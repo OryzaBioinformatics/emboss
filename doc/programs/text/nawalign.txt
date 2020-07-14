@@ -5,8 +5,7 @@
 
 Function
 
-   Damian Counsell's implementation for protein sequences of the
-   Needleman and Wunsch alignment algorithm
+   Damian Counsell's NW implementation
 
 Description
 
@@ -48,6 +47,7 @@ Command line arguments
                                   be significantly lower than the gap opening
                                   penalty.
   [-alignedoutfile]    seqout     Output sequence USA
+  [-verticaltrace]     outfile    Output file name
 
    Additional (Optional) qualifiers:
    -substitutionscoringfile matrixf    Matrix of scores for specific amino acid
@@ -104,6 +104,9 @@ Command line arguments
    -ofname3            string     Features file name
    -ofdirectory3       string     Output directory
 
+   "-verticaltrace" associated qualifiers
+   -odirectory4        string     Output directory
+
    General qualifiers:
    -auto               boolean    Turn off prompts
    -stdout             boolean    Write standard output
@@ -143,6 +146,8 @@ Command line arguments
    point number from 0.0 to 10.0 0.5 for any sequence
    [-alignedoutfile]
    (Parameter 3) Output sequence USA Writeable sequence <sequence>.format
+   [-verticaltrace]
+   (Parameter 4) Output file name Output file <sequence>.nawalign
    Additional (Optional) qualifiers Allowed values Default
    -substitutionscoringfile Matrix of scores for specific amino acid
    residue type substitution within one-dimensional sequence strings
@@ -195,27 +200,20 @@ Known bugs
 
 See also
 
-   Program name Description
-   alignrunner Runs alignment program on all sequence pairs in a
-   directory
-   contactalign EMBOSS implementation of Damian Counsell's 2.5-D
-   alignment algorithm
-   esim4 Align an mRNA to a genomic DNA sequence
-   est2genome Align EST and genomic DNA sequences
-   nawalignrunner Runs nawalign alignment program on all sequence pairs
-   in a directory
-   needle Needleman-Wunsch global alignment
-   needlerunner Runs needle alignment program on all sequence pairs in a
-   directory
-   scorer Scores accuracy of protein-protein sequence alignment against
-   gold standard structure-structure alignment
-   scorerrunner Runs scorer to compare ordered pairs of substituted seqs
-   in two directories and write the scores to a third
-   stretcher Finds the best global alignment between two sequences
-   substitute Substitutes matches from first (query) sequence of two
-   aligned sequences in a trace into second (template sequence)
-   substituterunner Runs substitute on directory of traces and writes
-   substituted sequences to another
+     Program name                         Description
+   alignrunner      Align sequence pairs in a directory
+   comparator       Compare contact scores of two sequence alignments
+   contactalign     Damian Counsell's experimental 2.5-D alignment algorithm
+   esim4            Align an mRNA to a genomic DNA sequence
+   est2genome       Align EST and genomic DNA sequences
+   nawalignrunner   Nawalign all sequence pairs in a directory
+   needle           Needleman-Wunsch global alignment
+   needlerunner     Needle all sequence pairs in a directory
+   scorer           Score alignments using structural alignments
+   scorerrunner     SCORER for ordered pairs of substituted seqs
+   stretcher        Finds the best global alignment between two sequences
+   substitute       Substitute matches into a template
+   substituterunner Run SUBSTITUTE on a directory of traces
 
 Author(s)
 

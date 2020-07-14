@@ -26,19 +26,8 @@ CONTENTS
    discriminating elements (e.g. profiles for protein families). rocplot
    reads file(s) of hits from discriminator-database search(es), performs
    ROC analysis on the hits, and writes graphs illustrating the
-   diagnostic performance of the discriminating elements
-
-  1.1 DESCRIPTION
-
-   ROCPLOT is a generic and flexible tool for interpretation and
-   graphical display of the performance of predictive methods. ROCPLOT
-   reads one or more files of hits, performs Receiver Operator
-   Characteristic (ROC) analysis on the hits, and writes graphs,
-   including ROC plots, illustrating diagnostic performance. For example,
-   a profile or other type of discriminating element can be generated for
-   a protein family and scanned against a sequence database to identify
-   putative new family members. The file(s) of hits would contain the
-   results of the profile-database search(es).
+   diagnostic performance of the discriminating elements. Performs ROC
+   analysis on hits files
 
 2.0 INPUTS & OUTPUTS
 
@@ -755,7 +744,7 @@ mooth bezier title "False hits"
 
   File: _summary
 
-rocplot summary file (15 Jul 2004)
+rocplot summary file (15 Jul 2005)
 
 mode      == 2 (Multiple input file mode)
 multimode == 2 (Combine data: single ROC plot, single classification plot.)
@@ -767,7 +756,7 @@ data2.hits     140
 
 ROC50     == 0.185 (combined)
 
-  File: rocplot.errors
+  File: rocplot.log
 
 MODE INFO
 modei: 2
@@ -955,14 +944,14 @@ hitcnt[0]: 80
                                   as unique if they have different accession
                                   numbers (no requirement for overlapping
                                   ranges).
-   -errfile            outfile    Name of error file (output).
+   -logfile            outfile    Name of error log file (output).
 
    Associated qualifiers:
 
    "-outfile" associated qualifiers
    -odirectory         string     Output directory
 
-   "-errfile" associated qualifiers
+   "-logfile" associated qualifiers
    -odirectory         string     Output directory
 
    General qualifiers:
@@ -1092,7 +1081,7 @@ hitcnt[0]: 80
    files are disregarded, two hits are classed as unique if they have
    different accession numbers (no requirement for overlapping ranges).
    Boolean value Yes/No No
-   -errfile Name of error file (output). Output file rocplot.errors
+   -logfile Name of error log file (output). Output file rocplot.log
 
   6.2 EXAMPLE SESSION
 
@@ -1101,12 +1090,7 @@ hitcnt[0]: 80
 
 
 % rocplot 
-Provides interpretation and graphical display of the performance of
-discriminating elements (e.g. profiles for protein families). rocplot reads
-file(s) of hits from discriminator-database search(es), performs ROC analysis o
-n
-the hits, and writes graphs illustrating the diagnostic performance of the
-discriminating elements.
+Performs ROC analysis on hits files.
 Directory of hits files (input). [rocplot]: rocplot/hitsin
 Available modes
          1 : Single input file mode
@@ -1152,18 +1136,33 @@ Please wait ... done!
 
 8.0 NOTES
 
-   A future implementation will
+   Future implementation 
    1. Accept a feature file as input.
    2. Split ROCPLOT into separate programs, one for each of the major
    modes.
+   Description of 'sort' mode (additional option in ACD) 
+   This option specifies whether to process the input files in blocks (of
+   the same domain identifier). In this case the analysis mode
+   (mode-multimode-datamode) are set to Multiple input file - combine
+   data - Single list of known true relatives (2-2-1) and the analysis is
+   performed on each block of hits files with the same domain identifier.
+   In the output file, ROC values are given for each combined analysis
+   and the mean and SD of all the combined analyses are given. The domain
+   identifier is defined as the text between the first and second period
+   ('/.') in the input file name.
+   Description of 'norange' mode (additional option in ACD) 
+   This option specifies whether to disregard range data when identifying
+   unique hits. If set, the range data specified in the hits files are
+   disregarded, two hits are classed as unique if they have different
+   accession numbers (no requirement for overlapping ranges).
 
   8.1 GLOSSARY OF FILE TYPES
 
    FILE TYPE FORMAT DESCRIPTION CREATED BY SEE ALSO
    Hits file Text file of classified hits A list of hits (e.g. from a
    prediction method) that are classified and rank-ordered on the basis
-   of score, p-value, E-value etc. SIGSCAN and LIBSCAN (hits from
-   searches of a discriminating element (hidden Markov model, profile or
+   of score, p-value, E-value etc. ROCON and LIBSCAN (hits from searches
+   of a discriminating element (hidden Markov model, profile or
    signature) against a sequence database). ROCPLOT is run on the files
    to perform Receiver Operator Characteristic (ROC) analysis on the
    hits.
@@ -1594,43 +1593,27 @@ Rank  File1  File2  File3
 
 See also
 
-   Program name Description
-   contactcount Counts specific versus non-specific contacts in a
-   directory of cleaned protein chain contact files
-   contacts Reads CCF files (clean coordinate files) and writes CON files
-   (contact files) of intra-chain residue-residue contact data
-   domainalign Generates DAF files (domain alignment files) of
-   structure-based sequence alignments for nodes in a DCF file (domain
-   classification file)
-   domainrep Reorder DCF file (domain classification file) so that the
-   representative structure of each user-specified node is given first
-   domainreso Removes low resolution domains from a DCF file (domain
-   classification file)
-   interface Reads CCF files (clean coordinate files) and writes CON
-   files (contact files) of inter-chain residue-residue contact data
-   libgen Generates various types of discriminating elements for each
-   alignment in a directory
-   psiphi Calculates phi and psi torsion angles from cleaned EMBOSS-style
-   protein co-ordinate file
-   rocon Reads a DHF file (domain hits file) of hits (sequences of
-   unknown structural classification) and a DHF file of validation
-   sequences (known classification) and writes a 'hits file' for the
-   hits, which are classified and rank-ordered on the basis of score
-   seqalign Reads a DAF file (domain alignment file) and a DHF file
-   (domain hits file) and writes a DAF file extended with the hits
-   seqfraggle Removes fragments from DHF files (domain hits files) or
-   other files of sequences
-   seqsearch Generate database hits (sequences) for nodes in a DCF file
-   (domain classification file) by using PSI-BLAST
-   seqsort Reads DHF files (domain hits files) of database hits
-   (sequences) and removes hits of ambiguous classification
-   seqwords Generates DHF files (domain hits files) of database hits
-   (sequences) for nodes in a DCF file (domain classification file) by
-   keyword search of UniProt
-   siggen Generates a sparse protein signature from an alignment and
-   residue contact data
-   sigscan Generates a DHF file (domain hits file) of hits (sequences)
-   from scanning a signature against a sequence database
+   Program name                       Description
+   contactcount Count specific versus non-specific contacts
+   contacts     Generate intra-chain CON files from CCF files
+   domainalign  Generate alignments (DAF file) for nodes in a DCF file
+   domainrep    Reorder DCF file to identify representative structures
+   domainreso   Remove low resolution domains from a DCF file
+   interface    Generate inter-chain CON files from CCF files
+   libgen       Generate discriminating elements from alignments
+   matgen3d     Generate a 3D-1D scoring matrix from CCF files
+   psiphi       Phi and psi torsion angles from protein coordinates
+   rocon        Generates a hits file from comparing two DHF files
+   scorecmapdir Contact scores for cleaned protein chain contact files
+   seqalign     Extend alignments (DAF file) with sequences (DHF file)
+   seqfraggle   Removes fragment sequences from DHF files
+   seqsearch    Generate PSI-BLAST hits (DHF file) from a DAF file
+   seqsort      Remove ambiguous classified sequences from DHF files
+   seqwords     Generates DHF files from keyword search of UniProt
+   siggen       Generates a sparse protein signature from an alignment
+   siggenlig    Generate ligand-binding signatures from a CON file
+   sigscan      Generate hits (DHF file) from a signature search
+   sigscanlig   Search ligand-signature library & write hits (LHF file)
 
 12.0 DIAGNOSTIC ERROR MESSAGES
 

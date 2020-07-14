@@ -158,6 +158,77 @@ Algorithm
 
 Usage
 
+   Here is a sample session with fdnamlk
+
+
+% fdnamlk -printdata -ncategories 2 -categories "1111112222222" -rate "1.0 2.0"
+ -gamma h -nhmmcategories 5 -hmmrates "0.264 1.413 3.596 7.086 12.641" -hmmprob
+abilities "0.522 0.399 0.076 0.0036 0.000023" -lambda 1.5 -weight "011111111111
+0" 
+Estimates nucleotide phylogeny by maximum likelihood
+Input sequence: dnaml.dat
+Input tree file: 
+Output file [dnaml.fdnamlk]: 
+
+
+ mulsets: false
+ datasets : 1
+ rctgry : true
+ gama : false
+ invar : false
+
+ ctgry: true
+ categs : 2
+ rcategs : 5
+ auto_: false
+ freqsfrom : true
+ global : false
+ hypstate : false
+ invar : false
+ jumble : false
+ njumble : 1
+ lngths : false
+ lambda : 1.000000
+ lambda1 : 0.000000
+ cv : 0.000000
+ freqa : 0.000000
+ freqc : 0.000000
+ freqg : 0.000000
+ freqt : 0.000000
+ trout : true
+ ttratio : 2.000000
+ probsum : 1.000623
+ ttr : false
+ usertree : false
+ weights: true
+ printdata : true
+ progress : true
+ treeprint: true
+ interleaved : true
+
+probcat[0] 0.522000
+probcat[1] 0.399000
+probcat[2] 0.076000
+probcat[3] 0.003600
+probcat[4] 0.000023
+
+Adding species:
+   1. Alpha
+   2. Beta
+   3. Gamma
+   4. Delta
+   5. Epsilon
+
+Output written to file "dnaml.fdnamlk"
+
+Tree also written onto file "dnaml.treefile"
+
+Done.
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -303,10 +374,21 @@ Input file format
 
    fdnamlk reads any normal sequence USAs.
 
+  Input files for usage example
+
+  File: dnaml.dat
+
+   5   13
+Alpha     AACGTGGCCAAAT
+Beta      AAGGTCGCCAAAC
+Gamma     CATTTCGTCACAA
+Delta     GGTATTTCGGCCT
+Epsilon   GGGATCTCGGCCC
+
 Output file format
 
-   fdnamlk output starts by giving the number of species, the number of
-   sites, and the base frequencies for A, C, G, and T that have been
+   --> fdnamlk output starts by giving the number of species, the number
+   of sites, and the base frequencies for A, C, G, and T that have been
    specified. It then prints out the transition/transversion ratio that
    was specified or used by default. It also uses the base frequencies to
    compute the actual transition/transversion ratio implied by the
@@ -481,6 +563,104 @@ Output file format
    likelihood that is accounted for by that particular combination of
    rates.
 
+  Output files for usage example
+
+  File: dnaml.fdnamlk
+
+
+Nucleic acid sequence Maximum Likelihood method, version 3.6b
+
+ 5 species,  13  sites
+
+    Site categories are:
+
+             1111112222 222
+
+
+    Sites are weighted as follows:
+
+             01111 11111 110
+
+
+Name            Sequences
+----            ---------
+
+Alpha        AACGTGGCCA AAT
+Beta         AAGGTCGCCA AAC
+Gamma        CATTTCGTCA CAA
+Delta        GGTATTTCGG CCT
+Epsilon      GGGATCTCGG CCC
+
+
+
+Empirical Base Frequencies:
+
+   A       0.23636
+   C       0.29091
+   G       0.25455
+  T(U)     0.21818
+
+Transition/transversion ratio =   2.000000
+
+
+State in HMM    Rate of change    Probability
+
+        1           0.264            0.522
+        2           1.413            0.399
+        3           3.596            0.076
+        4           7.086            0.0036
+        5          12.641            0.000023
+
+
+Site category   Rate of change
+
+        1           1.000
+        2           2.000
+
+
+
+
+
+
+                                                    +------Epsilon
+  +-------------------------------------------------4
+  !                                                 +------Delta
+--3
+  !                                             +-----------Gamma
+  +---------------------------------------------2
+                                                !  +--------Beta
+                                                +--1
+                                                   +--------Alpha
+
+
+Ln Likelihood =   -60.78722
+
+ Ancestor      Node      Node Height     Length
+ --------      ----      ---- ------     ------
+ root            3
+   3             4          3.94793      3.94793
+   4          Epsilon       4.52951      0.58158
+   4          Delta         4.52951      0.58158
+   3             2          3.62149      3.62149
+   2          Gamma         4.52951      0.90802
+   2             1          3.85069      0.22921
+   1          Beta          4.52951      0.67882
+   1          Alpha         4.52951      0.67882
+
+Combination of categories that contributes the most to the likelihood:
+
+             1121121111 111
+
+Most probable category at each site if > 0.95 probability ("." otherwise)
+
+             ....1..... ...
+
+
+  File: dnaml.treefile
+
+((Epsilon:0.58158,Delta:0.58158):3.94793,(Gamma:0.90802,
+(Beta:0.67882,Alpha:0.67882):0.22921):3.62149);
+
 Data files
 
    None
@@ -511,39 +691,37 @@ Known bugs
 
 See also
 
-   Program name Description
-   ednacomp DNA compatibility algorithm
-   ednadist Nucleic acid sequence Distance Matrix program
-   ednainvar Nucleic acid sequence Invariants method
-   ednaml Estimates phylogenies from nucleic acid sequence Maximum
-   Likelihood
-   ednamlk Estimates phylogenies from nucleic acid sequence Maximum
-   Likelihood with molecular clock
-   ednapars DNA parsimony algorithm
-   ednapenny Penny algorithm for DNA
-   eprotdist Protein distance algorithm
-   eprotpars Protein parsimony algorithm
-   erestml Restriction site Maximum Likelihood method
-   eseqboot Bootstrapped sequences algorithm
-   fdiscboot Bootstrapped discrete sites algorithm
-   fdnacomp DNA compatibility algorithm
-   fdnadist Nucleic acid sequence Distance Matrix program
-   fdnainvar Nucleic acid sequence Invariants method
-   fdnaml Estimates nucleotide phylogeny by maximum likelihood
-   fdnamove Interactive DNA parsimony
-   fdnapars DNA parsimony algorithm
-   fdnapenny Penny algorithm for DNA
-   fdolmove Interactive Dollo or Polymorphism Parsimony
-   ffreqboot Bootstrapped genetic frequencies algorithm
-   fproml Protein phylogeny by maximum likelihood
-   fpromlk Protein phylogeny by maximum likelihood
-   fprotdist Protein distance algorithm
-   fprotpars Protein pasimony algorithm
-   frestboot Bootstrapped restriction sites algorithm
-   frestdist Computes distance matrix from restriction sites or fragments
-   frestml Restriction site maximum Likelihood method
-   fseqboot Bootstrapped sequences algorithm
-   fseqbootall Bootstrapped sequences algorithm
+   Program name                         Description
+   ednacomp     DNA compatibility algorithm
+   ednadist     Nucleic acid sequence Distance Matrix program
+   ednainvar    Nucleic acid sequence Invariants method
+   ednaml       Phylogenies from nucleic acid Maximum Likelihood
+   ednamlk      Phylogenies from nucleic acid Maximum Likelihood with clock
+   ednapars     DNA parsimony algorithm
+   ednapenny    Penny algorithm for DNA
+   eprotdist    Protein distance algorithm
+   eprotpars    Protein parsimony algorithm
+   erestml      Restriction site Maximum Likelihood method
+   eseqboot     Bootstrapped sequences algorithm
+   fdiscboot    Bootstrapped discrete sites algorithm
+   fdnacomp     DNA compatibility algorithm
+   fdnadist     Nucleic acid sequence Distance Matrix program
+   fdnainvar    Nucleic acid sequence Invariants method
+   fdnaml       Estimates nucleotide phylogeny by maximum likelihood
+   fdnamove     Interactive DNA parsimony
+   fdnapars     DNA parsimony algorithm
+   fdnapenny    Penny algorithm for DNA
+   fdolmove     Interactive Dollo or Polymorphism Parsimony
+   ffreqboot    Bootstrapped genetic frequencies algorithm
+   fproml       Protein phylogeny by maximum likelihood
+   fpromlk      Protein phylogeny by maximum likelihood
+   fprotdist    Protein distance algorithm
+   fprotpars    Protein pasimony algorithm
+   frestboot    Bootstrapped restriction sites algorithm
+   frestdist    Distance matrix from restriction sites or fragments
+   frestml      Restriction site maximum Likelihood method
+   fseqboot     Bootstrapped sequences algorithm
+   fseqbootall  Bootstrapped sequences algorithm
 
 Author(s)
 

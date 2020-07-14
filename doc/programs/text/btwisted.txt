@@ -377,10 +377,10 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                        Description
    banana       Bending and curvature plot in B-DNA
    chaos        Create a chaos game representation plot for a sequence
-   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   compseq      Count composition of dimer/trimer/etc words in a sequence
    dan          Calculates DNA RNA/DNA melting temperature
    freak        Residue/base frequency table or plot
    isochore     Plots isochores in large DNA sequences
@@ -390,9 +390,9 @@ See also
 Author(s)
 
    David Martin (dmartin © rfcgr.mrc.ac.uk)
-   and Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   and Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
    This application was written during the first Scandinavian EMBOSS
    Workshop.

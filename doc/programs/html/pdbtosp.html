@@ -1,14 +1,8 @@
-<!--START OF HEADER - DON'T ALTER -->
-
-<HTML>
-<HEAD>
-  <TITLE>
-  EMBOSS: pdbtosp
-  </TITLE>
+<!-- START OF HEADER -->
+<HTML><HEAD>
+<TITLE> EMBASSY: PDBTOSP documentation. </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-
-
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
@@ -17,7 +11,7 @@
 <td align=left valign=middle>
 <b><font size="+6">
 
-pdbtosp
+<H2> PDBTOSP documentation
 </font></b>
 </td></tr>
 </table>
@@ -26,238 +20,67 @@ pdbtosp
 
 
 
-<!--END OF HEADER-->
+<!-- END OF HEADER -->
 
 
 
 
+<!-- CONTENTS
+     This always includes the sections below.
+     Other subsections can be added for individual applications.
+-->
+<H2>CONTENTS </H2>
+<b> <a href="#1.0">1.0     SUMMARY                   </a></b><br>
+<b> <a href="#2.0">2.0     INPUTS & OUTPUTS          </a></b><br>
+<b> <a href="#3.0">3.0     INPUT FILE FORMAT         </a></b><br>
+<b> <a href="#4.0">4.0     OUTPUT FILE FORMAT        </a></b><br>
+<b> <a href="#5.0">5.0     DATA FILES                </a></b><br>
+<b> <a href="#6.0">6.0     USAGE                     </a></b><br>    
+<b> <a href="#7.0">7.0     KNOWN BUGS & WARNINGS     </a></b><br>    
+<b> <a href="#8.0">8.0     NOTES                     </a></b><br>
+<b> <a href="#9.0">9.0     DESCRIPTION               </a></b><br>
+<b> <a href="#10.0">10.0   ALGORITHM                 </a></b><br>
+<b> <a href="#11.0">11.0   RELATED APPLICATIONS      </a></b><br>
+<b> <a href="#12.0">12.0   DIAGNOSTIC ERROR MESSAGES </a></b><br>
+<b> <a href="#13.0">13.0   AUTHORS                   </a></b><br>
+<b> <a href="#14.0">14.0   REFERENCES                </a></b><br>
 
 
-<H2>
-    Function
-</H2>
-Convert raw swissprot:PDB equivalence file to EMBL-like format
+<!-- SUMMARY
+     Succint description of the application, particularly its inputs, outputs
+     and what it does.  The same text is given at the top of the source (.c)
+     file and in the <documentation> attribute of the <application definition>
+     of the ACD file.
+-->
+<a name="1.0"></a>
+<br><br><br><H2> 1.0   SUMMARY  </H2>
+Convert raw swissprot:PDB equivalence file to EMBL-like format.
+Convert swissprot:PDB codes file to EMBL-like format
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
+
+
+<!-- INPUTS & OUTPUTS
+     Short summary of the application inputs and outputs in its different 
+     modes of usage (if appropriate). More detail than the summary.
+-->
+<a name="2.0"></a>
+<br><br><br><H2> 2.0   INPUTS & OUTPUTS          </H2>
+
+PDBTOSP parses the swissprot:PDB equivalence table available at <a href ="http://www.expasy.ch/cgi-bin/lists?pdbtosp.txt">http://www.expasy.ch/cgi-bin/lists?pdbtosp.txt</a> and writes the data out in EMBL-like format. The raw (input) file can be obtained by doing a "save as ... text format" from the web page. No changes are made to the data other than changing the format in which it is held.  The input and output files are specified by the user.
+
+<!-- INPUT FILE FORMAT 
+     Description and example(s) of input file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.
+     Use "<b>PDBTOSP</b> reads any normal sequence USAs." if
+     appropriate.
 -->
 
 
 
-
-<H2>
-    Description
-</H2>
-
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-  -->
-
-This program is part of a suite of EMBOSS applications that directly or
-indirectly make use of the protein structure databases pdb and scop.
-This program is part of an experimental analysis pipeline described in an
-accompanying document.  We provide the software in the hope that it will
-be useful.  The applications were designed for specific research purposes
-and may not be useful or reliable in contexts other than the described
-pipeline.  The development of the suite was coordinated by Jon Ison to
-whom enquiries and bug reports should be sent (email jison@hgmp.mrc.ac.uk).
-
-<p>
-
-Some research applications require knowledge of the database sequence(s)
-that corresponds to the sequence(s) given in a pdb file.  A 'swissprot:pdb
-equivalence' file listing accession numbers and swissprot database
-identifiers for certain pdb code is available, but is not in a format that
-is consistent with flat file formats used for protein structural data in
-emboss.  pdbtosp parses the swissprot:pdb equivalence in its raw format
-and converts it to an embl-like format.   
-
-<p>
-
-pdbtosp parses the swissprot:pdb equivalence table available at URL (1)
-(1) http://www.expasy.ch/cgi-bin/lists?pdbtosp.txt
-and writes the data out in embl-like format file (Figure 2). The raw (input)
-file can be obtained by doing a "save as ... text format" from the web page
-(1).   No changes are made to the data other than changing the format in
-which it is held.  The input and output files are specified by the user.
-
-
-
-
-
-
-
-
-
-
-<H2>
-    Algorithm
-</H2>
-
-<!-- 
-        Algorithms
-	  Pseudocode/Vague description/Handwaving/web links to useful pages
-  -->
-
-pdbtosp relies on finding a line beginning with '____  _' in the input file
-(all lines up to and including this one are ignored). Lines of code data
-are then parsed, up until the first blank line.    
-
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    Usage
-</H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
-<b>Here is a sample session with pdbtosp</b>
-<p>
-
-<p>
-<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
-
-% <b>pdbtosp </b>
-Convert raw swissprot:PDB equivalence file to EMBL-like format
-Name of raw swissprot:PDB equivalence file (input): <b>pdbtosp.txt</b>
-Name of swissprot:PDB equivalence file (EMBL-like format output) [Epdbtosp.dat]: <b></b>
-
-</pre></td></tr></table><p>
-<p>
-<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
-
-
-
-<H2>
-    Command line arguments
-</H2>
-
-<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
-<pre>
-   Standard (Mandatory) qualifiers:
-  [-infile]            infile     This option specifies the name of raw
-                                  swissprot:PDB equivalence file (input).
-                                  HETPARSE parses this file, which is
-                                  available at URL
-                                  http://www.expasy.ch/cgi-bin/lists?pdbtosp.txt
-  [-outfile]           outfile    This option specifies the name of
-                                  swissprot:PDB equivalence file (EMBL-like
-                                  format). This is the PDBTOSP output file.
-
-   Additional (Optional) qualifiers: (none)
-   Advanced (Unprompted) qualifiers: (none)
-   Associated qualifiers:
-
-   "-outfile" associated qualifiers
-   -odirectory2        string     Output directory
-
-   General qualifiers:
-   -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
-   -options            boolean    Prompt for standard and additional values
-   -debug              boolean    Write debug output to program.dbg
-   -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
-   -warning            boolean    Report warnings
-   -error              boolean    Report errors
-   -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-</pre>
-</td></tr></table>
-<P>
-<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td>[-infile]<br>(Parameter 1)</td>
-<td>This option specifies the name of raw swissprot:PDB equivalence file (input). HETPARSE parses this file, which is available at URL http://www.expasy.ch/cgi-bin/lists?pdbtosp.txt</td>
-<td>Input file</td>
-<td><b>Required</b></td>
-</tr>
-
-<tr>
-<td>[-outfile]<br>(Parameter 2)</td>
-<td>This option specifies the name of swissprot:PDB equivalence file (EMBL-like format). This is the PDBTOSP output file.</td>
-<td>Output file</td>
-<td>Epdbtosp.dat</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td colspan=4>(none)</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td colspan=4>(none)</td>
-</tr>
-
-</table>
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
-
-
-
-
-<H2>
-    Input file format
-</H2>
-
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
-<b>pdbtosp</b> reads any normal sequence USAs.
-
-<p>
+<a name="3.0"></a>
+<br><br><br><H2> 3.0   INPUT FILE FORMAT         </H2>
+An excerpt from the raw swissprot:PDB equivalence file is shown (Figure 1).
 
 
 <a name="input.1"></a>
@@ -328,42 +151,20 @@ license@isb-sib.ch.
 
 
 
-<H2>
-    Output file format
-</H2>
 
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-
-        If you wish to include the standard description of the avalable
-	report formats, use:
-<p>
-
-The output is a standard EMBOSS report file. 
-
-<p>
-
-The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
-
-<p>
-
-See:
-<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
-http://emboss.sf.net/docs/themes/ReportFormats.html</A>
-for further information on report formats.
-
-<p>
-
-   -->
-
-<p>
+<!-- OUTPUT FILE FORMAT 
+     Description and example(s) of output file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.  
+     If the standard description of the avalable report formats is required, 
+     use:   #include file="inc/reportformats.ihtml"
+     Use "Outputs a graph to the specified graphics device."
+     or  "outputs a report format file. The default format is ..."
+     if appropriate.
+-->
+<a name="4.0"></a>
+<br><br><br><H2> 4.0   OUTPUT FILE FORMAT         </H2>
+An excerpt from the swissprot:PDB equivalence file in EMBL-like format is shown (Figure 2). 
 
 
 <a name="output.1"></a>
@@ -424,442 +225,287 @@ XX
 </td></tr></table><p>
 
 
-<p>
 
-An excerpt from the swissprot:pdb equivalence file in embl-like format is
-shown below.  The records used to describe an entry are as follows.
 
-<p>
-
-(1)  EN - PDB identifier code.  This is the 4-character PDB identifier code.
-
-<p>
-
-(2)  NE - Number of entries.  This is the number of accession numbers that
-were given for that pdb code in the equivalence file.
-
-<p>
-
-(3)  IN - Code line.  The swissprot database identifier code and accession
-number are given preceeding ID and ACC respectively.
-
-<p>
-
-Excerpt from embl-like format swissprot:pdb equivalence file
-
-<p>
-
-<pre>
-EN   3SDH
-XX
-NE   2
-XX
-IN   LEU3_THETH ID; P00351 ACC;
-IN   LEU4_THEFF ID; P02351 ACC;
-XX
-//
-EN   2SDH
-XX
-NE   1
-XX
-IN   LEU1_FDFTH ID; P11351 ACC;
-XX
-//     
-</pre>
-
-
-<H2>
-    Data files
-</H2>
-
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-<p>
-EMBOSS data files are distributed with the application and stored
-in the standard EMBOSS data directory, which is defined
-by the EMBOSS environment variable EMBOSS_DATA.
-
-<p>
-
-To see the available EMBOSS data files, run:
-<p>
-<pre>
-% embossdata -showall
-</pre>
-<p>
-To fetch one of the data files (for example 'Exxx.dat') into your
-current directory for you to inspect or modify, run:
-
-<pre>
-
-% embossdata -fetch -file Exxx.dat
-
-</pre>
-<p>
-
-Users can provide their own data files in their own directories.
-Project specific files can be put in the current directory, or for
-tidier directory listings in a subdirectory called
-".embossdata". Files for all EMBOSS runs can be put in the user's home
-directory, or again in a subdirectory called ".embossdata".
-
-<p>
-The directories are searched in the following order:
-
-<ul>
-   <li> . (your current directory)
-   <li> .embossdata (under your current directory)
-   <li> ~/ (your home directory)
-   <li> ~/.embossdata
-</ul>
-<p>
-
-   -->
-
-None.
-
-
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    Notes
-</H2>
-
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
-pdbtosp is used to create the emboss data file Epdbtosp.dat that is
-included in the emboss distribution. 
-
-
-
-
-
-
-
-<H2>
-    References
-</H2>
-
-<!-- 
-        Bibliography for methods used.
-   -->
-
-None.
-
-
-
-
-
-
-
-
-<H2>
-    Warnings
-</H2>
-
-<!-- 
-        Potentially stupid things the program will let you do.
-   -->
-
-None.
-
-
-
-
-
-
-
-<H2>
-    Diagnostic Error Messages
-</H2>
-
-<!-- 
-        Error messages specific to this program, eg:
-        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
-   -->
-
-None.
-
-
-
-
-
-
-
-<H2>
-    Exit status
-</H2>
-
-<!-- 
-        Description of the exit status for various error conditions
-   -->
-
-It always exits with status 0.
-
-
-
-
-
-
-
-
-<H2>
-    Known bugs
-</H2>
-
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
-None.
-
-
-
-
-
-
-
-
-<!--
-<H2>
-    See also
-</H2>
+<!-- DATA FILES         
+     Any data files used (e.g. translation table file, substitution matrix 
+     etc.  This includes example data file formats if they are not obvious.
+     For a standard description of what data files are and how embossdata can
+     be used to inspect and retrieve them, use:
+     #include file="inc/localfiles.ihtml" 
 -->
+
+<a name="5.0"></a>
+<br><br><br><H2> 5.0   DATA FILES                </H2>
+No data files are used by PDBTOSP.
+
+<!-- USAGE
+     Example usage, as run from the command-line.
+     Many examples illustrating different behaviours is good.
+-->
+<a name="6.0"></a>
+<br><br><br><H2> 6.0   USAGE                     </H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" >
+<tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     This option specifies the name of raw
+                                  swissprot:PDB equivalence file (input).
+                                  HETPARSE parses this file, which is
+                                  available at URL
+                                  http://www.expasy.ch/cgi-bin/lists?pdbtosp.txt
+  [-outfile]           outfile    This option specifies the name of
+                                  swissprot:PDB equivalence file (EMBL-like
+                                  format). This is the PDBTOSP output file.
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+</pre>
+</pre>
+</td></tr>
+</table>
+
+
+<H3> 6.1   COMMAND LINE ARGUMENTS </H3>
+ 
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>This option specifies the name of raw swissprot:PDB equivalence file (input). HETPARSE parses this file, which is available at URL http://www.expasy.ch/cgi-bin/lists?pdbtosp.txt</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>This option specifies the name of swissprot:PDB equivalence file (EMBL-like format). This is the PDBTOSP output file.</td>
+<td>Output file</td>
+<td>Epdbtosp.dat</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H3> 6.2 EXAMPLE SESSION </H3>
+An example of interactive use of PDBTOSP is shown below.
+
+<b>Here is a sample session with pdbtosp</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pdbtosp </b>
+Convert swissprot:PDB codes file to EMBL-like format.
+Name of raw swissprot:PDB equivalence file (input): <b>pdbtosp.txt</b>
+Name of swissprot:PDB equivalence file (EMBL-like format output) [Epdbtosp.dat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<!-- <br><br>
+The raw swissprot:PDB equivalence file /testdata/pdbtosp.txt was parsed and a new file in EMBL-like format called /testdata/pdbtosp/Epdbtosp.dat was written.
+<br><br>
+
+
+<!-- KNOWN BUGS & WARNINGS
+     Bugs that have not yet been fixed, easily missued features, problems
+     and caveats etc. Potentially stupid things the program will let you do.
+-->
+<a name="7.0"></a>
+<br><br><br><H2> 7.0   KNOWN BUGS & WARNINGS     </H2>
+None.
+
+
+
+
+
+
+
+
+<!-- NOTES
+     Important general remarks, including:
+       Restrictions.
+       Interesting behaviour.
+       Useful things you can do with this program.
+       Future plans.
+       etc.
+-->
+<a name="8.0"></a>
+<br><br><br><H2> 8.0   NOTES                     </H2>
+PDBTOSP is used to create the EMBOSS data file Epdbtosp.dat that is included in the EMBOSS distribution.
+
+
+<H3> 8.1   GLOSSARY OF FILE TYPES    </H3>
+<table BORDER CELLSPACING=5 CELLPADDING=5 BGCOLOR="#f5f5ff" >
+<tr>
+<td><b>FILE TYPE</b></td>
+<td><b>FORMAT</b></td>
+<td><b>DESCRIPTION</b></td>
+<td><b>CREATED BY <b></td>
+<td><b>SEE ALSO</b></td>
+</tr>
+<tr>
+<td><b> swissprot:PDB equivalence file</b></td>
+<td> EMBL-like format. </td>
+<td> A file containing swissprot identifiers for PDB codes. </td>
+<td> Included in the EMBOSS distribution</td>
+<td> N.A. </td>
+</tr>
+</table>
+
+
+
+None
+
+
+<!-- DESCRIPTION
+     A complete, non-technical, user-level description of the application.
+-->
+<a name="9.0"></a>
+<br><br><br><H2> 9.0   DESCRIPTION               </H2>
+
+Some research applications require knowledge of the database sequence(s) that corresponds to the sequence(s) given in a PDB file.  A 'swissprot:PDB equivalence' file listing accession numbers and swissprot database identifiers for certain PDB codes is available, but is not in a format that is consistent with flat file formats used for protein structural data in emboss.  PDBTOSP parses the swissprot:PDB equivalence in its raw format and converts it to an EMBL-like format.
+
+<!-- ALGORITHM
+     A technical description of algorithmic aspects, describing exactly how
+     the key aspects of the application work.
+-->
+<a name="10.0"></a>
+<br><br><br><H2> 10.0  ALGORITHM                 </H2>
+PDBTOSP relies on finding a line beginning with '____  _' in the input file (all lines up to and including this one are ignored). Lines of code data are then parsed, up until the first blank line.
+
+
+
+<!-- RELATED APPLICATIONS
+     Other applications that either generate the input, use the output or 
+     are in some other way related to the application are described here. 
+-->
+
+<a name="11.0"></a>
+<br><br><br><H2> 11.0  RELATED APPLICATIONS      </H2>
+
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="../../apps/aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
-<tr><td><a href="allversusall.html">allversusall</a></td><td>Does an all-versus-all global alignment for each set of sequences in an input directory and writes files of sequence similarity values</td></tr>
-<tr><td><a href="cathparse.html">cathparse</a></td><td>Reads raw CATH classification files and writes DCF file (domain classification file)</td></tr>
+<tr><td><a href="../domalign/allversusall.html">allversusall</a></td><td>Sequence similarity data from all-versus-all comparison</td></tr>
+<tr><td><a href="../domainatrix/cathparse.html">cathparse</a></td><td>Generates DCF file from raw CATH files</td></tr>
 <tr><td><a href="../../apps/cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="domainer.html">domainer</a></td><td>Reads CCF files (clean coordinate files) for proteins and writes CCF files for domains, taken from a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainnr.html">domainnr</a></td><td>Removes redundant domains from a DCF file (domain classification file). The file must contain domain sequence information, which can be added by using DOMAINSEQS</td></tr>
-<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainsse.html">domainsse</a></td><td>Adds secondary structure records to a DCF file (domain classification file)</td></tr>
-<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in EMBL-like format</td></tr>
-<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes CCF files (clean coordinate files) for proteins</td></tr>
-<tr><td><a href="pdbplus.html">pdbplus</a></td><td>Add residue solvent accessibility and secondary structure data to a CCF file (clean coordinate file) for a protein or domain</td></tr>
+<tr><td><a href="domainer.html">domainer</a></td><td>Generates domain CCF files from protein CCF files</td></tr>
+<tr><td><a href="../domainatrix/domainnr.html">domainnr</a></td><td>Removes redundant domains from a DCF file</td></tr>
+<tr><td><a href="../domainatrix/domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file</td></tr>
+<tr><td><a href="../domainatrix/domainsse.html">domainsse</a></td><td>Add secondary structure records to a DCF file</td></tr>
+<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts heterogen group dictionary to EMBL-like format</td></tr>
+<tr><td><a href="pdbplus.html">pdbplus</a></td><td>Add accessibility & secondary structure to a CCF file</td></tr>
+<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert swissprot:PDB codes file to EMBL-like format</td></tr>
 <tr><td><a href="../../apps/printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
-<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Build the PROSITE motif database for use by patmatmotifs</td></tr>
 <tr><td><a href="../../apps/rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
-<tr><td><a href="scopparse.html">scopparse</a></td><td>Reads raw SCOP classification files and writes a DCF file (domain classification file)</td></tr>
-<tr><td><a href="seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files (domain hits files) or other files of sequences</td></tr>
-<tr><td><a href="sites.html">sites</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of residue-ligand contact data for domains in a DCF file (domain classification file)</td></tr>
-<tr><td><a href="ssematch.html">ssematch</a></td><td>Searches a DCF file (domain classification file) for secondary structure matches</td></tr>
+<tr><td><a href="../domainatrix/scopparse.html">scopparse</a></td><td>Generate DCF file from raw SCOP files</td></tr>
+<tr><td><a href="../domsearch/seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files</td></tr>
+<tr><td><a href="sites.html">sites</a></td><td>Generate residue-ligand CON files from CCF files</td></tr>
+<tr><td><a href="../domainatrix/ssematch.html">ssematch</a></td><td>Search a DCF file for secondary structure matches</td></tr>
 <tr><td><a href="../../apps/tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
-
-<p>
-
-scopseqs uses the pdbtosp output file as input.
 
 
 
-
-
-
-
-
-
-<H2>
-    Author(s)
-</H2>
-<!--
-        Who has worked on the program in the past.
-e.g. one of:
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-
-Bernd Jagla (bernd&nbsp;&copy;&nbsp;golgi.ski.mskcc.org)
-<br>
-Cellular Biochemistry and Biophysics Program, Rockefeller
-Research Laboratories, Memorial Sloan-Kettering Cancer Center, 1275 York
-Avenue, Box 251,New York, NY 10021.
-
-David Martin (dmartin&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-
-Gos Micklem (gos&nbsp;&copy;&nbsp;ebi.ac.uk)
-<br>
-Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-
-Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.                      
-
-Mark Faller (current e-mail address unknown)
-<br>
-while he was with:
-<br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
-
-Michael K. Schuster and Martin Grabner (martin.grabner&nbsp;&copy;&nbsp;univie.ac.at)
-<br>
-from the Austrian National EMBnet node.
-
-
-Michael Schmitz (mschmitz&nbsp;&copy;&nbsp;lbl.gov)
-<br>
-Lawrence Berkeley Labs, USA
-
-Nicolas Tourasse (nicolas.tourasse&nbsp;&copy;&nbsp;biotek.uio.no)
-<br>
-Biotechnology Center of Oslo
-
-Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
-<br>
-Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-Richard Durbin (rd&nbsp;&copy;&nbsp;sanger.ac.uk)
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.                      
-
-Richard Bruskiewich (r.bruskiewich@cgiar.org)
-<br>
-while he was at:
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.                      
-
-Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
-<br>
-European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-Sinead O'Leary (current e-mail address unknown)
-<br>
-while she was at:
-<br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
-
-
-Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-Thomas Laurent (thomas.laurent&nbsp;&copy;&nbsp;uk.lionbioscience.com)
-<br>
-Lion Bioscience Ltd,
-     Compass House,
-     80-82 Newmarket Road,
-     Cambridge,
-     CB5 8DZ,
-     UK
-
-Val Curwen (vac&nbsp;&copy;&nbsp;sanger.ac.uk)
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK. 
-
-
-   -->
-
-
-Jon Ison (jison&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    History
-</H2>
-
-<!--
-        What changes have been made.
-   -->
-
-Written (2003) - Jon Ison.
-
-<!--
-<p>
-
-
+<!-- DIAGNOSTIC ERROR MESSAGES
+     Description of error messages or log file, if one is written.
 -->
+<a name="12.0"></a>
+<br><br><br><H2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2>
+None.
+
+
+
+<!-- AUTHORS
+     The main author first then all others. 
+-->
+<a name="13.0"></a>
+<br><br><br><H2> 13.0  AUTHORS                   </H2>
+Jon Ison <a href="mailto:jison@rfcgr.mrc.ac.uk">(jison@rfcgr.mrc.ac.uk)</a>
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
 
+<!-- REFERENCES
+     Quote the paper where the application was first published, described, used etc. 
+-->
+<a name="14.0"></a>
+<br><br><br><H2> 14.0  REFERENCES                </H2>
+
+Please cite the authors and EMBOSS.
+<br><br>
+<i>Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+Molecular Biology Open Software Suite"  Trends in Genetics,
+15:276-278.
+
+<p>
+See also <a href="http://emboss.sourceforge.net/">http://emboss.sourceforge.net/</a></i>
 
 
 
 
-
-
-
-
-<H2>
-    Target users
-</H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-   -->
-
-This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
-
-
-
-
-
-
-
-
-
+<H3>14.1 Other useful references  </H3>
 
 
 </BODY>
 </HTML>
+
+
 

@@ -5,7 +5,7 @@
 
 Function
 
-   Gene frequency and continuous character Maximum Likelihood method
+   Gene frequency and continuous character Maximum Likelihood
 
 Description
 
@@ -95,7 +95,7 @@ Usage
 
 
 % fcontml -printdata 
-Gene frequency and continuous character Maximum Likelihood method
+Gene frequency and continuous character Maximum Likelihood
 Input file: contml.dat
 Input tree file: 
 Output file [contml.fcontml]: 

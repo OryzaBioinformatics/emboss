@@ -17,6 +17,23 @@ Algorithm
 
 Usage
 
+   Here is a sample session with meme
+
+
+% meme -protein 
+Motif detection
+Input sequence(s): memepep.dat
+Motif Distribution
+      oops : Oops Distribution
+     zoops : Zoops Distribution
+       tcm : TCM Distribution
+Model to use [zoops]: 
+Maximum number of motifs to find [1]: 3
+Output file [carp_rhich.meme]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -185,10 +202,210 @@ Input file format
 
    meme reads any normal sequence USAs.
 
+  Input files for usage example
+
+  File: memepep.dat
+
+>CARP_RHICH P06026 RHIZOPUSPEPSIN PRECURSOR (EC 3.4.23.21)
+MKFTLISSCIAIAALAVAVDAAPGEKKISIPLAKNPNYKPSAKNAIQKAIAKYNKHKINT
+STGGIVPDAGVGTVPMTDYGNDVEYYGQVTIGTPGKKFNLDFDTGSSDLWIASTLCTNCG
+SRQTKYDPKQSSTYQADGRTWSISYGDGSSASGILAKDNVNLGGLLIKGQTIELAKREAA
+SFANGPNDGLLGLGFDTITTVRGVKTPMDNLISQGLISRPIFGVYLGKASNGGGGEYIFG
+GYDSTKFKGSLTTVPIDNSRGWWGITVDRATVGTSTVASSFDGILDTGTTLLILPNNVAA
+SVARAYGASDNGDGTYTISCDTSRFKPLVFSINGASFQVSPDSLVFEEYQGQCIAGFGYG
+NFDFAIIGDTFLKNNYVVFNQGVPEVQIAPVAQ
+>CARP_YEAST P07267 SACCHAROPEPSIN PRECURSOR (EC 3.4.23.25) (ASPARTATE PROTEASE)
+MFSLKALLPLALLLVSANQVAAKVHKAKIYKHELSDEMKEVTFEQHLAHLGQKYLTQFEK
+ANPEVVFSREHPFFTEGGHDVPLTNYLNAQYYTDITLGTPPQNFKVILDTGSSNLWVPSN
+ECGSLACFLHSKYDHEASSSYKANGTEFAIQYGTGSLEGYISQDTLSIGDLTIPKQDFAE
+ATSEPGLTFAFGKFDGILGLGYDTISVDKVVPPFYNAIQQDLLDEKRFAFYLGDTSKDTE
+NGGEATFGGIDESKFKGDITWLPVRRKAYWEVKFEGIGLGDEYAELESHGAAIDTGTSLI
+TLPSGLAEMINAEIGAKKGWTGQYTLDCNTRDNLPDLIFNFNGYNFTIGPYDYTLEVSGS
+CISAITPMDFPEPVGPLAIVGDAFLRKYYSIYDLGNNAVGLAKAI
+>CATD_HUMAN P07339 CATHEPSIN D PRECURSOR (EC 3.4.23.5)
+MQPSSLLPLALCLLAAPASALVRIPLHKFTSIRRTMSEVGGSVEDLIAKGPVSKYSQAVP
+AVTEGPIPEVLKNYMDAQYYGEIGIGTPPQCFTVVFDTGSSNLWVPSIHCKLLDIACWIH
+HKYNSDKSSTYVKNGTSFDIHYGSGSLSGYLSQDTVSVPCQSASSASALGGVKVERQVFG
+EATKQPGITFIAAKFDGILGMAYPRISVNNVLPVFDNLMQQKLVDQNIFSFYLSRDPDAQ
+PGGELMLGGTDSKYYKGSLSYLNVTRKAYWQVHLDQVEVASGLTLCKEGCEAIVDTGTSL
+MVGPVDEVRELQKAIGAVPLIQGEYMIPCEKVSTLPAITLKLGGKGYKLSPEDYTLKVSQ
+AGKTLCLSGFMGMDIPPPSGPLWILGDVFIGRYYTVFDRDNNRVGFAEAARL
+>CHYM_BOVIN P00794 PROCHYMOSIN A AND B PRECURSORS (EC 3.4.23.4) (PREPRORENNIN)
+MRCLVVLLAVFALSQGTEITRIPLYKGKSLRKALKEHGLLEDFLQKQQYGISSKYSGFGE
+VASVPLTNYLDSQYFGKIYLGTPPQEFTVLFDTGSSDFWVPSIYCKSNACKNHQRFDPRK
+SSTFQNLGKPLSIHYGTGSMQGILGYDTVTVSNIVDIQQTVGLSTQEPGDVFTYAEFDGI
+LGMAYPSLASEYSIPVFDNMMNRHLVAQDLFSVYMDRNGQESMLTLGAIDPSYYTGSLHW
+VPVTVQQYWQFTVDSVTISGVVVACEGGCQAILDTGTSKLVGPSSDILNIQQAIGATQNQ
+YGEFDIDCDNLSYMPTVVFEINGKMYPLTPSAYTSQDQGFCTSGFQSENHSQKWILGDVF
+IREYYSVFDRANNLVGLAKAI
+>PEPA_ASPAW P17946 ASPERGILLOPEPSIN A PRECURSOR (EC 3.4.23.18)
+MVVFSKTAALVLGLSSAVSAAPAPTRKGFTINQIARPANKTRTINLPGMYARSLAKFGGT
+VPQSVKEAASKGSAVTTPQNNDEEYLTPVTVGKSTLHLDFDTGSADLWVFSDELPSSEQT
+GHDLYTPSSSATKLSGYTWDISYGDGSSASGDVYRDTVTVGGVTTNKQAVEAASKISSEF
+VQNTANDGLLGLAFSSINTVQPKAQTTFFDTVKSQLDSPLFAVQLKHDAPGVYDFGYIDD
+SKYTGSITYTDADSSQGYWGFSTDGYSIGDGSSSSSGFSAIADTGTTLILLDDEIVSAYY
+EQVSGASGETEAGGYVFSCSTNPPDFTVVIGDYKAVVPGKYINYAPISTGSSTCFGGIQS
+NSGLGLSILGDVFLKSQYVVFNSEGPKLGFAAQA
+
 Output file format
 
    meme outputs a graph to the specified graphics device. outputs a
    report format file. The default format is ...
+
+  Output files for usage example
+
+  File: carp_rhich.meme
+
+*******************************************************************************
+*
+MEME - Motif discovery tool
+*******************************************************************************
+*
+MEME version 2.3.1 (Release date: 2000/11/05 21:47:56)
+
+For further information on how to interpret these results or to get
+a copy of the MEME software please access http://www.sdsc.edu/MEME.
+
+This file may be used as input to the MAST algorithm for searching
+sequence databases for matches to groups of motifs.  MAST is available
+for interactive use and downloading at http://www.sdsc.edu/MEME.
+*******************************************************************************
+*
+
+
+*******************************************************************************
+*
+REFERENCE
+*******************************************************************************
+*
+If you use this program in your research, please cite:
+
+Timothy L. Bailey and Charles Elkan,
+"Fitting a mixture model by expectation maximization to discover
+motifs in biopolymers", Proceedings of the Second International
+Conference on Intelligent Systems for Molecular Biology, pp. 28-36,
+AAAI Press, Menlo Park, California, 1994.
+*******************************************************************************
+*
+*******************************************************************************
+*
+TRAINING SET
+*******************************************************************************
+*
+DATAFILE= ../../data/memepep.dat (deleted by web version of MEME)
+ALPHABET= ACDEFGHIKLMNPQRSTVWY
+Sequence name           Weight Length  Sequence name           Weight Length
+-------------           ------ ------  -------------           ------ ------
+CARP_RHICH              1.0000    393  CARP_YEAST              1.0000    405
+CATD_HUMAN              1.0000    412  CHYM_BOVIN              1.0000    381
+PEPA_ASPAW              1.0000    394
+*******************************************************************************
+*
+
+
+
+*******************************************************************************
+*
+MOTIF  1                width =   8     sites =  5.0
+*******************************************************************************
+*
+Simplified     A  55:2::2:
+motif letter-  C  :22:::::
+probability    D  ::::::::
+matrix         E  ::::::::
+               F  ::::::::
+               G  ::::::::
+               H  ::::332:
+               I  2::2::::
+
+
+  [Part of this file has been deleted for brevity]
+
+letter-probability matrix: alength= 20 w= 16 n= 1910
+ 0.345527  0.003027  0.008623  0.010390  0.006714  0.011555  0.003738  0.009380
+  0.009749  0.015285  0.003844  0.007680  0.008446  0.006793  0.008650  0.17896
+7  0.009902  0.010727  0.335557  0.005447
+ 0.012194  0.003027  0.008623  0.010390  0.006714  0.011555  0.003738  0.842714
+  0.009749  0.015285  0.003844  0.007680  0.008446  0.006793  0.008650  0.01230
+0  0.009902  0.010727  0.002224  0.005447
+ 0.012194  0.003027  0.008623  0.010390  0.006714  0.011555  0.003738  0.176047
+  0.009749  0.515285  0.003844  0.007680  0.008446  0.006793  0.008650  0.01230
+0  0.009902  0.177394  0.002224  0.005447
+ 0.012194  0.003027  0.008623  0.010390  0.006714  0.844888  0.003738  0.009380
+  0.009749  0.015285  0.003844  0.007680  0.008446  0.006793  0.008650  0.01230
+0  0.009902  0.010727  0.002224  0.005447
+ 0.012194  0.003027  0.841956  0.010390  0.006714  0.011555  0.003738  0.009380
+  0.009749  0.015285  0.003844  0.007680  0.008446  0.006793  0.008650  0.01230
+0  0.009902  0.010727  0.002224  0.005447
+ 0.178861  0.003027  0.008623  0.010390  0.006714  0.011555  0.003738  0.009380
+  0.009749  0.015285  0.003844  0.007680  0.008446  0.006793  0.008650  0.01230
+0  0.176568  0.510727  0.002224  0.005447
+ 0.012194  0.003027  0.008623  0.010390  0.840047  0.011555  0.003738  0.009380
+  0.009749  0.015285  0.003844  0.007680  0.008446  0.006793  0.008650  0.01230
+0  0.009902  0.010727  0.002224  0.005447
+ 0.012194  0.003027  0.008623  0.010390  0.006714  0.011555  0.003738  0.342714
+  0.009749  0.515285  0.003844  0.007680  0.008446  0.006793  0.008650  0.01230
+0  0.009902  0.010727  0.002224  0.005447
+ 0.012194  0.003027  0.008623  0.010390  0.006714  0.178221  0.003738  0.009380
+  0.343082  0.015285  0.003844  0.007680  0.008446  0.006793  0.341983  0.01230
+0  0.009902  0.010727  0.002224  0.005447
+ 0.012194  0.003027  0.008623  0.177057  0.006714  0.011555  0.003738  0.009380
+  0.176415  0.015285  0.003844  0.174346  0.008446  0.006793  0.175316  0.17896
+7  0.009902  0.010727  0.002224  0.005447
+ 0.012194  0.003027  0.008623  0.010390  0.006714  0.011555  0.003738  0.009380
+  0.009749  0.015285  0.003844  0.174346  0.008446  0.173459  0.008650  0.01230
+0  0.009902  0.010727  0.002224  0.505447
+ 0.012194  0.003027  0.008623  0.010390  0.006714  0.011555  0.003738  0.009380
+  0.009749  0.015285  0.003844  0.007680  0.008446  0.006793  0.008650  0.01230
+0  0.009902  0.010727  0.002224  0.838780
+ 0.012194  0.003027  0.008623  0.010390  0.006714  0.011555  0.003738  0.009380
+  0.009749  0.015285  0.003844  0.007680  0.008446  0.006793  0.008650  0.34563
+4  0.176568  0.344060  0.002224  0.005447
+ 0.012194  0.003027  0.008623  0.010390  0.006714  0.011555  0.003738  0.176047
+  0.009749  0.015285  0.003844  0.007680  0.008446  0.006793  0.008650  0.01230
+0  0.009902  0.677394  0.002224  0.005447
+ 0.012194  0.003027  0.008623  0.010390  0.673381  0.011555  0.003738  0.009380
+  0.009749  0.015285  0.003844  0.007680  0.008446  0.006793  0.008650  0.01230
+0  0.009902  0.010727  0.002224  0.172114
+ 0.012194  0.003027  0.508623  0.010390  0.006714  0.011555  0.003738  0.009380
+  0.009749  0.015285  0.003844  0.341013  0.008446  0.006793  0.008650  0.01230
+0  0.009902  0.010727  0.002224  0.005447
+
+Stopped because nmotifs = 3 reached.
+
+
+*******************************************************************************
+*
+DEBUG INFORMATION
+*******************************************************************************
+*
+This information can also be useful in the event you wish to report a
+problem with the MEME software.
+
+model:  mod=         zoops    nmotifs=         3    chi=             1
+width:  minw=            8    maxw=           57    shorten=       yes
+lambda: minsites=        0    maxsites=        5
+theta:  prob=            1    spmap=         uni    spfuzz=        0.5
+em:     prior=   dirichlet    b=               1    maxiter=        50
+        distance=    0.001
+data:   n=            1985    N=               5
+strands:    w53
+sample: seed=            0    seqfrac=         1
+LRT:    adj=          root
+Letter frequencies:
+A 0.074 C 0.014 D 0.061 E 0.039 F 0.048 G 0.100 H 0.013 I 0.058 K 0.052
+L 0.084 M 0.014 N 0.040 P 0.048 Q 0.042 R 0.021 S 0.094 T 0.072 V 0.069
+W 0.010 Y 0.049
+Non-redundant database letter frequencies:
+A 0.073 C 0.018 D 0.052 E 0.062 F 0.040 G 0.069 H 0.022 I 0.056 K 0.058
+L 0.092 M 0.023 N 0.046 P 0.051 Q 0.041 R 0.052 S 0.074 T 0.059 V 0.064
+W 0.013 Y 0.033
+Effective length of alphabet = 20
+Entropy of dataset (bits) =     -4.1
+
+meme -protein
+*******************************************************************************
+*
 
 Data files
 
@@ -227,7 +444,7 @@ See also
    fuzzpro        Protein pattern search
    fuzztran       Protein pattern search after translation
    helixturnhelix Report nucleic acid binding motifs
-   oddcomp        Finds protein sequence regions with a biased composition
+   oddcomp        Find protein sequence regions with a biased composition
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
@@ -237,7 +454,16 @@ See also
 
 Author(s)
 
-   [an error occurred while processing this directive]
+   This program is an EMBOSS conversion of a program written by Thomas L.
+   Bailey as part of the MEME package.
+
+   Although we take every care to ensure that the results of the EMBOSS
+   version are identical to those from the original package, we recommend
+   that you check your inputs give the same results in both versions
+   before publication.
+
+   Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+   not to the original author.
 
 History
 

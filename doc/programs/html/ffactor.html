@@ -95,6 +95,26 @@ states is assumed to be a tree, with no loops in it.
         Many examples illustrating different behaviours is good.
  -->
 
+<b>Here is a sample session with ffactor</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>ffactor </b>
+Multistate to binary recoding program
+File containing data set: <b>factor.dat</b>
+Output file [factor.ffactor]: <b></b>
+
+
+Data matrix written on file "factor.ffactor"
+
+Done.
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -391,6 +411,25 @@ distribution copy.
 <p>
 
 
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: factor.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+   4   6
+1 A:B B:C
+2 A:B B:.
+4
+5 0:1 1:2 .:0
+6 .:# #:$ #:%
+999
+Alpha     CAW00#
+Beta      BBX01%
+Gamma     ABY12#
+Epsilon   CAZ01$
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -408,7 +447,7 @@ distribution copy.
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-[an error occurred while processing this directive]
+include file="inc/reportformats.ihtml"
    -->
 
 The first line of <b>ffactor</b> output will contain the number of
@@ -431,6 +470,29 @@ putting the Factors and Ancestors information into the data file.
 
 <p>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: factor.ffactor</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+    4    8
+Alpha     11100000
+Beta      10001001
+Gamma     00011100
+Epsilon   11101010
+</pre>
+</td></tr></table><p>
+<p><h3>File: factor.factor</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: factor.ancestor</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
 
 
 
@@ -578,14 +640,14 @@ None.
 <tr><td><a href="../phylip/edolpenny.html">edolpenny</a></td><td>Penny algorithm Dollo or polymorphism</td></tr>
 <tr><td><a href="../phylip/efactor.html">efactor</a></td><td>Multistate to binary recoding program</td></tr>
 <tr><td><a href="../phylip/emix.html">emix</a></td><td>Mixed parsimony algorithm</td></tr>
-<tr><td><a href="../phylip/epenny.html">epenny</a></td><td>Penny algorithm, branch-and-bound to find all most parsimonious trees</td></tr>
+<tr><td><a href="../phylip/epenny.html">epenny</a></td><td>Penny algorithm, branch-and-bound</td></tr>
 <tr><td><a href="fclique.html">fclique</a></td><td>Largest clique program</td></tr>
 <tr><td><a href="fdollop.html">fdollop</a></td><td>Dollo and polymorphism parsimony algorithm</td></tr>
 <tr><td><a href="fdolpenny.html">fdolpenny</a></td><td>Penny algorithm Dollo or polymorphism</td></tr>
 <tr><td><a href="fmix.html">fmix</a></td><td>Mixed parsimony algorithm</td></tr>
 <tr><td><a href="fmove.html">fmove</a></td><td>Interactive mixed method parsimony</td></tr>
 <tr><td><a href="fpars.html">fpars</a></td><td>Discrete character parsimony</td></tr>
-<tr><td><a href="fpenny.html">fpenny</a></td><td>Penny algorithm, branch-and-bound to find all most parsimonious trees</td></tr>
+<tr><td><a href="fpenny.html">fpenny</a></td><td>Penny algorithm, branch-and-bound</td></tr>
 </table>
 
 <!-- 

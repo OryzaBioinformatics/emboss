@@ -1,5 +1,7 @@
 
-CATHPARSE documentation
+                          CATHPARSE documentation
+                                      
+   
 
 CONTENTS
 
@@ -20,8 +22,7 @@ CONTENTS
 
 1.0 SUMMARY
 
-   Reads raw CATH classification files and writes DCF file (domain
-   classification file)
+   Generates DCF file from raw CATH files
 
 2.0 INPUTS & OUTPUTS
 
@@ -166,7 +167,7 @@ XX
 CH   0 CHAIN; 159 START; 202 END;
 //
 
-  File: CATHPARSE.log
+  File: cathparse.log
 
 1.10.8.10
 1.10.8
@@ -267,7 +268,7 @@ CH   0 CHAIN; 159 START; 202 END;
    CATHPARSE. Domain sequence information can be added to the file by
    using DOMAINSEQS. Output file Ecath.dat
    -logfile This option specifies the name of the CATHPARSE log file.
-   Output file CATHPARSE.log
+   Output file cathparse.log
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
@@ -280,8 +281,7 @@ CH   0 CHAIN; 159 START; 202 END;
 
 
 % cathparse 
-Reads raw CATH classification files and writes DCF file (domain
-classification file).
+Generates DCF file from raw CATH files.
 Name of raw CATH classification file (caths.list.vX.X) (input). [caths.list.v2.
 4]: caths.list.small
 Name of raw CATH classification file (domlist.vX.X) (input). [domlist.v2.4]: do
@@ -289,16 +289,10 @@ mlist.small
 Name of raw CATH classification file (CAT.names.all.vX.X) (input). [CAT.names.a
 ll.v2.4]: CAT.names.all.small
 Name of CATH DCF file (domain classification file) (output). [Ecath.dat]: 
-Name of CATHPARSE log file [CATHPARSE.log]: 
+Name of CATHPARSE log file [cathparse.log]: 
 
    Go to the input files for this example
    Go to the output files for this example
-
-   The raw CATH classification files caths.list.small, domlist.small and
-   CAT.names.all.small were read from test_data/ directory and and a
-   domain classification file in DCF format called
-   /test_data/cathparse/all.scop was written. The log file
-   test_data/cathparse/CATHPARSE.log was written.
 
 7.0 KNOWN BUGS & WARNINGS
 
@@ -339,43 +333,26 @@ Name of CATHPARSE log file [CATHPARSE.log]:
 
 See also
 
-   Program name Description
+    Program name                        Description
    aaindexextract Extract data from AAINDEX
-   allversusall Does an all-versus-all global alignment for each set of
-   sequences in an input directory and writes files of sequence
-   similarity values
-   cutgextract Extract data from CUTG
-   domainer Reads CCF files (clean coordinate files) for proteins and
-   writes CCF files for domains, taken from a DCF file (domain
-   classification file)
-   domainnr Removes redundant domains from a DCF file (domain
-   classification file). The file must contain domain sequence
-   information, which can be added by using DOMAINSEQS
-   domainseqs Adds sequence records to a DCF file (domain classification
-   file)
-   domainsse Adds secondary structure records to a DCF file (domain
-   classification file)
-   hetparse Converts raw dictionary of heterogen groups to a file in
-   EMBL-like format
-   pdbparse Parses PDB files and writes CCF files (clean coordinate
-   files) for proteins
-   pdbplus Add residue solvent accessibility and secondary structure data
-   to a CCF file (clean coordinate file) for a protein or domain
-   pdbtosp Convert raw swissprot:PDB equivalence file to EMBL-like format
-   printsextract Extract data from PRINTS
-   prosextract Builds the PROSITE motif database for patmatmotifs to
-   search
-   rebaseextract Extract data from REBASE
-   scopparse Reads raw SCOP classification files and writes a DCF file
-   (domain classification file)
-   seqnr Removes redundancy from DHF files (domain hits files) or other
-   files of sequences
-   sites Reads CCF files (clean coordinate files) and writes CON files
-   (contact files) of residue-ligand contact data for domains in a DCF
-   file (domain classification file)
-   ssematch Searches a DCF file (domain classification file) for
-   secondary structure matches
-   tfextract Extract data from TRANSFAC
+   allversusall   Sequence similarity data from all-versus-all comparison
+   cutgextract    Extract data from CUTG
+   domainer       Generates domain CCF files from protein CCF files
+   domainnr       Removes redundant domains from a DCF file
+   domainseqs     Adds sequence records to a DCF file
+   domainsse      Add secondary structure records to a DCF file
+   hetparse       Converts heterogen group dictionary to EMBL-like format
+   pdbparse       Parses PDB files and writes protein CCF files
+   pdbplus        Add accessibility & secondary structure to a CCF file
+   pdbtosp        Convert swissprot:PDB codes file to EMBL-like format
+   printsextract  Extract data from PRINTS
+   prosextract    Build the PROSITE motif database for use by patmatmotifs
+   rebaseextract  Extract data from REBASE
+   scopparse      Generate DCF file from raw SCOP files
+   seqnr          Removes redundancy from DHF files
+   sites          Generate residue-ligand CON files from CCF files
+   ssematch       Search a DCF file for secondary structure matches
+   tfextract      Extract data from TRANSFAC
 
 12.0 DIAGNOSTIC ERROR MESSAGES
 
@@ -390,10 +367,12 @@ See also
 
 14.0 REFERENCES
 
-   Please cite the authors and EMBOSS.
-   Rice P, Bleasby A.J. 2000. EMBOSS - The European Molecular Biology
-   Open Software Suite. Trends in Genetics, 15:276-278. See also
-   http://www.uk.embnet.org/Software/EMBOSS
+   Please cite the authors and EMBOSS. Please cite the authors and
+   EMBOSS.
+   Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+   Molecular Biology Open Software Suite" Trends in Genetics, 15:276-278.
+   
+   See also http://emboss.sourceforge.net/
 
   14.1 Other useful references
 

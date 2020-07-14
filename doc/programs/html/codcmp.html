@@ -127,9 +127,9 @@ This compares the codon usage tables for Escherichia coli and Haemophilus influe
 
 % <b>codcmp </b>
 Codon usage table comparison
-Codon usage file [Ehum.cut]: <b>Eeco.cut</b>
-Second Codon usage file [Ehum.cut]: <b>Ehin.cut</b>
-Output file [outfile.codcmp]: <b></b>
+Codon usage file: <b>Eecoli.cut</b>
+Second Codon usage file: <b>Ehaein.cut</b>
+Output file [eecoli.codcmp]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -151,23 +151,29 @@ Output file [outfile.codcmp]: <b></b>
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
+   "-first" associated qualifiers
+   -format1            string     Data format
+
+   "-second" associated qualifiers
+   -format2            string     Data format
+
    "-outfile" associated qualifiers
-   -odirectory3         string     Output directory
+   -odirectory3        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
@@ -184,14 +190,14 @@ Output file [outfile.codcmp]: <b></b>
 <td>[-first]<br>(Parameter 1)</td>
 <td>First codon usage file</td>
 <td>Codon usage file in EMBOSS data path</td>
-<td>Ehum.cut</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
 <td>[-second]<br>(Parameter 2)</td>
 <td>Second codon usage file for comparison</td>
 <td>Codon usage file in EMBOSS data path</td>
-<td>Ehum.cut</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
@@ -242,17 +248,17 @@ See below for details.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: outfile.codcmp</h3>
+<p><h3>File: eecoli.codcmp</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 # CODCMP codon usage table comparison
-# Eeco.cut vs Ehin.cut
+# Eecoli.cut vs Ehaein.cut
 
-Sum Squared Difference = 2.337
-Mean Squared Difference = 0.037
-Root Mean Squared Difference = 0.191
-Sum Difference         = 9.840
-Mean Difference         = 0.154
+Sum Squared Difference = 2.178
+Mean Squared Difference = 0.034
+Root Mean Squared Difference = 0.184
+Sum Difference         = 9.504
+Mean Difference         = 0.149
 Codons not appearing   = 0
 </pre>
 </td></tr></table><p>
@@ -367,10 +373,9 @@ None.
     Author(s)
 </H2>
 
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
 <p>

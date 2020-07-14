@@ -108,6 +108,13 @@ qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
 qapir         P    OK  OK  OK  PIR
 qapirall      P    OK  OK  OK  PIR
 qapirinc      P    OK  OK  OK  PIR
+qapxfasta     P    OK  OK  OK  FASTA file swissnew entries
+qapxflat      P    OK  OK  OK  Swissnew flatfiles
+qapxflatexc   P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapxflatinc   P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
+qaxpir        P    OK  OK  OK  PIR
+qaxpirall     P    OK  OK  OK  PIR
+qaxpirinc     P    OK  OK  OK  PIR
 tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
 tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL CD-ROM index
@@ -119,11 +126,21 @@ qangcg        N    OK  OK  OK  GCG format EMBL
 qangcgall     N    OK  OK  OK  GCG format EMBL
 qangcgexc     N    OK  OK  OK  GCG format EMBL without prokaryotes
 qangcginc     N    OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta     N    OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall  N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat      N    OK  OK  OK  EMBL flatfiles
+qanxflatall   N    OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxgcg       N    OK  OK  OK  GCG format EMBL
+qanxgcgall    N    OK  OK  OK  GCG format EMBL
+qanxgcgexc    N    OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc    N    OK  OK  OK  GCG format EMBL only prokaryotes
 qapirexc      N    OK  OK  OK  PIR
 qasrs         N    OK  OK  -   EMBL in local srs installation
 qasrsfasta    N    OK  OK  -   EMBL in local srs installation, fasta format
 qasrswww      N    OK  -   -   Remote SRS web server
 qawfasta      N    OK  OK  OK  FASTA file wormpep entries
+qawxfasta     N    OK  OK  OK  FASTA file wormpep entries
+qaxpirexc     N    OK  OK  OK  PIR
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
 temblall      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 temblrest     N    -   -   OK  EMBL in native format with EMBL CD-ROM index
@@ -195,6 +212,13 @@ Displays information on the currently available databases
 <tr><td>qapir</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
 <tr><td>qapirall</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
 <tr><td>qapirinc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>qapxfasta</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file swissnew entries</td></tr>
+<tr><td>qapxflat</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissnew flatfiles</td></tr>
+<tr><td>qapxflatexc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissnew flatfiles, no updated sequence file</td></tr>
+<tr><td>qapxflatinc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissnew flatfiles, only updated sequence file</td></tr>
+<tr><td>qaxpir</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>qaxpirall</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>qaxpirinc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
 <tr><td>tpir</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR using NBRF access for 4 files</td></tr>
 <tr><td>tsw</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissprot native format with EMBL CD-ROM index</td></tr>
 <tr><td>tswnew</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissnew as 3 files in native format with EMBL CD-ROM index</td></tr>
@@ -206,11 +230,21 @@ Displays information on the currently available databases
 <tr><td>qangcgall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL</td></tr>
 <tr><td>qangcgexc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL without prokaryotes</td></tr>
 <tr><td>qangcginc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL only prokaryotes</td></tr>
+<tr><td>qanxfasta</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file EMBL rodents</td></tr>
+<tr><td>qanxfastaall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file EMBL rodents, all fields indexed</td></tr>
+<tr><td>qanxflat</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL flatfiles</td></tr>
+<tr><td>qanxflatall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL flatfiles, all fields indexed</td></tr>
+<tr><td>qanxgcg</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL</td></tr>
+<tr><td>qanxgcgall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL</td></tr>
+<tr><td>qanxgcgexc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL without prokaryotes</td></tr>
+<tr><td>qanxgcginc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL only prokaryotes</td></tr>
 <tr><td>qapirexc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
 <tr><td>qasrs</td><td>N</td><td>OK  </td><td>OK  </td><td>-   </td><td>EMBL in local srs installation</td></tr>
 <tr><td>qasrsfasta</td><td>N</td><td>OK  </td><td>OK  </td><td>-   </td><td>EMBL in local srs installation, fasta format</td></tr>
 <tr><td>qasrswww</td><td>N</td><td>OK  </td><td>-   </td><td>-   </td><td>Remote SRS web server</td></tr>
 <tr><td>qawfasta</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file wormpep entries</td></tr>
+<tr><td>qawxfasta</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file wormpep entries</td></tr>
+<tr><td>qaxpirexc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
 <tr><td>tembl</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
 <tr><td>temblall</td><td>N</td><td>-   </td><td>-   </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
 <tr><td>temblrest</td><td>N</td><td>-   </td><td>-   </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
@@ -249,6 +283,13 @@ qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
 qapir         P    OK  OK  OK  PIR
 qapirall      P    OK  OK  OK  PIR
 qapirinc      P    OK  OK  OK  PIR
+qapxfasta     P    OK  OK  OK  FASTA file swissnew entries
+qapxflat      P    OK  OK  OK  Swissnew flatfiles
+qapxflatexc   P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapxflatinc   P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
+qaxpir        P    OK  OK  OK  PIR
+qaxpirall     P    OK  OK  OK  PIR
+qaxpirinc     P    OK  OK  OK  PIR
 tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
 tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL CD-ROM index
@@ -282,6 +323,13 @@ qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
 qapir         P    OK  OK  OK  PIR
 qapirall      P    OK  OK  OK  PIR
 qapirinc      P    OK  OK  OK  PIR
+qapxfasta     P    OK  OK  OK  FASTA file swissnew entries
+qapxflat      P    OK  OK  OK  Swissnew flatfiles
+qapxflatexc   P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapxflatinc   P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
+qaxpir        P    OK  OK  OK  PIR
+qaxpirall     P    OK  OK  OK  PIR
+qaxpirinc     P    OK  OK  OK  PIR
 tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
 tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL CD-ROM index
@@ -293,11 +341,21 @@ qangcg        N    OK  OK  OK  GCG format EMBL
 qangcgall     N    OK  OK  OK  GCG format EMBL
 qangcgexc     N    OK  OK  OK  GCG format EMBL without prokaryotes
 qangcginc     N    OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta     N    OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall  N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat      N    OK  OK  OK  EMBL flatfiles
+qanxflatall   N    OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxgcg       N    OK  OK  OK  GCG format EMBL
+qanxgcgall    N    OK  OK  OK  GCG format EMBL
+qanxgcgexc    N    OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc    N    OK  OK  OK  GCG format EMBL only prokaryotes
 qapirexc      N    OK  OK  OK  PIR
 qasrs         N    OK  OK  -   EMBL in local srs installation
 qasrsfasta    N    OK  OK  -   EMBL in local srs installation, fasta format
 qasrswww      N    OK  -   -   Remote SRS web server
 qawfasta      N    OK  OK  OK  FASTA file wormpep entries
+qawxfasta     N    OK  OK  OK  FASTA file wormpep entries
+qaxpirexc     N    OK  OK  OK  PIR
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
 temblall      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 temblrest     N    -   -   OK  EMBL in native format with EMBL CD-ROM index
@@ -332,6 +390,13 @@ qapflatinc
 qapir         
 qapirall      
 qapirinc      
+qapxfasta     
+qapxflat      
+qapxflatexc   
+qapxflatinc   
+qaxpir        
+qaxpirall     
+qaxpirinc     
 tpir          
 tsw           
 tswnew        
@@ -343,11 +408,21 @@ qangcg
 qangcgall     
 qangcgexc     
 qangcginc     
+qanxfasta     
+qanxfastaall  
+qanxflat      
+qanxflatall   
+qanxgcg       
+qanxgcgall    
+qanxgcgexc    
+qanxgcginc    
 qapirexc      
 qasrs         
 qasrsfasta    
 qasrswww      
 qawfasta      
+qawxfasta     
+qaxpirexc     
 tembl         
 temblall      
 temblrest     
@@ -383,6 +458,13 @@ qapflatinc    P
 qapir         P    
 qapirall      P    
 qapirinc      P    
+qapxfasta     P    
+qapxflat      P    
+qapxflatexc   P    
+qapxflatinc   P    
+qaxpir        P    
+qaxpirall     P    
+qaxpirinc     P    
 tpir          P    
 tsw           P    
 tswnew        P    
@@ -394,11 +476,21 @@ qangcg        N
 qangcgall     N    
 qangcgexc     N    
 qangcginc     N    
+qanxfasta     N    
+qanxfastaall  N    
+qanxflat      N    
+qanxflatall   N    
+qanxgcg       N    
+qanxgcgall    N    
+qanxgcgexc    N    
+qanxgcginc    N    
 qapirexc      N    
 qasrs         N    
 qasrsfasta    N    
 qasrswww      N    
 qawfasta      N    
+qawxfasta     N    
+qaxpirexc     N    
 tembl         N    
 temblall      N    
 temblrest     N    
@@ -640,6 +732,13 @@ qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
 qapir         P    OK  OK  OK  PIR
 qapirall      P    OK  OK  OK  PIR
 qapirinc      P    OK  OK  OK  PIR
+qapxfasta     P    OK  OK  OK  FASTA file swissnew entries
+qapxflat      P    OK  OK  OK  Swissnew flatfiles
+qapxflatexc   P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapxflatinc   P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
+qaxpir        P    OK  OK  OK  PIR
+qaxpirall     P    OK  OK  OK  PIR
+qaxpirinc     P    OK  OK  OK  PIR
 tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
 tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL CD-ROM index
@@ -651,11 +750,21 @@ qangcg        N    OK  OK  OK  GCG format EMBL
 qangcgall     N    OK  OK  OK  GCG format EMBL
 qangcgexc     N    OK  OK  OK  GCG format EMBL without prokaryotes
 qangcginc     N    OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta     N    OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall  N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat      N    OK  OK  OK  EMBL flatfiles
+qanxflatall   N    OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxgcg       N    OK  OK  OK  GCG format EMBL
+qanxgcgall    N    OK  OK  OK  GCG format EMBL
+qanxgcgexc    N    OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc    N    OK  OK  OK  GCG format EMBL only prokaryotes
 qapirexc      N    OK  OK  OK  PIR
 qasrs         N    OK  OK  -   EMBL in local srs installation
 qasrsfasta    N    OK  OK  -   EMBL in local srs installation, fasta format
 qasrswww      N    OK  -   -   Remote SRS web server
 qawfasta      N    OK  OK  OK  FASTA file wormpep entries
+qawxfasta     N    OK  OK  OK  FASTA file wormpep entries
+qaxpirexc     N    OK  OK  OK  PIR
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
 temblall      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 temblrest     N    -   -   OK  EMBL in native format with EMBL CD-ROM index
@@ -824,13 +933,13 @@ None noted.
 <tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
 <tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
 <tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
+<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
 <tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
 <tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
 <tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
-<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
+<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td></tr>
 <tr><td><a href="tfm.html">tfm</a></td><td>Displays a program's help documentation manual</td></tr>
 <tr><td><a href="whichdb.html">whichdb</a></td><td>Search all databases for an entry</td></tr>
 <tr><td><a href="wossname.html">wossname</a></td><td>Finds programs by keywords in their one-line documentation</td></tr>

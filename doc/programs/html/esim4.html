@@ -728,7 +728,7 @@ FT                   /clone_lib="CV007K"
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-[an error occurred while processing this directive]
+include file="inc/reportformats.ihtml"
    -->
 
 <b>esim4</b> 
@@ -771,7 +771,7 @@ seq2 = HSNFG9 (HSNFG9), 33760 bp
 	If you wish to include the standard description of what data
 	files are and how to use embossdata to inspect and retrieve
 	them, use:
-[an error occurred while processing this directive]
+include file="inc/localfiles.ihtml"
    -->
 
 **************** 
@@ -902,18 +902,19 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="../construct/alignrunner.html">alignrunner</a></td><td>Runs alignment program on all sequence pairs in a directory</td></tr>
-<tr><td><a href="../construct/contactalign.html">contactalign</a></td><td>EMBOSS implementation of Damian Counsell's 2.5-D alignment algorithm</td></tr>
+<tr><td><a href="../reconstruct/alignrunner.html">alignrunner</a></td><td>Align sequence pairs in a directory</td></tr>
+<tr><td><a href="../reconstruct/comparator.html">comparator</a></td><td>Compare contact scores of two sequence alignments</td></tr>
+<tr><td><a href="../reconstruct/contactalign.html">contactalign</a></td><td>Damian Counsell's experimental 2.5-D alignment algorithm</td></tr>
 <tr><td><a href="../../apps/est2genome.html">est2genome</a></td><td>Align EST and genomic DNA sequences</td></tr>
-<tr><td><a href="../construct/nawalign.html">nawalign</a></td><td>Damian Counsell's implementation for protein sequences of the Needleman and Wunsch alignment algorithm</td></tr>
-<tr><td><a href="../construct/nawalignrunner.html">nawalignrunner</a></td><td>Runs nawalign alignment program on all sequence pairs in a directory</td></tr>
+<tr><td><a href="../reconstruct/nawalign.html">nawalign</a></td><td>Damian Counsell's NW implementation</td></tr>
+<tr><td><a href="../reconstruct/nawalignrunner.html">nawalignrunner</a></td><td>Nawalign all sequence pairs in a directory</td></tr>
 <tr><td><a href="../../apps/needle.html">needle</a></td><td>Needleman-Wunsch global alignment</td></tr>
-<tr><td><a href="../construct/needlerunner.html">needlerunner</a></td><td>Runs needle alignment program on all sequence pairs in a directory</td></tr>
-<tr><td><a href="../construct/scorer.html">scorer</a></td><td>Scores accuracy of protein-protein sequence alignment against gold standard structure-structure alignment</td></tr>
-<tr><td><a href="../construct/scorerrunner.html">scorerrunner</a></td><td>Runs scorer to compare ordered pairs of substituted seqs in two directories and write the scores to a third</td></tr>
+<tr><td><a href="../reconstruct/needlerunner.html">needlerunner</a></td><td>Needle all sequence pairs in a directory</td></tr>
+<tr><td><a href="../reconstruct/scorer.html">scorer</a></td><td>Score alignments using structural alignments</td></tr>
+<tr><td><a href="../reconstruct/scorerrunner.html">scorerrunner</a></td><td>SCORER for ordered pairs of substituted seqs</td></tr>
 <tr><td><a href="../../apps/stretcher.html">stretcher</a></td><td>Finds the best global alignment between two sequences</td></tr>
-<tr><td><a href="../construct/substitute.html">substitute</a></td><td>Substitutes matches from first (query) sequence of two aligned sequences in a trace into second (template sequence)</td></tr>
-<tr><td><a href="../construct/substituterunner.html">substituterunner</a></td><td>Runs substitute on directory of traces and writes substituted sequences to another</td></tr>
+<tr><td><a href="../reconstruct/substitute.html">substitute</a></td><td>Substitute matches into a template</td></tr>
+<tr><td><a href="../reconstruct/substituterunner.html">substituterunner</a></td><td>Run SUBSTITUTE on a directory of traces</td></tr>
 </table>
 
 <!-- 

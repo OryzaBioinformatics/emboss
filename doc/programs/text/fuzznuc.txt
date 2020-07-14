@@ -313,7 +313,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Report_format: seqtable
 # Report_file: hhtetra.fuzznuc
 ########################################
@@ -380,9 +380,9 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

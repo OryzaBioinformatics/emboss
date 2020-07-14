@@ -5,7 +5,7 @@
 
 Function
 
-   Finds restriction enzymes that produce a specific overhang
+   Find restriction enzymes producing specific overhang
 
 Description
 
@@ -31,7 +31,7 @@ Usage
 
 
 % restover 
-Finds restriction enzymes that produce a specific overhang
+Find restriction enzymes producing specific overhang
 Input sequence(s): tembl:hsfau
 Overlap sequence: cg
 Output file [hsfau.restover]: 
@@ -351,10 +351,10 @@ Known bugs
 
 See also
 
-   Program name                          Description
-   recoder      Remove restriction sites but maintain the same translation
+   Program name                       Description
+   recoder      Remove restriction sites but maintain same translation
    redata       Search REBASE for enzyme name, references, suppliers etc
-   remap        Display a sequence with restriction cut sites, translation etc
+   remap        Display sequence with restriction sites, translation etc
    restrict     Finds restriction enzyme cleavage sites
    showseq      Display a sequence with features, translation etc
    silent       Silent mutation restriction enzyme scan

@@ -252,10 +252,13 @@ Known bugs
 
 See also
 
-   Program name          Description
-   dbifasta     Index a fasta database
+   Program name                     Description
+   dbifasta     Database indexing for fasta file databases
    dbiflat      Index a flat file database
    dbigcg       Index a GCG formatted database
+   dbxfasta     Database b+tree indexing for fasta file databases
+   dbxflat      Database b+tree indexing for flat file databases
+   dbxgcg       Database b+tree indexing for GCG formatted databases
 
 Author(s)
 

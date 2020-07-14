@@ -752,32 +752,31 @@ Known bugs
 
 See also
 
-   Program name Description
-   abiview Reads ABI file and display the trace
-   backtranseq Back translate a protein sequence
-   cirdna Draws circular maps of DNA constructs
-   coderet Extract CDS, mRNA and translations from feature tables
-   getorf Finds and extracts open reading frames (ORFs)
-   lindna Draws linear maps of DNA constructs
-   marscan Finds MAR/SAR sites in nucleic sequences
-   pepnet Displays proteins as a helical net
-   pepwheel Shows protein sequences as helices
-   plotorf Plot potential open reading frames
-   prettyplot Displays aligned sequences, with colouring and boxing
-   prettyseq Output sequence with translated ranges
-   remap Display a sequence with restriction cut sites, translation etc
-   seealso Finds programs sharing group names
-   showalign Displays a multiple sequence alignment
-   showdb Displays information on the currently available databases
-   showfeat Show features of a sequence
-   showorf Pretty output of DNA translations
-   showseq Display a sequence with features, translation etc
-   syco Synonymous codon usage Gribskov statistic plot
-   tcode Fickett TESTCODE statistic to identify protein-coding DNA
-   textsearch Search sequence documentation text. SRS and Entrez are
-   faster!
-   transeq Translate nucleic acid sequences
-   wobble Wobble base plot
+   Program name                        Description
+   abiview      Reads ABI file and display the trace
+   backtranseq  Back translate a protein sequence
+   cirdna       Draws circular maps of DNA constructs
+   coderet      Extract CDS, mRNA and translations from feature tables
+   getorf       Finds and extracts open reading frames (ORFs)
+   lindna       Draws linear maps of DNA constructs
+   marscan      Finds MAR/SAR sites in nucleic sequences
+   pepnet       Displays proteins as a helical net
+   pepwheel     Shows protein sequences as helices
+   plotorf      Plot potential open reading frames
+   prettyplot   Displays aligned sequences, with colouring and boxing
+   prettyseq    Output sequence with translated ranges
+   remap        Display sequence with restriction sites, translation etc
+   seealso      Finds programs sharing group names
+   showalign    Displays a multiple sequence alignment
+   showdb       Displays information on the currently available databases
+   showfeat     Show features of a sequence
+   showorf      Pretty output of DNA translations
+   showseq      Display a sequence with features, translation etc
+   syco         Synonymous codon usage Gribskov statistic plot
+   tcode        Fickett TESTCODE statistic to identify protein-coding DNA
+   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
+   transeq      Translate nucleic acid sequences
+   wobble       Wobble base plot
 
 Author(s)
 

@@ -278,7 +278,7 @@ See also
    garnier        Predicts protein secondary structure
    helixturnhelix Report nucleic acid binding motifs
    hmoment        Hydrophobic moment calculation
-   oddcomp        Finds protein sequence regions with a biased composition
+   oddcomp        Find protein sequence regions with a biased composition
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepnet         Displays proteins as a helical net
@@ -290,9 +290,9 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
    Original program "PEPCOIL" by Peter Rice (EGCG 1991)
 

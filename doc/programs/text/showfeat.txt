@@ -625,26 +625,25 @@ Known bugs
 
 See also
 
-   Program name Description
-   abiview Reads ABI file and display the trace
-   cirdna Draws circular maps of DNA constructs
-   coderet Extract CDS, mRNA and translations from feature tables
-   extractfeat Extract features from a sequence
-   lindna Draws linear maps of DNA constructs
-   maskfeat Mask off features of a sequence
-   pepnet Displays proteins as a helical net
-   pepwheel Shows protein sequences as helices
-   prettyplot Displays aligned sequences, with colouring and boxing
-   prettyseq Output sequence with translated ranges
-   remap Display a sequence with restriction cut sites, translation etc
-   seealso Finds programs sharing group names
-   showalign Displays a multiple sequence alignment
-   showdb Displays information on the currently available databases
-   showseq Display a sequence with features, translation etc
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   textsearch Search sequence documentation text. SRS and Entrez are
-   faster!
-   twofeat Finds neighbouring pairs of features in sequences
+   Program name                        Description
+   abiview      Reads ABI file and display the trace
+   cirdna       Draws circular maps of DNA constructs
+   coderet      Extract CDS, mRNA and translations from feature tables
+   extractfeat  Extract features from a sequence
+   lindna       Draws linear maps of DNA constructs
+   maskfeat     Mask off features of a sequence
+   pepnet       Displays proteins as a helical net
+   pepwheel     Shows protein sequences as helices
+   prettyplot   Displays aligned sequences, with colouring and boxing
+   prettyseq    Output sequence with translated ranges
+   remap        Display sequence with restriction sites, translation etc
+   seealso      Finds programs sharing group names
+   showalign    Displays a multiple sequence alignment
+   showdb       Displays information on the currently available databases
+   showseq      Display a sequence with features, translation etc
+   sixpack      Display a DNA sequence with 6-frame translation and ORFs
+   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
+   twofeat      Finds neighbouring pairs of features in sequences
 
 Author(s)
 

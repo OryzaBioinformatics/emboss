@@ -26,7 +26,7 @@ stssearch
 <H2>
     Function
 </H2>
-Searches a DNA database for matches with a set of STS primers
+Search a DNA database for matches with a set of STS primers
 
 
 <H2>
@@ -58,7 +58,7 @@ to be reported..
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>stssearch </b>
-Searches a DNA database for matches with a set of STS primers
+Search a DNA database for matches with a set of STS primers
 Input sequence(s): <b>tembl:eclac*</b>
 Primer file: <b>lac.primers</b>
 Output file [eclac.stssearch]: <b></b>
@@ -77,7 +77,7 @@ Output file [eclac.stssearch]: <b></b>
 <pre>
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Sequence database USA
-  [-primersfile]       infile     Primer file
+  [-infile]            infile     Primer file
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers: (none)
@@ -85,38 +85,38 @@ Output file [eclac.stssearch]: <b></b>
    Associated qualifiers:
 
    "-seqall" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory3         string     Output directory
+   -odirectory3        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
@@ -137,7 +137,7 @@ Output file [eclac.stssearch]: <b></b>
 </tr>
 
 <tr>
-<td>[-primersfile]<br>(Parameter 2)</td>
+<td>[-infile]<br>(Parameter 2)</td>
 <td>Primer file</td>
 <td>Input file</td>
 <td><b>Required</b></td>

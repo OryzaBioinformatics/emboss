@@ -26,7 +26,7 @@ supermatcher
 <H2>
     Function
 </H2>
-Finds a match of a large sequence against one or more sequences
+Match large sequences against one or more other sequences
 
 
 <H2>
@@ -52,7 +52,7 @@ to the space saving much larger sequences can be aligned.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>supermatcher tembl:ec* tembl:eclac -word 50  </b>
-Finds a match of a large sequence against one or more sequences
+Match large sequences against one or more other sequences
 Gap opening penalty [10.0]: <b></b>
 Gap extension penalty [0.5]: <b>3.0</b>
 Output alignment [eclac.supermatcher]: <b></b>
@@ -179,14 +179,14 @@ Output alignment [eclac.supermatcher]: <b></b>
 <tr>
 <td>-gapopen</td>
 <td>Gap opening penalty</td>
-<td>Number from 1.000 to 100.000</td>
+<td>Number from 0.000 to 100.000</td>
 <td>10.0 for any sequence type</td>
 </tr>
 
 <tr>
 <td>-gapextend</td>
 <td>Gap extension penalty</td>
-<td>Number from 0.100 to 10.000</td>
+<td>Number from 0.000 to 10.000</td>
 <td>0.5 for any sequence type</td>
 </tr>
 
@@ -427,7 +427,7 @@ The output alignment is in <b>simple</b> format by default.
 <pre>
 ########################################
 # Program: supermatcher
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Align_format: simple
 # Report_file: eclac.supermatcher
 ########################################
@@ -665,7 +665,7 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="matcher.html">matcher</a></td><td>Finds the best local alignments between two sequences</td></tr>
-<tr><td><a href="seqmatchall.html">seqmatchall</a></td><td>Does an all-against-all comparison of a set of sequences</td></tr>
+<tr><td><a href="seqmatchall.html">seqmatchall</a></td><td>All-against-all comparison of a set of sequences</td></tr>
 <tr><td><a href="water.html">water</a></td><td>Smith-Waterman local alignment</td></tr>
 <tr><td><a href="wordmatch.html">wordmatch</a></td><td>Finds all exact matches of a given size between 2 sequences</td></tr>
 </table>

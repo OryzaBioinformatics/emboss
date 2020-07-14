@@ -5,7 +5,7 @@
 
 Function
 
-   Index a fasta database
+   Database indexing for fasta file databases
 
 Description
 
@@ -39,7 +39,7 @@ Usage
 
 
 % dbifasta 
-Index a fasta database
+Database indexing for fasta file databases
 Database name: EMROD
     simple : >ID
      idacc : >ID ACC
@@ -209,16 +209,19 @@ Known bugs
 
 See also
 
-   Program name          Description
+   Program name                     Description
    dbiblast     Index a BLAST database
    dbiflat      Index a flat file database
    dbigcg       Index a GCG formatted database
+   dbxfasta     Database b+tree indexing for fasta file databases
+   dbxflat      Database b+tree indexing for flat file databases
+   dbxgcg       Database b+tree indexing for GCG formatted databases
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

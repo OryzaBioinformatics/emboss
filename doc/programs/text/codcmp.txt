@@ -76,9 +76,9 @@ Usage
 
 % codcmp 
 Codon usage table comparison
-Codon usage file [Ehum.cut]: Eeco.cut
-Second Codon usage file [Ehum.cut]: Ehin.cut
-Output file [outfile.codcmp]: 
+Codon usage file: Eecoli.cut
+Second Codon usage file: Ehaein.cut
+Output file [eecoli.codcmp]: 
 
    Go to the output files for this example
 
@@ -93,32 +93,38 @@ Command line arguments
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
+   "-first" associated qualifiers
+   -format1            string     Data format
+
+   "-second" associated qualifiers
+   -format2            string     Data format
+
    "-outfile" associated qualifiers
-   -odirectory3         string     Output directory
+   -odirectory3        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-first]
    (Parameter 1) First codon usage file Codon usage file in EMBOSS data
-   path Ehum.cut
+   path
    [-second]
    (Parameter 2) Second codon usage file for comparison Codon usage file
-   in EMBOSS data path Ehum.cut
+   in EMBOSS data path
    [-outfile]
    (Parameter 3) Output file name Output file <sequence>.codcmp
    Additional (Optional) qualifiers Allowed values Default
@@ -135,16 +141,16 @@ Output file format
 
   Output files for usage example
 
-  File: outfile.codcmp
+  File: eecoli.codcmp
 
 # CODCMP codon usage table comparison
-# Eeco.cut vs Ehin.cut
+# Eecoli.cut vs Ehaein.cut
 
-Sum Squared Difference = 2.337
-Mean Squared Difference = 0.037
-Root Mean Squared Difference = 0.191
-Sum Difference         = 9.840
-Mean Difference         = 0.154
+Sum Squared Difference = 2.178
+Mean Squared Difference = 0.034
+Root Mean Squared Difference = 0.184
+Sum Difference         = 9.504
+Mean Difference         = 0.149
 Codons not appearing   = 0
 
 Data files
@@ -215,9 +221,9 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
    Some more statistics were added by David Martin
    (dmartin © rfcgr.mrc.ac.uk)

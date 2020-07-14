@@ -100,6 +100,34 @@ Algorithm
 
 Usage
 
+   Here is a sample session with fproml
+
+
+% fproml 
+Protein phylogeny by maximum likelihood
+Input sequence: proml.dat
+Input tree file: 
+Output file [proml.fproml]: 
+
+
+Adding species:
+   1. Alpha
+   2. Beta
+   3. Gamma
+   4. Delta
+   5. Epsilon
+
+
+Output written to file "proml.fproml"
+
+Tree also written onto file "proml.treefile"
+
+Done.
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -246,6 +274,17 @@ Command line arguments
 Input file format
 
    fproml reads any normal sequence USAs.
+
+  Input files for usage example
+
+  File: proml.dat
+
+   5   13
+Alpha     AACGTGGCCAAAT
+Beta      AAGGTCGCCAAAC
+Gamma     CATTTCGTCACAA
+Delta     GGTATTTCGGCCT
+Epsilon   GGGATCTCGGCCC
 
 Output file format
 
@@ -438,6 +477,48 @@ Output file format
    tabulating the ancestral states, refers to 95% of the likelihood that
    is accounted for by that particular combination of rates.
 
+  Output files for usage example
+
+  File: proml.fproml
+
+Jones-Taylor-Thornton model of amino acid change
+
+
+  +Beta
+  |
+  |                                    +Epsilon
+  |      +-----------------------------3
+  1------2                             +------------Delta
+  |      |
+  |      +--------------------Gamma
+  |
+  +---------Alpha
+
+
+remember: this is an unrooted tree!
+
+Ln Likelihood =  -131.58633
+
+ Between        And            Length      Approx. Confidence Limits
+ -------        ---            ------      ------- ---------- ------
+
+     1          Alpha             0.30915     (     zero,     0.66607) **
+     1          Beta              0.00010     (     zero,    infinity)
+     1             2              0.22118     (     zero,     0.62671) *
+     2             3              1.00021     (  0.13925,     1.86116) **
+     3          Epsilon           0.00010     (     zero,    infinity)
+     3          Delta             0.41008     (     zero,     0.86345) **
+     2          Gamma             0.68318     (  0.01678,     1.34958) **
+
+     *  = significantly positive, P < 0.05
+     ** = significantly positive, P < 0.01
+
+
+  File: proml.treefile
+
+(Beta:0.00010,((Epsilon:0.00010,Delta:0.41008):1.00021,
+Gamma:0.68318):0.22118,Alpha:0.30915);
+
 Data files
 
    None
@@ -468,39 +549,37 @@ Known bugs
 
 See also
 
-   Program name Description
-   ednacomp DNA compatibility algorithm
-   ednadist Nucleic acid sequence Distance Matrix program
-   ednainvar Nucleic acid sequence Invariants method
-   ednaml Estimates phylogenies from nucleic acid sequence Maximum
-   Likelihood
-   ednamlk Estimates phylogenies from nucleic acid sequence Maximum
-   Likelihood with molecular clock
-   ednapars DNA parsimony algorithm
-   ednapenny Penny algorithm for DNA
-   eprotdist Protein distance algorithm
-   eprotpars Protein parsimony algorithm
-   erestml Restriction site Maximum Likelihood method
-   eseqboot Bootstrapped sequences algorithm
-   fdiscboot Bootstrapped discrete sites algorithm
-   fdnacomp DNA compatibility algorithm
-   fdnadist Nucleic acid sequence Distance Matrix program
-   fdnainvar Nucleic acid sequence Invariants method
-   fdnaml Estimates nucleotide phylogeny by maximum likelihood
-   fdnamlk Estimates nucleotide phylogeny by maximum likelihood
-   fdnamove Interactive DNA parsimony
-   fdnapars DNA parsimony algorithm
-   fdnapenny Penny algorithm for DNA
-   fdolmove Interactive Dollo or Polymorphism Parsimony
-   ffreqboot Bootstrapped genetic frequencies algorithm
-   fpromlk Protein phylogeny by maximum likelihood
-   fprotdist Protein distance algorithm
-   fprotpars Protein pasimony algorithm
-   frestboot Bootstrapped restriction sites algorithm
-   frestdist Computes distance matrix from restriction sites or fragments
-   frestml Restriction site maximum Likelihood method
-   fseqboot Bootstrapped sequences algorithm
-   fseqbootall Bootstrapped sequences algorithm
+   Program name                         Description
+   ednacomp     DNA compatibility algorithm
+   ednadist     Nucleic acid sequence Distance Matrix program
+   ednainvar    Nucleic acid sequence Invariants method
+   ednaml       Phylogenies from nucleic acid Maximum Likelihood
+   ednamlk      Phylogenies from nucleic acid Maximum Likelihood with clock
+   ednapars     DNA parsimony algorithm
+   ednapenny    Penny algorithm for DNA
+   eprotdist    Protein distance algorithm
+   eprotpars    Protein parsimony algorithm
+   erestml      Restriction site Maximum Likelihood method
+   eseqboot     Bootstrapped sequences algorithm
+   fdiscboot    Bootstrapped discrete sites algorithm
+   fdnacomp     DNA compatibility algorithm
+   fdnadist     Nucleic acid sequence Distance Matrix program
+   fdnainvar    Nucleic acid sequence Invariants method
+   fdnaml       Estimates nucleotide phylogeny by maximum likelihood
+   fdnamlk      Estimates nucleotide phylogeny by maximum likelihood
+   fdnamove     Interactive DNA parsimony
+   fdnapars     DNA parsimony algorithm
+   fdnapenny    Penny algorithm for DNA
+   fdolmove     Interactive Dollo or Polymorphism Parsimony
+   ffreqboot    Bootstrapped genetic frequencies algorithm
+   fpromlk      Protein phylogeny by maximum likelihood
+   fprotdist    Protein distance algorithm
+   fprotpars    Protein pasimony algorithm
+   frestboot    Bootstrapped restriction sites algorithm
+   frestdist    Distance matrix from restriction sites or fragments
+   frestml      Restriction site maximum Likelihood method
+   fseqboot     Bootstrapped sequences algorithm
+   fseqbootall  Bootstrapped sequences algorithm
 
 Author(s)
 

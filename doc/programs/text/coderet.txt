@@ -95,6 +95,7 @@ Usage
 Extract CDS, mRNA and translations from feature tables
 Input sequence(s): tembl:X03487
 Output sequence [hsferg1.fasta]: 
+Output file [hsferg1.coderet]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -108,6 +109,7 @@ Output sequence [hsferg1.fasta]:
 Extract CDS, mRNA and translations from feature tables
 Input sequence(s): tembl:X03487
 Output sequence [hsferg1.fasta]: 
+Output file [hsferg1.coderet]: 
 
    Go to the output files for this example
 
@@ -116,6 +118,7 @@ Command line arguments
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Sequence database USA
   [-outseq]            seqout     Output sequence USA
+  [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -126,47 +129,50 @@ Command line arguments
    Associated qualifiers:
 
    "-seqall" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outseq" associated qualifiers
-   -osformat2           string     Output seq format
-   -osextension2        string     File name extension
-   -osname2             string     Base file name
-   -osdirectory2        string     Output directory
-   -osdbname2           string     Database name to add
-   -ossingle2           boolean    Separate file for each entry
-   -oufo2               string     UFO features
-   -offormat2           string     Features format
-   -ofname2             string     Features file name
-   -ofdirectory2        string     Output directory
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
    Standard (Mandatory) qualifiers Allowed values Default
@@ -174,6 +180,8 @@ Command line arguments
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-outseq]
    (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.coderet
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
@@ -322,6 +330,12 @@ HEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECALHLEKNVNQSLLELHK
 LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
 NES
 
+  File: hsferg1.coderet
+
+   CDS  mRNA Trans Total Sequence
+ ===== ===== ===== ===== ========
+     1     1     1     3 HSFERG1
+
   Output files for usage example 2
 
   File: hsferg1.fasta
@@ -333,6 +347,12 @@ cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
 ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
 gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
 ctcctacgtttacctgtccatg
+
+  File: hsferg1.coderet
+
+  mRNA Total Sequence
+ ===== ===== ========
+     1     1 HSFERG1
 
 Data files
 
@@ -366,13 +386,13 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                       Description
    backtranseq  Back translate a protein sequence
    extractfeat  Extract features from a sequence
    maskfeat     Mask off features of a sequence
    plotorf      Plot potential open reading frames
    prettyseq    Output sequence with translated ranges
-   remap        Display a sequence with restriction cut sites, translation etc
+   remap        Display sequence with restriction sites, translation etc
    showfeat     Show features of a sequence
    showorf      Pretty output of DNA translations
    showseq      Display a sequence with features, translation etc
@@ -382,9 +402,9 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

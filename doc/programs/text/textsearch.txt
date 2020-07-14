@@ -5,7 +5,7 @@
 
 Function
 
-   Search sequence documentation text. SRS and Entrez are faster!
+   Search sequence documentation. Slow, use SRS and Entrez!
 
 Description
 
@@ -22,7 +22,7 @@ Usage
 
 
 % textsearch tsw:* 'lactose' 
-Search sequence documentation text. SRS and Entrez are faster!
+Search sequence documentation. Slow, use SRS and Entrez!
 Output file [100k_rat.textsearch]: 
 
    Go to the input files for this example
@@ -34,7 +34,7 @@ Output file [100k_rat.textsearch]:
 
 
 % textsearch tsw:*_ecoli 'lactose | permease' 
-Search sequence documentation text. SRS and Entrez are faster!
+Search sequence documentation. Slow, use SRS and Entrez!
 Output file [laci_ecoli.textsearch]: 
 
    Go to the output files for this example
@@ -45,7 +45,7 @@ Output file [laci_ecoli.textsearch]:
 
 
 % textsearch tembl:* 'lacz' -html -outfile embl.lacz.html 
-Search sequence documentation text. SRS and Entrez are faster!
+Search sequence documentation. Slow, use SRS and Entrez!
 
    Go to the input files for this example
    Go to the output files for this example
@@ -231,7 +231,7 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                        Description
    abiview      Reads ABI file and display the trace
    cirdna       Draws circular maps of DNA constructs
    infoalign    Information on a multiple sequence alignment
@@ -241,7 +241,7 @@ See also
    pepwheel     Shows protein sequences as helices
    prettyplot   Displays aligned sequences, with colouring and boxing
    prettyseq    Output sequence with translated ranges
-   remap        Display a sequence with restriction cut sites, translation etc
+   remap        Display sequence with restriction sites, translation etc
    seealso      Finds programs sharing group names
    showalign    Displays a multiple sequence alignment
    showdb       Displays information on the currently available databases

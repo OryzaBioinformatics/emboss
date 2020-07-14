@@ -204,7 +204,7 @@ DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
   File: paamir_1.gff
 
 ##gff-version 2.0
-##date 2004-07-15
+##date 2005-07-15
 ##Type Protein PAAMIR_1
 PAAMIR_1        checktrans      misc_feature    278     634     0.000   +
 .       Sequence "PAAMIR_1.1"
@@ -239,10 +239,10 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                        Description
    backtranseq  Back translate a protein sequence
    charge       Protein charge plot
-   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   compseq      Count composition of dimer/trimer/etc words in a sequence
    emowse       Protein identification by mass spectrometry
    freak        Residue/base frequency table or plot
    iep          Calculates the isoelectric point of a protein

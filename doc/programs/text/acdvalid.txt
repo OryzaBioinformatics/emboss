@@ -29,8 +29,6 @@ Usage
 
 % acdvalid antigenic 
 
-   Go to the input files for this example
-
 Command line arguments
 
    The first parameter is the name of the program to compile. All other

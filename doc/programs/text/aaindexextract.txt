@@ -269,13 +269,12 @@ Known bugs
 
 See also
 
-   Program name Description
-   cutgextract Extract data from CUTG
+   Program name                        Description
+   cutgextract   Extract data from CUTG
    printsextract Extract data from PRINTS
-   prosextract Builds the PROSITE motif database for patmatmotifs to
-   search
+   prosextract   Build the PROSITE motif database for use by patmatmotifs
    rebaseextract Extract data from REBASE
-   tfextract Extract data from TRANSFAC
+   tfextract     Extract data from TRANSFAC
 
    The programs pepwindow and pepwindowall normally use the standard
    EMBOSS data file 'Enakai.dat' by default, but you can set their

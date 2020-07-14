@@ -212,7 +212,6 @@ order of these pairs in the input tree file, in odd ways.
 % <b>ftreedist </b>
 Distances between trees
 Input tree file: <b>treedist.dat</b>
-Second input tree file: <b></b>
 Output file [treedist.ftreedist]: <b></b>
 
 
@@ -234,7 +233,6 @@ Done.
 % <b>ftreedist -dtype s </b>
 Distances between trees
 Input tree file: <b>treedist2.dat</b>
-Second input tree file: <b></b>
 Output file [treedist2.ftreedist]: <b></b>
 
 
@@ -258,13 +256,11 @@ Done.
 <pre>
    Standard (Mandatory) qualifiers:
   [-intreefile]        tree       (no help text) tree value
-  [-secondintreefile]  tree       Second input tree file
   [-outfile]           outfile    Output file name
 
-   Additional (Optional) qualifiers (* if not always prompted):
+   Additional (Optional) qualifiers:
    -dtype              menu       Distance type
-*  -pairing            menu       Tree pairing method
-*  -pairingtwo         menu       Tree pairing method
+   -pairing            menu       Tree pairing method
    -style              menu       Distances output option
    -noroot             boolean    Trees to be treated as rooted
    -outgrno            integer    Species number to use as outgroup
@@ -274,7 +270,7 @@ Done.
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory3        string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -310,14 +306,7 @@ Done.
 </tr>
 
 <tr>
-<td>[-secondintreefile]<br>(Parameter 2)</td>
-<td>Second input tree file</td>
-<td>Phylogenetic tree</td>
-<td>&nbsp;</td>
-</tr>
-
-<tr>
-<td>[-outfile]<br>(Parameter 3)</td>
+<td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
 <td><i>&lt;sequence&gt;</i>.ftreedist</td>
@@ -341,13 +330,6 @@ Done.
 <td>Tree pairing method</td>
 <td><table><tr><td>a</td> <td><i>(Distances between adjacent pairs in tree file)</i></td></tr><tr><td>p</td> <td><i>(Distances between all possible pairs in tree file)</i></td></tr></table></td>
 <td>a</td>
-</tr>
-
-<tr>
-<td>-pairingtwo</td>
-<td>Tree pairing method</td>
-<td><table><tr><td>c</td> <td><i>(Distances between corresponding pairs in one tree file and another)</i></td></tr><tr><td>l</td> <td><i>(Distances between all pairs in one tree file and another)</i></td></tr></table></td>
-<td>c</td>
 </tr>
 
 <tr>
@@ -497,7 +479,7 @@ D:0.1):0.1):0.1,C:0.1):0.1):0.1):0.1):0.1);
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-[an error occurred while processing this directive]
+include file="inc/reportformats.ihtml"
    -->
 
 If any of the four types of analysis are selected, the user must

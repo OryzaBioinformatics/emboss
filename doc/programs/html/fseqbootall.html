@@ -241,6 +241,44 @@ alignment XML format  </td></tr>
 <H2>
     Usage
 </H2>
+<b>Here is a sample session with fseqbootall</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fseqbootall -seed 3 </b>
+Bootstrapped sequences algorithm
+Input sequence set: <b>seqboot.dat</b>
+Output file [seqboot.fseqbootall]: <b></b>
+
+
+ bootstrap: true
+jackknife: false
+ permute: false
+ lockhart: false
+ ild: false
+ justwts: false 
+
+completed replicate number   10
+completed replicate number   20
+completed replicate number   30
+completed replicate number   40
+completed replicate number   50
+completed replicate number   60
+completed replicate number   70
+completed replicate number   80
+completed replicate number   90
+completed replicate number  100
+
+Output written to file "seqboot.fseqbootall"
+
+Done.
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -528,6 +566,20 @@ sequence USAs.
 <p>
 
 
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: seqboot.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+    5    6
+Alpha     AACAAC
+Beta      AACCCC
+Gamma     ACCAAC
+Delta     CCACCA
+Epsilon   CCAAAC
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -577,6 +629,119 @@ has been written to the output file.
 
 <p>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: seqboot.fseqbootall</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+    5     6
+Alpha     AAACCA
+Beta      AAACCC
+Gamma     ACCCCA
+Delta     CCCAAC
+Epsilon   CCCAAA
+    5     6
+Alpha     AAACAA
+Beta      AAACCC
+Gamma     ACCCAA
+Delta     CCCACC
+Epsilon   CCCAAA
+    5     6
+Alpha     AAAAAC
+Beta      AAACCC
+Gamma     AACAAC
+Delta     CCCCCA
+Epsilon   CCCAAC
+    5     6
+Alpha     CCCCCA
+Beta      CCCCCC
+Gamma     CCCCCA
+Delta     AAAAAC
+Epsilon   AAAAAA
+    5     6
+Alpha     AAAACC
+Beta      AAACCC
+Gamma     AACACC
+Delta     CCCCAA
+Epsilon   CCCACC
+    5     6
+Alpha     AAAACC
+Beta      ACCCCC
+Gamma     AAAACC
+Delta     CCCCAA
+Epsilon   CAAACC
+    5     6
+Alpha     AACCAA
+Beta      AACCCC
+Gamma     ACCCAA
+Delta     CCAACC
+Epsilon   CCAAAA
+    5     6
+Alpha     AAAACC
+Beta      ACCCCC
+Gamma     AAAACC
+Delta     CCCCAA
+Epsilon   CAAACC
+    5     6
+Alpha     AACACC
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+Gamma     ACAAAA
+Delta     CCCCCC
+Epsilon   CCAAAA
+    5     6
+Alpha     AACAAC
+Beta      AACCCC
+Gamma     AACAAC
+Delta     CCACCA
+Epsilon   CCAAAC
+    5     6
+Alpha     AACAAA
+Beta      AACCCC
+Gamma     CCCAAA
+Delta     CCACCC
+Epsilon   CCAAAA
+    5     6
+Alpha     ACAAAA
+Beta      ACCCCC
+Gamma     CCAAAA
+Delta     CACCCC
+Epsilon   CAAAAA
+    5     6
+Alpha     CAAAAA
+Beta      CCCCCC
+Gamma     CAAAAA
+Delta     ACCCCC
+Epsilon   AAAAAA
+    5     6
+Alpha     CAACCC
+Beta      CCCCCC
+Gamma     CAACCC
+Delta     ACCAAA
+Epsilon   AAACCC
+    5     6
+Alpha     ACAACC
+Beta      ACCCCC
+Gamma     ACAACC
+Delta     CACCAA
+Epsilon   CAAACC
+    5     6
+Alpha     AAAAAA
+Beta      AAAAAC
+Gamma     ACCCCA
+Delta     CCCCCC
+Epsilon   CCCCCA
+    5     6
+Alpha     AACAAC
+Beta      AACCCC
+Gamma     CCCAAC
+Delta     CCACCA
+Epsilon   CCAAAC
+</pre>
+</td></tr></table><p>
 
 
 
@@ -631,8 +796,8 @@ None.
 <tr><td><a href="../phylip/ednacomp.html">ednacomp</a></td><td>DNA compatibility algorithm</td></tr>
 <tr><td><a href="../phylip/ednadist.html">ednadist</a></td><td>Nucleic acid sequence Distance Matrix program</td></tr>
 <tr><td><a href="../phylip/ednainvar.html">ednainvar</a></td><td>Nucleic acid sequence Invariants method</td></tr>
-<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood</td></tr>
-<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood with molecular clock</td></tr>
+<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Phylogenies from nucleic acid Maximum Likelihood</td></tr>
+<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Phylogenies from nucleic acid Maximum Likelihood with clock</td></tr>
 <tr><td><a href="../phylip/ednapars.html">ednapars</a></td><td>DNA parsimony algorithm</td></tr>
 <tr><td><a href="../phylip/ednapenny.html">ednapenny</a></td><td>Penny algorithm for DNA</td></tr>
 <tr><td><a href="../phylip/eprotdist.html">eprotdist</a></td><td>Protein distance algorithm</td></tr>
@@ -655,7 +820,7 @@ None.
 <tr><td><a href="fprotdist.html">fprotdist</a></td><td>Protein distance algorithm</td></tr>
 <tr><td><a href="fprotpars.html">fprotpars</a></td><td>Protein pasimony algorithm</td></tr>
 <tr><td><a href="frestboot.html">frestboot</a></td><td>Bootstrapped restriction sites algorithm</td></tr>
-<tr><td><a href="frestdist.html">frestdist</a></td><td>Computes distance matrix from restriction sites or fragments</td></tr>
+<tr><td><a href="frestdist.html">frestdist</a></td><td>Distance matrix from restriction sites or fragments</td></tr>
 <tr><td><a href="frestml.html">frestml</a></td><td>Restriction site maximum Likelihood method</td></tr>
 <tr><td><a href="fseqboot.html">fseqboot</a></td><td>Bootstrapped sequences algorithm</td></tr>
 </table>

@@ -341,11 +341,11 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                        Description
    backtranseq  Back translate a protein sequence
    charge       Protein charge plot
    checktrans   Reports STOP codons and ORF statistics of a protein
-   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   compseq      Count composition of dimer/trimer/etc words in a sequence
    emowse       Protein identification by mass spectrometry
    freak        Residue/base frequency table or plot
    iep          Calculates the isoelectric point of a protein

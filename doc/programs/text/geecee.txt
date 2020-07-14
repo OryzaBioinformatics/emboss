@@ -5,7 +5,7 @@
 
 Function
 
-   Calculates the fractional GC content of nucleic acid sequences
+   Calculates fractional GC content of nucleic acid sequences
 
 Description
 
@@ -22,7 +22,7 @@ Usage
 
 
 % geecee tembl:hhtetra 
-Calculates the fractional GC content of nucleic acid sequences
+Calculates fractional GC content of nucleic acid sequences
 Output file [hhtetra.geecee]: 
 
    Go to the input files for this example

@@ -237,7 +237,7 @@ Output file format
 
 ########################################
 # Program: helixturnhelix
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Report_format: motif
 # Report_file: laci_ecoli.hth
 ########################################
@@ -378,7 +378,7 @@ See also
    fuzztran     Protein pattern search after translation
    garnier      Predicts protein secondary structure
    hmoment      Hydrophobic moment calculation
-   oddcomp      Finds protein sequence regions with a biased composition
+   oddcomp      Find protein sequence regions with a biased composition
    patmatdb     Search a protein sequence with a motif
    patmatmotifs Search a PROSITE motif database with a protein sequence
    pepcoil      Predicts coiled coil regions
@@ -391,9 +391,9 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
    Original program "HELIXTURNHELIX" (EGCG 1990) by Peter Rice
    (pmr © ebi.ac.uk)

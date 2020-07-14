@@ -455,8 +455,8 @@ Known bugs
 
 See also
 
-   Program name                          Description
-   dotpath      Displays a non-overlapping wordmatch dotplot of two sequences
+   Program name                       Description
+   dotpath      Non-overlapping wordmatch dotplot of two sequences
    dottup       Displays a wordmatch dotplot of two sequences
    polydot      Displays all-against-all dotplots of a set of sequences
 

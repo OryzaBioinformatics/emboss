@@ -35,11 +35,11 @@ Finds programs by keywords in their one-line documentation
 SEARCH FOR 'RESTRICT'
 erestml          Restriction site Maximum Likelihood method
 frestboot        Bootstrapped restriction sites algorithm
-frestdist        Computes distance matrix from restriction sites or fragments
+frestdist        Distance matrix from restriction sites or fragments
 frestml          Restriction site maximum Likelihood method
-recoder          Remove restriction sites but maintain the same translation
-remap            Display a sequence with restriction cut sites, translation etc
-restover         Finds restriction enzymes that produce a specific overhang
+recoder          Remove restriction sites but maintain same translation
+remap            Display sequence with restriction sites, translation etc
+restover         Find restriction enzymes producing specific overhang
 restrict         Finds restriction enzyme cleavage sites
 silent           Silent mutation restriction enzyme scan
 
@@ -69,38 +69,30 @@ diffseq          Find differences between nearly identical sequences
 
 ALIGNMENT DOT PLOTS
 dotmatcher       Displays a thresholded dotplot of two sequences
-dotpath          Displays a non-overlapping wordmatch dotplot of two sequences
+dotpath          Non-overlapping wordmatch dotplot of two sequences
 dottup           Displays a wordmatch dotplot of two sequences
 polydot          Displays all-against-all dotplots of a set of sequences
 
 ALIGNMENT GLOBAL
-alignrunner      Runs alignment program on all sequence pairs in a directory
-contactalign     EMBOSS implementation of Damian Counsell's 2.5-D alignment alg
-orithm
+alignrunner      Align sequence pairs in a directory
+comparator       Compare contact scores of two sequence alignments
+contactalign     Damian Counsell's experimental 2.5-D alignment algorithm
 esim4            Align an mRNA to a genomic DNA sequence
 est2genome       Align EST and genomic DNA sequences
-nawalign         Damian Counsell's implementation for protein sequences of the
-Needleman and Wunsch alignment algorithm
-nawalignrunner   Runs nawalign alignment program on all sequence pairs in a dir
-ectory
+nawalign         Damian Counsell's NW implementation
+nawalignrunner   Nawalign all sequence pairs in a directory
 needle           Needleman-Wunsch global alignment
-needlerunner     Runs needle alignment program on all sequence pairs in a direc
-tory
-scorer           Scores accuracy of protein-protein sequence alignment against
-gold standard structure-structure alignment
-scorerrunner     Runs scorer to compare ordered pairs of substituted seqs in tw
-o directories and write the scores to a third
+needlerunner     Needle all sequence pairs in a directory
+scorer           Score alignments using structural alignments
+scorerrunner     SCORER for ordered pairs of substituted seqs
 stretcher        Finds the best global alignment between two sequences
-substitute       Substitutes matches from first (query) sequence of two aligned
- sequences in a trace into second (template sequence)
-substituterunner Runs substitute on directory of traces and writes substituted
-sequences to another
+substitute       Substitute matches into a template
+substituterunner Run SUBSTITUTE on a directory of traces
 
 ALIGNMENT LOCAL
 matcher          Finds the best local alignments between two sequences
-seqmatchall      Does an all-against-all comparison of a set of sequences
-supermatcher     Finds a match of a large sequence against one or more sequence
-s
+seqmatchall      All-against-all comparison of a set of sequences
+supermatcher     Match large sequences against one or more other sequences
 water            Smith-Waterman local alignment
 wordmatch        Finds all exact matches of a given size between 2 sequences
 
@@ -108,7 +100,7 @@ ALIGNMENT MULTIPLE
 emma             Multiple alignment program - interface to ClustalW program
 infoalign        Information on a multiple sequence alignment
 mse              Multiple Sequence Editor
-plotcon          Plots the quality of conservation of a sequence alignment
+plotcon          Plot quality of conservation of a sequence alignment
 prettyplot       Displays aligned sequences, with colouring and boxing
 showalign        Displays a multiple sequence alignment
 tranalign        Align nucleic coding regions given the aligned proteins
@@ -121,36 +113,37 @@ pepnet           Displays proteins as a helical net
 pepwheel         Shows protein sequences as helices
 prettyplot       Displays aligned sequences, with colouring and boxing
 prettyseq        Output sequence with translated ranges
-remap            Display a sequence with restriction cut sites, translation etc
+remap            Display sequence with restriction sites, translation etc
 seealso          Finds programs sharing group names
 showalign        Displays a multiple sequence alignment
 showdb           Displays information on the currently available databases
 showfeat         Show features of a sequence
 showseq          Display a sequence with features, translation etc
 sixpack          Display a DNA sequence with 6-frame translation and ORFs
-textsearch       Search sequence documentation text. SRS and Entrez are faster!
+textsearch       Search sequence documentation. Slow, use SRS and Entrez!
 
 EDIT
 biosed           Replace or delete sequence sections
+codcopy          Reads and writes a codon usage table
 cutseq           Removes a specified section from a sequence
 degapseq         Removes gap characters from sequences
-degapseqrunner   Runs degapseq program on all sequence pairs in a directory
+degapseqrunner   Degapseq all sequence pairs in a directory
 descseq          Alter the name or description of a sequence
 entret           Reads and writes (returns) flatfile entries
 extractfeat      Extract features from a sequence
 extractseq       Extract regions from a sequence
-listor           Writes a list file of the logical OR of two sets of sequences
+listor           Write a list file of the logical OR of two sets of sequences
 maskfeat         Mask off features of a sequence
 maskseq          Mask off regions of a sequence
 newseq           Type in a short new sequence
 noreturn         Removes carriage return from ASCII files
-notseq           Excludes a set of sequences and writes out the remaining ones
+notseq           Exclude a set of sequences and write out the remaining ones
 nthseq           Writes one sequence from a multiple set of sequences
 pasteseq         Insert one sequence into another
 revseq           Reverse and complement a sequence
 seqret           Reads and writes (returns) sequences
 seqretsplit      Reads and writes (returns) sequences in individual files
-skipseq          Reads and writes (returns) sequences, skipping the first few
+skipseq          Reads and writes (returns) sequences, skipping first few
 splitter         Split a sequence into (overlapping) smaller sequences
 trimest          Trim poly-A tails off EST sequences
 trimseq          Trim ambiguous bits off the ends of sequences
@@ -159,7 +152,7 @@ vectorstrip      Strips out DNA between a pair of vector sequences
 yank             Reads a sequence range, appends the full USA to a list file
 
 ENZYME KINETICS
-findkm           Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot
+findkm           Find Km and Vmax for an enzyme reaction
 
 FEATURE TABLES
 coderet          Extract CDS, mRNA and translations from feature tables
@@ -185,7 +178,7 @@ infoalign        Information on a multiple sequence alignment
 infoseq          Displays some simple information about sequences
 seealso          Finds programs sharing group names
 showdb           Displays information on the currently available databases
-textsearch       Search sequence documentation text. SRS and Entrez are faster!
+textsearch       Search sequence documentation. Slow, use SRS and Entrez!
 tfm              Displays a program's help documentation manual
 whichdb          Search all databases for an entry
 wossname         Finds programs by keywords in their one-line documentation
@@ -207,7 +200,7 @@ NUCLEIC COMPOSITION
 banana           Bending and curvature plot in B-DNA
 btwisted         Calculates the twisting in a B-DNA sequence
 chaos            Create a chaos game representation plot for a sequence
-compseq          Counts the composition of dimer/trimer/etc words in a sequence
+compseq          Count composition of dimer/trimer/etc words in a sequence
 dan              Calculates DNA RNA/DNA melting temperature
 freak            Residue/base frequency table or plot
 isochore         Plots isochores in large DNA sequences
@@ -217,7 +210,7 @@ wordcount        Counts words of a specified size in a DNA sequence
 NUCLEIC CPG ISLANDS
 cpgplot          Plot CpG rich areas
 cpgreport        Reports all CpG rich regions
-geecee           Calculates the fractional GC content of nucleic acid sequences
+geecee           Calculates fractional GC content of nucleic acid sequences
 newcpgreport     Report CpG rich areas
 newcpgseek       Reports CpG rich regions
 
@@ -244,7 +237,7 @@ shuffleseq       Shuffles a set of sequences maintaining composition
 NUCLEIC PRIMERS
 eprimer3         Picks PCR primers and hybridization oligos
 primersearch     Searches DNA sequences for matches with primer pairs
-stssearch        Searches a DNA database for matches with a set of STS primers
+stssearch        Search a DNA database for matches with a set of STS primers
 
 NUCLEIC PROFILES
 profit           Scan a sequence or database with a matrix or profile
@@ -258,10 +251,10 @@ etandem          Looks for tandem repeats in a nucleotide sequence
 palindrome       Looks for inverted repeats in a nucleotide sequence
 
 NUCLEIC RESTRICTION
-recoder          Remove restriction sites but maintain the same translation
+recoder          Remove restriction sites but maintain same translation
 redata           Search REBASE for enzyme name, references, suppliers etc
-remap            Display a sequence with restriction cut sites, translation etc
-restover         Finds restriction enzymes that produce a specific overhang
+remap            Display sequence with restriction sites, translation etc
+restover         Find restriction enzymes producing specific overhang
 restrict         Finds restriction enzyme cleavage sites
 showseq          Display a sequence with features, translation etc
 silent           Silent mutation restriction enzyme scan
@@ -274,7 +267,7 @@ backtranseq      Back translate a protein sequence
 coderet          Extract CDS, mRNA and translations from feature tables
 plotorf          Plot potential open reading frames
 prettyseq        Output sequence with translated ranges
-remap            Display a sequence with restriction cut sites, translation etc
+remap            Display sequence with restriction sites, translation etc
 showorf          Pretty output of DNA translations
 showseq          Display a sequence with features, translation etc
 sixpack          Display a DNA sequence with 6-frame translation and ORFs
@@ -297,8 +290,7 @@ edollop          Dollo and polymorphism parsimony algorithm
 edolpenny        Penny algorithm Dollo or polymorphism
 efactor          Multistate to binary recoding program
 emix             Mixed parsimony algorithm
-epenny           Penny algorithm, branch-and-bound to find all most parsimoniou
-s trees
+epenny           Penny algorithm, branch-and-bound
 fclique          Largest clique program
 fdollop          Dollo and polymorphism parsimony algorithm
 fdolpenny        Penny algorithm Dollo or polymorphism
@@ -306,8 +298,7 @@ ffactor          Multistate to binary recoding program
 fmix             Mixed parsimony algorithm
 fmove            Interactive mixed method parsimony
 fpars            Discrete character parsimony
-fpenny           Penny algorithm, branch-and-bound to find all most parsimoniou
-s trees
+fpenny           Penny algorithm, branch-and-bound
 
 PHYLOGENY DISTANCE MATRIX
 distmat          Creates a distance matrix from multiple alignments
@@ -320,18 +311,15 @@ fneighbor        Phylogenies from distance matrix by N-J or UPGMA method
 
 PHYLOGENY GENE FREQUENCIES
 egendist         Genetic Distance Matrix program
-fcontml          Gene frequency and continuous character Maximum Likelihood met
-hod
+fcontml          Gene frequency and continuous character Maximum Likelihood
 fgendist         Compute genetic distances from gene frequencies
 
 PHYLOGENY MOLECULAR SEQUENCE
 ednacomp         DNA compatibility algorithm
 ednadist         Nucleic acid sequence Distance Matrix program
 ednainvar        Nucleic acid sequence Invariants method
-ednaml           Estimates phylogenies from nucleic acid sequence Maximum Likel
-ihood
-ednamlk          Estimates phylogenies from nucleic acid sequence Maximum Likel
-ihood with molecular clock
+ednaml           Phylogenies from nucleic acid Maximum Likelihood
+ednamlk          Phylogenies from nucleic acid Maximum Likelihood with clock
 ednapars         DNA parsimony algorithm
 ednapenny        Penny algorithm for DNA
 eprotdist        Protein distance algorithm
@@ -354,7 +342,7 @@ fpromlk          Protein phylogeny by maximum likelihood
 fprotdist        Protein distance algorithm
 fprotpars        Protein pasimony algorithm
 frestboot        Bootstrapped restriction sites algorithm
-frestdist        Computes distance matrix from restriction sites or fragments
+frestdist        Distance matrix from restriction sites or fragments
 frestml          Restriction site maximum Likelihood method
 fseqboot         Bootstrapped sequences algorithm
 fseqbootall      Bootstrapped sequences algorithm
@@ -375,52 +363,33 @@ tmap             Displays membrane spanning regions
 topo             Draws an image of a transmembrane protein
 
 PROTEIN 3D STRUCTURE
-contactcount     Counts specific versus non-specific contacts in a directory of
- cleaned protein chain contact files
-contacts         Reads CCF files (clean coordinate files) and writes CON files
-(contact files) of intra-chain residue-residue contact data
-domainalign      Generates DAF files (domain alignment files) of structure-base
-d sequence alignments for nodes in a DCF file (domain classification file)
-domainrep        Reorder DCF file (domain classification file) so that the repr
-esentative structure of each user-specified node is given first
-domainreso       Removes low resolution domains from a DCF file (domain classif
-ication file)
-interface        Reads CCF files (clean coordinate files) and writes CON files
-(contact files) of inter-chain residue-residue contact data
-libgen           Generates various types of discriminating elements for each al
-ignment in a directory
-psiphi           Calculates phi and psi torsion angles from cleaned EMBOSS-styl
-e protein co-ordinate file
-rocon            Reads a DHF file (domain hits file) of hits (sequences of unkn
-own structural classification) and a DHF file of validation sequences (known cl
-assification) and writes a 'hits file' for the hits, which are classified and r
-ank-ordered on the basis of score
-rocplot          Provides interpretation and graphical display of the performan
-ce of discriminating elements (e.g. profiles for protein families). rocplot rea
-ds file(s) of hits from discriminator-database search(es), performs ROC analysi
-s on the hits, and writes graphs illustrating the diagnostic performance of the
- discriminating elements
-seqalign         Reads a DAF file (domain alignment file) and a DHF file (domai
-n hits file) and writes a DAF file extended with the hits
-seqfraggle       Removes fragments from DHF files (domain hits files) or other
-files of sequences
-seqsearch        Generate database hits (sequences) for nodes in a DCF file (do
-main classification file) by using PSI-BLAST
-seqsort          Reads DHF files (domain hits files) of database hits (sequence
-s) and removes hits of ambiguous classification
-seqwords         Generates DHF files (domain hits files) of database hits (sequ
-ences) for nodes in a DCF file (domain classification file) by keyword search o
-f UniProt
-siggen           Generates a sparse protein signature from an alignment and res
-idue contact data
-sigscan          Generates a DHF file (domain hits file) of hits (sequences) fr
-om scanning a signature against a sequence database
+contactcount     Count specific versus non-specific contacts
+contacts         Generate intra-chain CON files from CCF files
+domainalign      Generate alignments (DAF file) for nodes in a DCF file
+domainrep        Reorder DCF file to identify representative structures
+domainreso       Remove low resolution domains from a DCF file
+interface        Generate inter-chain CON files from CCF files
+libgen           Generate discriminating elements from alignments
+matgen3d         Generate a 3D-1D scoring matrix from CCF files
+psiphi           Phi and psi torsion angles from protein coordinates
+rocon            Generates a hits file from comparing two DHF files
+rocplot          Performs ROC analysis on hits files
+scorecmapdir     Contact scores for cleaned protein chain contact files
+seqalign         Extend alignments (DAF file) with sequences (DHF file)
+seqfraggle       Removes fragment sequences from DHF files
+seqsearch        Generate PSI-BLAST hits (DHF file) from a DAF file
+seqsort          Remove ambiguous classified sequences from DHF files
+seqwords         Generates DHF files from keyword search of UniProt
+siggen           Generates a sparse protein signature from an alignment
+siggenlig        Generate ligand-binding signatures from a CON file
+sigscan          Generate hits (DHF file) from a signature search
+sigscanlig       Search ligand-signature library & write hits (LHF file)
 
 PROTEIN COMPOSITION
 backtranseq      Back translate a protein sequence
 charge           Protein charge plot
 checktrans       Reports STOP codons and ORF statistics of a protein
-compseq          Counts the composition of dimer/trimer/etc words in a sequence
+compseq          Count composition of dimer/trimer/etc words in a sequence
 emowse           Protein identification by mass spectrometry
 freak            Residue/base frequency table or plot
 iep              Calculates the isoelectric point of a protein
@@ -440,7 +409,7 @@ fuzzpro          Protein pattern search
 fuzztran         Protein pattern search after translation
 helixturnhelix   Report nucleic acid binding motifs
 meme             Motif detection
-oddcomp          Finds protein sequence regions with a biased composition
+oddcomp          Find protein sequence regions with a biased composition
 patmatdb         Search a protein sequence with a motif
 patmatmotifs     Search a PROSITE motif database with a protein sequence
 pepcoil          Predicts coiled coil regions
@@ -458,55 +427,43 @@ prophecy         Creates matrices/profiles from multiple alignments
 prophet          Gapped alignment for profiles
 
 TEST
-crystalball      Answers every drug discovery question you have about this sequ
-ence
+crystalball      Answers every drug discovery question about a sequence
 myseq            Demonstration of sequence reading
+mytest           Demonstration of sequence reading
 
 UTILS DATABASE CREATION
 aaindexextract   Extract data from AAINDEX
-allversusall     Does an all-versus-all global alignment for each set of sequen
-ces in an input directory and writes files of sequence similarity values
-cathparse        Reads raw CATH classification files and writes DCF file (domai
-n classification file)
+allversusall     Sequence similarity data from all-versus-all comparison
+cathparse        Generates DCF file from raw CATH files
 cutgextract      Extract data from CUTG
-domainer         Reads CCF files (clean coordinate files) for proteins and writ
-es CCF files for domains, taken from a DCF file (domain classification file)
-domainnr         Removes redundant domains from a DCF file (domain classificati
-on file). The file must contain domain sequence information, which can be added
- by using DOMAINSEQS
-domainseqs       Adds sequence records to a DCF file (domain classification fil
-e)
-domainsse        Adds secondary structure records to a DCF file (domain classif
-ication file)
-hetparse         Converts raw dictionary of heterogen groups to a file in EMBL-
-like format
-pdbparse         Parses PDB files and writes CCF files (clean coordinate files)
- for proteins
-pdbplus          Add residue solvent accessibility and secondary structure data
- to a CCF file (clean coordinate file) for a protein or domain
-pdbtosp          Convert raw swissprot:PDB equivalence file to EMBL-like format
+domainer         Generates domain CCF files from protein CCF files
+domainnr         Removes redundant domains from a DCF file
+domainseqs       Adds sequence records to a DCF file
+domainsse        Add secondary structure records to a DCF file
+hetparse         Converts heterogen group dictionary to EMBL-like format
+pdbparse         Parses PDB files and writes protein CCF files
+pdbplus          Add accessibility & secondary structure to a CCF file
+pdbtosp          Convert swissprot:PDB codes file to EMBL-like format
 printsextract    Extract data from PRINTS
-prosextract      Builds the PROSITE motif database for patmatmotifs to search
+prosextract      Build the PROSITE motif database for use by patmatmotifs
 rebaseextract    Extract data from REBASE
-scopparse        Reads raw SCOP classification files and writes a DCF file (dom
-ain classification file)
-seqnr            Removes redundancy from DHF files (domain hits files) or other
- files of sequences
-sites            Reads CCF files (clean coordinate files) and writes CON files
-(contact files) of residue-ligand contact data for domains in a DCF file (domai
-n classification file)
-ssematch         Searches a DCF file (domain classification file) for secondary
- structure matches
+scopparse        Generate DCF file from raw SCOP files
+seqnr            Removes redundancy from DHF files
+sites            Generate residue-ligand CON files from CCF files
+ssematch         Search a DCF file for secondary structure matches
 tfextract        Extract data from TRANSFAC
 
 UTILS DATABASE INDEXING
 dbiblast         Index a BLAST database
-dbifasta         Index a fasta database
+dbifasta         Database indexing for fasta file databases
 dbiflat          Index a flat file database
 dbigcg           Index a GCG formatted database
+dbxfasta         Database b+tree indexing for fasta file databases
+dbxflat          Database b+tree indexing for flat file databases
+dbxgcg           Database b+tree indexing for GCG formatted databases
 
 UTILS MISC
-embossdata       Finds or fetches the data files read in by the EMBOSS programs
+embossdata       Finds or fetches data files read by EMBOSS programs
 embossversion    Writes the current EMBOSS version number
 
 
@@ -526,67 +483,58 @@ acdpretty        ACD pretty printing utility
 acdtable         Creates an HTML table from an ACD file
 acdtrace         ACD compiler on-screen trace
 acdvalid         ACD file validation
-alignrunner      Runs alignment program on all sequence pairs in a directory
-allversusall     Does an all-versus-all global alignment for each set of sequen
-ces in an input directory and writes files of sequence similarity values
+alignrunner      Align sequence pairs in a directory
+allversusall     Sequence similarity data from all-versus-all comparison
 antigenic        Finds antigenic sites in proteins
 backtranseq      Back translate a protein sequence
 banana           Bending and curvature plot in B-DNA
 biosed           Replace or delete sequence sections
 btwisted         Calculates the twisting in a B-DNA sequence
 cai              CAI codon adaptation index
-cathparse        Reads raw CATH classification files and writes DCF file (domai
-n classification file)
+cathparse        Generates DCF file from raw CATH files
 chaos            Create a chaos game representation plot for a sequence
 charge           Protein charge plot
 checktrans       Reports STOP codons and ORF statistics of a protein
 chips            Codon usage statistics
 cirdna           Draws circular maps of DNA constructs
 codcmp           Codon usage table comparison
+codcopy          Reads and writes a codon usage table
 coderet          Extract CDS, mRNA and translations from feature tables
-compseq          Counts the composition of dimer/trimer/etc words in a sequence
+comparator       Compare contact scores of two sequence alignments
+compseq          Count composition of dimer/trimer/etc words in a sequence
 cons             Creates a consensus from multiple alignments
-contactalign     EMBOSS implementation of Damian Counsell's 2.5-D alignment alg
-orithm
-contactcount     Counts specific versus non-specific contacts in a directory of
- cleaned protein chain contact files
-contacts         Reads CCF files (clean coordinate files) and writes CON files
-(contact files) of intra-chain residue-residue contact data
+contactalign     Damian Counsell's experimental 2.5-D alignment algorithm
+contactcount     Count specific versus non-specific contacts
+contacts         Generate intra-chain CON files from CCF files
 cpgplot          Plot CpG rich areas
 cpgreport        Reports all CpG rich regions
-crystalball      Answers every drug discovery question you have about this sequ
-ence
+crystalball      Answers every drug discovery question about a sequence
 cusp             Create a codon usage table
 cutgextract      Extract data from CUTG
 cutseq           Removes a specified section from a sequence
 dan              Calculates DNA RNA/DNA melting temperature
 dbiblast         Index a BLAST database
-dbifasta         Index a fasta database
+dbifasta         Database indexing for fasta file databases
 dbiflat          Index a flat file database
 dbigcg           Index a GCG formatted database
+dbxfasta         Database b+tree indexing for fasta file databases
+dbxflat          Database b+tree indexing for flat file databases
+dbxgcg           Database b+tree indexing for GCG formatted databases
 degapseq         Removes gap characters from sequences
-degapseqrunner   Runs degapseq program on all sequence pairs in a directory
+degapseqrunner   Degapseq all sequence pairs in a directory
 descseq          Alter the name or description of a sequence
 diffseq          Find differences between nearly identical sequences
 digest           Protein proteolytic enzyme or reagent cleavage digest
 distmat          Creates a distance matrix from multiple alignments
-domainalign      Generates DAF files (domain alignment files) of structure-base
-d sequence alignments for nodes in a DCF file (domain classification file)
-domainer         Reads CCF files (clean coordinate files) for proteins and writ
-es CCF files for domains, taken from a DCF file (domain classification file)
-domainnr         Removes redundant domains from a DCF file (domain classificati
-on file). The file must contain domain sequence information, which can be added
- by using DOMAINSEQS
-domainrep        Reorder DCF file (domain classification file) so that the repr
-esentative structure of each user-specified node is given first
-domainreso       Removes low resolution domains from a DCF file (domain classif
-ication file)
-domainseqs       Adds sequence records to a DCF file (domain classification fil
-e)
-domainsse        Adds secondary structure records to a DCF file (domain classif
-ication file)
+domainalign      Generate alignments (DAF file) for nodes in a DCF file
+domainer         Generates domain CCF files from protein CCF files
+domainnr         Removes redundant domains from a DCF file
+domainrep        Reorder DCF file to identify representative structures
+domainreso       Remove low resolution domains from a DCF file
+domainseqs       Adds sequence records to a DCF file
+domainsse        Add secondary structure records to a DCF file
 dotmatcher       Displays a thresholded dotplot of two sequences
-dotpath          Displays a non-overlapping wordmatch dotplot of two sequences
+dotpath          Non-overlapping wordmatch dotplot of two sequences
 dottup           Displays a wordmatch dotplot of two sequences
 dreg             Regular expression search of a nucleotide sequence
 ealistat         Statistics for multiple alignment files
@@ -597,10 +545,8 @@ econtrast        Continuous character Contrasts
 ednacomp         DNA compatibility algorithm
 ednadist         Nucleic acid sequence Distance Matrix program
 ednainvar        Nucleic acid sequence Invariants method
-ednaml           Estimates phylogenies from nucleic acid sequence Maximum Likel
-ihood
-ednamlk          Estimates phylogenies from nucleic acid sequence Maximum Likel
-ihood with molecular clock
+ednaml           Phylogenies from nucleic acid Maximum Likelihood
+ednamlk          Phylogenies from nucleic acid Maximum Likelihood with clock
 ednapars         DNA parsimony algorithm
 ednapenny        Penny algorithm for DNA
 edollop          Dollo and polymorphism parsimony algorithm
@@ -619,7 +565,7 @@ ehmmpfam         Align single sequence with an HMM
 ehmmsearch       Search sequence database with an HMM
 einverted        Finds DNA inverted repeats
 ekitsch          Fitch-Margoliash method with contemporary tips
-embossdata       Finds or fetches the data files read in by the EMBOSS programs
+embossdata       Finds or fetches data files read by EMBOSS programs
 embossversion    Writes the current EMBOSS version number
 emix             Mixed parsimony algorithm
 emma             Multiple alignment program - interface to ClustalW program
@@ -627,8 +573,7 @@ emnu             Simple menu of EMBOSS applications
 emowse           Protein identification by mass spectrometry
 eneighbor        Phylogenies from distance matrix by N-J or UPGMA method
 entret           Reads and writes (returns) flatfile entries
-epenny           Penny algorithm, branch-and-bound to find all most parsimoniou
-s trees
+epenny           Penny algorithm, branch-and-bound
 epestfind        Finds PEST motifs as potential proteolytic cleavage sites
 eprimer3         Picks PCR primers and hybridization oligos
 eprotdist        Protein distance algorithm
@@ -643,8 +588,7 @@ extractfeat      Extract features from a sequence
 extractseq       Extract regions from a sequence
 fclique          Largest clique program
 fconsense        Majority-rule and strict consensus tree
-fcontml          Gene frequency and continuous character Maximum Likelihood met
-hod
+fcontml          Gene frequency and continuous character Maximum Likelihood
 fcontrast        Continuous character Contrasts
 fdiscboot        Bootstrapped discrete sites algorithm
 fdnacomp         DNA compatibility algorithm
@@ -664,21 +608,20 @@ ffactor          Multistate to binary recoding program
 ffitch           Fitch-Margoliash and Least-Squares Distance Methods
 ffreqboot        Bootstrapped genetic frequencies algorithm
 fgendist         Compute genetic distances from gene frequencies
-findkm           Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot
+findkm           Find Km and Vmax for an enzyme reaction
 fkitsch          Fitch-Margoliash method with contemporary tips
 fmix             Mixed parsimony algorithm
 fmove            Interactive mixed method parsimony
 fneighbor        Phylogenies from distance matrix by N-J or UPGMA method
 fpars            Discrete character parsimony
-fpenny           Penny algorithm, branch-and-bound to find all most parsimoniou
-s trees
+fpenny           Penny algorithm, branch-and-bound
 fproml           Protein phylogeny by maximum likelihood
 fpromlk          Protein phylogeny by maximum likelihood
 fprotdist        Protein distance algorithm
 fprotpars        Protein pasimony algorithm
 freak            Residue/base frequency table or plot
 frestboot        Bootstrapped restriction sites algorithm
-frestdist        Computes distance matrix from restriction sites or fragments
+frestdist        Distance matrix from restriction sites or fragments
 frestml          Restriction site maximum Likelihood method
 fretree          Interactive tree rearrangement
 fseqboot         Bootstrapped sequences algorithm
@@ -689,26 +632,24 @@ fuzznuc          Nucleic acid pattern search
 fuzzpro          Protein pattern search
 fuzztran         Protein pattern search after translation
 garnier          Predicts protein secondary structure
-geecee           Calculates the fractional GC content of nucleic acid sequences
+geecee           Calculates fractional GC content of nucleic acid sequences
 getorf           Finds and extracts open reading frames (ORFs)
 helixturnhelix   Report nucleic acid binding motifs
-hetparse         Converts raw dictionary of heterogen groups to a file in EMBL-
-like format
+hetparse         Converts heterogen group dictionary to EMBL-like format
 hmoment          Hydrophobic moment calculation
 iep              Calculates the isoelectric point of a protein
 infoalign        Information on a multiple sequence alignment
 infoseq          Displays some simple information about sequences
-interface        Reads CCF files (clean coordinate files) and writes CON files
-(contact files) of inter-chain residue-residue contact data
+interface        Generate inter-chain CON files from CCF files
 isochore         Plots isochores in large DNA sequences
-libgen           Generates various types of discriminating elements for each al
-ignment in a directory
+libgen           Generate discriminating elements from alignments
 lindna           Draws linear maps of DNA constructs
-listor           Writes a list file of the logical OR of two sets of sequences
+listor           Write a list file of the logical OR of two sets of sequences
 marscan          Finds MAR/SAR sites in nucleic sequences
 maskfeat         Mask off features of a sequence
 maskseq          Mask off regions of a sequence
 matcher          Finds the best local alignments between two sequences
+matgen3d         Generate a 3D-1D scoring matrix from CCF files
 megamerger       Merge two large overlapping nucleic acid sequences
 meme             Motif detection
 merger           Merge two overlapping nucleic acid sequences
@@ -717,30 +658,26 @@ mse              Multiple Sequence Editor
 mwcontam         Shows molwts that match across a set of files
 mwfilter         Filter noisy molwts from mass spec output
 myseq            Demonstration of sequence reading
-nawalign         Damian Counsell's implementation for protein sequences of the
-Needleman and Wunsch alignment algorithm
-nawalignrunner   Runs nawalign alignment program on all sequence pairs in a dir
-ectory
+mytest           Demonstration of sequence reading
+nawalign         Damian Counsell's NW implementation
+nawalignrunner   Nawalign all sequence pairs in a directory
 needle           Needleman-Wunsch global alignment
-needlerunner     Runs needle alignment program on all sequence pairs in a direc
-tory
+needlerunner     Needle all sequence pairs in a directory
 newcpgreport     Report CpG rich areas
 newcpgseek       Reports CpG rich regions
 newseq           Type in a short new sequence
 noreturn         Removes carriage return from ASCII files
-notseq           Excludes a set of sequences and writes out the remaining ones
+notseq           Exclude a set of sequences and write out the remaining ones
 nthseq           Writes one sequence from a multiple set of sequences
 octanol          Displays protein hydropathy
-oddcomp          Finds protein sequence regions with a biased composition
+oddcomp          Find protein sequence regions with a biased composition
 palindrome       Looks for inverted repeats in a nucleotide sequence
 pasteseq         Insert one sequence into another
 patmatdb         Search a protein sequence with a motif
 patmatmotifs     Search a PROSITE motif database with a protein sequence
-pdbparse         Parses PDB files and writes CCF files (clean coordinate files)
- for proteins
-pdbplus          Add residue solvent accessibility and secondary structure data
- to a CCF file (clean coordinate file) for a protein or domain
-pdbtosp          Convert raw swissprot:PDB equivalence file to EMBL-like format
+pdbparse         Parses PDB files and writes protein CCF files
+pdbplus          Add accessibility & secondary structure to a CCF file
+pdbtosp          Convert swissprot:PDB codes file to EMBL-like format
 pepcoil          Predicts coiled coil regions
 pepinfo          Plots simple amino acid properties in parallel
 pepnet           Displays proteins as a helical net
@@ -748,7 +685,7 @@ pepstats         Protein statistics
 pepwheel         Shows protein sequences as helices
 pepwindow        Displays protein hydropathy
 pepwindowall     Displays protein hydropathy of a set of sequences
-plotcon          Plots the quality of conservation of a sequence alignment
+plotcon          Plot quality of conservation of a sequence alignment
 plotorf          Plot potential open reading frames
 polydot          Displays all-against-all dotplots of a set of sequences
 preg             Regular expression search of a protein sequence
@@ -759,49 +696,32 @@ printsextract    Extract data from PRINTS
 profit           Scan a sequence or database with a matrix or profile
 prophecy         Creates matrices/profiles from multiple alignments
 prophet          Gapped alignment for profiles
-prosextract      Builds the PROSITE motif database for patmatmotifs to search
+prosextract      Build the PROSITE motif database for use by patmatmotifs
 pscan            Scans proteins using PRINTS
-psiphi           Calculates phi and psi torsion angles from cleaned EMBOSS-styl
-e protein co-ordinate file
+psiphi           Phi and psi torsion angles from protein coordinates
 rebaseextract    Extract data from REBASE
-recoder          Remove restriction sites but maintain the same translation
+recoder          Remove restriction sites but maintain same translation
 redata           Search REBASE for enzyme name, references, suppliers etc
-remap            Display a sequence with restriction cut sites, translation etc
-restover         Finds restriction enzymes that produce a specific overhang
+remap            Display sequence with restriction sites, translation etc
+restover         Find restriction enzymes producing specific overhang
 restrict         Finds restriction enzyme cleavage sites
 revseq           Reverse and complement a sequence
-rocon            Reads a DHF file (domain hits file) of hits (sequences of unkn
-own structural classification) and a DHF file of validation sequences (known cl
-assification) and writes a 'hits file' for the hits, which are classified and r
-ank-ordered on the basis of score
-rocplot          Provides interpretation and graphical display of the performan
-ce of discriminating elements (e.g. profiles for protein families). rocplot rea
-ds file(s) of hits from discriminator-database search(es), performs ROC analysi
-s on the hits, and writes graphs illustrating the diagnostic performance of the
- discriminating elements
-scopparse        Reads raw SCOP classification files and writes a DCF file (dom
-ain classification file)
-scorer           Scores accuracy of protein-protein sequence alignment against
-gold standard structure-structure alignment
-scorerrunner     Runs scorer to compare ordered pairs of substituted seqs in tw
-o directories and write the scores to a third
+rocon            Generates a hits file from comparing two DHF files
+rocplot          Performs ROC analysis on hits files
+scopparse        Generate DCF file from raw SCOP files
+scorecmapdir     Contact scores for cleaned protein chain contact files
+scorer           Score alignments using structural alignments
+scorerrunner     SCORER for ordered pairs of substituted seqs
 seealso          Finds programs sharing group names
-seqalign         Reads a DAF file (domain alignment file) and a DHF file (domai
-n hits file) and writes a DAF file extended with the hits
-seqfraggle       Removes fragments from DHF files (domain hits files) or other
-files of sequences
-seqmatchall      Does an all-against-all comparison of a set of sequences
-seqnr            Removes redundancy from DHF files (domain hits files) or other
- files of sequences
+seqalign         Extend alignments (DAF file) with sequences (DHF file)
+seqfraggle       Removes fragment sequences from DHF files
+seqmatchall      All-against-all comparison of a set of sequences
+seqnr            Removes redundancy from DHF files
 seqret           Reads and writes (returns) sequences
 seqretsplit      Reads and writes (returns) sequences in individual files
-seqsearch        Generate database hits (sequences) for nodes in a DCF file (do
-main classification file) by using PSI-BLAST
-seqsort          Reads DHF files (domain hits files) of database hits (sequence
-s) and removes hits of ambiguous classification
-seqwords         Generates DHF files (domain hits files) of database hits (sequ
-ences) for nodes in a DCF file (domain classification file) by keyword search o
-f UniProt
+seqsearch        Generate PSI-BLAST hits (DHF file) from a DAF file
+seqsort          Remove ambiguous classified sequences from DHF files
+seqwords         Generates DHF files from keyword search of UniProt
 showalign        Displays a multiple sequence alignment
 showdb           Displays information on the currently available databases
 showfeat         Show features of a sequence
@@ -809,31 +729,25 @@ showorf          Pretty output of DNA translations
 showseq          Display a sequence with features, translation etc
 shuffleseq       Shuffles a set of sequences maintaining composition
 sigcleave        Reports protein signal cleavage sites
-siggen           Generates a sparse protein signature from an alignment and res
-idue contact data
-sigscan          Generates a DHF file (domain hits file) of hits (sequences) fr
-om scanning a signature against a sequence database
+siggen           Generates a sparse protein signature from an alignment
+siggenlig        Generate ligand-binding signatures from a CON file
+sigscan          Generate hits (DHF file) from a signature search
+sigscanlig       Search ligand-signature library & write hits (LHF file)
 silent           Silent mutation restriction enzyme scan
 sirna            Finds siRNA duplexes in mRNA
-sites            Reads CCF files (clean coordinate files) and writes CON files
-(contact files) of residue-ligand contact data for domains in a DCF file (domai
-n classification file)
+sites            Generate residue-ligand CON files from CCF files
 sixpack          Display a DNA sequence with 6-frame translation and ORFs
-skipseq          Reads and writes (returns) sequences, skipping the first few
+skipseq          Reads and writes (returns) sequences, skipping first few
 splitter         Split a sequence into (overlapping) smaller sequences
-ssematch         Searches a DCF file (domain classification file) for secondary
- structure matches
+ssematch         Search a DCF file for secondary structure matches
 stretcher        Finds the best global alignment between two sequences
-stssearch        Searches a DNA database for matches with a set of STS primers
-substitute       Substitutes matches from first (query) sequence of two aligned
- sequences in a trace into second (template sequence)
-substituterunner Runs substitute on directory of traces and writes substituted
-sequences to another
-supermatcher     Finds a match of a large sequence against one or more sequence
-s
+stssearch        Search a DNA database for matches with a set of STS primers
+substitute       Substitute matches into a template
+substituterunner Run SUBSTITUTE on a directory of traces
+supermatcher     Match large sequences against one or more other sequences
 syco             Synonymous codon usage Gribskov statistic plot
 tcode            Fickett TESTCODE statistic to identify protein-coding DNA
-textsearch       Search sequence documentation text. SRS and Entrez are faster!
+textsearch       Search sequence documentation. Slow, use SRS and Entrez!
 tfextract        Extract data from TRANSFAC
 tfm              Displays a program's help documentation manual
 tfscan           Scans DNA sequences for transcription factors
@@ -1214,113 +1128,83 @@ ALIGNMENT DIFFERENCES
 
 ALIGNMENT DOT PLOTS
 
-   Program name                          Description
+   Program name                       Description
    dotmatcher   Displays a thresholded dotplot of two sequences
-   dotpath      Displays a non-overlapping wordmatch dotplot of two sequences
+   dotpath      Non-overlapping wordmatch dotplot of two sequences
    dottup       Displays a wordmatch dotplot of two sequences
    polydot      Displays all-against-all dotplots of a set of sequences
 
 ALIGNMENT GLOBAL
 
-   Program name Description
-   alignrunner Runs alignment program on all sequence pairs in a
-   directory
-   contactalign EMBOSS implementation of Damian Counsell's 2.5-D
-   alignment algorithm
-   esim4 Align an mRNA to a genomic DNA sequence
-   est2genome Align EST and genomic DNA sequences
-   nawalign Damian Counsell's implementation for protein sequences of the
-   Needleman and Wunsch alignment algorithm
-   nawalignrunner Runs nawalign alignment program on all sequence pairs
-   in a directory
-   needle Needleman-Wunsch global alignment
-   needlerunner Runs needle alignment program on all sequence pairs in a
-   directory
-   scorer Scores accuracy of protein-protein sequence alignment against
-   gold standard structure-structure alignment
-   scorerrunner Runs scorer to compare ordered pairs of substituted seqs
-   in two directories and write the scores to a third
-   stretcher Finds the best global alignment between two sequences
-   substitute Substitutes matches from first (query) sequence of two
-   aligned sequences in a trace into second (template sequence)
-   substituterunner Runs substitute on directory of traces and writes
-   substituted sequences to another
+     Program name                         Description
+   alignrunner      Align sequence pairs in a directory
+   comparator       Compare contact scores of two sequence alignments
+   contactalign     Damian Counsell's experimental 2.5-D alignment algorithm
+   esim4            Align an mRNA to a genomic DNA sequence
+   est2genome       Align EST and genomic DNA sequences
+   nawalign         Damian Counsell's NW implementation
+   nawalignrunner   Nawalign all sequence pairs in a directory
+   needle           Needleman-Wunsch global alignment
+   needlerunner     Needle all sequence pairs in a directory
+   scorer           Score alignments using structural alignments
+   scorerrunner     SCORER for ordered pairs of substituted seqs
+   stretcher        Finds the best global alignment between two sequences
+   substitute       Substitute matches into a template
+   substituterunner Run SUBSTITUTE on a directory of traces
 
 ALIGNMENT LOCAL
 
-   Program name                      Description
-   matcher      Finds the best local alignments between two sequences
+   Program name                    Description
    [Part of this file has been deleted for brevity]
-
-PROTEIN PROFILES
-
-   Program name                     Description
-   profit       Scan a sequence or database with a matrix or profile
    prophecy     Creates matrices/profiles from multiple alignments
    prophet      Gapped alignment for profiles
 
 TEST
 
-   Program name Description
-   crystalball Answers every drug discovery question you have about this
-   sequence
-   myseq Demonstration of sequence reading
+   Program name                      Description
+   crystalball  Answers every drug discovery question about a sequence
+   myseq        Demonstration of sequence reading
+   mytest       Demonstration of sequence reading
 
 UTILS DATABASE CREATION
 
-   Program name Description
+    Program name                        Description
    aaindexextract Extract data from AAINDEX
-   allversusall Does an all-versus-all global alignment for each set of
-   sequences in an input directory and writes files of sequence
-   similarity values
-   cathparse Reads raw CATH classification files and writes DCF file
-   (domain classification file)
-   cutgextract Extract data from CUTG
-   domainer Reads CCF files (clean coordinate files) for proteins and
-   writes CCF files for domains, taken from a DCF file (domain
-   classification file)
-   domainnr Removes redundant domains from a DCF file (domain
-   classification file). The file must contain domain sequence
-   information, which can be added by using DOMAINSEQS
-   domainseqs Adds sequence records to a DCF file (domain classification
-   file)
-   domainsse Adds secondary structure records to a DCF file (domain
-   classification file)
-   hetparse Converts raw dictionary of heterogen groups to a file in
-   EMBL-like format
-   pdbparse Parses PDB files and writes CCF files (clean coordinate
-   files) for proteins
-   pdbplus Add residue solvent accessibility and secondary structure data
-   to a CCF file (clean coordinate file) for a protein or domain
-   pdbtosp Convert raw swissprot:PDB equivalence file to EMBL-like format
-   printsextract Extract data from PRINTS
-   prosextract Builds the PROSITE motif database for patmatmotifs to
-   search
-   rebaseextract Extract data from REBASE
-   scopparse Reads raw SCOP classification files and writes a DCF file
-   (domain classification file)
-   seqnr Removes redundancy from DHF files (domain hits files) or other
-   files of sequences
-   sites Reads CCF files (clean coordinate files) and writes CON files
-   (contact files) of residue-ligand contact data for domains in a DCF
-   file (domain classification file)
-   ssematch Searches a DCF file (domain classification file) for
-   secondary structure matches
-   tfextract Extract data from TRANSFAC
+   allversusall   Sequence similarity data from all-versus-all comparison
+   cathparse      Generates DCF file from raw CATH files
+   cutgextract    Extract data from CUTG
+   domainer       Generates domain CCF files from protein CCF files
+   domainnr       Removes redundant domains from a DCF file
+   domainseqs     Adds sequence records to a DCF file
+   domainsse      Add secondary structure records to a DCF file
+   hetparse       Converts heterogen group dictionary to EMBL-like format
+   pdbparse       Parses PDB files and writes protein CCF files
+   pdbplus        Add accessibility & secondary structure to a CCF file
+   pdbtosp        Convert swissprot:PDB codes file to EMBL-like format
+   printsextract  Extract data from PRINTS
+   prosextract    Build the PROSITE motif database for use by patmatmotifs
+   rebaseextract  Extract data from REBASE
+   scopparse      Generate DCF file from raw SCOP files
+   seqnr          Removes redundancy from DHF files
+   sites          Generate residue-ligand CON files from CCF files
+   ssematch       Search a DCF file for secondary structure matches
+   tfextract      Extract data from TRANSFAC
 
 UTILS DATABASE INDEXING
 
-   Program name          Description
+   Program name                     Description
    dbiblast     Index a BLAST database
-   dbifasta     Index a fasta database
+   dbifasta     Database indexing for fasta file databases
    dbiflat      Index a flat file database
    dbigcg       Index a GCG formatted database
+   dbxfasta     Database b+tree indexing for fasta file databases
+   dbxflat      Database b+tree indexing for flat file databases
+   dbxgcg       Database b+tree indexing for GCG formatted databases
 
 UTILS MISC
 
-   Program name Description
-   embossdata Finds or fetches the data files read in by the EMBOSS
-   programs
+   Program name                      Description
+   embossdata    Finds or fetches data files read by EMBOSS programs
    embossversion Writes the current EMBOSS version number
 
    If the -html, -prelink and -postlink qualifiers are specified, then
@@ -1368,15 +1252,14 @@ Known bugs
 
 See also
 
-   Program name Description
-   infoalign Information on a multiple sequence alignment
-   infoseq Displays some simple information about sequences
-   seealso Finds programs sharing group names
-   showdb Displays information on the currently available databases
-   textsearch Search sequence documentation text. SRS and Entrez are
-   faster!
-   tfm Displays a program's help documentation manual
-   whichdb Search all databases for an entry
+   Program name                        Description
+   infoalign    Information on a multiple sequence alignment
+   infoseq      Displays some simple information about sequences
+   seealso      Finds programs sharing group names
+   showdb       Displays information on the currently available databases
+   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
+   tfm          Displays a program's help documentation manual
+   whichdb      Search all databases for an entry
 
 Author(s)
 

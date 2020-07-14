@@ -123,6 +123,13 @@ cases, but the tree it displays will look a bit uglier.
 Interactive tree rearrangement
 Number of species [0]: <b>10</b>
 Input tree file: <b>retree.dat</b>
+Output file [retree.treefile]: <b></b>
+NEXT? (R . U W O T F D B N H J K L C + ? X Q) (? for Help): <b>Q</b>
+Do you want to write out the tree to a file? (Y or N): <b>Y</b>
+Enter R if the tree is to be rooted, OR enter U if the tree is to be unrooted: <b>U</b>
+
+Tree written to file "retree.treefile"
+
 
 
 Reading tree file ...
@@ -152,11 +159,6 @@ Reading tree file ...
   !  !                                ,>11:Tarsier
 ** 7 lines below screen **
 
-NEXT? (Options: R . U W O T F D B N H J K L C + ? X Q) (? for Help) Do you want to write out the tree to a file? (Y or N) Enter R if the tree is to be rooted
-OR enter U if the tree is to be unrooted: 
-Tree written to file "retree.treefile"
-
-
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
@@ -173,6 +175,7 @@ Tree written to file "retree.treefile"
    Standard (Mandatory) qualifiers:
   [-spp]               integer    Number of species
   [-intreefile]        tree       (no help text) tree value
+  [-outtreefile]       outfile    Output file name
 
    Additional (Optional) qualifiers:
    -initialtree        menu       Initial tree
@@ -181,13 +184,11 @@ Tree written to file "retree.treefile"
    -vscreenwidth       integer    Width of plotting area in characters
    -screenlines        integer    Number of lines on screen
 
-   Advanced (Unprompted) qualifiers:
-   -outtreefile        outfile    Output file name
-
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-outtreefile" associated qualifiers
-   -odirectory         string     Output directory
+   -odirectory3        string     Output directory
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -227,6 +228,13 @@ Tree written to file "retree.treefile"
 <td>(no help text) tree value</td>
 <td>Phylogenetic tree</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-outtreefile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.fretree</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -277,10 +285,7 @@ Tree written to file "retree.treefile"
 </tr>
 
 <tr>
-<td>-outtreefile</td>
-<td>Output file name</td>
-<td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.fretree</td>
+<td colspan=4>(none)</td>
 </tr>
 
 </table>
@@ -341,7 +346,7 @@ IT IS DONE FOR YOU.
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-[an error occurred while processing this directive]
+include file="inc/reportformats.ihtml"
    -->
 
 The N (output file format) option allows the user to

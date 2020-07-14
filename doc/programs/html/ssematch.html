@@ -1,10 +1,26 @@
 <!-- START OF HEADER -->
 <HTML><HEAD>
-<TITLE> EMBOSS: SSEMATCH documentation. </TITLE>
+<TITLE> EMBASSY: SSEMATCH documentation. </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<H2> SSEMATCH documentation </H2>
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+<H2> SSEMATCH documentation
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
 <!-- END OF HEADER -->
+
 
 
 
@@ -39,7 +55,7 @@
 <a name="1.0"></a>
 <br><br><br><H2> 1.0   SUMMARY  </H2>
 
-Searches a DCF file (domain classification file) for secondary structure matches
+Search a DCF file for secondary structure matches
 
 <!-- INPUTS & OUTPUTS
      Short summary of the application inputs and outputs in its different 
@@ -111,7 +127,7 @@ SS   SEQUENCE    43 AA;   5411 MW;  61C5458D CRC32;
      LLLLLLHHHH EEEEEEEEEE EEEEEEEEEE EELLLEEEEE LLL
 </pre>
 </td></tr></table><p>
-<p><h3>File: all_e.scop</h3>
+<p><h3>File: ../domainsse-keep/domainsse.out</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   D1CS4A_
@@ -134,13 +150,10 @@ DO   Adenylyl cyclase VC1, domain C1a
 XX
 OS   Dog (Canis familiaris)
 XX
-SE   EEEEEEE
+SE   HH
 XX
-SS   SEQUENCE   189 AA;  24290 MW;  D1929097 CRC32;
-     LLLLLLLEEE EEEEEEEEEE ELHHHHHHHL LHHHHHHHHH HHHHHHHHHH HHHHLLEEEE
-     EELLEEEEEE LLLLLLLHHH HHHHHHHHHH HHHHHHHHHH HHLLLLEEEE EEEEEEEEEL
-     LLLLLLLLEE EHHHHHHHHH HHHHLLLLLE EEEHHHHHLL LLLLLEEELH HHHHHHHHHH
-     HLLLEEEEL
+SS   SEQUENCE    46 AA;   6039 MW;  C2EA3A0F CRC32;
+     LLLHHHHHHH LLHHHHHHHH HHHHHHHHHH HHHHHLLEEE EEELLL
 XX
 NC   1
 XX
@@ -279,13 +292,10 @@ DO   Adenylyl cyclase VC1, domain C1a
 XX
 OS   Dog (Canis familiaris)
 XX
-SE   EEEEEEE
+SE   HH
 XX
-SS   SEQUENCE   189 AA;  24290 MW;  D1929097 CRC32;
-     LLLLLLLEEE EEEEEEEEEE ELHHHHHHHL LHHHHHHHHH HHHHHHHHHH HHHHLLEEEE
-     EELLEEEEEE LLLLLLLHHH HHHHHHHHHH HHHHHHHHHH HHLLLLEEEE EEEEEEEEEL
-     LLLLLLLLEE EHHHHHHHHH HHHHLLLLLE EEEHHHHHLL LLLLLEEELH HHHHHHHHHH
-     HLLLEEEEL
+SS   SEQUENCE    46 AA;   6039 MW;  C2EA3A0F CRC32;
+     LLLHHHHHHH LLHHHHHHHH HHHHHHHHHH HHHHHLLEEE EEELLL
 XX
 NC   1
 XX
@@ -295,7 +305,7 @@ CH   A CHAIN; . START; . END;
 //
 </pre>
 </td></tr></table><p>
-<p><h3>File: SSEMATCH.log </h3>
+<p><h3>File: ssematch.log </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 </pre>
@@ -434,14 +444,7 @@ C  -4  -4   2  -7
                                   Usually you will expect a few long gaps
                                   rather than many short gaps, so the gap
                                   extension penalty should be lower than the
-                                  gap penalty. An exception is where one or
-                                  both sequences are single reads with
-                                  possible sequencing errors in which case you
-                                  would expect many single base gaps. You can
-                                  get this result by setting the gap open
-                                  penalty to zero (or very low) and using the
-                                  gap extension penalty to control gap
-                                  scoring.
+                                  gap penalty.
    -gapopene           float      This options specifies the gap insertion
                                   penalty for element-based alignment. The gap
                                   insertion penalty is the score taken away
@@ -459,14 +462,7 @@ C  -4  -4   2  -7
                                   is how long gaps are penalized. Usually you
                                   will expect a few long gaps rather than many
                                   short gaps, so the gap extension penalty
-                                  should be lower than the gap penalty. An
-                                  exception is where one or both sequences are
-                                  single reads with possible sequencing
-                                  errors in which case you would expect many
-                                  single base gaps. You can get this result by
-                                  setting the gap open penalty to zero (or
-                                  very low) and using the gap extension
-                                  penalty to control gap scoring.
+                                  should be lower than the gap penalty.
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -545,7 +541,7 @@ C  -4  -4   2  -7
 <td>-logfile</td>
 <td>This option specifies the name of the ssematch log file (output).</td>
 <td>Output file</td>
-<td>SSEMATCH.log</td>
+<td>ssematch.log</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -570,7 +566,7 @@ C  -4  -4   2  -7
 
 <tr>
 <td>-gapextendr</td>
-<td>This options specifies the gap extension penalty for residue-based alignment. The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring.</td>
+<td>This options specifies the gap extension penalty for residue-based alignment. The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty.</td>
 <td>Floating point number from 0.0 to 10.0</td>
 <td>0.5 for any sequence</td>
 </tr>
@@ -584,7 +580,7 @@ C  -4  -4   2  -7
 
 <tr>
 <td>-gapextende</td>
-<td>This options specifies the gap extension penalty for secondary structure element-based alignment. The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring.</td>
+<td>This options specifies the gap extension penalty for secondary structure element-based alignment. The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty.</td>
 <td>Floating point number from 0.0 to 10.0</td>
 <td>0.5 for any sequence</td>
 </tr>
@@ -613,27 +609,20 @@ An example of interactive use of SSEMATCH is shown below.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>ssematch </b>
-Searches a DCF file (domain classification file) for secondary structure
-matches.
+Search a DCF file for secondary structure matches.
 Name of file of secondary structure (input).: <b>sse.in</b>
-Name of DCF file (domain classification file) (input).: <b>all_e.scop</b>
+Name of DCF file (domain classification file) (input).: <b>../domainsse-keep/domainsse.out</b>
 Number of top-scoring matches to report. [5]: <b>1</b>
 Name of DCF file (domain classification file) containing top-scoring domains for residue-based alinnment (output). [sse.ssematch]: <b>res.dcf</b>
 Name of DCF file (domain classification file) containing top-scoring domains for secondary structure element-based alinnment (output). [sse.out2]: <b>elm.dcf</b>
-Name ssematch log file (output) [SSEMATCH.log]: <b></b>
+Name ssematch log file (output) [ssematch.log]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-Two strings (for residues and elements) of secondary structure were
-read from sse.in and scanned against
-all_e.scop. The single highest scoring match for each
-search was written to the output files:
-res.dcf for residue-based alignment and
-elm.dcf for element-based alignment. A log
-file called SSEMATCH.log was written.
+<!-- Two strings (for residues and elements) of secondary structure were read from sse.in and scanned against all_e.scop. The single highest scoring match for each search was written to the output files: res.dcf for residue-based alignment and elm.dcf for element-based alignment. A log file called SSEMATCH.log was written. -->
 
 
 <!-- KNOWN BUGS & WARNINGS
@@ -701,6 +690,7 @@ input file:
 
 
 
+
 None
 
 
@@ -712,12 +702,7 @@ None
 <a name="9.0"></a>
 <br><br><br><H2> 9.0   DESCRIPTION               </H2>
 
-Secondary structure element mapping is a coarse but powerful approach
-for identifying similarities between protein sequences.  SSEMATCH
-implements a very basic approach whereby a query sequence of secondary
-structure (of elements or residues) is scanned against a library of
-known secondary structures for domains in SCOP or CATH, as held in a
-DCF file (domain classification file).
+Secondary structure element mapping is a coarse but powerful approach for identifying similarities between protein sequences.  SSEMATCH implements a very basic approach whereby a query sequence of secondary structure (of elements or residues) is scanned against a library of known secondary structures for domains in SCOP or CATH, as held in a DCF file (domain classification file).
 
 
 
@@ -746,23 +731,23 @@ Standard N&W-type global alignment.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="../../apps/aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
-<tr><td><a href="allversusall.html">allversusall</a></td><td>Does an all-versus-all global alignment for each set of sequences in an input directory and writes files of sequence similarity values</td></tr>
-<tr><td><a href="cathparse.html">cathparse</a></td><td>Reads raw CATH classification files and writes DCF file (domain classification file)</td></tr>
+<tr><td><a href="../domalign/allversusall.html">allversusall</a></td><td>Sequence similarity data from all-versus-all comparison</td></tr>
+<tr><td><a href="cathparse.html">cathparse</a></td><td>Generates DCF file from raw CATH files</td></tr>
 <tr><td><a href="../../apps/cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="domainer.html">domainer</a></td><td>Reads CCF files (clean coordinate files) for proteins and writes CCF files for domains, taken from a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainnr.html">domainnr</a></td><td>Removes redundant domains from a DCF file (domain classification file). The file must contain domain sequence information, which can be added by using DOMAINSEQS</td></tr>
-<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainsse.html">domainsse</a></td><td>Adds secondary structure records to a DCF file (domain classification file)</td></tr>
-<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in EMBL-like format</td></tr>
-<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes CCF files (clean coordinate files) for proteins</td></tr>
-<tr><td><a href="pdbplus.html">pdbplus</a></td><td>Add residue solvent accessibility and secondary structure data to a CCF file (clean coordinate file) for a protein or domain</td></tr>
-<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:PDB equivalence file to EMBL-like format</td></tr>
+<tr><td><a href="../structure/domainer.html">domainer</a></td><td>Generates domain CCF files from protein CCF files</td></tr>
+<tr><td><a href="domainnr.html">domainnr</a></td><td>Removes redundant domains from a DCF file</td></tr>
+<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file</td></tr>
+<tr><td><a href="domainsse.html">domainsse</a></td><td>Add secondary structure records to a DCF file</td></tr>
+<tr><td><a href="../structure/hetparse.html">hetparse</a></td><td>Converts heterogen group dictionary to EMBL-like format</td></tr>
+<tr><td><a href="../structure/pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes protein CCF files</td></tr>
+<tr><td><a href="../structure/pdbplus.html">pdbplus</a></td><td>Add accessibility & secondary structure to a CCF file</td></tr>
+<tr><td><a href="../structure/pdbtosp.html">pdbtosp</a></td><td>Convert swissprot:PDB codes file to EMBL-like format</td></tr>
 <tr><td><a href="../../apps/printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
-<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Build the PROSITE motif database for use by patmatmotifs</td></tr>
 <tr><td><a href="../../apps/rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
-<tr><td><a href="scopparse.html">scopparse</a></td><td>Reads raw SCOP classification files and writes a DCF file (domain classification file)</td></tr>
-<tr><td><a href="seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files (domain hits files) or other files of sequences</td></tr>
-<tr><td><a href="sites.html">sites</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of residue-ligand contact data for domains in a DCF file (domain classification file)</td></tr>
+<tr><td><a href="scopparse.html">scopparse</a></td><td>Generate DCF file from raw SCOP files</td></tr>
+<tr><td><a href="../domsearch/seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files</td></tr>
+<tr><td><a href="../structure/sites.html">sites</a></td><td>Generate residue-ligand CON files from CCF files</td></tr>
 <tr><td><a href="../../apps/tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
 </table>
 

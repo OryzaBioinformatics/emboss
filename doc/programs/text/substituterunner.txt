@@ -5,8 +5,7 @@
 
 Function
 
-   Runs substitute on directory of traces and writes substituted
-   sequences to another
+   Run SUBSTITUTE on a directory of traces
 
 Description
 
@@ -23,8 +22,8 @@ Usage
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-pathtocommands]    directory  Directory where alignment executables live
-  [-alignedpairsdirlist] dirlist    Directory containing paired traces
+  [-commandpath]       directory  Directory where alignment executables live
+  [-alignedpairsdir]   dirlist    Directory containing paired traces
   [-substitutedseqsoutdir] outdir     Directory to write substituted sequences
 to
 
@@ -47,8 +46,19 @@ to
    -die                boolean    Report deaths
 
 
-   Error: File /homes/pmr/local/share/EMBOSS/acd/substituterunner.acd
-   line 21: (alignedpairsdirlist) Unknown attribute 'name'
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-commandpath]
+   (Parameter 1) Directory where alignment executables live Directory
+   [-alignedpairsdir]
+   (Parameter 2) Directory containing paired traces Directory with files
+   .
+   [-substitutedseqsoutdir]
+   (Parameter 3) Directory to write substituted sequences to Output
+   directory
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
 
 Input file format
 
@@ -93,27 +103,20 @@ Known bugs
 
 See also
 
-   Program name Description
-   alignrunner Runs alignment program on all sequence pairs in a
-   directory
-   contactalign EMBOSS implementation of Damian Counsell's 2.5-D
-   alignment algorithm
-   esim4 Align an mRNA to a genomic DNA sequence
-   est2genome Align EST and genomic DNA sequences
-   nawalign Damian Counsell's implementation for protein sequences of the
-   Needleman and Wunsch alignment algorithm
-   nawalignrunner Runs nawalign alignment program on all sequence pairs
-   in a directory
-   needle Needleman-Wunsch global alignment
-   needlerunner Runs needle alignment program on all sequence pairs in a
-   directory
-   scorer Scores accuracy of protein-protein sequence alignment against
-   gold standard structure-structure alignment
-   scorerrunner Runs scorer to compare ordered pairs of substituted seqs
-   in two directories and write the scores to a third
-   stretcher Finds the best global alignment between two sequences
-   substitute Substitutes matches from first (query) sequence of two
-   aligned sequences in a trace into second (template sequence)
+    Program name                        Description
+   alignrunner    Align sequence pairs in a directory
+   comparator     Compare contact scores of two sequence alignments
+   contactalign   Damian Counsell's experimental 2.5-D alignment algorithm
+   esim4          Align an mRNA to a genomic DNA sequence
+   est2genome     Align EST and genomic DNA sequences
+   nawalign       Damian Counsell's NW implementation
+   nawalignrunner Nawalign all sequence pairs in a directory
+   needle         Needleman-Wunsch global alignment
+   needlerunner   Needle all sequence pairs in a directory
+   scorer         Score alignments using structural alignments
+   scorerrunner   SCORER for ordered pairs of substituted seqs
+   stretcher      Finds the best global alignment between two sequences
+   substitute     Substitute matches into a template
 
 Author(s)
 

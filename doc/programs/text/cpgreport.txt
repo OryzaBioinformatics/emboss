@@ -257,7 +257,7 @@ RNU68037               1183   1193    26          2  72.7   2.00
   File: rnu68037.gff
 
 ##gff-version 2.0
-##date 2004-07-15
+##date 2005-07-15
 ##Type DNA RNU68037
 RNU68037        cpgreport       misc_feature    12      13      17.000  +
 .       Sequence "RNU68037.1"
@@ -321,9 +321,9 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                        Description
    cpgplot      Plot CpG rich areas
-   geecee       Calculates the fractional GC content of nucleic acid sequences
+   geecee       Calculates fractional GC content of nucleic acid sequences
    newcpgreport Report CpG rich areas
    newcpgseek   Reports CpG rich regions
 
@@ -368,9 +368,9 @@ Author(s)
    Hinxton, Cambridge CB10 1SD, UK
 
    This application was modified for inclusion in EMBOSS by Alan Bleasby
-   (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

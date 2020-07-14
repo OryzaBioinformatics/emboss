@@ -421,10 +421,9 @@ Known bugs
 
 See also
 
-   Program name Description
-   egendist Genetic Distance Matrix program
-   fcontml Gene frequency and continuous character Maximum Likelihood
-   method
+   Program name                        Description
+   egendist     Genetic Distance Matrix program
+   fcontml      Gene frequency and continuous character Maximum Likelihood
 
 Author(s)
 

@@ -5,7 +5,7 @@
 
 Function
 
-   Plots the quality of conservation of a sequence alignment
+   Plot quality of conservation of a sequence alignment
 
 Description
 
@@ -52,7 +52,7 @@ Usage
 
 
 % plotcon -sformat msf globins.msf -graph cps 
-Plots the quality of conservation of a sequence alignment
+Plot quality of conservation of a sequence alignment
 Window size [4]: 
 
 Created plotcon.ps

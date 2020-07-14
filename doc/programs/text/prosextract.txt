@@ -5,7 +5,7 @@
 
 Function
 
-   Builds the PROSITE motif database for patmatmotifs to search
+   Build the PROSITE motif database for use by patmatmotifs
 
 Description
 
@@ -20,7 +20,7 @@ Usage
 
 
 % prosextract 
-Builds the PROSITE motif database for patmatmotifs to search
+Build the PROSITE motif database for use by patmatmotifs
 Name of prosite directory [.]: 
 
    Go to the output files for this example
@@ -32,29 +32,29 @@ Name of prosite directory [.]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-infdat]            directory  Name of prosite directory
+  [-prositedir]        directory  Name of prosite directory
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers: (none)
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
                  Standard (Mandatory) qualifiers     Allowed values Default
-   [-infdat]
+   [-prositedir]
    (Parameter 1) Name of prosite directory Directory
                  Additional (Optional) qualifiers    Allowed values Default
                  (none)

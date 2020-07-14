@@ -1,114 +1,43 @@
 
-                                  pdbtosp 
+                           PDBTOSP documentation
+                                      
+   
 
+CONTENTS
 
+   1.0 SUMMARY 
+   2.0 INPUTS & OUTPUTS 
+   3.0 INPUT FILE FORMAT 
+   4.0 OUTPUT FILE FORMAT 
+   5.0 DATA FILES 
+   6.0 USAGE 
+   7.0 KNOWN BUGS & WARNINGS 
+   8.0 NOTES 
+   9.0 DESCRIPTION 
+   10.0 ALGORITHM 
+   11.0 RELATED APPLICATIONS 
+   12.0 DIAGNOSTIC ERROR MESSAGES 
+   13.0 AUTHORS 
+   14.0 REFERENCES 
 
-Function
+1.0 SUMMARY
 
-   Convert raw swissprot:PDB equivalence file to EMBL-like format
+   Convert raw swissprot:PDB equivalence file to EMBL-like format.
+   Convert swissprot:PDB codes file to EMBL-like format
 
-Description
+2.0 INPUTS & OUTPUTS
 
-   This program is part of a suite of EMBOSS applications that directly
-   or indirectly make use of the protein structure databases pdb and
-   scop. This program is part of an experimental analysis pipeline
-   described in an accompanying document. We provide the software in the
-   hope that it will be useful. The applications were designed for
-   specific research purposes and may not be useful or reliable in
-   contexts other than the described pipeline. The development of the
-   suite was coordinated by Jon Ison to whom enquiries and bug reports
-   should be sent (email jison@hgmp.mrc.ac.uk).
+   PDBTOSP parses the swissprot:PDB equivalence table available at
+   http://www.expasy.ch/cgi-bin/lists?pdbtosp.txt and writes the data out
+   in EMBL-like format. The raw (input) file can be obtained by doing a
+   "save as ... text format" from the web page. No changes are made to
+   the data other than changing the format in which it is held. The input
+   and output files are specified by the user.
 
-   Some research applications require knowledge of the database
-   sequence(s) that corresponds to the sequence(s) given in a pdb file. A
-   'swissprot:pdb equivalence' file listing accession numbers and
-   swissprot database identifiers for certain pdb code is available, but
-   is not in a format that is consistent with flat file formats used for
-   protein structural data in emboss. pdbtosp parses the swissprot:pdb
-   equivalence in its raw format and converts it to an embl-like format.
+3.0 INPUT FILE FORMAT
 
-   pdbtosp parses the swissprot:pdb equivalence table available at URL
-   (1) (1) http://www.expasy.ch/cgi-bin/lists?pdbtosp.txt and writes the
-   data out in embl-like format file (Figure 2). The raw (input) file can
-   be obtained by doing a "save as ... text format" from the web page
-   (1). No changes are made to the data other than changing the format in
-   which it is held. The input and output files are specified by the
-   user.
-
-Algorithm
-
-   pdbtosp relies on finding a line beginning with '____ _' in the input
-   file (all lines up to and including this one are ignored). Lines of
-   code data are then parsed, up until the first blank line.
-
-Usage
-
-   Here is a sample session with pdbtosp
-
-
-% pdbtosp 
-Convert raw swissprot:PDB equivalence file to EMBL-like format
-Name of raw swissprot:PDB equivalence file (input): pdbtosp.txt
-Name of swissprot:PDB equivalence file (EMBL-like format output) [Epdbtosp.dat]
-: 
-
-   Go to the input files for this example
-   Go to the output files for this example
-
-Command line arguments
-
-   Standard (Mandatory) qualifiers:
-  [-infile]            infile     This option specifies the name of raw
-                                  swissprot:PDB equivalence file (input).
-                                  HETPARSE parses this file, which is
-                                  available at URL
-                                  http://www.expasy.ch/cgi-bin/lists?pdbtosp.tx
-t
-  [-outfile]           outfile    This option specifies the name of
-                                  swissprot:PDB equivalence file (EMBL-like
-                                  format). This is the PDBTOSP output file.
-
-   Additional (Optional) qualifiers: (none)
-   Advanced (Unprompted) qualifiers: (none)
-   Associated qualifiers:
-
-   "-outfile" associated qualifiers
-   -odirectory2        string     Output directory
-
-   General qualifiers:
-   -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
-   -options            boolean    Prompt for standard and additional values
-   -debug              boolean    Write debug output to program.dbg
-   -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
-   -warning            boolean    Report warnings
-   -error              boolean    Report errors
-   -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-infile]
-   (Parameter 1) This option specifies the name of raw swissprot:PDB
-   equivalence file (input). HETPARSE parses this file, which is
-   available at URL http://www.expasy.ch/cgi-bin/lists?pdbtosp.txt Input
-   file Required
-   [-outfile]
-   (Parameter 2) This option specifies the name of swissprot:PDB
-   equivalence file (EMBL-like format). This is the PDBTOSP output file.
-   Output file Epdbtosp.dat
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
-
-Input file format
-
-   pdbtosp reads any normal sequence USAs.
+   An excerpt from the raw swissprot:PDB equivalence file is shown
+   (Figure 1).
 
   Input files for usage example
 
@@ -170,7 +99,10 @@ license@isb-sib.ch.
  Switzerland         sites:      AustraliaCanada China Korea Taiwan
   ------------------------------------------------------------------------
 
-Output file format
+4.0 OUTPUT FILE FORMAT
+
+   An excerpt from the swissprot:PDB equivalence file in EMBL-like format
+   is shown (Figure 2).
 
   Output files for usage example
 
@@ -226,119 +158,152 @@ IN   XYLA_ACTMI ID; P12851 ACC;
 XX
 //
 
-   An excerpt from the swissprot:pdb equivalence file in embl-like format
-   is shown below. The records used to describe an entry are as follows.
+5.0 DATA FILES
 
-   (1) EN - PDB identifier code. This is the 4-character PDB identifier
-   code.
+   No data files are used by PDBTOSP.
 
-   (2) NE - Number of entries. This is the number of accession numbers
-   that were given for that pdb code in the equivalence file.
+6.0 USAGE
 
-   (3) IN - Code line. The swissprot database identifier code and
-   accession number are given preceeding ID and ACC respectively.
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     This option specifies the name of raw
+                                  swissprot:PDB equivalence file (input).
+                                  HETPARSE parses this file, which is
+                                  available at URL
+                                  http://www.expasy.ch/cgi-bin/lists?pdbtosp.tx
+t
+  [-outfile]           outfile    This option specifies the name of
+                                  swissprot:PDB equivalence file (EMBL-like
+                                  format). This is the PDBTOSP output file.
 
-   Excerpt from embl-like format swissprot:pdb equivalence file
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
 
-EN   3SDH
-XX
-NE   2
-XX
-IN   LEU3_THETH ID; P00351 ACC;
-IN   LEU4_THEFF ID; P02351 ACC;
-XX
-//
-EN   2SDH
-XX
-NE   1
-XX
-IN   LEU1_FDFTH ID; P11351 ACC;
-XX
-//
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
 
-Data files
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+  6.1 COMMAND LINE ARGUMENTS
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) This option specifies the name of raw swissprot:PDB
+   equivalence file (input). HETPARSE parses this file, which is
+   available at URL http://www.expasy.ch/cgi-bin/lists?pdbtosp.txt Input
+   file Required
+   [-outfile]
+   (Parameter 2) This option specifies the name of swissprot:PDB
+   equivalence file (EMBL-like format). This is the PDBTOSP output file.
+   Output file Epdbtosp.dat
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+  6.2 EXAMPLE SESSION
+
+   An example of interactive use of PDBTOSP is shown below. Here is a
+   sample session with pdbtosp
+
+
+% pdbtosp 
+Convert swissprot:PDB codes file to EMBL-like format.
+Name of raw swissprot:PDB equivalence file (input): pdbtosp.txt
+Name of swissprot:PDB equivalence file (EMBL-like format output) [Epdbtosp.dat]
+: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+7.0 KNOWN BUGS & WARNINGS
 
    None.
 
-Notes
+8.0 NOTES
 
-   pdbtosp is used to create the emboss data file Epdbtosp.dat that is
-   included in the emboss distribution.
+   PDBTOSP is used to create the EMBOSS data file Epdbtosp.dat that is
+   included in the EMBOSS distribution.
 
-References
+  8.1 GLOSSARY OF FILE TYPES
 
-   None.
+   FILE TYPE FORMAT DESCRIPTION CREATED BY SEE ALSO
+   swissprot:PDB equivalence file EMBL-like format. A file containing
+   swissprot identifiers for PDB codes. Included in the EMBOSS
+   distribution N.A.
 
-Warnings
+   None
 
-   None.
+9.0 DESCRIPTION
 
-Diagnostic Error Messages
+   Some research applications require knowledge of the database
+   sequence(s) that corresponds to the sequence(s) given in a PDB file. A
+   'swissprot:PDB equivalence' file listing accession numbers and
+   swissprot database identifiers for certain PDB codes is available, but
+   is not in a format that is consistent with flat file formats used for
+   protein structural data in emboss. PDBTOSP parses the swissprot:PDB
+   equivalence in its raw format and converts it to an EMBL-like format.
 
-   None.
+10.0 ALGORITHM
 
-Exit status
+   PDBTOSP relies on finding a line beginning with '____ _' in the input
+   file (all lines up to and including this one are ignored). Lines of
+   code data are then parsed, up until the first blank line.
 
-   It always exits with status 0.
-
-Known bugs
-
-   None.
+11.0 RELATED APPLICATIONS
 
 See also
 
-   Program name Description
+    Program name                        Description
    aaindexextract Extract data from AAINDEX
-   allversusall Does an all-versus-all global alignment for each set of
-   sequences in an input directory and writes files of sequence
-   similarity values
-   cathparse Reads raw CATH classification files and writes DCF file
-   (domain classification file)
-   cutgextract Extract data from CUTG
-   domainer Reads CCF files (clean coordinate files) for proteins and
-   writes CCF files for domains, taken from a DCF file (domain
-   classification file)
-   domainnr Removes redundant domains from a DCF file (domain
-   classification file). The file must contain domain sequence
-   information, which can be added by using DOMAINSEQS
-   domainseqs Adds sequence records to a DCF file (domain classification
-   file)
-   domainsse Adds secondary structure records to a DCF file (domain
-   classification file)
-   hetparse Converts raw dictionary of heterogen groups to a file in
-   EMBL-like format
-   pdbparse Parses PDB files and writes CCF files (clean coordinate
-   files) for proteins
-   pdbplus Add residue solvent accessibility and secondary structure data
-   to a CCF file (clean coordinate file) for a protein or domain
-   printsextract Extract data from PRINTS
-   prosextract Builds the PROSITE motif database for patmatmotifs to
-   search
-   rebaseextract Extract data from REBASE
-   scopparse Reads raw SCOP classification files and writes a DCF file
-   (domain classification file)
-   seqnr Removes redundancy from DHF files (domain hits files) or other
-   files of sequences
-   sites Reads CCF files (clean coordinate files) and writes CON files
-   (contact files) of residue-ligand contact data for domains in a DCF
-   file (domain classification file)
-   ssematch Searches a DCF file (domain classification file) for
-   secondary structure matches
-   tfextract Extract data from TRANSFAC
+   allversusall   Sequence similarity data from all-versus-all comparison
+   cathparse      Generates DCF file from raw CATH files
+   cutgextract    Extract data from CUTG
+   domainer       Generates domain CCF files from protein CCF files
+   domainnr       Removes redundant domains from a DCF file
+   domainseqs     Adds sequence records to a DCF file
+   domainsse      Add secondary structure records to a DCF file
+   hetparse       Converts heterogen group dictionary to EMBL-like format
+   pdbplus        Add accessibility & secondary structure to a CCF file
+   pdbtosp        Convert swissprot:PDB codes file to EMBL-like format
+   printsextract  Extract data from PRINTS
+   prosextract    Build the PROSITE motif database for use by patmatmotifs
+   rebaseextract  Extract data from REBASE
+   scopparse      Generate DCF file from raw SCOP files
+   seqnr          Removes redundancy from DHF files
+   sites          Generate residue-ligand CON files from CCF files
+   ssematch       Search a DCF file for secondary structure matches
+   tfextract      Extract data from TRANSFAC
 
-   scopseqs uses the pdbtosp output file as input.
+12.0 DIAGNOSTIC ERROR MESSAGES
 
-Author(s)
+   None.
 
-   Jon Ison (jison © rfcgr.mrc.ac.uk)
+13.0 AUTHORS
+
+   Jon Ison (jison@rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
-History
+14.0 REFERENCES
 
-   Written (2003) - Jon Ison.
+   Please cite the authors and EMBOSS.
+   Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+   Molecular Biology Open Software Suite" Trends in Genetics, 15:276-278.
+   
+   See also http://emboss.sourceforge.net/
 
-Target users
-
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+  14.1 Other useful references

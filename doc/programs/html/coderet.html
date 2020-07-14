@@ -133,6 +133,7 @@ To extract all of the CDS, mRNA and the protein translations:
 Extract CDS, mRNA and translations from feature tables
 Input sequence(s): <b>tembl:X03487</b>
 Output sequence [hsferg1.fasta]: <b></b>
+Output file [hsferg1.coderet]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -150,6 +151,7 @@ To only extract the mRNA sequence:
 Extract CDS, mRNA and translations from feature tables
 Input sequence(s): <b>tembl:X03487</b>
 Output sequence [hsferg1.fasta]: <b></b>
+Output file [hsferg1.coderet]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -165,6 +167,7 @@ Output sequence [hsferg1.fasta]: <b></b>
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Sequence database USA
   [-outseq]            seqout     Output sequence USA
+  [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -175,47 +178,50 @@ Output sequence [hsferg1.fasta]: <b></b>
    Associated qualifiers:
 
    "-seqall" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outseq" associated qualifiers
-   -osformat2           string     Output seq format
-   -osextension2        string     File name extension
-   -osname2             string     Base file name
-   -osdirectory2        string     Output directory
-   -osdbname2           string     Database name to add
-   -ossingle2           boolean    Separate file for each entry
-   -oufo2               string     UFO features
-   -offormat2           string     Features format
-   -ofname2             string     Features file name
-   -ofdirectory2        string     Output directory
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
@@ -240,6 +246,13 @@ Output sequence [hsferg1.fasta]: <b></b>
 <td>Output sequence USA</td>
 <td>Writeable sequence</td>
 <td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.coderet</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -430,6 +443,14 @@ LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
 NES
 </pre>
 </td></tr></table><p>
+<p><h3>File: hsferg1.coderet</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+   CDS  mRNA Trans Total Sequence
+ ===== ===== ===== ===== ========
+     1     1     1     3 HSFERG1
+</pre>
+</td></tr></table><p>
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
@@ -443,6 +464,14 @@ cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
 ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
 gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
 ctcctacgtttacctgtccatg
+</pre>
+</td></tr></table><p>
+<p><h3>File: hsferg1.coderet</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+  mRNA Total Sequence
+ ===== ===== ========
+     1     1 HSFERG1
 </pre>
 </td></tr></table><p>
 
@@ -499,7 +528,7 @@ None.
 <tr><td><a href="maskfeat.html">maskfeat</a></td><td>Mask off features of a sequence</td></tr>
 <tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
 <tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
+<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
@@ -512,10 +541,9 @@ None.
 <H2>
     Author(s)
 </H2>
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
 

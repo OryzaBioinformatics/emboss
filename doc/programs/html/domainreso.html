@@ -1,22 +1,25 @@
 <!-- START OF HEADER -->
 <HTML><HEAD>
-<TITLE> EMBOSS: DOMAINRESO documentation. </TITLE>
+<TITLE> EMBASSY: DOMAINRESO documentation. </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
+
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="../index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="../../emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
 
-<H2> DOMAINRESO documentation </H2>
+<H2> DOMAINRESO documentation
 </font></b>
 </td></tr>
 </table>
 <br>&nbsp;
 <p>
 
+
+<!-- END OF HEADER -->
 
 
 
@@ -52,7 +55,7 @@
 <br><br><br><H2> 1.0   SUMMARY  </H2>
 
 
-Removes low resolution domains from a DCF file (domain classification file)
+Remove low resolution domains from a DCF file
 
 
 
@@ -90,7 +93,7 @@ The format of the DCF file is described in the <a href="scopparse.html">SCOPPARS
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: all.scop</h3>
+<p><h3>File: ../scopparse-keep/all.scop</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   D1CS4A_
@@ -353,10 +356,8 @@ DOMAINRESO does not use any data files.
 <H3> 6.2 EXAMPLE SESSION </H3>
 An example of interactive use of DOMAINRESO is shown below.
 
-The DCF file /test_data/all.scop was read and a DCF
-file called /test_data/domainreso/all_2.3.scop was written containing
-only those domains of 2.3 Angstrom resolution or better.  Resolution data
-were taken from domain coordinte files in the directory /test_data.
+<!--
+The DCF file /test_data/all.scop was read and a DCF file called /test_data/domainreso/all_2.3.scop was written containing only those domains of 2.3 Angstrom resolution or better.  Resolution data were taken from domain coordinte files in the directory /test_data. -->
 
 <b>Here is a sample session with domainreso</b>
 <p>
@@ -365,17 +366,14 @@ were taken from domain coordinte files in the directory /test_data.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>domainreso </b>
-Removes low resolution domains from a DCF file (domain classification
-file).
-Location of domain CCF file (clean coordinate files) (input). [./]: <b>structure</b>
-Name of DCF file (domain classification file) (input).: <b>all.scop</b>
+Remove low resolution domains from a DCF file.
+Location of domain CCF file (clean coordinate files) (input). [./]: <b>../domainer-keep/</b>
+Name of DCF file (domain classification file) (input).: <b>../scopparse-keep/all.scop</b>
 Threshold for inclusion (Angstroms). [2.8]: <b>2.3</b>
 Name of DCF file (domain classification file) (output). [test.scop]: <b>all_2.3.scop</b>
 
-/ebi/services/idata/pmr/hgmp/test/data/structure/1cs4.ccf
-/ebi/services/idata/pmr/hgmp/test/data/structure/1ii7.ccf
-/ebi/services/idata/pmr/hgmp/test/data/structure/d1cs4a_.ccf
-/ebi/services/idata/pmr/hgmp/test/data/structure/d1ii7a_.ccf
+/ebi/services/idata/pmr/hgmp/test/qa/domainer-keep/d1cs4a_.ccf
+/ebi/services/idata/pmr/hgmp/test/qa/domainer-keep/d1ii7a_.ccf
 
 </pre></td></tr></table><p>
 <p>
@@ -418,8 +416,6 @@ Domains that lack a value for resolution in the CCF file
 (e.g. theoretical models and NMR structures) are included in the output
 file.
 
-
-
 <H3> 8.1   GLOSSARY OF FILE TYPES    </H3>
 <table BORDER CELLSPACING=5 CELLPADDING=5 BGCOLOR="#f5f5ff" >
 <tr>
@@ -451,6 +447,8 @@ file.
 <td> Records for residue solvent accessibility and secondary structure are added to the file by using PDBPLUS.</td>
 </tr>
 </table>
+
+
 
 
 
@@ -497,25 +495,30 @@ None.
 <br><br><br><H2> 11.0  RELATED APPLICATIONS      </H2>
 
 
+
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="../construct/contactcount.html">contactcount</a></td><td>Counts specific versus non-specific contacts in a directory of cleaned protein chain contact files</td></tr>
-<tr><td><a href="contacts.html">contacts</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of intra-chain residue-residue contact data</td></tr>
-<tr><td><a href="domainalign.html">domainalign</a></td><td>Generates DAF files (domain alignment files) of structure-based sequence alignments for nodes in a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainrep.html">domainrep</a></td><td>Reorder DCF file (domain classification file) so that the representative structure of each user-specified node is given first</td></tr>
-<tr><td><a href="interface.html">interface</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of inter-chain residue-residue contact data</td></tr>
-<tr><td><a href="libgen.html">libgen</a></td><td>Generates various types of discriminating elements for each alignment in a directory</td></tr>
-<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file</td></tr>
-<tr><td><a href="rocon.html">rocon</a></td><td>Reads a DHF file (domain hits file) of hits (sequences of unknown structural classification) and a DHF file of validation sequences (known classification) and writes a 'hits file' for the hits, which are classified and rank-ordered on the basis of score</td></tr>
-<tr><td><a href="rocplot.html">rocplot</a></td><td>Provides interpretation and graphical display of the performance of discriminating elements (e.g. profiles for protein families). rocplot reads file(s) of hits from discriminator-database search(es), performs ROC analysis on the hits, and writes graphs illustrating the diagnostic performance of the discriminating elements</td></tr>
-<tr><td><a href="seqalign.html">seqalign</a></td><td>Reads a DAF file (domain alignment file) and a DHF file (domain hits file) and writes a DAF file extended with the hits</td></tr>
-<tr><td><a href="seqfraggle.html">seqfraggle</a></td><td>Removes fragments from DHF files (domain hits files) or other files of sequences</td></tr>
-<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate database hits (sequences) for nodes in a DCF file (domain classification file) by using PSI-BLAST</td></tr>
-<tr><td><a href="seqsort.html">seqsort</a></td><td>Reads DHF files (domain hits files) of database hits (sequences) and removes hits of ambiguous classification</td></tr>
-<tr><td><a href="seqwords.html">seqwords</a></td><td>Generates DHF files (domain hits files) of database hits (sequences) for nodes in a DCF file (domain classification file) by keyword search of UniProt</td></tr>
-<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
-<tr><td><a href="sigscan.html">sigscan</a></td><td>Generates a DHF file (domain hits file) of hits (sequences) from scanning a signature against a sequence database</td></tr>
+<tr><td><a href="../../apps/contactcount.html">contactcount</a></td><td>Count specific versus non-specific contacts</td></tr>
+<tr><td><a href="../structure/contacts.html">contacts</a></td><td>Generate intra-chain CON files from CCF files</td></tr>
+<tr><td><a href="../domalign/domainalign.html">domainalign</a></td><td>Generate alignments (DAF file) for nodes in a DCF file</td></tr>
+<tr><td><a href="../domalign/domainrep.html">domainrep</a></td><td>Reorder DCF file to identify representative structures</td></tr>
+<tr><td><a href="../structure/interface.html">interface</a></td><td>Generate inter-chain CON files from CCF files</td></tr>
+<tr><td><a href="../signature/libgen.html">libgen</a></td><td>Generate discriminating elements from alignments</td></tr>
+<tr><td><a href="../signature/matgen3d.html">matgen3d</a></td><td>Generate a 3D-1D scoring matrix from CCF files</td></tr>
+<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Phi and psi torsion angles from protein coordinates</td></tr>
+<tr><td><a href="../signature/rocon.html">rocon</a></td><td>Generates a hits file from comparing two DHF files</td></tr>
+<tr><td><a href="../signature/rocplot.html">rocplot</a></td><td>Performs ROC analysis on hits files</td></tr>
+<tr><td><a href="../reconstruct/scorecmapdir.html">scorecmapdir</a></td><td>Contact scores for cleaned protein chain contact files</td></tr>
+<tr><td><a href="../domalign/seqalign.html">seqalign</a></td><td>Extend alignments (DAF file) with sequences (DHF file)</td></tr>
+<tr><td><a href="../domsearch/seqfraggle.html">seqfraggle</a></td><td>Removes fragment sequences from DHF files</td></tr>
+<tr><td><a href="../domsearch/seqsearch.html">seqsearch</a></td><td>Generate PSI-BLAST hits (DHF file) from a DAF file</td></tr>
+<tr><td><a href="../domsearch/seqsort.html">seqsort</a></td><td>Remove ambiguous classified sequences from DHF files</td></tr>
+<tr><td><a href="../domsearch/seqwords.html">seqwords</a></td><td>Generates DHF files from keyword search of UniProt</td></tr>
+<tr><td><a href="../signature/siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment</td></tr>
+<tr><td><a href="../signature/siggenlig.html">siggenlig</a></td><td>Generate ligand-binding signatures from a CON file</td></tr>
+<tr><td><a href="../signature/sigscan.html">sigscan</a></td><td>Generate hits (DHF file) from a signature search</td></tr>
+<tr><td><a href="../signature/sigscanlig.html">sigscanlig</a></td><td>Search ligand-signature library & write hits (LHF file)</td></tr>
 </table>
 
 

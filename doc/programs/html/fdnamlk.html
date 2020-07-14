@@ -259,6 +259,77 @@ you may want to use both types of rate variation.
         Many examples illustrating different behaviours is good.
  -->
 
+<b>Here is a sample session with fdnamlk</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fdnamlk -printdata -ncategories 2 -categories "1111112222222" -rate "1.0 2.0" -gamma h -nhmmcategories 5 -hmmrates "0.264 1.413 3.596 7.086 12.641" -hmmprobabilities "0.522 0.399 0.076 0.0036 0.000023" -lambda 1.5 -weight "0111111111110" </b>
+Estimates nucleotide phylogeny by maximum likelihood
+Input sequence: <b>dnaml.dat</b>
+Input tree file: <b></b>
+Output file [dnaml.fdnamlk]: <b></b>
+
+
+ mulsets: false
+ datasets : 1
+ rctgry : true
+ gama : false
+ invar : false
+
+ ctgry: true
+ categs : 2
+ rcategs : 5
+ auto_: false
+ freqsfrom : true
+ global : false
+ hypstate : false
+ invar : false
+ jumble : false
+ njumble : 1
+ lngths : false
+ lambda : 1.000000
+ lambda1 : 0.000000
+ cv : 0.000000
+ freqa : 0.000000
+ freqc : 0.000000
+ freqg : 0.000000
+ freqt : 0.000000
+ trout : true
+ ttratio : 2.000000
+ probsum : 1.000623
+ ttr : false
+ usertree : false
+ weights: true
+ printdata : true
+ progress : true
+ treeprint: true
+ interleaved : true 
+
+probcat[0] 0.522000
+probcat[1] 0.399000
+probcat[2] 0.076000
+probcat[3] 0.003600
+probcat[4] 0.000023
+
+Adding species:
+   1. Alpha     
+   2. Beta      
+   3. Gamma     
+   4. Delta     
+   5. Epsilon   
+
+Output written to file "dnaml.fdnamlk"
+
+Tree also written onto file "dnaml.treefile"
+
+Done.
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -627,6 +698,20 @@ IT IS DONE FOR YOU.
 <p>
 
 
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: dnaml.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+   5   13
+Alpha     AACGTGGCCAAAT
+Beta      AAGGTCGCCAAAC
+Gamma     CATTTCGTCACAA
+Delta     GGTATTTCGGCCT
+Epsilon   GGGATCTCGGCCC
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -644,7 +729,7 @@ IT IS DONE FOR YOU.
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-[an error occurred while processing this directive]
+include file="inc/reportformats.ihtml" -->
    -->
 
 <b>fdnamlk</b> output starts by giving the number of species, the
@@ -842,6 +927,110 @@ rates.
 <p>
 
 
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: dnaml.fdnamlk</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+Nucleic acid sequence Maximum Likelihood method, version 3.6b
+
+ 5 species,  13  sites
+
+    Site categories are:
+
+             1111112222 222
+
+
+    Sites are weighted as follows:
+
+             01111 11111 110
+
+
+Name            Sequences
+----            ---------
+
+Alpha        AACGTGGCCA AAT
+Beta         AAGGTCGCCA AAC
+Gamma        CATTTCGTCA CAA
+Delta        GGTATTTCGG CCT
+Epsilon      GGGATCTCGG CCC
+
+
+
+Empirical Base Frequencies:
+
+   A       0.23636
+   C       0.29091
+   G       0.25455
+  T(U)     0.21818
+
+Transition/transversion ratio =   2.000000
+
+
+State in HMM    Rate of change    Probability
+
+        1           0.264            0.522
+        2           1.413            0.399
+        3           3.596            0.076
+        4           7.086            0.0036
+        5          12.641            0.000023
+
+
+Site category   Rate of change
+
+        1           1.000
+        2           2.000
+
+
+
+
+
+
+                                                    +------Epsilon   
+  +-------------------------------------------------4  
+  !                                                 +------Delta     
+--3  
+  !                                             +-----------Gamma     
+  +---------------------------------------------2  
+                                                !  +--------Beta      
+                                                +--1  
+                                                   +--------Alpha     
+
+
+Ln Likelihood =   -60.78722
+
+ Ancestor      Node      Node Height     Length
+ --------      ----      ---- ------     ------
+ root            3      
+   3             4          3.94793      3.94793
+   4          Epsilon       4.52951      0.58158
+   4          Delta         4.52951      0.58158
+   3             2          3.62149      3.62149
+   2          Gamma         4.52951      0.90802
+   2             1          3.85069      0.22921
+   1          Beta          4.52951      0.67882
+   1          Alpha         4.52951      0.67882
+
+Combination of categories that contributes the most to the likelihood:
+
+             1121121111 111
+
+Most probable category at each site if &gt; 0.95 probability ("." otherwise)
+
+             ....1..... ...
+
+
+</pre>
+</td></tr></table><p>
+<p><h3>File: dnaml.treefile</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+((Epsilon:0.58158,Delta:0.58158):3.94793,(Gamma:0.90802,
+(Beta:0.67882,Alpha:0.67882):0.22921):3.62149);
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -968,8 +1157,8 @@ None.
 <tr><td><a href="../phylip/ednacomp.html">ednacomp</a></td><td>DNA compatibility algorithm</td></tr>
 <tr><td><a href="../phylip/ednadist.html">ednadist</a></td><td>Nucleic acid sequence Distance Matrix program</td></tr>
 <tr><td><a href="../phylip/ednainvar.html">ednainvar</a></td><td>Nucleic acid sequence Invariants method</td></tr>
-<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood</td></tr>
-<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood with molecular clock</td></tr>
+<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Phylogenies from nucleic acid Maximum Likelihood</td></tr>
+<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Phylogenies from nucleic acid Maximum Likelihood with clock</td></tr>
 <tr><td><a href="../phylip/ednapars.html">ednapars</a></td><td>DNA parsimony algorithm</td></tr>
 <tr><td><a href="../phylip/ednapenny.html">ednapenny</a></td><td>Penny algorithm for DNA</td></tr>
 <tr><td><a href="../phylip/eprotdist.html">eprotdist</a></td><td>Protein distance algorithm</td></tr>
@@ -991,7 +1180,7 @@ None.
 <tr><td><a href="fprotdist.html">fprotdist</a></td><td>Protein distance algorithm</td></tr>
 <tr><td><a href="fprotpars.html">fprotpars</a></td><td>Protein pasimony algorithm</td></tr>
 <tr><td><a href="frestboot.html">frestboot</a></td><td>Bootstrapped restriction sites algorithm</td></tr>
-<tr><td><a href="frestdist.html">frestdist</a></td><td>Computes distance matrix from restriction sites or fragments</td></tr>
+<tr><td><a href="frestdist.html">frestdist</a></td><td>Distance matrix from restriction sites or fragments</td></tr>
 <tr><td><a href="frestml.html">frestml</a></td><td>Restriction site maximum Likelihood method</td></tr>
 <tr><td><a href="fseqboot.html">fseqboot</a></td><td>Bootstrapped sequences algorithm</td></tr>
 <tr><td><a href="fseqbootall.html">fseqbootall</a></td><td>Bootstrapped sequences algorithm</td></tr>

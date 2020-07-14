@@ -201,7 +201,7 @@ Output file format
 
 ########################################
 # Program: antigenic
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Report_format: motif
 # Report_file: act1_fugru.antigenic
 ########################################
@@ -310,7 +310,7 @@ Max_score_pos at "*"
   File: act1_fugru.antigenic
 
 ##gff-version 2.0
-##date 2004-07-15
+##date 2005-07-15
 ##Type Protein ACT1_FUGRU
 ACT1_FUGRU      antigenic       site    214     222     1.207   +       .
 Sequence "ACT1_FUGRU.1" ; note "*pos 218"
@@ -438,7 +438,7 @@ See also
    fuzzpro        Protein pattern search
    fuzztran       Protein pattern search after translation
    helixturnhelix Report nucleic acid binding motifs
-   oddcomp        Finds protein sequence regions with a biased composition
+   oddcomp        Find protein sequence regions with a biased composition
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
@@ -448,9 +448,9 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
    Original program "ANTIGENIC" by Peter Rice (EGCG 1991) Peter Rice
    (pmr © ebi.ac.uk)

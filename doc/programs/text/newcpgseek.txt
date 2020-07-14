@@ -279,10 +279,10 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                        Description
    cpgplot      Plot CpG rich areas
    cpgreport    Reports all CpG rich regions
-   geecee       Calculates the fractional GC content of nucleic acid sequences
+   geecee       Calculates fractional GC content of nucleic acid sequences
    newcpgreport Report CpG rich areas
 
    As there is no official definition of what is a cpg island is, and

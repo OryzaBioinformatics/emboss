@@ -536,7 +536,7 @@ Output file format
 
 ########################################
 # Program: sirna
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Report_format: table
 # Report_file: hsfau.sirna
 ########################################
@@ -754,7 +754,7 @@ taaaaaagccacttagttcagtc
 
 ########################################
 # Program: sirna
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Report_format: table
 # Report_file: hsfau.sirna
 ########################################
@@ -975,11 +975,11 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                        Description
    banana       Bending and curvature plot in B-DNA
    btwisted     Calculates the twisting in a B-DNA sequence
    chaos        Create a chaos game representation plot for a sequence
-   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   compseq      Count composition of dimer/trimer/etc words in a sequence
    dan          Calculates DNA RNA/DNA melting temperature
    freak        Residue/base frequency table or plot
    isochore     Plots isochores in large DNA sequences

@@ -1,16 +1,16 @@
 <!-- START OF HEADER -->
 <HTML><HEAD>
-<TITLE> EMBOSS: ROCPLOT documentation. </TITLE>
+<TITLE> EMBASSY: ROCPLOT documentation. </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="../index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="../../emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
 
-<H2> ROCPLOT documentation </H2>
+<H2> ROCPLOT documentation
 </font></b>
 </td></tr>
 </table>
@@ -18,6 +18,7 @@
 <p>
 
 
+<!-- END OF HEADER -->
 
 
 
@@ -51,19 +52,12 @@
 -->
 <a name="1.0"><br><br><br><H2> 1.0   SUMMARY  </H2></a>
 
-Provides interpretation and graphical display of the performance of discriminating elements (e.g. profiles for protein families). rocplot reads file(s) of hits from discriminator-database search(es), performs ROC analysis on the hits, and writes graphs illustrating the diagnostic performance of the discriminating elements
+Provides interpretation and graphical display of the performance of discriminating elements (e.g. profiles for protein families).  rocplot reads file(s) of hits from discriminator-database search(es), performs ROC analysis on the hits, and writes graphs illustrating the diagnostic performance of the discriminating elements.
 
-<H3> 1.1 DESCRIPTION </H3>
+Performs ROC analysis on hits files
+
  
-ROCPLOT is a generic and flexible tool for interpretation and
- graphical display of the performance of predictive methods.  ROCPLOT
- reads one or more files of hits, performs Receiver Operator
- Characteristic (ROC) analysis on the hits, and writes graphs,
- including ROC plots, illustrating diagnostic performance.  For
- example, a profile or other type of discriminating element can be
- generated for a protein family and scanned against a sequence
- database to identify putative new family members.  The file(s) of
- hits would contain the results of the profile-database search(es).
+
 
 
 
@@ -73,7 +67,7 @@ ROCPLOT is a generic and flexible tool for interpretation and
      Short summary of the application inputs and outputs in its different 
      modes of usage (if appropriate). More detail than the summary.
 -->
-<a name="2.0"><br><br><br><h2> 2.0   INPUTS & OUTPUTS          </H2></a>
+<a name="2.0"><br><br><br><H2> 2.0   INPUTS & OUTPUTS          </H2></a>
 
 ROCPLOT reads a directory of one or more hits files and writes a text, 
 summary file containing ROC value(s), which are a convenient numerical 
@@ -174,7 +168,7 @@ There is a gold standard for each different search.
      Use "<b>ROCPLOT</b> reads any normal sequence USAs." if
      appropriate.
 -->
-<a name="3.0"><br><br><br><h2> 3.0   INPUT FILE FORMAT         </H2></a>
+<a name="3.0"><br><br><br><H2> 3.0   INPUT FILE FORMAT         </H2></a>
 
 <H3> 3.1  Hits files</H3>
 A hits file contains a list of classified hits that are 
@@ -246,7 +240,7 @@ FALSE        DBCODE17  1   51
      or  "outputs a report format file. The default format is ..."
      if appropriate.
 -->
-<a name="4.0"><br><br><br><h2> 4.0   OUTPUT FILE FORMAT         </H2></a>
+<a name="4.0"><br><br><br><H2> 4.0   OUTPUT FILE FORMAT         </H2></a>
 
 <H3> 4.0  OUTPUT FILE FORMAT</H3>
 <H3> 4.1  Summary file</H3>
@@ -891,7 +885,7 @@ plot "_classplot_dat0" smooth bezier title "True hits", "_classplot_dat1" smooth
 <p><h3>File: _summary</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-rocplot summary file (15 Jul 2004)
+rocplot summary file (15 Jul 2005)
 
 mode      == 2 (Multiple input file mode)
 multimode == 2 (Combine data: single ROC plot, single classification plot.)
@@ -904,7 +898,7 @@ data2.hits     140
 ROC50     == 0.185 (combined)
 </pre>
 </td></tr></table><p>
-<p><h3>File: rocplot.errors</h3>
+<p><h3>File: rocplot.log</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 MODE INFO
@@ -954,7 +948,7 @@ hitcnt[0]: 80
      <br><br>  #include file="inc/localfiles.ihtml"  <br><br>
 -->
 
-<a name="5.0"><br><br><br><h2> 5.0   DATA FILES                </H2></a>
+<a name="5.0"><br><br><br><H2> 5.0   DATA FILES                </H2></a>
 ROCPLOT does not use a data file.
 
 
@@ -962,7 +956,7 @@ ROCPLOT does not use a data file.
      Example usage, as run from the command-line.
      Many examples illustrating different behaviours is good.
 -->
-<a name="6.0"><br><br><br><h2> 6.0   USAGE                     </H2></a>
+<a name="6.0"><br><br><br><H2> 6.0   USAGE                     </H2></a>
 <H3> 6.1   COMMAND LINE ARGUMENTS </H3>
 
 
@@ -1112,14 +1106,14 @@ ROCPLOT does not use a data file.
                                   as unique if they have different accession
                                   numbers (no requirement for overlapping
                                   ranges).
-   -errfile            outfile    Name of error file (output).
+   -logfile            outfile    Name of error log file (output).
 
    Associated qualifiers:
 
    "-outfile" associated qualifiers
    -odirectory         string     Output directory
 
-   "-errfile" associated qualifiers
+   "-logfile" associated qualifiers
    -odirectory         string     Output directory
 
    General qualifiers:
@@ -1242,10 +1236,10 @@ ROCPLOT does not use a data file.
 </tr>
 
 <tr>
-<td>-errfile</td>
-<td>Name of error file (output).</td>
+<td>-logfile</td>
+<td>Name of error log file (output).</td>
 <td>Output file</td>
-<td>rocplot.errors</td>
+<td>rocplot.log</td>
 </tr>
 
 </table>
@@ -1263,11 +1257,7 @@ An example of interactive use of ROCPLOT is shown below.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>rocplot </b>
-Provides interpretation and graphical display of the performance of
-discriminating elements (e.g. profiles for protein families). rocplot reads
-file(s) of hits from discriminator-database search(es), performs ROC analysis on
-the hits, and writes graphs illustrating the diagnostic performance of the
-discriminating elements.
+Performs ROC analysis on hits files.
 Directory of hits files (input). [rocplot]: <b>rocplot/hitsin</b>
 Available modes
          1 : Single input file mode
@@ -1303,7 +1293,7 @@ Please wait ... done!
      Bugs that have not yet been fixed, easily missued features, problems
      and caveats etc. Potentially stupid things the program will let you do.
 -->
-<a name="7.0"><br><br><br><h2> 7.0   KNOWN BUGS & WARNINGS     </H2></a>
+<a name="7.0"><br><br><br><H2> 7.0   KNOWN BUGS & WARNINGS     </H2></a>
 GNUPLOT must be started in the same directory as the gnuplot data files.
 <br>
 <br>If you run ROCPLOT on many input files without specifying combination of 
@@ -1329,10 +1319,21 @@ should then be given in order of decreasing score / significance.
        Future plans.
        etc.
 -->
-<a name="8.0"><br><br><br><h2> 8.0   NOTES                     </H2></a>
-A future implementation will 
+<a name="8.0"><br><br><br><H2> 8.0   NOTES                     </H2></a>
+<b>Future implementation </b>
 <br>1. Accept a feature file as input.
 <br>2. Split ROCPLOT into separate programs, one for each of the major modes. 
+
+<br><br>
+<b>Description of 'sort' mode (additional option in ACD) </b>
+<br>This option specifies whether to process the input files in blocks (of the same domain identifier). In this case the analysis mode (mode-multimode-datamode) are set to Multiple input file - combine data - Single list of known true relatives (2-2-1) and the analysis is performed on each block of hits files with the same domain identifier.  In the output file, ROC values are given for each combined analysis and the mean and SD of all the combined analyses are given.  The domain identifier is defined as the text between the first and second period ('/.') in the input file name.  
+
+<br><br>
+<b>Description of 'norange' mode (additional option in ACD) </b>
+<br>This option specifies whether to disregard range data when identifying unique hits.  If set, the range data specified in the hits files are disregarded, two hits are classed as unique if they have different accession numbers (no requirement for overlapping ranges).
+
+
+
 
 <H3> 8.1   GLOSSARY OF FILE TYPES    </H3>
 <table BORDER CELLSPACING=5 CELLPADDING=5 BGCOLOR="#f5f5ff" >
@@ -1347,10 +1348,12 @@ A future implementation will
 <td><b> Hits file</b></td>
 <td> Text file of classified hits </td>
 <td> A list of hits (e.g. from a prediction method) that are classified and rank-ordered on the basis of score, p-value, E-value etc.  </td>
-<td> <a href="sigscan.html">SIGSCAN</a> and <a href="libscan.html">LIBSCAN</a> (hits from searches of a discriminating element (hidden Markov model, profile or signature) against a sequence database).   </td>
+<td> <a href="rocon.html">ROCON</a> and <a href="libscan.html">LIBSCAN</a> (hits from searches of a discriminating element (hidden Markov model, profile or signature) against a sequence database).   </td>
 <td> ROCPLOT is run on the files to perform Receiver Operator Characteristic (ROC) analysis on the hits.  </td>
 </tr>
 </table>
+
+
 
 
 
@@ -1361,7 +1364,8 @@ None
 <!-- DESCRIPTION
      A complete, non-technical, user-level description of the application.
 -->
-<br><br><br><h2> 9.0   DESCRIPTION               </H2>
+<br><br><br><H2> 9.0   DESCRIPTION               </H2>
+
 Predictive methods are a mainstay of bioinformatics.  Discrciminating 
 elements such as hidden Markov models (HMM), sparse protein signatures 
 and profiles can be generated for a set of proteins with related sequence,
@@ -1659,7 +1663,7 @@ and 2, and so on. This is the approach taken in ROCPLOT (see Section 10).
      A technical description of algorithmic aspects, describing exactly how
      the key aspects of the application work.
 -->
-<a name="10.0"><br><br><br><h2> 10.0  ALGORITHM                 </H2></a>
+<a name="10.0"><br><br><br><H2> 10.0  ALGORITHM                 </H2></a>
 <H3> 10.1  Classification plot</H3>
 The proportion of the total hits detected that are of a certain type (TRUE, 
 CROSS, UNCERTAIN, UNKNOWN and FALSE) is calculated at each rank position in
@@ -1798,27 +1802,35 @@ Rank  File1  File2  File3
      Other applications that either generate the input, use the output or 
      are in some other way related to the application are described here. 
 -->
-<a name="11.0"><br><br><br><h2> 11.0  RELATED APPLICATIONS      </H2></a>
+
+
+
+<a name="11.0"></a>
+<br><br><br><H2> 11.0  RELATED APPLICATIONS      </H2>
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="../construct/contactcount.html">contactcount</a></td><td>Counts specific versus non-specific contacts in a directory of cleaned protein chain contact files</td></tr>
-<tr><td><a href="contacts.html">contacts</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of intra-chain residue-residue contact data</td></tr>
-<tr><td><a href="domainalign.html">domainalign</a></td><td>Generates DAF files (domain alignment files) of structure-based sequence alignments for nodes in a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainrep.html">domainrep</a></td><td>Reorder DCF file (domain classification file) so that the representative structure of each user-specified node is given first</td></tr>
-<tr><td><a href="domainreso.html">domainreso</a></td><td>Removes low resolution domains from a DCF file (domain classification file)</td></tr>
-<tr><td><a href="interface.html">interface</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of inter-chain residue-residue contact data</td></tr>
-<tr><td><a href="libgen.html">libgen</a></td><td>Generates various types of discriminating elements for each alignment in a directory</td></tr>
-<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file</td></tr>
-<tr><td><a href="rocon.html">rocon</a></td><td>Reads a DHF file (domain hits file) of hits (sequences of unknown structural classification) and a DHF file of validation sequences (known classification) and writes a 'hits file' for the hits, which are classified and rank-ordered on the basis of score</td></tr>
-<tr><td><a href="seqalign.html">seqalign</a></td><td>Reads a DAF file (domain alignment file) and a DHF file (domain hits file) and writes a DAF file extended with the hits</td></tr>
-<tr><td><a href="seqfraggle.html">seqfraggle</a></td><td>Removes fragments from DHF files (domain hits files) or other files of sequences</td></tr>
-<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate database hits (sequences) for nodes in a DCF file (domain classification file) by using PSI-BLAST</td></tr>
-<tr><td><a href="seqsort.html">seqsort</a></td><td>Reads DHF files (domain hits files) of database hits (sequences) and removes hits of ambiguous classification</td></tr>
-<tr><td><a href="seqwords.html">seqwords</a></td><td>Generates DHF files (domain hits files) of database hits (sequences) for nodes in a DCF file (domain classification file) by keyword search of UniProt</td></tr>
-<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
-<tr><td><a href="sigscan.html">sigscan</a></td><td>Generates a DHF file (domain hits file) of hits (sequences) from scanning a signature against a sequence database</td></tr>
+<tr><td><a href="../../apps/contactcount.html">contactcount</a></td><td>Count specific versus non-specific contacts</td></tr>
+<tr><td><a href="../structure/contacts.html">contacts</a></td><td>Generate intra-chain CON files from CCF files</td></tr>
+<tr><td><a href="../domalign/domainalign.html">domainalign</a></td><td>Generate alignments (DAF file) for nodes in a DCF file</td></tr>
+<tr><td><a href="../domalign/domainrep.html">domainrep</a></td><td>Reorder DCF file to identify representative structures</td></tr>
+<tr><td><a href="../domainatrix/domainreso.html">domainreso</a></td><td>Remove low resolution domains from a DCF file</td></tr>
+<tr><td><a href="../structure/interface.html">interface</a></td><td>Generate inter-chain CON files from CCF files</td></tr>
+<tr><td><a href="libgen.html">libgen</a></td><td>Generate discriminating elements from alignments</td></tr>
+<tr><td><a href="matgen3d.html">matgen3d</a></td><td>Generate a 3D-1D scoring matrix from CCF files</td></tr>
+<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Phi and psi torsion angles from protein coordinates</td></tr>
+<tr><td><a href="rocon.html">rocon</a></td><td>Generates a hits file from comparing two DHF files</td></tr>
+<tr><td><a href="../reconstruct/scorecmapdir.html">scorecmapdir</a></td><td>Contact scores for cleaned protein chain contact files</td></tr>
+<tr><td><a href="../domalign/seqalign.html">seqalign</a></td><td>Extend alignments (DAF file) with sequences (DHF file)</td></tr>
+<tr><td><a href="../domsearch/seqfraggle.html">seqfraggle</a></td><td>Removes fragment sequences from DHF files</td></tr>
+<tr><td><a href="../domsearch/seqsearch.html">seqsearch</a></td><td>Generate PSI-BLAST hits (DHF file) from a DAF file</td></tr>
+<tr><td><a href="../domsearch/seqsort.html">seqsort</a></td><td>Remove ambiguous classified sequences from DHF files</td></tr>
+<tr><td><a href="../domsearch/seqwords.html">seqwords</a></td><td>Generates DHF files from keyword search of UniProt</td></tr>
+<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment</td></tr>
+<tr><td><a href="siggenlig.html">siggenlig</a></td><td>Generate ligand-binding signatures from a CON file</td></tr>
+<tr><td><a href="sigscan.html">sigscan</a></td><td>Generate hits (DHF file) from a signature search</td></tr>
+<tr><td><a href="sigscanlig.html">sigscanlig</a></td><td>Search ligand-signature library & write hits (LHF file)</td></tr>
 </table>
 
 
@@ -1826,7 +1838,7 @@ Rank  File1  File2  File3
 <!-- DIAGNOSTIC ERROR MESSAGES
      Description of error messages or log file, if one is written.
 -->
-<a name="12.0"><br><br><br><h2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2></a>
+<a name="12.0"><br><br><br><H2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2></a>
 For purposes of generating the ROC plot and ROC curve, hits classified as 
 CROSS, UNCERTAIN and UNKNOWN are all treated as FALSE.  An error is 
 generated and ROCPLOT terminates in the following cases.
@@ -1852,7 +1864,7 @@ generated and ROCPLOT terminates in the following cases.
 <!-- AUTHORS
 
 -->
-<a name="13.0"><br><br><br><h2> 13.0  AUTHORS                   </H2></a>
+<a name="13.0"><br><br><br><H2> 13.0  AUTHORS                   </H2></a>
 Jon Ison <a href="mailto:jison@rfcgr.mrc.ac.uk">(jison@rfcgr.mrc.ac.uk)</a>
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
@@ -1863,7 +1875,7 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 <!-- REFERENCES
      Quote the paper where the application was first published, described, used etc. 
 -->
-<a name="14.0"><br><br><br><h2> 14.0  REFERENCES                </H2></a>
+<a name="14.0"><br><br><br><H2> 14.0  REFERENCES                </H2></a>
 
 Please cite the authors and EMBOSS.
 <br><br>

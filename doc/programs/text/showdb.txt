@@ -72,6 +72,13 @@ qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
 qapir         P    OK  OK  OK  PIR
 qapirall      P    OK  OK  OK  PIR
 qapirinc      P    OK  OK  OK  PIR
+qapxfasta     P    OK  OK  OK  FASTA file swissnew entries
+qapxflat      P    OK  OK  OK  Swissnew flatfiles
+qapxflatexc   P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapxflatinc   P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
+qaxpir        P    OK  OK  OK  PIR
+qaxpirall     P    OK  OK  OK  PIR
+qaxpirinc     P    OK  OK  OK  PIR
 tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
 tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL C
@@ -84,11 +91,21 @@ qangcg        N    OK  OK  OK  GCG format EMBL
 qangcgall     N    OK  OK  OK  GCG format EMBL
 qangcgexc     N    OK  OK  OK  GCG format EMBL without prokaryotes
 qangcginc     N    OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta     N    OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall  N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat      N    OK  OK  OK  EMBL flatfiles
+qanxflatall   N    OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxgcg       N    OK  OK  OK  GCG format EMBL
+qanxgcgall    N    OK  OK  OK  GCG format EMBL
+qanxgcgexc    N    OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc    N    OK  OK  OK  GCG format EMBL only prokaryotes
 qapirexc      N    OK  OK  OK  PIR
 qasrs         N    OK  OK  -   EMBL in local srs installation
 qasrsfasta    N    OK  OK  -   EMBL in local srs installation, fasta format
 qasrswww      N    OK  -   -   Remote SRS web server
 qawfasta      N    OK  OK  OK  FASTA file wormpep entries
+qawxfasta     N    OK  OK  OK  FASTA file wormpep entries
+qaxpirexc     N    OK  OK  OK  PIR
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
 temblall      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 temblrest     N    -   -   OK  EMBL in native format with EMBL CD-ROM index
@@ -158,6 +175,20 @@ Displays information on the currently available databases
 
  qapirinc P OK   OK   OK   PIR
 
+ qapxfasta P OK   OK   OK   FASTA file swissnew entries
+
+ qapxflat P OK   OK   OK   Swissnew flatfiles
+
+ qapxflatexc P OK   OK   OK   Swissnew flatfiles, no updated sequence file
+
+ qapxflatinc P OK   OK   OK   Swissnew flatfiles, only updated sequence file
+
+ qaxpir P OK   OK   OK   PIR
+
+ qaxpirall P OK   OK   OK   PIR
+
+ qaxpirinc P OK   OK   OK   PIR
+
  tpir P OK   OK   OK   PIR using NBRF access for 4 files
 
  tsw P OK   OK   OK   Swissprot native format with EMBL CD-ROM index
@@ -181,6 +212,22 @@ index
 
  qangcginc N OK   OK   OK   GCG format EMBL only prokaryotes
 
+ qanxfasta N OK   OK   OK   FASTA file EMBL rodents
+
+ qanxfastaall N OK   OK   OK   FASTA file EMBL rodents, all fields indexed
+
+ qanxflat N OK   OK   OK   EMBL flatfiles
+
+ qanxflatall N OK   OK   OK   EMBL flatfiles, all fields indexed
+
+ qanxgcg N OK   OK   OK   GCG format EMBL
+
+ qanxgcgall N OK   OK   OK   GCG format EMBL
+
+ qanxgcgexc N OK   OK   OK   GCG format EMBL without prokaryotes
+
+ qanxgcginc N OK   OK   OK   GCG format EMBL only prokaryotes
+
  qapirexc N OK   OK   OK   PIR
 
  qasrs N OK   OK   -    EMBL in local srs installation
@@ -190,6 +237,10 @@ index
  qasrswww N OK   -    -    Remote SRS web server
 
  qawfasta N OK   OK   OK   FASTA file wormpep entries
+
+ qawxfasta N OK   OK   OK   FASTA file wormpep entries
+
+ qaxpirexc N OK   OK   OK   PIR
 
  tembl N OK   OK   OK   EMBL in native format with EMBL CD-ROM index
 
@@ -228,6 +279,13 @@ qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
 qapir         P    OK  OK  OK  PIR
 qapirall      P    OK  OK  OK  PIR
 qapirinc      P    OK  OK  OK  PIR
+qapxfasta     P    OK  OK  OK  FASTA file swissnew entries
+qapxflat      P    OK  OK  OK  Swissnew flatfiles
+qapxflatexc   P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapxflatinc   P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
+qaxpir        P    OK  OK  OK  PIR
+qaxpirall     P    OK  OK  OK  PIR
+qaxpirinc     P    OK  OK  OK  PIR
 tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
 tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL C
@@ -255,6 +313,13 @@ qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
 qapir         P    OK  OK  OK  PIR
 qapirall      P    OK  OK  OK  PIR
 qapirinc      P    OK  OK  OK  PIR
+qapxfasta     P    OK  OK  OK  FASTA file swissnew entries
+qapxflat      P    OK  OK  OK  Swissnew flatfiles
+qapxflatexc   P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapxflatinc   P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
+qaxpir        P    OK  OK  OK  PIR
+qaxpirall     P    OK  OK  OK  PIR
+qaxpirinc     P    OK  OK  OK  PIR
 tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
 tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL C
@@ -267,11 +332,21 @@ qangcg        N    OK  OK  OK  GCG format EMBL
 qangcgall     N    OK  OK  OK  GCG format EMBL
 qangcgexc     N    OK  OK  OK  GCG format EMBL without prokaryotes
 qangcginc     N    OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta     N    OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall  N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat      N    OK  OK  OK  EMBL flatfiles
+qanxflatall   N    OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxgcg       N    OK  OK  OK  GCG format EMBL
+qanxgcgall    N    OK  OK  OK  GCG format EMBL
+qanxgcgexc    N    OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc    N    OK  OK  OK  GCG format EMBL only prokaryotes
 qapirexc      N    OK  OK  OK  PIR
 qasrs         N    OK  OK  -   EMBL in local srs installation
 qasrsfasta    N    OK  OK  -   EMBL in local srs installation, fasta format
 qasrswww      N    OK  -   -   Remote SRS web server
 qawfasta      N    OK  OK  OK  FASTA file wormpep entries
+qawxfasta     N    OK  OK  OK  FASTA file wormpep entries
+qaxpirexc     N    OK  OK  OK  PIR
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
 temblall      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 temblrest     N    -   -   OK  EMBL in native format with EMBL CD-ROM index
@@ -299,6 +374,13 @@ qapflatinc
 qapir
 qapirall
 qapirinc
+qapxfasta
+qapxflat
+qapxflatexc
+qapxflatinc
+qaxpir
+qaxpirall
+qaxpirinc
 tpir
 tsw
 tswnew
@@ -310,11 +392,21 @@ qangcg
 qangcgall
 qangcgexc
 qangcginc
+qanxfasta
+qanxfastaall
+qanxflat
+qanxflatall
+qanxgcg
+qanxgcgall
+qanxgcgexc
+qanxgcginc
 qapirexc
 qasrs
 qasrsfasta
 qasrswww
 qawfasta
+qawxfasta
+qaxpirexc
 tembl
 temblall
 temblrest
@@ -343,6 +435,13 @@ qapflatinc    P
 qapir         P
 qapirall      P
 qapirinc      P
+qapxfasta     P
+qapxflat      P
+qapxflatexc   P
+qapxflatinc   P
+qaxpir        P
+qaxpirall     P
+qaxpirinc     P
 tpir          P
 tsw           P
 tswnew        P
@@ -354,11 +453,21 @@ qangcg        N
 qangcgall     N
 qangcgexc     N
 qangcginc     N
+qanxfasta     N
+qanxfastaall  N
+qanxflat      N
+qanxflatall   N
+qanxgcg       N
+qanxgcgall    N
+qanxgcgexc    N
+qanxgcginc    N
 qapirexc      N
 qasrs         N
 qasrsfasta    N
 qasrswww      N
 qawfasta      N
+qawxfasta     N
+qaxpirexc     N
 tembl         N
 temblall      N
 temblrest     N
@@ -471,6 +580,13 @@ qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
 qapir         P    OK  OK  OK  PIR
 qapirall      P    OK  OK  OK  PIR
 qapirinc      P    OK  OK  OK  PIR
+qapxfasta     P    OK  OK  OK  FASTA file swissnew entries
+qapxflat      P    OK  OK  OK  Swissnew flatfiles
+qapxflatexc   P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapxflatinc   P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
+qaxpir        P    OK  OK  OK  PIR
+qaxpirall     P    OK  OK  OK  PIR
+qaxpirinc     P    OK  OK  OK  PIR
 tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
 tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL C
@@ -483,11 +599,21 @@ qangcg        N    OK  OK  OK  GCG format EMBL
 qangcgall     N    OK  OK  OK  GCG format EMBL
 qangcgexc     N    OK  OK  OK  GCG format EMBL without prokaryotes
 qangcginc     N    OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta     N    OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall  N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat      N    OK  OK  OK  EMBL flatfiles
+qanxflatall   N    OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxgcg       N    OK  OK  OK  GCG format EMBL
+qanxgcgall    N    OK  OK  OK  GCG format EMBL
+qanxgcgexc    N    OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc    N    OK  OK  OK  GCG format EMBL only prokaryotes
 qapirexc      N    OK  OK  OK  PIR
 qasrs         N    OK  OK  -   EMBL in local srs installation
 qasrsfasta    N    OK  OK  -   EMBL in local srs installation, fasta format
 qasrswww      N    OK  -   -   Remote SRS web server
 qawfasta      N    OK  OK  OK  FASTA file wormpep entries
+qawxfasta     N    OK  OK  OK  FASTA file wormpep entries
+qaxpirexc     N    OK  OK  OK  PIR
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
 temblall      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 temblrest     N    -   -   OK  EMBL in native format with EMBL CD-ROM index
@@ -582,27 +708,26 @@ Known bugs
 
 See also
 
-   Program name Description
-   abiview Reads ABI file and display the trace
-   cirdna Draws circular maps of DNA constructs
-   infoalign Information on a multiple sequence alignment
-   infoseq Displays some simple information about sequences
-   lindna Draws linear maps of DNA constructs
-   pepnet Displays proteins as a helical net
-   pepwheel Shows protein sequences as helices
-   prettyplot Displays aligned sequences, with colouring and boxing
-   prettyseq Output sequence with translated ranges
-   remap Display a sequence with restriction cut sites, translation etc
-   seealso Finds programs sharing group names
-   showalign Displays a multiple sequence alignment
-   showfeat Show features of a sequence
-   showseq Display a sequence with features, translation etc
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   textsearch Search sequence documentation text. SRS and Entrez are
-   faster!
-   tfm Displays a program's help documentation manual
-   whichdb Search all databases for an entry
-   wossname Finds programs by keywords in their one-line documentation
+   Program name                        Description
+   abiview      Reads ABI file and display the trace
+   cirdna       Draws circular maps of DNA constructs
+   infoalign    Information on a multiple sequence alignment
+   infoseq      Displays some simple information about sequences
+   lindna       Draws linear maps of DNA constructs
+   pepnet       Displays proteins as a helical net
+   pepwheel     Shows protein sequences as helices
+   prettyplot   Displays aligned sequences, with colouring and boxing
+   prettyseq    Output sequence with translated ranges
+   remap        Display sequence with restriction sites, translation etc
+   seealso      Finds programs sharing group names
+   showalign    Displays a multiple sequence alignment
+   showfeat     Show features of a sequence
+   showseq      Display a sequence with features, translation etc
+   sixpack      Display a DNA sequence with 6-frame translation and ORFs
+   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
+   tfm          Displays a program's help documentation manual
+   whichdb      Search all databases for an entry
+   wossname     Finds programs by keywords in their one-line documentation
 
 Author(s)
 

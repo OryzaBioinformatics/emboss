@@ -62,7 +62,7 @@ Extract data from PRINTS
 <tr>
 <td><a href="prosextract.html">prosextract</a></td>
 <td>
-Builds the PROSITE motif database for patmatmotifs to search
+Build the PROSITE motif database for use by patmatmotifs
 </td>
 </tr>
 
@@ -81,100 +81,100 @@ Extract data from TRANSFAC
 </tr>
 
 <tr>
-<td><a href="../embassy/domainatrix/allversusall.html">allversusall</a></td>
-<td>
-Does an all-versus-all global alignment for each set of sequences in an input directory and writes files of sequence similarity values
-</td>
-</tr>
-
-<tr>
 <td><a href="../embassy/domainatrix/cathparse.html">cathparse</a></td>
 <td>
-Reads raw CATH classification files and writes DCF file (domain classification file)
-</td>
-</tr>
-
-<tr>
-<td><a href="../embassy/domainatrix/domainer.html">domainer</a></td>
-<td>
-Reads CCF files (clean coordinate files) for proteins and writes CCF files for domains, taken from a DCF file (domain classification file)
+Generates DCF file from raw CATH files
 </td>
 </tr>
 
 <tr>
 <td><a href="../embassy/domainatrix/domainnr.html">domainnr</a></td>
 <td>
-Removes redundant domains from a DCF file (domain classification file). The file must contain domain sequence information, which can be added by using DOMAINSEQS
+Removes redundant domains from a DCF file
 </td>
 </tr>
 
 <tr>
 <td><a href="../embassy/domainatrix/domainseqs.html">domainseqs</a></td>
 <td>
-Adds sequence records to a DCF file (domain classification file)
+Adds sequence records to a DCF file
 </td>
 </tr>
 
 <tr>
 <td><a href="../embassy/domainatrix/domainsse.html">domainsse</a></td>
 <td>
-Adds secondary structure records to a DCF file (domain classification file)
-</td>
-</tr>
-
-<tr>
-<td><a href="../embassy/domainatrix/hetparse.html">hetparse</a></td>
-<td>
-Converts raw dictionary of heterogen groups to a file in EMBL-like format
-</td>
-</tr>
-
-<tr>
-<td><a href="../embassy/domainatrix/pdbparse.html">pdbparse</a></td>
-<td>
-Parses PDB files and writes CCF files (clean coordinate files) for proteins
-</td>
-</tr>
-
-<tr>
-<td><a href="../embassy/domainatrix/pdbplus.html">pdbplus</a></td>
-<td>
-Add residue solvent accessibility and secondary structure data to a CCF file (clean coordinate file) for a protein or domain
-</td>
-</tr>
-
-<tr>
-<td><a href="../embassy/domainatrix/pdbtosp.html">pdbtosp</a></td>
-<td>
-Convert raw swissprot:PDB equivalence file to EMBL-like format
+Add secondary structure records to a DCF file
 </td>
 </tr>
 
 <tr>
 <td><a href="../embassy/domainatrix/scopparse.html">scopparse</a></td>
 <td>
-Reads raw SCOP classification files and writes a DCF file (domain classification file)
-</td>
-</tr>
-
-<tr>
-<td><a href="../embassy/domainatrix/seqnr.html">seqnr</a></td>
-<td>
-Removes redundancy from DHF files (domain hits files) or other files of sequences
-</td>
-</tr>
-
-<tr>
-<td><a href="../embassy/domainatrix/sites.html">sites</a></td>
-<td>
-Reads CCF files (clean coordinate files) and writes CON files (contact files) of residue-ligand contact data for domains in a DCF file (domain classification file)
+Generate DCF file from raw SCOP files
 </td>
 </tr>
 
 <tr>
 <td><a href="../embassy/domainatrix/ssematch.html">ssematch</a></td>
 <td>
-Searches a DCF file (domain classification file) for secondary structure matches
+Search a DCF file for secondary structure matches
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domalign/allversusall.html">allversusall</a></td>
+<td>
+Sequence similarity data from all-versus-all comparison
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domsearch/seqnr.html">seqnr</a></td>
+<td>
+Removes redundancy from DHF files
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/structure/domainer.html">domainer</a></td>
+<td>
+Generates domain CCF files from protein CCF files
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/structure/hetparse.html">hetparse</a></td>
+<td>
+Converts heterogen group dictionary to EMBL-like format
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/structure/pdbparse.html">pdbparse</a></td>
+<td>
+Parses PDB files and writes protein CCF files
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/structure/pdbplus.html">pdbplus</a></td>
+<td>
+Add accessibility & secondary structure to a CCF file
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/structure/pdbtosp.html">pdbtosp</a></td>
+<td>
+Convert swissprot:PDB codes file to EMBL-like format
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/structure/sites.html">sites</a></td>
+<td>
+Generate residue-ligand CON files from CCF files
 </td>
 </tr>
 

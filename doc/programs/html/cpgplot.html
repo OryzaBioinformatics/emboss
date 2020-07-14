@@ -105,7 +105,6 @@ regions which match this program's definition of a CpG island.
 % <b>cpgplot tembl:rnu68037 -graph cps </b>
 Plot CpG rich areas
 Window size [100]: <b></b>
-Window shift increment [1]: <b></b>
 Minimum length of an island [200]: <b></b>
 Minimum observed/expected [0.6]: <b></b>
 Minimum percentage [50.]: <b></b>
@@ -132,11 +131,6 @@ Created cpgplot.ps
                                   The window is moved down the sequence and
                                   these statistics are calculated at each
                                   postition that the window is moved to.
-   -shift              integer    This determines the number of bases that the
-                                  window is moved each time after values of
-                                  the percentage CG content and the Observed
-                                  frequency of CG are calculated within the
-                                  window.
    -minlen             integer    This sets the minimum length that a CpG
                                   island has to be before it is reported.
    -minoe              float      This sets the minimum average observed to
@@ -168,55 +162,55 @@ Created cpgplot.ps
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    "-graph" associated qualifiers
-   -gprompt3            boolean    Graph prompting
-   -gtitle3             string     Graph title
-   -gsubtitle3          string     Graph subtitle
-   -gxtitle3            string     Graph x axis title
-   -gytitle3            string     Graph y axis title
-   -goutfile3           string     Output file for non interactive displays
-   -gdirectory3         string     Output directory
+   -gprompt3           boolean    Graph prompting
+   -gtitle3            string     Graph title
+   -gsubtitle3         string     Graph subtitle
+   -gxtitle3           string     Graph x axis title
+   -gytitle3           string     Graph y axis title
+   -goutfile3          string     Output file for non interactive displays
+   -gdirectory3        string     Output directory
 
    "-outfeat" associated qualifiers
-   -offormat4           string     Output feature format
-   -ofopenfile4         string     Features file name
-   -ofextension4        string     File name extension
-   -ofdirectory4        string     Output directory
-   -ofname4             string     Base file name
-   -ofsingle4           boolean    Separate file for each entry
+   -offormat4          string     Output feature format
+   -ofopenfile4        string     Features file name
+   -ofextension4       string     File name extension
+   -ofdirectory4       string     Output directory
+   -ofname4            string     Base file name
+   -ofsingle4          boolean    Separate file for each entry
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
@@ -241,13 +235,6 @@ Created cpgplot.ps
 <td>The percentage CG content and the Observed frequency of CG is calculated within a window whose size is set by this parameter. The window is moved down the sequence and these statistics are calculated at each postition that the window is moved to.</td>
 <td>Integer 1 or more</td>
 <td>100</td>
-</tr>
-
-<tr>
-<td>-shift</td>
-<td>This determines the number of bases that the window is moved each time after values of the percentage CG content and the Observed frequency of CG are calculated within the window.</td>
-<td>Integer 1 or more</td>
-<td>1</td>
 </tr>
 
 <tr>
@@ -456,7 +443,7 @@ RNU68037 from 1 to 1218
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2004-07-15
+##date 2005-07-15
 ##Type DNA RNU68037
 RNU68037	cpgplot	misc_feature	104	509	0.000	+	.	Sequence "RNU68037.1"
 RNU68037	cpgplot	misc_feature	596	924	0.000	+	.	Sequence "RNU68037.2"
@@ -516,7 +503,7 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
-<tr><td><a href="geecee.html">geecee</a></td><td>Calculates the fractional GC content of nucleic acid sequences</td></tr>
+<tr><td><a href="geecee.html">geecee</a></td><td>Calculates fractional GC content of nucleic acid sequences</td></tr>
 <tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
 <tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
 </table>
@@ -571,10 +558,9 @@ sequences that MIGHT contain an island.
 <H2>
     Author(s)
 </H2>
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
 

@@ -41,119 +41,140 @@ Protein tertiary structure
 <tr>
 <td><a href="psiphi.html">psiphi</a></td>
 <td>
-Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file
-</td>
-</tr>
-
-<tr>
-<td><a href="../embassy/construct/contactcount.html">contactcount</a></td>
-<td>
-Counts specific versus non-specific contacts in a directory of cleaned protein chain contact files
-</td>
-</tr>
-
-<tr>
-<td><a href="../embassy/domainatrix/contacts.html">contacts</a></td>
-<td>
-Reads CCF files (clean coordinate files) and writes CON files (contact files) of intra-chain residue-residue contact data
-</td>
-</tr>
-
-<tr>
-<td><a href="../embassy/domainatrix/domainalign.html">domainalign</a></td>
-<td>
-Generates DAF files (domain alignment files) of structure-based sequence alignments for nodes in a DCF file (domain classification file)
-</td>
-</tr>
-
-<tr>
-<td><a href="../embassy/domainatrix/domainrep.html">domainrep</a></td>
-<td>
-Reorder DCF file (domain classification file) so that the representative structure of each user-specified node is given first
+Phi and psi torsion angles from protein coordinates
 </td>
 </tr>
 
 <tr>
 <td><a href="../embassy/domainatrix/domainreso.html">domainreso</a></td>
 <td>
-Removes low resolution domains from a DCF file (domain classification file)
+Remove low resolution domains from a DCF file
 </td>
 </tr>
 
 <tr>
-<td><a href="../embassy/domainatrix/interface.html">interface</a></td>
+<td><a href="../embassy/domalign/domainalign.html">domainalign</a></td>
 <td>
-Reads CCF files (clean coordinate files) and writes CON files (contact files) of inter-chain residue-residue contact data
+Generate alignments (DAF file) for nodes in a DCF file
 </td>
 </tr>
 
 <tr>
-<td><a href="../embassy/domainatrix/libgen.html">libgen</a></td>
+<td><a href="../embassy/domalign/domainrep.html">domainrep</a></td>
 <td>
-Generates various types of discriminating elements for each alignment in a directory
+Reorder DCF file to identify representative structures
 </td>
 </tr>
 
 <tr>
-<td><a href="../embassy/domainatrix/rocon.html">rocon</a></td>
+<td><a href="../embassy/domalign/seqalign.html">seqalign</a></td>
 <td>
-Reads a DHF file (domain hits file) of hits (sequences of unknown structural classification) and a DHF file of validation sequences (known classification) and writes a 'hits file' for the hits, which are classified and rank-ordered on the basis of score
+Extend alignments (DAF file) with sequences (DHF file)
 </td>
 </tr>
 
 <tr>
-<td><a href="../embassy/domainatrix/rocplot.html">rocplot</a></td>
+<td><a href="../embassy/domsearch/seqfraggle.html">seqfraggle</a></td>
 <td>
-Provides interpretation and graphical display of the performance of discriminating elements (e.g. profiles for protein families). rocplot reads file(s) of hits from discriminator-database search(es), performs ROC analysis on the hits, and writes graphs illustrating the diagnostic performance of the discriminating elements
+Removes fragment sequences from DHF files
 </td>
 </tr>
 
 <tr>
-<td><a href="../embassy/domainatrix/seqalign.html">seqalign</a></td>
+<td><a href="../embassy/domsearch/seqsearch.html">seqsearch</a></td>
 <td>
-Reads a DAF file (domain alignment file) and a DHF file (domain hits file) and writes a DAF file extended with the hits
+Generate PSI-BLAST hits (DHF file) from a DAF file
 </td>
 </tr>
 
 <tr>
-<td><a href="../embassy/domainatrix/seqfraggle.html">seqfraggle</a></td>
+<td><a href="../embassy/domsearch/seqsort.html">seqsort</a></td>
 <td>
-Removes fragments from DHF files (domain hits files) or other files of sequences
+Remove ambiguous classified sequences from DHF files
 </td>
 </tr>
 
 <tr>
-<td><a href="../embassy/domainatrix/seqsearch.html">seqsearch</a></td>
+<td><a href="../embassy/domsearch/seqwords.html">seqwords</a></td>
 <td>
-Generate database hits (sequences) for nodes in a DCF file (domain classification file) by using PSI-BLAST
+Generates DHF files from keyword search of UniProt
 </td>
 </tr>
 
 <tr>
-<td><a href="../embassy/domainatrix/seqsort.html">seqsort</a></td>
+<td><a href="../embassy/reconstruct/scorecmapdir.html">scorecmapdir</a></td>
 <td>
-Reads DHF files (domain hits files) of database hits (sequences) and removes hits of ambiguous classification
+Contact scores for cleaned protein chain contact files
 </td>
 </tr>
 
 <tr>
-<td><a href="../embassy/domainatrix/seqwords.html">seqwords</a></td>
+<td><a href="../embassy/signature/libgen.html">libgen</a></td>
 <td>
-Generates DHF files (domain hits files) of database hits (sequences) for nodes in a DCF file (domain classification file) by keyword search of UniProt
+Generate discriminating elements from alignments
 </td>
 </tr>
 
 <tr>
-<td><a href="../embassy/domainatrix/siggen.html">siggen</a></td>
+<td><a href="../embassy/signature/matgen3d.html">matgen3d</a></td>
 <td>
-Generates a sparse protein signature from an alignment and residue contact data
+Generate a 3D-1D scoring matrix from CCF files
 </td>
 </tr>
 
 <tr>
-<td><a href="../embassy/domainatrix/sigscan.html">sigscan</a></td>
+<td><a href="../embassy/signature/rocon.html">rocon</a></td>
 <td>
-Generates a DHF file (domain hits file) of hits (sequences) from scanning a signature against a sequence database
+Generates a hits file from comparing two DHF files
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/signature/rocplot.html">rocplot</a></td>
+<td>
+Performs ROC analysis on hits files
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/signature/siggen.html">siggen</a></td>
+<td>
+Generates a sparse protein signature from an alignment
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/signature/siggenlig.html">siggenlig</a></td>
+<td>
+Generate ligand-binding signatures from a CON file
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/signature/sigscan.html">sigscan</a></td>
+<td>
+Generate hits (DHF file) from a signature search
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/signature/sigscanlig.html">sigscanlig</a></td>
+<td>
+Search ligand-signature library & write hits (LHF file)
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/structure/contacts.html">contacts</a></td>
+<td>
+Generate intra-chain CON files from CCF files
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/structure/interface.html">interface</a></td>
+<td>
+Generate inter-chain CON files from CCF files
 </td>
 </tr>
 

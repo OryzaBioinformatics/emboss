@@ -205,9 +205,9 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                    Description
    dotmatcher   Displays a thresholded dotplot of two sequences
-   dotpath      Displays a non-overlapping wordmatch dotplot of two sequences
+   dotpath      Non-overlapping wordmatch dotplot of two sequences
    dottup       Displays a wordmatch dotplot of two sequences
 
 Author(s)

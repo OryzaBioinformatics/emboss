@@ -392,7 +392,9 @@ Author(s)
 
 History
 
-   [an error occurred while processing this directive]
+   Written (2004) - Joe Felsenstein, University of Washington.
+
+   Converted (August 2004) to an EMBASSY program by the EMBOSS team.
 
 Target users
 

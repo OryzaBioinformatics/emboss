@@ -608,7 +608,7 @@ Output file format
 
 ########################################
 # Program: twofeat
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Report_format: table
 # Report_file: hsfau.twofeat
 ########################################
@@ -630,7 +630,7 @@ Output file format
   File: hsfau.twofeat
 
 ##gff-version 2.0
-##date 2004-07-15
+##date 2005-07-15
 ##Type DNA HSFAU
 HSFAU   EMBL    polyA_signal    484     489     0.000   +       .       Sequenc
 e "HSFAU.6"

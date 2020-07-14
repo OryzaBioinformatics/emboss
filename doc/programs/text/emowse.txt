@@ -749,11 +749,11 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                        Description
    backtranseq  Back translate a protein sequence
    charge       Protein charge plot
    checktrans   Reports STOP codons and ORF statistics of a protein
-   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   compseq      Count composition of dimer/trimer/etc words in a sequence
    freak        Residue/base frequency table or plot
    iep          Calculates the isoelectric point of a protein
    mwcontam     Shows molwts that match across a set of files
@@ -766,9 +766,9 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

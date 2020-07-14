@@ -291,25 +291,26 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                         Description
    biosed       Replace or delete sequence sections
+   codcopy      Reads and writes a codon usage table
    cutseq       Removes a specified section from a sequence
    degapseq     Removes gap characters from sequences
    descseq      Alter the name or description of a sequence
    entret       Reads and writes (returns) flatfile entries
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
-   listor       Writes a list file of the logical OR of two sets of sequences
+   listor       Write a list file of the logical OR of two sets of sequences
    maskfeat     Mask off features of a sequence
    newseq       Type in a short new sequence
    noreturn     Removes carriage return from ASCII files
-   notseq       Excludes a set of sequences and writes out the remaining ones
+   notseq       Exclude a set of sequences and write out the remaining ones
    nthseq       Writes one sequence from a multiple set of sequences
    pasteseq     Insert one sequence into another
    revseq       Reverse and complement a sequence
    seqret       Reads and writes (returns) sequences
    seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping the first few
+   skipseq      Reads and writes (returns) sequences, skipping first few
    splitter     Split a sequence into (overlapping) smaller sequences
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences

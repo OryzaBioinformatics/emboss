@@ -78,7 +78,7 @@ This uses a drosophila sequence and codon table.
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>backtranseq -cfile Edrosophila.cut </b>
+% <b>backtranseq -cfile Edrome.cut </b>
 Back translate a protein sequence
 Input sequence: <b>tsw:ach2_drome</b>
 Output sequence [ach2_drome.fasta]: <b></b>
@@ -104,47 +104,50 @@ Output sequence [ach2_drome.fasta]: <b></b>
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-cfile" associated qualifiers
+   -format             string     Data format
 
    "-outfile" associated qualifiers
-   -osformat2           string     Output seq format
-   -osextension2        string     File name extension
-   -osname2             string     Base file name
-   -osdirectory2        string     Output directory
-   -osdbname2           string     Database name to add
-   -ossingle2           boolean    Separate file for each entry
-   -oufo2               string     UFO features
-   -offormat2           string     Features format
-   -ofname2             string     Features file name
-   -ofdirectory2        string     Output directory
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
@@ -181,7 +184,7 @@ Output sequence [ach2_drome.fasta]: <b></b>
 <td>-cfile</td>
 <td>Codon usage table name</td>
 <td>Codon usage file in EMBOSS data path</td>
-<td>Ehum.cut</td>
+<td>Ehuman.cut</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -435,21 +438,21 @@ translation table (which defaults to human).
 <pre>
 &gt;OPSD_HUMAN P08100 RHODOPSIN.
 ATGAACGGCACCGAGGGCCCCAACTTCTACGTGCCCTTCAGCAACGCCACCGGCGTGGTG
-AGAAGCCCCTTCGAGTACCCCCAGTACTACCTGGCCGAGCCCTGGCAGTTCAGCATGCTG
+AGGAGCCCCTTCGAGTACCCCCAGTACTACCTGGCCGAGCCCTGGCAGTTCAGCATGCTG
 GCCGCCTACATGTTCCTGCTGATCGTGCTGGGCTTCCCCATCAACTTCCTGACCCTGTAC
-GTGACCGTGCAGCACAAGAAGCTGAGAACCCCCCTGAACTACATCCTGCTGAACCTGGCC
+GTGACCGTGCAGCACAAGAAGCTGAGGACCCCCCTGAACTACATCCTGCTGAACCTGGCC
 GTGGCCGACCTGTTCATGGTGCTGGGCGGCTTCACCAGCACCCTGTACACCAGCCTGCAC
 GGCTACTTCGTGTTCGGCCCCACCGGCTGCAACCTGGAGGGCTTCTTCGCCACCCTGGGC
-GGCGAGATCGCCCTGTGGAGCCTGGTGGTGCTGGCCATCGAGAGATACGTGGTGGTGTGC
-AAGCCCATGAGCAACTTCAGATTCGGCGAGAACCACGCCATCATGGGCGTGGCCTTCACC
-TGGGTGATGGCCCTGGCCTGCGCCGCCCCCCCCCTGGCCGGCTGGAGCAGATACATCCCC
+GGCGAGATCGCCCTGTGGAGCCTGGTGGTGCTGGCCATCGAGAGGTACGTGGTGGTGTGC
+AAGCCCATGAGCAACTTCAGGTTCGGCGAGAACCACGCCATCATGGGCGTGGCCTTCACC
+TGGGTGATGGCCCTGGCCTGCGCCGCCCCCCCCCTGGCCGGCTGGAGCAGGTACATCCCC
 GAGGGCCTGCAGTGCAGCTGCGGCATCGACTACTACACCCTGAAGCCCGAGGTGAACAAC
 GAGAGCTTCGTGATCTACATGTTCGTGGTGCACTTCACCATCCCCATGATCATCATCTTC
 TTCTGCTACGGCCAGCTGGTGTTCACCGTGAAGGAGGCCGCCGCCCAGCAGCAGGAGAGC
-GCCACCACCCAGAAGGCCGAGAAGGAGGTGACCAGAATGGTGATCATCATGGTGATCGCC
+GCCACCACCCAGAAGGCCGAGAAGGAGGTGACCAGGATGGTGATCATCATGGTGATCGCC
 TTCCTGATCTGCTGGGTGCCCTACGCCAGCGTGGCCTTCTACATCTTCACCCACCAGGGC
 AGCAACTTCGGCCCCATCTTCATGACCATCCCCGCCTTCTTCGCCAAGAGCGCCGCCATC
-TACAACCCCGTGATCTACATCATGATGAACAAGCAGTTCAGAAACTGCATGCTGACCACC
+TACAACCCCGTGATCTACATCATGATGAACAAGCAGTTCAGGAACTGCATGCTGACCACC
 ATCTGCTGCGGCAAGAACCCCCTGGGCGACGACGAGGCCAGCGCCACCGTGAGCAAGACC
 GAGACCAGCCAGGTGGCCCCCGCC
 </pre>
@@ -463,33 +466,33 @@ GAGACCAGCCAGGTGGCCCCCGCC
 &gt;ACH2_DROME P17644 ACETYLCHOLINE RECEPTOR PROTEIN, ALPHA-LIKE CHAIN 2 PRECURSOR.
 ATGGCCCCCGGCTGCTGCACCACCCGCCCCCGCCCCATCGCCCTGCTGGCCCACATCTGG
 CGCCACTGCAAGCCCCTGTGCCTGCTGCTGGTGCTGCTGCTGCTGTGCGAGACCGTGCAG
-GCCAACCCCGACGCCAAGCGCCTGTACGACGACCTGCTGTCCAACTACAACCGCCTGATC
-CGCCCCGTGTCCAACAACACCGACACCGTGCTGGTGAAGCTGGGCCTGCGCCTGTCCCAG
-CTGATCGACCTGAACCTGAAGGACCAGATCCTGACCACCAACGTGTGGCTGGAGCACGAG
-TGGCAGGACCACAAGTTCAAGTGGGACCCCTCCGAGTACGGCGGCGTGACCGAGCTGTAC
-GTGCCCTCCGAGCACATCTGGCTGCCCGACATCGTGCTGTACAACAACGCCGACGGCGAG
+GCCAACCCCGATGCCAAGCGCCTGTACGATGATCTGCTGAGCAACTACAACCGCCTGATC
+CGCCCCGTGAGCAACAACACCGATACCGTGCTGGTGAAGCTGGGCCTGCGCCTGAGCCAG
+CTGATCGATCTGAACCTGAAGGATCAGATCCTGACCACCAACGTGTGGCTGGAGCACGAG
+TGGCAGGATCACAAGTTCAAGTGGGATCCCAGCGAGTACGGCGGCGTGACCGAGCTGTAC
+GTGCCCAGCGAGCACATCTGGCTGCCCGATATCGTGCTGTACAACAACGCCGATGGCGAG
 TACGTGGTGACCACCATGACCAAGGCCATCCTGCACTACACCGGCAAGGTGGTGTGGACC
-CCCCCCGCCATCTTCAAGTCCTCCTGCGAGATCGACGTGCGCTACTTCCCCTTCGACCAG
-CAGACCTGCTTCATGAAGTTCGGCTCCTGGACCTACGACGGCGACCAGATCGACCTGAAG
-CACATCTCCCAGAAGAACGACAAGGACAACAAGGTGGAGATCGGCATCGACCTGCGCGAG
-TACTACCCCTCCGTGGAGTGGGACATCCTGGGCGTGCCCGCCGAGCGCCACGAGAAGTAC
-TACCCCTGCTGCGCCGAGCCCTACCCCGACATCTTCTTCAACATCACCCTGCGCCGCAAG
-ACCCTGTTCTACACCGTGAACCTGATCATCCCCTGCGTGGGCATCTCCTACCTGTCCGTG
-CTGGTGTTCTACCTGCCCGCCGACTCCGGCGAGAAGATCGCCCTGTGCATCTCCATCCTG
-CTGTCCCAGACCATGTTCTTCCTGCTGATCTCCGAGATCATCCCCTCCACCTCCCTGGCC
-CTGCCCCTGCTGGGCAAGTACCTGCTGTTCACCATGCTGCTGGTGGGCCTGTCCGTGGTG
-ATCACCATCATCATCCTGAACATCCACTACCGCAAGCCCTCCACCCACAAGATGCGCCCC
-TGGATCCGCTCCTTCTTCATCAAGCGCCTGCCCAAGCTGCTGCTGATGCGCGTGCCCAAG
-GACCTGCTGCGCGACCTGGCCGCCAACAAGATCAACTACGGCCTGAAGTTCTCCAAGACC
-AAGTTCGGCCAGGCCCTGATGGACGAGATGCAGATGAACTCCGGCGGCTCCTCCCCCGAC
-TCCCTGCGCCGCATGCAGGGCCGCGTGGGCGCCGGCGGCTGCAACGGCATGCACGTGACC
-ACCGCCACCAACCGCTTCTCCGGCCTGGTGGGCGCCCTGGGCGGCGGCCTGTCCACCCTG
-TCCGGCTACAACGGCCTGCCCTCCGTGCTGTCCGGCCTGGACGACTCCCTGTCCGACGTG
+CCCCCCGCCATCTTCAAGAGCAGCTGCGAGATCGATGTGCGCTACTTCCCCTTCGATCAG
+CAGACCTGCTTCATGAAGTTCGGCAGCTGGACCTACGATGGCGATCAGATCGATCTGAAG
+CACATCAGCCAGAAGAACGATAAGGATAACAAGGTGGAGATCGGCATCGATCTGCGCGAG
+TACTACCCCAGCGTGGAGTGGGATATCCTGGGCGTGCCCGCCGAGCGCCACGAGAAGTAC
+TACCCCTGCTGCGCCGAGCCCTACCCCGATATCTTCTTCAACATCACCCTGCGCCGCAAG
+ACCCTGTTCTACACCGTGAACCTGATCATCCCCTGCGTGGGCATCAGCTACCTGAGCGTG
+CTGGTGTTCTACCTGCCCGCCGATAGCGGCGAGAAGATCGCCCTGTGCATCAGCATCCTG
+CTGAGCCAGACCATGTTCTTCCTGCTGATCAGCGAGATCATCCCCAGCACCAGCCTGGCC
+CTGCCCCTGCTGGGCAAGTACCTGCTGTTCACCATGCTGCTGGTGGGCCTGAGCGTGGTG
+ATCACCATCATCATCCTGAACATCCACTACCGCAAGCCCAGCACCCACAAGATGCGCCCC
+TGGATCCGCAGCTTCTTCATCAAGCGCCTGCCCAAGCTGCTGCTGATGCGCGTGCCCAAG
+GATCTGCTGCGCGATCTGGCCGCCAACAAGATCAACTACGGCCTGAAGTTCAGCAAGACC
+AAGTTCGGCCAGGCCCTGATGGATGAGATGCAGATGAACAGCGGCGGCAGCAGCCCCGAT
+AGCCTGCGCCGCATGCAGGGCCGCGTGGGCGCCGGCGGCTGCAACGGCATGCACGTGACC
+ACCGCCACCAACCGCTTCAGCGGCCTGGTGGGCGCCCTGGGCGGCGGCCTGAGCACCCTG
+AGCGGCTACAACGGCCTGCCCAGCGTGCTGAGCGGCCTGGATGATAGCCTGAGCGATGTG
 GCCGCCCGCAAGAAGTACCCCTTCGAGCTGGAGAAGGCCATCCACAACGTGATGTTCATC
-CAGCACCACATGCAGCGCCAGGACGAGTTCAACGCCGAGGACCAGGACTGGGGCTTCGTG
-GCCATGGTGATGGACCGCCTGTTCCTGTGGCTGTTCATGATCGCCTCCCTGGTGGGCACC
-TTCGTGATCCTGGGCGAGGCCCCCTCCCTGTACGACGACACCAAGGCCATCGACGTGCAG
-CTGTCCGACGTGGCCAAGCAGATCTACAACCTGACCGAGAAGAAGAAC
+CAGCACCACATGCAGCGCCAGGATGAGTTCAACGCCGAGGATCAGGATTGGGGCTTCGTG
+GCCATGGTGATGGATCGCCTGTTCCTGTGGCTGTTCATGATCGCCAGCCTGGTGGGCACC
+TTCGTGATCCTGGGCGAGGCCCCCAGCCTGTACGATGATACCAAGGCCATCGATGTGCAG
+CTGAGCGATGTGGCCAAGCAGATCTACAACCTGACCGAGAAGAAGAAC
 </pre>
 </td></tr></table><p>
 
@@ -597,7 +600,7 @@ None.
 <tr><td><a href="charge.html">charge</a></td><td>Protein charge plot</td></tr>
 <tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein</td></tr>
 <tr><td><a href="coderet.html">coderet</a></td><td>Extract CDS, mRNA and translations from feature tables</td></tr>
-<tr><td><a href="compseq.html">compseq</a></td><td>Counts the composition of dimer/trimer/etc words in a sequence</td></tr>
+<tr><td><a href="compseq.html">compseq</a></td><td>Count composition of dimer/trimer/etc words in a sequence</td></tr>
 <tr><td><a href="emowse.html">emowse</a></td><td>Protein identification by mass spectrometry</td></tr>
 <tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>
 <tr><td><a href="iep.html">iep</a></td><td>Calculates the isoelectric point of a protein</td></tr>
@@ -610,7 +613,7 @@ None.
 <tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
 <tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
 <tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
+<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
 <tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
 <tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
@@ -620,10 +623,9 @@ None.
 <H2>
     Author(s)
 </H2>
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
 

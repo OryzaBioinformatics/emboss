@@ -39,6 +39,23 @@ Algorithm
 
 Usage
 
+   Here is a sample session with ffactor
+
+
+% ffactor 
+Multistate to binary recoding program
+File containing data set: factor.dat
+Output file [factor.ffactor]: 
+
+
+Data matrix written on file "factor.ffactor"
+
+Done.
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -218,6 +235,22 @@ Input file format
    be changed by changing that constant. It is set to "?" in the
    distribution copy.
 
+  Input files for usage example
+
+  File: factor.dat
+
+   4   6
+1 A:B B:C
+2 A:B B:.
+4
+5 0:1 1:2 .:0
+6 .:# #:$ #:%
+999
+Alpha     CAW00#
+Beta      BBX01%
+Gamma     ABY12#
+Epsilon   CAZ01$
+
 Output file format
 
    The first line of ffactor output will contain the number of species
@@ -234,6 +267,20 @@ Output file format
    correct for the current release of PHYLIP. We need to change their
    output to write a factors file and an ancestors file instead of
    putting the Factors and Ancestors information into the data file.
+
+  Output files for usage example
+
+  File: factor.ffactor
+
+    4    8
+Alpha     11100000
+Beta      10001001
+Gamma     00011100
+Epsilon   11101010
+
+  File: factor.factor
+
+  File: factor.ancestor
 
 Data files
 
@@ -281,22 +328,20 @@ Known bugs
 
 See also
 
-   Program name Description
-   eclique Largest clique program
-   edollop Dollo and polymorphism parsimony algorithm
-   edolpenny Penny algorithm Dollo or polymorphism
-   efactor Multistate to binary recoding program
-   emix Mixed parsimony algorithm
-   epenny Penny algorithm, branch-and-bound to find all most parsimonious
-   trees
-   fclique Largest clique program
-   fdollop Dollo and polymorphism parsimony algorithm
-   fdolpenny Penny algorithm Dollo or polymorphism
-   fmix Mixed parsimony algorithm
-   fmove Interactive mixed method parsimony
-   fpars Discrete character parsimony
-   fpenny Penny algorithm, branch-and-bound to find all most parsimonious
-   trees
+   Program name                Description
+   eclique      Largest clique program
+   edollop      Dollo and polymorphism parsimony algorithm
+   edolpenny    Penny algorithm Dollo or polymorphism
+   efactor      Multistate to binary recoding program
+   emix         Mixed parsimony algorithm
+   epenny       Penny algorithm, branch-and-bound
+   fclique      Largest clique program
+   fdollop      Dollo and polymorphism parsimony algorithm
+   fdolpenny    Penny algorithm Dollo or polymorphism
+   fmix         Mixed parsimony algorithm
+   fmove        Interactive mixed method parsimony
+   fpars        Discrete character parsimony
+   fpenny       Penny algorithm, branch-and-bound
 
 Author(s)
 

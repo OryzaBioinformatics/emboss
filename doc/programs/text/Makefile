@@ -33,8 +33,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = i686-pc-linux-gnu
-host_triplet = i686-pc-linux-gnu
+build_triplet = x86_64-unknown-linux-gnu
+host_triplet = x86_64-unknown-linux-gnu
 subdir = doc/programs/text
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -60,21 +60,21 @@ pkgdata2DATA_INSTALL = $(INSTALL_DATA)
 DATA = $(pkgdata_DATA) $(pkgdata2_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 pkgdatadir = $(prefix)/share/$(PACKAGE)/doc/programs/text
-ACLOCAL = ${SHELL} /scratch/emboss/emboss/missing --run aclocal-1.9
-AJAX_FIXED_ROOT = \"/scratch/emboss/emboss/emboss\"
+ACLOCAL = ${SHELL} /m1/emboss/emboss/missing --run aclocal-1.9
+AJAX_FIXED_ROOT = \"/m1/emboss/emboss/emboss\"
 AMDEP_FALSE = #
 AMDEP_TRUE = 
 AMPNG_FALSE = #
 AMPNG_TRUE = 
-AMTAR = ${SHELL} /scratch/emboss/emboss/missing --run tar
+AMTAR = ${SHELL} /m1/emboss/emboss/missing --run tar
 AR = ar
-AUTOCONF = ${SHELL} /scratch/emboss/emboss/missing --run autoconf
-AUTOHEADER = ${SHELL} /scratch/emboss/emboss/missing --run autoheader
-AUTOMAKE = ${SHELL} /scratch/emboss/emboss/missing --run automake-1.9
+AUTOCONF = ${SHELL} /m1/emboss/emboss/missing --run autoconf
+AUTOHEADER = ${SHELL} /m1/emboss/emboss/missing --run autoheader
+AUTOMAKE = ${SHELL} /m1/emboss/emboss/missing --run automake-1.9
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS =   -O2
+CFLAGS =   -O2 -Wall -fno-strict-aliasing
 CPP = gcc -E
 CPPFLAGS = -DAJ_LinuxLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE  -DLENDIAN -DNO_AUTH
 CXX = g++
@@ -82,16 +82,16 @@ CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2  -I/usr/X11R6/include
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"EMBOSS\" -DVERSION=\"2.10.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DHAVE_DIRENT_H=1 -DSTDC_HEADERS=1 -DHAVE_UNISTD_H=1 -DGETPGRP_VOID=1 -DHAVE_STRFTIME=1 -DHAVE_UNISTD_H=1 -DHAVE_FORK=1 -DHAVE_VFORK=1 -DHAVE_WORKING_VFORK=1 -DHAVE_WORKING_FORK=1 -DHAVE_VPRINTF=1 -DHAVE_MEMMOVE=1 -DHAVE_LIBM=1 -DPLD_png=1 
+DEFS = -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"EMBOSS\" -DVERSION=\"3.0.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DHAVE_DIRENT_H=1 -DSTDC_HEADERS=1 -DHAVE_UNISTD_H=1 -DGETPGRP_VOID=1 -DHAVE_STRFTIME=1 -DHAVE_UNISTD_H=1 -DHAVE_FORK=1 -DHAVE_VFORK=1 -DHAVE_WORKING_VFORK=1 -DHAVE_WORKING_FORK=1 -DHAVE_VPRINTF=1 -DHAVE_MEMMOVE=1 -DHAVE_LIBM=1 -DPLD_png=1 
 DEPDIR = .deps
 ECHO = echo
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
 EGREP = grep -E
-EMBOSS_TOP = /scratch/emboss/emboss
+EMBOSS_TOP = /m1/emboss/emboss
 EXEEXT = 
-F77 = g77
+F77 = f95
 FFLAGS = -g -O2
 HAVE_MEMMOVE = 
 HAVE_STRERROR = 
@@ -114,7 +114,7 @@ LIBS = -lm  -lgd -lpng -lz -lm
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /scratch/emboss/emboss/missing --run makeinfo
+MAKEINFO = ${SHELL} /m1/emboss/emboss/missing --run makeinfo
 NEEDAJAX = 
 NEEDAJAX_FALSE = 
 NEEDAJAX_TRUE = #
@@ -139,16 +139,16 @@ RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = strip
-VERSION = 2.10.0
-XLIB =  -L/usr/X11R6/lib -lX11 
+VERSION = 3.0.0
+XLIB =  -L/usr/X11R6/lib64 -lX11 
 X_CFLAGS =  -I/usr/X11R6/include
 X_EXTRA_LIBS = 
-X_LIBS =  -L/usr/X11R6/lib
+X_LIBS =  -L/usr/X11R6/lib64
 X_PRE_LIBS =  -lSM -lICE
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
-ac_ct_F77 = g77
+ac_ct_F77 = f95
 ac_ct_RANLIB = ranlib
 ac_ct_STRIP = strip
 am__fastdepCC_FALSE = #
@@ -161,22 +161,22 @@ am__quote =
 am__tar = ${AMTAR} chof - "$$tardir"
 am__untar = ${AMTAR} xf -
 bindir = ${exec_prefix}/bin
-build = i686-pc-linux-gnu
+build = x86_64-unknown-linux-gnu
 build_alias = 
-build_cpu = i686
+build_cpu = x86_64
 build_os = linux-gnu
-build_vendor = pc
+build_vendor = unknown
 datadir = ${prefix}/share
 exec_prefix = ${prefix}
 havejavac = 
-host = i686-pc-linux-gnu
+host = x86_64-unknown-linux-gnu
 host_alias = 
-host_cpu = i686
+host_cpu = x86_64
 host_os = linux-gnu
-host_vendor = pc
+host_vendor = unknown
 includedir = ${prefix}/include
 infodir = ${prefix}/info
-install_sh = /scratch/emboss/emboss/install-sh
+install_sh = /m1/emboss/emboss/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localstatedir = ${prefix}/var
@@ -191,71 +191,74 @@ sysconfdir = ${prefix}/etc
 target_alias = 
 pkgdata_DATA = aaindexextract.txt abiview.txt acdc.txt acdlog.txt \
 	acdpretty.txt acdtable.txt acdtrace.txt acdvalid.txt \
-	alignrunner.txt allversusall.txt antigenic.txt backtranseq.txt \
-	banana.txt biosed.txt btwisted.txt cai.txt cathparse.txt \
-	chaos.txt charge.txt checktrans.txt chips.txt cirdna.txt \
-	clique.txt codcmp.txt coderet.txt complex.txt compseq.txt \
-	consense.txt cons.txt contactalign.txt contactcount.txt \
-	contacts.txt contml.txt contrast.txt cpgplot.txt cpgreport.txt \
-	crystalball.txt cusp.txt cutgextract.txt cutseq.txt dan.txt \
-	dbiblast.txt dbifasta.txt dbiflat.txt dbigcg.txt degapseqrunner.txt \
-	degapseq.txt descseq.txt diffseq.txt digest.txt distmat.txt \
-	dnacomp.txt dnadist.txt dnainvar.txt dnamlk.txt dnaml.txt \
-	dnapars.txt dnapenny.txt dollop.txt dolpenny.txt domainalign.txt \
+	alignrunner.txt allversusall.txt antigenic.txt \
+	backtranseq.txt banana.txt biosed.txt btwisted.txt cai.txt \
+	cathparse.txt chaos.txt charge.txt checktrans.txt chips.txt \
+	cirdna.txt codcmp.txt codcopy.txt coderet.txt comparator.txt \
+	complex.txt compseq.txt cons.txt contactalign.txt \
+	contacts.txt cpgplot.txt cpgreport.txt crystalball.txt \
+	cusp.txt cutgextract.txt cutseq.txt dan.txt dbiblast.txt \
+	dbifasta.txt dbiflat.txt dbigcg.txt dbxfasta.txt dbxflat.txt \
+	dbxgcg.txt degapseq.txt degapseqrunner.txt descseq.txt \
+	diffseq.txt digest.txt distmat.txt domainalign.txt \
 	domainer.txt domainnr.txt domainrep.txt domainreso.txt \
-	domainseqs.txt domainsse.txt dotmatcher.txt dotpath.txt dottup.txt \
-	dreg.txt ealistat.txt eclique.txt econsense.txt econtml.txt \
-	econtrast.txt ednacomp.txt ednadist.txt ednainvar.txt ednamlk.txt \
-	ednaml.txt ednapars.txt ednapenny.txt edollop.txt edolpenny.txt \
-	efactor.txt efitch.txt egendist.txt ehmmalign.txt ehmmbuild.txt \
+	domainseqs.txt domainsse.txt dotmatcher.txt dotpath.txt \
+	dottup.txt dreg.txt ealistat.txt eclique.txt econsense.txt \
+	econtml.txt econtrast.txt ednacomp.txt ednadist.txt \
+	ednainvar.txt ednaml.txt ednamlk.txt ednapars.txt \
+	ednapenny.txt edollop.txt edolpenny.txt efactor.txt \
+	efitch.txt egendist.txt ehmmalign.txt ehmmbuild.txt \
 	ehmmcalibrate.txt ehmmconvert.txt ehmmemit.txt ehmmfetch.txt \
 	ehmmindex.txt ehmmpfam.txt ehmmsearch.txt einverted.txt \
-	ekitsch.txt embossdata.txt embossversion.txt emix.txt emma.txt \
-	emnu.txt emowse.txt eneighbor.txt entret.txt epenny.txt \
-	epestfind.txt eprimer3.txt eprotdist.txt eprotpars.txt \
-	equicktandem.txt erestml.txt eseqboot.txt esim4.txt \
-	est2genome.txt etandem.txt extractfeat.txt extractseq.txt \
-	factor.txt fclique.txt fconsense.txt fcontml.txt fcontrast.txt \
-	fdiscboot.txt fdnacomp.txt fdnadist.txt fdnainvar.txt \
-	fdnamlk.txt fdnaml.txt fdnamove.txt fdnapars.txt fdnapenny.txt \
-	fdollop.txt fdolmove.txt fdolpenny.txt fdrawgram.txt fdrawtree.txt \
-	ffactor.txt ffitch.txt ffreqboot.txt fgendist.txt findkm.txt \
-	fitch.txt fkitsch.txt fmix.txt fmove.txt fneighbor.txt fpars.txt \
-	fpenny.txt fpromlk.txt fproml.txt fprotdist.txt fprotpars.txt \
-	freak.txt frestboot.txt frestdist.txt frestml.txt fretree.txt \
-	fseqbootall.txt fseqboot.txt ftreedistpair.txt ftreedist.txt \
+	ekitsch.txt embossdata.txt embossversion.txt emix.txt \
+	emma.txt emnu.txt emowse.txt eneighbor.txt entret.txt \
+	epenny.txt epestfind.txt eprimer3.txt eprotdist.txt \
+	eprotpars.txt equicktandem.txt erestml.txt eseqboot.txt \
+	esim4.txt est2genome.txt etandem.txt extractfeat.txt \
+	extractseq.txt fclique.txt fconsense.txt fcontml.txt \
+	fcontrast.txt fdiscboot.txt fdnacomp.txt fdnadist.txt \
+	fdnainvar.txt fdnaml.txt fdnamlk.txt fdnamove.txt \
+	fdnapars.txt fdnapenny.txt fdollop.txt fdolmove.txt \
+	fdolpenny.txt fdrawgram.txt fdrawtree.txt ffactor.txt \
+	ffitch.txt ffreqboot.txt fgendist.txt findkm.txt fkitsch.txt \
+	fmix.txt fmove.txt fneighbor.txt fpars.txt fpenny.txt \
+	fproml.txt fpromlk.txt fprotdist.txt fprotpars.txt freak.txt \
+	frestboot.txt frestdist.txt frestml.txt fretree.txt \
+	fseqboot.txt fseqbootall.txt ftreedist.txt ftreedistpair.txt \
 	fuzznuc.txt fuzzpro.txt fuzztran.txt garnier.txt geecee.txt \
-	gendist.txt getorf.txt helixturnhelix.txt hetparse.txt \
-	hmoment.txt iep.txt infoalign.txt infoseq.txt interface.txt \
-	isochore.txt jembossctl.txt kitsch.txt libgen.txt libscan.txt \
-	lindna.txt listor.txt marscan.txt maskfeat.txt maskseq.txt \
-	matcher.txt megamerger.txt meme.txt merger.txt mix.txt \
-	msbar.txt mse.txt mwcontam.txt mwfilter.txt myseq.txt
+	getorf.txt helixturnhelix.txt hetparse.txt hmoment.txt \
+	iep.txt infoalign.txt infoseq.txt interface.txt isochore.txt
 
-pkgdata2_DATA = nawalignrunner.txt nawalign.txt needlerunner.txt \
-	needle.txt neighbor.txt newcpgreport.txt newcpgseek.txt \
-	newseq.txt noreturn.txt notseq.txt nthseq.txt octanol.txt \
-	oddcomp.txt palindrome.txt pasteseq.txt patmatdb.txt \
-	patmatmotifs.txt pdbparse.txt pdbplus.txt pdbtosp.txt penny.txt \
-	pepcoil.txt pepinfo.txt pepnet.txt pepstats.txt pepwheel.txt \
-	pepwindowall.txt pepwindow.txt pestfind.txt plotcon.txt plotorf.txt \
-	polydot.txt preg.txt prettyplot.txt prettyseq.txt primersearch.txt \
-	printsextract.txt profit.txt prophecy.txt prophet.txt \
-	prosextract.txt protdist.txt pscan.txt psiphi.txt rebaseextract.txt \
-	recoder.txt redata.txt remap.txt restml.txt restover.txt \
-	restrict.txt revseq.txt rocon.txt rocplot.txt scope.txt \
-	scopparse.txt scorerrunner.txt scorer.txt seealso.txt seqalign.txt \
-	seqboot.txt seqfraggle.txt seqmatchall.txt seqnr.txt \
-	seqretsplit.txt seqret.txt seqsearch.txt seqsort.txt seqwords.txt \
-	showalign.txt showdb.txt showfeat.txt showorf.txt showseq.txt \
-	shuffleseq.txt sigcleave.txt siggen.txt sigscan.txt silent.txt \
-	sirna.txt sites.txt sixpack.txt skipseq.txt splitter.txt \
-	ssematch.txt stretcher.txt stssearch.txt substituterunner.txt \
-	substitute.txt supermatcher.txt syco.txt tcode.txt textsearch.txt \
-	tfextract.txt tfm.txt tfscan.txt tmap.txt topo.txt tranalign.txt \
-	transeq.txt trimest.txt trimseq.txt twofeat.txt union.txt \
-	vectorstrip.txt water.txt whichdb.txt wobble.txt wordcount.txt \
-	wordmatch.txt wossname.txt yank.txt
+pkgdata2_DATA = jembossctl.txt libgen.txt libscan.txt lindna.txt listor.txt \
+	marscan.txt maskfeat.txt maskseq.txt matcher.txt \
+	matgen3d.txt megamerger.txt meme.txt merger.txt msbar.txt \
+	mse.txt mwcontam.txt mwfilter.txt myseq.txt nawalign.txt \
+	nawalignrunner.txt needle.txt needlerunner.txt \
+	newcpgreport.txt newcpgseek.txt newseq.txt noreturn.txt \
+	notseq.txt nthseq.txt octanol.txt oddcomp.txt palindrome.txt \
+	pasteseq.txt patmatdb.txt patmatmotifs.txt pdbparse.txt \
+	pdbplus.txt pdbtosp.txt pepcoil.txt pepinfo.txt pepnet.txt \
+	pepstats.txt pepwheel.txt pepwindow.txt pepwindowall.txt \
+	plotcon.txt plotorf.txt polydot.txt preg.txt prettyplot.txt \
+	prettyseq.txt primersearch.txt printsextract.txt profit.txt \
+	prophecy.txt prophet.txt prosextract.txt pscan.txt \
+	psiphi.txt rebaseextract.txt recoder.txt redata.txt \
+	remap.txt restover.txt restrict.txt revseq.txt rocon.txt \
+	rocplot.txt scope.txt scopparse.txt scorecmapdir.txt \
+	scorer.txt scorerrunner.txt seealso.txt seqalign.txt \
+	seqfraggle.txt seqmatchall.txt seqnr.txt seqret.txt \
+	seqretsplit.txt seqsearch.txt seqsort.txt seqwords.txt \
+	showalign.txt showdb.txt showfeat.txt showorf.txt \
+	showseq.txt shuffleseq.txt sigcleave.txt siggen.txt \
+	siggenlig.txt sigscan.txt sigscanlig.txt silent.txt \
+	sirna.txt SITE-DIRECTED.txt sites.txt sixpack.txt \
+	skipseq.txt splitter.txt ssematch.txt stretcher.txt \
+	stssearch.txt substitute.txt substituterunner.txt \
+	supermatcher.txt syco.txt tcode.txt textsearch.txt \
+	tfextract.txt tfm.txt tfscan.txt tmap.txt topo.txt \
+	tranalign.txt transeq.txt trimest.txt trimseq.txt \
+	twofeat.txt union.txt vectorstrip.txt water.txt whichdb.txt \
+               wobble.txt wordcount.txt wordmatch.txt wossname.txt yank.txt
 
 pkgdata2dir = $(prefix)/share/$(PACKAGE)/doc/programs/text
 all: all-am

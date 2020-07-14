@@ -63,6 +63,14 @@ Usage
 Interactive tree rearrangement
 Number of species [0]: 10
 Input tree file: retree.dat
+Output file [retree.treefile]: 
+NEXT? (R . U W O T F D B N H J K L C + ? X Q) (? for Help): Q
+Do you want to write out the tree to a file? (Y or N): Y
+Enter R if the tree is to be rooted, OR enter U if the tree is to be unrooted: 
+U
+
+Tree written to file "retree.treefile"
+
 
 
 Reading tree file ...
@@ -92,12 +100,6 @@ Reading tree file ...
   !  !                                ,>11:Tarsier
 ** 7 lines below screen **
 
-NEXT? (Options: R . U W O T F D B N H J K L C + ? X Q) (? for Help) Do you want
- to write out the tree to a file? (Y or N) Enter R if the tree is to be rooted
-OR enter U if the tree is to be unrooted:
-Tree written to file "retree.treefile"
-
-
    Go to the input files for this example
    Go to the output files for this example
 
@@ -106,6 +108,7 @@ Command line arguments
    Standard (Mandatory) qualifiers:
   [-spp]               integer    Number of species
   [-intreefile]        tree       (no help text) tree value
+  [-outtreefile]       outfile    Output file name
 
    Additional (Optional) qualifiers:
    -initialtree        menu       Initial tree
@@ -114,13 +117,11 @@ Command line arguments
    -vscreenwidth       integer    Width of plotting area in characters
    -screenlines        integer    Number of lines on screen
 
-   Advanced (Unprompted) qualifiers:
-   -outtreefile        outfile    Output file name
-
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-outtreefile" associated qualifiers
-   -odirectory         string     Output directory
+   -odirectory3        string     Output directory
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -143,6 +144,8 @@ Command line arguments
    (Parameter 1) Number of species Any integer value 0
    [-intreefile]
    (Parameter 2) (no help text) tree value Phylogenetic tree
+   [-outtreefile]
+   (Parameter 3) Output file name Output file <sequence>.fretree
    Additional (Optional) qualifiers Allowed values Default
    -initialtree Initial tree
    a (Arbitary)
@@ -160,7 +163,7 @@ Command line arguments
    80
    -screenlines Number of lines on screen Any integer value 24
    Advanced (Unprompted) qualifiers Allowed values Default
-   -outtreefile Output file name Output file <sequence>.fretree
+   (none)
 
 Input file format
 

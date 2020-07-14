@@ -44,7 +44,7 @@ Output sequence [opsd_human.fasta]:
    This uses a drosophila sequence and codon table.
 
 
-% backtranseq -cfile Edrosophila.cut 
+% backtranseq -cfile Edrome.cut 
 Back translate a protein sequence
 Input sequence: tsw:ach2_drome
 Output sequence [ach2_drome.fasta]: 
@@ -65,47 +65,50 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-cfile" associated qualifiers
+   -format             string     Data format
 
    "-outfile" associated qualifiers
-   -osformat2           string     Output seq format
-   -osextension2        string     File name extension
-   -osname2             string     Base file name
-   -osdirectory2        string     Output directory
-   -osdbname2           string     Database name to add
-   -ossingle2           boolean    Separate file for each entry
-   -oufo2               string     UFO features
-   -offormat2           string     Features format
-   -ofname2             string     Features file name
-   -ofdirectory2        string     Output directory
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
    Standard (Mandatory) qualifiers Allowed values Default
@@ -115,7 +118,7 @@ Command line arguments
    (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
    Additional (Optional) qualifiers Allowed values Default
    -cfile Codon usage table name Codon usage file in EMBOSS data path
-   Ehum.cut
+   Ehuman.cut
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
 
@@ -339,21 +342,21 @@ Output file format
 
 >OPSD_HUMAN P08100 RHODOPSIN.
 ATGAACGGCACCGAGGGCCCCAACTTCTACGTGCCCTTCAGCAACGCCACCGGCGTGGTG
-AGAAGCCCCTTCGAGTACCCCCAGTACTACCTGGCCGAGCCCTGGCAGTTCAGCATGCTG
+AGGAGCCCCTTCGAGTACCCCCAGTACTACCTGGCCGAGCCCTGGCAGTTCAGCATGCTG
 GCCGCCTACATGTTCCTGCTGATCGTGCTGGGCTTCCCCATCAACTTCCTGACCCTGTAC
-GTGACCGTGCAGCACAAGAAGCTGAGAACCCCCCTGAACTACATCCTGCTGAACCTGGCC
+GTGACCGTGCAGCACAAGAAGCTGAGGACCCCCCTGAACTACATCCTGCTGAACCTGGCC
 GTGGCCGACCTGTTCATGGTGCTGGGCGGCTTCACCAGCACCCTGTACACCAGCCTGCAC
 GGCTACTTCGTGTTCGGCCCCACCGGCTGCAACCTGGAGGGCTTCTTCGCCACCCTGGGC
-GGCGAGATCGCCCTGTGGAGCCTGGTGGTGCTGGCCATCGAGAGATACGTGGTGGTGTGC
-AAGCCCATGAGCAACTTCAGATTCGGCGAGAACCACGCCATCATGGGCGTGGCCTTCACC
-TGGGTGATGGCCCTGGCCTGCGCCGCCCCCCCCCTGGCCGGCTGGAGCAGATACATCCCC
+GGCGAGATCGCCCTGTGGAGCCTGGTGGTGCTGGCCATCGAGAGGTACGTGGTGGTGTGC
+AAGCCCATGAGCAACTTCAGGTTCGGCGAGAACCACGCCATCATGGGCGTGGCCTTCACC
+TGGGTGATGGCCCTGGCCTGCGCCGCCCCCCCCCTGGCCGGCTGGAGCAGGTACATCCCC
 GAGGGCCTGCAGTGCAGCTGCGGCATCGACTACTACACCCTGAAGCCCGAGGTGAACAAC
 GAGAGCTTCGTGATCTACATGTTCGTGGTGCACTTCACCATCCCCATGATCATCATCTTC
 TTCTGCTACGGCCAGCTGGTGTTCACCGTGAAGGAGGCCGCCGCCCAGCAGCAGGAGAGC
-GCCACCACCCAGAAGGCCGAGAAGGAGGTGACCAGAATGGTGATCATCATGGTGATCGCC
+GCCACCACCCAGAAGGCCGAGAAGGAGGTGACCAGGATGGTGATCATCATGGTGATCGCC
 TTCCTGATCTGCTGGGTGCCCTACGCCAGCGTGGCCTTCTACATCTTCACCCACCAGGGC
 AGCAACTTCGGCCCCATCTTCATGACCATCCCCGCCTTCTTCGCCAAGAGCGCCGCCATC
-TACAACCCCGTGATCTACATCATGATGAACAAGCAGTTCAGAAACTGCATGCTGACCACC
+TACAACCCCGTGATCTACATCATGATGAACAAGCAGTTCAGGAACTGCATGCTGACCACC
 ATCTGCTGCGGCAAGAACCCCCTGGGCGACGACGAGGCCAGCGCCACCGTGAGCAAGACC
 GAGACCAGCCAGGTGGCCCCCGCC
 
@@ -365,33 +368,33 @@ GAGACCAGCCAGGTGGCCCCCGCC
 .
 ATGGCCCCCGGCTGCTGCACCACCCGCCCCCGCCCCATCGCCCTGCTGGCCCACATCTGG
 CGCCACTGCAAGCCCCTGTGCCTGCTGCTGGTGCTGCTGCTGCTGTGCGAGACCGTGCAG
-GCCAACCCCGACGCCAAGCGCCTGTACGACGACCTGCTGTCCAACTACAACCGCCTGATC
-CGCCCCGTGTCCAACAACACCGACACCGTGCTGGTGAAGCTGGGCCTGCGCCTGTCCCAG
-CTGATCGACCTGAACCTGAAGGACCAGATCCTGACCACCAACGTGTGGCTGGAGCACGAG
-TGGCAGGACCACAAGTTCAAGTGGGACCCCTCCGAGTACGGCGGCGTGACCGAGCTGTAC
-GTGCCCTCCGAGCACATCTGGCTGCCCGACATCGTGCTGTACAACAACGCCGACGGCGAG
+GCCAACCCCGATGCCAAGCGCCTGTACGATGATCTGCTGAGCAACTACAACCGCCTGATC
+CGCCCCGTGAGCAACAACACCGATACCGTGCTGGTGAAGCTGGGCCTGCGCCTGAGCCAG
+CTGATCGATCTGAACCTGAAGGATCAGATCCTGACCACCAACGTGTGGCTGGAGCACGAG
+TGGCAGGATCACAAGTTCAAGTGGGATCCCAGCGAGTACGGCGGCGTGACCGAGCTGTAC
+GTGCCCAGCGAGCACATCTGGCTGCCCGATATCGTGCTGTACAACAACGCCGATGGCGAG
 TACGTGGTGACCACCATGACCAAGGCCATCCTGCACTACACCGGCAAGGTGGTGTGGACC
-CCCCCCGCCATCTTCAAGTCCTCCTGCGAGATCGACGTGCGCTACTTCCCCTTCGACCAG
-CAGACCTGCTTCATGAAGTTCGGCTCCTGGACCTACGACGGCGACCAGATCGACCTGAAG
-CACATCTCCCAGAAGAACGACAAGGACAACAAGGTGGAGATCGGCATCGACCTGCGCGAG
-TACTACCCCTCCGTGGAGTGGGACATCCTGGGCGTGCCCGCCGAGCGCCACGAGAAGTAC
-TACCCCTGCTGCGCCGAGCCCTACCCCGACATCTTCTTCAACATCACCCTGCGCCGCAAG
-ACCCTGTTCTACACCGTGAACCTGATCATCCCCTGCGTGGGCATCTCCTACCTGTCCGTG
-CTGGTGTTCTACCTGCCCGCCGACTCCGGCGAGAAGATCGCCCTGTGCATCTCCATCCTG
-CTGTCCCAGACCATGTTCTTCCTGCTGATCTCCGAGATCATCCCCTCCACCTCCCTGGCC
-CTGCCCCTGCTGGGCAAGTACCTGCTGTTCACCATGCTGCTGGTGGGCCTGTCCGTGGTG
-ATCACCATCATCATCCTGAACATCCACTACCGCAAGCCCTCCACCCACAAGATGCGCCCC
-TGGATCCGCTCCTTCTTCATCAAGCGCCTGCCCAAGCTGCTGCTGATGCGCGTGCCCAAG
-GACCTGCTGCGCGACCTGGCCGCCAACAAGATCAACTACGGCCTGAAGTTCTCCAAGACC
-AAGTTCGGCCAGGCCCTGATGGACGAGATGCAGATGAACTCCGGCGGCTCCTCCCCCGAC
-TCCCTGCGCCGCATGCAGGGCCGCGTGGGCGCCGGCGGCTGCAACGGCATGCACGTGACC
-ACCGCCACCAACCGCTTCTCCGGCCTGGTGGGCGCCCTGGGCGGCGGCCTGTCCACCCTG
-TCCGGCTACAACGGCCTGCCCTCCGTGCTGTCCGGCCTGGACGACTCCCTGTCCGACGTG
+CCCCCCGCCATCTTCAAGAGCAGCTGCGAGATCGATGTGCGCTACTTCCCCTTCGATCAG
+CAGACCTGCTTCATGAAGTTCGGCAGCTGGACCTACGATGGCGATCAGATCGATCTGAAG
+CACATCAGCCAGAAGAACGATAAGGATAACAAGGTGGAGATCGGCATCGATCTGCGCGAG
+TACTACCCCAGCGTGGAGTGGGATATCCTGGGCGTGCCCGCCGAGCGCCACGAGAAGTAC
+TACCCCTGCTGCGCCGAGCCCTACCCCGATATCTTCTTCAACATCACCCTGCGCCGCAAG
+ACCCTGTTCTACACCGTGAACCTGATCATCCCCTGCGTGGGCATCAGCTACCTGAGCGTG
+CTGGTGTTCTACCTGCCCGCCGATAGCGGCGAGAAGATCGCCCTGTGCATCAGCATCCTG
+CTGAGCCAGACCATGTTCTTCCTGCTGATCAGCGAGATCATCCCCAGCACCAGCCTGGCC
+CTGCCCCTGCTGGGCAAGTACCTGCTGTTCACCATGCTGCTGGTGGGCCTGAGCGTGGTG
+ATCACCATCATCATCCTGAACATCCACTACCGCAAGCCCAGCACCCACAAGATGCGCCCC
+TGGATCCGCAGCTTCTTCATCAAGCGCCTGCCCAAGCTGCTGCTGATGCGCGTGCCCAAG
+GATCTGCTGCGCGATCTGGCCGCCAACAAGATCAACTACGGCCTGAAGTTCAGCAAGACC
+AAGTTCGGCCAGGCCCTGATGGATGAGATGCAGATGAACAGCGGCGGCAGCAGCCCCGAT
+AGCCTGCGCCGCATGCAGGGCCGCGTGGGCGCCGGCGGCTGCAACGGCATGCACGTGACC
+ACCGCCACCAACCGCTTCAGCGGCCTGGTGGGCGCCCTGGGCGGCGGCCTGAGCACCCTG
+AGCGGCTACAACGGCCTGCCCAGCGTGCTGAGCGGCCTGGATGATAGCCTGAGCGATGTG
 GCCGCCCGCAAGAAGTACCCCTTCGAGCTGGAGAAGGCCATCCACAACGTGATGTTCATC
-CAGCACCACATGCAGCGCCAGGACGAGTTCAACGCCGAGGACCAGGACTGGGGCTTCGTG
-GCCATGGTGATGGACCGCCTGTTCCTGTGGCTGTTCATGATCGCCTCCCTGGTGGGCACC
-TTCGTGATCCTGGGCGAGGCCCCCTCCCTGTACGACGACACCAAGGCCATCGACGTGCAG
-CTGTCCGACGTGGCCAAGCAGATCTACAACCTGACCGAGAAGAAGAAC
+CAGCACCACATGCAGCGCCAGGATGAGTTCAACGCCGAGGATCAGGATTGGGGCTTCGTG
+GCCATGGTGATGGATCGCCTGTTCCTGTGGCTGTTCATGATCGCCAGCCTGGTGGGCACC
+TTCGTGATCCTGGGCGAGGCCCCCAGCCTGTACGATGATACCAAGGCCATCGATGTGCAG
+CTGAGCGATGTGGCCAAGCAGATCTACAACCTGACCGAGAAGAAGAAC
 
 Data files
 
@@ -457,11 +460,11 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                        Description
    charge       Protein charge plot
    checktrans   Reports STOP codons and ORF statistics of a protein
    coderet      Extract CDS, mRNA and translations from feature tables
-   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   compseq      Count composition of dimer/trimer/etc words in a sequence
    emowse       Protein identification by mass spectrometry
    freak        Residue/base frequency table or plot
    iep          Calculates the isoelectric point of a protein
@@ -474,7 +477,7 @@ See also
    pepwindowall Displays protein hydropathy of a set of sequences
    plotorf      Plot potential open reading frames
    prettyseq    Output sequence with translated ranges
-   remap        Display a sequence with restriction cut sites, translation etc
+   remap        Display sequence with restriction sites, translation etc
    showorf      Pretty output of DNA translations
    showseq      Display a sequence with features, translation etc
    sixpack      Display a DNA sequence with 6-frame translation and ORFs
@@ -482,9 +485,9 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

@@ -5,7 +5,7 @@
 
 Function
 
-   Displays a non-overlapping wordmatch dotplot of two sequences
+   Non-overlapping wordmatch dotplot of two sequences
 
 Description
 
@@ -46,7 +46,7 @@ Usage
 
 
 % dotpath tembl:AF129756 tembl:AP000504 -word 20 -graph cps -overlaps 
-Displays a non-overlapping wordmatch dotplot of two sequences
+Non-overlapping wordmatch dotplot of two sequences
 
 Created dotpath.ps
 

@@ -380,39 +380,37 @@ Known bugs
 
 See also
 
-   Program name Description
-   ednacomp DNA compatibility algorithm
-   ednadist Nucleic acid sequence Distance Matrix program
-   ednainvar Nucleic acid sequence Invariants method
-   ednaml Estimates phylogenies from nucleic acid sequence Maximum
-   Likelihood
-   ednamlk Estimates phylogenies from nucleic acid sequence Maximum
-   Likelihood with molecular clock
-   ednapars DNA parsimony algorithm
-   ednapenny Penny algorithm for DNA
-   eprotdist Protein distance algorithm
-   eprotpars Protein parsimony algorithm
-   erestml Restriction site Maximum Likelihood method
-   eseqboot Bootstrapped sequences algorithm
-   fdiscboot Bootstrapped discrete sites algorithm
-   fdnacomp DNA compatibility algorithm
-   fdnadist Nucleic acid sequence Distance Matrix program
-   fdnainvar Nucleic acid sequence Invariants method
-   fdnaml Estimates nucleotide phylogeny by maximum likelihood
-   fdnamlk Estimates nucleotide phylogeny by maximum likelihood
-   fdnamove Interactive DNA parsimony
-   fdnapenny Penny algorithm for DNA
-   fdolmove Interactive Dollo or Polymorphism Parsimony
-   ffreqboot Bootstrapped genetic frequencies algorithm
-   fproml Protein phylogeny by maximum likelihood
-   fpromlk Protein phylogeny by maximum likelihood
-   fprotdist Protein distance algorithm
-   fprotpars Protein pasimony algorithm
-   frestboot Bootstrapped restriction sites algorithm
-   frestdist Computes distance matrix from restriction sites or fragments
-   frestml Restriction site maximum Likelihood method
-   fseqboot Bootstrapped sequences algorithm
-   fseqbootall Bootstrapped sequences algorithm
+   Program name                         Description
+   ednacomp     DNA compatibility algorithm
+   ednadist     Nucleic acid sequence Distance Matrix program
+   ednainvar    Nucleic acid sequence Invariants method
+   ednaml       Phylogenies from nucleic acid Maximum Likelihood
+   ednamlk      Phylogenies from nucleic acid Maximum Likelihood with clock
+   ednapars     DNA parsimony algorithm
+   ednapenny    Penny algorithm for DNA
+   eprotdist    Protein distance algorithm
+   eprotpars    Protein parsimony algorithm
+   erestml      Restriction site Maximum Likelihood method
+   eseqboot     Bootstrapped sequences algorithm
+   fdiscboot    Bootstrapped discrete sites algorithm
+   fdnacomp     DNA compatibility algorithm
+   fdnadist     Nucleic acid sequence Distance Matrix program
+   fdnainvar    Nucleic acid sequence Invariants method
+   fdnaml       Estimates nucleotide phylogeny by maximum likelihood
+   fdnamlk      Estimates nucleotide phylogeny by maximum likelihood
+   fdnamove     Interactive DNA parsimony
+   fdnapenny    Penny algorithm for DNA
+   fdolmove     Interactive Dollo or Polymorphism Parsimony
+   ffreqboot    Bootstrapped genetic frequencies algorithm
+   fproml       Protein phylogeny by maximum likelihood
+   fpromlk      Protein phylogeny by maximum likelihood
+   fprotdist    Protein distance algorithm
+   fprotpars    Protein pasimony algorithm
+   frestboot    Bootstrapped restriction sites algorithm
+   frestdist    Distance matrix from restriction sites or fragments
+   frestml      Restriction site maximum Likelihood method
+   fseqboot     Bootstrapped sequences algorithm
+   fseqbootall  Bootstrapped sequences algorithm
 
 Author(s)
 

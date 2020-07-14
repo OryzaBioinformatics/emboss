@@ -45,9 +45,8 @@ Finds programs sharing group names
 Program to search for: matcher
 
 SEE ALSO
-seqmatchall      Does an all-against-all comparison of a set of sequences
-supermatcher     Finds a match of a large sequence against one or more sequence
-s
+seqmatchall      All-against-all comparison of a set of sequences
+supermatcher     Match large sequences against one or more other sequences
 water            Smith-Waterman local alignment
 wordmatch        Finds all exact matches of a given size between 2 sequences
 
@@ -279,27 +278,26 @@ Known bugs
 
 See also
 
-   Program name Description
-   abiview Reads ABI file and display the trace
-   cirdna Draws circular maps of DNA constructs
-   infoalign Information on a multiple sequence alignment
-   infoseq Displays some simple information about sequences
-   lindna Draws linear maps of DNA constructs
-   pepnet Displays proteins as a helical net
-   pepwheel Shows protein sequences as helices
-   prettyplot Displays aligned sequences, with colouring and boxing
-   prettyseq Output sequence with translated ranges
-   remap Display a sequence with restriction cut sites, translation etc
-   showalign Displays a multiple sequence alignment
-   showdb Displays information on the currently available databases
-   showfeat Show features of a sequence
-   showseq Display a sequence with features, translation etc
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   textsearch Search sequence documentation text. SRS and Entrez are
-   faster!
-   tfm Displays a program's help documentation manual
-   whichdb Search all databases for an entry
-   wossname Finds programs by keywords in their one-line documentation
+   Program name                        Description
+   abiview      Reads ABI file and display the trace
+   cirdna       Draws circular maps of DNA constructs
+   infoalign    Information on a multiple sequence alignment
+   infoseq      Displays some simple information about sequences
+   lindna       Draws linear maps of DNA constructs
+   pepnet       Displays proteins as a helical net
+   pepwheel     Shows protein sequences as helices
+   prettyplot   Displays aligned sequences, with colouring and boxing
+   prettyseq    Output sequence with translated ranges
+   remap        Display sequence with restriction sites, translation etc
+   showalign    Displays a multiple sequence alignment
+   showdb       Displays information on the currently available databases
+   showfeat     Show features of a sequence
+   showseq      Display a sequence with features, translation etc
+   sixpack      Display a DNA sequence with 6-frame translation and ORFs
+   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
+   tfm          Displays a program's help documentation manual
+   whichdb      Search all databases for an entry
+   wossname     Finds programs by keywords in their one-line documentation
 
 Author(s)
 

@@ -181,14 +181,13 @@ Done.
    -sitelength         integer    Site length
 *  -global             boolean    Global rearrangements
 *  -[no]rough          boolean    Speedier but rougher analysis
+   -[no]trout          toggle     Write out trees to tree file
+*  -outtreefile        outfile    Tree file name
    -printdata          boolean    Print data at start of run
    -[no]progress       boolean    Print indications of progress of run
    -[no]treeprint      boolean    Print out tree
-   -[no]trout          boolean    Write out trees to tree file
 
-   Advanced (Unprompted) qualifiers:
-   -outtreefile        outfile    Tree file name
-
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-outfile" associated qualifiers
@@ -314,6 +313,20 @@ Done.
 </tr>
 
 <tr>
+<td>-[no]trout</td>
+<td>Write out trees to tree file</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-outtreefile</td>
+<td>Tree file name</td>
+<td>Output file</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
 <td>-printdata</td>
 <td>Print data at start of run</td>
 <td>Boolean value Yes/No</td>
@@ -334,13 +347,6 @@ Done.
 <td>Yes</td>
 </tr>
 
-<tr>
-<td>-[no]trout</td>
-<td>Write out trees to tree file</td>
-<td>Boolean value Yes/No</td>
-<td>Yes</td>
-</tr>
-
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
@@ -348,10 +354,7 @@ Done.
 </tr>
 
 <tr>
-<td>-outtreefile</td>
-<td>Tree file name</td>
-<td>Output file</td>
-<td>&nbsp;</td>
+<td colspan=4>(none)</td>
 </tr>
 
 </table>
@@ -467,7 +470,7 @@ Epsilon   ++++----++---
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-[an error occurred while processing this directive]
+include file="inc/reportformats.ihtml"
    -->
 
 <b>frestml</b> 
@@ -657,8 +660,8 @@ None.
 <tr><td><a href="../phylip/ednacomp.html">ednacomp</a></td><td>DNA compatibility algorithm</td></tr>
 <tr><td><a href="../phylip/ednadist.html">ednadist</a></td><td>Nucleic acid sequence Distance Matrix program</td></tr>
 <tr><td><a href="../phylip/ednainvar.html">ednainvar</a></td><td>Nucleic acid sequence Invariants method</td></tr>
-<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood</td></tr>
-<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood with molecular clock</td></tr>
+<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Phylogenies from nucleic acid Maximum Likelihood</td></tr>
+<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Phylogenies from nucleic acid Maximum Likelihood with clock</td></tr>
 <tr><td><a href="../phylip/ednapars.html">ednapars</a></td><td>DNA parsimony algorithm</td></tr>
 <tr><td><a href="../phylip/ednapenny.html">ednapenny</a></td><td>Penny algorithm for DNA</td></tr>
 <tr><td><a href="../phylip/eprotdist.html">eprotdist</a></td><td>Protein distance algorithm</td></tr>
@@ -681,7 +684,7 @@ None.
 <tr><td><a href="fprotdist.html">fprotdist</a></td><td>Protein distance algorithm</td></tr>
 <tr><td><a href="fprotpars.html">fprotpars</a></td><td>Protein pasimony algorithm</td></tr>
 <tr><td><a href="frestboot.html">frestboot</a></td><td>Bootstrapped restriction sites algorithm</td></tr>
-<tr><td><a href="frestdist.html">frestdist</a></td><td>Computes distance matrix from restriction sites or fragments</td></tr>
+<tr><td><a href="frestdist.html">frestdist</a></td><td>Distance matrix from restriction sites or fragments</td></tr>
 <tr><td><a href="fseqboot.html">fseqboot</a></td><td>Bootstrapped sequences algorithm</td></tr>
 <tr><td><a href="fseqbootall.html">fseqbootall</a></td><td>Bootstrapped sequences algorithm</td></tr>
 </table>

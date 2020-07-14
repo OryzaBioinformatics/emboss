@@ -5,7 +5,7 @@
 
 Function
 
-   Does an all-against-all comparison of a set of sequences
+   All-against-all comparison of a set of sequences
 
 Description
 
@@ -29,7 +29,7 @@ Usage
 
 
 % seqmatchall 
-Does an all-against-all comparison of a set of sequences
+All-against-all comparison of a set of sequences
 Input sequence set: tembl:eclac*
 Word size [4]: 15
 Output alignment [eclac.seqmatchall]: 
@@ -121,7 +121,7 @@ Output file format
 
 ########################################
 # Program: seqmatchall
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Align_format: match
 # Report_file: eclac.seqmatchall
 ########################################
@@ -232,12 +232,11 @@ Known bugs
 
 See also
 
-   Program name Description
-   matcher Finds the best local alignments between two sequences
-   supermatcher Finds a match of a large sequence against one or more
-   sequences
-   water Smith-Waterman local alignment
-   wordmatch Finds all exact matches of a given size between 2 sequences
+   Program name                         Description
+   matcher      Finds the best local alignments between two sequences
+   supermatcher Match large sequences against one or more other sequences
+   water        Smith-Waterman local alignment
+   wordmatch    Finds all exact matches of a given size between 2 sequences
 
    polydot will give a graphical view of the same matches.
 

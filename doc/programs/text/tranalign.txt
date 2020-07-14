@@ -355,7 +355,7 @@ See also
    Program name                        Description
    emma         Multiple alignment program - interface to ClustalW program
    infoalign    Information on a multiple sequence alignment
-   plotcon      Plots the quality of conservation of a sequence alignment
+   plotcon      Plot quality of conservation of a sequence alignment
    prettyplot   Displays aligned sequences, with colouring and boxing
    showalign    Displays a multiple sequence alignment
 

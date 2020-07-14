@@ -173,6 +173,37 @@ paper). Nevertheless you may want to use both types of rate variation.
         Many examples illustrating different behaviours is good.
  -->
 
+<b>Here is a sample session with fproml</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fproml </b>
+Protein phylogeny by maximum likelihood
+Input sequence: <b>proml.dat</b>
+Input tree file: <b></b>
+Output file [proml.fproml]: <b></b>
+
+
+Adding species:
+   1. Alpha     
+   2. Beta      
+   3. Gamma     
+   4. Delta     
+   5. Epsilon   
+
+
+Output written to file "proml.fproml"
+
+Tree also written onto file "proml.treefile"
+
+Done.
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -540,6 +571,21 @@ IT IS DONE FOR YOU.
 <p>
 
 
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: proml.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+   5   13
+Alpha     AACGTGGCCAAAT
+Beta      AAGGTCGCCAAAC
+Gamma     CATTTCGTCACAA
+Delta     GGTATTTCGGCCT
+Epsilon   GGGATCTCGGCCC
+
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -557,7 +603,7 @@ IT IS DONE FOR YOU.
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-[an error occurred while processing this directive]
+include file="inc/reportformats.ihtml"
    -->
 
 <b>fproml</b> output starts by giving the number of species and the
@@ -769,6 +815,54 @@ is accounted for by that particular combination of rates.
 <p>
 
 
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: proml.fproml</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Jones-Taylor-Thornton model of amino acid change
+
+
+  +Beta      
+  |  
+  |                                    +Epsilon   
+  |      +-----------------------------3  
+  1------2                             +------------Delta     
+  |      |  
+  |      +--------------------Gamma     
+  |  
+  +---------Alpha     
+
+
+remember: this is an unrooted tree!
+
+Ln Likelihood =  -131.58633
+
+ Between        And            Length      Approx. Confidence Limits
+ -------        ---            ------      ------- ---------- ------
+
+     1          Alpha             0.30915     (     zero,     0.66607) **
+     1          Beta              0.00010     (     zero,    infinity)
+     1             2              0.22118     (     zero,     0.62671) *
+     2             3              1.00021     (  0.13925,     1.86116) **
+     3          Epsilon           0.00010     (     zero,    infinity)
+     3          Delta             0.41008     (     zero,     0.86345) **
+     2          Gamma             0.68318     (  0.01678,     1.34958) **
+
+     *  = significantly positive, P &lt; 0.05
+     ** = significantly positive, P &lt; 0.01
+
+
+</pre>
+</td></tr></table><p>
+<p><h3>File: proml.treefile</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+(Beta:0.00010,((Epsilon:0.00010,Delta:0.41008):1.00021,
+Gamma:0.68318):0.22118,Alpha:0.30915);
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -895,8 +989,8 @@ None.
 <tr><td><a href="../phylip/ednacomp.html">ednacomp</a></td><td>DNA compatibility algorithm</td></tr>
 <tr><td><a href="../phylip/ednadist.html">ednadist</a></td><td>Nucleic acid sequence Distance Matrix program</td></tr>
 <tr><td><a href="../phylip/ednainvar.html">ednainvar</a></td><td>Nucleic acid sequence Invariants method</td></tr>
-<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood</td></tr>
-<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood with molecular clock</td></tr>
+<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Phylogenies from nucleic acid Maximum Likelihood</td></tr>
+<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Phylogenies from nucleic acid Maximum Likelihood with clock</td></tr>
 <tr><td><a href="../phylip/ednapars.html">ednapars</a></td><td>DNA parsimony algorithm</td></tr>
 <tr><td><a href="../phylip/ednapenny.html">ednapenny</a></td><td>Penny algorithm for DNA</td></tr>
 <tr><td><a href="../phylip/eprotdist.html">eprotdist</a></td><td>Protein distance algorithm</td></tr>
@@ -918,7 +1012,7 @@ None.
 <tr><td><a href="fprotdist.html">fprotdist</a></td><td>Protein distance algorithm</td></tr>
 <tr><td><a href="fprotpars.html">fprotpars</a></td><td>Protein pasimony algorithm</td></tr>
 <tr><td><a href="frestboot.html">frestboot</a></td><td>Bootstrapped restriction sites algorithm</td></tr>
-<tr><td><a href="frestdist.html">frestdist</a></td><td>Computes distance matrix from restriction sites or fragments</td></tr>
+<tr><td><a href="frestdist.html">frestdist</a></td><td>Distance matrix from restriction sites or fragments</td></tr>
 <tr><td><a href="frestml.html">frestml</a></td><td>Restriction site maximum Likelihood method</td></tr>
 <tr><td><a href="fseqboot.html">fseqboot</a></td><td>Bootstrapped sequences algorithm</td></tr>
 <tr><td><a href="fseqbootall.html">fseqbootall</a></td><td>Bootstrapped sequences algorithm</td></tr>

@@ -304,33 +304,32 @@ Known bugs
 
 See also
 
-   Program name Description
-   abiview Reads ABI file and display the trace
-   cirdna Draws circular maps of DNA constructs
-   garnier Predicts protein secondary structure
+    Program name                         Description
+   abiview        Reads ABI file and display the trace
+   cirdna         Draws circular maps of DNA constructs
+   garnier        Predicts protein secondary structure
    helixturnhelix Report nucleic acid binding motifs
-   hmoment Hydrophobic moment calculation
-   lindna Draws linear maps of DNA constructs
-   pepcoil Predicts coiled coil regions
-   pepnet Displays proteins as a helical net
-   prettyplot Displays aligned sequences, with colouring and boxing
-   prettyseq Output sequence with translated ranges
-   remap Display a sequence with restriction cut sites, translation etc
-   seealso Finds programs sharing group names
-   showalign Displays a multiple sequence alignment
-   showdb Displays information on the currently available databases
-   showfeat Show features of a sequence
-   showseq Display a sequence with features, translation etc
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   textsearch Search sequence documentation text. SRS and Entrez are
-   faster!
-   tmap Displays membrane spanning regions
+   hmoment        Hydrophobic moment calculation
+   lindna         Draws linear maps of DNA constructs
+   pepcoil        Predicts coiled coil regions
+   pepnet         Displays proteins as a helical net
+   prettyplot     Displays aligned sequences, with colouring and boxing
+   prettyseq      Output sequence with translated ranges
+   remap          Display sequence with restriction sites, translation etc
+   seealso        Finds programs sharing group names
+   showalign      Displays a multiple sequence alignment
+   showdb         Displays information on the currently available databases
+   showfeat       Show features of a sequence
+   showseq        Display a sequence with features, translation etc
+   sixpack        Display a DNA sequence with 6-frame translation and ORFs
+   textsearch     Search sequence documentation. Slow, use SRS and Entrez!
+   tmap           Displays membrane spanning regions
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

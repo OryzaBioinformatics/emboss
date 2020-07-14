@@ -5,7 +5,7 @@
 
 Function
 
-   Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot
+   Find Km and Vmax for an enzyme reaction
 
 Description
 
@@ -19,7 +19,7 @@ Usage
 
 
 % findkm -graph cps 
-Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot
+Find Km and Vmax for an enzyme reaction
 Enter name of file containing data: enztest.dat
 Output file [enztest.findkm]: 
 

@@ -25,7 +25,7 @@ listor
 <H2>
     Function
 </H2>
-Writes a list file of the logical OR of two sets of sequences
+Write a list file of the logical OR of two sets of sequences
 
 
 <H2>
@@ -86,7 +86,7 @@ Write the logical OR of two lists:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>listor ../data/file2 </b>
-Writes a list file of the logical OR of two sets of sequences
+Write a list file of the logical OR of two sets of sequences
 Output file [file1.list]: <b></b>
 
 </pre></td></tr></table><p>
@@ -102,7 +102,7 @@ Write the logical AND of two lists:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>listor ../data/file2 -operator and </b>
-Writes a list file of the logical OR of two sets of sequences
+Write a list file of the logical OR of two sets of sequences
 Output file [file1.list]: <b></b>
 
 </pre></td></tr></table><p>
@@ -118,7 +118,7 @@ Write the logical XOR of two lists:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>listor ../data/file2 -operator xor </b>
-Writes a list file of the logical OR of two sets of sequences
+Write a list file of the logical OR of two sets of sequences
 Output file [file1.list]: <b></b>
 
 </pre></td></tr></table><p>
@@ -134,7 +134,7 @@ Write the logical NOT of two lists:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>listor ../data/file2 -operator not </b>
-Writes a list file of the logical OR of two sets of sequences
+Write a list file of the logical OR of two sets of sequences
 Output file [file1.list]: <b></b>
 
 </pre></td></tr></table><p>
@@ -149,8 +149,8 @@ Output file [file1.list]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-firstset]          seqset     Sequence set USA
-  [-secondset]         seqset     Sequence set USA
+  [-firstsequences]    seqset     Sequence set USA
+  [-secondsequences]   seqset     Sequence set USA
   [-outfile]           outfile    The list of sequence names will be written
                                   to this list file
 
@@ -170,55 +170,55 @@ Output file [file1.list]: <b></b>
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
-   "-firstset" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   "-firstsequences" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
-   "-secondset" associated qualifiers
-   -sbegin2             integer    Start of each sequence to be used
-   -send2               integer    End of each sequence to be used
-   -sreverse2           boolean    Reverse (if DNA)
-   -sask2               boolean    Ask for begin/end/reverse
-   -snucleotide2        boolean    Sequence is nucleotide
-   -sprotein2           boolean    Sequence is protein
-   -slower2             boolean    Make lower case
-   -supper2             boolean    Make upper case
-   -sformat2            string     Input sequence format
-   -sdbname2            string     Database name
-   -sid2                string     Entryname
-   -ufo2                string     UFO features
-   -fformat2            string     Features format
-   -fopenfile2          string     Features file name
+   "-secondsequences" associated qualifiers
+   -sbegin2            integer    Start of each sequence to be used
+   -send2              integer    End of each sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory3         string     Output directory
+   -odirectory3        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
@@ -232,14 +232,14 @@ Output file [file1.list]: <b></b>
 </tr>
 
 <tr>
-<td>[-firstset]<br>(Parameter 1)</td>
+<td>[-firstsequences]<br>(Parameter 1)</td>
 <td>Sequence set USA</td>
 <td>Readable set of sequences</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
-<td>[-secondset]<br>(Parameter 2)</td>
+<td>[-secondsequences]<br>(Parameter 2)</td>
 <td>Sequence set USA</td>
 <td>Readable set of sequences</td>
 <td><b>Required</b></td>
@@ -441,6 +441,7 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="biosed.html">biosed</a></td><td>Replace or delete sequence sections</td></tr>
+<tr><td><a href="codcopy.html">codcopy</a></td><td>Reads and writes a codon usage table</td></tr>
 <tr><td><a href="cutseq.html">cutseq</a></td><td>Removes a specified section from a sequence</td></tr>
 <tr><td><a href="degapseq.html">degapseq</a></td><td>Removes gap characters from sequences</td></tr>
 <tr><td><a href="descseq.html">descseq</a></td><td>Alter the name or description of a sequence</td></tr>
@@ -451,13 +452,13 @@ None.
 <tr><td><a href="maskseq.html">maskseq</a></td><td>Mask off regions of a sequence</td></tr>
 <tr><td><a href="newseq.html">newseq</a></td><td>Type in a short new sequence</td></tr>
 <tr><td><a href="noreturn.html">noreturn</a></td><td>Removes carriage return from ASCII files</td></tr>
-<tr><td><a href="notseq.html">notseq</a></td><td>Excludes a set of sequences and writes out the remaining ones</td></tr>
+<tr><td><a href="notseq.html">notseq</a></td><td>Exclude a set of sequences and write out the remaining ones</td></tr>
 <tr><td><a href="nthseq.html">nthseq</a></td><td>Writes one sequence from a multiple set of sequences</td></tr>
 <tr><td><a href="pasteseq.html">pasteseq</a></td><td>Insert one sequence into another</td></tr>
 <tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
 <tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
-<tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
+<tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>

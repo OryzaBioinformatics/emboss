@@ -102,10 +102,13 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="codcmp.html">codcmp</a></td><td>Codon usage table comparison</td>
 </tr>
 <tr>
+<td><a href="codcopy.html">codcopy</a></td><td>Reads and writes a codon usage table</td>
+</tr>
+<tr>
 <td><a href="coderet.html">coderet</a></td><td>Extract CDS, mRNA and translations from feature tables</td>
 </tr>
 <tr>
-<td><a href="compseq.html">compseq</a></td><td>Counts the composition of dimer/trimer/etc words in a sequence</td>
+<td><a href="compseq.html">compseq</a></td><td>Count composition of dimer/trimer/etc words in a sequence</td>
 </tr>
 <tr>
 <td><a href="cons.html">cons</a></td><td>Creates a consensus from multiple alignments</td>
@@ -132,13 +135,22 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="dbiblast.html">dbiblast</a></td><td>Index a BLAST database</td>
 </tr>
 <tr>
-<td><a href="dbifasta.html">dbifasta</a></td><td>Index a fasta database</td>
+<td><a href="dbifasta.html">dbifasta</a></td><td>Database indexing for fasta file databases</td>
 </tr>
 <tr>
 <td><a href="dbiflat.html">dbiflat</a></td><td>Index a flat file database</td>
 </tr>
 <tr>
 <td><a href="dbigcg.html">dbigcg</a></td><td>Index a GCG formatted database</td>
+</tr>
+<tr>
+<td><a href="dbxfasta.html">dbxfasta</a></td><td>Database b+tree indexing for fasta file databases</td>
+</tr>
+<tr>
+<td><a href="dbxflat.html">dbxflat</a></td><td>Database b+tree indexing for flat file databases</td>
+</tr>
+<tr>
+<td><a href="dbxgcg.html">dbxgcg</a></td><td>Database b+tree indexing for GCG formatted databases</td>
 </tr>
 <tr>
 <td><a href="degapseq.html">degapseq</a></td><td>Removes gap characters from sequences</td>
@@ -159,7 +171,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td>
 </tr>
 <tr>
-<td><a href="dotpath.html">dotpath</a></td><td>Displays a non-overlapping wordmatch dotplot of two sequences</td>
+<td><a href="dotpath.html">dotpath</a></td><td>Non-overlapping wordmatch dotplot of two sequences</td>
 </tr>
 <tr>
 <td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td>
@@ -171,7 +183,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td>
 </tr>
 <tr>
-<td><a href="embossdata.html">embossdata</a></td><td>Finds or fetches the data files read in by the EMBOSS programs</td>
+<td><a href="embossdata.html">embossdata</a></td><td>Finds or fetches data files read by EMBOSS programs</td>
 </tr>
 <tr>
 <td><a href="embossversion.html">embossversion</a></td><td>Writes the current EMBOSS version number</td>
@@ -207,7 +219,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="extractseq.html">extractseq</a></td><td>Extract regions from a sequence</td>
 </tr>
 <tr>
-<td><a href="findkm.html">findkm</a></td><td>Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot</td>
+<td><a href="findkm.html">findkm</a></td><td>Find Km and Vmax for an enzyme reaction</td>
 </tr>
 <tr>
 <td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td>
@@ -225,7 +237,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="garnier.html">garnier</a></td><td>Predicts protein secondary structure</td>
 </tr>
 <tr>
-<td><a href="geecee.html">geecee</a></td><td>Calculates the fractional GC content of nucleic acid sequences</td>
+<td><a href="geecee.html">geecee</a></td><td>Calculates fractional GC content of nucleic acid sequences</td>
 </tr>
 <tr>
 <td><a href="getorf.html">getorf</a></td><td>Finds and extracts open reading frames (ORFs)</td>
@@ -252,7 +264,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="lindna.html">lindna</a></td><td>Draws linear maps of DNA constructs</td>
 </tr>
 <tr>
-<td><a href="listor.html">listor</a></td><td>Writes a list file of the logical OR of two sets of sequences</td>
+<td><a href="listor.html">listor</a></td><td>Write a list file of the logical OR of two sets of sequences</td>
 </tr>
 <tr>
 <td><a href="marscan.html">marscan</a></td><td>Finds MAR/SAR sites in nucleic sequences</td>
@@ -297,7 +309,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="noreturn.html">noreturn</a></td><td>Removes carriage return from ASCII files</td>
 </tr>
 <tr>
-<td><a href="notseq.html">notseq</a></td><td>Excludes a set of sequences and writes out the remaining ones</td>
+<td><a href="notseq.html">notseq</a></td><td>Exclude a set of sequences and write out the remaining ones</td>
 </tr>
 <tr>
 <td><a href="nthseq.html">nthseq</a></td><td>Writes one sequence from a multiple set of sequences</td>
@@ -306,7 +318,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="octanol.html">octanol</a></td><td>Displays protein hydropathy</td>
 </tr>
 <tr>
-<td><a href="oddcomp.html">oddcomp</a></td><td>Finds protein sequence regions with a biased composition</td>
+<td><a href="oddcomp.html">oddcomp</a></td><td>Find protein sequence regions with a biased composition</td>
 </tr>
 <tr>
 <td><a href="palindrome.html">palindrome</a></td><td>Looks for inverted repeats in a nucleotide sequence</td>
@@ -342,7 +354,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td>
 </tr>
 <tr>
-<td><a href="plotcon.html">plotcon</a></td><td>Plots the quality of conservation of a sequence alignment</td>
+<td><a href="plotcon.html">plotcon</a></td><td>Plot quality of conservation of a sequence alignment</td>
 </tr>
 <tr>
 <td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td>
@@ -375,28 +387,28 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="prophet.html">prophet</a></td><td>Gapped alignment for profiles</td>
 </tr>
 <tr>
-<td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td>
+<td><a href="prosextract.html">prosextract</a></td><td>Build the PROSITE motif database for use by patmatmotifs</td>
 </tr>
 <tr>
 <td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td>
 </tr>
 <tr>
-<td><a href="psiphi.html">psiphi</a></td><td>Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file</td>
+<td><a href="psiphi.html">psiphi</a></td><td>Phi and psi torsion angles from protein coordinates</td>
 </tr>
 <tr>
 <td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td>
 </tr>
 <tr>
-<td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain the same translation</td>
+<td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain same translation</td>
 </tr>
 <tr>
 <td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td>
 </tr>
 <tr>
-<td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td>
+<td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td>
 </tr>
 <tr>
-<td><a href="restover.html">restover</a></td><td>Finds restriction enzymes that produce a specific overhang</td>
+<td><a href="restover.html">restover</a></td><td>Find restriction enzymes producing specific overhang</td>
 </tr>
 <tr>
 <td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td>
@@ -408,7 +420,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td>
 </tr>
 <tr>
-<td><a href="seqmatchall.html">seqmatchall</a></td><td>Does an all-against-all comparison of a set of sequences</td>
+<td><a href="seqmatchall.html">seqmatchall</a></td><td>All-against-all comparison of a set of sequences</td>
 </tr>
 <tr>
 <td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td>
@@ -447,7 +459,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td>
 </tr>
 <tr>
-<td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td>
+<td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping first few</td>
 </tr>
 <tr>
 <td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td>
@@ -456,10 +468,10 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="stretcher.html">stretcher</a></td><td>Finds the best global alignment between two sequences</td>
 </tr>
 <tr>
-<td><a href="stssearch.html">stssearch</a></td><td>Searches a DNA database for matches with a set of STS primers</td>
+<td><a href="stssearch.html">stssearch</a></td><td>Search a DNA database for matches with a set of STS primers</td>
 </tr>
 <tr>
-<td><a href="supermatcher.html">supermatcher</a></td><td>Finds a match of a large sequence against one or more sequences</td>
+<td><a href="supermatcher.html">supermatcher</a></td><td>Match large sequences against one or more other sequences</td>
 </tr>
 <tr>
 <td><a href="syco.html">syco</a></td><td>Synonymous codon usage Gribskov statistic plot</td>
@@ -468,7 +480,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td><a href="tcode.html">tcode</a></td><td>Fickett TESTCODE statistic to identify protein-coding DNA</td>
 </tr>
 <tr>
-<td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td>
+<td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td>
 </tr>
 <tr>
 <td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td>

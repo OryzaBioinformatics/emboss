@@ -28,7 +28,10 @@ Description
    format is easy to parse into other software. The program also
    indicates, based on the splice site information, the gene's predicted
    direction of transcription. Optionally the full sequence alignment is
-   printed as well (see the example). H2> Algorithm
+   printed as well (see the example).
+
+Algorithm
+
    The program uses a linear-space divide-and-conquer strategy (Myers and
    Miller, 1988; Huang, 1994) to limit memory use:
 

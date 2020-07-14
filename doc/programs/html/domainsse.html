@@ -1,11 +1,25 @@
 <!-- START OF HEADER -->
 <HTML><HEAD>
-<TITLE> EMBOSS: DOMAINSSE documentation. </TITLE>
+<TITLE> EMBASSY: DOMAINSSE documentation. </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<H2> DOMAINSSE documentation </H2>
-<!-- END OF HEADER -->
 
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+<H2> DOMAINSSE documentation
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<!-- END OF HEADER -->
 
 
 
@@ -39,7 +53,7 @@
 <a name="1.0"></a>
 <br><br><br><H2> 1.0   SUMMARY  </H2>
 
-Adds secondary structure records to a DCF file (domain classification file)
+Add secondary structure records to a DCF file
 
 
 
@@ -57,10 +71,7 @@ Domain sequences are taken from domain CCF files (clean coordinate files).
 The CCF files must contain secondary structure information, which can be added 
 by  using PDBPLUS.
 
-
-The path for the CCF files (input) and names of DCF files (input and
-output) are specified by the user.  The extension of CCF files is
-specified in the ACD file.  A log file is also written.
+The path for the CCF files (input) and names of DCF files (input and output) are specified by the user.  The extension of CCF files is specified in the ACD file. A log file is also written.
 
 
 
@@ -78,13 +89,13 @@ specified in the ACD file.  A log file is also written.
 <a name="3.0"></a>
 <br><br><br><H2> 3.0   INPUT FILE FORMAT         </H2>
 
-The format of the DCF file is described in the <a
-href="scopparse.html">SCOPPARSE documentation.</a>
+The format of the DCF file is described in the <a href="scopparse.html">SCOPPARSE documentation.</a>
+An example of the input file is shown in Figure 1.
 
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: all.scop</h3>
+<p><h3>File: ../scopparse-keep/all.scop</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   D1CS4A_
@@ -145,9 +156,6 @@ CH   A CHAIN; . START; . END;
 
 
 <!--
-An example of the input file is shown in Figure 1.
-
-
 <br><br><b>Figure 1   Excerpt from a DOMAINSSE (input) file </b>
 <table><td bgcolor="#CFCCFF">
 <pre>
@@ -257,13 +265,10 @@ DO   Adenylyl cyclase VC1, domain C1a
 XX
 OS   Dog (Canis familiaris)
 XX
-SE   EEEEEEE
+SE   HH
 XX
-SS   SEQUENCE   189 AA;  24290 MW;  D1929097 CRC32;
-     LLLLLLLEEE EEEEEEEEEE ELHHHHHHHL LHHHHHHHHH HHHHHHHHHH HHHHLLEEEE
-     EELLEEEEEE LLLLLLLHHH HHHHHHHHHH HHHHHHHHHH HHLLLLEEEE EEEEEEEEEL
-     LLLLLLLLEE EHHHHHHHHH HHHHLLLLLE EEEHHHHHLL LLLLLEEELH HHHHHHHHHH
-     HLLLEEEEL
+SS   SEQUENCE    46 AA;   6039 MW;  C2EA3A0F CRC32;
+     LLLHHHHHHH LLHHHHHHHH HHHHHHHHHH HHHHHLLEEE EEELLL
 XX
 NC   1
 XX
@@ -304,7 +309,7 @@ CH   A CHAIN; . START; . END;
 //
 </pre>
 </td></tr></table><p>
-<p><h3>File: DOMAINSSE.log</h3>
+<p><h3>File: domainsse.log</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 </pre>
@@ -448,7 +453,7 @@ None.
                                   using SCOPPARSE and CATHPARSE. Domain
                                   sequence information can be added to the
                                   file by using DOMAINSEQS.
-  [-errfile]           outfile    This option specifies the name of the
+  [-logfile]           outfile    This option specifies the name of the
                                   DOMAINSSE log file.
 
    Additional (Optional) qualifiers: (none)
@@ -458,7 +463,7 @@ None.
    "-dcfoutfile" associated qualifiers
    -odirectory3        string     Output directory
 
-   "-errfile" associated qualifiers
+   "-logfile" associated qualifiers
    -odirectory4        string     Output directory
 
    General qualifiers:
@@ -509,10 +514,10 @@ None.
 </tr>
 
 <tr>
-<td>[-errfile]<br>(Parameter 4)</td>
+<td>[-logfile]<br>(Parameter 4)</td>
 <td>This option specifies the name of the DOMAINSSE log file.</td>
 <td>Output file</td>
-<td>DOMAINSSE.log</td>
+<td>domainsse.log</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -549,19 +554,18 @@ An example of interactive use of DOMAINSSE is shown below.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>domainsse </b>
-Adds secondary structure records to a DCF file (domain classification
-file).
-Name of DCF file (domain classification file) (input): <b>all.scop</b>
-Location of domain CCF file (clean coordinate file) (input) [./]: <b></b>
+Add secondary structure records to a DCF file.
+Name of DCF file (domain classification file) (input): <b>../scopparse-keep/all.scop</b>
+Location of domain CCF file (clean coordinate file) (input) [./]: <b>../domainer-keep</b>
 Name of DCF file (domain classification file) (output) [all.domainsse]: <b>domainsse.out</b>
-Name of DOMAINSSE log file. [DOMAINSSE.log]: <b>DOMAINSSE.log</b>
+Name of DOMAINSSE log file. [domainsse.log]: <b>domainsse.log</b>
 
 Processing D1CS4A_
 Processing D1II7A_
 
 Done!
  output file name: domainsse.out
- log file name: DOMAINSSE.log
+ log file name: domainsse.log
 
 </pre></td></tr></table><p>
 <p>
@@ -569,11 +573,7 @@ Done!
 
 
 <br><br>
-The DCF file (domain classification file) lacking secondary structure information called 
-/test_data/all.scop was parsed and a DCF file with secondary structure information
-called /test_data/domainseqs/all_s.scop was written.  Secondary structure information
-was taken from CCF files in test_data/. 
-A log file called /test_data/domainseqs/DOMAINSSE.log was written.
+<!-- The DCF file (domain classification file) lacking secondary structure information called /test_data/all.scop was parsed and a DCF file with secondary structure information called /test_data/domainseqs/all_s.scop was written.  Secondary structure information was taken from CCF files in test_data/. A log file called /test_data/domainseqs/DOMAINSSE.log was written. -->
 
 
 
@@ -599,7 +599,6 @@ None.
 <a name="8.0"></a>
 <br><br><br><H2> 8.0   NOTES                     </H2>
 
-<H3> 8.1   GLOSSARY OF FILE TYPES    </H3>
 
 <table BORDER CELLSPACING=5 CELLPADDING=5 BGCOLOR="#f5f5ff" >
 <tr>
@@ -644,6 +643,8 @@ to the file by using PDBPLUS.</td>
 
 
 
+
+
 None
 
 
@@ -681,31 +682,31 @@ None.
      are in some other way related to the application are described here. 
      (Take this from "Sister applications" in the old documentation)
 -->
+
 <a name="11.0"></a>
 <br><br><br><H2> 11.0  RELATED APPLICATIONS      </H2>
-
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="../../apps/aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
-<tr><td><a href="allversusall.html">allversusall</a></td><td>Does an all-versus-all global alignment for each set of sequences in an input directory and writes files of sequence similarity values</td></tr>
-<tr><td><a href="cathparse.html">cathparse</a></td><td>Reads raw CATH classification files and writes DCF file (domain classification file)</td></tr>
+<tr><td><a href="../domalign/allversusall.html">allversusall</a></td><td>Sequence similarity data from all-versus-all comparison</td></tr>
+<tr><td><a href="cathparse.html">cathparse</a></td><td>Generates DCF file from raw CATH files</td></tr>
 <tr><td><a href="../../apps/cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="domainer.html">domainer</a></td><td>Reads CCF files (clean coordinate files) for proteins and writes CCF files for domains, taken from a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainnr.html">domainnr</a></td><td>Removes redundant domains from a DCF file (domain classification file). The file must contain domain sequence information, which can be added by using DOMAINSEQS</td></tr>
-<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file (domain classification file)</td></tr>
-<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in EMBL-like format</td></tr>
-<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes CCF files (clean coordinate files) for proteins</td></tr>
-<tr><td><a href="pdbplus.html">pdbplus</a></td><td>Add residue solvent accessibility and secondary structure data to a CCF file (clean coordinate file) for a protein or domain</td></tr>
-<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:PDB equivalence file to EMBL-like format</td></tr>
+<tr><td><a href="../structure/domainer.html">domainer</a></td><td>Generates domain CCF files from protein CCF files</td></tr>
+<tr><td><a href="domainnr.html">domainnr</a></td><td>Removes redundant domains from a DCF file</td></tr>
+<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file</td></tr>
+<tr><td><a href="../structure/hetparse.html">hetparse</a></td><td>Converts heterogen group dictionary to EMBL-like format</td></tr>
+<tr><td><a href="../structure/pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes protein CCF files</td></tr>
+<tr><td><a href="../structure/pdbplus.html">pdbplus</a></td><td>Add accessibility & secondary structure to a CCF file</td></tr>
+<tr><td><a href="../structure/pdbtosp.html">pdbtosp</a></td><td>Convert swissprot:PDB codes file to EMBL-like format</td></tr>
 <tr><td><a href="../../apps/printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
-<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Build the PROSITE motif database for use by patmatmotifs</td></tr>
 <tr><td><a href="../../apps/rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
-<tr><td><a href="scopparse.html">scopparse</a></td><td>Reads raw SCOP classification files and writes a DCF file (domain classification file)</td></tr>
-<tr><td><a href="seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files (domain hits files) or other files of sequences</td></tr>
-<tr><td><a href="sites.html">sites</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of residue-ligand contact data for domains in a DCF file (domain classification file)</td></tr>
-<tr><td><a href="ssematch.html">ssematch</a></td><td>Searches a DCF file (domain classification file) for secondary structure matches</td></tr>
+<tr><td><a href="scopparse.html">scopparse</a></td><td>Generate DCF file from raw SCOP files</td></tr>
+<tr><td><a href="../domsearch/seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files</td></tr>
+<tr><td><a href="../structure/sites.html">sites</a></td><td>Generate residue-ligand CON files from CCF files</td></tr>
+<tr><td><a href="ssematch.html">ssematch</a></td><td>Search a DCF file for secondary structure matches</td></tr>
 <tr><td><a href="../../apps/tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
 </table>
 
@@ -737,8 +738,16 @@ None.
 <a name="14.0"></a>
 <br><br><br><H2> 14.0  REFERENCES                </H2>
 Please cite the authors and EMBOSS.
+Please cite the authors and EMBOSS.
 <br><br>
-<i>Rice P, Bleasby A.J.  2000.  EMBOSS - The European Molecular Biology Open Software Suite.  Trends in Genetics, 15:276-278.  See also http://www.uk.embnet.org/Software/EMBOSS</i>
+<i>Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+Molecular Biology Open Software Suite"  Trends in Genetics,
+15:276-278.
+
+<p>
+See also <a href="http://emboss.sourceforge.net/">http://emboss.sourceforge.net/</a></i>
+
+
 
 <H3>14.1 Other useful references  </H3>
 

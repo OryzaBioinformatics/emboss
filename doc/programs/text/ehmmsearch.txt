@@ -201,7 +201,7 @@ MAP   yes
 COM   ehmmbuild ../../data/hmm/globins50.msf globin.hmm -auto
 COM   ehmmcalibrate globin.hmm -seed 1079460101 -auto
 NSEQ  50
-DATE  Mon Feb 14 11:26:54 2005
+DATE  Fri Jul 15 12:00:00 2005
 CKSUM 5854
 XT      -8455     -4      0      *  -8455     -4      0      *
 NULT      -4  -8455

@@ -5,7 +5,7 @@
 
 Function
 
-   Runs degapseq program on all sequence pairs in a directory
+   Degapseq all sequence pairs in a directory
 
 Description
 
@@ -24,10 +24,10 @@ Command line arguments
    Standard (Mandatory) qualifiers:
   [-gappedseqsdir]     dirlist    Input directory of files containing sequence
                                   pairs for degapping
-  [-pathtocommand]     directory  Directory where degapping executable lives
+  [-commandpath]       directory  Directory where degapping executable lives
   [-commandname]       string     Name of degapping executable
-  [-degappedseqsoutdir] outdir     Name of directory containing degapped
-                                  sequence pairs
+  [-degappedseqsoutdir] outdir     Directory where degapped sequence pairs will
+                                  be written
   [-outfilesuffix]     string     Appended to end of all output file names
 
    Additional (Optional) qualifiers: (none)
@@ -49,8 +49,25 @@ Command line arguments
    -die                boolean    Report deaths
 
 
-   Error: File /homes/pmr/local/share/EMBOSS/acd/degapseqrunner.acd line
-   12: (gappedseqsdir) Unknown attribute 'name'
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-gappedseqsdir]
+   (Parameter 1) Input directory of files containing sequence pairs for
+   degapping Directory with files .
+   [-commandpath]
+   (Parameter 2) Directory where degapping executable lives Directory
+   [-commandname]
+   (Parameter 3) Name of degapping executable Any string is accepted
+   degapseq
+   [-degappedseqsoutdir]
+   (Parameter 4) Directory where degapped sequence pairs will be written
+   Output directory
+   [-outfilesuffix]
+   (Parameter 5) Appended to end of all output file names Any string is
+   accepted .deg
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
 
 Input file format
 
@@ -95,26 +112,27 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                         Description
    biosed       Replace or delete sequence sections
+   codcopy      Reads and writes a codon usage table
    cutseq       Removes a specified section from a sequence
    degapseq     Removes gap characters from sequences
    descseq      Alter the name or description of a sequence
    entret       Reads and writes (returns) flatfile entries
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
-   listor       Writes a list file of the logical OR of two sets of sequences
+   listor       Write a list file of the logical OR of two sets of sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
    newseq       Type in a short new sequence
    noreturn     Removes carriage return from ASCII files
-   notseq       Excludes a set of sequences and writes out the remaining ones
+   notseq       Exclude a set of sequences and write out the remaining ones
    nthseq       Writes one sequence from a multiple set of sequences
    pasteseq     Insert one sequence into another
    revseq       Reverse and complement a sequence
    seqret       Reads and writes (returns) sequences
    seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping the first few
+   skipseq      Reads and writes (returns) sequences, skipping first few
    splitter     Split a sequence into (overlapping) smaller sequences
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences

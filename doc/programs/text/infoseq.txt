@@ -418,15 +418,14 @@ Known bugs
 
 See also
 
-   Program name Description
-   infoalign Information on a multiple sequence alignment
-   seealso Finds programs sharing group names
-   showdb Displays information on the currently available databases
-   textsearch Search sequence documentation text. SRS and Entrez are
-   faster!
-   tfm Displays a program's help documentation manual
-   whichdb Search all databases for an entry
-   wossname Finds programs by keywords in their one-line documentation
+   Program name                        Description
+   infoalign    Information on a multiple sequence alignment
+   seealso      Finds programs sharing group names
+   showdb       Displays information on the currently available databases
+   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
+   tfm          Displays a program's help documentation manual
+   whichdb      Search all databases for an entry
+   wossname     Finds programs by keywords in their one-line documentation
 
      * geecee - Calculates the fractional GC content of a nucleic acid
        sequence

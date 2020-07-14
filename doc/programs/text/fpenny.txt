@@ -5,7 +5,7 @@
 
 Function
 
-   Penny algorithm, branch-and-bound to find all most parsimonious trees
+   Penny algorithm, branch-and-bound
 
 Description
 
@@ -244,7 +244,7 @@ Usage
 
 
 % fpenny 
-Penny algorithm, branch-and-bound to find all most parsimonious trees
+Penny algorithm, branch-and-bound
 Input file: penny.dat
 Output file [penny.fpenny]: 
 
@@ -591,21 +591,20 @@ Known bugs
 
 See also
 
-   Program name Description
-   eclique Largest clique program
-   edollop Dollo and polymorphism parsimony algorithm
-   edolpenny Penny algorithm Dollo or polymorphism
-   efactor Multistate to binary recoding program
-   emix Mixed parsimony algorithm
-   epenny Penny algorithm, branch-and-bound to find all most parsimonious
-   trees
-   fclique Largest clique program
-   fdollop Dollo and polymorphism parsimony algorithm
-   fdolpenny Penny algorithm Dollo or polymorphism
-   ffactor Multistate to binary recoding program
-   fmix Mixed parsimony algorithm
-   fmove Interactive mixed method parsimony
-   fpars Discrete character parsimony
+   Program name                Description
+   eclique      Largest clique program
+   edollop      Dollo and polymorphism parsimony algorithm
+   edolpenny    Penny algorithm Dollo or polymorphism
+   efactor      Multistate to binary recoding program
+   emix         Mixed parsimony algorithm
+   epenny       Penny algorithm, branch-and-bound
+   fclique      Largest clique program
+   fdollop      Dollo and polymorphism parsimony algorithm
+   fdolpenny    Penny algorithm Dollo or polymorphism
+   ffactor      Multistate to binary recoding program
+   fmix         Mixed parsimony algorithm
+   fmove        Interactive mixed method parsimony
+   fpars        Discrete character parsimony
 
 Author(s)
 

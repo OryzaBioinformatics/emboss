@@ -58,7 +58,7 @@ Usage
    Here is a sample session with whichdb
 
 
-% whichdb 
+% whichdb -showall 
 Search all databases for an entry
 ID or Accession number: hsfau1
 Output file [outfile.whichdb]: 
@@ -118,11 +118,104 @@ Output file format
 
   File: outfile.whichdb
 
+# Trying 'qangcgall:hsfau1'
+# Failed 'qangcgall:hsfau1'
+# Trying 'twp:hsfau1'
+# Failed 'twp:hsfau1'
+# Trying 'qapblast:hsfau1'
+# Failed 'qapblast:hsfau1'
+# Trying 'tsw:hsfau1'
+# Failed 'tsw:hsfau1'
+# Trying 'qapblastsplit:hsfau1'
+# Failed 'qapblastsplit:hsfau1'
+# Trying 'qangcginc:hsfau1'
+# Failed 'qangcginc:hsfau1'
+# Trying 'qangcgexc:hsfau1'
+# Failed 'qangcgexc:hsfau1'
+# Trying 'qasrsfasta:hsfau1'
 qasrsfasta:hsfau1
+# Trying 'qapir:hsfau1'
+# Failed 'qapir:hsfau1'
+# Trying 'tgenbank:hsfau1'
 tgenbank:hsfau1
+# Trying 'qanfasta:hsfau1'
+# Failed 'qanfasta:hsfau1'
+# Trying 'qanxflat:hsfau1'
+# Failed 'qanxflat:hsfau1'
+# Trying 'qanxgcg:hsfau1'
+# Failed 'qanxgcg:hsfau1'
+# Trying 'qapflat:hsfau1'
+# Failed 'qapflat:hsfau1'
+# Trying 'qapblastsplitinc:hsfau1'
+# Failed 'qapblastsplitinc:hsfau1'
+# Trying 'qapblastsplitexc:hsfau1'
+# Failed 'qapblastsplitexc:hsfau1'
+# Trying 'qapflatall:hsfau1'
+# Failed 'qapflatall:hsfau1'
+# Trying 'qanxflatall:hsfau1'
+qanxflatall:hsfau1
+# Trying 'qapflatinc:hsfau1'
+# Failed 'qapflatinc:hsfau1'
+# Trying 'qapflatexc:hsfau1'
+# Failed 'qapflatexc:hsfau1'
+# Trying 'qasrs:hsfau1'
 qasrs:hsfau1
+# Trying 'qapxflatinc:hsfau1'
+# Failed 'qapxflatinc:hsfau1'
+# Trying 'qapxflatexc:hsfau1'
+# Failed 'qapxflatexc:hsfau1'
+# Trying 'tpir:hsfau1'
+# Failed 'tpir:hsfau1'
+# Trying 'qasrswww:hsfau1'
 qasrswww:hsfau1
+# Trying 'qanxfasta:hsfau1'
+# Failed 'qanxfasta:hsfau1'
+# Trying 'qanxgcgall:hsfau1'
+# Failed 'qanxgcgall:hsfau1'
+# Trying 'qangcg:hsfau1'
+# Failed 'qangcg:hsfau1'
+# Trying 'qanfastaall:hsfau1'
+# Failed 'qanfastaall:hsfau1'
+# Trying 'qapirall:hsfau1'
+# Failed 'qapirall:hsfau1'
+# Trying 'qanxgcginc:hsfau1'
+# Failed 'qanxgcginc:hsfau1'
+# Trying 'qanxgcgexc:hsfau1'
+# Failed 'qanxgcgexc:hsfau1'
+# Trying 'qapirinc:hsfau1'
+# Failed 'qapirinc:hsfau1'
+# Trying 'qanflat:hsfau1'
+# Failed 'qanflat:hsfau1'
+# Trying 'qanxfastaall:hsfau1'
+# Failed 'qanxfastaall:hsfau1'
+# Trying 'qapfasta:hsfau1'
+# Failed 'qapfasta:hsfau1'
+# Trying 'qawxfasta:hsfau1'
+# Failed 'qawxfasta:hsfau1'
+# Trying 'qapirexc:hsfau1'
+# Failed 'qapirexc:hsfau1'
+# Trying 'tswnew:hsfau1'
+# Failed 'tswnew:hsfau1'
+# Trying 'qaxpirall:hsfau1'
+# Failed 'qaxpirall:hsfau1'
+# Trying 'qapxflat:hsfau1'
+# Failed 'qapxflat:hsfau1'
+# Trying 'qaxpirinc:hsfau1'
+# Failed 'qaxpirinc:hsfau1'
+# Trying 'qapxfasta:hsfau1'
+# Failed 'qapxfasta:hsfau1'
+# Trying 'tembl:hsfau1'
 tembl:hsfau1
+# Trying 'qaxpirexc:hsfau1'
+# Failed 'qaxpirexc:hsfau1'
+# Trying 'qapblastall:hsfau1'
+# Failed 'qapblastall:hsfau1'
+# Trying 'tgb:hsfau1'
+# Failed 'tgb:hsfau1'
+# Trying 'qaxpir:hsfau1'
+# Failed 'qaxpir:hsfau1'
+# Trying 'qawfasta:hsfau1'
+# Failed 'qawfasta:hsfau1'
 
    The reported database entries are written out to the specified output
    file.
@@ -179,21 +272,20 @@ Known bugs
 
 See also
 
-   Program name Description
-   infoalign Information on a multiple sequence alignment
-   infoseq Displays some simple information about sequences
-   seealso Finds programs sharing group names
-   showdb Displays information on the currently available databases
-   textsearch Search sequence documentation text. SRS and Entrez are
-   faster!
-   tfm Displays a program's help documentation manual
-   wossname Finds programs by keywords in their one-line documentation
+   Program name                        Description
+   infoalign    Information on a multiple sequence alignment
+   infoseq      Displays some simple information about sequences
+   seealso      Finds programs sharing group names
+   showdb       Displays information on the currently available databases
+   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
+   tfm          Displays a program's help documentation manual
+   wossname     Finds programs by keywords in their one-line documentation
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

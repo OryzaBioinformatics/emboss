@@ -5,7 +5,7 @@
 
 Function
 
-   Writes a list file of the logical OR of two sets of sequences
+   Write a list file of the logical OR of two sets of sequences
 
 Description
 
@@ -44,7 +44,7 @@ Usage
 
 
 % listor ../data/file2 
-Writes a list file of the logical OR of two sets of sequences
+Write a list file of the logical OR of two sets of sequences
 Output file [file1.list]: 
 
    Go to the input files for this example
@@ -56,7 +56,7 @@ Output file [file1.list]:
 
 
 % listor ../data/file2 -operator and 
-Writes a list file of the logical OR of two sets of sequences
+Write a list file of the logical OR of two sets of sequences
 Output file [file1.list]: 
 
    Go to the output files for this example
@@ -67,7 +67,7 @@ Output file [file1.list]:
 
 
 % listor ../data/file2 -operator xor 
-Writes a list file of the logical OR of two sets of sequences
+Write a list file of the logical OR of two sets of sequences
 Output file [file1.list]: 
 
    Go to the output files for this example
@@ -78,7 +78,7 @@ Output file [file1.list]:
 
 
 % listor ../data/file2 -operator not 
-Writes a list file of the logical OR of two sets of sequences
+Write a list file of the logical OR of two sets of sequences
 Output file [file1.list]: 
 
    Go to the output files for this example
@@ -86,8 +86,8 @@ Output file [file1.list]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-firstset]          seqset     Sequence set USA
-  [-secondset]         seqset     Sequence set USA
+  [-firstsequences]    seqset     Sequence set USA
+  [-secondsequences]   seqset     Sequence set USA
   [-outfile]           outfile    The list of sequence names will be written
                                   to this list file
 
@@ -107,61 +107,61 @@ Command line arguments
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
-   "-firstset" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   "-firstsequences" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
-   "-secondset" associated qualifiers
-   -sbegin2             integer    Start of each sequence to be used
-   -send2               integer    End of each sequence to be used
-   -sreverse2           boolean    Reverse (if DNA)
-   -sask2               boolean    Ask for begin/end/reverse
-   -snucleotide2        boolean    Sequence is nucleotide
-   -sprotein2           boolean    Sequence is protein
-   -slower2             boolean    Make lower case
-   -supper2             boolean    Make upper case
-   -sformat2            string     Input sequence format
-   -sdbname2            string     Database name
-   -sid2                string     Entryname
-   -ufo2                string     UFO features
-   -fformat2            string     Features format
-   -fopenfile2          string     Features file name
+   "-secondsequences" associated qualifiers
+   -sbegin2            integer    Start of each sequence to be used
+   -send2              integer    End of each sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory3         string     Output directory
+   -odirectory3        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
    Standard (Mandatory) qualifiers Allowed values Default
-   [-firstset]
+   [-firstsequences]
    (Parameter 1) Sequence set USA Readable set of sequences Required
-   [-secondset]
+   [-secondsequences]
    (Parameter 2) Sequence set USA Readable set of sequences Required
    [-outfile]
    (Parameter 3) The list of sequence names will be written to this list
@@ -288,8 +288,9 @@ Known bugs
 
 See also
 
-   Program name                          Description
+   Program name                         Description
    biosed       Replace or delete sequence sections
+   codcopy      Reads and writes a codon usage table
    cutseq       Removes a specified section from a sequence
    degapseq     Removes gap characters from sequences
    descseq      Alter the name or description of a sequence
@@ -300,13 +301,13 @@ See also
    maskseq      Mask off regions of a sequence
    newseq       Type in a short new sequence
    noreturn     Removes carriage return from ASCII files
-   notseq       Excludes a set of sequences and writes out the remaining ones
+   notseq       Exclude a set of sequences and write out the remaining ones
    nthseq       Writes one sequence from a multiple set of sequences
    pasteseq     Insert one sequence into another
    revseq       Reverse and complement a sequence
    seqret       Reads and writes (returns) sequences
    seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping the first few
+   skipseq      Reads and writes (returns) sequences, skipping first few
    splitter     Split a sequence into (overlapping) smaller sequences
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences

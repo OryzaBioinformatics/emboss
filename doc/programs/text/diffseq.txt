@@ -550,7 +550,7 @@ Output file format
 
 ########################################
 # Program: diffseq
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Report_format: diffseq
 # Report_file: ap000504.diffseq
 # Additional_files: 2
@@ -657,7 +657,7 @@ AF129756 103855-103855 Length: 1
   File: AF129756.diffgff
 
 ##gff-version 2.0
-##date 2004-07-15
+##date 2005-07-15
 ##Type DNA AF129756
 AF129756        diffseq conflict        6882    6882    1.000   +       .
 Sequence "AF129756.1" ; note "SNP in AP000504" ; replace "a"
@@ -863,7 +863,7 @@ Sequence "AF129756.105" ; note "SNP in AP000504" ; replace "c"
   File: AP000504.diffgff
 
 ##gff-version 2.0
-##date 2004-07-15
+##date 2005-07-15
 ##Type DNA AP000504
 AP000504        diffseq conflict        847     847     1.000   +       .
 Sequence "AP000504.1" ; note "SNP in AF129756" ; replace "t"

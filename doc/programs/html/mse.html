@@ -108,6 +108,18 @@ EDIT HERE
         Many examples illustrating different behaviours is good.
  -->
 
+<b>Here is a sample session with mse</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>mse dna.msf msf::mse.msf </b>
+Multiple Sequence Editor
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -120,11 +132,10 @@ EDIT HERE
 <pre>
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     File containing a sequence alignment
+  [-outseq]            seqoutset  Output sequence set USA
 
    Additional (Optional) qualifiers: (none)
-   Advanced (Unprompted) qualifiers:
-   -tmpdir             outdir     Temp directory
-
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
@@ -142,6 +153,18 @@ EDIT HERE
    -ufo1               string     UFO features
    -fformat1           string     Features format
    -fopenfile1         string     Features file name
+
+   "-outseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -176,6 +199,13 @@ EDIT HERE
 <td><b>Required</b></td>
 </tr>
 
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Output sequence set USA</td>
+<td>Writeable sequences</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
@@ -193,10 +223,7 @@ EDIT HERE
 </tr>
 
 <tr>
-<td>-tmpdir</td>
-<td>Temp directory</td>
-<td>Output directory</td>
-<td>/tmp</td>
+<td colspan=4>(none)</td>
 </tr>
 
 </table>
@@ -230,6 +257,36 @@ IT IS DONE FOR YOU.
 <p>
 
 
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: dna.msf</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+!!NA_MULTIPLE_ALIGNMENT
+
+ dna.msf  MSF: 120  Type: N  January 01, 1776  12:00  Check: 3196 ..
+
+ Name: MSFM1          Len:   120  Check:  8587  Weight:  1.00
+ Name: MSFM2          Len:   120  Check:  6178  Weight:  1.00
+ Name: MSFM3          Len:   120  Check:  8431  Weight:  1.00
+
+//
+
+        MSFM1  ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC
+        MSFM2  ACGTACGTAC GTACGTACGT ....ACGTAC GTACGTACGT ACGTACGTAC
+        MSFM3  ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT CGTACGTACG
+
+        MSFM1  GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT
+        MSFM2  GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT
+        MSFM3  TACGTACGTA CGTACGTACG TACGTACGTA ACGTACGTAC GTACGTACGT
+
+        MSFM1  ACGTACGTAC GTACGTACGT
+        MSFM2  ACGTACGTTG CAACGTACGT
+        MSFM3  ACGTACGTAC GTACGTACGT
+
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -239,17 +296,6 @@ IT IS DONE FOR YOU.
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-
-        If you wish to include the standard description of the avalable
-	report formats, use:
-[an error occurred while processing this directive]
-   -->
-
 <b>mse</b> 
 outputs a graph to the specified graphics device. 
 outputs a report format file. The default format is ...
@@ -257,6 +303,39 @@ outputs a report format file. The default format is ...
 
 <p>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: mse.msf</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+!!NA_MULTIPLE_ALIGNMENT 1.0
+
+  mse.msf MSF: 120 Type: N 15/07/05 CompCheck: 2784 ..
+
+  Name: MSFM1      Len: 120  Check: 8587 Weight: 1.00
+  Name: MSFM2      Len: 120  Check: 5766 Weight: 1.00
+  Name: MSFM3      Len: 120  Check: 8431 Weight: 1.00
+
+//
+
+           1                                               50
+MSFM1      ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTAC
+MSFM2      ACGTACGTACGTACGTACGTacgt....ACGTACGTACGTACGTACGTAC
+MSFM3      ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTCGTACGTACG
+
+           51                                             100
+MSFM1      GTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+MSFM2      GTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+MSFM3      TACGTACGTACGTACGTACGTACGTACGTAACGTACGTACGTACGTACGT
+
+           101              120
+MSFM1      ACGTACGTACGTACGTACGT
+MSFM2      ACGTACGTTGCAACGTACGT
+MSFM3      ACGTACGTACGTACGTACGT
+
+</pre>
+</td></tr></table><p>
 
 
 
@@ -275,7 +354,7 @@ outputs a report format file. The default format is ...
 	If you wish to include the standard description of what data
 	files are and how to use embossdata to inspect and retrieve
 	them, use:
-[an error occurred while processing this directive]
+include file="inc/localfiles.ihtml"
    -->
 
 **************** 
@@ -408,7 +487,7 @@ None.
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="../../apps/emma.html">emma</a></td><td>Multiple alignment program - interface to ClustalW program</td></tr>
 <tr><td><a href="../../apps/infoalign.html">infoalign</a></td><td>Information on a multiple sequence alignment</td></tr>
-<tr><td><a href="../../apps/plotcon.html">plotcon</a></td><td>Plots the quality of conservation of a sequence alignment</td></tr>
+<tr><td><a href="../../apps/plotcon.html">plotcon</a></td><td>Plot quality of conservation of a sequence alignment</td></tr>
 <tr><td><a href="../../apps/prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
 <tr><td><a href="../../apps/showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
 <tr><td><a href="../../apps/tranalign.html">tranalign</a></td><td>Align nucleic coding regions given the aligned proteins</td></tr>

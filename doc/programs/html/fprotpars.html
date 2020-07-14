@@ -284,6 +284,222 @@ Trees also written onto file "protpars.treefile"
 </pre></td></tr></table><p>
 <p>
 <a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fprotpars -njumble 3 -seed 3 </b>
+Protein pasimony algorithm
+Input sequence: <b>protpars2.dat</b>
+Input tree file: <b></b>
+Output file [protpars2.fprotpars]: <b></b>
+
+Data set # 1:
+
+
+Adding species:
+   1. Delta     
+   2. Epsilon   
+   3. Alpha     
+   4. Beta      
+   5. Gamma     
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Beta      
+   2. Epsilon   
+   3. Delta     
+   4. Alpha     
+   5. Gamma     
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Epsilon   
+   2. Alpha     
+   3. Gamma     
+   4. Delta     
+   5. Beta      
+
+Doing global rearrangements
+  !---------!
+   .........
+
+Output written to file "protpars2.fprotpars"
+
+Trees also written onto file "protpars2.treefile"
+
+Data set # 2:
+
+
+Adding species:
+   1. Gamma     
+   2. Delta     
+   3. Epsilon   
+   4. Beta      
+   5. Alpha     
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Alpha     
+   2. Delta     
+   3. Epsilon   
+   4. Gamma     
+   5. Beta      
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Epsilon   
+   2. Beta      
+   3. Gamma     
+   4. Alpha     
+   5. Delta     
+
+Doing global rearrangements
+  !---------!
+   .........
+
+Output written to file "protpars2.fprotpars"
+
+Trees also written onto file "protpars2.treefile"
+
+Data set # 3:
+
+
+Adding species:
+   1. Delta     
+   2. Beta      
+   3. Gamma     
+   4. Alpha     
+   5. Epsilon   
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Gamma     
+   2. Delta     
+   3. Beta      
+   4. Epsilon   
+   5. Alpha     
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Epsilon   
+   2. Alpha     
+   3. Gamma     
+   4. Delta     
+   5. Beta      
+
+Doing global rearrangements
+  !---------!
+   .........
+
+Output written to file "protpars2.fprotpars"
+
+Trees also written onto file "protpars2.treefile"
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.3">Go to the input files for this example</a><br><a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fprotpars -option </b>
+Protein pasimony algorithm
+Input sequence: <b>protpars.dat</b>
+Input tree file: <b></b>
+Weights file: <b>protparswts.dat</b>
+Number of times to randomise [0]: <b></b>
+Species number to use as outgroup [0]: <b></b>
+Use threshold parsimony [N]: <b></b>
+Genetic codes
+         U : Universal
+         M : Mitochondrial
+         V : Vertebrate mitochondrial
+         F : Fly mitochondrial
+         Y : Yeast mitochondrial
+Use which genetic code [Universal]: <b></b>
+Output file [protpars.fprotpars]: <b></b>
+Write out trees to tree file [Y]: <b></b>
+Tree file name [protpars.treefile]: <b></b>
+Print data at start of run [N]: <b></b>
+Print indications of progress of run [Y]: <b></b>
+Print out tree [Y]: <b></b>
+Print steps at each site [N]: <b></b>
+Print sequences at all nodes of tree [N]: <b></b>
+
+
+Weights set # 1:
+
+
+Adding species:
+   1. Delta     
+   2. Alpha     
+   3. Gamma     
+   4. Epsilon   
+   5. Beta      
+
+Doing global rearrangements
+  !---------!
+   .........
+
+Output written to file "protpars.fprotpars"
+
+Trees also written onto file "protpars.treefile"
+
+
+Weights set # 2:
+
+
+Adding species:
+   1. Epsilon   
+   2. Alpha     
+   3. Delta     
+   4. Gamma     
+   5. Beta      
+
+Doing global rearrangements
+  !---------!
+   .........
+
+Output written to file "protpars.fprotpars"
+
+Trees also written onto file "protpars.treefile"
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.4">Go to the input files for this example</a><br><a href="#output.4">Go to the output files for this example</a><p><p>
 
 
 
@@ -556,6 +772,42 @@ Epsilon   DIKDEFGHIK
 </pre>
 </td></tr></table><p>
 
+<a name="input.3"></a>
+<h3>Input files for usage example 3</h3>
+<p><h3>File: protpars2.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+    5    10
+Alpha     AABBCCCFHK 
+Beta      AABB---FHK 
+Gamma     ??BBCCCF*? 
+Delta     CCIIKKKFHK 
+Epsilon   DDIIKKKFHK 
+    5    10
+Alpha     AADDEGGIIK 
+Beta      AA--EGGIIK 
+Gamma     ??DDSGG??? 
+Delta     CCDDEGGIIK 
+Epsilon   DDDDEGGIIK 
+    5    10
+Alpha     AACDDDEGHI 
+Beta      AA----EGHI 
+Gamma     ??CDDDSG*? 
+Delta     CCKDDDEGHI 
+Epsilon   DDKDDDEGHI 
+</pre>
+</td></tr></table><p>
+
+<a name="input.4"></a>
+<h3>Input files for usage example 4</h3>
+<p><h3>File: protparswts.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+1111100000
+0000011111
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -573,7 +825,7 @@ Epsilon   DIKDEFGHIK
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-[an error occurred while processing this directive]
+include file="inc/reportformats.ihtml"
    -->
 
 <b>fprotpars</b> output is standard: if option 1 is toggled on, the
@@ -814,6 +1066,282 @@ root     1                AN??EFGHIK
 </pre>
 </td></tr></table><p>
 
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: protpars2.fprotpars</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+Protein parsimony algorithm, version 3.6b
+
+
+Data set # 1:
+
+
+     3 trees in all found
+
+
+
+
+     +--------Gamma     
+     !  
+  +--2     +--Epsilon   
+  !  !  +--4  
+  !  +--3  +--Delta     
+  1     !  
+  !     +-----Beta      
+  !  
+  +-----------Alpha     
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     25.000
+
+
+
+
+           +--Epsilon   
+        +--4  
+     +--3  +--Delta     
+     !  !  
+  +--2  +-----Gamma     
+  !  !  
+  1  +--------Beta      
+  !  
+  +-----------Alpha     
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     25.000
+
+
+
+
+           +--Epsilon   
+     +-----4  
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     +--------Gamma     
+  +--2  
+  !  !  +-----Epsilon   
+  !  +--4  
+  1     !  +--Delta     
+  !     +--3  
+  !        +--Beta      
+  !  
+  +-----------Alpha     
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     24.000
+
+
+
+
+           +--Epsilon   
+        +--4  
+     +--3  +--Delta     
+     !  !  
+  +--2  +-----Gamma     
+  !  !  
+  1  +--------Beta      
+  !  
+  +-----------Alpha     
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     24.000
+
+
+
+
+           +--Epsilon   
+     +-----4  
+     !     +--Delta     
+  +--3  
+  !  !     +--Gamma     
+  1  +-----2  
+  !        +--Beta      
+  !  
+  +-----------Alpha     
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     24.000
+
+</pre>
+</td></tr></table><p>
+<p><h3>File: protpars2.treefile</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+((Gamma,((Epsilon,Delta),Beta)),Alpha)[0.3333];
+((((Epsilon,Delta),Gamma),Beta),Alpha)[0.3333];
+(((Epsilon,Delta),(Gamma,Beta)),Alpha)[0.3333];
+((Gamma,(Delta,(Epsilon,Beta))),Alpha)[0.0667];
+(((Epsilon,Gamma),(Delta,Beta)),Alpha)[0.0667];
+((Gamma,((Epsilon,Delta),Beta)),Alpha)[0.0667];
+((Epsilon,(Gamma,(Delta,Beta))),Alpha)[0.0667];
+((Gamma,(Epsilon,(Delta,Beta))),Alpha)[0.0667];
+(((Delta,Gamma),(Epsilon,Beta)),Alpha)[0.0667];
+(((Delta,(Epsilon,Gamma)),Beta),Alpha)[0.0667];
+((((Epsilon,Delta),Gamma),Beta),Alpha)[0.0667];
+((Epsilon,((Delta,Gamma),Beta)),Alpha)[0.0667];
+(((Epsilon,(Delta,Gamma)),Beta),Alpha)[0.0667];
+((Delta,(Gamma,(Epsilon,Beta))),Alpha)[0.0667];
+((Delta,((Epsilon,Gamma),Beta)),Alpha)[0.0667];
+(((Epsilon,Delta),(Gamma,Beta)),Alpha)[0.0667];
+((Delta,(Epsilon,(Gamma,Beta))),Alpha)[0.0667];
+((Epsilon,(Delta,(Gamma,Beta))),Alpha)[0.0667];
+((Gamma,(Delta,(Epsilon,Beta))),Alpha)[0.2000];
+((Gamma,((Epsilon,Delta),Beta)),Alpha)[0.2000];
+((Gamma,(Epsilon,(Delta,Beta))),Alpha)[0.2000];
+((((Epsilon,Delta),Gamma),Beta),Alpha)[0.2000];
+(((Epsilon,Delta),(Gamma,Beta)),Alpha)[0.2000];
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: protpars.fprotpars</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+Protein parsimony algorithm, version 3.6b
+
+
+
+
+Weights set # 1:
+
+
+     3 trees in all found
+
+
+
+
+     +--------Gamma     
+     !  
+  +--2     +--Epsilon   
+  !  !  +--4  
+  !  +--3  +--Delta     
+  1     !  
+  !     +-----Beta      
+  !  
+  +-----------Alpha     
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     14.000
+
+
+
+
+           +--Epsilon   
+        +--4  
+     +--3  +--Delta     
+     !  !  
+  +--2  +-----Gamma     
+  !  !  
+  1  +--------Beta      
+  !  
+  +-----------Alpha     
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     14.000
+
+
+
+
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+           +--Epsilon   
+     +-----4  
+     !     +--Delta     
+  +--3  
+  !  !     +--Gamma     
+  1  +-----2  
+  !        +--Beta      
+  !  
+  +-----------Alpha     
+
+  remember: this is an unrooted tree!
+
+
+requires a total of      2.000
+
+
+
+
+     +--------Delta     
+  +--3  
+  !  !  +-----Epsilon   
+  !  +--4  
+  1     !  +--Gamma     
+  !     +--2  
+  !        +--Beta      
+  !  
+  +-----------Alpha     
+
+  remember: this is an unrooted tree!
+
+
+requires a total of      2.000
+
+
+
+
+     +--------Epsilon   
+  +--4  
+  !  !  +-----Delta     
+  !  +--3  
+  1     !  +--Gamma     
+  !     +--2  
+  !        +--Beta      
+  !  
+  +-----------Alpha     
+
+  remember: this is an unrooted tree!
+
+
+requires a total of      2.000
+
+</pre>
+</td></tr></table><p>
+<p><h3>File: protpars.treefile</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+((Gamma,((Epsilon,Delta),Beta)),Alpha)[0.3333];
+((((Epsilon,Delta),Gamma),Beta),Alpha)[0.3333];
+(((Epsilon,Delta),(Gamma,Beta)),Alpha)[0.3333];
+((Gamma,(Delta,(Epsilon,Beta))),Alpha)[0.0714];
+(((Epsilon,Gamma),(Delta,Beta)),Alpha)[0.0714];
+((Epsilon,(Gamma,(Delta,Beta))),Alpha)[0.0714];
+((Gamma,(Epsilon,(Delta,Beta))),Alpha)[0.0714];
+(((Delta,Gamma),(Epsilon,Beta)),Alpha)[0.0714];
+(((Delta,(Epsilon,Gamma)),Beta),Alpha)[0.0714];
+((((Epsilon,Delta),Gamma),Beta),Alpha)[0.0714];
+((Epsilon,((Delta,Gamma),Beta)),Alpha)[0.0714];
+(((Epsilon,(Delta,Gamma)),Beta),Alpha)[0.0714];
+((Delta,(Gamma,(Epsilon,Beta))),Alpha)[0.0714];
+((Delta,((Epsilon,Gamma),Beta)),Alpha)[0.0714];
+(((Epsilon,Delta),(Gamma,Beta)),Alpha)[0.0714];
+((Delta,(Epsilon,(Gamma,Beta))),Alpha)[0.0714];
+((Epsilon,(Delta,(Gamma,Beta))),Alpha)[0.0714];
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -938,8 +1466,8 @@ None.
 <tr><td><a href="../phylip/ednacomp.html">ednacomp</a></td><td>DNA compatibility algorithm</td></tr>
 <tr><td><a href="../phylip/ednadist.html">ednadist</a></td><td>Nucleic acid sequence Distance Matrix program</td></tr>
 <tr><td><a href="../phylip/ednainvar.html">ednainvar</a></td><td>Nucleic acid sequence Invariants method</td></tr>
-<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood</td></tr>
-<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood with molecular clock</td></tr>
+<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Phylogenies from nucleic acid Maximum Likelihood</td></tr>
+<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Phylogenies from nucleic acid Maximum Likelihood with clock</td></tr>
 <tr><td><a href="../phylip/ednapars.html">ednapars</a></td><td>DNA parsimony algorithm</td></tr>
 <tr><td><a href="../phylip/ednapenny.html">ednapenny</a></td><td>Penny algorithm for DNA</td></tr>
 <tr><td><a href="../phylip/eprotdist.html">eprotdist</a></td><td>Protein distance algorithm</td></tr>
@@ -961,7 +1489,7 @@ None.
 <tr><td><a href="fpromlk.html">fpromlk</a></td><td>Protein phylogeny by maximum likelihood</td></tr>
 <tr><td><a href="fprotdist.html">fprotdist</a></td><td>Protein distance algorithm</td></tr>
 <tr><td><a href="frestboot.html">frestboot</a></td><td>Bootstrapped restriction sites algorithm</td></tr>
-<tr><td><a href="frestdist.html">frestdist</a></td><td>Computes distance matrix from restriction sites or fragments</td></tr>
+<tr><td><a href="frestdist.html">frestdist</a></td><td>Distance matrix from restriction sites or fragments</td></tr>
 <tr><td><a href="frestml.html">frestml</a></td><td>Restriction site maximum Likelihood method</td></tr>
 <tr><td><a href="fseqboot.html">fseqboot</a></td><td>Bootstrapped sequences algorithm</td></tr>
 <tr><td><a href="fseqbootall.html">fseqbootall</a></td><td>Bootstrapped sequences algorithm</td></tr>

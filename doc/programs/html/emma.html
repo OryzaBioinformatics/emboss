@@ -756,9 +756,9 @@ GCG-Alignment file created      [12345678A]
                                   sequences but will be VERY SLOW for many
                                   (e.g. >100) long (e.g. >1000 residue)
                                   sequences.
-*  -pwgapc             float      The penalty for opening a gap in the
+*  -pwgapopen          float      The penalty for opening a gap in the
                                   pairwise alignments.
-*  -pwgapv             float      The penalty for extending a gap by 1 residue
+*  -pwgapextend        float      The penalty for extending a gap by 1 residue
                                   in the pairwise alignments.
 *  -ktup               integer    This is the size of exactly matching
                                   fragment that is used. INCREASE for speed
@@ -782,10 +782,10 @@ GCG-Alignment file created      [12345678A]
                                   sensitivity.
 *  -nopercent          boolean    Fast pairwise alignment: similarity scores:
                                   suppresses percentage score
-   -gapc               float      The penalty for opening a gap in the
+   -gapopen            float      The penalty for opening a gap in the
                                   alignment. Increasing the gap opening
                                   penalty will make gaps less frequent.
-   -gapv               float      The penalty for extending a gap by 1
+   -gapextend          float      The penalty for extending a gap by 1
                                   residue. Increasing the gap extension
                                   penalty will make gaps shorter. Terminal
                                   gaps are not penalised.
@@ -999,14 +999,14 @@ The slow-accurate method is fine for short sequences but will be VERY SLOW for m
 </tr>
 
 <tr>
-<td>-pwgapc</td>
+<td>-pwgapopen</td>
 <td>The penalty for opening a gap in the pairwise alignments.</td>
 <td>Number 0.000 or more</td>
 <td>10.0</td>
 </tr>
 
 <tr>
-<td>-pwgapv</td>
+<td>-pwgapextend</td>
 <td>The penalty for extending a gap by 1 residue in the pairwise alignments.</td>
 <td>Number 0.000 or more</td>
 <td>0.1</td>
@@ -1048,14 +1048,14 @@ The slow-accurate method is fine for short sequences but will be VERY SLOW for m
 </tr>
 
 <tr>
-<td>-gapc</td>
+<td>-gapopen</td>
 <td>The penalty for opening a gap in the alignment. Increasing the gap opening penalty will make gaps less frequent.</td>
 <td>Positive foating point number</td>
 <td>10.0</td>
 </tr>
 
 <tr>
-<td>-gapv</td>
+<td>-gapextend</td>
 <td>The penalty for extending a gap by 1 residue. Increasing the gap extension penalty will make gaps shorter. Terminal gaps are not penalised.</td>
 <td>Positive foating point number</td>
 <td>5.0</td>
@@ -1495,7 +1495,7 @@ None
     References
 </H2>
 
-The main reference for ClustalW is Thmopsion et al below.
+The main reference for ClustalW is Thompson et al below.
 
 <ol>
 
@@ -1620,7 +1620,12 @@ None.
 
 "cannot find program 'clustalw'" - means that the ClustalW program has
 not been set up on your site or is not in your environment (i.e.  is
-not on your path). 
+not on your path). The solutions are to (1) install clustalw in the
+path so that emma can find it with the command "clustalw", or (2)
+define a variable (an environment variable of in emboss.defaults or
+your .embossrc file) called EMBOSS_CLUSTALW containing the command
+(program name or full path) to run clustalw if you have it elsewhere
+on your system.
 
 <H2>
     Exit status
@@ -1639,7 +1644,7 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="infoalign.html">infoalign</a></td><td>Information on a multiple sequence alignment</td></tr>
-<tr><td><a href="plotcon.html">plotcon</a></td><td>Plots the quality of conservation of a sequence alignment</td></tr>
+<tr><td><a href="plotcon.html">plotcon</a></td><td>Plot quality of conservation of a sequence alignment</td></tr>
 <tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
 <tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
 <tr><td><a href="tranalign.html">tranalign</a></td><td>Align nucleic coding regions given the aligned proteins</td></tr>

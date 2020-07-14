@@ -5,7 +5,7 @@
 
 Function
 
-   Runs nawalign alignment program on all sequence pairs in a directory
+   Nawalign all sequence pairs in a directory
 
 Description
 
@@ -24,9 +24,9 @@ Command line arguments
    Standard (Mandatory) qualifiers:
   [-seqpairsdir]       dirlist    Input directory of files containing sequence
                                   pairs for alignment
-  [-pathtocommand]     directory  Directory where alignment executable lives
+  [-commandpath]       directory  Directory where alignment executable lives
   [-commandname]       string     Name of alignment executable
-  [-scoringmatrixdirname] directory  Directory where scoring matrix lives
+  [-scoringmatrixdir]  directory  Directory where scoring matrix lives
   [-scoringmatrixname] string     Name of alignment scoring matrix
    -gapopen            float      The gap opening penalty is subtracted from
                                   the total score every time a gap is inserted
@@ -73,8 +73,46 @@ Command line arguments
    -die                boolean    Report deaths
 
 
-   Error: File /homes/pmr/local/share/EMBOSS/acd/nawalignrunner.acd line
-   12: (seqpairsdir) Unknown attribute 'name'
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-seqpairsdir]
+   (Parameter 1) Input directory of files containing sequence pairs for
+   alignment Directory with files .
+   [-commandpath]
+   (Parameter 2) Directory where alignment executable lives Directory
+   [-commandname]
+   (Parameter 3) Name of alignment executable Any string is accepted
+   nawalign
+   [-scoringmatrixdir]
+   (Parameter 4) Directory where scoring matrix lives Directory
+   [-scoringmatrixname]
+   (Parameter 5) Name of alignment scoring matrix Any string is accepted
+   EBLOSUM62
+   -gapopen The gap opening penalty is subtracted from the total score
+   every time a gap is inserted in the alignment. The default value is
+   chosen for the EBLOSUM62 scoring matrix when you are aligning protein
+   sequences, and the EDNAFULL matrix when you are aligning nucleotide
+   sequences. If you sequence contains many small errors you should set a
+   low gap opening penalty (near zero) to avoid over-penalizing those
+   errors. Floating point number from 1.0 to 100.0 10.0 for any sequence
+   -gapextend The gap extension penalty is the score substracted when
+   more spaces are added to an existing alignment gap. Often a single
+   insertion or deletion affects multiple residues/nucleotides; separate
+   opening and extension penalties reduce the excessive penalty such
+   events would otherwise carry; generally the gap extension penalty
+   should be significantly lower than the gap opening penalty. Floating
+   point number from 0.0 to 10.0 0.5 for any sequence
+   [-alignedseqsoutdir]
+   (Parameter 6) Name of directory containing sequences aligned by
+   nawalign Output directory
+   [-outfilesuffix]
+   (Parameter 7) Appended to end of all output alignment file names Any
+   string is accepted .nawalign
+   [-outfileformat]
+   (Parameter 8) Format of output alignments Any string is accepted fasta
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
 
 Input file format
 
@@ -119,27 +157,20 @@ Known bugs
 
 See also
 
-   Program name Description
-   alignrunner Runs alignment program on all sequence pairs in a
-   directory
-   contactalign EMBOSS implementation of Damian Counsell's 2.5-D
-   alignment algorithm
-   esim4 Align an mRNA to a genomic DNA sequence
-   est2genome Align EST and genomic DNA sequences
-   nawalign Damian Counsell's implementation for protein sequences of the
-   Needleman and Wunsch alignment algorithm
-   needle Needleman-Wunsch global alignment
-   needlerunner Runs needle alignment program on all sequence pairs in a
-   directory
-   scorer Scores accuracy of protein-protein sequence alignment against
-   gold standard structure-structure alignment
-   scorerrunner Runs scorer to compare ordered pairs of substituted seqs
-   in two directories and write the scores to a third
-   stretcher Finds the best global alignment between two sequences
-   substitute Substitutes matches from first (query) sequence of two
-   aligned sequences in a trace into second (template sequence)
-   substituterunner Runs substitute on directory of traces and writes
-   substituted sequences to another
+     Program name                         Description
+   alignrunner      Align sequence pairs in a directory
+   comparator       Compare contact scores of two sequence alignments
+   contactalign     Damian Counsell's experimental 2.5-D alignment algorithm
+   esim4            Align an mRNA to a genomic DNA sequence
+   est2genome       Align EST and genomic DNA sequences
+   nawalign         Damian Counsell's NW implementation
+   needle           Needleman-Wunsch global alignment
+   needlerunner     Needle all sequence pairs in a directory
+   scorer           Score alignments using structural alignments
+   scorerrunner     SCORER for ordered pairs of substituted seqs
+   stretcher        Finds the best global alignment between two sequences
+   substitute       Substitute matches into a template
+   substituterunner Run SUBSTITUTE on a directory of traces
 
 Author(s)
 

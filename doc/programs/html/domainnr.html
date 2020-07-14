@@ -1,22 +1,25 @@
 <!-- START OF HEADER -->
 <HTML><HEAD>
-<TITLE> EMBOSS: DOMAINNR documentation. </TITLE>
+<TITLE> EMBASSY: DOMAINNR documentation. </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
+
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="../index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="../../emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
 
-<H2> DOMAINNR documentation </H2>
+<H2> DOMAINNR documentation
 </font></b>
 </td></tr>
 </table>
 <br>&nbsp;
 <p>
 
+
+<!-- END OF HEADER -->
 
 
 
@@ -56,7 +59,7 @@
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: all_s.scop</h3>
+<p><h3>File: ../domainseqs-keep/all_s.scop</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   D1CS4A_
@@ -159,7 +162,7 @@ The format of the DCF file is described in the <a href="scopparse.html">SCOPPARS
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: all_s.scop</h3>
+<p><h3>File: ../domainseqs-keep/all_s.scop</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   D1CS4A_
@@ -247,35 +250,6 @@ The format of the DCF file is described in the <a href="scopparse.html">SCOPPARS
 <p><h3>File: all_nr.scop</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-ID   D1CS4A_
-XX
-EN   1CS4
-XX
-TY   SCOP
-XX
-SI   53931 CL; 54861 FO; 55073 SF; 55074 FA; 55077 DO; 55078 SO; 39418 DD;
-XX
-CL   Alpha and beta proteins (a+b)
-XX
-FO   Ferredoxin-like
-XX
-SF   Adenylyl and guanylyl cyclase catalytic domain
-XX
-FA   Adenylyl and guanylyl cyclase catalytic domain
-XX
-DO   Adenylyl cyclase VC1, domain C1a
-XX
-OS   Dog (Canis familiaris)
-XX
-DS   SEQUENCE    52 AA;   5817 MW;  47362A43 CRC32;
-     ADIEGFTSLA SQCTAQELVM TLNELFARFD KLAAENHCLR IKILGDCYYC VS
-XX
-NC   1
-XX
-CN   [1]
-XX
-CH   A CHAIN; . START; . END;
-//
 ID   D1II7A_
 XX
 EN   1II7
@@ -311,16 +285,13 @@ CH   A CHAIN; . START; . END;
 <p><h3>File: domainnr.log</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Families are non-redundant
-95% redundancy threshold
-// Adenylyl and guanylyl cyclase catalytic domain
-Retained
-D1CS4A_
-Rejected
-// DNA double-strand break repair nuclease
+Classes are non-redundant
+5% redundancy threshold
+// Alpha and beta proteins (a+b)
 Retained
 D1II7A_
 Rejected
+D1CS4A_
 </pre>
 </td></tr></table><p>
 
@@ -425,7 +396,7 @@ DOMAINNR requires a residue substitution matrix.
                                   by using SCOPPARSE and CATHPARSE. Domain
                                   sequence information can be added to the
                                   file by using DOMAINSEQS.
-   -errfile            outfile    This option specifies the name of log file
+   -logfile            outfile    This option specifies the name of log file
                                   for the build. The log file contains
                                   messages about any errors arising while
                                   domainnr ran.
@@ -448,14 +419,7 @@ DOMAINNR requires a residue substitution matrix.
                                   Usually you will expect a few long gaps
                                   rather than many short gaps, so the gap
                                   extension penalty should be lower than the
-                                  gap penalty. An exception is where one or
-                                  both sequences are single reads with
-                                  possible sequencing errors in which case you
-                                  would expect many single base gaps. You can
-                                  get this result by setting the gap open
-                                  penalty to zero (or very low) and using the
-                                  gap extension penalty to control gap
-                                  scoring.
+                                  gap penalty.
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -466,7 +430,7 @@ DOMAINNR requires a residue substitution matrix.
    "-redoutfile" associated qualifiers
    -odirectory         string     Output directory
 
-   "-errfile" associated qualifiers
+   "-logfile" associated qualifiers
    -odirectory         string     Output directory
 
    General qualifiers:
@@ -559,7 +523,7 @@ DOMAINNR requires a residue substitution matrix.
 </tr>
 
 <tr>
-<td>-errfile</td>
+<td>-logfile</td>
 <td>This option specifies the name of log file for the build. The log file contains messages about any errors arising while domainnr ran.</td>
 <td>Output file</td>
 <td>domainnr.log</td>
@@ -587,7 +551,7 @@ DOMAINNR requires a residue substitution matrix.
 
 <tr>
 <td>-gapextend</td>
-<td>This option specifies the gap extension penalty. This is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring.</td>
+<td>This option specifies the gap extension penalty. This is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty.</td>
 <td>Floating point number from 0.0 to 10.0</td>
 <td>0.5 for any sequence</td>
 </tr>
@@ -615,10 +579,8 @@ An example of interactive use of DOMAINNR is shown below.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>domainnr </b>
-Removes redundant domains from a DCF file (domain classification file). The
-file must contain domain sequence information, which can be added by using
-DOMAINSEQS.
-Name of DCF file (domain classification file) (input).: <b>all_s.scop</b>
+Removes redundant domains from a DCF file.
+Name of DCF file (domain classification file) (input).: <b>../domainseqs-keep/all_s.scop</b>
 Write redundant domains to separate file. [N]: <b></b>
 Node at which to remove redundancy
          1 : Class (SCOP)
@@ -630,18 +592,18 @@ Node at which to remove redundancy
          7 : Topology (CATH)
          8 : Homologous Superfamily (CATH)
          9 : Family (CATH)
-Select number. [1]: <b>4</b>
+Select number. [1]: <b>1</b>
 Redundancy removal options
          1 : Remove redundancy at a single threshold % sequence similarity
          2 : Remove redundancy outside a range of acceptable threshold % similarity
 Select number. [1]: <b>1</b>
-The % sequence identity redundancy threshold. [95.0]: <b></b>
+The % sequence identity redundancy threshold. [95.0]: <b>5</b>
 Name of non-redundant DCF file (domain classification file) (output) [test.scop]: <b>all_nr.scop</b>
 Name of log file for the build. [domainnr.log]: <b></b>
+Warning: Bad args passed to ajDomainWrite
 
-// Adenylyl and guanylyl cyclase catalytic domain
+// Alpha and beta proteins (a+b)
 D1CS4A_
-// DNA double-strand break repair nuclease
 D1II7A_
 
 </pre></td></tr></table><p>
@@ -650,12 +612,7 @@ D1II7A_
 
 
 <br><br>
-The DCF file /test_data/all_s.scop with families containing
-redundant domains was read and a DCF file called 
-/test_data/domainnr/all_nr.scop was written in which redundant domains were removed
-from each family.  A redundant domain was one sharing at least 95% sequence
-similarity to another domain.  Redundant domains were not retained. The log file 
-/test_data/domainnr/domainnr.log was written.
+<!-- The DCF file /test_data/all_s.scop with families containing redundant domains was read and a DCF file called /test_data/domainnr/all_nr.scop was written in which redundant domains were removed from each family.  A redundant domain was one sharing at least 95% sequence similarity to another domain.  Redundant domains were not retained. The log file /test_data/domainnr/domainnr.log was written. -->
 
 
 
@@ -709,6 +666,9 @@ to the same family will be non-redundant.
 <td> Domain sequence information can be added to the file by using DOMAINSEQS.  </td>
 </tr>
 </table>
+
+
+
 
 
 
@@ -767,30 +727,32 @@ function embAlignCalcSimilarity.
      are in some other way related to the application are described here. 
      (Take this from "Sister applications" in the old documentation)
 -->
+
 <a name="11.0"></a>
 <br><br><br><H2> 11.0  RELATED APPLICATIONS      </H2>
+
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="../../apps/aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
-<tr><td><a href="allversusall.html">allversusall</a></td><td>Does an all-versus-all global alignment for each set of sequences in an input directory and writes files of sequence similarity values</td></tr>
-<tr><td><a href="cathparse.html">cathparse</a></td><td>Reads raw CATH classification files and writes DCF file (domain classification file)</td></tr>
+<tr><td><a href="../domalign/allversusall.html">allversusall</a></td><td>Sequence similarity data from all-versus-all comparison</td></tr>
+<tr><td><a href="cathparse.html">cathparse</a></td><td>Generates DCF file from raw CATH files</td></tr>
 <tr><td><a href="../../apps/cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="domainer.html">domainer</a></td><td>Reads CCF files (clean coordinate files) for proteins and writes CCF files for domains, taken from a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainsse.html">domainsse</a></td><td>Adds secondary structure records to a DCF file (domain classification file)</td></tr>
-<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in EMBL-like format</td></tr>
-<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes CCF files (clean coordinate files) for proteins</td></tr>
-<tr><td><a href="pdbplus.html">pdbplus</a></td><td>Add residue solvent accessibility and secondary structure data to a CCF file (clean coordinate file) for a protein or domain</td></tr>
-<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:PDB equivalence file to EMBL-like format</td></tr>
+<tr><td><a href="../structure/domainer.html">domainer</a></td><td>Generates domain CCF files from protein CCF files</td></tr>
+<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file</td></tr>
+<tr><td><a href="domainsse.html">domainsse</a></td><td>Add secondary structure records to a DCF file</td></tr>
+<tr><td><a href="../structure/hetparse.html">hetparse</a></td><td>Converts heterogen group dictionary to EMBL-like format</td></tr>
+<tr><td><a href="../structure/pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes protein CCF files</td></tr>
+<tr><td><a href="../structure/pdbplus.html">pdbplus</a></td><td>Add accessibility & secondary structure to a CCF file</td></tr>
+<tr><td><a href="../structure/pdbtosp.html">pdbtosp</a></td><td>Convert swissprot:PDB codes file to EMBL-like format</td></tr>
 <tr><td><a href="../../apps/printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
-<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Build the PROSITE motif database for use by patmatmotifs</td></tr>
 <tr><td><a href="../../apps/rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
-<tr><td><a href="scopparse.html">scopparse</a></td><td>Reads raw SCOP classification files and writes a DCF file (domain classification file)</td></tr>
-<tr><td><a href="seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files (domain hits files) or other files of sequences</td></tr>
-<tr><td><a href="sites.html">sites</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of residue-ligand contact data for domains in a DCF file (domain classification file)</td></tr>
-<tr><td><a href="ssematch.html">ssematch</a></td><td>Searches a DCF file (domain classification file) for secondary structure matches</td></tr>
+<tr><td><a href="scopparse.html">scopparse</a></td><td>Generate DCF file from raw SCOP files</td></tr>
+<tr><td><a href="../domsearch/seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files</td></tr>
+<tr><td><a href="../structure/sites.html">sites</a></td><td>Generate residue-ligand CON files from CCF files</td></tr>
+<tr><td><a href="ssematch.html">ssematch</a></td><td>Search a DCF file for secondary structure matches</td></tr>
 <tr><td><a href="../../apps/tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
 </table>
 
@@ -801,20 +763,8 @@ function embAlignCalcSimilarity.
 -->
 <a name="12.0"></a>
 <br><br><br><H2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2>
+DOMAINNR generates a log file an excerpt of which is shown in Figure 1. The first two lines give the level in the SCOP or CATH hierarchy at which redundancy was removed (e.g. 'Families') and the value of the redundancy threshold.  The file then contains a section for each node, e.g. each family. Each section contains a line with the record '//' immediately followed by the name of the node (family in this case), and two lines containing 'Retained' and 'Rejected' respectively. Domain identifier codes of domains that appear in output file are listed under 'Retained', while redundant domains are listed under 'Rejected'. Tthese will be saved in a second output file if the user has specified redundant domains to be retained. The text  'ERROR filename file read error' will be given when an error was encountered during a file read.
 
-DOMAINNR generates a log file an excerpt of which is shown in Figure
-1. The first two lines give the level in the SCOP or CATH hierarchy at
-which redundancy was removed (e.g. 'Families') and the value of the
-redundancy threshold.  The file then contains a section for each node,
-e.g.  each family. Each section contains a line with the record '//'
-immediately followed by the name of the node (family in this case),
-and two lines containing 'Retained' and 'Rejected'
-respectively. Domain identifier codes of domains that appear in output
-file are listed under 'Retained', while redundant domains are listed
-under 'Rejected'.  Tthese will be saved in a second output file if the
-user has specified redundant domains to be retained.  The text 'ERROR
-filename file read error' will be given when an error was encountered
-during a file read.
 
 <br><br><b>Figure 1  Summary of ROCPLOT output </b>
 <table><td bgcolor="#FFCCFF">

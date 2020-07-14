@@ -202,7 +202,25 @@ order of these pairs in the input tree file, in odd ways.
         Many examples illustrating different behaviours is good.
  -->
 
-No qa tests were found for ftreedistpair
+<b>Here is a sample session with ftreedistpair</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>ftreedistpair -style s </b>
+Distances between two sets of trees
+Tree file: <b>treedist.dat</b>
+Second input tree file: <b>treedist.dat</b>
+Output file [treedist.ftreedistpair]: <b></b>
+
+Done.
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
 
 
 
@@ -213,13 +231,16 @@ No qa tests were found for ftreedistpair
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-intreefile]        infile     Tree file
-  [-bintreefile]       infile     Second input tree file
-   -pairing            menu       Tree pairing method
-   -style              menu       Distances output option
+  [-intreefile]        tree       Tree file
+  [-bintreefile]       tree       Second input tree file
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers:
+   -dtype              menu       Distance type
+   -pairing            menu       Tree pairing method
+   -style              menu       Distances output option
+   -noroot             boolean    Trees to be treated as rooted
+   -outgrno            integer    Species number to use as outgroup
    -progress           boolean    Print indications of progress of run
 
    Advanced (Unprompted) qualifiers: (none)
@@ -257,29 +278,15 @@ No qa tests were found for ftreedistpair
 <tr>
 <td>[-intreefile]<br>(Parameter 1)</td>
 <td>Tree file</td>
-<td>Input file</td>
-<td><b>Required</b></td>
+<td>Phylogenetic tree</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
 <td>[-bintreefile]<br>(Parameter 2)</td>
 <td>Second input tree file</td>
-<td>Input file</td>
-<td><b>Required</b></td>
-</tr>
-
-<tr>
-<td>-pairing</td>
-<td>Tree pairing method</td>
-<td><table><tr><td>Adjacent</td> <td><i>(Distances between adjacent pairs in tree file)</i></td></tr><tr><td>Pairs</td> <td><i>(Distances between all possible pairs in tree file)</i></td></tr><tr><td>Correspond</td> <td><i>(Distances between corresponding pairs in one tree file and another)</i></td></tr><tr><td>ListAll</td> <td><i>(Distances between all pairs in one tree file and another)</i></td></tr></table></td>
-<td>Adjacent</td>
-</tr>
-
-<tr>
-<td>-style</td>
-<td>Distances output option</td>
-<td><table><tr><td>Full</td> <td><i>(Full_matrix)</i></td></tr><tr><td>Verbose</td> <td><i>(One pair per line)</i></td></tr><tr><td>Sparse</td> <td><i>(One pair per line)</i></td></tr></table></td>
-<td>Verbose</td>
+<td>Phylogenetic tree</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
@@ -293,6 +300,41 @@ No qa tests were found for ftreedistpair
 <th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-dtype</td>
+<td>Distance type</td>
+<td><table><tr><td>s</td> <td><i>(Symmetric difference)</i></td></tr><tr><td>b</td> <td><i>(Branch score distance)</i></td></tr></table></td>
+<td>b</td>
+</tr>
+
+<tr>
+<td>-pairing</td>
+<td>Tree pairing method</td>
+<td><table><tr><td>c</td> <td><i>(Distances between corresponding pairs each tree file)</i></td></tr><tr><td>l</td> <td><i>(Distances between all possible pairs in each tree file)</i></td></tr></table></td>
+<td>l</td>
+</tr>
+
+<tr>
+<td>-style</td>
+<td>Distances output option</td>
+<td><table><tr><td>f</td> <td><i>(Full_matrix)</i></td></tr><tr><td>v</td> <td><i>(One pair per line, verbose)</i></td></tr><tr><td>s</td> <td><i>(One pair per line, sparese)</i></td></tr></table></td>
+<td>v</td>
+</tr>
+
+<tr>
+<td>-noroot</td>
+<td>Trees to be treated as rooted</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-outgrno</td>
+<td>Species number to use as outgroup</td>
+<td>Integer 0 or more</td>
+<td>0</td>
 </tr>
 
 <tr>
@@ -352,7 +394,39 @@ to be examined!
 
 <p>
 
-No qa tests were found for ftreedistpair
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: treedist.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+(A:0.1,(B:0.1,(H:0.1,(D:0.1,(J:0.1,(((G:0.1,E:0.1):0.1,(F:0.1,I:0.1):0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(D:0.1,((J:0.1,H:0.1):0.1,(((G:0.1,E:0.1):0.1,
+(F:0.1,I:0.1):0.1):0.1,C:0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(D:0.1,(H:0.1,(J:0.1,(((G:0.1,E:0.1):0.1,(F:0.1,I:0.1):0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,(G:0.1,((F:0.1,I:0.1):0.1,((J:0.1,(H:0.1,D:0.1):0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,(G:0.1,((F:0.1,I:0.1):0.1,(((J:0.1,H:0.1):0.1,D:0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,((F:0.1,I:0.1):0.1,(G:0.1,((J:0.1,(H:0.1,D:0.1):0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,((F:0.1,I:0.1):0.1,(G:0.1,(((J:0.1,H:0.1):0.1,D:0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,((G:0.1,(F:0.1,I:0.1):0.1):0.1,((J:0.1,(H:0.1,
+D:0.1):0.1):0.1,C:0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,((G:0.1,(F:0.1,I:0.1):0.1):0.1,(((J:0.1,H:0.1):0.1,
+D:0.1):0.1,C:0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,(G:0.1,((F:0.1,I:0.1):0.1,((J:0.1,(H:0.1,D:0.1):0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(D:0.1,(H:0.1,(J:0.1,(((G:0.1,E:0.1):0.1,(F:0.1,I:0.1):0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,((G:0.1,(F:0.1,I:0.1):0.1):0.1,((J:0.1,(H:0.1,
+D:0.1):0.1):0.1,C:0.1):0.1):0.1):0.1):0.1);
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -370,7 +444,7 @@ No qa tests were found for ftreedistpair
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-[an error occurred while processing this directive]
+include file="inc/reportformats.ihtml"
    -->
 
 If any of the four types of analysis are selected, the user must
@@ -477,7 +551,120 @@ output for the example trees.
 
 <p>
 
-No qa tests were found for ftreedistpair
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: treedist.ftreedistpair</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+1 13 0.000000e+00
+1 14 4.000000e-02
+1 15 2.000000e-02
+1 16 1.000000e-01
+1 17 1.000000e-01
+1 18 1.000000e-01
+1 19 1.000000e-01
+1 20 1.000000e-01
+1 21 1.000000e-01
+1 22 1.000000e-01
+1 23 2.000000e-02
+1 24 1.000000e-01
+2 13 4.000000e-02
+2 14 0.000000e+00
+2 15 2.000000e-02
+2 16 1.000000e-01
+2 17 8.000000e-02
+2 18 1.000000e-01
+2 19 8.000000e-02
+2 20 1.000000e-01
+2 21 8.000000e-02
+2 22 1.000000e-01
+2 23 2.000000e-02
+2 24 1.000000e-01
+3 13 2.000000e-02
+3 14 2.000000e-02
+3 15 0.000000e+00
+3 16 1.000000e-01
+3 17 1.000000e-01
+3 18 1.000000e-01
+3 19 1.000000e-01
+3 20 1.000000e-01
+3 21 1.000000e-01
+3 22 1.000000e-01
+3 23 0.000000e+00
+3 24 1.000000e-01
+4 13 1.000000e-01
+4 14 1.000000e-01
+4 15 1.000000e-01
+4 16 0.000000e+00
+4 17 2.000000e-02
+4 18 2.000000e-02
+4 19 4.000000e-02
+4 20 2.000000e-02
+4 21 4.000000e-02
+4 22 0.000000e+00
+4 23 1.000000e-01
+4 24 2.000000e-02
+5 13 1.000000e-01
+5 14 8.000000e-02
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+20 10 2.000000e-02
+20 11 1.000000e-01
+20 12 0.000000e+00
+21 1 1.000000e-01
+21 2 8.000000e-02
+21 3 1.000000e-01
+21 4 4.000000e-02
+21 5 2.000000e-02
+21 6 4.000000e-02
+21 7 2.000000e-02
+21 8 2.000000e-02
+21 9 0.000000e+00
+21 10 4.000000e-02
+21 11 1.000000e-01
+21 12 2.000000e-02
+22 1 1.000000e-01
+22 2 1.000000e-01
+22 3 1.000000e-01
+22 4 0.000000e+00
+22 5 2.000000e-02
+22 6 2.000000e-02
+22 7 4.000000e-02
+22 8 2.000000e-02
+22 9 4.000000e-02
+22 10 0.000000e+00
+22 11 1.000000e-01
+22 12 2.000000e-02
+23 1 2.000000e-02
+23 2 2.000000e-02
+23 3 0.000000e+00
+23 4 1.000000e-01
+23 5 1.000000e-01
+23 6 1.000000e-01
+23 7 1.000000e-01
+23 8 1.000000e-01
+23 9 1.000000e-01
+23 10 1.000000e-01
+23 11 0.000000e+00
+23 12 1.000000e-01
+24 1 1.000000e-01
+24 2 1.000000e-01
+24 3 1.000000e-01
+24 4 2.000000e-02
+24 5 4.000000e-02
+24 6 2.000000e-02
+24 7 4.000000e-02
+24 8 0.000000e+00
+24 9 2.000000e-02
+24 10 2.000000e-02
+24 11 1.000000e-01
+24 12 0.000000e+00
+</pre>
+</td></tr></table><p>
+
 
 
 

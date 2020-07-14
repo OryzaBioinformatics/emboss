@@ -675,9 +675,9 @@ Command line arguments
                                   sequences but will be VERY SLOW for many
                                   (e.g. >100) long (e.g. >1000 residue)
                                   sequences.
-*  -pwgapc             float      The penalty for opening a gap in the
+*  -pwgapopen          float      The penalty for opening a gap in the
                                   pairwise alignments.
-*  -pwgapv             float      The penalty for extending a gap by 1 residue
+*  -pwgapextend        float      The penalty for extending a gap by 1 residue
                                   in the pairwise alignments.
 *  -ktup               integer    This is the size of exactly matching
                                   fragment that is used. INCREASE for speed
@@ -701,10 +701,10 @@ Command line arguments
                                   sensitivity.
 *  -nopercent          boolean    Fast pairwise alignment: similarity scores:
                                   suppresses percentage score
-   -gapc               float      The penalty for opening a gap in the
+   -gapopen            float      The penalty for opening a gap in the
                                   alignment. Increasing the gap opening
                                   penalty will make gaps less frequent.
-   -gapv               float      The penalty for extending a gap by 1
+   -gapextend          float      The penalty for extending a gap by 1
                                   residue. Increasing the gap extension
                                   penalty will make gaps shorter. Terminal
                                   gaps are not penalised.
@@ -895,10 +895,10 @@ Command line arguments
    (extremely fast but approximate). The slow-accurate method is fine for
    short sequences but will be VERY SLOW for many (e.g. >100) long (e.g.
    >1000 residue) sequences. Toggle value Yes/No Yes
-   -pwgapc The penalty for opening a gap in the pairwise alignments.
+   -pwgapopen The penalty for opening a gap in the pairwise alignments.
    Number 0.000 or more 10.0
-   -pwgapv The penalty for extending a gap by 1 residue in the pairwise
-   alignments. Number 0.000 or more 0.1
+   -pwgapextend The penalty for extending a gap by 1 residue in the
+   pairwise alignments. Number 0.000 or more 0.1
    -ktup This is the size of exactly matching fragment that is used.
    INCREASE for speed (max= 2 for proteins; 4 for DNA), DECREASE for
    sensitivity. For longer sequences (e.g. >1000 residues) you may need
@@ -917,12 +917,12 @@ Command line arguments
    sensitivity. Positive integer 5 for protein, 4 for nucleic
    -nopercent Fast pairwise alignment: similarity scores: suppresses
    percentage score Boolean value Yes/No No
-   -gapc The penalty for opening a gap in the alignment. Increasing the
-   gap opening penalty will make gaps less frequent. Positive foating
+   -gapopen The penalty for opening a gap in the alignment. Increasing
+   the gap opening penalty will make gaps less frequent. Positive foating
    point number 10.0
-   -gapv The penalty for extending a gap by 1 residue. Increasing the gap
-   extension penalty will make gaps shorter. Terminal gaps are not
-   penalised. Positive foating point number 5.0
+   -gapextend The penalty for extending a gap by 1 residue. Increasing
+   the gap extension penalty will make gaps shorter. Terminal gaps are
+   not penalised. Positive foating point number 5.0
    -[no]endgaps End gap separation: treats end gaps just like internal
    gaps for the purposes of avoiding gaps that are too close (set by 'gap
    separation distance'). If you turn this off, end gaps will be ignored
@@ -1221,7 +1221,7 @@ Notes
 
 References
 
-   The main reference for ClustalW is Thmopsion et al below.
+   The main reference for ClustalW is Thompson et al below.
     1. Thompson, J.D., Higgins, D.G. and Gibson, T.J. (1994) "CLUSTAL W:
        improving the sensitivity of progressive multiple sequence
        alignment through sequence weighting, positions-specific gap
@@ -1303,7 +1303,12 @@ Diagnostic Error Messages
 
    "cannot find program 'clustalw'" - means that the ClustalW program has
    not been set up on your site or is not in your environment (i.e. is
-   not on your path).
+   not on your path). The solutions are to (1) install clustalw in the
+   path so that emma can find it with the command "clustalw", or (2)
+   define a variable (an environment variable of in emboss.defaults or
+   your .embossrc file) called EMBOSS_CLUSTALW containing the command
+   (program name or full path) to run clustalw if you have it elsewhere
+   on your system.
 
 Exit status
 
@@ -1315,9 +1320,9 @@ Known bugs
 
 See also
 
-   Program name                        Description
+   Program name                       Description
    infoalign    Information on a multiple sequence alignment
-   plotcon      Plots the quality of conservation of a sequence alignment
+   plotcon      Plot quality of conservation of a sequence alignment
    prettyplot   Displays aligned sequences, with colouring and boxing
    showalign    Displays a multiple sequence alignment
    tranalign    Align nucleic coding regions given the aligned proteins

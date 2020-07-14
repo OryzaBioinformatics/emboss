@@ -26,7 +26,7 @@ prosextract
 <H2>
     Function
 </H2>
-Builds the PROSITE motif database for patmatmotifs to search
+Build the PROSITE motif database for use by patmatmotifs
 
 
 <H2>
@@ -49,7 +49,7 @@ be called 'prosite.lines'.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>prosextract </b>
-Builds the PROSITE motif database for patmatmotifs to search
+Build the PROSITE motif database for use by patmatmotifs
 Name of prosite directory [.]: <b></b>
 
 </pre></td></tr></table><p>
@@ -70,25 +70,25 @@ created after prosextract is run.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-infdat]            directory  Name of prosite directory
+  [-prositedir]        directory  Name of prosite directory
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers: (none)
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
@@ -103,7 +103,7 @@ created after prosextract is run.
 </tr>
 
 <tr>
-<td>[-infdat]<br>(Parameter 1)</td>
+<td>[-prositedir]<br>(Parameter 1)</td>
 <td>Name of prosite directory</td>
 <td>Directory</td>
 <td>&nbsp;</td>

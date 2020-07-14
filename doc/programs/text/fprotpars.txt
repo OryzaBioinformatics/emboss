@@ -211,6 +211,214 @@ Trees also written onto file "protpars.treefile"
 
    Go to the output files for this example
 
+   Example 3
+
+
+% fprotpars -njumble 3 -seed 3 
+Protein pasimony algorithm
+Input sequence: protpars2.dat
+Input tree file: 
+Output file [protpars2.fprotpars]: 
+
+Data set # 1:
+
+
+Adding species:
+   1. Delta
+   2. Epsilon
+   3. Alpha
+   4. Beta
+   5. Gamma
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Beta
+   2. Epsilon
+   3. Delta
+   4. Alpha
+   5. Gamma
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Epsilon
+   2. Alpha
+   3. Gamma
+   4. Delta
+   5. Beta
+
+Doing global rearrangements
+  !---------!
+   .........
+
+Output written to file "protpars2.fprotpars"
+
+Trees also written onto file "protpars2.treefile"
+
+Data set # 2:
+
+
+Adding species:
+   1. Gamma
+   2. Delta
+   3. Epsilon
+   4. Beta
+   5. Alpha
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Alpha
+   2. Delta
+   3. Epsilon
+   4. Gamma
+   5. Beta
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Epsilon
+   2. Beta
+   3. Gamma
+   4. Alpha
+   5. Delta
+
+Doing global rearrangements
+  !---------!
+   .........
+
+Output written to file "protpars2.fprotpars"
+
+Trees also written onto file "protpars2.treefile"
+
+Data set # 3:
+
+
+Adding species:
+   1. Delta
+   2. Beta
+   3. Gamma
+   4. Alpha
+   5. Epsilon
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Gamma
+   2. Delta
+   3. Beta
+   4. Epsilon
+   5. Alpha
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Epsilon
+   2. Alpha
+   3. Gamma
+   4. Delta
+   5. Beta
+
+Doing global rearrangements
+  !---------!
+   .........
+
+Output written to file "protpars2.fprotpars"
+
+Trees also written onto file "protpars2.treefile"
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 4
+
+
+% fprotpars -option 
+Protein pasimony algorithm
+Input sequence: protpars.dat
+Input tree file: 
+Weights file: protparswts.dat
+Number of times to randomise [0]: 
+Species number to use as outgroup [0]: 
+Use threshold parsimony [N]: 
+Genetic codes
+         U : Universal
+         M : Mitochondrial
+         V : Vertebrate mitochondrial
+         F : Fly mitochondrial
+         Y : Yeast mitochondrial
+Use which genetic code [Universal]: 
+Output file [protpars.fprotpars]: 
+Write out trees to tree file [Y]: 
+Tree file name [protpars.treefile]: 
+Print data at start of run [N]: 
+Print indications of progress of run [Y]: 
+Print out tree [Y]: 
+Print steps at each site [N]: 
+Print sequences at all nodes of tree [N]: 
+
+
+Weights set # 1:
+
+
+Adding species:
+   1. Delta
+   2. Alpha
+   3. Gamma
+   4. Epsilon
+   5. Beta
+
+Doing global rearrangements
+  !---------!
+   .........
+
+Output written to file "protpars.fprotpars"
+
+Trees also written onto file "protpars.treefile"
+
+
+Weights set # 2:
+
+
+Adding species:
+   1. Epsilon
+   2. Alpha
+   3. Delta
+   4. Gamma
+   5. Beta
+
+Doing global rearrangements
+  !---------!
+   .........
+
+Output written to file "protpars.fprotpars"
+
+Trees also written onto file "protpars.treefile"
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -328,6 +536,36 @@ Beta      AB--EFGHIK
 Gamma     ?BCDSFG*??
 Delta     CIKDEFGHIK
 Epsilon   DIKDEFGHIK
+
+  Input files for usage example 3
+
+  File: protpars2.dat
+
+    5    10
+Alpha     AABBCCCFHK
+Beta      AABB---FHK
+Gamma     ??BBCCCF*?
+Delta     CCIIKKKFHK
+Epsilon   DDIIKKKFHK
+    5    10
+Alpha     AADDEGGIIK
+Beta      AA--EGGIIK
+Gamma     ??DDSGG???
+Delta     CCDDEGGIIK
+Epsilon   DDDDEGGIIK
+    5    10
+Alpha     AACDDDEGHI
+Beta      AA----EGHI
+Gamma     ??CDDDSG*?
+Delta     CCKDDDEGHI
+Epsilon   DDKDDDEGHI
+
+  Input files for usage example 4
+
+  File: protparswts.dat
+
+1111100000
+0000011111
 
 Output file format
 
@@ -552,6 +790,270 @@ root     1                AN??EFGHIK
 (Beta,(((Epsilon,Delta),Gamma),Alpha))[0.3333];
 (Beta,((Epsilon,Delta),(Gamma,Alpha)))[0.3333];
 
+  Output files for usage example 3
+
+  File: protpars2.fprotpars
+
+
+Protein parsimony algorithm, version 3.6b
+
+
+Data set # 1:
+
+
+     3 trees in all found
+
+
+
+
+     +--------Gamma
+     !
+  +--2     +--Epsilon
+  !  !  +--4
+  !  +--3  +--Delta
+  1     !
+  !     +-----Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     25.000
+
+
+
+
+           +--Epsilon
+        +--4
+     +--3  +--Delta
+     !  !
+  +--2  +-----Gamma
+  !  !
+  1  +--------Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     25.000
+
+
+
+
+           +--Epsilon
+     +-----4
+
+
+  [Part of this file has been deleted for brevity]
+
+     +--------Gamma
+  +--2
+  !  !  +-----Epsilon
+  !  +--4
+  1     !  +--Delta
+  !     +--3
+  !        +--Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     24.000
+
+
+
+
+           +--Epsilon
+        +--4
+     +--3  +--Delta
+     !  !
+  +--2  +-----Gamma
+  !  !
+  1  +--------Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     24.000
+
+
+
+
+           +--Epsilon
+     +-----4
+     !     +--Delta
+  +--3
+  !  !     +--Gamma
+  1  +-----2
+  !        +--Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     24.000
+
+  File: protpars2.treefile
+
+((Gamma,((Epsilon,Delta),Beta)),Alpha)[0.3333];
+((((Epsilon,Delta),Gamma),Beta),Alpha)[0.3333];
+(((Epsilon,Delta),(Gamma,Beta)),Alpha)[0.3333];
+((Gamma,(Delta,(Epsilon,Beta))),Alpha)[0.0667];
+(((Epsilon,Gamma),(Delta,Beta)),Alpha)[0.0667];
+((Gamma,((Epsilon,Delta),Beta)),Alpha)[0.0667];
+((Epsilon,(Gamma,(Delta,Beta))),Alpha)[0.0667];
+((Gamma,(Epsilon,(Delta,Beta))),Alpha)[0.0667];
+(((Delta,Gamma),(Epsilon,Beta)),Alpha)[0.0667];
+(((Delta,(Epsilon,Gamma)),Beta),Alpha)[0.0667];
+((((Epsilon,Delta),Gamma),Beta),Alpha)[0.0667];
+((Epsilon,((Delta,Gamma),Beta)),Alpha)[0.0667];
+(((Epsilon,(Delta,Gamma)),Beta),Alpha)[0.0667];
+((Delta,(Gamma,(Epsilon,Beta))),Alpha)[0.0667];
+((Delta,((Epsilon,Gamma),Beta)),Alpha)[0.0667];
+(((Epsilon,Delta),(Gamma,Beta)),Alpha)[0.0667];
+((Delta,(Epsilon,(Gamma,Beta))),Alpha)[0.0667];
+((Epsilon,(Delta,(Gamma,Beta))),Alpha)[0.0667];
+((Gamma,(Delta,(Epsilon,Beta))),Alpha)[0.2000];
+((Gamma,((Epsilon,Delta),Beta)),Alpha)[0.2000];
+((Gamma,(Epsilon,(Delta,Beta))),Alpha)[0.2000];
+((((Epsilon,Delta),Gamma),Beta),Alpha)[0.2000];
+(((Epsilon,Delta),(Gamma,Beta)),Alpha)[0.2000];
+
+  Output files for usage example 4
+
+  File: protpars.fprotpars
+
+
+Protein parsimony algorithm, version 3.6b
+
+
+
+
+Weights set # 1:
+
+
+     3 trees in all found
+
+
+
+
+     +--------Gamma
+     !
+  +--2     +--Epsilon
+  !  !  +--4
+  !  +--3  +--Delta
+  1     !
+  !     +-----Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     14.000
+
+
+
+
+           +--Epsilon
+        +--4
+     +--3  +--Delta
+     !  !
+  +--2  +-----Gamma
+  !  !
+  1  +--------Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     14.000
+
+
+
+
+
+
+  [Part of this file has been deleted for brevity]
+
+           +--Epsilon
+     +-----4
+     !     +--Delta
+  +--3
+  !  !     +--Gamma
+  1  +-----2
+  !        +--Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of      2.000
+
+
+
+
+     +--------Delta
+  +--3
+  !  !  +-----Epsilon
+  !  +--4
+  1     !  +--Gamma
+  !     +--2
+  !        +--Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of      2.000
+
+
+
+
+     +--------Epsilon
+  +--4
+  !  !  +-----Delta
+  !  +--3
+  1     !  +--Gamma
+  !     +--2
+  !        +--Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of      2.000
+
+  File: protpars.treefile
+
+((Gamma,((Epsilon,Delta),Beta)),Alpha)[0.3333];
+((((Epsilon,Delta),Gamma),Beta),Alpha)[0.3333];
+(((Epsilon,Delta),(Gamma,Beta)),Alpha)[0.3333];
+((Gamma,(Delta,(Epsilon,Beta))),Alpha)[0.0714];
+(((Epsilon,Gamma),(Delta,Beta)),Alpha)[0.0714];
+((Epsilon,(Gamma,(Delta,Beta))),Alpha)[0.0714];
+((Gamma,(Epsilon,(Delta,Beta))),Alpha)[0.0714];
+(((Delta,Gamma),(Epsilon,Beta)),Alpha)[0.0714];
+(((Delta,(Epsilon,Gamma)),Beta),Alpha)[0.0714];
+((((Epsilon,Delta),Gamma),Beta),Alpha)[0.0714];
+((Epsilon,((Delta,Gamma),Beta)),Alpha)[0.0714];
+(((Epsilon,(Delta,Gamma)),Beta),Alpha)[0.0714];
+((Delta,(Gamma,(Epsilon,Beta))),Alpha)[0.0714];
+((Delta,((Epsilon,Gamma),Beta)),Alpha)[0.0714];
+(((Epsilon,Delta),(Gamma,Beta)),Alpha)[0.0714];
+((Delta,(Epsilon,(Gamma,Beta))),Alpha)[0.0714];
+((Epsilon,(Delta,(Gamma,Beta))),Alpha)[0.0714];
+
 Data files
 
    None
@@ -582,39 +1084,37 @@ Known bugs
 
 See also
 
-   Program name Description
-   ednacomp DNA compatibility algorithm
-   ednadist Nucleic acid sequence Distance Matrix program
-   ednainvar Nucleic acid sequence Invariants method
-   ednaml Estimates phylogenies from nucleic acid sequence Maximum
-   Likelihood
-   ednamlk Estimates phylogenies from nucleic acid sequence Maximum
-   Likelihood with molecular clock
-   ednapars DNA parsimony algorithm
-   ednapenny Penny algorithm for DNA
-   eprotdist Protein distance algorithm
-   eprotpars Protein parsimony algorithm
-   erestml Restriction site Maximum Likelihood method
-   eseqboot Bootstrapped sequences algorithm
-   fdiscboot Bootstrapped discrete sites algorithm
-   fdnacomp DNA compatibility algorithm
-   fdnadist Nucleic acid sequence Distance Matrix program
-   fdnainvar Nucleic acid sequence Invariants method
-   fdnaml Estimates nucleotide phylogeny by maximum likelihood
-   fdnamlk Estimates nucleotide phylogeny by maximum likelihood
-   fdnamove Interactive DNA parsimony
-   fdnapars DNA parsimony algorithm
-   fdnapenny Penny algorithm for DNA
-   fdolmove Interactive Dollo or Polymorphism Parsimony
-   ffreqboot Bootstrapped genetic frequencies algorithm
-   fproml Protein phylogeny by maximum likelihood
-   fpromlk Protein phylogeny by maximum likelihood
-   fprotdist Protein distance algorithm
-   frestboot Bootstrapped restriction sites algorithm
-   frestdist Computes distance matrix from restriction sites or fragments
-   frestml Restriction site maximum Likelihood method
-   fseqboot Bootstrapped sequences algorithm
-   fseqbootall Bootstrapped sequences algorithm
+   Program name                         Description
+   ednacomp     DNA compatibility algorithm
+   ednadist     Nucleic acid sequence Distance Matrix program
+   ednainvar    Nucleic acid sequence Invariants method
+   ednaml       Phylogenies from nucleic acid Maximum Likelihood
+   ednamlk      Phylogenies from nucleic acid Maximum Likelihood with clock
+   ednapars     DNA parsimony algorithm
+   ednapenny    Penny algorithm for DNA
+   eprotdist    Protein distance algorithm
+   eprotpars    Protein parsimony algorithm
+   erestml      Restriction site Maximum Likelihood method
+   eseqboot     Bootstrapped sequences algorithm
+   fdiscboot    Bootstrapped discrete sites algorithm
+   fdnacomp     DNA compatibility algorithm
+   fdnadist     Nucleic acid sequence Distance Matrix program
+   fdnainvar    Nucleic acid sequence Invariants method
+   fdnaml       Estimates nucleotide phylogeny by maximum likelihood
+   fdnamlk      Estimates nucleotide phylogeny by maximum likelihood
+   fdnamove     Interactive DNA parsimony
+   fdnapars     DNA parsimony algorithm
+   fdnapenny    Penny algorithm for DNA
+   fdolmove     Interactive Dollo or Polymorphism Parsimony
+   ffreqboot    Bootstrapped genetic frequencies algorithm
+   fproml       Protein phylogeny by maximum likelihood
+   fpromlk      Protein phylogeny by maximum likelihood
+   fprotdist    Protein distance algorithm
+   frestboot    Bootstrapped restriction sites algorithm
+   frestdist    Distance matrix from restriction sites or fragments
+   frestml      Restriction site maximum Likelihood method
+   fseqboot     Bootstrapped sequences algorithm
+   fseqbootall  Bootstrapped sequences algorithm
 
 Author(s)
 

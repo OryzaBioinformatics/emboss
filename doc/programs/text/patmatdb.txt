@@ -176,7 +176,7 @@ Output file format
 
 ########################################
 # Program: patmatdb
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Report_format: dbmotif
 # Report_file: 100k_rat.patmatdb
 ########################################
@@ -289,7 +289,7 @@ See also
    fuzzpro        Protein pattern search
    fuzztran       Protein pattern search after translation
    helixturnhelix Report nucleic acid binding motifs
-   oddcomp        Finds protein sequence regions with a biased composition
+   oddcomp        Find protein sequence regions with a biased composition
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
    preg           Regular expression search of a protein sequence

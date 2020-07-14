@@ -5,12 +5,12 @@
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="../index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="../../emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
 
-<H2> ROCON documentation </H2>
+<H2> ROCON documentation
 </font></b>
 </td></tr>
 </table>
@@ -18,6 +18,7 @@
 <p>
 
 
+<!-- END OF HEADER -->
 
 
 
@@ -51,8 +52,12 @@
 -->
 <a name="1.0"></a>
 <br><br><br><H2> 1.0   SUMMARY  </H2>
+Reads a DHF file (domain hits file) of hits (sequences of unknown structural
+classification) and a domain families file (validation sequences of known 
+classification) and writes a "hits file" for the hits, which are classified 
+and rank-ordered on the basis of score.
 
-Reads a DHF file (domain hits file) of hits (sequences of unknown structural classification) and a DHF file of validation sequences (known classification) and writes a 'hits file' for the hits, which are classified and rank-ordered on the basis of score
+Generates a hits file from comparing two DHF files
 
 <!-- INPUTS & OUTPUTS
      Short summary of the application inputs and outputs in its different 
@@ -76,7 +81,7 @@ ROCON reads a DHF file (domain hits file) of hits generated for a single node fr
 -->
 <a name="3.0"></a>
 <br><br><br><H2> 3.0   INPUT FILE FORMAT         </H2>
-The format of the DHF is described in <a href="seqsearch.html">SEQSEARCH documentation.</a> See also the example of the DHF file for hit sequences and validation sequences below.
+The format of the DHF is described in <a href="seqsearch.html">SEQSEARCH documentation.</a> See also the example of the DHF file for hit sequences (Figure 1) and validation sequences (Figure 2) below.
 
 
 <a name="input.1"></a>
@@ -312,8 +317,7 @@ VKPIKNGTVIDHITANRSLNVLNILGLPDGRSKVTVAMNMDSSQLGSKDIVKIENRELKPSEVDQIALIAPRATINIVRD
 -->
 <a name="4.0"></a>
 <br><br><br><H2> 4.0   OUTPUT FILE FORMAT         </H2>
-The format of the hits file is described in <a
-     href="rocplot.html">ROCPLOT documentation.</a>
+The format of the hits file is described in <a href="rocplot.html">ROCPLOT documentation.</a> See also Figure 3.
 
 
 <a name="output.1"></a>
@@ -372,8 +376,7 @@ None.
 -->
 <a name="6.0"></a>
 <br><br><br><H2> 6.0   USAGE                     </H2>
-<H3> 6.1   COMMAND LINE ARGUMENTS </H3>
-
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" >
 <pre>
    Standard (Mandatory) qualifiers:
   [-hitsinfile]        infile     This option specifies the location of the
@@ -464,6 +467,9 @@ None.
 </pre>
 </td></tr></table>
 <P>
+
+<H3> 6.1   COMMAND LINE ARGUMENTS </H3>
+
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -539,10 +545,7 @@ An example of interactive use of ROCON is shown below.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>rocon </b>
-Reads a DHF file (domain hits file) of hits (sequences of unknown
-structural classification) and a DHF file of validation sequences (known
-classification) and writes a 'hits file' for the hits, which are classified and
-rank-ordered on the basis of score.
+Generates a hits file from comparing two DHF files.
 Name of DHF file (domain hits file) (input).: <b>rocon/rocon.dhf</b>
 Name of domain families file (input).: <b>rocon.valid</b>
 Overlap threshold for hits. [10]: <b>10</b>
@@ -652,7 +655,7 @@ The domain families file uses the same format as a DHF file (domain hits file). 
 <br><br>
 <table><td bgcolor="#FFCCFF">
 <pre>
-> Q9WVI4^.^513^667^.^55074^<b>CLASS</b>^<b>ARCHITECTURE</b>^<b>TOPOLOGY</b>^<b>FOLD</b>^<b>SUPERFAMILY</b>^<b>FAMILY</b>^PSIBLAST^113.00^0.000e+00^2.000e-25
+> Q9WVI4^.^513^667^SCOP^.^55074^<b>CLASS</b>^<b>ARCHITECTURE</b>^<b>TOPOLOGY</b>^<b>FOLD</b>^<b>SUPERFAMILY</b>^<b>FAMILY</b>^PSIBLAST^113.00^0.000e+00^2.000e-25
 RKFDDVTMLFSDIVGFTAICAQCTPMQVISMLNELYTRFDHQCGFLDIYKVETIGDAYCVASGLHRKSLCHAKPIALMALKMMELSEEVLTPDGRPIQMRIGIHSG
 </pre>
 </table>
@@ -719,6 +722,7 @@ The value of the tokens (<b>CLASS</b> through to <b>FAMILY</b>, but, in the curr
 
 <br><br>Putting this in context of a real example, imagine an input DHF file containing hits derived from searching a sequence database with a novel type of profile specific to a SCOP family.  In this case, the full SCOP classification (Class, Fold etc) of the hit are putatively assigned. To validate the novel method a validation file of manually curated sequences of known classification are used.  A <b>TRUE</b> hit would be one that overlaps with a validation sequence belonging to the same Family (and by implication Superfamily, Fold and Class) to the hit.  A <b>CROSS</b> hit overlaps with a sequence of the same fold,  but different family, as a validation sequence, and a <b>FALSE</b> hit overlaps with a sequence of a different fold to the hit.
 
+<br><br>The hits are rank-ordered on the basis of score before they are written to the the Hits (output) file.
 
 <!-- RELATED APPLICATIONS
      Other applications that either generate the input, use the output or 
@@ -731,22 +735,26 @@ The value of the tokens (<b>CLASS</b> through to <b>FAMILY</b>, but, in the curr
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="../construct/contactcount.html">contactcount</a></td><td>Counts specific versus non-specific contacts in a directory of cleaned protein chain contact files</td></tr>
-<tr><td><a href="contacts.html">contacts</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of intra-chain residue-residue contact data</td></tr>
-<tr><td><a href="domainalign.html">domainalign</a></td><td>Generates DAF files (domain alignment files) of structure-based sequence alignments for nodes in a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainrep.html">domainrep</a></td><td>Reorder DCF file (domain classification file) so that the representative structure of each user-specified node is given first</td></tr>
-<tr><td><a href="domainreso.html">domainreso</a></td><td>Removes low resolution domains from a DCF file (domain classification file)</td></tr>
-<tr><td><a href="interface.html">interface</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of inter-chain residue-residue contact data</td></tr>
-<tr><td><a href="libgen.html">libgen</a></td><td>Generates various types of discriminating elements for each alignment in a directory</td></tr>
-<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file</td></tr>
-<tr><td><a href="rocplot.html">rocplot</a></td><td>Provides interpretation and graphical display of the performance of discriminating elements (e.g. profiles for protein families). rocplot reads file(s) of hits from discriminator-database search(es), performs ROC analysis on the hits, and writes graphs illustrating the diagnostic performance of the discriminating elements</td></tr>
-<tr><td><a href="seqalign.html">seqalign</a></td><td>Reads a DAF file (domain alignment file) and a DHF file (domain hits file) and writes a DAF file extended with the hits</td></tr>
-<tr><td><a href="seqfraggle.html">seqfraggle</a></td><td>Removes fragments from DHF files (domain hits files) or other files of sequences</td></tr>
-<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate database hits (sequences) for nodes in a DCF file (domain classification file) by using PSI-BLAST</td></tr>
-<tr><td><a href="seqsort.html">seqsort</a></td><td>Reads DHF files (domain hits files) of database hits (sequences) and removes hits of ambiguous classification</td></tr>
-<tr><td><a href="seqwords.html">seqwords</a></td><td>Generates DHF files (domain hits files) of database hits (sequences) for nodes in a DCF file (domain classification file) by keyword search of UniProt</td></tr>
-<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
-<tr><td><a href="sigscan.html">sigscan</a></td><td>Generates a DHF file (domain hits file) of hits (sequences) from scanning a signature against a sequence database</td></tr>
+<tr><td><a href="../../apps/contactcount.html">contactcount</a></td><td>Count specific versus non-specific contacts</td></tr>
+<tr><td><a href="../structure/contacts.html">contacts</a></td><td>Generate intra-chain CON files from CCF files</td></tr>
+<tr><td><a href="../domalign/domainalign.html">domainalign</a></td><td>Generate alignments (DAF file) for nodes in a DCF file</td></tr>
+<tr><td><a href="../domalign/domainrep.html">domainrep</a></td><td>Reorder DCF file to identify representative structures</td></tr>
+<tr><td><a href="../domainatrix/domainreso.html">domainreso</a></td><td>Remove low resolution domains from a DCF file</td></tr>
+<tr><td><a href="../structure/interface.html">interface</a></td><td>Generate inter-chain CON files from CCF files</td></tr>
+<tr><td><a href="libgen.html">libgen</a></td><td>Generate discriminating elements from alignments</td></tr>
+<tr><td><a href="matgen3d.html">matgen3d</a></td><td>Generate a 3D-1D scoring matrix from CCF files</td></tr>
+<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Phi and psi torsion angles from protein coordinates</td></tr>
+<tr><td><a href="rocplot.html">rocplot</a></td><td>Performs ROC analysis on hits files</td></tr>
+<tr><td><a href="../reconstruct/scorecmapdir.html">scorecmapdir</a></td><td>Contact scores for cleaned protein chain contact files</td></tr>
+<tr><td><a href="../domalign/seqalign.html">seqalign</a></td><td>Extend alignments (DAF file) with sequences (DHF file)</td></tr>
+<tr><td><a href="../domsearch/seqfraggle.html">seqfraggle</a></td><td>Removes fragment sequences from DHF files</td></tr>
+<tr><td><a href="../domsearch/seqsearch.html">seqsearch</a></td><td>Generate PSI-BLAST hits (DHF file) from a DAF file</td></tr>
+<tr><td><a href="../domsearch/seqsort.html">seqsort</a></td><td>Remove ambiguous classified sequences from DHF files</td></tr>
+<tr><td><a href="../domsearch/seqwords.html">seqwords</a></td><td>Generates DHF files from keyword search of UniProt</td></tr>
+<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment</td></tr>
+<tr><td><a href="siggenlig.html">siggenlig</a></td><td>Generate ligand-binding signatures from a CON file</td></tr>
+<tr><td><a href="sigscan.html">sigscan</a></td><td>Generate hits (DHF file) from a signature search</td></tr>
+<tr><td><a href="sigscanlig.html">sigscanlig</a></td><td>Search ligand-signature library & write hits (LHF file)</td></tr>
 </table>
 
 

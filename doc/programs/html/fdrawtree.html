@@ -101,6 +101,33 @@ number may have to be removed.
         Many examples illustrating different behaviours is good.
  -->
 
+<b>Here is a sample session with fdrawtree</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fdrawtree </b>
+Plots an unrooted tree diagram
+Input tree file: <b>drawgram.tree</b>
+Output file [drawgram.fdrawtree]: <b></b>
+
+DRAWTREE from PHYLIP version 3.6b
+Reading tree ... 
+Tree has been read.
+Loading the font ... 
+Font loaded.
+
+Writing plot file ...
+
+Plot written to file "drawgram.fdrawtree"
+
+Done.
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -116,15 +143,13 @@ number may have to be removed.
   [-plotfile]          outfile    Output file name
 
    Additional (Optional) qualifiers (* if not always prompted):
-   -[no]grows          boolean    Tree grows horizontally
-   -style              menu       Tree style output
    -plotter            menu       Plotter or printer the tree will be drawn on
 *  -plotterpcl         menu       Laserjet resolution
 *  -plotterpcx         menu       PCX file resolution
    -previewer          menu       Previewing device
    -iterate            menu       Iterate to improve tree
    -lengths            boolean    Use branch lengths from user trees
-   -labeldirec         menu       Label direction
+   -labeldirection     menu       Label direction
    -treeangle          float      Angle the tree is to be plotted
    -arc                float      Degrees the arc should occupy
 *  -labelrotation      float      Angle of labels (0 degrees is horizontal for
@@ -132,9 +157,6 @@ number may have to be removed.
    -[no]rescaled       toggle     Automatically rescale branch lengths
 *  -bscale             float      Centimeters per unit branch length
    -treedepth          float      Depth of tree as fraction of its breadth
-   -stemlength         float      Stem length as fraction of tree depth
-   -nodespace          float      Character height as fraction of tip spacing
-   -nodeposition       menu       Position of interior nodes
 *  -xmargin            float      Horizontal margin (cm)
 *  -ymargin            float      Vertical margin (cm)
 *  -xmarginray         float      Horizontal margin (pixels)
@@ -146,7 +168,9 @@ number may have to be removed.
    -hpmargin           float      Horizontal overlap (cm)
    -vpmargin           float      Vertical overlap (cm)
 
-   Advanced (Unprompted) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -fontfile           string     Fontfile
+
    Associated qualifiers:
 
    "-plotfile" associated qualifiers
@@ -199,20 +223,6 @@ number may have to be removed.
 </tr>
 
 <tr>
-<td>-[no]grows</td>
-<td>Tree grows horizontally</td>
-<td>Boolean value Yes/No</td>
-<td>Yes</td>
-</tr>
-
-<tr>
-<td>-style</td>
-<td>Tree style output</td>
-<td><table><tr><td>c</td> <td><i>(cladogram (v-shaped))</i></td></tr><tr><td>p</td> <td><i>(phenogram (branches are square))</i></td></tr><tr><td>v</td> <td><i>(curvogram (branches are 1/4 out of an ellipse))</i></td></tr><tr><td>e</td> <td><i>(eurogram (branches angle outward, then up))</i></td></tr><tr><td>s</td> <td><i>(swooporam (branches curve outward then reverse))</i></td></tr><tr><td>o</td> <td><i>(circular tree)</i></td></tr></table></td>
-<td>c</td>
-</tr>
-
-<tr>
 <td>-plotter</td>
 <td>Plotter or printer the tree will be drawn on</td>
 <td><table><tr><td>l</td> <td><i>(Postscript printer file format)</i></td></tr><tr><td>m</td> <td><i>(PICT format (for drawing programs))</i></td></tr><tr><td>j</td> <td><i>(HP Laserjet PCL file format)</i></td></tr><tr><td>w</td> <td><i>(MS-Windows Bitmap)</i></td></tr><tr><td>f</td> <td><i>(FIG 2.0 drawing program format)</i></td></tr><tr><td>a</td> <td><i>(Idraw drawing program format)</i></td></tr><tr><td>z</td> <td><i>(VRML Virtual Reality Markup Language file)</i></td></tr><tr><td>p</td> <td><i>(PCX file format (for drawing programs))</i></td></tr><tr><td>k</td> <td><i>(TeKtronix 4010 graphics terminal)</i></td></tr><tr><td>x</td> <td><i>(X Bitmap format)</i></td></tr><tr><td>v</td> <td><i>(POVRAY 3D rendering program file)</i></td></tr><tr><td>r</td> <td><i>(Rayshade 3D rendering program file)</i></td></tr><tr><td>h</td> <td><i>(Hewlett-Packard pen plotter (HPGL file format))</i></td></tr><tr><td>d</td> <td><i>(DEC ReGIS graphics (VT240 terminal))</i></td></tr><tr><td>e</td> <td><i>(Epson MX-80 dot-matrix printer)</i></td></tr><tr><td>c</td> <td><i>(Prowriter/Imagewriter dot-matrix printer)</i></td></tr><tr><td>t</td> <td><i>(Toshiba 24-pin dot-matrix printer)</i></td></tr><tr><td>o</td> <td><i>(Okidata dot-matrix printer)</i></td></tr><tr><td>b</td> <td><i>(Houston Instruments plotter)</i></td></tr><tr><td>u</td> <td><i>(other (one you have inserted code for))</i></td></tr></table></td>
@@ -255,10 +265,10 @@ number may have to be removed.
 </tr>
 
 <tr>
-<td>-labeldirec</td>
+<td>-labeldirection</td>
 <td>Label direction</td>
 <td><table><tr><td>a</td> <td><i>(along)</i></td></tr><tr><td>f</td> <td><i>(fixed)</i></td></tr><tr><td>r</td> <td><i>(radial)</i></td></tr><tr><td>m</td> <td><i>(middle)</i></td></tr></table></td>
-<td>e</td>
+<td>m</td>
 </tr>
 
 <tr>
@@ -301,27 +311,6 @@ number may have to be removed.
 <td>Depth of tree as fraction of its breadth</td>
 <td>Number from 0.100 to 100.000</td>
 <td>0.53</td>
-</tr>
-
-<tr>
-<td>-stemlength</td>
-<td>Stem length as fraction of tree depth</td>
-<td>Number from 0.100 to 100.000</td>
-<td>0.05</td>
-</tr>
-
-<tr>
-<td>-nodespace</td>
-<td>Character height as fraction of tip spacing</td>
-<td>Number from 0.100 to 100.000</td>
-<td>0.3333</td>
-</tr>
-
-<tr>
-<td>-nodeposition</td>
-<td>Position of interior nodes</td>
-<td><table><tr><td>i</td> <td><i>(Intermediate between their immediate descendants)</i></td></tr><tr><td>w</td> <td><i>(Weighted average of tip positions)</i></td></tr><tr><td>c</td> <td><i>(Centered among their ultimate descendants)</i></td></tr><tr><td>n</td> <td><i>(Innermost of immediate descendants)</i></td></tr><tr><td>v</td> <td><i>(So tree is v shaped)</i></td></tr></table></td>
-<td>c</td>
 </tr>
 
 <tr>
@@ -401,7 +390,10 @@ number may have to be removed.
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-fontfile</td>
+<td>Fontfile</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
 </tr>
 
 </table>
@@ -435,6 +427,15 @@ IT IS DONE FOR YOU.
 <p>
 
 
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: drawgram.tree</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+(Delta,(Epsilon,(Gamma,(Beta,Alpha))));
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -452,7 +453,7 @@ IT IS DONE FOR YOU.
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-[an error occurred while processing this directive]
+include file="inc/reportformats.ihtml"
    -->
 
 <b>fdrawtree</b> 
@@ -461,6 +462,100 @@ outputs ...
 
 <p>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: drawgram.fdrawtree</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+%!PS-Adobe-2.0
+%%Title: Phylip Tree Output
+%%DocumentFonts: (atend)
+%%Pages: 1 1
+%%BoundingBox: 0 0 612 792
+%%DocumentPaperSizes: Letter
+%%Orientation: Portrait
+%%EndComments
+/l {newpath moveto lineto stroke} def
+%%EndProlog
+%%
+%%Page: 1 1
+%%PageBoundingBox: 0 0 585 765
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+ 1 setlinecap 
+ 1 setlinejoin  
+    4.25 setlinewidth newpath 
+%!PS-Adobe-2.0
+%%Title: Phylip Tree Output
+%%DocumentFonts: (atend)
+%%Pages: 1 1
+%%BoundingBox: 0 0 612 792
+%%DocumentPaperSizes: Letter
+%%Orientation: Portrait
+%%EndComments
+/l {newpath moveto lineto stroke} def
+%%EndProlog
+%%
+%%Page: 1 1
+%%PageBoundingBox: 0 0 585 765
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+ 1 setlinecap 
+ 1 setlinejoin  
+    4.72 setlinewidth newpath 
+  193.10   333.75   147.15   270.50 l
+  193.10   333.75   239.05   396.99 l
+  239.05   396.99   179.40   447.52 l
+  239.05   396.99   315.51   413.26 l
+  315.51   413.26   330.54   489.97 l
+  315.51   413.26   377.62   365.78 l
+  377.62   365.78   450.44   394.22 l
+  377.62   365.78   406.77   293.25 l
+ stroke    1.57 setlinewidth 
+1 setlinecap 1 setlinejoin 
+gsave
+/Times-Roman findfont 39.641216 scalefont setfont
+104.222223 231.138753 translate 0.000000 rotate
+0 0 moveto
+(Delta) show
+grestore
+gsave
+/Times-Roman findfont 39.641216 scalefont setfont
+118.832100 460.640405 translate 0.000000 rotate
+0 0 moveto
+(Epsilon) show
+grestore
+gsave
+/Times-Roman findfont 39.641216 scalefont setfont
+267.784752 503.095985 translate 0.000000 rotate
+0 0 moveto
+(Gamma) show
+grestore
+gsave
+/Times-Roman findfont 39.641216 scalefont setfont
+463.561935 400.403476 translate 0.000000 rotate
+0 0 moveto
+(Beta) show
+grestore
+gsave
+/Times-Roman findfont 39.641216 scalefont setfont
+358.330872 253.884183 translate 0.000000 rotate
+0 0 moveto
+(Alpha) show
+grestore
+stroke     4.72 setlinewidth 
+ 1 setlinecap 1 setlinejoin 
+stroke showpage 
+
+%%PageTrailer
+%%PageFonts: Times-Roman
+%%Trailer
+%%DocumentFonts: Times-Roman
+</pre>
+</td></tr></table><p>
 
 
 
@@ -479,7 +574,7 @@ outputs ...
 	If you wish to include the standard description of what data
 	files are and how to use embossdata to inspect and retrieve
 	them, use:
-[an error occurred while processing this directive]
+include file="inc/localfiles.ihtml"
    -->
 
 <p>

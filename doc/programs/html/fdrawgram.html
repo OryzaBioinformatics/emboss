@@ -102,6 +102,35 @@ numbr may have to be removed.
         Many examples illustrating different behaviours is good.
  -->
 
+<b>Here is a sample session with fdrawgram</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fdrawgram -previewer n </b>
+Plots a cladogram- or phenogram-like rooted tree diagram
+Input tree file: <b>drawgram.tree</b>
+Output file [drawgram.fdrawgram]: <b></b>
+ Is the tree ready to be plotted? Type Y or N: <b>Y</b>
+
+
+DRAWGRAM from PHYLIP version 3.6b
+Reading tree ... 
+Tree has been read.
+Loading the font .... 
+Font loaded.
+
+Writing plot file ...
+
+Plot written to file "drawgram.fdrawgram"
+
+Done.
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -113,7 +142,6 @@ numbr may have to be removed.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-fontfile]          infile     Fontfile
   [-intreefile]        tree       (no help text) tree value
   [-plotfile]          outfile    Output file name
 
@@ -142,11 +170,13 @@ numbr may have to be removed.
    -hpmargin           float      Horizontal overlap (cm)
    -vpmargin           float      Vertical overlap (cm)
 
-   Advanced (Unprompted) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -fontfile           string     Fontfile
+
    Associated qualifiers:
 
    "-plotfile" associated qualifiers
-   -odirectory3        string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -175,21 +205,14 @@ numbr may have to be removed.
 </tr>
 
 <tr>
-<td>[-fontfile]<br>(Parameter 1)</td>
-<td>Fontfile</td>
-<td>Input file</td>
-<td><b>Required</b></td>
-</tr>
-
-<tr>
-<td>[-intreefile]<br>(Parameter 2)</td>
+<td>[-intreefile]<br>(Parameter 1)</td>
 <td>(no help text) tree value</td>
 <td>Phylogenetic tree</td>
 <td>&nbsp;</td>
 </tr>
 
 <tr>
-<td>[-plotfile]<br>(Parameter 3)</td>
+<td>[-plotfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
 <td><i>&lt;sequence&gt;</i>.fdrawgram</td>
@@ -267,7 +290,7 @@ numbr may have to be removed.
 <tr>
 <td>-stemlength</td>
 <td>Stem length as fraction of tree depth</td>
-<td>Number from 0.100 to 100.000</td>
+<td>Number from 0.010 to 100.000</td>
 <td>0.05</td>
 </tr>
 
@@ -362,7 +385,10 @@ numbr may have to be removed.
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-fontfile</td>
+<td>Fontfile</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
 </tr>
 
 </table>
@@ -396,6 +422,15 @@ IT IS DONE FOR YOU.
 <p>
 
 
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: drawgram.tree</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+(Delta,(Epsilon,(Gamma,(Beta,Alpha))));
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -413,7 +448,7 @@ IT IS DONE FOR YOU.
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-[an error occurred while processing this directive]
+include file="inc/reportformats.ihtml"
    -->
 
 <b>fdrawgram</b> 
@@ -422,6 +457,90 @@ output ...
 
 <p>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: drawgram.fdrawgram</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+%!PS-Adobe-2.0
+%%Title: Phylip Tree Output
+%%DocumentFonts: (atend)
+%%Pages: 1 1
+%%BoundingBox: 0 0 612 792
+%%DocumentPaperSizes: Letter
+%%Orientation: Portrait
+%%EndComments
+/l {newpath moveto lineto stroke} def
+%%EndProlog
+%%
+%%Page: 1 1
+%%PageBoundingBox: 0 0 585 765
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+ 1 setlinecap 
+ 1 setlinejoin  
+    7.44 setlinewidth newpath 
+   46.80   382.50    60.54   382.50 l
+   60.54   382.50    60.54   630.57 l
+   60.54   630.57   321.67   630.57 l
+   60.54   382.50    60.54   320.48 l
+   60.54   320.48   125.83   320.48 l
+  125.83   320.48   125.83   506.53 l
+  125.83   506.53   321.67   506.53 l
+  125.83   320.48   125.83   258.47 l
+  125.83   258.47   191.11   258.47 l
+  191.11   258.47   191.11   382.50 l
+  191.11   382.50   321.67   382.50 l
+  191.11   258.47   191.11   196.45 l
+  191.11   196.45   256.39   196.45 l
+  256.39   196.45   256.39   258.47 l
+  256.39   258.47   321.67   258.47 l
+  256.39   196.45   256.39   134.43 l
+  256.39   134.43   321.67   134.43 l
+ stroke    2.48 setlinewidth 
+1 setlinecap 1 setlinejoin 
+gsave
+/Times-Roman findfont 62.454658 scalefont setfont
+340.468551 609.897411 translate -0.000000 rotate
+0 0 moveto
+(Delta) show
+grestore
+gsave
+/Times-Roman findfont 62.454658 scalefont setfont
+343.934785 485.862460 translate -0.000000 rotate
+0 0 moveto
+(Epsilon) show
+grestore
+gsave
+/Times-Roman findfont 62.454658 scalefont setfont
+340.468551 361.827508 translate -0.000000 rotate
+0 0 moveto
+(Gamma) show
+grestore
+gsave
+/Times-Roman findfont 62.454658 scalefont setfont
+342.186054 237.792556 translate -0.000000 rotate
+0 0 moveto
+(Beta) show
+grestore
+gsave
+/Times-Roman findfont 62.454658 scalefont setfont
+340.468551 113.757605 translate -0.000000 rotate
+0 0 moveto
+(Alpha) show
+grestore
+stroke     7.44 setlinewidth 
+ 1 setlinecap 1 setlinejoin 
+stroke showpage 
+
+%%PageTrailer
+%%PageFonts: Times-Roman
+%%Trailer
+%%DocumentFonts: Times-Roman
+</pre>
+</td></tr></table><p>
 
 
 
@@ -440,7 +559,7 @@ output ...
 	If you wish to include the standard description of what data
 	files are and how to use embossdata to inspect and retrieve
 	them, use:
-[an error occurred while processing this directive]
+include file="inc/localfiles.ihtml"
    -->
 
 

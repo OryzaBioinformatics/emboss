@@ -5,7 +5,7 @@
 
 Function
 
-   Display a sequence with restriction cut sites, translation etc
+   Display sequence with restriction sites, translation etc
 
 Description
 
@@ -66,7 +66,7 @@ Usage
 
 
 % remap -notran -sbeg 1 -send 60 
-Display a sequence with restriction cut sites, translation etc..
+Display sequence with restriction sites, translation etc.
 Input sequence(s): tembl:eclac
 Comma separated enzyme list [all]: taqi,bsu6i,acii,bsski
 Minimum recognition site length [4]: 
@@ -85,7 +85,7 @@ Output file [eclac.remap]:
 
 
 % remap -notran -sbeg 1 -send 60 
-Display a sequence with restriction cut sites, translation etc..
+Display sequence with restriction sites, translation etc.
 Input sequence(s): tembl:eclac
 Comma separated enzyme list [all]: 
 Minimum recognition site length [4]: 
@@ -103,7 +103,7 @@ Output file [eclac.remap]:
 
 
 % remap -notran -sbeg 1 -send 60 -nolimit 
-Display a sequence with restriction cut sites, translation etc..
+Display sequence with restriction sites, translation etc.
 Input sequence(s): tembl:eclac
 Comma separated enzyme list [all]: 
 Minimum recognition site length [4]: 
@@ -119,7 +119,7 @@ Output file [eclac.remap]:
 
 
 % remap -notran -sbeg 1 -send 60 -flat 
-Display a sequence with restriction cut sites, translation etc..
+Display sequence with restriction sites, translation etc.
 Input sequence(s): tembl:eclac
 Comma separated enzyme list [all]: 
 Minimum recognition site length [4]: 
@@ -1031,32 +1031,31 @@ Known bugs
 
 See also
 
-   Program name Description
-   abiview Reads ABI file and display the trace
-   backtranseq Back translate a protein sequence
-   cirdna Draws circular maps of DNA constructs
-   coderet Extract CDS, mRNA and translations from feature tables
-   lindna Draws linear maps of DNA constructs
-   pepnet Displays proteins as a helical net
-   pepwheel Shows protein sequences as helices
-   plotorf Plot potential open reading frames
-   prettyplot Displays aligned sequences, with colouring and boxing
-   prettyseq Output sequence with translated ranges
-   recoder Remove restriction sites but maintain the same translation
-   redata Search REBASE for enzyme name, references, suppliers etc
-   restover Finds restriction enzymes that produce a specific overhang
-   restrict Finds restriction enzyme cleavage sites
-   seealso Finds programs sharing group names
-   showalign Displays a multiple sequence alignment
-   showdb Displays information on the currently available databases
-   showfeat Show features of a sequence
-   showorf Pretty output of DNA translations
-   showseq Display a sequence with features, translation etc
-   silent Silent mutation restriction enzyme scan
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   textsearch Search sequence documentation text. SRS and Entrez are
-   faster!
-   transeq Translate nucleic acid sequences
+   Program name                        Description
+   abiview      Reads ABI file and display the trace
+   backtranseq  Back translate a protein sequence
+   cirdna       Draws circular maps of DNA constructs
+   coderet      Extract CDS, mRNA and translations from feature tables
+   lindna       Draws linear maps of DNA constructs
+   pepnet       Displays proteins as a helical net
+   pepwheel     Shows protein sequences as helices
+   plotorf      Plot potential open reading frames
+   prettyplot   Displays aligned sequences, with colouring and boxing
+   prettyseq    Output sequence with translated ranges
+   recoder      Remove restriction sites but maintain same translation
+   redata       Search REBASE for enzyme name, references, suppliers etc
+   restover     Find restriction enzymes producing specific overhang
+   restrict     Finds restriction enzyme cleavage sites
+   seealso      Finds programs sharing group names
+   showalign    Displays a multiple sequence alignment
+   showdb       Displays information on the currently available databases
+   showfeat     Show features of a sequence
+   showorf      Pretty output of DNA translations
+   showseq      Display a sequence with features, translation etc
+   silent       Silent mutation restriction enzyme scan
+   sixpack      Display a DNA sequence with 6-frame translation and ORFs
+   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
+   transeq      Translate nucleic acid sequences
 
 Author(s)
 

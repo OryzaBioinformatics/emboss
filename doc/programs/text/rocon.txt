@@ -23,9 +23,10 @@ CONTENTS
 1.0 SUMMARY
 
    Reads a DHF file (domain hits file) of hits (sequences of unknown
-   structural classification) and a DHF file of validation sequences
-   (known classification) and writes a 'hits file' for the hits, which
-   are classified and rank-ordered on the basis of score
+   structural classification) and a domain families file (validation
+   sequences of known classification) and writes a "hits file" for the
+   hits, which are classified and rank-ordered on the basis of score.
+   Generates a hits file from comparing two DHF files
 
 2.0 INPUTS & OUTPUTS
 
@@ -42,8 +43,8 @@ CONTENTS
 3.0 INPUT FILE FORMAT
 
    The format of the DHF is described in SEQSEARCH documentation. See
-   also the example of the DHF file for hit sequences and validation
-   sequences below.
+   also the example of the DHF file for hit sequences (Figure 1) and
+   validation sequences (Figure 2) below.
 
   Input files for usage example
 
@@ -448,7 +449,8 @@ DYKIVEKAKVRL
 
 4.0 OUTPUT FILE FORMAT
 
-   The format of the hits file is described in ROCPLOT documentation.
+   The format of the hits file is described in ROCPLOT documentation. See
+   also Figure 3.
 
   Output files for usage example
 
@@ -469,8 +471,6 @@ TRUE         Q9YBD5    95    135
    None.
 
 6.0 USAGE
-
-  6.1 COMMAND LINE ARGUMENTS
 
    Standard (Mandatory) qualifiers:
   [-hitsinfile]        infile     This option specifies the location of the
@@ -558,6 +558,8 @@ TRUE         Q9YBD5    95    135
    -die                boolean    Report deaths
 
 
+  6.1 COMMAND LINE ARGUMENTS
+
    Standard (Mandatory) qualifiers Allowed values Default
    [-hitsinfile]
    (Parameter 1) This option specifies the location of the DHF file
@@ -618,10 +620,7 @@ TRUE         Q9YBD5    95    135
 
 
 % rocon 
-Reads a DHF file (domain hits file) of hits (sequences of unknown
-structural classification) and a DHF file of validation sequences (known
-classification) and writes a 'hits file' for the hits, which are classified and
-rank-ordered on the basis of score.
+Generates a hits file from comparing two DHF files.
 Name of DHF file (domain hits file) (input).: rocon/rocon.dhf
 Name of domain families file (input).: rocon.valid
 Overlap threshold for hits. [10]: 10
@@ -721,8 +720,8 @@ Name of hits files (output). [hits.dhf]: rocon.hits
    topology (CATH only), domain fold (SCOP domains only), domain
    superfamily and domain family (SCOP only) - see below.
 
-> Q9WVI4^.^513^667^.^55074^CLASS^ARCHITECTURE^TOPOLOGY^FOLD^SUPERFAMILY^FAMILY^
-PSIBLAST^113.00^0.000e+00^2.000e-25
+> Q9WVI4^.^513^667^SCOP^.^55074^CLASS^ARCHITECTURE^TOPOLOGY^FOLD^SUPERFAMILY^FA
+MILY^PSIBLAST^113.00^0.000e+00^2.000e-25
 RKFDDVTMLFSDIVGFTAICAQCTPMQVISMLNELYTRFDHQCGFLDIYKVETIGDAYCVASGLHRKSLCHAKPIALMA
 LKMMELSEEVLTPDGRPIQMRIGIHSG
 
@@ -763,49 +762,34 @@ LKMMELSEEVLTPDGRPIQMRIGIHSG
    CROSS hit overlaps with a sequence of the same fold, but different
    family, as a validation sequence, and a FALSE hit overlaps with a
    sequence of a different fold to the hit.
+   The hits are rank-ordered on the basis of score before they are
+   written to the the Hits (output) file.
 
 11.0 RELATED APPLICATIONS
 
 See also
 
-   Program name Description
-   contactcount Counts specific versus non-specific contacts in a
-   directory of cleaned protein chain contact files
-   contacts Reads CCF files (clean coordinate files) and writes CON files
-   (contact files) of intra-chain residue-residue contact data
-   domainalign Generates DAF files (domain alignment files) of
-   structure-based sequence alignments for nodes in a DCF file (domain
-   classification file)
-   domainrep Reorder DCF file (domain classification file) so that the
-   representative structure of each user-specified node is given first
-   domainreso Removes low resolution domains from a DCF file (domain
-   classification file)
-   interface Reads CCF files (clean coordinate files) and writes CON
-   files (contact files) of inter-chain residue-residue contact data
-   libgen Generates various types of discriminating elements for each
-   alignment in a directory
-   psiphi Calculates phi and psi torsion angles from cleaned EMBOSS-style
-   protein co-ordinate file
-   rocplot Provides interpretation and graphical display of the
-   performance of discriminating elements (e.g. profiles for protein
-   families). rocplot reads file(s) of hits from discriminator-database
-   search(es), performs ROC analysis on the hits, and writes graphs
-   illustrating the diagnostic performance of the discriminating elements
-   seqalign Reads a DAF file (domain alignment file) and a DHF file
-   (domain hits file) and writes a DAF file extended with the hits
-   seqfraggle Removes fragments from DHF files (domain hits files) or
-   other files of sequences
-   seqsearch Generate database hits (sequences) for nodes in a DCF file
-   (domain classification file) by using PSI-BLAST
-   seqsort Reads DHF files (domain hits files) of database hits
-   (sequences) and removes hits of ambiguous classification
-   seqwords Generates DHF files (domain hits files) of database hits
-   (sequences) for nodes in a DCF file (domain classification file) by
-   keyword search of UniProt
-   siggen Generates a sparse protein signature from an alignment and
-   residue contact data
-   sigscan Generates a DHF file (domain hits file) of hits (sequences)
-   from scanning a signature against a sequence database
+   Program name                       Description
+   contactcount Count specific versus non-specific contacts
+   contacts     Generate intra-chain CON files from CCF files
+   domainalign  Generate alignments (DAF file) for nodes in a DCF file
+   domainrep    Reorder DCF file to identify representative structures
+   domainreso   Remove low resolution domains from a DCF file
+   interface    Generate inter-chain CON files from CCF files
+   libgen       Generate discriminating elements from alignments
+   matgen3d     Generate a 3D-1D scoring matrix from CCF files
+   psiphi       Phi and psi torsion angles from protein coordinates
+   rocplot      Performs ROC analysis on hits files
+   scorecmapdir Contact scores for cleaned protein chain contact files
+   seqalign     Extend alignments (DAF file) with sequences (DHF file)
+   seqfraggle   Removes fragment sequences from DHF files
+   seqsearch    Generate PSI-BLAST hits (DHF file) from a DAF file
+   seqsort      Remove ambiguous classified sequences from DHF files
+   seqwords     Generates DHF files from keyword search of UniProt
+   siggen       Generates a sparse protein signature from an alignment
+   siggenlig    Generate ligand-binding signatures from a CON file
+   sigscan      Generate hits (DHF file) from a signature search
+   sigscanlig   Search ligand-signature library & write hits (LHF file)
 
 12.0 DIAGNOSTIC ERROR MESSAGES
 

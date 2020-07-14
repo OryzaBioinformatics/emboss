@@ -1,124 +1,44 @@
 
-                                 hetparse 
+                           HETPARSE documentation
+                                      
+   
 
+CONTENTS
 
+   1.0 SUMMARY 
+   2.0 INPUTS & OUTPUTS 
+   3.0 INPUT FILE FORMAT 
+   4.0 OUTPUT FILE FORMAT 
+   5.0 DATA FILES 
+   6.0 USAGE 
+   7.0 KNOWN BUGS & WARNINGS 
+   8.0 NOTES 
+   9.0 DESCRIPTION 
+   10.0 ALGORITHM 
+   11.0 RELATED APPLICATIONS 
+   12.0 DIAGNOSTIC ERROR MESSAGES 
+   13.0 AUTHORS 
+   14.0 REFERENCES 
 
-Function
+1.0 SUMMARY
 
-   Converts raw dictionary of heterogen groups to a file in EMBL-like
-   format
+   Converts raw dictionary of heterogen groups EMBL-like format. Converts
+   heterogen group dictionary to EMBL-like format
 
-Description
+2.0 INPUTS & OUTPUTS
 
-   This program is part of a suite of EMBOSS applications that directly
-   or indirectly make use of the protein structure databases pdb and
-   scop. This program is part of an experimental analysis pipeline
-   described in an accompanying document. We provide the software in the
-   hope that it will be useful. The applications were designed for
-   specific research purposes and may not be useful or reliable in
-   contexts other than the described pipeline. The development of the
-   suite was coordinated by Jon Ison to whom enquiries and bug reports
-   should be sent (email jison@hgmp.mrc.ac.uk).
-
-   Some research applications require knowledge of the types of heterogen
-   (non-protein groups) that are represented in pdb files. A dictionary
-   of heterogen groups containing various data for all of the heterogens
-   found in pdb is available, but is not in a format that is consistent
-   with flat file formats used for protein structural data in emboss.
-   hetparse parses the dictionary in its raw format and converts it to an
-   embl-like format.
-
-   hetparse parse the dictionary of heterogen groups available at
+   HETPARSE parse the dictionary of heterogen groups available at
    http://pdb.rutgers.edu/het_dictionary.txt and writes a file containing
-   the group names, synonyms and 3-letter codes in embl-like format.
-   Optionally, hetparse will search a directory of pdb files and will
+   the group names, synonyms and 3-letter codes in EMBL-like format.
+   Optionally, HETPARSE will search a directory of PDB files and will
    count the number of files that each heterogen appears in. The path and
-   extension for the pdb files and the names of the input and output
-   files are user- specified.
+   extension of the PDB files and the names of the input and output files
+   are user- specified (file extension is set in the ACD file).
 
-Algorithm
+3.0 INPUT FILE FORMAT
 
-   Contact the author
-
-Usage
-
-   Here is a sample session with hetparse
-
-
-% hetparse 
-Converts raw dictionary of heterogen groups to a file in EMBL-like format.
-Name of input file (raw dictionary of heterogen groups): het.txt
-Search a directory of PDB files with keywords? [N]: Y
-Directory to search with keywords [./]: 
-Name of EMBL-like format dictionary of heterogen groups. [Ehet.dat]: Ehet.dat
-
-   Go to the input files for this example
-   Go to the output files for this example
-
-Command line arguments
-
-   Standard (Mandatory) qualifiers (* if not always prompted):
-  [-infile]            infile     This option specifies the name of input file
-                                  (raw dictionary of heterogen groups) to
-                                  parse, which should be of the format
-                                  specified at
-                                  http://pdb.rutgers.edu/het_dictionary.txt
-   -dogrep             toggle     This option specifies whether to search a
-                                  directory of files (typically PDB files)
-                                  with keywords. If set, HETPARSE will search
-                                  the directory and will count the number of
-                                  files that each heterogen appears in.
-*  -dirlistpath        dirlist    This option specifies the directory to
-                                  search with keywords.
-  [-outfile]           outfile    This option specifies the name of EMBL-like
-                                  format dictionary of heterogen groups.
-
-   Additional (Optional) qualifiers: (none)
-   Advanced (Unprompted) qualifiers: (none)
-   Associated qualifiers:
-
-   "-outfile" associated qualifiers
-   -odirectory2        string     Output directory
-
-   General qualifiers:
-   -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
-   -options            boolean    Prompt for standard and additional values
-   -debug              boolean    Write debug output to program.dbg
-   -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
-   -warning            boolean    Report warnings
-   -error              boolean    Report errors
-   -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-infile]
-   (Parameter 1) This option specifies the name of input file (raw
-   dictionary of heterogen groups) to parse, which should be of the
-   format specified at http://pdb.rutgers.edu/het_dictionary.txt Input
-   file Required
-   -dogrep This option specifies whether to search a directory of files
-   (typically PDB files) with keywords. If set, HETPARSE will search the
-   directory and will count the number of files that each heterogen
-   appears in. Toggle value Yes/No No
-   -dirlistpath This option specifies the directory to search with
-   keywords. Directory with files ./
-   [-outfile]
-   (Parameter 2) This option specifies the name of EMBL-like format
-   dictionary of heterogen groups. Output file Ehet.dat
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
-
-Input file format
-
-   hetparse reads any normal sequence USAs.
+   An excerpt from the raw dictionary of heterogen group is shown (Figure
+   1).
 
   Input files for usage example
 
@@ -229,55 +149,13 @@ HETNAM     105 N-[5-METHYL-3-O-TOLYL-ISOXAZOLE-4-CARBOXYLIC ACID
 HETNAM   2 105 AMIDE] BORONIC ACID
 FORMUL      105    C12 H12 N2 O4 B1 CL1
 
-   Excerpt from heterogen dictionary file (input)
+4.0 OUTPUT FILE FORMAT
 
-RESIDUE   061     58
-CONECT      N1     2 N2   C5
-CONECT      N2     2 N1   N3
-CONECT      N3     2 N2   N4
-CONECT      N4     3 N3   C5   HN4
-CONECT      C5     3 N1   N4   C6
-CONECT      C6     3 C5   C7   C11
-< data ommitted for clarity >
-END
-HET    061             58
-HETSYN     061 L-159,061
-HETNAM     061 2-BUTYL-6-HYDROXY-3-[2'-(1H-TETRAZOL-5-YL)-BIPHENYL-4-
-HETNAM   2 061 YLMETHYL]-3H-QUINAZOLIN-4-ONE
-FORMUL      061    C26 H24 N6 O2
-**
-RESIDUE   072     90
-CONECT      S1B    2 C1B  C2A
-CONECT      C1A    3 C1B  O1A  N3A
-CONECT      C1B    4 S1B  C1A  C1C  H1B
-CONECT      O1A    1 C1A
-CONECT      C1C    4 C1B  C1D 1H1C 2H1C
-< data ommitted for clarity >
-END
-HET    072             90
-HETSYN     072 THIAZOLIDINONE; GW0072
-HETNAM     072 (+/-)(2S,5S)-3-(4-(4-CARBOXYPHENYL)BUTYL)-2-HEPTYL-4-
-HETNAM   2 072 OXO-5-THIAZOLIDINE
-FORMUL      072    C37 H46 N2 O4 S1
-**
-RESIDUE   074     58
-CONECT      C1     4 C2  1H1  2H1  3H1
-CONECT      C2     4 C1   C3  1H2  2H2
-CONECT      C3     4 C2   N1  1H3  2H3
-CONECT      N1     3 C3   C4  1HN1
-CONECT      C4     3 N1   O1   C5
-CONECT      O1     1 C4
-< data ommitted for clarity >
-END
-HET    074             58
-HETSYN     074 CA-074; [N-(L-3-TRANS-PROPYLCARBAMOYL-OXIRANE-2-
-HETSYN   2 074 CARBONYL)-L-ISOLEUCYL-L-PROLINE]
-HETNAM     074 [PROPYLAMINO-3-HYDROXY-BUTAN-1,4-DIONYL]-ISOLEUCYL-
-HETNAM   2 074 PROLINE
-FORMUL      074    C18 H31 N3 O6
-< data ommitted for clarity >
-
-Output file format
+   The records used in the output file (Figure 2) are as follows:
+     * ID - 3-character abbreviation of heterogen
+     * DE - full description
+     * SY - synonym
+     * NN - number of files which this heterogen appears in
 
   Output files for usage example
 
@@ -333,117 +211,159 @@ SY   L-159,061
 NN   0
 //
 
-   The records used in the output file (below) are as follows:
+5.0 DATA FILES
 
-(1) ID - 3-character abbreviation of heterogen
-(2) DE - full description
-(3) SY - synonym
-(4) NN - no. of files which this heterogen appears in
+   HETPARSE does not use a data file.
 
-   Example of hetparse output file
+6.0 USAGE
 
-ID  061
-DE  2-BUTYL-6-HYDROXY-3-[2'-(1H-TETRAZOL-5-YL)-BIPHENYL-4-YLMETHYL]-3H-QUINAZ
-DE  OLIN-4-ONE
-SY  L-159,061
-NN  2
-//
-ID  072
-DE  (+/-)(2S,5S)-3-(4-(4-CARBOXYPHENYL)BUTYL)-2-HEPTYL-4-OXO-5-THIAZOLIDINE
-SY  THIAZOLIDINONE; GW0072
-NN  10
-//
-ID  074
-DE  [PROPYLAMINO-3-HYDROXY-BUTAN-1,4-DIONYL]-ISOLEUCYL-PROLINE
-SY  CA-074; [N-(L-3-TRANS-PROPYLCARBAMOYL-OXIRANE-2-CARBONYL)-L-ISOLEUCYL-L-P
-SY  ROLINE]
-NN  1
-//
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-infile]            infile     This option specifies the name of input file
+                                  (raw dictionary of heterogen groups) to
+                                  parse, which should be of the format
+                                  specified at
+                                  http://pdb.rutgers.edu/het_dictionary.txt
+   -dogrep             toggle     This option specifies whether to search a
+                                  directory of files (typically PDB files)
+                                  with keywords. If set, HETPARSE will search
+                                  the directory and will count the number of
+                                  files that each heterogen appears in.
+*  -dirlistpath        dirlist    This option specifies the directory to
+                                  search with keywords.
+  [-outfile]           outfile    This option specifies the name of EMBL-like
+                                  format dictionary of heterogen groups.
 
-Data files
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+  6.1 COMMAND LINE ARGUMENTS
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) This option specifies the name of input file (raw
+   dictionary of heterogen groups) to parse, which should be of the
+   format specified at http://pdb.rutgers.edu/het_dictionary.txt Input
+   file Required
+   -dogrep This option specifies whether to search a directory of files
+   (typically PDB files) with keywords. If set, HETPARSE will search the
+   directory and will count the number of files that each heterogen
+   appears in. Toggle value Yes/No No
+   -dirlistpath This option specifies the directory to search with
+   keywords. Directory with files ./
+   [-outfile]
+   (Parameter 2) This option specifies the name of EMBL-like format
+   dictionary of heterogen groups. Output file Ehet.dat
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+  6.2 EXAMPLE SESSION
+
+   An example of interactive use of HETPARSE is shown below. Here is a
+   sample session with hetparse
+
+
+% hetparse 
+Converts heterogen group dictionary to EMBL-like format.
+Name of input file (raw dictionary of heterogen groups): het.txt
+Search a directory of PDB files with keywords? [N]: Y
+Directory to search with keywords [./]: 
+Name of EMBL-like format dictionary of heterogen groups. [Ehet.dat]: Ehet.dat
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+7.0 KNOWN BUGS & WARNINGS
 
    None.
 
-Notes
+8.0 NOTES
+
+   HETPARSE is used to create the EMBOSS data file Ehet.dat that is
+   included in the EMBOSS distribution.
+
+  8.1 GLOSSARY OF FILE TYPES
+
+   FILE TYPE FORMAT DESCRIPTION CREATED BY SEE ALSO
+   Dictionary of heterogen groups A file of the dictionary of heterogen
+   groups in PDB. HETPARSE N.A.
+
+   None
+
+9.0 DESCRIPTION
+
+   Some research applications require knowledge of the types of small
+   molecules or 'heterogens' (non-protein groups) that are represented in
+   PDB files. A dictionary of such groups containing various data for all
+   of the heterogens found in PDB is available, but is not in a
+   convenient format. HETPARSE parses the dictionary in its raw format
+   and converts it to an EMBL-like format.
+
+10.0 ALGORITHM
 
    None.
 
-References
-
-   None.
-
-Warnings
-
-   None.
-
-Diagnostic Error Messages
-
-   None.
-
-Exit status
-
-   It always exits with status 0.
-
-Known bugs
-
-   None.
+11.0 RELATED APPLICATIONS
 
 See also
 
-   Program name Description
+    Program name                        Description
    aaindexextract Extract data from AAINDEX
-   allversusall Does an all-versus-all global alignment for each set of
-   sequences in an input directory and writes files of sequence
-   similarity values
-   cathparse Reads raw CATH classification files and writes DCF file
-   (domain classification file)
-   cutgextract Extract data from CUTG
-   domainer Reads CCF files (clean coordinate files) for proteins and
-   writes CCF files for domains, taken from a DCF file (domain
-   classification file)
-   domainnr Removes redundant domains from a DCF file (domain
-   classification file). The file must contain domain sequence
-   information, which can be added by using DOMAINSEQS
-   domainseqs Adds sequence records to a DCF file (domain classification
-   file)
-   domainsse Adds secondary structure records to a DCF file (domain
-   classification file)
-   pdbparse Parses PDB files and writes CCF files (clean coordinate
-   files) for proteins
-   pdbplus Add residue solvent accessibility and secondary structure data
-   to a CCF file (clean coordinate file) for a protein or domain
-   pdbtosp Convert raw swissprot:PDB equivalence file to EMBL-like format
-   printsextract Extract data from PRINTS
-   prosextract Builds the PROSITE motif database for patmatmotifs to
-   search
-   rebaseextract Extract data from REBASE
-   scopparse Reads raw SCOP classification files and writes a DCF file
-   (domain classification file)
-   seqnr Removes redundancy from DHF files (domain hits files) or other
-   files of sequences
-   sites Reads CCF files (clean coordinate files) and writes CON files
-   (contact files) of residue-ligand contact data for domains in a DCF
-   file (domain classification file)
-   ssematch Searches a DCF file (domain classification file) for
-   secondary structure matches
-   tfextract Extract data from TRANSFAC
+   allversusall   Sequence similarity data from all-versus-all comparison
+   cathparse      Generates DCF file from raw CATH files
+   cutgextract    Extract data from CUTG
+   domainer       Generates domain CCF files from protein CCF files
+   domainnr       Removes redundant domains from a DCF file
+   domainseqs     Adds sequence records to a DCF file
+   domainsse      Add secondary structure records to a DCF file
+   pdbparse       Parses PDB files and writes protein CCF files
+   pdbplus        Add accessibility & secondary structure to a CCF file
+   pdbtosp        Convert swissprot:PDB codes file to EMBL-like format
+   printsextract  Extract data from PRINTS
+   prosextract    Build the PROSITE motif database for use by patmatmotifs
+   rebaseextract  Extract data from REBASE
+   scopparse      Generate DCF file from raw SCOP files
+   seqnr          Removes redundancy from DHF files
+   sites          Generate residue-ligand CON files from CCF files
+   ssematch       Search a DCF file for secondary structure matches
+   tfextract      Extract data from TRANSFAC
 
-   funky uses the hetparse output file as input.
+12.0 DIAGNOSTIC ERROR MESSAGES
 
-Author(s)
+   None.
 
-   Jon Ison (jison © rfcgr.mrc.ac.uk)
+13.0 AUTHORS
+
+   Jon Ison (jison@rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
-   Waqas Awan (wawan © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+14.0 REFERENCES
 
-History
+   Please cite the authors and EMBOSS.
+   Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+   Molecular Biology Open Software Suite" Trends in Genetics, 15:276-278.
+   
+   See also http://emboss.sourceforge.net/
 
-   Written (2003) - Jon Ison & Waqas Awan
-
-Target users
-
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+  14.1 Other useful references

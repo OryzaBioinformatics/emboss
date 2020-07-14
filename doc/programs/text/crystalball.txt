@@ -5,7 +5,7 @@
 
 Function
 
-   Answers every drug discovery question you have about this sequence
+   Answers every drug discovery question about a sequence
 
 Description
 
@@ -41,7 +41,7 @@ Usage
 
 % crystalball -competition -rdtime -rdcost -animalstudies -clinicaltrials -fdap
 roblems -fdatime -profit -everythingelse 
-Answers every drug discovery question you have about this sequence.
+Answers every drug discovery question about a sequence.
 Input sequence: tembl:hsfau
 Output file [hsfau.crystalball]: 
 
@@ -285,6 +285,7 @@ See also
 
    Program name            Description
    myseq        Demonstration of sequence reading
+   mytest       Demonstration of sequence reading
 
 Author(s)
 
@@ -300,3 +301,5 @@ Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
+
+Comments

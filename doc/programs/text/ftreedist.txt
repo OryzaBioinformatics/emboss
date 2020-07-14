@@ -136,7 +136,6 @@ Usage
 % ftreedist 
 Distances between trees
 Input tree file: treedist.dat
-Second input tree file: 
 Output file [treedist.ftreedist]: 
 
 
@@ -154,7 +153,6 @@ Done.
 % ftreedist -dtype s 
 Distances between trees
 Input tree file: treedist2.dat
-Second input tree file: 
 Output file [treedist2.ftreedist]: 
 
 
@@ -170,13 +168,11 @@ Command line arguments
 
    Standard (Mandatory) qualifiers:
   [-intreefile]        tree       (no help text) tree value
-  [-secondintreefile]  tree       Second input tree file
   [-outfile]           outfile    Output file name
 
-   Additional (Optional) qualifiers (* if not always prompted):
+   Additional (Optional) qualifiers:
    -dtype              menu       Distance type
-*  -pairing            menu       Tree pairing method
-*  -pairingtwo         menu       Tree pairing method
+   -pairing            menu       Tree pairing method
    -style              menu       Distances output option
    -noroot             boolean    Trees to be treated as rooted
    -outgrno            integer    Species number to use as outgroup
@@ -186,7 +182,7 @@ Command line arguments
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory3        string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -207,10 +203,8 @@ Command line arguments
    Standard (Mandatory) qualifiers Allowed values Default
    [-intreefile]
    (Parameter 1) (no help text) tree value Phylogenetic tree
-   [-secondintreefile]
-   (Parameter 2) Second input tree file Phylogenetic tree
    [-outfile]
-   (Parameter 3) Output file name Output file <sequence>.ftreedist
+   (Parameter 2) Output file name Output file <sequence>.ftreedist
    Additional (Optional) qualifiers Allowed values Default
    -dtype Distance type
    s (Symmetric difference)
@@ -220,10 +214,6 @@ Command line arguments
    a (Distances between adjacent pairs in tree file)
    p (Distances between all possible pairs in tree file)
    a
-   -pairingtwo Tree pairing method
-   c (Distances between corresponding pairs in one tree file and another)
-   l (Distances between all pairs in one tree file and another)
-   c
    -style Distances output option
    f (Full matrix)
    v (One pair per line, verbose)

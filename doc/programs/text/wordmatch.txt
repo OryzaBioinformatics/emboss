@@ -391,7 +391,7 @@ Output file format
 
 ########################################
 # Program: wordmatch
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Align_format: match
 # Report_file: hba_human.wordmatch
 ########################################
@@ -413,7 +413,7 @@ Output file format
   File: HBA_HUMAN.gff
 
 ##gff-version 2.0
-##date 2004-07-15
+##date 2005-07-15
 ##Type Protein HBA_HUMAN
 HBA_HUMAN       wordmatch       misc_feature    58      62      1.000   +
 .       Sequence "HBA_HUMAN.1" ; note "HBB_HUMAN"
@@ -425,7 +425,7 @@ HBA_HUMAN       wordmatch       misc_feature    116     119     1.000   +
   File: HBB_HUMAN.gff
 
 ##gff-version 2.0
-##date 2004-07-15
+##date 2005-07-15
 ##Type Protein HBB_HUMAN
 HBB_HUMAN       wordmatch       misc_feature    63      67      1.000   +
 .       Sequence "HBB_HUMAN.1" ; note "HBA_HUMAN"
@@ -474,12 +474,11 @@ Known bugs
 
 See also
 
-   Program name Description
-   matcher Finds the best local alignments between two sequences
-   seqmatchall Does an all-against-all comparison of a set of sequences
-   supermatcher Finds a match of a large sequence against one or more
-   sequences
-   water Smith-Waterman local alignment
+   Program name                        Description
+   matcher      Finds the best local alignments between two sequences
+   seqmatchall  All-against-all comparison of a set of sequences
+   supermatcher Match large sequences against one or more other sequences
+   water        Smith-Waterman local alignment
 
 Author(s)
 

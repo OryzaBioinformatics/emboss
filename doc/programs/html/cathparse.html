@@ -1,12 +1,27 @@
 <!-- START OF HEADER -->
 <HTML><HEAD>
-<TITLE> EMBOSS: CATHPARSE documentation. </TITLE>
+<TITLE> EMBASSY: CATHPARSE documentation. </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<!-- #include file="header1.inc" -->
-<H2> CATHPARSE documentation </H2>
-<!-- #include file="header2.inc" -->
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+<H2> CATHPARSE documentation
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
 <!-- END OF HEADER -->
+
+
 
 
 
@@ -39,16 +54,16 @@
      of the ACD file.
 -->
 <a name="1.0"></a>
-<H2> 1.0   SUMMARY  </H2>
+<br><br><br><H2> 1.0   SUMMARY  </H2>
 
-Reads raw CATH classification files and writes DCF file (domain classification file)
+Generates DCF file from raw CATH files
 
 <!-- INPUTS & OUTPUTS
      Short summary of the application inputs and outputs in its different 
      modes of usage (if appropriate). More detail than the summary.
 -->
 <a name="2.0"></a>
-<H2> 2.0   INPUTS & OUTPUTS          </H2>
+<br><br><br><H2> 2.0   INPUTS & OUTPUTS          </H2>
 CATHPARSE parses the CATH classification files, e.g. caths.list.v2.4, domlist.v2.4 and CAT.names.all.v2.4. 
 These files are available by anonymous ftp from ftp.biochem.ucl.ac.uk (e.g. /pub/cathdata/v2.4)
 The format of these files is explained in the README file available there.
@@ -68,7 +83,7 @@ format in which it is held.  The input and output files are specified by the use
      appropriate.
 -->
 <a name="3.0"></a>
-<H2> 3.0   INPUT FILE FORMAT         </H2>
+<br><br><br><H2> 3.0   INPUT FILE FORMAT         </H2>
 An excerpt from the raw CATH classification files, of the type caths.list.vX.X (Figure 1), 
 domlist.vX.X (Figure 2) and CAT.names.all.vX.X (Figure 3) is shown below.  The format of 
 these files is explained in the CATH README file available by anonymous ftp from 
@@ -202,7 +217,7 @@ ftp.biochem.ucl.ac.uk (e.g. /pub/cathdata/v2.4).
      if appropriate.
 -->
 <a name="4.0"></a>
-<H2> 4.0   OUTPUT FILE FORMAT         </H2>
+<br><br><br><H2> 4.0   OUTPUT FILE FORMAT         </H2>
 An example of the DCF output file is shown in Figure 4.
 The records used to describe an entry are as follows.  Records (5) to (8) 
 are used to describe the position of the domain in the CATH hierarchy.
@@ -300,7 +315,7 @@ CH   0 CHAIN; 159 START; 202 END;
 //
 </pre>
 </td></tr></table><p>
-<p><h3>File: CATHPARSE.log</h3>
+<p><h3>File: cathparse.log</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 1.10.8.10
@@ -384,7 +399,7 @@ CH   0 CHAIN; 159 START; 202 END;
 -->
 
 <a name="5.0"></a>
-<H2> 5.0   DATA FILES                </H2>
+<br><br><br><H2> 5.0   DATA FILES                </H2>
 None.
 
 
@@ -393,7 +408,7 @@ None.
      Many examples illustrating different behaviours is good.
 -->
 <a name="6.0"></a>
-<H2> 6.0   USAGE                     </H2>
+<br><br><br><H2> 6.0   USAGE                     </H2>
 <H3> 6.1   COMMAND LINE ARGUMENTS </H3>
  
  
@@ -496,7 +511,7 @@ None.
 <td>-logfile</td>
 <td>This option specifies the name of the CATHPARSE log file.</td>
 <td>Output file</td>
-<td>CATHPARSE.log</td>
+<td>cathparse.log</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -534,24 +549,20 @@ None.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>cathparse </b>
-Reads raw CATH classification files and writes DCF file (domain
-classification file).
+Generates DCF file from raw CATH files.
 Name of raw CATH classification file (caths.list.vX.X) (input). [caths.list.v2.4]: <b>caths.list.small</b>
 Name of raw CATH classification file (domlist.vX.X) (input). [domlist.v2.4]: <b>domlist.small</b>
 Name of raw CATH classification file (CAT.names.all.vX.X) (input). [CAT.names.all.v2.4]: <b>CAT.names.all.small</b>
 Name of CATH DCF file (domain classification file) (output). [Ecath.dat]: <b></b>
-Name of CATHPARSE log file [CATHPARSE.log]: <b></b>
+Name of CATHPARSE log file [cathparse.log]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-<br>The raw CATH classification files caths.list.small, domlist.small
-and CAT.names.all.small were read from test_data/ directory and and a
-domain classification file in DCF format called
-/test_data/cathparse/all.scop was written.  The log file
-test_data/cathparse/CATHPARSE.log was written.
+<!--
+<br>The raw CATH classification files caths.list.small, domlist.small and CAT.names.all.small were read from test_data/ directory and and a domain classification file in DCF format called /test_data/cathparse/all.scop was written.  The log file test_data/cathparse/CATHPARSE.log was written. -->
 
 
 
@@ -560,7 +571,7 @@ test_data/cathparse/CATHPARSE.log was written.
      and caveats etc. Potentially stupid things the program will let you do.
 -->
 <a name="7.0"></a>
-<H2> 7.0   KNOWN BUGS & WARNINGS     </H2>
+<br><br><br><H2> 7.0   KNOWN BUGS & WARNINGS     </H2>
 
 
 
@@ -575,7 +586,7 @@ test_data/cathparse/CATHPARSE.log was written.
        etc.
 -->
 <a name="8.0"></a>
-<H2> 8.0   NOTES                     </H2>
+<br><br><br><H2> 8.0   NOTES                     </H2>
 A future implementation will give the option of omitting from the output file 
 domains that consist of more than one segment.
 <br><br>
@@ -610,11 +621,12 @@ minor classes.
 </table>
 
 
+
 <!-- DESCRIPTION
      A complete, non-technical, user-level description of the application.
 -->
 <a name="9.0"></a>
-<H2> 9.0   DESCRIPTION               </H2>
+<br><br><br><H2> 9.0   DESCRIPTION               </H2>
 The raw CATH classification files are inconvenient for some uses because 
 the text describing the domain classification is given in a different file
 to the classification itself, the file formats are not easily extended and
@@ -630,7 +642,7 @@ human-readable and is more extensible than the native CATH database format.
      the key aspects of the application work.
 -->
 <a name="10.0"></a>
-<H2> 10.0  ALGORITHM                 </H2>
+<br><br><br><H2> 10.0  ALGORITHM                 </H2>
 None.
 
 
@@ -642,29 +654,29 @@ None.
      are in some other way related to the application are described here. 
 -->
 <a name="11.0"></a>
-<H2> 11.0  RELATED APPLICATIONS      </H2>
+<br><br><br><H2> 11.0  RELATED APPLICATIONS      </H2>
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="../../apps/aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
-<tr><td><a href="allversusall.html">allversusall</a></td><td>Does an all-versus-all global alignment for each set of sequences in an input directory and writes files of sequence similarity values</td></tr>
+<tr><td><a href="../domalign/allversusall.html">allversusall</a></td><td>Sequence similarity data from all-versus-all comparison</td></tr>
 <tr><td><a href="../../apps/cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="domainer.html">domainer</a></td><td>Reads CCF files (clean coordinate files) for proteins and writes CCF files for domains, taken from a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainnr.html">domainnr</a></td><td>Removes redundant domains from a DCF file (domain classification file). The file must contain domain sequence information, which can be added by using DOMAINSEQS</td></tr>
-<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainsse.html">domainsse</a></td><td>Adds secondary structure records to a DCF file (domain classification file)</td></tr>
-<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in EMBL-like format</td></tr>
-<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes CCF files (clean coordinate files) for proteins</td></tr>
-<tr><td><a href="pdbplus.html">pdbplus</a></td><td>Add residue solvent accessibility and secondary structure data to a CCF file (clean coordinate file) for a protein or domain</td></tr>
-<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:PDB equivalence file to EMBL-like format</td></tr>
+<tr><td><a href="../structure/domainer.html">domainer</a></td><td>Generates domain CCF files from protein CCF files</td></tr>
+<tr><td><a href="domainnr.html">domainnr</a></td><td>Removes redundant domains from a DCF file</td></tr>
+<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file</td></tr>
+<tr><td><a href="domainsse.html">domainsse</a></td><td>Add secondary structure records to a DCF file</td></tr>
+<tr><td><a href="../structure/hetparse.html">hetparse</a></td><td>Converts heterogen group dictionary to EMBL-like format</td></tr>
+<tr><td><a href="../structure/pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes protein CCF files</td></tr>
+<tr><td><a href="../structure/pdbplus.html">pdbplus</a></td><td>Add accessibility & secondary structure to a CCF file</td></tr>
+<tr><td><a href="../structure/pdbtosp.html">pdbtosp</a></td><td>Convert swissprot:PDB codes file to EMBL-like format</td></tr>
 <tr><td><a href="../../apps/printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
-<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Build the PROSITE motif database for use by patmatmotifs</td></tr>
 <tr><td><a href="../../apps/rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
-<tr><td><a href="scopparse.html">scopparse</a></td><td>Reads raw SCOP classification files and writes a DCF file (domain classification file)</td></tr>
-<tr><td><a href="seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files (domain hits files) or other files of sequences</td></tr>
-<tr><td><a href="sites.html">sites</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of residue-ligand contact data for domains in a DCF file (domain classification file)</td></tr>
-<tr><td><a href="ssematch.html">ssematch</a></td><td>Searches a DCF file (domain classification file) for secondary structure matches</td></tr>
+<tr><td><a href="scopparse.html">scopparse</a></td><td>Generate DCF file from raw SCOP files</td></tr>
+<tr><td><a href="../domsearch/seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files</td></tr>
+<tr><td><a href="../structure/sites.html">sites</a></td><td>Generate residue-ligand CON files from CCF files</td></tr>
+<tr><td><a href="ssematch.html">ssematch</a></td><td>Search a DCF file for secondary structure matches</td></tr>
 <tr><td><a href="../../apps/tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
 </table>
 
@@ -674,7 +686,7 @@ None.
      Description of error messages or log file, if one is written.
 -->
 <a name="12.0"></a>
-<H2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2>
+<br><br><br><H2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2>
 None.
 
 
@@ -683,7 +695,7 @@ None.
      The main author first then all others. 
 -->
 <a name="13.0"></a>
-<H2> 13.0  AUTHORS                   </H2>
+<br><br><br><H2> 13.0  AUTHORS                   </H2>
 <!-- #include file="inc/jison.address" -->
 
 Mike Hurley <a href="mailto:mhurley@rfcgr.mrc.ac.uk">(mhurley@rfcgr.mrc.ac.uk)</a>
@@ -699,10 +711,18 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
      Quote the paper where the application was first published, described, used etc. 
 -->
 <a name="14.0"></a>
-<H2> 14.0  REFERENCES                </H2>
+<br><br><br><H2> 14.0  REFERENCES                </H2>
+Please cite the authors and EMBOSS.
 Please cite the authors and EMBOSS.
 <br><br>
-<i>Rice P, Bleasby A.J.  2000.  EMBOSS - The European Molecular Biology Open Software Suite.  Trends in Genetics, 15:276-278.  See also http://www.uk.embnet.org/Software/EMBOSS</i>
+<i>Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+Molecular Biology Open Software Suite"  Trends in Genetics,
+15:276-278.
+
+<p>
+See also <a href="http://emboss.sourceforge.net/">http://emboss.sourceforge.net/</a></i>
+
+
 
 <H3>14.1 Other useful references  </H3>
 1. Conte, L.L., Ailey, B., Hubbard, T.J. Brenner, S.E., Murzin, A.G. and Chothia, C. (2000) SCOP: a structural classification of proteins database. Nucleic Acids Res. 28, 257-259.

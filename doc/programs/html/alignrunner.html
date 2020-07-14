@@ -26,7 +26,7 @@ alignrunner
 <H2>
     Function
 </H2>
-Runs alignment program on all sequence pairs in a directory
+Align sequence pairs in a directory
 
 <!--
 DON'T WRITE ANYTHING HERE.
@@ -112,10 +112,15 @@ EDIT HERE
    Standard (Mandatory) qualifiers:
   [-seqpairsdir]       dirlist    Input directory of files containing sequence
                                   pairs for alignment
-  [-pathtocommands]    directory  Directory where alignment executables live
-  [-firstcommandname]  string     Name of first alignment executable
-  [-secondcommandname] string     Name of second alignment executable
-  [-scoringmatrixdirname] directory  Directory where scoring matrix lives
+  [-firstcommandpath]  directory  Directory where conventional alignment
+                                  executable lives
+  [-secondcommandpath] directory  Directory where structure-weighted alignment
+                                  executable lives
+  [-firstcommandname]  string     Name of conventional alignment executable
+  [-secondcommandname] string     Name of structure-weighted alignment
+                                  executable
+  [-scoringmatrixdir]  directory  Directory where conventional scoring matrix
+                                  lives
   [-scoringmatrixname] string     Name of scoring matrix
    -gapopen            float      The gap opening penalty is subtracted from
                                   the total score every time a gap is inserted
@@ -137,7 +142,7 @@ EDIT HERE
                                   generally the gap extension penalty should
                                   be significantly lower than the gap opening
                                   penalty.
-   -[no]zeroend        boolean    If this option is true then no penalty is
+   -zeroend            boolean    If this option is true then no penalty is
                                   added for gaps at either ends of a trace.
   [-firstalignedseqsoutdir] outdir     Name of directory containing sequences
                                   aligned by first method
@@ -172,8 +177,138 @@ EDIT HERE
 </td></tr></table>
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
-Error: File /homes/pmr/local/share/EMBOSS/acd/alignrunner.acd line 12: (seqpairsdir) Unknown attribute 'name'
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
 
+<tr>
+<td>[-seqpairsdir]<br>(Parameter 1)</td>
+<td>Input directory of files containing sequence pairs for alignment</td>
+<td>Directory with files</td>
+<td>.</td>
+</tr>
+
+<tr>
+<td>[-firstcommandpath]<br>(Parameter 2)</td>
+<td>Directory where conventional alignment executable lives</td>
+<td>Directory</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-secondcommandpath]<br>(Parameter 3)</td>
+<td>Directory where structure-weighted alignment executable lives</td>
+<td>Directory</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-firstcommandname]<br>(Parameter 4)</td>
+<td>Name of conventional alignment executable</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>[-secondcommandname]<br>(Parameter 5)</td>
+<td>Name of structure-weighted alignment executable</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>[-scoringmatrixdir]<br>(Parameter 6)</td>
+<td>Directory where conventional scoring matrix lives</td>
+<td>Directory</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-scoringmatrixname]<br>(Parameter 7)</td>
+<td>Name of scoring matrix</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-gapopen</td>
+<td>The gap opening penalty is subtracted from the total score every time a gap is inserted in the alignment. The default value is chosen for the EBLOSUM62 scoring matrix when you are aligning protein sequences, and the EDNAFULL matrix when you are aligning nucleotide sequences. If you sequence contains many small errors you should set a low gap opening penalty (near zero) to avoid over-penalizing those errors.</td>
+<td>Floating point number from 1.0 to 100.0</td>
+<td>10.0 for any sequence</td>
+</tr>
+
+<tr>
+<td>-gapextend</td>
+<td>The gap extension penalty is the score substracted when more spaces are added to an existing alignment gap. Often a single insertion or deletion affects multiple residues/nucleotides; separate opening and extension penalties reduce the excessive penalty such events would otherwise carry; generally the gap extension penalty should be significantly lower than the gap opening penalty.</td>
+<td>Floating point number from 0.0 to 10.0</td>
+<td>0.5 for any sequence</td>
+</tr>
+
+<tr>
+<td>-zeroend</td>
+<td>If this option is true then no penalty is added for gaps at either ends of a trace.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>[-firstalignedseqsoutdir]<br>(Parameter 8)</td>
+<td>Name of directory containing sequences aligned by first method</td>
+<td>Output directory</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-secondalignedseqsoutdir]<br>(Parameter 9)</td>
+<td>Name of directory containing sequences aligned by second method</td>
+<td>Output directory</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-firstoutfilesuffix]<br>(Parameter 10)</td>
+<td>Appended to end of all output file names of sequences aligned by first alignment method</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>[-secondoutfilesuffix]<br>(Parameter 11)</td>
+<td>Appended to end of all output file names of sequences aligned by second alignment method</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>[-outfileformat]<br>(Parameter 12)</td>
+<td>Format of output alignments for both methods</td>
+<td>Any string is accepted</td>
+<td>fasta</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
 
 
 <!--
@@ -222,7 +357,7 @@ IT IS DONE FOR YOU.
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-[an error occurred while processing this directive]
+include file="inc/reportformats.ihtml"
    -->
 
 <b>alignrunner</b> 
@@ -251,7 +386,7 @@ outputs a report format file. The default format is ...
 	If you wish to include the standard description of what data
 	files are and how to use embossdata to inspect and retrieve
 	them, use:
-[an error occurred while processing this directive]
+include file="inc/localfiles.ihtml"
    -->
 
 **************** 
@@ -382,18 +517,19 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="contactalign.html">contactalign</a></td><td>EMBOSS implementation of Damian Counsell's 2.5-D alignment algorithm</td></tr>
+<tr><td><a href="comparator.html">comparator</a></td><td>Compare contact scores of two sequence alignments</td></tr>
+<tr><td><a href="contactalign.html">contactalign</a></td><td>Damian Counsell's experimental 2.5-D alignment algorithm</td></tr>
 <tr><td><a href="../esim4/esim4.html">esim4</a></td><td>Align an mRNA to a genomic DNA sequence</td></tr>
 <tr><td><a href="../../apps/est2genome.html">est2genome</a></td><td>Align EST and genomic DNA sequences</td></tr>
-<tr><td><a href="nawalign.html">nawalign</a></td><td>Damian Counsell's implementation for protein sequences of the Needleman and Wunsch alignment algorithm</td></tr>
-<tr><td><a href="nawalignrunner.html">nawalignrunner</a></td><td>Runs nawalign alignment program on all sequence pairs in a directory</td></tr>
+<tr><td><a href="nawalign.html">nawalign</a></td><td>Damian Counsell's NW implementation</td></tr>
+<tr><td><a href="nawalignrunner.html">nawalignrunner</a></td><td>Nawalign all sequence pairs in a directory</td></tr>
 <tr><td><a href="../../apps/needle.html">needle</a></td><td>Needleman-Wunsch global alignment</td></tr>
-<tr><td><a href="needlerunner.html">needlerunner</a></td><td>Runs needle alignment program on all sequence pairs in a directory</td></tr>
-<tr><td><a href="scorer.html">scorer</a></td><td>Scores accuracy of protein-protein sequence alignment against gold standard structure-structure alignment</td></tr>
-<tr><td><a href="scorerrunner.html">scorerrunner</a></td><td>Runs scorer to compare ordered pairs of substituted seqs in two directories and write the scores to a third</td></tr>
+<tr><td><a href="needlerunner.html">needlerunner</a></td><td>Needle all sequence pairs in a directory</td></tr>
+<tr><td><a href="scorer.html">scorer</a></td><td>Score alignments using structural alignments</td></tr>
+<tr><td><a href="scorerrunner.html">scorerrunner</a></td><td>SCORER for ordered pairs of substituted seqs</td></tr>
 <tr><td><a href="../../apps/stretcher.html">stretcher</a></td><td>Finds the best global alignment between two sequences</td></tr>
-<tr><td><a href="substitute.html">substitute</a></td><td>Substitutes matches from first (query) sequence of two aligned sequences in a trace into second (template sequence)</td></tr>
-<tr><td><a href="substituterunner.html">substituterunner</a></td><td>Runs substitute on directory of traces and writes substituted sequences to another</td></tr>
+<tr><td><a href="substitute.html">substitute</a></td><td>Substitute matches into a template</td></tr>
+<tr><td><a href="substituterunner.html">substituterunner</a></td><td>Run SUBSTITUTE on a directory of traces</td></tr>
 </table>
 
 <!-- 

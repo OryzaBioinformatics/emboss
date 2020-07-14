@@ -130,18 +130,34 @@ Algorithm
 
 Usage
 
-   No qa tests were found for ftreedistpair
+   Here is a sample session with ftreedistpair
+
+
+% ftreedistpair -style s 
+Distances between two sets of trees
+Tree file: treedist.dat
+Second input tree file: treedist.dat
+Output file [treedist.ftreedistpair]: 
+
+Done.
+
+
+   Go to the input files for this example
+   Go to the output files for this example
 
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-intreefile]        infile     Tree file
-  [-bintreefile]       infile     Second input tree file
-   -pairing            menu       Tree pairing method
-   -style              menu       Distances output option
+  [-intreefile]        tree       Tree file
+  [-bintreefile]       tree       Second input tree file
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers:
+   -dtype              menu       Distance type
+   -pairing            menu       Tree pairing method
+   -style              menu       Distances output option
+   -noroot             boolean    Trees to be treated as rooted
+   -outgrno            integer    Species number to use as outgroup
    -progress           boolean    Print indications of progress of run
 
    Advanced (Unprompted) qualifiers: (none)
@@ -168,24 +184,27 @@ Command line arguments
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-intreefile]
-   (Parameter 1) Tree file Input file Required
+   (Parameter 1) Tree file Phylogenetic tree
    [-bintreefile]
-   (Parameter 2) Second input tree file Input file Required
-   -pairing Tree pairing method
-   Adjacent (Distances between adjacent pairs in tree file)
-   Pairs (Distances between all possible pairs in tree file)
-   Correspond (Distances between corresponding pairs in one tree file and
-   another)
-   ListAll (Distances between all pairs in one tree file and another)
-   Adjacent
-   -style Distances output option
-   Full    (Full_matrix)
-   Verbose (One pair per line)
-   Sparse  (One pair per line)
-   Verbose
+   (Parameter 2) Second input tree file Phylogenetic tree
    [-outfile]
    (Parameter 3) Output file name Output file <sequence>.ftreedistpair
    Additional (Optional) qualifiers Allowed values Default
+   -dtype Distance type
+   s (Symmetric difference)
+   b (Branch score distance)
+   b
+   -pairing Tree pairing method
+   c (Distances between corresponding pairs each tree file)
+   l (Distances between all possible pairs in each tree file)
+   l
+   -style Distances output option
+   f (Full_matrix)
+   v (One pair per line, verbose)
+   s (One pair per line, sparese)
+   v
+   -noroot Trees to be treated as rooted Boolean value Yes/No No
+   -outgrno Species number to use as outgroup Integer 0 or more 0
    -progress Print indications of progress of run Boolean value Yes/No No
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
@@ -204,7 +223,34 @@ Input file format
    file, keep in mind that all possible pairs means 1,000,000 pairs to be
    examined!
 
-   No qa tests were found for ftreedistpair
+  Input files for usage example
+
+  File: treedist.dat
+
+(A:0.1,(B:0.1,(H:0.1,(D:0.1,(J:0.1,(((G:0.1,E:0.1):0.1,(F:0.1,I:0.1):0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(D:0.1,((J:0.1,H:0.1):0.1,(((G:0.1,E:0.1):0.1,
+(F:0.1,I:0.1):0.1):0.1,C:0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(D:0.1,(H:0.1,(J:0.1,(((G:0.1,E:0.1):0.1,(F:0.1,I:0.1):0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,(G:0.1,((F:0.1,I:0.1):0.1,((J:0.1,(H:0.1,D:0.1):0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,(G:0.1,((F:0.1,I:0.1):0.1,(((J:0.1,H:0.1):0.1,D:0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,((F:0.1,I:0.1):0.1,(G:0.1,((J:0.1,(H:0.1,D:0.1):0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,((F:0.1,I:0.1):0.1,(G:0.1,(((J:0.1,H:0.1):0.1,D:0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,((G:0.1,(F:0.1,I:0.1):0.1):0.1,((J:0.1,(H:0.1,
+D:0.1):0.1):0.1,C:0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,((G:0.1,(F:0.1,I:0.1):0.1):0.1,(((J:0.1,H:0.1):0.1,
+D:0.1):0.1,C:0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,(G:0.1,((F:0.1,I:0.1):0.1,((J:0.1,(H:0.1,D:0.1):0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(D:0.1,(H:0.1,(J:0.1,(((G:0.1,E:0.1):0.1,(F:0.1,I:0.1):0.1):0.1,
+C:0.1):0.1):0.1):0.1):0.1):0.1);
+(A:0.1,(B:0.1,(E:0.1,((G:0.1,(F:0.1,I:0.1):0.1):0.1,((J:0.1,(H:0.1,
+D:0.1):0.1):0.1,C:0.1):0.1):0.1):0.1):0.1);
 
 Output file format
 
@@ -285,7 +331,115 @@ Trees 11 and 12:    10
 9 10 4
 11 12 10
 
-   No qa tests were found for ftreedistpair
+  Output files for usage example
+
+  File: treedist.ftreedistpair
+
+1 13 0.000000e+00
+1 14 4.000000e-02
+1 15 2.000000e-02
+1 16 1.000000e-01
+1 17 1.000000e-01
+1 18 1.000000e-01
+1 19 1.000000e-01
+1 20 1.000000e-01
+1 21 1.000000e-01
+1 22 1.000000e-01
+1 23 2.000000e-02
+1 24 1.000000e-01
+2 13 4.000000e-02
+2 14 0.000000e+00
+2 15 2.000000e-02
+2 16 1.000000e-01
+2 17 8.000000e-02
+2 18 1.000000e-01
+2 19 8.000000e-02
+2 20 1.000000e-01
+2 21 8.000000e-02
+2 22 1.000000e-01
+2 23 2.000000e-02
+2 24 1.000000e-01
+3 13 2.000000e-02
+3 14 2.000000e-02
+3 15 0.000000e+00
+3 16 1.000000e-01
+3 17 1.000000e-01
+3 18 1.000000e-01
+3 19 1.000000e-01
+3 20 1.000000e-01
+3 21 1.000000e-01
+3 22 1.000000e-01
+3 23 0.000000e+00
+3 24 1.000000e-01
+4 13 1.000000e-01
+4 14 1.000000e-01
+4 15 1.000000e-01
+4 16 0.000000e+00
+4 17 2.000000e-02
+4 18 2.000000e-02
+4 19 4.000000e-02
+4 20 2.000000e-02
+4 21 4.000000e-02
+4 22 0.000000e+00
+4 23 1.000000e-01
+4 24 2.000000e-02
+5 13 1.000000e-01
+5 14 8.000000e-02
+
+
+  [Part of this file has been deleted for brevity]
+
+20 10 2.000000e-02
+20 11 1.000000e-01
+20 12 0.000000e+00
+21 1 1.000000e-01
+21 2 8.000000e-02
+21 3 1.000000e-01
+21 4 4.000000e-02
+21 5 2.000000e-02
+21 6 4.000000e-02
+21 7 2.000000e-02
+21 8 2.000000e-02
+21 9 0.000000e+00
+21 10 4.000000e-02
+21 11 1.000000e-01
+21 12 2.000000e-02
+22 1 1.000000e-01
+22 2 1.000000e-01
+22 3 1.000000e-01
+22 4 0.000000e+00
+22 5 2.000000e-02
+22 6 2.000000e-02
+22 7 4.000000e-02
+22 8 2.000000e-02
+22 9 4.000000e-02
+22 10 0.000000e+00
+22 11 1.000000e-01
+22 12 2.000000e-02
+23 1 2.000000e-02
+23 2 2.000000e-02
+23 3 0.000000e+00
+23 4 1.000000e-01
+23 5 1.000000e-01
+23 6 1.000000e-01
+23 7 1.000000e-01
+23 8 1.000000e-01
+23 9 1.000000e-01
+23 10 1.000000e-01
+23 11 0.000000e+00
+23 12 1.000000e-01
+24 1 1.000000e-01
+24 2 1.000000e-01
+24 3 1.000000e-01
+24 4 2.000000e-02
+24 5 4.000000e-02
+24 6 2.000000e-02
+24 7 4.000000e-02
+24 8 0.000000e+00
+24 9 2.000000e-02
+24 10 2.000000e-02
+24 11 1.000000e-01
+24 12 0.000000e+00
 
 Data files
 

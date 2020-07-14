@@ -1,14 +1,8 @@
-<!--START OF HEADER - DON'T ALTER -->
-
-<HTML>
-<HEAD>
-  <TITLE>
-  EMBOSS: contacts
-  </TITLE>
+<!-- START OF HEADER -->
+<HTML><HEAD>
+<TITLE> EMBASSY: CONTACTS documentation. </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-
-
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
@@ -17,7 +11,7 @@
 <td align=left valign=middle>
 <b><font size="+6">
 
-contacts
+<H2> CONTACTS documentation
 </font></b>
 </td></tr>
 </table>
@@ -26,363 +20,127 @@ contacts
 
 
 
-<!--END OF HEADER-->
+<!-- END OF HEADER -->
 
 
 
 
+<!-- CONTENTS
+     This always includes the sections below.
+     Other subsections can be added for individual applications.
+-->
+<H2>CONTENTS </H2>
+<b> <a href="#1.0">1.0     SUMMARY                   </a></b><br>
+<b> <a href="#2.0">2.0     INPUTS & OUTPUTS          </a></b><br>
+<b> <a href="#3.0">3.0     INPUT FILE FORMAT         </a></b><br>
+<b> <a href="#4.0">4.0     OUTPUT FILE FORMAT        </a></b><br>
+<b> <a href="#5.0">5.0     DATA FILES                </a></b><br>
+<b> <a href="#6.0">6.0     USAGE                     </a></b><br>    
+<b> <a href="#7.0">7.0     KNOWN BUGS & WARNINGS     </a></b><br>    
+<b> <a href="#8.0">8.0     NOTES                     </a></b><br>
+<b> <a href="#9.0">9.0     DESCRIPTION               </a></b><br>
+<b> <a href="#10.0">10.0   ALGORITHM                 </a></b><br>
+<b> <a href="#11.0">11.0   RELATED APPLICATIONS      </a></b><br>
+<b> <a href="#12.0">12.0   DIAGNOSTIC ERROR MESSAGES </a></b><br>
+<b> <a href="#13.0">13.0   AUTHORS                   </a></b><br>
+<b> <a href="#14.0">14.0   REFERENCES                </a></b><br>
 
 
-<H2>
-    Function
-</H2>
-Reads CCF files (clean coordinate files) and writes CON files (contact files) of intra-chain residue-residue contact data
+<!-- SUMMARY
+     Succint description of the application, particularly its inputs, outputs
+     and what it does.  The same text is given at the top of the source (.c)
+     file and in the <documentation> attribute of the <application definition>
+     of the ACD file.
+-->
+<a name="1.0"></a>
+<br><br><br><H2> 1.0   SUMMARY  </H2>
+ Reads CCF files (clean coordinate files) and writes CON files (contact files) of intra-chain residue-residue contact data.
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
+Generate intra-chain CON files from CCF files
+
+
+
+<!-- INPUTS & OUTPUTS
+     Short summary of the application inputs and outputs in its different 
+     modes of usage (if appropriate). More detail than the summary.
+-->
+<a name="2.0"></a>
+<br><br><br><H2> 2.0   INPUTS & OUTPUTS          </H2>
+CONTACTS reads a directory of domain or protein CCF files (clean coordinate files) and writes a CON file (contacts file) of intra-chain residue-residue contact data for each file in the input directory.  Each CON file contains residue contact data for every chain of every model in a protein coordinate file, or for a single domain where a domain CCF file is read.  The user is prompted for the paths for the CCF (input) and CON (output) files and the file extensions are specified in the ACD file.  The domain identifier code or pdb identifier code is used as appropriate to name the output files.  A log file is also written.
+
+
+<!-- INPUT FILE FORMAT 
+     Description and example(s) of input file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.
+     Use "<b>CONTACTS</b> reads any normal sequence USAs." if
+     appropriate.
 -->
 
 
 
-
-<H2>
-    Description
-</H2>
-
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-  -->
-
-This program is part of a suite of EMBOSS applications that directly or
-indirectly make use of the protein structure databases pdb and scop.
-This program is part of an experimental analysis pipeline described in an
-accompanying document.  We provide the software in the hope that it will
-be useful.  The applications were designed for specific research purposes
-and may not be useful or reliable in contexts other than the described
-pipeline.  The development of the suite was coordinated by Jon Ison to
-whom enquiries and bug reports should be sent (email jison@hgmp.mrc.ac.uk).
-**
-Knowledge of the physical contacts that amino acid residues within a
-protein or domain make with one another is required for several different
-analyses.  contacts calculates intra-chain residue-residue contact data
-from protein and domain coordinate files.     
+<a name="3.0"></a>
+<br><br><br><H2> 3.0   INPUT FILE FORMAT         </H2>
+The format of the clean coordinate file is described in the <a href="pdbparse.html">PDBPARSE documentation.</a>
 
 
 
 
 
 
-
-
-
-
-
-<H2>
-    Algorithm
-</H2>
-
-<!-- 
-        Algorithms
-	  Pseudocode/Vague description/Handwaving/web links to useful pages
-  -->
-
-Contact between two residues is defined as when the van der Waals surface
-of any atom of the first residue comes within the threshold contact
-distance of the van der Waals surface of any atom of the second residue.
-The threshold contact distance is a user-defined distance with a default
-value of 1 Angstrom.
-
-
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    Usage
-</H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
-<b>Here is a sample session with contacts</b>
-<p>
-
-<p>
-<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
-
-% <b>contacts </b>
-Reads CCF files (clean coordinate files) and writes CON files (contact
-files) of intra-chain residue-residue contact data.
-Location of CCF files (clean coordinate files) (input) [./]: <b>structure</b>
-Name of data file with van der Waals radii [Evdw.dat]: <b></b>
-Threshold contact distance [1.0]: <b>1</b>
-Location of CON files (contact files) (output) [./]: <b></b>
-Name of log file for the build [contacts.log]: <b></b>
-
-1cs4
-1ii7
-D1CS4A_
-D1II7A_
-
-</pre></td></tr></table><p>
-<p>
-<a href="#output.1">Go to the output files for this example</a><p><p>
-
-
-
-
-<H2>
-    Command line arguments
-</H2>
-
-<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
-<pre>
-   Standard (Mandatory) qualifiers:
-  [-cpdbdir]           dirlist    This option specifies the location of CCF
-                                  files (clean coordinate files) (input). A
-                                  'clean cordinate file' contains protein
-                                  coordinate and derived data for a single PDB
-                                  file ('protein clean coordinate file') or a
-                                  single domain from SCOP or CATH ('domain
-                                  clean coordinate file'), in CCF format
-                                  (EMBL-like). The files, generated by using
-                                  PDBPARSE (PDB files) or DOMAINER (domains),
-                                  contain 'cleaned-up' data that is
-                                  self-consistent and error-corrected. Records
-                                  for residue solvent accessibility and
-                                  secondary structure are added to the file by
-                                  using PDBPLUS.
-   -vdwfile            datafile   This option specifies the name of the data
-                                  file with van der Waals radii of atoms for
-                                  different amino acid residues.
-   -threshold          float      Contact between two residues is defined as
-                                  when the van der Waals surface of any atom
-                                  of the first residue comes within the
-                                  threshold contact distance of the van der
-                                  Waals surface of any atom of the second
-                                  residue. The threshold contact distance is a
-                                  user-defined distance with a default value
-                                  of 1 Angstrom.
-  [-conoutdir]         outdir     This option specifies the location of CON
-                                  files (contact files) (output). A 'contact
-                                  file' contains contact data for a protein or
-                                  a domain from SCOP or CATH, in the CON
-                                  format (EMBL-like). The contacts may be
-                                  intra-chain residue-residue, inter-chain
-                                  residue-residue or residue-ligand. The files
-                                  are generated by using CONTACTS, INTERFACE
-                                  and FUNKY.
-   -conerrfile         outfile    The log file contains messages about any
-                                  errors arising while contacts ran.
-
-   Additional (Optional) qualifiers:
-   -[no]ccfnaming      boolean    This option specifies whether to use pdbid
-                                  code to name the output files. If set, the
-                                  PDB identifier code (from the PDB file) is
-                                  used to name the file. Otherwise, the output
-                                  files have the same names as the input
-                                  files.
-   -skip               boolean    Whether to calculate contacts between
-                                  residue adjacent in sequence.
-   -ignore             float      If any two atoms from two different residues
-                                  are at least this distance apart then no
-                                  futher inter-atomic contacts will be checked
-                                  for for that residue pair . This speeds the
-                                  calculation up considerably.
-
-   Advanced (Unprompted) qualifiers: (none)
-   Associated qualifiers:
-
-   "-conerrfile" associated qualifiers
-   -odirectory         string     Output directory
-
-   General qualifiers:
-   -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
-   -options            boolean    Prompt for standard and additional values
-   -debug              boolean    Write debug output to program.dbg
-   -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
-   -warning            boolean    Report warnings
-   -error              boolean    Report errors
-   -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-</pre>
-</td></tr></table>
-<P>
-<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td>[-cpdbdir]<br>(Parameter 1)</td>
-<td>This option specifies the location of CCF files (clean coordinate files) (input). A 'clean cordinate file' contains protein coordinate and derived data for a single PDB file ('protein clean coordinate file') or a single domain from SCOP or CATH ('domain clean coordinate file'), in CCF format (EMBL-like). The files, generated by using PDBPARSE (PDB files) or DOMAINER (domains), contain 'cleaned-up' data that is self-consistent and error-corrected. Records for residue solvent accessibility and secondary structure are added to the file by using PDBPLUS.</td>
-<td>Directory with files</td>
-<td>./</td>
-</tr>
-
-<tr>
-<td>-vdwfile</td>
-<td>This option specifies the name of the data file with van der Waals radii of atoms for different amino acid residues.</td>
-<td>Data file</td>
-<td>Evdw.dat</td>
-</tr>
-
-<tr>
-<td>-threshold</td>
-<td>Contact between two residues is defined as when the van der Waals surface of any atom of the first residue comes within the threshold contact distance of the van der Waals surface of any atom of the second residue. The threshold contact distance is a user-defined distance with a default value of 1 Angstrom.</td>
-<td>Any numeric value</td>
-<td>1.0</td>
-</tr>
-
-<tr>
-<td>[-conoutdir]<br>(Parameter 2)</td>
-<td>This option specifies the location of CON files (contact files) (output). A 'contact file' contains contact data for a protein or a domain from SCOP or CATH, in the CON format (EMBL-like). The contacts may be intra-chain residue-residue, inter-chain residue-residue or residue-ligand. The files are generated by using CONTACTS, INTERFACE and FUNKY.</td>
-<td>Output directory</td>
-<td>./</td>
-</tr>
-
-<tr>
-<td>-conerrfile</td>
-<td>The log file contains messages about any errors arising while contacts ran.</td>
-<td>Output file</td>
-<td>contacts.log</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Additional (Optional) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td>-[no]ccfnaming</td>
-<td>This option specifies whether to use pdbid code to name the output files. If set, the PDB identifier code (from the PDB file) is used to name the file. Otherwise, the output files have the same names as the input files.</td>
-<td>Boolean value Yes/No</td>
-<td>Yes</td>
-</tr>
-
-<tr>
-<td>-skip</td>
-<td>Whether to calculate contacts between residue adjacent in sequence.</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-ignore</td>
-<td>If any two atoms from two different residues are at least this distance apart then no futher inter-atomic contacts will be checked for for that residue pair . This speeds the calculation up considerably.</td>
-<td>Any numeric value</td>
-<td>20.0</td>
-</tr>
-
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td colspan=4>(none)</td>
-</tr>
-
-</table>
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
+<!-- OUTPUT FILE FORMAT 
+     Description and example(s) of output file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.  
+     If the standard description of the avalable report formats is required, 
+     use:   #include file="inc/reportformats.ihtml"
+     Use "Outputs a graph to the specified graphics device."
+     or  "outputs a report format file. The default format is ..."
+     if appropriate.
 -->
+<a name="4.0"></a>
+<br><br><br><H2> 4.0   OUTPUT FILE FORMAT         </H2>
+The CON format used for the contact files (Figure 1) is similar to EMBL format and uses the following records:
+<UL>
+<LI> XX - used for spacing and comments.  The first line is bibliographic information and 
+contains the text "XX Intra-chain residue-residue contact data".
+<LI> TY - type of contact.  For CON files generated by CONTACTS, 'INTRA' is always given.
+<LI>  EX - experimental information. The value of the threshold contact 
+distance is given as a floating point number after 'THRESH'. For CON files generated by 
+CONTACTS, the threshold ignore distance is given after 'THRESH'. The number of 
+models and number of polypeptide chains are given after 'NMOD' and 'NCHA' 
+respectively. For domain CCF files a 1 is always given. 
+<LI> NE - number of entries (chains) in the file. For CON files generated by CONTACTS this is 
+the number of chains, equal to the number of models multiplied by the number of unique chains. 
+Following the NE record, the file has a section for each entry containing
+records for entry number (EN), identifier codes (ID),  
+polypeptide chain-specific data (CN), chain sequence information (S1) and 
+number of contacts (NC), that together define the chain and its contacts. 
+<LI> EN - entry number.  The number in brackets indicates the start of an entry (chain).
+<LI> CN - polypeptide chain-specific data.  Tokens delimiting data items are as follow. 
+ (1) MO: The model number (from the PDB file).  (2) CN1: Chain number. (3) CN2: Not used by 
+CONTACTS, a '.' is given.  (4) ID1: PDB chain identifier (a '.` given in cases where a chain 
+identifier was not specified in the original PDB file or, for domain CCF files, the domain 
+is comprised of more than one domain). (5) ID2: Not used by CONTACTS, a '.' is given. 
+(6) NRES1: number of amino acid residues in the chain or domain. (7) NRES2: Not used by SITES, a '.' is given. 
+<LI> NC - number of contacts: (1) SM:  Number of residue-residue contacts; between the side-chain 
+or main-chain atoms of different amino acid residues in the same chain (2) LI: Not used by 
+CONTACTS, a '.' is given.
+<LI> ID - identifier codes: (1) PDB: 4-character PDB identifier code. (2) DOM: 7-character domain identifier 
+code from SCOP or CATH (where domain CCF files were read). (3) LIG: Not used by CONTACTS, a '.' 
+is given. 
+<LI> S1 - polypeptide chain sequence for domain or protein. The number of residues is given 
+before AA on the first line.  The sequece is given on subsequent lines. 
+<LI> SM - Line of residue contact data. Pairs of amino acid identifiers and 
+residue numbers are delimited by a ';'. Residue numbers are taken from the 
+CCF file and give a correct index into the sequence (i.e. they
+are not necessarily the same as the original PDB file).  This sequence is 
+given in the CON file itself (S1 record).
+<LI> // - delimiter for individual entries in the file and also given on
+the last line of the file.
+</UL>
 
 
-
-
-
-
-
-
-<H2>
-    Input file format
-</H2>
-
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
-<b>contacts</b> reads any normal sequence USAs.
-
-<p>
-
-
-
-<p>
-
-The format of the clean coordinate file is described in pdbparse
-
-
-
-<H2>
-    Output file format
-</H2>
-
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-
-        If you wish to include the standard description of the avalable
-	report formats, use:
-<p>
-
-The output is a standard EMBOSS report file. 
-
-<p>
-
-The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
-
-<p>
-
-See:
-<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
-http://emboss.sf.net/docs/themes/ReportFormats.html</A>
-for further information on report formats.
-
-<p>
-
-   -->
-
-
-<p>
 
 
 <a name="output.1"></a>
@@ -607,824 +365,543 @@ SM   ASP 49 ; LEU 50
 //
 </pre>
 </td></tr></table><p>
-<p><h3>File: d1cs4a_.con</h3>
+<p><h3>File: 2hhb.con</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 XX   Intra-chain residue-residue contact data.
 XX
 TY   INTRA
 XX
-EX   THRESH 1.0; IGNORE 20.0; NMOD 1; NCHA 1
+EX   THRESH 1.0; IGNORE 20.0; NMOD 1; NCHA 4
 XX
-NE   1
+NE   4
 XX
 EN   [1]
 XX
-ID   PDB 1CS4; DOM D1CS4A_; LIG .
+ID   PDB 2hhb; DOM .; LIG .
 XX
-CN   MO 1; CN1 1; CN2 .; ID1 A; ID2 .; NRES1 225; NRES2 .
+CN   MO 1; CN1 1; CN2 .; ID1 A; ID2 .; NRES1 141; NRES2 .
 XX
-S1   SEQUENCE   225 AA;  25486 MW;  437C8290 CRC32;
-     MHHHHHHAME MKADINAKQE DMMFHKIYIQ KHDNVSILFA DIEGFTSLAS QCTAQELVMT
-     LNELFARFDK LAAENHCLRI KILGDCYYCV SGLPEARADH AHCCVEMGMD MIEAISLVRE
-     MTGVNVNMRV GIHSGRVHCG VLGLRKWQFD VWSNDVTLAN HMEAGGKAGR IHITKATLSY
-     LNGDYEVEPG CGGERNAYLK EHSIETFLIL RCTQKRKEEK AMIAK
+S1   SEQUENCE   141 AA;  15127 MW;  5EC7DB1E CRC32;
+     VLSPADKTNV KAAWGKVGAH AGEYGAEALE RMFLSFPTTK TYFPHFDLSH GSAQVKGHGK
+     KVADALTNAV AHVDDMPNAL SALSDLHAHK LRVDPVNFKL LSHCLLVTLA AHLPAEFTPA
+     VHASLDKFLA SVSTVLTSKY R
 XX
-NC   SM 843; LI .
+NC   SM 643; LI .
 XX
-SM   MET 22 ; MET 23
-SM   MET 22 ; PHE 24
-SM   MET 22 ; HIS 25
-SM   MET 22 ; LYS 26
-SM   MET 23 ; PHE 24
-SM   MET 23 ; HIS 25
-SM   PHE 24 ; HIS 25
-SM   PHE 24 ; LYS 26
-SM   HIS 25 ; LYS 26
-SM   HIS 25 ; ILE 27
-SM   HIS 25 ; LEU 144
-SM   LYS 26 ; ILE 27
-SM   LYS 26 ; TYR 28
-SM   ILE 27 ; TYR 28
-SM   ILE 27 ; ILE 29
-SM   TYR 28 ; ILE 29
-SM   TYR 28 ; GLY 140
-SM   TYR 28 ; VAL 141
-SM   TYR 28 ; TRP 147
-SM   ILE 29 ; GLN 30
-SM   ILE 29 ; HIS 138
-SM   ILE 29 ; CYS 139
-SM   ILE 29 ; GLY 140
-SM   ILE 29 ; VAL 141
-SM   ILE 29 ; LEU 142
-SM   ILE 29 ; TRP 152
-SM   GLN 30 ; LYS 31
-SM   GLN 30 ; HIS 32
+SM   VAL 1 ; LEU 2
+SM   VAL 1 ; SER 3
+SM   VAL 1 ; LYS 127
+SM   LEU 2 ; SER 3
+SM   LEU 2 ; PRO 4
+SM   LEU 2 ; ASP 6
+SM   LEU 2 ; LYS 7
+SM   LEU 2 ; VAL 73
+SM   LEU 2 ; MET 76
+SM   LEU 2 ; LYS 127
+SM   LEU 2 ; PHE 128
+SM   LEU 2 ; SER 131
+SM   SER 3 ; PRO 4
+SM   SER 3 ; ALA 5
+SM   SER 3 ; ASP 6
+SM   SER 3 ; LYS 7
+SM   SER 3 ; LYS 127
+SM   PRO 4 ; ALA 5
+SM   PRO 4 ; ASP 6
+SM   PRO 4 ; LYS 7
+SM   PRO 4 ; THR 8
+SM   ALA 5 ; ASP 6
+SM   ALA 5 ; LYS 7
+SM   ALA 5 ; THR 8
+SM   ALA 5 ; ASN 9
+SM   ASP 6 ; LYS 7
+SM   ASP 6 ; THR 8
+SM   ASP 6 ; ASN 9
+SM   ASP 6 ; VAL 10
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-SM   GLY 192 ; GLU 194
-SM   GLY 192 ; ARG 195
-SM   GLY 192 ; ASN 196
-SM   GLY 192 ; LEU 199
-SM   GLY 192 ; THR 206
-SM   GLY 193 ; GLU 194
-SM   GLY 193 ; ARG 195
-SM   GLY 193 ; ASN 196
-SM   GLY 193 ; LEU 199
-SM   GLY 193 ; LYS 200
-SM   GLU 194 ; ARG 195
-SM   GLU 194 ; ASN 196
-SM   ARG 195 ; ASN 196
-SM   ASN 196 ; ALA 197
-SM   ASN 196 ; TYR 198
-SM   ASN 196 ; LEU 199
-SM   ASN 196 ; LYS 200
-SM   ALA 197 ; TYR 198
-SM   ALA 197 ; LEU 199
-SM   ALA 197 ; LYS 200
-SM   ALA 197 ; GLU 201
-SM   TYR 198 ; LEU 199
-SM   TYR 198 ; LYS 200
-SM   TYR 198 ; GLU 201
-SM   TYR 198 ; HIS 202
-SM   LEU 199 ; LYS 200
-SM   LEU 199 ; GLU 201
-SM   LEU 199 ; HIS 202
-SM   LEU 199 ; SER 203
-SM   LEU 199 ; ILE 204
-SM   LEU 199 ; THR 206
-SM   LYS 200 ; GLU 201
-SM   LYS 200 ; HIS 202
-SM   LYS 200 ; SER 203
-SM   GLU 201 ; HIS 202
-SM   GLU 201 ; SER 203
-SM   HIS 202 ; SER 203
-SM   HIS 202 ; ILE 204
-SM   SER 203 ; ILE 204
-SM   SER 203 ; GLU 205
-SM   ILE 204 ; GLU 205
-SM   ILE 204 ; THR 206
-SM   GLU 205 ; THR 206
-SM   GLU 205 ; PHE 207
-SM   THR 206 ; PHE 207
-SM   PHE 207 ; LEU 208
-SM   PHE 207 ; ILE 209
-SM   LEU 208 ; ILE 209
-SM   LEU 208 ; LEU 210
-SM   ILE 209 ; LEU 210
-//
-</pre>
-</td></tr></table><p>
-<p><h3>File: d1ii7a_.con</h3>
-<table width="90%"><tr><td bgcolor="#CCFFCC">
-<pre>
-XX   Intra-chain residue-residue contact data.
-XX
-TY   INTRA
-XX
-EX   THRESH 1.0; IGNORE 20.0; NMOD 1; NCHA 1
-XX
-NE   1
-XX
-EN   [1]
-XX
-ID   PDB 1II7; DOM D1II7A_; LIG .
-XX
-CN   MO 1; CN1 1; CN2 .; ID1 A; ID2 .; NRES1 65; NRES2 .
-XX
-S1   SEQUENCE    65 AA;   7396 MW;  0CFB92A3 CRC32;
-     MKFAHLADIH LGYEQFHKPQ REEEFAEAFK NALEIAVQEN VDFILIAGDL FHSSRPSPGT
-     LKKAI
-XX
-NC   SM 151; LI .
-XX
-SM   ASP 8 ; ILE 9
-SM   ASP 8 ; HIS 10
-SM   ASP 8 ; GLY 48
-SM   ASP 8 ; ASP 49
-SM   ILE 9 ; HIS 10
-SM   ILE 9 ; LEU 11
-SM   ILE 9 ; PHE 25
-SM   ILE 9 ; PHE 29
-SM   ILE 9 ; ILE 46
-SM   ILE 9 ; ASP 49
-SM   ILE 9 ; LEU 50
-SM   HIS 10 ; LEU 11
-SM   HIS 10 ; GLY 12
-SM   HIS 10 ; TYR 13
-SM   HIS 10 ; PHE 25
-SM   HIS 10 ; ASP 49
-SM   HIS 10 ; LEU 50
-SM   LEU 11 ; GLY 12
-SM   LEU 11 ; TYR 13
-SM   LEU 11 ; ALA 26
-SM   LEU 11 ; PHE 29
-SM   LEU 11 ; LEU 50
-SM   GLY 12 ; TYR 13
-SM   GLY 12 ; GLU 14
-SM   GLY 12 ; GLU 22
-SM   TYR 13 ; GLU 14
-SM   TYR 13 ; GLN 15
-SM   TYR 13 ; GLU 22
-SM   TYR 13 ; PHE 25
-SM   GLU 14 ; GLN 15
-
-
-<font color=red>  [Part of this file has been deleted for brevity]</font>
-
-SM   ASN 31 ; ILE 35
-SM   ALA 32 ; LEU 33
-SM   ALA 32 ; GLU 34
-SM   ALA 32 ; ILE 35
-SM   ALA 32 ; ALA 36
-SM   LEU 33 ; GLU 34
-SM   LEU 33 ; ILE 35
-SM   LEU 33 ; ALA 36
-SM   LEU 33 ; VAL 37
-SM   LEU 33 ; ILE 44
-SM   GLU 34 ; ILE 35
-SM   GLU 34 ; ALA 36
-SM   GLU 34 ; VAL 37
-SM   GLU 34 ; GLN 38
-SM   ILE 35 ; ALA 36
-SM   ILE 35 ; VAL 37
-SM   ILE 35 ; GLN 38
-SM   ILE 35 ; GLU 39
-SM   ALA 36 ; VAL 37
-SM   ALA 36 ; GLN 38
-SM   ALA 36 ; GLU 39
-SM   ALA 36 ; ASN 40
-SM   ALA 36 ; VAL 41
-SM   ALA 36 ; ILE 44
-SM   VAL 37 ; GLN 38
-SM   VAL 37 ; GLU 39
-SM   VAL 37 ; ASN 40
-SM   GLN 38 ; GLU 39
-SM   GLN 38 ; ASN 40
-SM   GLU 39 ; ASN 40
-SM   GLU 39 ; VAL 41
-SM   ASN 40 ; VAL 41
-SM   ASN 40 ; ASP 42
-SM   VAL 41 ; ASP 42
-SM   VAL 41 ; PHE 43
-SM   VAL 41 ; ILE 44
-SM   ASP 42 ; PHE 43
-SM   PHE 43 ; ILE 44
-SM   PHE 43 ; LEU 45
-SM   ILE 44 ; LEU 45
-SM   ILE 44 ; ILE 46
-SM   LEU 45 ; ILE 46
-SM   LEU 45 ; ALA 47
-SM   ILE 46 ; ALA 47
-SM   ILE 46 ; GLY 48
-SM   ILE 46 ; LEU 50
-SM   ALA 47 ; GLY 48
-SM   GLY 48 ; ASP 49
-SM   GLY 48 ; LEU 50
-SM   ASP 49 ; LEU 50
+SM   GLN 131 ; LYS 132
+SM   GLN 131 ; VAL 133
+SM   GLN 131 ; VAL 134
+SM   GLN 131 ; ALA 135
+SM   LYS 132 ; VAL 133
+SM   LYS 132 ; VAL 134
+SM   LYS 132 ; ALA 135
+SM   LYS 132 ; GLY 136
+SM   VAL 133 ; VAL 134
+SM   VAL 133 ; ALA 135
+SM   VAL 133 ; GLY 136
+SM   VAL 133 ; VAL 137
+SM   VAL 134 ; ALA 135
+SM   VAL 134 ; GLY 136
+SM   VAL 134 ; VAL 137
+SM   VAL 134 ; ALA 138
+SM   ALA 135 ; GLY 136
+SM   ALA 135 ; VAL 137
+SM   ALA 135 ; ALA 138
+SM   ALA 135 ; ASN 139
+SM   GLY 136 ; VAL 137
+SM   GLY 136 ; ALA 138
+SM   GLY 136 ; ASN 139
+SM   GLY 136 ; ALA 140
+SM   VAL 137 ; ALA 138
+SM   VAL 137 ; ASN 139
+SM   VAL 137 ; ALA 140
+SM   VAL 137 ; LEU 141
+SM   ALA 138 ; ASN 139
+SM   ALA 138 ; ALA 140
+SM   ALA 138 ; LEU 141
+SM   ALA 138 ; ALA 142
+SM   ASN 139 ; ALA 140
+SM   ASN 139 ; LEU 141
+SM   ASN 139 ; ALA 142
+SM   ASN 139 ; HIS 143
+SM   ALA 140 ; LEU 141
+SM   ALA 140 ; ALA 142
+SM   ALA 140 ; HIS 143
+SM   LEU 141 ; ALA 142
+SM   LEU 141 ; HIS 143
+SM   LEU 141 ; TYR 145
+SM   ALA 142 ; HIS 143
+SM   ALA 142 ; LYS 144
+SM   ALA 142 ; TYR 145
+SM   HIS 143 ; LYS 144
+SM   HIS 143 ; TYR 145
+SM   LYS 144 ; TYR 145
+SM   LYS 144 ; HIS 146
+SM   TYR 145 ; HIS 146
 //
 </pre>
 </td></tr></table><p>
 <p><h3>File: contacts.log</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+2hhb
 1cs4
 1ii7
-D1CS4A_
-D1II7A_
 </pre>
 </td></tr></table><p>
 
 
-<p>
 
-contacts reads a directory of domain or protein coordinate files and writes
-a contacts file of intra-chain residue-residue contact data in embl-like
-format for each file in the input directory.  Each output file contains
-residue contact data for every chain of every model in a protein coordinate
-file, or contact data for the single scop domain where a domain coordinate
-file is read.  The paths and extensions for the coordinate (input) and
-contact (output) files are specified by the user.  The scop domain or pdb
-identifier codes are used as appropriate to name the output files.  A log
-file is also written.
-                
 
-<p>
-
-The embl-like format used for the contact files (below) uses the following
-records:
-
-<p>
-
-(1)  ID - either the 4-character PDB identifier code (where clean protein
-coordinate files are used as input) or the 7-character domain identifier
-code taken from scop (where domain coordinate files were used as input; see
-documentation for the EMBOSS application scope for further info.)
-
-<p>
-
-(2)  DE - bibliographic information.  The text "Residue-residue contact
-data" is always given.
-
-<p>
-
-(4)  EX - experimental information. The value of the threshold contact
-distance is given as a floating point number after 'THRESH'. The number of
-models and number of polypeptide chains are given after 'NMOD' and 'NCHA'
-respectively. domain coordinate files a 1 is always given. Following the EX
-record, the file will have a section containing a CN, IN and SM records
-(see below) for each chain. The sections for each chain of a model are given
-after the MO record.
-
-<p>
-
-(5) MO - model number. The number given in brackets after this record
-indicates the start of a section of model-specific data.
-
-<p>
-
-(6) CN - chain number.  The number given in brackets after this record
-indicates the start of a section of chain-specific data.
-
-<p>
-
-(7) IN - chain specific data. The character given after ID is the PDB chain
-identifier taken from the input file, (a '.` given in cases where a chain
-identifier was not specified in the original pdb file or, for domain
-coordinate files, the domain is comprised of more than one domain).  The
-number of amino acid residues comprising the chain (or the chains from
-which a domain is comprised) is given after NR. The number of residue-residue
-contacts is given after NSMCON.
-
-<p>
-
-(8) SM - Line of residue contact data. Pairs of amino acid identifiers and
-residue numbers are delimited by a ';'. Residue numbers are taken from the 
-clean coordinate file and give a correct index into the sequence (i.e. they
-are not necessarily the same as the original pdb file).
-
-<p>
-
-(9) XX - used for spacing.
-
-<p>
-
-(10) // - given on the last line of the file only.
-
-<p>
-
-Note - SM records are used for contacts between either either side-chain
-or main-chain atoms as defined above.  In a future implementation, SS will
-be used for side-chain only contacts, MM will be used for main-chain only
-contacts, and there will probably be several other forms of contact too.
-
-<p>
-
-
-Excerpt from contacts output file
-
-<p>
-
-<pre>
-ID   D1HBBB_
-XX
-DE   Residue-residue side-chain contact data
-XX
-EX   THRESH 10.0; NMOD 1; NCHA 1;
-XX
-MO   [1]
-XX
-CN   [1]
-XX
-IN   ID B; NR 146; NSMCON 2514;
-XX
-SM   VAL 1 ; HIS 2
-SM   VAL 1 ; LEU 3
-SM   VAL 1 ; THR 4
-SM   VAL 1 ; PRO 5
-SM   VAL 1 ; GLU 6
-SM   VAL 1 ; GLU 7
-SM   VAL 1 ; LYS 8
-SM   VAL 1 ; VAL 11
-SM   VAL 1 ; PHE 71
-</pre>
-
-<H2>
-    Data files
-</H2>
-
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-<p>
-EMBOSS data files are distributed with the application and stored
-in the standard EMBOSS data directory, which is defined
-by the EMBOSS environment variable EMBOSS_DATA.
-
-<p>
-
-To see the available EMBOSS data files, run:
-<p>
-<pre>
-% embossdata -showall
-</pre>
-<p>
-To fetch one of the data files (for example 'Exxx.dat') into your
-current directory for you to inspect or modify, run:
-
-<pre>
-
-% embossdata -fetch -file Exxx.dat
-
-</pre>
-<p>
-
-Users can provide their own data files in their own directories.
-Project specific files can be put in the current directory, or for
-tidier directory listings in a subdirectory called
-".embossdata". Files for all EMBOSS runs can be put in the user's home
-directory, or again in a subdirectory called ".embossdata".
-
-<p>
-The directories are searched in the following order:
-
-<ul>
-   <li> . (your current directory)
-   <li> .embossdata (under your current directory)
-   <li> ~/ (your home directory)
-   <li> ~/.embossdata
-</ul>
-<p>
-
-   -->
-
-contacts uses a data file containing van der Waals radii for atoms in
-proteins (below).  The file Evdw.dat is such a data file and is part
-of the emboss distribution.
-
-<p>
-
-<pre>
-DE   File of van der Waals radii for atoms in proteins
-XX
-NR   24
-XX
-AA   ALA
-XX
-ID   A
-XX
-NN   12
-XX
-AT   N    ; 1.7
-AT   CA   ; 1.9
-AT   C    ; 1.7
-AT   O    ; 1.4
-AT   CB   ; 1.9
-AT   OXT  ; 1.4
-AT   H    ; 1.2
-AT   OH   ; 1.4
-AT   HA   ; 1.2
-AT   HB   ; 1.2
-AT   HG   ; 1.2
-AT   D    ; 1.2
-//
-AA   ARG
-XX
-ID   R
-XX
-NN   31
-XX
-AT   N    ; 1.7
-AT   CA   ; 1.9
-AT   C    ; 1.7
-AT   O    ; 1.4
-AT   N    ; 1.7
-**
-< data ommitted for clarity >
-**
-//
-AA   XAA
-XX
-ID   X
-XX
-NN   6
-XX
-AT   C    ; 1.9
-AT   N    ; 1.7
-AT   O    ; 1.4
-AT   H    ; 1.2
-AT   S    ; 1.8
-AT   D    ; 1.2
-//              
-</pre>
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    Notes
-</H2>
-
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
-None.
-
-
-
-
-
-
-
-<H2>
-    References
-</H2>
-
-<!-- 
-        Bibliography for methods used.
-   -->
-
-None.
-
-
-
-
-
-
-
-
-<H2>
-    Warnings
-</H2>
-
-<!-- 
-        Potentially stupid things the program will let you do.
-   -->
-
-None.
-
-
-
-
-
-
-
-<H2>
-    Diagnostic Error Messages
-</H2>
-
-<!-- 
-        Error messages specific to this program, eg:
-        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
-   -->
-
-contacts generates a log file an excerpt of which is shown (below). If
-there is a problem in processing a coordinate file, three lines containing
-the record '//', the scop domain or pdb identifier code and an error message
-respectively are written. The text 'WARN  file open error filename',
-'ERROR file read error filename' or 'ERROR file write error filename ' will
-be reported when an error was encountered during a file open, read or write
-respectively.  Various other error messages may also be given (in case of
-difficulty email Jon Ison, jison@hgmp.mrc.ac.uk).
-
-<p>
-
-<pre>
-Excerpt of log file
-//
-DS002__
-WARN  Could not open for reading cpdb file s002.pxyz
-//
-DS003__
-WARN  Could not open for reading cpdb file s003.pxyz   
-</pre>
-
-
-
-
-
-
-<H2>
-    Exit status
-</H2>
-
-<!-- 
-        Description of the exit status for various error conditions
-   -->
-
-It always exits with status 0.
-
-
-
-
-
-
-
-
-<H2>
-    Known bugs
-</H2>
-
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
-None.
-
-
-
-
-
-
-
-
-<!--
-<H2>
-    See also
-</H2>
+<!-- DATA FILES         
+     Any data files used (e.g. translation table file, substitution matrix 
+     etc.  This includes example data file formats if they are not obvious.
+     For a standard description of what data files are and how embossdata can
+     be used to inspect and retrieve them, use:
+     #include file="inc/localfiles.ihtml" 
 -->
+
+<a name="5.0"></a>
+<br><br><br><H2> 5.0   DATA FILES                </H2>
+
+CONTACTS uses a data file containing van der Waals radii for atoms in proteins (below).  The file Evdw.dat is such a data file and is part of the EMBOSS distribution.
+
+<!-- USAGE
+     Example usage, as run from the command-line.
+     Many examples illustrating different behaviours is good.
+-->
+<a name="6.0"></a>
+<br><br><br><H2> 6.0   USAGE                     </H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" >
+<tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-cpdbdir]           dirlist    This option specifies the location of CCF
+                                  files (clean coordinate files) (input). A
+                                  'clean cordinate file' contains protein
+                                  coordinate and derived data for a single PDB
+                                  file ('protein clean coordinate file') or a
+                                  single domain from SCOP or CATH ('domain
+                                  clean coordinate file'), in CCF format
+                                  (EMBL-like). The files, generated by using
+                                  PDBPARSE (PDB files) or DOMAINER (domains),
+                                  contain 'cleaned-up' data that is
+                                  self-consistent and error-corrected. Records
+                                  for residue solvent accessibility and
+                                  secondary structure are added to the file by
+                                  using PDBPLUS.
+   -vdwfile            datafile   This option specifies the name of the data
+                                  file with van der Waals radii of atoms for
+                                  different amino acid residues.
+   -threshold          float      Contact between two residues is defined as
+                                  when the van der Waals surface of any atom
+                                  of the first residue comes within the
+                                  threshold contact distance of the van der
+                                  Waals surface of any atom of the second
+                                  residue. The threshold contact distance is a
+                                  user-defined distance with a default value
+                                  of 1 Angstrom.
+  [-conoutdir]         outdir     This option specifies the location of CON
+                                  files (contact files) (output). A 'contact
+                                  file' contains contact data for a protein or
+                                  a domain from SCOP or CATH, in the CON
+                                  format (EMBL-like). The contacts may be
+                                  intra-chain residue-residue, inter-chain
+                                  residue-residue or residue-ligand. The files
+                                  are generated by using CONTACTS, INTERFACE
+                                  and SITES.
+   -conlogfile         outfile    The log file contains messages about any
+                                  errors arising while contacts ran.
+
+   Additional (Optional) qualifiers:
+   -[no]ccfnaming      boolean    This option specifies whether to use pdbid
+                                  code to name the output files. If set, the
+                                  PDB identifier code (from the PDB file) is
+                                  used to name the file. Otherwise, the output
+                                  files have the same names as the input
+                                  files.
+   -skip               boolean    Whether to calculate contacts between
+                                  residue adjacent in sequence.
+   -ignore             float      If any two atoms from two different residues
+                                  are at least this distance apart then no
+                                  futher inter-atomic contacts will be checked
+                                  for for that residue pair . This speeds the
+                                  calculation up considerably.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-conlogfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+</pre>
+</pre>
+</td></tr>
+</table>
+
+
+<H3> 6.1   COMMAND LINE ARGUMENTS </H3>
+ 
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-cpdbdir]<br>(Parameter 1)</td>
+<td>This option specifies the location of CCF files (clean coordinate files) (input). A 'clean cordinate file' contains protein coordinate and derived data for a single PDB file ('protein clean coordinate file') or a single domain from SCOP or CATH ('domain clean coordinate file'), in CCF format (EMBL-like). The files, generated by using PDBPARSE (PDB files) or DOMAINER (domains), contain 'cleaned-up' data that is self-consistent and error-corrected. Records for residue solvent accessibility and secondary structure are added to the file by using PDBPLUS.</td>
+<td>Directory with files</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>-vdwfile</td>
+<td>This option specifies the name of the data file with van der Waals radii of atoms for different amino acid residues.</td>
+<td>Data file</td>
+<td>Evdw.dat</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>Contact between two residues is defined as when the van der Waals surface of any atom of the first residue comes within the threshold contact distance of the van der Waals surface of any atom of the second residue. The threshold contact distance is a user-defined distance with a default value of 1 Angstrom.</td>
+<td>Any numeric value</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>[-conoutdir]<br>(Parameter 2)</td>
+<td>This option specifies the location of CON files (contact files) (output). A 'contact file' contains contact data for a protein or a domain from SCOP or CATH, in the CON format (EMBL-like). The contacts may be intra-chain residue-residue, inter-chain residue-residue or residue-ligand. The files are generated by using CONTACTS, INTERFACE and SITES.</td>
+<td>Output directory</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>-conlogfile</td>
+<td>The log file contains messages about any errors arising while contacts ran.</td>
+<td>Output file</td>
+<td>contacts.log</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]ccfnaming</td>
+<td>This option specifies whether to use pdbid code to name the output files. If set, the PDB identifier code (from the PDB file) is used to name the file. Otherwise, the output files have the same names as the input files.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-skip</td>
+<td>Whether to calculate contacts between residue adjacent in sequence.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-ignore</td>
+<td>If any two atoms from two different residues are at least this distance apart then no futher inter-atomic contacts will be checked for for that residue pair . This speeds the calculation up considerably.</td>
+<td>Any numeric value</td>
+<td>20.0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H3> 6.2 EXAMPLE SESSION </H3>
+An example of interactive use of CONTACTS is shown below.
+
+<b>Here is a sample session with contacts</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>contacts </b>
+Generate intra-chain CON files from CCF files.
+Location of CCF files (clean coordinate files) (input) [./]: <b>../pdbplus-keep/</b>
+Name of data file with van der Waals radii [Evdw.dat]: <b></b>
+Threshold contact distance [1.0]: <b>1</b>
+Location of CON files (contact files) (output) [./]: <b></b>
+Name of log file for the build [contacts.log]: <b></b>
+
+2hhb
+1cs4
+1ii7
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<!-- <br><br>
+All CCF files (with a file extension specified in the ACD file) were read from testdata and the contact files (e.g. d1cs4a_.con and d1ii7a_.con) were written to the same directory (the file extension .con would be set in the ACD file).  van der Waals radii were taken from the emboss data file Evdw.dat and the default contact distance of 1 Angstrom was used to determine contacts.  The log file testdata/contacts.log was written.
+<br><br>
+
+
+<!-- KNOWN BUGS & WARNINGS
+     Bugs that have not yet been fixed, easily missued features, problems
+     and caveats etc. Potentially stupid things the program will let you do.
+-->
+<a name="7.0"></a>
+<br><br><br><H2> 7.0   KNOWN BUGS & WARNINGS     </H2>
+None.
+
+
+
+
+
+
+
+
+<!-- NOTES
+     Important general remarks, including:
+       Restrictions.
+       Interesting behaviour.
+       Useful things you can do with this program.
+       Future plans.
+       etc.
+-->
+<a name="8.0"></a>
+<br><br><br><H2> 8.0   NOTES                     </H2>
+<b> Types of contact </b>
+<br><b>SM</b> records are used for contacts between either either side-chain or main-chain atoms 
+as defined above.  In a future implementation, <b>SS</b> will be used for side-chain only contacts,
+ <b>MM</b> will be used for main-chain only contacts, <b>LI</b> will be used for contacts to
+ligands, and there will probably be several other forms of contact too.
+
+<br><br><b>Threshold ignore distance option</b>
+<br>The threshold ignore distance can be adjusted to speed-up the calculation of contacts considerably.  If any two atoms from two different residues are at least this distance apart then no futher inter-atomic contacts will be checked for for that residue pair. 
+
+<br><br><b>Skip option</b>
+<br>Two residues that are adjacent in the sequence will always be in contact through their peptide bond, therefore it is not normally necessary to calculate such contacts directly.  Furthermore, some analyses require such contacts to be omitted.  The skip option determines whether contacts between residue adjacent in sequence are calculated and written to the output file.
+
+
+
+
+<H3> 8.1   GLOSSARY OF FILE TYPES    </H3>
+<table BORDER CELLSPACING=5 CELLPADDING=5 BGCOLOR="#f5f5ff" >
+<tr>
+<td><b>FILE TYPE</b></td>
+<td><b>FORMAT</b></td>
+<td><b>DESCRIPTION</b></td>
+<td><b>CREATED BY <b></td>
+<td><b>SEE ALSO</b></td>
+</tr>
+<tr>
+<td><b> Clean coordinate file (for protein) </b></td>
+<td> CCF format (EMBL-like).</td>
+<td> Protein coordinate and derived data for a single PDB file.  The data are 'cleaned-up': self-consistent and error-corrected.  </td>
+<td> <a href="pdbparse.html">PDBPARSE</a> </td>
+<td> Records for residue solvent accessibility and secondary structure are added to the file by using PDBPLUS. </td>
+</tr>
+<tr>
+<td><b> Clean coordinate file (for domain)</b></td>
+<td> CCF format (EMBL-like).</td>
+<td> Protein coordinate and derived data for a single domain from SCOP or CATH. The data are 'cleaned-up': self-consistent and error-corrected. </td>
+<td> <a href="domainer.html">DOMAINER</a></td>
+<td> Records for residue solvent accessibility and secondary structure are added to the file by using PDBPLUS.</td>
+</tr>
+<tr>
+<td><b> Contact file (intra-chain residue-residue contacts)</b></td>
+<td> CON format (EMBL-like.) </td>
+<td> Intra-chain residue-residue contact data for a protein or a domain from SCOP or CATH.  </td>
+<td> <a href="contacts.html">CONTACTS</a> </td>
+<td> N.A. </td>
+</tr>
+<tr>
+<td><b> Contact file (inter-chain residue-residue contacts)</b></td>
+<td> CON format (EMBL-like.) </td>
+<td> Inter-chain residue-residue contact data for a protein or a domain from SCOP or CATH.  </td>
+<td> <a href="interface.html">INTERFACE</a> </td>
+<td> N.A. </td>
+</tr>
+<tr>
+<td><b> Contact file (residue-ligand contacts)</b></td>
+<td> CON format (EMBL-like.) </td>
+<td> Residue-ligand contact data for a protein or a domain from SCOP or CATH. </td>
+<td> <a href="sites.html">SITES</a> </td>
+<td> N.A. </td>
+</tr>
+<tr>
+<td><b>van der Waals radii  </b></td>
+<td> A file of van der Waals radii for atoms in amino acid residues. Part of the emboss distribution.</td>
+<td> N.A. </td>
+<td> N.A. </td>
+</tr>
+</table>
+
+
+
+
+
+None
+
+
+<!-- DESCRIPTION
+     A complete, non-technical, user-level description of the application.
+-->
+<a name="9.0"></a>
+<br><br><br><H2> 9.0   DESCRIPTION               </H2>
+Knowledge of the physical contacts that amino acid residues within a protein or domain make with one another is required for several different analyses.  CONTACTS calculates intra-chain residue-residue contact data from protein and domain CCF files (clean coordinate files).
+
+
+<!-- ALGORITHM
+     A technical description of algorithmic aspects, describing exactly how
+     the key aspects of the application work.
+-->
+<a name="10.0"></a>
+<br><br><br><H2> 10.0  ALGORITHM                 </H2>
+Contact between two residues is defined when the van der Waals surface of any atom of the first residue comes within the threshold contact distance of the van der Waals surface of any atom of the second residue. The threshold contact distance is a user-defined distance with a default value of 1 Angstrom.
+
+
+
+<!-- RELATED APPLICATIONS
+     Other applications that either generate the input, use the output or 
+     are in some other way related to the application are described here. 
+-->
+
+<a name="11.0"></a>
+<br><br><br><H2> 11.0  RELATED APPLICATIONS      </H2>
+
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="../construct/contactcount.html">contactcount</a></td><td>Counts specific versus non-specific contacts in a directory of cleaned protein chain contact files</td></tr>
-<tr><td><a href="domainalign.html">domainalign</a></td><td>Generates DAF files (domain alignment files) of structure-based sequence alignments for nodes in a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainrep.html">domainrep</a></td><td>Reorder DCF file (domain classification file) so that the representative structure of each user-specified node is given first</td></tr>
-<tr><td><a href="domainreso.html">domainreso</a></td><td>Removes low resolution domains from a DCF file (domain classification file)</td></tr>
-<tr><td><a href="interface.html">interface</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of inter-chain residue-residue contact data</td></tr>
-<tr><td><a href="libgen.html">libgen</a></td><td>Generates various types of discriminating elements for each alignment in a directory</td></tr>
-<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file</td></tr>
-<tr><td><a href="rocon.html">rocon</a></td><td>Reads a DHF file (domain hits file) of hits (sequences of unknown structural classification) and a DHF file of validation sequences (known classification) and writes a 'hits file' for the hits, which are classified and rank-ordered on the basis of score</td></tr>
-<tr><td><a href="rocplot.html">rocplot</a></td><td>Provides interpretation and graphical display of the performance of discriminating elements (e.g. profiles for protein families). rocplot reads file(s) of hits from discriminator-database search(es), performs ROC analysis on the hits, and writes graphs illustrating the diagnostic performance of the discriminating elements</td></tr>
-<tr><td><a href="seqalign.html">seqalign</a></td><td>Reads a DAF file (domain alignment file) and a DHF file (domain hits file) and writes a DAF file extended with the hits</td></tr>
-<tr><td><a href="seqfraggle.html">seqfraggle</a></td><td>Removes fragments from DHF files (domain hits files) or other files of sequences</td></tr>
-<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate database hits (sequences) for nodes in a DCF file (domain classification file) by using PSI-BLAST</td></tr>
-<tr><td><a href="seqsort.html">seqsort</a></td><td>Reads DHF files (domain hits files) of database hits (sequences) and removes hits of ambiguous classification</td></tr>
-<tr><td><a href="seqwords.html">seqwords</a></td><td>Generates DHF files (domain hits files) of database hits (sequences) for nodes in a DCF file (domain classification file) by keyword search of UniProt</td></tr>
-<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
-<tr><td><a href="sigscan.html">sigscan</a></td><td>Generates a DHF file (domain hits file) of hits (sequences) from scanning a signature against a sequence database</td></tr>
+<tr><td><a href="../../apps/contactcount.html">contactcount</a></td><td>Count specific versus non-specific contacts</td></tr>
+<tr><td><a href="../domalign/domainalign.html">domainalign</a></td><td>Generate alignments (DAF file) for nodes in a DCF file</td></tr>
+<tr><td><a href="../domalign/domainrep.html">domainrep</a></td><td>Reorder DCF file to identify representative structures</td></tr>
+<tr><td><a href="../domainatrix/domainreso.html">domainreso</a></td><td>Remove low resolution domains from a DCF file</td></tr>
+<tr><td><a href="interface.html">interface</a></td><td>Generate inter-chain CON files from CCF files</td></tr>
+<tr><td><a href="../signature/libgen.html">libgen</a></td><td>Generate discriminating elements from alignments</td></tr>
+<tr><td><a href="../signature/matgen3d.html">matgen3d</a></td><td>Generate a 3D-1D scoring matrix from CCF files</td></tr>
+<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Phi and psi torsion angles from protein coordinates</td></tr>
+<tr><td><a href="../signature/rocon.html">rocon</a></td><td>Generates a hits file from comparing two DHF files</td></tr>
+<tr><td><a href="../signature/rocplot.html">rocplot</a></td><td>Performs ROC analysis on hits files</td></tr>
+<tr><td><a href="../reconstruct/scorecmapdir.html">scorecmapdir</a></td><td>Contact scores for cleaned protein chain contact files</td></tr>
+<tr><td><a href="../domalign/seqalign.html">seqalign</a></td><td>Extend alignments (DAF file) with sequences (DHF file)</td></tr>
+<tr><td><a href="../domsearch/seqfraggle.html">seqfraggle</a></td><td>Removes fragment sequences from DHF files</td></tr>
+<tr><td><a href="../domsearch/seqsearch.html">seqsearch</a></td><td>Generate PSI-BLAST hits (DHF file) from a DAF file</td></tr>
+<tr><td><a href="../domsearch/seqsort.html">seqsort</a></td><td>Remove ambiguous classified sequences from DHF files</td></tr>
+<tr><td><a href="../domsearch/seqwords.html">seqwords</a></td><td>Generates DHF files from keyword search of UniProt</td></tr>
+<tr><td><a href="../signature/siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment</td></tr>
+<tr><td><a href="../signature/siggenlig.html">siggenlig</a></td><td>Generate ligand-binding signatures from a CON file</td></tr>
+<tr><td><a href="../signature/sigscan.html">sigscan</a></td><td>Generate hits (DHF file) from a signature search</td></tr>
+<tr><td><a href="../signature/sigscanlig.html">sigscanlig</a></td><td>Search ligand-signature library & write hits (LHF file)</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
 
 
-A 'protein coordinate file' contains protein coordinate and other data
-extracted from a single pdb file.  The files, generated by pdbparse, are in
-embl-like format and contain 'cleaned-up' data that is self-consistent and
-error-corrected.
-
-<p>
-
-A 'domain coordinate file' contains coordinate and other data for a single
-scop domain.  The files are generated by domainer and are in embl-like and
-pdb formats.
-
-<p>
-
-siggen uses contacts files as input. 
-
-
-
-
-
-
-
-<H2>
-    Author(s)
-</H2>
-<!--
-        Who has worked on the program in the past.
-e.g. one of:
-
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-
-Bernd Jagla (bernd&nbsp;&copy;&nbsp;golgi.ski.mskcc.org)
-<br>
-Cellular Biochemistry and Biophysics Program, Rockefeller
-Research Laboratories, Memorial Sloan-Kettering Cancer Center, 1275 York
-Avenue, Box 251,New York, NY 10021.
-
-David Martin (dmartin&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-
-Gos Micklem (gos&nbsp;&copy;&nbsp;ebi.ac.uk)
-<br>
-Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-
-Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.                      
-
-Mark Faller (current e-mail address unknown)
-<br>
-while he was with:
-<br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
-
-Michael K. Schuster and Martin Grabner (martin.grabner&nbsp;&copy;&nbsp;univie.ac.at)
-<br>
-from the Austrian National EMBnet node.
-
-
-Michael Schmitz (mschmitz&nbsp;&copy;&nbsp;lbl.gov)
-<br>
-Lawrence Berkeley Labs, USA
-
-Nicolas Tourasse (nicolas.tourasse&nbsp;&copy;&nbsp;biotek.uio.no)
-<br>
-Biotechnology Center of Oslo
-
-Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
-<br>
-Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-Richard Durbin (rd&nbsp;&copy;&nbsp;sanger.ac.uk)
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.                      
-
-Richard Bruskiewich (r.bruskiewich@cgiar.org)
-<br>
-while he was at:
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.                      
-
-Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
-<br>
-European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-Sinead O'Leary (current e-mail address unknown)
-<br>
-while she was at:
-<br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
-
-
-Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-Thomas Laurent (thomas.laurent&nbsp;&copy;&nbsp;uk.lionbioscience.com)
-<br>
-Lion Bioscience Ltd,
-     Compass House,
-     80-82 Newmarket Road,
-     Cambridge,
-     CB5 8DZ,
-     UK
-
-Val Curwen (vac&nbsp;&copy;&nbsp;sanger.ac.uk)
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK. 
-
-
-   -->
-
-Jon Ison (jison&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    History
-</H2>
-
-<!--
-        What changes have been made.
-   -->
-
-Written (2003) - Jon Ison
-
-<!--
-<p>
-
-
+<!-- DIAGNOSTIC ERROR MESSAGES
+     Description of error messages or log file, if one is written.
 -->
+<a name="12.0"></a>
+<br><br><br><H2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2>
+CONTACTS generates a log file an excerpt of which is shown (Figure 2). If there is a problem in processing a CCF file, three lines containing the record '//', the domain or pdb identifier code and an error message respectively are written. The text <i>'WARN  file open error filename'</i>, <i>'ERROR file read error filename'</i> or <i>'ERROR file write error filename'</i> will be reported when an error was encountered during a file open, read or write respectively.  Various other error messages may also be given (in case of difficulty email jison@hgmp.mrc.ac.uk).
+
+
+
+<!-- AUTHORS
+     The main author first then all others. 
+-->
+<a name="13.0"></a>
+<br><br><br><H2> 13.0  AUTHORS                   </H2>
+Jon Ison <a href="mailto:jison@rfcgr.mrc.ac.uk">(jison@rfcgr.mrc.ac.uk)</a>
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
 
+<!-- REFERENCES
+     Quote the paper where the application was first published, described, used etc. 
+-->
+<a name="14.0"></a>
+<br><br><br><H2> 14.0  REFERENCES                </H2>
+
+Please cite the authors and EMBOSS.
+<br><br>
+<i>Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+Molecular Biology Open Software Suite"  Trends in Genetics,
+15:276-278.
+
+<p>
+See also <a href="http://emboss.sourceforge.net/">http://emboss.sourceforge.net/</a></i>
 
 
 
 
-
-
-
-
-<H2>
-    Target users
-</H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-   -->
-
-This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
-
-
-
-
-
-
-
-
-
+<H3>14.1 Other useful references  </H3>
 
 
 </BODY>
 </HTML>
+
+
 

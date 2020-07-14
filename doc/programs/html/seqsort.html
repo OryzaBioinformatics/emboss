@@ -1,22 +1,25 @@
 <!-- START OF HEADER -->
 <HTML><HEAD>
-<TITLE> EMBOSS: SEQSORT documentation. </TITLE>
+<TITLE> EMBASSY: SEQSORT documentation. </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
+
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="../index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="../../emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
 
-<H2> SEQSORT documentation </H2>
+<H2> SEQSORT documentation
 </font></b>
 </td></tr>
 </table>
 <br>&nbsp;
 <p>
 
+
+<!-- END OF HEADER -->
 
 
 
@@ -52,7 +55,7 @@
 <a name="1.0"></a>
 <br><br><br><H2> 1.0   SUMMARY  </H2>
 
-Reads DHF files (domain hits files) of database hits (sequences) and removes hits of ambiguous classification
+Remove ambiguous classified sequences from DHF files
 
 <!-- INPUTS & OUTPUTS
      Short summary of the application inputs and outputs in its different 
@@ -61,20 +64,9 @@ Reads DHF files (domain hits files) of database hits (sequences) and removes hit
 <a name="2.0"></a>
 <br><br><br><H2> 2.0   INPUTS & OUTPUTS          </H2>
 
-SEQSORT reads a directory of DHF files (domain hits files) where each
-file contains hits to a single SCOP family, compares, processes and
-collates the hits and writes a directory of DHF files which contain
-only those hits that could be uniquely assigned to a SCOP family.
-Optionally, two further files of hits are written: (i) a domain
-families file, of ALL hits from the input files that could be uniquely
-assigned to a SCOP family and (ii) a domain ambiguities file, of hits
-from ALL the input files that are of ambiguous family assignment and
-are assigned as relatives to a SCOP superfamily or fold instead.
+SEQSORT reads a directory of DHF files (domain hits files) where each file contains hits to a single SCOP family, compares, processes and collates the hits and writes a directory of DHF files which contain only those hits that could be uniquely assigned to a SCOP family. Optionally, two further files of hits are written: (i) a domain families file, of ALL hits from the input files that could be uniquely assigned to a SCOP family and (ii) a domain ambiguities file, of hits from ALL the input files that are of ambiguous family assignment and are assigned as relatives to a SCOP superfamily or fold instead.
 
-<br>
-The path for the domain hits files (input and output) and the
-names of the output files are specified by the user.  The file
-extension of the DHF files are set in the ACD file.
+<br> The path for the domain hits files (input and output) and the names of the output files are specified by the user.  The file extension of the DHF files are set in the ACD file.
 
 
 
@@ -118,119 +110,68 @@ The format of the domain hits file is described in <a href="seqsearch.html">SEQS
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: scop.fam</h3>
+<p><h3>File: fam.dhf</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-CL   Alpha and beta proteins (a+b)
-XX
-FO   Ferredoxin-like
-XX
-SF   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
-XX
-FA   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
-XX
-SI   54894
-XX
-NS   27
-XX
-NN   [1]
-XX
-TY   HIT
-XX
-SC   0.00
-XX
-AC   Q9YBD5
-XX
-RA   11 START; 105 END;
-XX
-SQ   SEQUENCE    95 AA;  10687 MW;  B8ACF34B CRC32;
-     VRKIRSGVVI DHIPPGRAFT MLKALGLLPP RGYRWRIAVV INAESSKLGR KDILKIEGYK
-     PRQRDLEVLG IIAPGATFNV IEDYKVVEKV KLKLP
-XX
-NN   [2]
-XX
-TY   HIT
-XX
-SC   0.00
-XX
-AC   Q9UX07
-XX
-RA   12 START; 104 END;
-XX
-SQ   SEQUENCE    93 AA;  10312 MW;  12DDDE7C CRC32;
-     VSKIRNGTVI DHIPAGRALA VLRILGIRGS EGYRVALVMN VESKKIGRKD IVKIEDRVID
-     EKEASLITLI APSATINIIR DYVVTEKRHL EVP
-XX
-NN   [3]
-XX
-TY   HIT
-XX
-SC   0.00
-XX
-AC   Q9KP65
-XX
-RA   9 START; 100 END;
-XX
-
-
-<font color=red>  [Part of this file has been deleted for brevity]</font>
-
-     MMFHKIYIQK HDNVSILFAD IEGFTSLASQ CTAQELVMTL NELFARFDKL AAENHCLRIK
-     ILGDCYYCVS GLPEARADHA HCCVEMGVDM IEAISLVREV TGVNVNMRVG IHSGRVHCGV
-     LGLRKWQFDV WSNDVTLANH MEAGGRAGRI HITRATLQYL NGDYEVEPGR GGERNAYLKE
-     QHIETFLIL
-XX
-NN   [111]
-XX
-TY   HIT
-XX
-SC   0.00
-XX
-AC   O30820
-XX
-RA   241 START; 400 END;
-XX
-SQ   SEQUENCE   160 AA;  17506 MW;  B1E1A024 CRC32;
-     NIIADKYDEA SVLFADIVGF TERASSTAPA DLVRFLDRLY SAFDELVDQH GLEKIKVSGD
-     SYMVVSGVPR PRPDHTQALA DFALDMTNVA AQLKDPRGNP VPLRVGLATG PVVAGVVGSR
-     RFFYDVWGDA VNVASRMEST DSVGQIQVPD EVYERLKDDF
-XX
-NN   [112]
-XX
-TY   HIT
-XX
-SC   0.00
-XX
-AC   O19179
-XX
-RA   877 START; 1032 END;
-XX
-SQ   SEQUENCE   156 AA;  17212 MW;  675838EA CRC32;
-     PEYFEEVTLY FSDIVGFTTI SAMSEPIEVV DLLNDLYTLF DAIIGSHDVY KVETIGDAYM
-     VASGLPQRNG QRHAAEIANM ALDILSAVGS FRMRHMPEVP VRIRIGLHSG PCVAGVVGLT
-     MPRYCLFGDT VNTASRMEST GLPYRIHVNM STVRIL
-XX
-NN   [113]
-XX
-TY   HIT
-XX
-SC   0.00
-XX
-AC   O02740
-XX
-RA   877 START; 1042 END;
-XX
-SQ   SEQUENCE   166 AA;  18151 MW;  E2BB2824 CRC32;
-     PEGFDLVTLY FSDIVGFTTI SAMSEPIEVV DLLNDLYTLF DAIIGSHDVY KVETIGDAYM
-     VASGLPKRNG MRHAAEIANM SLDILSSVGT FKMRHMPEVP VRIRIGLHSG PVVAGVVGLT
-     MPRYCLFGDT VNTASRMEST GLPYRIHVSH STVTILRTLG EGYEVE
-XX
-//
+&gt; Q9YBD5^.^1^95^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^.^55.30^0.000e+00^2.000e-11
+VRKIRSGVVIDHIPPGRAFTMLKALGLLPPRGYRWRIAVVINAESSKLGRKDILKIEGYKPRQRDLEVLGIIAPGATFNVIEDYKVVEKVKLKLP
+&gt; Q97FS4^.^1^90^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^.^42.60^0.000e+00^1.000e-07
+INSIKNGIVIDHIKAGHGIKIYNYLKLGEAEFPTALIMNAISKKNKAKDIIKIENVMDLDLAVLGFLDPNITVNIIEDEKIRQKIQLKLP
+&gt; Q7MX57^.^1^92^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^.^72.70^0.000e+00^1.000e-16
+VAAIRNGIVIDHIPPTKLFKVATLLQLDDLDKRITIGNNLRSRSHGSKGVIKIEDKTFEEEELNRIALIAPNVRLNIIRDYEVVEKRQVEVP
+&gt; P96111^.^1^98^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^.^42.20^0.000e+00^1.000e-07
+GIKPIENGTVIDHIAKGKTPEEIYSTILKIRKILRLYDVDSADGIFRSSDGSFKGYISLPDRYLSKKEIKKLSAISPNTTVNIIKNSTVVEKYRIKLP
+&gt; Q08462^.^1^167^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^49.70^0.000e+00^3.000e-09
+DCVCVMFASIPDFKEFYTESDVNKEGLECLRLLNEIIADFDDLLSKPKFSGVEKIKTIGSTYMAATGLSAVPSQEHSQEPERQYMHIGTMVEFAFALVGKLDAINKHSFNDFKLRVGINHGPVIAGVIGAQKPQYDIWGNTVNVASRMDSTGVLDKIQVTEETSLVL
+&gt; Q03101^.^1^149^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^70.90^0.000e+00^1.000e-15
+NNACVFFLDIAGFTRFSSIHSPEQVIQVLIKIFNSMDLLCAKHGIEKIKTIGDAYMATCGIFPKCDDIRHNTYKMLGFAMDVLEFIPKEMSFHLGLQVRVGIHCGPVISGVISGYAKPHFDVWGDTVNVASRMESTGIAGQIHVSDRVY
+&gt; Q02153^.^1^165^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^75.90^0.000e+00^4.000e-17
+HKRPVPAKRYDNVTILFSGIVGFNAFCSKHASGEGAMKIVNLLNDLYTRFDTLTDSRKNPFVYKVETVGDKYMTVSGLPEPCIHHARSICHLALDMMEIAGQVQVDGESVQITIGIHTGEVVTGVIGQRMPRYCLFGNTVNLTSRTETTGEKGKINVSEYTYRCL
+&gt; P46197^.^1^168^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^84.40^0.000e+00^1.000e-19
+VQAEAFDSVTIYFSDIVGFTALSAESTPMQVVTLLNDLYTCFDAIIDNFDVYKVETIGDAYMVVSGLPGRNGQRHAPEIARMALALLDAVSSFRIRHRPHDQLRLRIGVHTGPVCAGVVGLKMPRYCLFGDTVNTASRMESNGQALKIHVSSTTKDALDELGCFQLEL
+&gt; P40137^.^1^139^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^50.90^0.000e+00^1.000e-09
+VTLLFADIRDFTSLSERLRPEQVVTLLNEYYGRMVEVVFRHGGTLDKFIGDALMVYFGAPIADPAHARRGVQCALDMVQELETVNALRSARGEPCLRIGVGVHTGPAVLGNIGSATRRLEYTAIGDTVNLASRIESLTK
+&gt; P23466^.^1^154^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^55.90^0.000e+00^4.000e-11
+PTGNVAIVFTDIKNSTFLWELFPDAMRAAIKTHNDIMRRQLRIYGGYEVKTEGDAFMVAFPTPTSALVWCLSVQLKLLEAEWPEEITSIQDGCLITDNSGTKVYLGLSVRMGVHWGCPVPEIDLVTQRMDYLGPVVNKAARVSGVADGGQITLS
+&gt; O30820^.^1^149^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^80.20^0.000e+00^2.000e-18
+DEASVLFADIVGFTERASSTAPADLVRFLDRLYSAFDELVDQHGLEKIKVSGDSYMVVSGVPRPRPDHTQALADFALDMTNVAAQLKDPRGNPVPLRVGLATGPVVAGVVGSRRFFYDVWGDAVNVASRMESTDSVGQIQVPDEVYERL
 </pre>
 </td></tr></table><p>
-<p><h3>File: scop.oth</h3>
+<p><h3>File: oth.dhf</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: 54894.dhf</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt; Q9YBD5^.^1^95^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^.^55.30^0.000e+00^2.000e-11
+VRKIRSGVVIDHIPPGRAFTMLKALGLLPPRGYRWRIAVVINAESSKLGRKDILKIEGYKPRQRDLEVLGIIAPGATFNVIEDYKVVEKVKLKLP
+&gt; Q97FS4^.^1^90^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^.^42.60^0.000e+00^1.000e-07
+INSIKNGIVIDHIKAGHGIKIYNYLKLGEAEFPTALIMNAISKKNKAKDIIKIENVMDLDLAVLGFLDPNITVNIIEDEKIRQKIQLKLP
+&gt; Q7MX57^.^1^92^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^.^72.70^0.000e+00^1.000e-16
+VAAIRNGIVIDHIPPTKLFKVATLLQLDDLDKRITIGNNLRSRSHGSKGVIKIEDKTFEEEELNRIALIAPNVRLNIIRDYEVVEKRQVEVP
+&gt; P96111^.^1^98^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^.^42.20^0.000e+00^1.000e-07
+GIKPIENGTVIDHIAKGKTPEEIYSTILKIRKILRLYDVDSADGIFRSSDGSFKGYISLPDRYLSKKEIKKLSAISPNTTVNIIKNSTVVEKYRIKLP
+</pre>
+</td></tr></table><p>
+<p><h3>File: 55074.dhf</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt; Q08462^.^1^167^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^49.70^0.000e+00^3.000e-09
+DCVCVMFASIPDFKEFYTESDVNKEGLECLRLLNEIIADFDDLLSKPKFSGVEKIKTIGSTYMAATGLSAVPSQEHSQEPERQYMHIGTMVEFAFALVGKLDAINKHSFNDFKLRVGINHGPVIAGVIGAQKPQYDIWGNTVNVASRMDSTGVLDKIQVTEETSLVL
+&gt; Q03101^.^1^149^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^70.90^0.000e+00^1.000e-15
+NNACVFFLDIAGFTRFSSIHSPEQVIQVLIKIFNSMDLLCAKHGIEKIKTIGDAYMATCGIFPKCDDIRHNTYKMLGFAMDVLEFIPKEMSFHLGLQVRVGIHCGPVISGVISGYAKPHFDVWGDTVNVASRMESTGIAGQIHVSDRVY
+&gt; Q02153^.^1^165^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^75.90^0.000e+00^4.000e-17
+HKRPVPAKRYDNVTILFSGIVGFNAFCSKHASGEGAMKIVNLLNDLYTRFDTLTDSRKNPFVYKVETVGDKYMTVSGLPEPCIHHARSICHLALDMMEIAGQVQVDGESVQITIGIHTGEVVTGVIGQRMPRYCLFGNTVNLTSRTETTGEKGKINVSEYTYRCL
+&gt; P46197^.^1^168^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^84.40^0.000e+00^1.000e-19
+VQAEAFDSVTIYFSDIVGFTALSAESTPMQVVTLLNDLYTCFDAIIDNFDVYKVETIGDAYMVVSGLPGRNGQRHAPEIARMALALLDAVSSFRIRHRPHDQLRLRIGVHTGPVCAGVVGLKMPRYCLFGDTVNTASRMESNGQALKIHVSSTTKDALDELGCFQLEL
+&gt; P40137^.^1^139^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^50.90^0.000e+00^1.000e-09
+VTLLFADIRDFTSLSERLRPEQVVTLLNEYYGRMVEVVFRHGGTLDKFIGDALMVYFGAPIADPAHARRGVQCALDMVQELETVNALRSARGEPCLRIGVGVHTGPAVLGNIGSATRRLEYTAIGDTVNLASRIESLTK
+&gt; P23466^.^1^154^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^55.90^0.000e+00^4.000e-11
+PTGNVAIVFTDIKNSTFLWELFPDAMRAAIKTHNDIMRRQLRIYGGYEVKTEGDAFMVAFPTPTSALVWCLSVQLKLLEAEWPEEITSIQDGCLITDNSGTKVYLGLSVRMGVHWGCPVPEIDLVTQRMDYLGPVVNKAARVSGVADGGQITLS
+&gt; O30820^.^1^149^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase catalytic domain^.^80.20^0.000e+00^2.000e-18
+DEASVLFADIVGFTERASSTAPADLVRFLDRLYSAFDELVDQHGLEKIKVSGDSYMVVSGVPRPRPDHTQALADFALDMTNVAAQLKDPRGNPVPLRVGLATGPVVAGVVGSRRFFYDVWGDAVNVASRMESTDSVGQIQVPDEVYERL
 </pre>
 </td></tr></table><p>
 
@@ -473,33 +414,21 @@ An example of interactive use of SEQSORT is shown below.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqsort </b>
-Reads multiple files of hits and writes (i) a scop families file and (ii) a
-scop ambiguities file.
-Mode of operation
-         1 : Process psiblast hits
-         2 : Process swissparse hits (WARNING - untested)
-         3 : Merge psiblast and swissparse hits (WARNING - untested)
-Select mode [1]: <b></b>
-Location of scop hits files (input) [./]: <b>structure</b>
-Extension of scop hits files (input) [.hits]: <b></b>
-Number of overlapping residues required for merging of two hits [10]: <b>20</b>
-Name of scop families file (output) [fam.hits]: <b>scop.fam</b>
-Name of ambiguities file (output) [oth.hits]: <b>scop.oth</b>
-Warning: Empty list in embDmxScophitsToHitlist
-Warning: Empty list in embDmxScophitsToHitlist
-Warning: Empty list in embDmxScophitsToHitlist
+Remove ambiguous classified sequences from DHF files.
+Location of DHF files (domain hits files) (input). [./]: <b>../seqnr-keep/hitsnr</b>
+Number of overlapping residues required for merging of two hits. [10]: <b>10</b>
+Write domain families file. [N]: <b>Y</b>
+Write domain ambiguities file. [N]: <b>Y</b>
+Location of DHF files (domain hits files) (output). [./]: <b></b>
+Name of domain families file (output). [fam.dhf]: <b></b>
+Name of domain ambiguities file (output). [oth.dhf]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-All DHF files (of the file extension .dhf specicied in ACD) in
-directory /test_data were processed by SEQSORT.  DHF output files were
-written to /test_data/seqsort/seqsort_hits.  A shared segment of 10 or
-more identical was required to class two sequences as overlapping.
-Domain families and ambiguities files called fam.dhf and oth.dhf
-respectively were written to /test_data/seqsort.
+<!-- All DHF files (of the file extension .dhf specicied in ACD) in directory /test_data were processed by SEQSORT.  DHF output files were written to /test_data/seqsort/seqsort_hits.  A shared segment of 10 or more identical was required to class two sequences as overlapping. Domain families and ambiguities files called fam.dhf and oth.dhf respectively were written to /test_data/seqsort. -->
 
 <!-- KNOWN BUGS & WARNINGS
      Bugs that have not yet been fixed, easily missued features, problems
@@ -526,6 +455,7 @@ None.
 None.
 
 
+
 <H3> 8.1   GLOSSARY OF FILE TYPES    </H3>
 <table BORDER CELLSPACING=5 CELLPADDING=5 BGCOLOR="#f5f5ff" >
 <tr>
@@ -537,9 +467,9 @@ None.
 </tr>
 <tr>
 <td><b>Domain hits file </b></td>
-<td> DHF format (FASTA-like with domain classification information). </td>
-<td> Database hits (sequences) with domain classification information.  The hits are relatives to a SCOP or CATH family and are found from a search of a sequence database. </td>
-<td> <a href="seqsearch.html">SEQSEARCH</a> (hits retrieved by PSIBLAST)</td>
+<td> DHF format (FASTA-like). </td>
+<td> Database hits (sequences) with domain classification information.  The hits are relatives to a SCOP or CATH family (or other node in the structural hierarchies) and are found from a search of a discriminating element (e.g. a protein signature, hidden Markov model, simple frequency matrix, Gribskov profile or Hennikoff profile) against a sequence database. </td>
+<td> <a href="seqsearch.html">SEQSEARCH</a> (hits retrieved by PSIBLAST). <a href="sigscan.html">SIGSCAN</a> (hits retrieved by sparse protein signature). <a href="libscan.html">LIBSCAN</a> (hits retrieved by various types of HMM and profile). </td>
 <td> N.A. </td>
 </tr>
 <tr>
@@ -559,6 +489,8 @@ None.
 
 
 
+
+
 None
 
 
@@ -570,22 +502,7 @@ None
 <a name="9.0"></a>
 <br><br><br><H2> 9.0   DESCRIPTION               </H2>
 
-The results of multiple searches of a sequence database using an
-homology search tool such as blast may contain overlapping or
-identical hits, especially where the query sequences are related, for
-instance, belong to different families but the same superfamily.  For
-certain analyses it is desirable to assign a hit with confidence to a
-unique family, or otherwise assign it as a member of a larger
-superfamily or fold instead.  SEQSORT reads a directory of DHF files
-(domain hits files) where each file containing hits to a different
-SCOP family, compares, processes and collates the hits and writes a
-directory of DHF files which contain only those hits that could be
-uniquely assigned to a SCOP family.  Optionally, two further files are
-written: (i) a domain families file, of hits (from ALL the input
-files) that could be uniquely assigned to a SCOP family and (ii) a
-domain ambiguities file, for hits (from ALL the input files) of
-ambiguous family assignment which are assigned as relatives to a SCOP
-superfamily or fold instead.
+The results of multiple searches of a sequence database using an homology search tool such as blast may contain overlapping or identical hits, especially where the query sequences are related, for instance, belong to different families but the same superfamily.  For certain analyses it is desirable to assign a hit with confidence to a unique family, or otherwise assign it as a member of a larger superfamily or fold instead.  SEQSORT reads a directory of DHF files (domain hits files) where each file containing hits to a different SCOP family, compares, processes and collates the hits and writes a directory of DHF files which contain only those hits that could be uniquely assigned to a SCOP family.  Optionally, two further files are written: (i) a domain families file, of hits (from ALL the input files) that could be uniquely assigned to a SCOP family and (ii) a domain ambiguities file, for hits (from ALL the input files) of ambiguous family assignment which are assigned as relatives to a SCOP superfamily or fold instead.
 
 
 <!-- ALGORITHM
@@ -595,27 +512,7 @@ superfamily or fold instead.
 <a name="10.0"></a>
 <br><br><br><H2> 10.0  ALGORITHM                 </H2>
 
-A rough outline of the algorithm follows; a better description will
-appear in a publication in preparation.  Hits from searches for all
-domain families are collated into a single list and the list sorted
-according to family name.  The hits hits within each family are sorted
-by accession number, then hits within a family and with identical
-accession number are sorted by the start position of the hit relative
-to the full length sequence in swissprot.  In each family identical
-hits (i.e. those with identical accession number and the same start
-and end points relative to the full-length sequence in swissprot) were
-removed leaving only a single copy.  Each family is also processed so
-that ovlerapping hits (hits with identical accesssion number that
-overlap by at least a user-defined number of residues) are replaced by
-a hit that is produced from merging the two overlapping hits.  If two
-hits have the same accession number and overlap but are from searches
-for different families, the hits are merged and the merged hit placed
-into a new list for hits to superfamilies (if the two families
-belonged to the same superfamily) or for hits to folds (if the two
-families were in different superfamilies but the same fold).  In this
-way hits that are unique to a particular family are identified, and
-hits of ambiguous family assignment are assigned as belonging to a
-superfamily or fold instead.
+A rough outline of the algorithm follows; a better description will appear in a publication in preparation.  Hits from searches for all domain families are collated into a single list and the list sorted according to family name.  The hits hits within each family are sorted by accession number, then hits within a family and with identical accession number are sorted by the start position of the hit relative to the full length sequence in swissprot.  In each family identical hits (i.e. those with identical accession number and the same start and end points relative to the full-length sequence in swissprot) were removed leaving only a single copy.  Each family is also processed so that ovlerapping hits (hits with identical accesssion number that overlap by at least a user-defined number of residues) are replaced by a hit that is produced from merging the two overlapping hits.  If two hits have the same accession number and overlap but are from searches for different families, the hits are merged and the merged hit placed into a new list for hits to superfamilies (if the two families belonged to the same superfamily) or for hits to folds (if the two families were in different superfamilies but the same fold).  In this way hits that are unique to a particular family are identified, and hits of ambiguous family assignment are assigned as belonging to a superfamily or fold instead.
 
 
 
@@ -626,28 +523,33 @@ superfamily or fold instead.
      are in some other way related to the application are described here. 
      (Take this from "Sister applications" in the old documentation)
 -->
+
 <a name="11.0"></a>
 <br><br><br><H2> 11.0  RELATED APPLICATIONS      </H2>
 
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="../construct/contactcount.html">contactcount</a></td><td>Counts specific versus non-specific contacts in a directory of cleaned protein chain contact files</td></tr>
-<tr><td><a href="contacts.html">contacts</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of intra-chain residue-residue contact data</td></tr>
-<tr><td><a href="domainalign.html">domainalign</a></td><td>Generates DAF files (domain alignment files) of structure-based sequence alignments for nodes in a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainrep.html">domainrep</a></td><td>Reorder DCF file (domain classification file) so that the representative structure of each user-specified node is given first</td></tr>
-<tr><td><a href="domainreso.html">domainreso</a></td><td>Removes low resolution domains from a DCF file (domain classification file)</td></tr>
-<tr><td><a href="interface.html">interface</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of inter-chain residue-residue contact data</td></tr>
-<tr><td><a href="libgen.html">libgen</a></td><td>Generates various types of discriminating elements for each alignment in a directory</td></tr>
-<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file</td></tr>
-<tr><td><a href="rocon.html">rocon</a></td><td>Reads a DHF file (domain hits file) of hits (sequences of unknown structural classification) and a DHF file of validation sequences (known classification) and writes a 'hits file' for the hits, which are classified and rank-ordered on the basis of score</td></tr>
-<tr><td><a href="rocplot.html">rocplot</a></td><td>Provides interpretation and graphical display of the performance of discriminating elements (e.g. profiles for protein families). rocplot reads file(s) of hits from discriminator-database search(es), performs ROC analysis on the hits, and writes graphs illustrating the diagnostic performance of the discriminating elements</td></tr>
-<tr><td><a href="seqalign.html">seqalign</a></td><td>Reads a DAF file (domain alignment file) and a DHF file (domain hits file) and writes a DAF file extended with the hits</td></tr>
-<tr><td><a href="seqfraggle.html">seqfraggle</a></td><td>Removes fragments from DHF files (domain hits files) or other files of sequences</td></tr>
-<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate database hits (sequences) for nodes in a DCF file (domain classification file) by using PSI-BLAST</td></tr>
-<tr><td><a href="seqwords.html">seqwords</a></td><td>Generates DHF files (domain hits files) of database hits (sequences) for nodes in a DCF file (domain classification file) by keyword search of UniProt</td></tr>
-<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
-<tr><td><a href="sigscan.html">sigscan</a></td><td>Generates a DHF file (domain hits file) of hits (sequences) from scanning a signature against a sequence database</td></tr>
+<tr><td><a href="../../apps/contactcount.html">contactcount</a></td><td>Count specific versus non-specific contacts</td></tr>
+<tr><td><a href="../structure/contacts.html">contacts</a></td><td>Generate intra-chain CON files from CCF files</td></tr>
+<tr><td><a href="../domalign/domainalign.html">domainalign</a></td><td>Generate alignments (DAF file) for nodes in a DCF file</td></tr>
+<tr><td><a href="../domalign/domainrep.html">domainrep</a></td><td>Reorder DCF file to identify representative structures</td></tr>
+<tr><td><a href="../domainatrix/domainreso.html">domainreso</a></td><td>Remove low resolution domains from a DCF file</td></tr>
+<tr><td><a href="../structure/interface.html">interface</a></td><td>Generate inter-chain CON files from CCF files</td></tr>
+<tr><td><a href="../signature/libgen.html">libgen</a></td><td>Generate discriminating elements from alignments</td></tr>
+<tr><td><a href="../signature/matgen3d.html">matgen3d</a></td><td>Generate a 3D-1D scoring matrix from CCF files</td></tr>
+<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Phi and psi torsion angles from protein coordinates</td></tr>
+<tr><td><a href="../signature/rocon.html">rocon</a></td><td>Generates a hits file from comparing two DHF files</td></tr>
+<tr><td><a href="../signature/rocplot.html">rocplot</a></td><td>Performs ROC analysis on hits files</td></tr>
+<tr><td><a href="../reconstruct/scorecmapdir.html">scorecmapdir</a></td><td>Contact scores for cleaned protein chain contact files</td></tr>
+<tr><td><a href="../domalign/seqalign.html">seqalign</a></td><td>Extend alignments (DAF file) with sequences (DHF file)</td></tr>
+<tr><td><a href="seqfraggle.html">seqfraggle</a></td><td>Removes fragment sequences from DHF files</td></tr>
+<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate PSI-BLAST hits (DHF file) from a DAF file</td></tr>
+<tr><td><a href="seqwords.html">seqwords</a></td><td>Generates DHF files from keyword search of UniProt</td></tr>
+<tr><td><a href="../signature/siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment</td></tr>
+<tr><td><a href="../signature/siggenlig.html">siggenlig</a></td><td>Generate ligand-binding signatures from a CON file</td></tr>
+<tr><td><a href="../signature/sigscan.html">sigscan</a></td><td>Generate hits (DHF file) from a signature search</td></tr>
+<tr><td><a href="../signature/sigscanlig.html">sigscanlig</a></td><td>Search ligand-signature library & write hits (LHF file)</td></tr>
 </table>
 
 

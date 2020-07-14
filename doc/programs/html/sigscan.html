@@ -1,14 +1,8 @@
-<!--START OF HEADER - DON'T ALTER -->
-
-<HTML>
-<HEAD>
-  <TITLE>
-  EMBOSS: sigscan
-  </TITLE>
+<!-- START OF HEADER -->
+<HTML><HEAD>
+<TITLE> EMBASSY: SIGSCAN documentation. </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-
-
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
@@ -17,7 +11,7 @@
 <td align=left valign=middle>
 <b><font size="+6">
 
-sigscan
+<H2> sigscan documentation
 </font></b>
 </td></tr>
 </table>
@@ -26,43 +20,291 @@ sigscan
 
 
 
-<!--END OF HEADER-->
+<!-- END OF HEADER -->
 
 
 
 
+<!-- CONTENTS
+     This always includes the sections below.
+     Other subsections can be added for individual applications.
+-->
+<H2>CONTENTS </H2>
+<b> <a href="#1.0">1.0     SUMMARY                   </a></b><br>
+<b> <a href="#2.0">2.0     INPUTS & OUTPUTS          </a></b><br>
+<b> <a href="#3.0">3.0     INPUT FILE FORMAT         </a></b><br>
+<b> <a href="#4.0">4.0     OUTPUT FILE FORMAT        </a></b><br>
+<b> <a href="#5.0">5.0     DATA FILES                </a></b><br>
+<b> <a href="#6.0">6.0     USAGE                     </a></b><br>    
+<b> <a href="#7.0">7.0     KNOWN BUGS & WARNINGS     </a></b><br>    
+<b> <a href="#8.0">8.0     NOTES                     </a></b><br>
+<b> <a href="#9.0">9.0     DESCRIPTION               </a></b><br>
+<b> <a href="#10.0">10.0   ALGORITHM                 </a></b><br>
+<b> <a href="#11.0">11.0   RELATED APPLICATIONS      </a></b><br>
+<b> <a href="#12.0">12.0   DIAGNOSTIC ERROR MESSAGES </a></b><br>
+<b> <a href="#13.0">13.0   AUTHORS                   </a></b><br>
+<b> <a href="#14.0">14.0   REFERENCES                </a></b><br>
 
 
-<H2>
-    Function
-</H2>
-Generates a DHF file (domain hits file) of hits (sequences) from scanning a signature against a sequence database
+<!-- SUMMARY
+     Succint description of the application, particularly its inputs, outputs
+     and what it does.  The same text is given at the top of the source (.c)
+     file and in the <documentation> attribute of the <application definition>
+     of the ACD file.
+-->
+<a name="1.0"></a>
+<br><br><br><H2> 1.0   SUMMARY  </H2>
+Generates a DHF (domain hits file) of hits (sequences) from scanning a signature against a sequence database.
+Generate hits (DHF file) from a signature search
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
+
+
+<!-- INPUTS & OUTPUTS
+     Short summary of the application inputs and outputs in its different 
+     modes of usage (if appropriate). More detail than the summary.
+-->
+<a name="2.0"></a>
+<br><br><br><H2> 2.0   INPUTS & OUTPUTS          </H2>
+SIGSCAN reads a signature from a protein signature file, scans the signature against a protein sequence database and generates a DHF file (domain hits file) of hits to database sequences and a DAF file (domain alignment file) of corresponding signature-sequence alignments. The names of the signature file, DHF file and DAF file are provided by the user. The user specifies a maximum number of high-scoring hits that will be generated.
+
+
+<!-- INPUT FILE FORMAT 
+     Description and example(s) of input file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.
+     Use "<b>sigscan</b> reads any normal sequence USAs." if
+     appropriate.
 -->
 
 
 
-
-<H2>
-    Description
-</H2>
-
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-  -->
-
-**************** 
-EDIT HERE
-**************** 
+<a name="3.0"></a>
+<br><br><br><H2> 3.0   INPUT FILE FORMAT         </H2>
+The format of the signature file is described in <a href="siggen.html">SIGGEN documentation</a>.
 
 
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../siggen-keep/54894.sig</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+TY   SCOP
+XX
+TS   1D
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+XX
+FA   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+XX
+SI   54894
+XX
+NP   15
+XX
+NN   [1]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   H ; 2
+XX
+GA   12 ; 2
+XX
+NN   [2]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   P ; 2
+XX
+GA   1 ; 2
+XX
+NN   [3]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   P ; 2
+XX
+GA   26 ; 2
+XX
+NN   [4]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   F ; 2
+XX
+GA   16 ; 2
+XX
+NN   [5]
+XX
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+XX
+GA   4 ; 2
+XX
+NN   [10]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   D ; 2
+XX
+GA   2 ; 2
+XX
+NN   [11]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   N ; 2
+XX
+GA   0 ; 2
+XX
+NN   [12]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   Y ; 2
+XX
+GA   0 ; 2
+XX
+NN   [13]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   G ; 2
+XX
+GA   3 ; 2
+XX
+NN   [14]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   P ; 2
+XX
+GA   3 ; 2
+XX
+NN   [15]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   P ; 2
+XX
+GA   2 ; 2
+//
+</pre>
+</td></tr></table><p>
+<p><h3>File: swsmall</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt; Q9WVI4
+DDVTMLFSDIVGFTAICAQCTPMQVISMLNELYTRFDHQCGFLDIYKVETIGDAYCVASG
+LHRKSLCHAKPIALMALKMMELSEEVLTPDGRPIQMRIGIHSGSVLAGVVGVRMPRYCLF
+GNNVTLASKFESGSHPRRINISPTTYQLL
+&gt; Q9ERL9
+VTMLFSDIVGFTAICSQCSPLQVITMLNALYTRFDQQCGELDVYKVETIGDAYCVAGGLH
+RESDTHAVQIALMALKMMELSNEVMSPHGEPIKMRIGLHSGSVFAGVVGVKMPRYCLFGN
+NVTLANKFESCSVPRKINVSPTTYRLLKDCPG
+&gt; Q9DGG6
+EQVSILFADIVGFTKMSANKSAHALVGLLNDLFGRFDRLCEDTKCEKISTLGDCYYCVAG
+CPEPRADHAYCCIEMGLGMIKAIEQFCQEKKEMVNMRVGVHTGTVLCGILGMRRFKFDVW
+SNDVNLANLMEQLGVAGKVHISEATAKYLDDRYEMEDGKVTERVGQSAVADQLKGLKTYL
+I
+&gt; Q99396
+KELADPVTLIFTDIESSTAQWATQPELMPDAVATHHSMVRSLIENYDCYEVKTVGDSFMI
+ACKSPFAAVQLAQELQLRFLRLDWGTTVFDEFYREFEERHAEEGDGKYKPPTARLDPEVY
+RQLWNGLRVRVGIHTGLCDIRYDEVTKGYDYYGQTANTAARTESVGNGGQVLMTCETYHS
+LSTAERSQFDVTPLGGVPLRGVSEPVEVYQLN
+&gt; Q99280
+NDSAPKEPTGPVTLIFTDIESSTALWAAHPDLMPDAVATHHRLIRSLITRYECYEVKTVG
+DSFMIASKSPFAAVQLAQELQLRFLRLDWETNALDESYREFEEQRAEGECEYTPPTAHMD
+PEVYSRLWNGLRVRVGIHTGLCDIRYDEVTKGYDYYGRTSNMAARTESVANGGQVLMTHA
+AYMSLSGEDRNQLDVTTLGATVLRGVPEPVRMYQLN
+&gt; Q99279
+NNNRAPKEPTDPVTLIFTDIESSTALWAAHPDLMPDAVAAHHRMVRSLIGRYKCYEVKTV
+GDSFMIASKSPFAAVQLAQELQLCFLHHDWGTNALDDSYREFEEQRAEGECEYTPPTAHM
+DPEVYSRLWNGLRVRVGIHTGLCDIIRHDEVTKGYDYYGRTPNMAARTESVANGGQVLMT
+HAAYMSLSAEDRKQIDVTALGDVALRGVSDPVKMYQLN
+&gt; Q91WF3
+VCVLFASVPDFKEFYSESNINHEGLECLRLLNEIIADFDELLSKPKFSGVEKIKTIGSTY
+MAATGLNATSGQDTQQDSERSCSHLGTMVEFAVALGSKLGVINKHSFNNFRLRVGLNHGP
+VVAGVIGAQKPQYDIWGNTVNVASRMESTGVLGKIQVTEETARAL
+&gt; Q91WF3
+FHSLYVKRHQGVSVLYADIVGFTRLASECSPKELVLMLNELFGKFDQIAKEHECMRIKIL
+GDCYYCVSGLPLSLPDHAINCVRMGLDMCRAIRKLRVATGVDINMRVGVHSGSVLCGVIG
+LQKWQYDVWSHDVTLANHMEAGGVPGRVHITGATLALL
+&gt; Q8VHH7
+NNFMLRIGMNKGGVLAGVIGARKPHYDIWGNTVNVASRMESTGVMGNIQVVEET
+&gt; Q8VHH7
+FNTMYMYRHENVSILFADIVGFTQLSSACSAQELVKLLNELFARFDKLAAKYHQLRIKIL
+GDCYYCICGLPDYREDHAVCSILMGLAMVEAISYVREKTKTGVDMRVGVHTGTVLGGVLG
+QKRWQYDVWSTDVTVANKMEAGGIPGRVHISQSTMDCLKGEFDVEPGDGGSRCDYLDEKG
+IETYLI
+&gt; Q8NFM4
+VCVLFASVPDFKEFYSESNINHEGLECLRLLNEIIADFDELLSKPKFSGVEKIKTIGSTY
+MAATGLNATSGQDAQQDAERSCSHLGTMVEFAVALGSKLDVINKHSFNNFRLRVGLNHGP
+VVAGVIGAQKPQYDIWGNTVNVASRMESTGVLGKIQVTEET
+&gt; Q8NFM4
+FHSLYVKRHQGVSVLYADIVGFTRLASECSPKELVLMLNELFGKFDQIAKEHECMRIKIL
+GDCYYCVSGLPLSLPDHAINCVRMGLDMCRAIRKLRAATGVDINMRVGVHSGSVLCGVIG
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+&gt; Q83IL8
+VEAIKRGTVIDHIPAQIGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKIENTFLSE
+EQVDQLALYAPQATVNRIDNYEVVGKSRPSLP
+&gt; Q7P144
+VEALKQGTVIDHIPAGEGVKILRLFKLTETGERVTVGLNLVSRHMGSKDLIKVENVALTE
+EQANELALFAPKATVNVIDNFEVVKKHKLTLP
+&gt; Q7MZ14
+VEAIRCGTVIDHIPAQVGFKLLSLFKLTETDQRITIGLNLPSNRLGKKDLIKIENTFLTE
+QQANQLAMYAPNATVNCIENYEVVKKLPINLP
+&gt; Q7MX57
+VAAIRNGIVIDHIPPTKLFKVATLLQLDDLDKRITIGNNLRSRSHGSKGVIKIEDKTFEE
+EELNRIALIAPNVRLNIIRDYEVVEKRQVEVP
+&gt; Q7MHF0
+VEAIKNGTVIDHIPAQVGIKVLKLFDMHNSSQRVTIGLNLPSSALGNKDLLKIENVFINE
+EQASKLALYAPHATVNQIEDYQVVKKLALELP
+&gt; Q58801
+VKKITNGTVIDHIDAGKALMVFKVLNVPKETSVMIAINVPSKKKGKKDILKIEGIELKKE
+DVDKISLISPDVTINIIRNGKVVEKLKPQIP
+&gt; P96175
+VEAICNGYVIDHIPSGQGVKILRLFSLTDTKQRVTVGFNLPSHDGTTKDLIKVENTEITK
+SQANQLALLAPNATVNIIENFKVTDKHSLALP
+&gt; P96111
+GIKPIENGTVIDHIAKGKTPEEIYSTILKIRKILRLYDVDSADGIFRSSDGSFKGYISLP
+DRYLSKKEIKKLSAISPNTTVNIIKNSTVVEKYRIKLP
+&gt; P77919
+VSAIKEGTVIDHIPAGKGLKVIEILKLGKLTNGGAVLLAMNVPSKKLGRKDIVKVEGRFL
+SEEEVNKIALVAPNATVNIIRDYKVVEKFKVEVP
+&gt; P74766
+VSKIKNGTVIDHIPAGRAFAVLNVLGIKGHEGFRIALVINVDSKKMGKKDIVKIEDKEIS
+DTEANLITLIAPTATINIVREYEVVKKTKLEVP
+&gt; P57451
+VEAIKSGSVIDHIPEYIGFKLLSLFRFTETEKRITIGLNLPSKKLGRKDIIKIENTFLSD
+EQINQLAIYAPHATVNYINEYNLVRKVFPTLP
+&gt; P19936
+VEAIKCGTVIDHIPAQIGFKLLTLFKLTATDQRITIGLNLPSNELGRKDLIKIENTFLTE
+QQANQLAMYAPKATVNRIDNYEVVRKLTLSLP
+&gt; P08421
+VEAIKCGTVIDHIPAQVGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKIENTFLTE
+EQVNQLALYAPQATVNRIDNYDVVGKSRPSLP
+&gt; P00478
+VEAIKRGTVIDHIPAQIGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKIENTFLSE
+DQVDQLALYAPQATVNRIDNYEVVGKSRPSLP
+&gt; O58452
+VSAIKEGTVIDHIPAGKGLKVIEILGLSKLSNGGSVLLAMNVPSKKLGRKDIVKVEGKFL
+SEEEVNKIALVAPTATVNIIRNYKVVEKFKVEVP
+&gt; O30129
+VSKIKEGTVIDHINAGKALLVLKILKIQPGTDLTVSMAMNVPSSKMGKKDIVKVEGMFIR
+DEELNKIALISPNATINLIRDYEIERKFKVSPP
+&gt; O26938
+VKPIKNGTVIDHITANRSLNVLNILGLPDGRSKVTVAMNMDSSQLGSKDIVKIENRELKP
+SEVDQIALIAPRATINIVRDYKIVEKAKVRL
+</pre>
+</td></tr></table><p>
 
 
 
@@ -70,60 +312,321 @@ EDIT HERE
 
 
 
+<!-- OUTPUT FILE FORMAT 
+     Description and example(s) of output file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.  
+     If the standard description of the avalable report formats is required, 
+     use:   #include file="inc/reportformats.ihtml"
+     Use "Outputs a graph to the specified graphics device."
+     or  "outputs a report format file. The default format is ..."
+     if appropriate.
+-->
+<a name="4.0"></a>
+<br><br><br><H2> 4.0   OUTPUT FILE FORMAT         </H2>
+
+<b>DHF file (domain hits file)</b>
+<br>The format of the DHF file (domain hits file) of hit sequences generated by SIGSCAN (Figure 1)
+is described fully in <a href="seqsearch.html">SEQSEARCH documentation</a> and only summarised here.
+The file contains two lines per hit, the first is a description of the hit in 16 text tokens delimited by '^'. The second line contains the protein sequence.
+The first 4 tokens refer to the hit (sequence) itself, the tokens are 
+<UL>
+<LI>(i) Accession number
+<LI>(ii)  Database code, 
+<LI>(iii - iv) Start and end positions of the hit relative to the full length sequence. 
+</UL>
+
+<br>The next 9 tokens refer to the domain family, superfamily etc for which the signature was derived and are as follows: 
+<UL>
+<LI>(v)  Type of domain (one of 'SCOP' or 'CATH'), 
+<LI>(vi)  SCOP or CATH domain identifier.  
+<LI>(vii) SCOP or CATH node unique identifier, e.g. SCOP Family Sunid.
+<LI>(viii) Domain class.  Textual description of the 'Class' (SCOP and CATH domains). 
+<LI>(ix) Domain architecture. Textual description of the 'Architecture' (CATH only). 
+<LI>(x) Domain topology. Textual description of the 'Topology' (CATH only).  
+<LI>(xi) Domain fold. Textual description of the 'Fold' (SCOP domains only).  
+<LI>(xii) Domain superfamily. Textual description of the 'Superfamily' (SCOP and CATH domains).  
+<LI>(xiii) Domain family. Textual description of the 'Fold' (SCOP only). 
+</UL>
+
+<br>The next 4 tokens refer to the hit, specifically, information about the search result as follows: 
+<UL>
+<LI>(xiv) Model type.  The type of model that was used to generate the hit. For DHF files generated by using SIGSCAN a value of SPARSE (sparse protein signature) is given.  Several other values are possible, however, see <a href="seqsearch.html">SEQSEARCH documentation</a>.
+<LI>(xv) SC - Score of hit from search algoritm  (not written by SIGSCAN).
+<LI>(xvi) P-value of hit (not written by SIGSCAN).
+<LI>(xvii) E-value of hit (not written by SIGSCAN).
+</UL>
+
+
+
+<br><br>
+<b>DAF file (domain alignment file)</b>
+<br>
+The format of the DAF file (domain alignment file, Figure 2) generated by SIGSCAN 
+is described fully in <a href="domainalign.html">DOMAINALIGN documentation</a> and
+is only summarised here. 
+
+<br>
+It conforms to EMBOSS "simple" multiple sequence alignment format and includes domain classification records (in comment lines beginning with '#') for the node for which the signature was generated. The classification records are TY (domain type, either SCOP or CATH), CL (class), FO (fold), SF (superfamily) and FA (family).  For CATH domains, AR (architecture) and TP (topology) may also be given.  A <b>unique identifier</b> for the node is given after <b>SI</b>. 
+<br>There are multiple blocks that contain the accession numbers, positions and aligned sequences. An accession number is given for each hit.  The positions are the start and end residue positions of the appropriate section of sequence. The sequence uses '-' as a gap character.  A 'SIGNATURE' line is given as a markup line underneath the sequence (signature positions are marked with a '*').
+
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: SIGSCAN.dhf</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt; P00478^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^4.67^0.000e+00^0.000e+00
+VEAIKRGTVIDHIPAQIGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKIENTFLSEDQVDQLALYAPQATVNRIDNYEVVGKSRPSLP
+&gt; Q83IL8^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^4.40^0.000e+00^0.000e+00
+VEAIKRGTVIDHIPAQIGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKIENTFLSEEQVDQLALYAPQATVNRIDNYEVVGKSRPSLP
+&gt; Q8Z130^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^4.07^0.000e+00^0.000e+00
+VEAIKCGTVIDHIPAQVGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKIENTFLTDEQVNQLALYAPQATVNRIDNYDVVGKSRPSLP
+&gt; P08421^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^4.07^0.000e+00^0.000e+00
+VEAIKCGTVIDHIPAQVGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKIENTFLTEEQVNQLALYAPQATVNRIDNYDVVGKSRPSLP
+&gt; Q8K9H8^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^3.67^0.000e+00^0.000e+00
+VEAIKSGSVIDHIPAHIGFKLLSLFRFTETEKRITIGLNLPSQKLDKKDIIKIENTFLSDDQINQLAIYAPCATVNYIEKYNLVGKIFPSLP
+&gt; Q9HKM3^.^11^92^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^3.20^0.000e+00^0.000e+00
+ISKIRDGTVIDHVPSGKGIRVIGVLGVHEDVNYTVSLAIHVPSNKMGFKDVIKIENRFLDRNELDMISLIAPNATISIIKNYEISEKFQVELP
+&gt; Q9HHN3^.^11^92^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.87^0.000e+00^0.000e+00
+VSKIQAGTVIDHIPAGQALQVLQILGTNGASDDQITVGMNVTSERHHRKDIVKIEGRELSQDEVDVLSLIAPDATINIVRDYEVDEKRRVDRP
+&gt; P57451^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.80^0.000e+00^0.000e+00
+VEAIKSGSVIDHIPEYIGFKLLSLFRFTETEKRITIGLNLPSKKLGRKDIIKIENTFLSDEQINQLAIYAPHATVNYINEYNLVRKVFPTLP
+&gt; Q8ZB38^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.73^0.000e+00^0.000e+00
+VEAIKCGTVIDHIPAQIGFKLLSLFKLTATDQRITIGLNLPSKRSGRKDLIKIENTFLTEQQANQLAMYAPDATVNRIDNYEVVKKLTLSLP
+&gt; P19936^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.73^0.000e+00^0.000e+00
+VEAIKCGTVIDHIPAQIGFKLLTLFKLTATDQRITIGLNLPSNELGRKDLIKIENTFLTEQQANQLAMYAPKATVNRIDNYEVVRKLTLSLP
+&gt; Q97B28^.^11^92^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.60^0.000e+00^0.000e+00
+ISKIKDGTVIDHIPSGKALRVLSILGIRDDVDYTVSVGMHVPSSKMEYKDVIKIENRSLDKNELDMISLTAPNATISIIKNYEISEKFKVELP
+&gt; Q87LF7^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.53^0.000e+00^0.000e+00
+VEAIKNGTVIDHIPAQIGIKVLKLFDMHNSSQRVTIGLNLPSSALGHKDLLKIENVFINEEQASKLALYAPHATVNQIENYEVVKKLALELP
+&gt; Q7MZ14^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.47^0.000e+00^0.000e+00
+VEAIRCGTVIDHIPAQVGFKLLSLFKLTETDQRITIGLNLPSNRLGKKDLIKIENTFLTEQQANQLAMYAPNATVNCIENYEVVKKLPINLP
+&gt; Q8ZTG2^.^11^92^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.33^0.000e+00^0.000e+00
+VSKIENGTVIDHIPAGRALTVLRILGISGKEGLRVALVMNVESKKLGKKDIVKIEGRELTPEEVNIISAVAPTATINIIRNFAVVKKFKVTPP
+&gt; Q9KP65^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.33^0.000e+00^0.000e+00
+VEAIKNGTVIDHIPAKVGIKVLKLFDMHNSAQRVTIGLNLPSSALGSKDLLKIENVFISEAQANKLALYAPHATVNQIENYEVVKKLALQLP
+&gt; O30129^.^11^92^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.27^0.000e+00^0.000e+00
+VSKIKEGTVIDHINAGKALLVLKILKIQPGTDLTVSMAMNVPSSKMGKKDIVKVEGMFIRDEELNKIALISPNATINLIRDYEIERKFKVSPP
+&gt; Q8D1W6^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.27^0.000e+00^0.000e+00
+VEAIFGGTVIDHIPAQVGLKLLSLFKWLHTKERITMGLNLPSNQQKKKDLIKLENVLLNEDQANQLSIYAPLATVNQIKNYIVIKKQKLKLP
+&gt; Q7MHF0^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.20^0.000e+00^0.000e+00
+VEAIKNGTVIDHIPAQVGIKVLKLFDMHNSSQRVTIGLNLPSSALGNKDLLKIENVFINEEQASKLALYAPHATVNQIEDYQVVKKLALELP
+&gt; Q8DCF7^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.20^0.000e+00^0.000e+00
+VEAIKNGTVIDHIPAQVGIKVLKLFDMHNSSQRVTIGLNLPSSALGNKDLLKIENVFINEEQASKLALYAPHATVNQIEDYQVVKKLALELP
+&gt; Q9UX07^.^11^92^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^2.07^0.000e+00^0.000e+00
+VSKIRNGTVIDHIPAGRALAVLRILGIRGSEGYRVALVMNVESKKIGRKDIVKIEDRVIDEKEASLITLIAPSATINIIRDYVVTEKRHLEVP
+&gt; Q9K1K9^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^1.93^0.000e+00^0.000e+00
+VEAIEKGTVIDHIPAGRGLTILRQFKLLHYGNAVTVGFNLPSKTQGSKDIIKIKGVCLDDKAADRLALFAPEAVVNTIDNFKVVQKRHLNLP
+&gt; O58452^.^12^93^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^1.93^0.000e+00^0.000e+00
+VSAIKEGTVIDHIPAGKGLKVIEILGLSKLSNGGSVLLAMNVPSKKLGRKDIVKVEGKFLSEEEVNKIALVAPTATVNIIRNYKVVEKFKVEVP
+&gt; P74766^.^11^92^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^1.93^0.000e+00^0.000e+00
+VSKIKNGTVIDHIPAGRAFAVLNVLGIKGHEGFRIALVINVDSKKMGKKDIVKIEDKEISDTEANLITLIAPTATINIVREYEVVKKTKLEVP
+&gt; Q7P144^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^1.80^0.000e+00^0.000e+00
+VEALKQGTVIDHIPAGEGVKILRLFKLTETGERVTVGLNLVSRHMGSKDLIKVENVALTEEQANELALFAPKATVNVIDNFEVVKKHKLTLP
+&gt; Q9JWY6^.^10^91^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^1.60^0.000e+00^0.000e+00
+VEAIEKGTVIDHIPAGRGLTILRQFKLLHYGNAVTVGFNLPSKTQGSKDIIKIKGVCLDDKAADRLALFAPEAVVNTIDHFKVVQKRHLNLP
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+VQAEAFDSVTIYFSDIVGFTALSAESTPMQVVTLLNDLYTCFDAVIDNFDVYKVETIGDAYMVVSGLPVRNGRLHACEVARMALALLDAVRSFRIRHRPQEQLRLRIGIHTGPVCAGVVGLKMPRYCLFGDTVNTASRMESNGEALKIHLSSETKAVLEEFGGFELEL
+&gt; Q891I9^.^9^90^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.07^0.000e+00^0.000e+00
+ITSIKDGIVIDHIKSGYGIKIFNYLNLKNVEYSVALIMNVFSSKLGKKDIIKIANKEIDIDFTVLGLIDPTITINIIEDEKIKEKLNLELP
+&gt; P18293^.^38^119^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.07^0.000e+00^0.000e+00
+VQAEAFDSVTIYFSDIVGFTALSAESTPMQVVTLLNDLYTCFDAVIDNFDVYKVETIGDAYMVVSGLPVRNGQLHAREVARMALALLDAVRSFRIRHRPQEQLRLRIGIHTGPVCAGVVGLKMPRYCLFGDTVNTASRMESNGEALRIHLSSETKAVLEEFDGFELEL
+&gt; O02740^.^32^113^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.07^0.000e+00^0.000e+00
+DLVTLYFSDIVGFTTISAMSEPIEVVDLLNDLYTLFDAIIGSHDVYKVETIGDAYMVASGLPKRNGMRHAAEIANMSLDILSSVGTFKMRHMPEVPVRIRIGLHSGPVVAGVVGLTMPRYCLFGDTVNTASRMESTGLPYRIHVSHSTVTILRTLGEGYEVE
+&gt; P51841^.^32^113^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.07^0.000e+00^0.000e+00
+DLVTLYFSDIVGFTTISAMSEPIEVVDLLNDLYTLFDAIIGSHDVYKVETIGDAYMVASGLPKRNGSRHAAEIANMSLDILSSVGTFKMRHMPEVPVRIRIGLHSGPVVAGVVGLTMPRYCLFGDTVNTASRMESTGLPYRIHVSLSTVTILQNLSEGYEVE
+&gt; Q8NFM4^.^49^130^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.07^0.000e+00^0.000e+00
+VCVLFASVPDFKEFYSESNINHEGLECLRLLNEIIADFDELLSKPKFSGVEKIKTIGSTYMAATGLNATSGQDAQQDAERSCSHLGTMVEFAVALGSKLDVINKHSFNNFRLRVGLNHGPVVAGVIGAQKPQYDIWGNTVNVASRMESTGVLGKIQVTEET
+&gt; P46197^.^38^119^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.07^0.000e+00^0.000e+00
+VQAEAFDSVTIYFSDIVGFTALSAESTPMQVVTLLNDLYTCFDAIIDNFDVYKVETIGDAYMVVSGLPGRNGQRHAPEIARMALALLDAVSSFRIRHRPHDQLRLRIGVHTGPVCAGVVGLKMPRYCLFGDTVNTASRMESNGQALKIHVSSTTKDALDELGCFQLEL
+&gt; P19686^.^65^146^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+VQAKKFNEVTMLFSDIVGFTAICSQCSPLQVITMLNALYTRFDQQCGELDVYKVETIGDAYCVAGGLHRESDTHAVQIALMALKMMELSNEVMSPHGEPIKMRIGLHSGSVFAGVVGVKMPRYCLFGNNVTLANKFESCSVPRKINVSPTTYRLLKDCPG
+&gt; P19687^.^66^147^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+AVQAKRFGNVTMLFSDIVGFTAICSQCSPLQVITMLNALYTRFDRQCGELDVYKVETIGDAYCVAGGLHKESDTHAVQIALMALKMMELSHEVVSPHGEPIKMRIGLHSGSVFAGVVGVKMPRYCLFGNNVTLANKFESCSVPRKINVSPTTYRLLKDCPG
+&gt; O60503^.^60^141^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+VSILFADIVGFTKMSANKSAHALVGLLNDLFGRFDRLCEETKCEKISTLGDCYYCVAGCPEPRADHAYCCIEMGLGMIKAIEQFCQEKKEMVNMRVGVHTGTVLCGILGMRRFKFDVWSNDVNLANLMEQLGVAGKVHISEATAKYLDDRYEMEDGKVIERLGQSVVADQLKGLKTYLI
+&gt; P97490^.^75^156^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+DAVGVMFASIPGFADFYSQTEMNNQGVECLRLLNEIIADFDELLGEDRFQDIEKIKTIGSTYMAVSGLSPEKQQCEDKWGHLCALADFSLALTESIQEINKHSFNNFELRIGISHGSVVAGVIGAKKPQYDIWGKTVNLASRMDSTGVSGRIQVPEETYLIL
+&gt; P51830^.^60^141^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+VSILFADIVGFTKMSANKSAHALVGLLNDLFGRFDRLCEQTKCEKISTLGDCYYCVAGCPEPRADHAYCCIEMGLGMIKAIEQFCQEKKEMVNMRVGVHTGTVLCGILGMRRFKFDVWSNDVNLANLMEQLGVAGKVHISEATAKYLDDRYEMEDGRVIERLGQSVVADQLKGLKTYLI
+&gt; Q02108^.^65^146^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+VQAKKFSNVTMLFSDIVGFTAICSQCSPLQVITMLNALYTRFDQQCGELDVYKVETIGDAYCVAGGLHKESDTHAVQIALMALKMMELSDEVMSPHGEPIKMRIGLHSGSVFAGVVGVKMPRYCLFGNNVTLANKFESCSVPRKINVSPTTYRLLKDCPG
+&gt; Q9DGG6^.^62^143^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+EQVSILFADIVGFTKMSANKSAHALVGLLNDLFGRFDRLCEDTKCEKISTLGDCYYCVAGCPEPRADHAYCCIEMGLGMIKAIEQFCQEKKEMVNMRVGVHTGTVLCGILGMRRFKFDVWSNDVNLANLMEQLGVAGKVHISEATAKYLDDRYEMEDGKVTERVGQSAVADQLKGLKTYLI
+&gt; Q9ERL9^.^57^138^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+VTMLFSDIVGFTAICSQCSPLQVITMLNALYTRFDQQCGELDVYKVETIGDAYCVAGGLHRESDTHAVQIALMALKMMELSNEVMSPHGEPIKMRIGLHSGSVFAGVVGVKMPRYCLFGNNVTLANKFESCSVPRKINVSPTTYRLLKDCPG
+&gt; P30803^.^0^81^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+VAVMFASIANFSEFYVELEANNEGVECLRVLNEIIADFDEIISEDRFRQLEKIKTIGSTYMAASGLNDSTYDKVGKTHIKALADFAMKLMDQMKYINEHSFNNFQMKIGLNIGPVVAGVIGARKPQYDIWGNTVNVASRMDSTGVPDRIQVTTDMYQVL
+&gt; P40145^.^75^156^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+DAVGVMFASIPGFADFYSQTEMNNQGVECLRLLNEIIADFDELLGEDRFQDIEKIKTIGSTYMAVSGLSPEKQQCEDKWGHLCALADFSLALTESIQEINKHSFNNFELRIGISHGSVVAGVIGAKKPQYDIWGKTVNLASRMDSTGVSGRIQVPEETYLIL
+&gt; O19179^.^30^111^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+VTLYFSDIVGFTTISAMSEPIEVVDLLNDLYTLFDAIIGSHDVYKVETIGDAYMVASGLPQRNGQRHAAEIANMALDILSAVGSFRMRHMPEVPVRIRIGLHSGPCVAGVVGLTMPRYCLFGDTVNTASRMESTGLPYRIHVNMSTVRILHALDEGFQTEV
+&gt; P51840^.^30^111^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+VTLYFSDIVGFTTISAMSEPIEVVDLLNDLYTLFDAIIGSHDVYKVETIGDAYMVASGLPQRNGQRHAAEIANMSLDILSAVGSFRMRHMPEVPVRIRIGLHSGPCVAGVVGLTMPRYCLFGDTVNTASRMESTGLPYRIHVNMSTVRIL
+&gt; P40146^.^75^156^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+DAVGVMFASIPGFADFYSQTEMNNQGVECLRLLNEIIADFDELLGEDRFQDIEKIKTIGSTYMAVSGLSPEKQQCEDKWGHLCALADFSLALTESIQEINKHSFNNFELRIGISHGSVVAGVIGAKKPQYDIWGKTVNLASRMDSTGVSGRIQVPEETYLIL
+&gt; P52785^.^30^111^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+VTLYFSDIVGFTTISAMSEPIEVVDLLNDLYTLFDAIIGAHDVYKVETIGDAYMVASGLPQRNGQRHAAEIANMSLDILSAVGSFRMRHMPEVPVRIRIGLHSGPCVAGVVGLTMPRYCLFGDTVNTASRMESTGLPYRIHVNMSTVRILRSLDQGFQME
+&gt; P98999^.^62^143^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^0.00^0.000e+00^0.000e+00
+EQVSILFADIVGFTKMSANKSAHALVGLLNDLFGRFDRLCEETKCEKISTLGDCYYCVAGCPEPRPDHAYCCIEMGLGMIEAIDQFCQEKKEMVNMRVGVHTGTVLCGILGMRRFKFDVWSNDVNLANLMEQLGVAGKVHISEKTARYLD
+&gt; P30804^.^0^81^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^-0.07^0.000e+00^0.000e+00
+VAVMFASIANFSEFYVELEANNEGVECLRLLNEIIADFDEIISEERFRQLEKIKTIGSTYMAASGLNASTYDQAGRSHITALADYAMRLMEQMKHINEHSFNNFQMKIGLNMGPVVAGVIGARKPQYDIWGNTVNVSSRMDSTGVPDRIQVTTDLYQVL
+&gt; Q01341^.^0^81^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^-0.07^0.000e+00^0.000e+00
+VAVMFASIANFSEFYVELEANNEGVECLRLLNEIIADFDEIISEERFRQLEKIKTIGSTYMAASGLNASTYDQVGRSHITALADYAMRLMEQMKHINEHSFNNFQMKIGLNMGPVVAGVIGARKPQYDIWGNTVNVSSRMDSTGVPDRIQVTTDLYQVL
+&gt; Q03343^.^0^81^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^-0.07^0.000e+00^0.000e+00
+VAVMFASIANFSEFYVELEANNEGVECLRLLNEIIADFDEIISEERFRQLEKIKTIGSTYMAASGLNASTYDQVGRSHITALADYAMRLMEQMKHINEHSFNNFQMKIGLNMGPVVAGVIGARKPQYDIWGNTVNVSSRMDSTGVPDRIQVTTDLYQVL
+&gt; O95622^.^0^81^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^SPARSE^-0.07^0.000e+00^0.000e+00
+VAVMFASIANFSEFYVELEANNEGVECLRLLNEIIADFDEIISEDRFRQLEKIKTIGSTYMAASGLNDSTYDKVGKTHIKALADFAMKLMDQMKYINEHSFNNFQMKIGLNIGPVVAGVIGARKPQYDIWGNTVNVASRMDSTGVPDRIQVTTDMYQVL
+</pre>
+</td></tr></table><p>
+<p><h3>File: SIGSCAN.aln</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# DE   Results of signature search
+# XX
+# TY   SCOP
+# XX
+# CL   Alpha and beta proteins (a+b)
+# XX
+# FO   Ferredoxin-like
+# XX
+# SF   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+# XX
+# FA   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+# XX
+# SI   54894
+# XX
+P00478    1      VEAIKRGTVIDHIPAQIGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKI 53
+SIGNATURE -      ----------*-*--------------------------*-------------
+P00478    54     ENTFLSEDQVDQLALYAPQATVNRIDNYEVVGKSRPSLP               106
+SIGNATURE -      ---*---*--*----*-*----*--***---*---*--*              
+P00478    107    .                                                     159
+SIGNATURE -      .                                                    
+P00478    160    .                                                     212
+SIGNATURE -      .                                                    
+P00478    213    .                                                     265
+SIGNATURE -      .                                                    
+# XX
+Q83IL8    1      VEAIKRGTVIDHIPAQIGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKI 53
+SIGNATURE -      ----------*-*--------------------------*-------------
+Q83IL8    54     ENTFLSEEQVDQLALYAPQATVNRIDNYEVVGKSRPSLP               106
+SIGNATURE -      ---*---*--*----*-*----*--***---*---*--*              
+Q83IL8    107    .                                                     159
+SIGNATURE -      .                                                    
+Q83IL8    160    .                                                     212
+SIGNATURE -      .                                                    
+Q83IL8    213    .                                                     265
+SIGNATURE -      .                                                    
+# XX
+Q8Z130    1      VEAIKCGTVIDHIPAQVGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKI 53
+SIGNATURE -      ----------*-*--------------------------*-------------
+Q8Z130    54     ENTFLTDEQVNQLALYAPQATVNRIDNYDVVGKSRPSLP               106
+SIGNATURE -      ---*---*--*----*-*----*--***---*---*--*              
+Q8Z130    107    .                                                     159
+SIGNATURE -      .                                                    
+Q8Z130    160    .                                                     212
+SIGNATURE -      .                                                    
+Q8Z130    213    .                                                     265
+SIGNATURE -      .                                                    
+# XX
+P08421    1      VEAIKCGTVIDHIPAQVGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKI 53
+SIGNATURE -      ----------*-*--------------------------*-------------
+P08421    54     ENTFLTEEQVNQLALYAPQATVNRIDNYDVVGKSRPSLP               106
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+SIGNATURE -      ---------*-*--------------------------*--------------
+P98999    107    CGILGMRRFKFDVWSNDVNLANLMEQLGVAGKVHISEKTARYLD          159
+SIGNATURE -      --*---*--*----*-*----*--***---*---*--*------         
+P98999    160    .                                                     212
+SIGNATURE -      .                                                    
+P98999    213    .                                                     265
+SIGNATURE -      .                                                    
+# XX
+P30804    1      VAVMFASIANFSEFYVELEANNEGVECLRLLNEIIADFDEIISEERFRQLEKI 53
+SIGNATURE -      *-*--------------------------*----------------*---*--
+P30804    54     KTIGSTYMAASGLNASTYDQAGRSHITALADYAMRLMEQMKHINEHSFNNFQM 106
+SIGNATURE -      *----*-*----*--***---*---*--*------------------------
+P30804    107    KIGLNMGPVVAGVIGARKPQYDIWGNTVNVSSRMDSTGVPDRIQVTTDLYQVL 159
+SIGNATURE -      -----------------------------------------------------
+P30804    160    .                                                     212
+SIGNATURE -      .                                                    
+P30804    213    .                                                     265
+SIGNATURE -      .                                                    
+# XX
+Q01341    1      VAVMFASIANFSEFYVELEANNEGVECLRLLNEIIADFDEIISEERFRQLEKI 53
+SIGNATURE -      *-*--------------------------*----------------*---*--
+Q01341    54     KTIGSTYMAASGLNASTYDQVGRSHITALADYAMRLMEQMKHINEHSFNNFQM 106
+SIGNATURE -      *----*-*----*--***---*---*--*------------------------
+Q01341    107    KIGLNMGPVVAGVIGARKPQYDIWGNTVNVSSRMDSTGVPDRIQVTTDLYQVL 159
+SIGNATURE -      -----------------------------------------------------
+Q01341    160    .                                                     212
+SIGNATURE -      .                                                    
+Q01341    213    .                                                     265
+SIGNATURE -      .                                                    
+# XX
+Q03343    1      VAVMFASIANFSEFYVELEANNEGVECLRLLNEIIADFDEIISEERFRQLEKI 53
+SIGNATURE -      *-*--------------------------*----------------*---*--
+Q03343    54     KTIGSTYMAASGLNASTYDQVGRSHITALADYAMRLMEQMKHINEHSFNNFQM 106
+SIGNATURE -      *----*-*----*--***---*---*--*------------------------
+Q03343    107    KIGLNMGPVVAGVIGARKPQYDIWGNTVNVSSRMDSTGVPDRIQVTTDLYQVL 159
+SIGNATURE -      -----------------------------------------------------
+Q03343    160    .                                                     212
+SIGNATURE -      .                                                    
+Q03343    213    .                                                     265
+SIGNATURE -      .                                                    
+# XX
+O95622    1      VAVMFASIANFSEFYVELEANNEGVECLRLLNEIIADFDEIISEDRFRQLEKI 53
+SIGNATURE -      *-*--------------------------*----------------*---*--
+O95622    54     KTIGSTYMAASGLNDSTYDKVGKTHIKALADFAMKLMDQMKYINEHSFNNFQM 106
+SIGNATURE -      *----*-*----*--***---*---*--*------------------------
+O95622    107    KIGLNIGPVVAGVIGARKPQYDIWGNTVNVASRMDSTGVPDRIQVTTDMYQVL 159
+SIGNATURE -      -----------------------------------------------------
+O95622    160    .                                                     212
+SIGNATURE -      .                                                    
+O95622    213    .                                                     265
+SIGNATURE -      .                                                    
+</pre>
+</td></tr></table><p>
 
 
 
 
-<H2>
-    Algorithm
-</H2>
+<!-- DATA FILES         
+     Any data files used (e.g. translation table file, substitution matrix 
+     etc.  This includes example data file formats if they are not obvious.
+     For a standard description of what data files are and how embossdata can
+     be used to inspect and retrieve them, use:
+     #include file="inc/localfiles.ihtml" 
+-->
 
-<!-- 
-        Algorithms
-	  Pseudocode/Vague description/Handwaving/web links to useful pages
-  -->
+<a name="5.0"></a>
+<br><br><br><H2> 5.0   DATA FILES                </H2>
+SIGSCAN requires a residue substitution matrix.
 
-**************** 
-EDIT HERE
-**************** 
+<!-- USAGE
+     Example usage, as run from the command-line.
+     Many examples illustrating different behaviours is good.
+-->
+<a name="6.0"></a>
+<br><br><br><H2> 6.0   USAGE                     </H2>
 
-
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    Usage
-</H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
-
-
-
-
-<H2>
-    Command line arguments
-</H2>
-
-<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" >
+<tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
   [-siginfile]         infile     This option specifies the name of the
                                   signature file (input). A 'signature file'
                                   contains a sparse sequence signature
-                                  suitable for use with the SIGSCAN program.
-                                  The files are generated by using SIGGEN.
+                                  suitable for use with the SIGSCAN and
+                                  SIGSCANLIG programs. The files are generated
+                                  by using SIGGEN and SIGGENLIG.
   [-dbsequence]        seqall     This option specifies the name of the
                                   database to search.
    -sub                matrixf    This option specifies the residue
@@ -143,14 +646,7 @@ EDIT HERE
                                   are penalized. Usually you will expect a few
                                   long gaps rather than many short gaps, so
                                   the gap extension penalty should be lower
-                                  than the gap penalty. An exception is where
-                                  one or both sequences are single reads with
-                                  possible sequencing errors in which case you
-                                  would expect many single base gaps. You can
-                                  get this result by setting the gap open
-                                  penalty to zero (or very low) and using the
-                                  gap extension penalty to control gap
-                                  scoring.
+                                  than the gap penalty.
    -nterm              menu       This option specifies the N-terminal
                                   matching option. This determines how the
                                   first signature position is aligned to a
@@ -170,19 +666,24 @@ EDIT HERE
                                   PSIBLAST are generated by using SEQSEARCH or
                                   various types of HMM and profile by using
                                   LIBSCAN.
-  [-alignfile]         outfile    This option specifies the name of the DAF
-                                  (domain alignment file) (output). A 'domain
-                                  alignment file' contains a sequence
-                                  alignment of domains belonging to the same
-                                  SCOP or CATH family (or other node in the
-                                  structural hierarchies). The file is in DAF
-                                  format (CLUSTAL-like) and is annotated with
-                                  domain family classification information.
-                                  The files generated by using SIGSCAN will
-                                  contain a signature-sequence alignment of
-                                  domain sequences returned by scanning a
-                                  signature (for a family of domains) against
-                                  a sequence database.
+  [-alignfile]         outfile    Name of SAF file (signature alignment file)
+                                  for signature-sequence alignments (output)
+                                  help: "This option specifies the name of the
+                                  SAF (signature alignment file) (output).A
+                                  'signature alignment file' contains one or
+                                  more signnature-sequence alignments. The
+                                  file is in DAF format (CLUSTAL-like) and is
+                                  annotated with bibliographic information,
+                                  either the domain family classification (for
+                                  SIGSCAN output) or ligand classification
+                                  (for SIGSCANLIG output). The files generated
+                                  by SIGSCAN will contain a
+                                  signature-sequence alignment for a single
+                                  signature against a library of one or more
+                                  sequences. The files generated by using
+                                  SIGSCANLIG will contain a signature-sequence
+                                  alignment for a single query sequence
+                                  against a library of one or more signatures.
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -225,10 +726,14 @@ EDIT HERE
    -fatal              boolean    Report fatal errors
    -die                boolean    Report deaths
 
-
 </pre>
-</td></tr></table>
-<P>
+</pre>
+</td></tr>
+</table>
+
+
+<H3> 6.1   COMMAND LINE ARGUMENTS </H3>
+ 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -238,7 +743,7 @@ EDIT HERE
 
 <tr>
 <td>[-siginfile]<br>(Parameter 1)</td>
-<td>This option specifies the name of the signature file (input). A 'signature file' contains a sparse sequence signature suitable for use with the SIGSCAN program. The files are generated by using SIGGEN.</td>
+<td>This option specifies the name of the signature file (input). A 'signature file' contains a sparse sequence signature suitable for use with the SIGSCAN and SIGSCANLIG programs. The files are generated by using SIGGEN and SIGGENLIG.</td>
 <td>Input file</td>
 <td><b>Required</b></td>
 </tr>
@@ -266,7 +771,7 @@ EDIT HERE
 
 <tr>
 <td>-gape</td>
-<td>This option specifies the gap extension penalty. The gap extension penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring.</td>
+<td>This option specifies the gap extension penalty. The gap extension penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty.</td>
 <td>Floating point number from 0.0 to 10.0</td>
 <td>0.5 for any sequence</td>
 </tr>
@@ -294,7 +799,7 @@ EDIT HERE
 
 <tr>
 <td>[-alignfile]<br>(Parameter 4)</td>
-<td>This option specifies the name of the DAF (domain alignment file) (output). A 'domain alignment file' contains a sequence alignment of domains belonging to the same SCOP or CATH family (or other node in the structural hierarchies). The file is in DAF format (CLUSTAL-like) and is annotated with domain family classification information. The files generated by using SIGSCAN will contain a signature-sequence alignment of domain sequences returned by scanning a signature (for a family of domains) against a sequence database.</td>
+<td>Name of SAF file (signature alignment file) for signature-sequence alignments (output) help: "This option specifies the name of the SAF (signature alignment file) (output).A 'signature alignment file' contains one or more signnature-sequence alignments. The file is in DAF format (CLUSTAL-like) and is annotated with bibliographic information, either the domain family classification (for SIGSCAN output) or ligand classification (for SIGSCANLIG output). The files generated by SIGSCAN will contain a signature-sequence alignment for a single signature against a library of one or more sequences. The files generated by using SIGSCANLIG will contain a signature-sequence alignment for a single query sequence against a library of one or more signatures.</td>
 <td>Output file</td>
 <td>SIGSCAN.aln</td>
 </tr>
@@ -322,472 +827,239 @@ EDIT HERE
 </table>
 
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
+<H3> 6.2 EXAMPLE SESSION </H3>
+An example of interactive use of sigscan is shown below.
+
+<b>Here is a sample session with sigscan</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>sigscan </b>
+Generate hits (DHF file) from a signature search.
+Name of signature file (input): <b>../siggen-keep/54894.sig</b>
+Name of database to search.: <b>swsmall</b>
+Residue substitution matrix [EBLOSUM62]: <b></b>
+Gap insertion penalty [10]: <b></b>
+Gap extension penalty [0.5]: <b></b>
+N-terminal matching options
+         1 : Align anywhere and allow only complete signature-sequence fit
+         2 : Align anywhere and allow partial signature-sequence fit
+         3 : Use empirical gaps only
+Select number [1]: <b></b>
+Max. number of hits to output [100]: <b></b>
+Name of DHF file (domain hits file) (output) [SIGSCAN.dhf]: <b></b>
+Name of SAF file (signature alignment file) for signature-sequence alignments (output) help: <b></b>
+"This option specifies the name of the SAF (signature alignment file) (output).A 'signature alignment file' contains one or more signnature-sequence alignments. The file is in DAF format (CLUSTAL-like) and is annotated with bibliographic information, either the domain family classification (for SIGSCAN output) or ligand classification (for SIGSCANLIG output). The files generated by SIGSCAN will contain a signature-sequence alignment for a single signature against a library of one or more sequences. The files generated by using SIGSCANLIG will contain a signature-sequence alignment for a single query sequence against a library of one or more signatures. [SIGSCAN.aln]: <b>
+</b>
+
+Signature file read ok
+Signature compiled ok
+Signature aligned to db ok
+Hits file written ok
+Alignments file written ok
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<!-- <br><br>
+The signature file /test_data/54894.sig was scanned against the swissprot database /test_data/swsmall to generate a DHF file (database hits) called /test_data/54894.dhf and a DAF file (signature-sequence alignments) called /test_data/54894.daf.  The output files contained no more than 100 hits in total.  When aligning and scoring the signature to a protein sequence, the residue substitution matrix EBLOSUM62, a gap insertion penalty of 10 and a gap extension penalty of 0.5 was used.  The first signature position was permitted to be aligned anywhere in the sequence without attracing a gap penalty and only complete signature-sequence fits were allowed, i.e. every signature position had to be aligned or otherwise the sequence was rejected (sequences smaller than the sum of the gap distances in the signature were rejected).
+<br><br>
+
+
+<!-- KNOWN BUGS & WARNINGS
+     Bugs that have not yet been fixed, easily missued features, problems
+     and caveats etc. Potentially stupid things the program will let you do.
+-->
+<a name="7.0"></a>
+<br><br><br><H2> 7.0   KNOWN BUGS & WARNINGS     </H2>
+None.
+
+
+
+
+
+
+
+
+<!-- NOTES
+     Important general remarks, including:
+       Restrictions.
+       Interesting behaviour.
+       Useful things you can do with this program.
+       Future plans.
+       etc.
+-->
+<a name="8.0"></a>
+<br><br><br><H2> 8.0   NOTES                     </H2>
+SIGSCAN does not generate p-values or E-values.  DHF files of hits for which p-values or E-values are calculated may be generated by using <a href="libscan.html">LIBSCAN </a>. LIBSCAN provides searches for sparse protein signatures as well as various types of hidden Markov models and other profiles. 
+
+<br><br>In the case a signature file is generated by hand, it is essential that the 
+gap data given is listed in order of increasing gap size (see <a href="siggen.html">SIGGEN documentation </a>).
+
+
+<H3> 8.1   GLOSSARY OF FILE TYPES    </H3>
+<table BORDER CELLSPACING=5 CELLPADDING=5 BGCOLOR="#f5f5ff" >
+<tr>
+<td><b>FILE TYPE</b></td>
+<td><b>FORMAT</b></td>
+<td><b>DESCRIPTION</b></td>
+<td><b>CREATED BY <b></td>
+<td><b>SEE ALSO</b></td>
+</tr>
+<td><b>Domain hits file </b></td>
+<td> DHF format (FASTA-like). </td>
+<td> Database hits (sequences) with domain classification information.  The hits are relatives to a SCOP or CATH family (or other node in the structural hierarchies) and are found from a search of a discriminating element (e.g. a protein signature, hidden Markov model, simple frequency matrix, Gribskov profile or Hennikoff profile) against a sequence database. </td>
+<td> <a href="seqsearch.html">SEQSEARCH</a> (hits retrieved by PSIBLAST). <a href="sigscan.html">SIGSCAN</a> (hits retrieved by sparse protein signature). <a href="libscan.html">LIBSCAN</a> (hits retrieved by various types of HMM and profile). </td>
+<td> N.A. </td>
+</tr>
+<tr>
+<td><b>Domain alignment file </b></td>
+<td> DAF format (CLUSTAL-like). </td>
+<td> Sequence alignment of domains belonging to the same SCOP or CATH family (or other node in the structural hierarchies).  The file is annotated with domain family classification information.</td>
+<td> <a href="domainalign.html">DOMAINALIGN</a> (structure-based sequence alignment of domains of known structure). </td>
+<td> DOMAINALIGN alignments can be extended with sequence relatives (of unknown structure) to the family in question by using SEQALIGN. </td>
+</tr>
+<tr>
+<td><b> Hits file</b></td>
+<td> Text file of classified hits </td>
+<td> A list of hits (e.g. from a prediction method) that are classified and rank-ordered on the basis of score, p-value, E-value etc.  </td>
+<td> <a href="rocon.html">ROCON</a> and <a href="libscan.html">LIBSCAN</a> (hits from searches of a discriminating element (hidden Markov model, profile or signature) against a sequence database).   </td>
+<td> ROCPLOT is run on the files to perform Receiver Operator Characteristic (ROC) analysis on the hits.  </td>
+</tr>
+<tr>
+<td><b>Signature file </b></td>
+<td> SIG format </td>
+<td> Contains a sparse sequence signature suitable for use with the SIGSCAN program. Contains a sparse sequence signature. </td>
+<td> <a href="siggen.html">SIGGEN</a>, <a href="siggenlig.html">SIGGENLIG</a>, <a href="libgen.html">LIBGEN</a> </td>
+<td> The files are generated by using SIGGEN. </td>
+</tr>
+</table>
+
+
+
+
+
+None
+
+
+<!-- DESCRIPTION
+     A complete, non-technical, user-level description of the application.
+-->
+<a name="9.0"></a>
+<br><br><br><H2> 9.0   DESCRIPTION               </H2>
+See Blades et al., Ison et al. and Daniel et al. for a description of protein signatures and their application.
+
+
+<!-- ALGORITHM
+     A technical description of algorithmic aspects, describing exactly how
+     the key aspects of the application work.
+-->
+<a name="10.0"></a>
+<br><br><br><H2> 10.0  ALGORITHM                 </H2>
+The algorithm is based on approach first described in Daniel et al (1999) that was applied to the definition of protein families (Ison et al, 2000) and later to automatically-generated signatures (Blades et al, 2005).
+
+
+
+<!-- RELATED APPLICATIONS
+     Other applications that either generate the input, use the output or 
+     are in some other way related to the application are described here. 
 -->
 
+<a name="11.0"></a>
+<br><br><br><H2> 11.0  RELATED APPLICATIONS      </H2>
 
-
-
-
-
-
-
-<H2>
-    Input file format
-</H2>
-
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
-<b>sigscan</b> reads any normal sequence USAs.
-
-<p>
-
-
-
-
-
-
-
-<H2>
-    Output file format
-</H2>
-
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-
-        If you wish to include the standard description of the avalable
-	report formats, use:
-<p>
-
-The output is a standard EMBOSS report file. 
-
-<p>
-
-The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
-
-<p>
-
-See:
-<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
-http://emboss.sf.net/docs/themes/ReportFormats.html</A>
-for further information on report formats.
-
-<p>
-
-   -->
-
-<b>sigscan</b> 
-outputs a graph to the specified graphics device. 
-outputs a report format file. The default format is ...
-
-
-<p>
-
-
-
-
-
-
-
-<H2>
-    Data files
-</H2>
-
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-<p>
-EMBOSS data files are distributed with the application and stored
-in the standard EMBOSS data directory, which is defined
-by the EMBOSS environment variable EMBOSS_DATA.
-
-<p>
-
-To see the available EMBOSS data files, run:
-<p>
-<pre>
-% embossdata -showall
-</pre>
-<p>
-To fetch one of the data files (for example 'Exxx.dat') into your
-current directory for you to inspect or modify, run:
-
-<pre>
-
-% embossdata -fetch -file Exxx.dat
-
-</pre>
-<p>
-
-Users can provide their own data files in their own directories.
-Project specific files can be put in the current directory, or for
-tidier directory listings in a subdirectory called
-".embossdata". Files for all EMBOSS runs can be put in the user's home
-directory, or again in a subdirectory called ".embossdata".
-
-<p>
-The directories are searched in the following order:
-
-<ul>
-   <li> . (your current directory)
-   <li> .embossdata (under your current directory)
-   <li> ~/ (your home directory)
-   <li> ~/.embossdata
-</ul>
-<p>
-
-   -->
-
-**************** 
-EDIT HERE
-**************** 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    Notes
-</H2>
-
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
-None.
-
-
-
-
-
-
-
-<H2>
-    References
-</H2>
-
-<!-- 
-        Bibliography for methods used.
-   -->
-
-None.
-
-
-
-
-
-
-
-
-<H2>
-    Warnings
-</H2>
-
-<!-- 
-        Potentially stupid things the program will let you do.
-   -->
-
-None.
-
-
-
-
-
-
-
-<H2>
-    Diagnostic Error Messages
-</H2>
-
-<!-- 
-        Error messages specific to this program, eg:
-        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
-   -->
-
-None.
-
-
-
-
-
-
-
-<H2>
-    Exit status
-</H2>
-
-<!-- 
-        Description of the exit status for various error conditions
-   -->
-
-It always exits with status 0.
-
-
-
-
-
-
-
-
-<H2>
-    Known bugs
-</H2>
-
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
-None.
-
-
-
-
-
-
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="../construct/contactcount.html">contactcount</a></td><td>Counts specific versus non-specific contacts in a directory of cleaned protein chain contact files</td></tr>
-<tr><td><a href="contacts.html">contacts</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of intra-chain residue-residue contact data</td></tr>
-<tr><td><a href="domainalign.html">domainalign</a></td><td>Generates DAF files (domain alignment files) of structure-based sequence alignments for nodes in a DCF file (domain classification file)</td></tr>
-<tr><td><a href="domainrep.html">domainrep</a></td><td>Reorder DCF file (domain classification file) so that the representative structure of each user-specified node is given first</td></tr>
-<tr><td><a href="domainreso.html">domainreso</a></td><td>Removes low resolution domains from a DCF file (domain classification file)</td></tr>
-<tr><td><a href="interface.html">interface</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of inter-chain residue-residue contact data</td></tr>
-<tr><td><a href="libgen.html">libgen</a></td><td>Generates various types of discriminating elements for each alignment in a directory</td></tr>
-<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file</td></tr>
-<tr><td><a href="rocon.html">rocon</a></td><td>Reads a DHF file (domain hits file) of hits (sequences of unknown structural classification) and a DHF file of validation sequences (known classification) and writes a 'hits file' for the hits, which are classified and rank-ordered on the basis of score</td></tr>
-<tr><td><a href="rocplot.html">rocplot</a></td><td>Provides interpretation and graphical display of the performance of discriminating elements (e.g. profiles for protein families). rocplot reads file(s) of hits from discriminator-database search(es), performs ROC analysis on the hits, and writes graphs illustrating the diagnostic performance of the discriminating elements</td></tr>
-<tr><td><a href="seqalign.html">seqalign</a></td><td>Reads a DAF file (domain alignment file) and a DHF file (domain hits file) and writes a DAF file extended with the hits</td></tr>
-<tr><td><a href="seqfraggle.html">seqfraggle</a></td><td>Removes fragments from DHF files (domain hits files) or other files of sequences</td></tr>
-<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate database hits (sequences) for nodes in a DCF file (domain classification file) by using PSI-BLAST</td></tr>
-<tr><td><a href="seqsort.html">seqsort</a></td><td>Reads DHF files (domain hits files) of database hits (sequences) and removes hits of ambiguous classification</td></tr>
-<tr><td><a href="seqwords.html">seqwords</a></td><td>Generates DHF files (domain hits files) of database hits (sequences) for nodes in a DCF file (domain classification file) by keyword search of UniProt</td></tr>
-<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
+<tr><td><a href="../../apps/contactcount.html">contactcount</a></td><td>Count specific versus non-specific contacts</td></tr>
+<tr><td><a href="../structure/contacts.html">contacts</a></td><td>Generate intra-chain CON files from CCF files</td></tr>
+<tr><td><a href="../domalign/domainalign.html">domainalign</a></td><td>Generate alignments (DAF file) for nodes in a DCF file</td></tr>
+<tr><td><a href="../domalign/domainrep.html">domainrep</a></td><td>Reorder DCF file to identify representative structures</td></tr>
+<tr><td><a href="../domainatrix/domainreso.html">domainreso</a></td><td>Remove low resolution domains from a DCF file</td></tr>
+<tr><td><a href="../structure/interface.html">interface</a></td><td>Generate inter-chain CON files from CCF files</td></tr>
+<tr><td><a href="libgen.html">libgen</a></td><td>Generate discriminating elements from alignments</td></tr>
+<tr><td><a href="matgen3d.html">matgen3d</a></td><td>Generate a 3D-1D scoring matrix from CCF files</td></tr>
+<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Phi and psi torsion angles from protein coordinates</td></tr>
+<tr><td><a href="rocon.html">rocon</a></td><td>Generates a hits file from comparing two DHF files</td></tr>
+<tr><td><a href="rocplot.html">rocplot</a></td><td>Performs ROC analysis on hits files</td></tr>
+<tr><td><a href="../reconstruct/scorecmapdir.html">scorecmapdir</a></td><td>Contact scores for cleaned protein chain contact files</td></tr>
+<tr><td><a href="../domalign/seqalign.html">seqalign</a></td><td>Extend alignments (DAF file) with sequences (DHF file)</td></tr>
+<tr><td><a href="../domsearch/seqfraggle.html">seqfraggle</a></td><td>Removes fragment sequences from DHF files</td></tr>
+<tr><td><a href="../domsearch/seqsearch.html">seqsearch</a></td><td>Generate PSI-BLAST hits (DHF file) from a DAF file</td></tr>
+<tr><td><a href="../domsearch/seqsort.html">seqsort</a></td><td>Remove ambiguous classified sequences from DHF files</td></tr>
+<tr><td><a href="../domsearch/seqwords.html">seqwords</a></td><td>Generates DHF files from keyword search of UniProt</td></tr>
+<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment</td></tr>
+<tr><td><a href="siggenlig.html">siggenlig</a></td><td>Generate ligand-binding signatures from a CON file</td></tr>
+<tr><td><a href="sigscanlig.html">sigscanlig</a></td><td>Search ligand-signature library & write hits (LHF file)</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
 
 
 
-
-
-
-
-
-
-
-<H2>
-    Author(s)
-</H2>
-<!--
-        Who has worked on the program in the past.
-e.g. one of:
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-
-Bernd Jagla (bernd&nbsp;&copy;&nbsp;golgi.ski.mskcc.org)
-<br>
-Cellular Biochemistry and Biophysics Program, Rockefeller
-Research Laboratories, Memorial Sloan-Kettering Cancer Center, 1275 York
-Avenue, Box 251,New York, NY 10021.
-
-David Martin (dmartin&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-
-Gos Micklem (gos&nbsp;&copy;&nbsp;ebi.ac.uk)
-<br>
-Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-
-Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.                      
-
-Mark Faller (current e-mail address unknown)
-<br>
-while he was with:
-<br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
-
-Michael K. Schuster and Martin Grabner (martin.grabner&nbsp;&copy;&nbsp;univie.ac.at)
-<br>
-from the Austrian National EMBnet node.
-
-
-Michael Schmitz (mschmitz&nbsp;&copy;&nbsp;lbl.gov)
-<br>
-Lawrence Berkeley Labs, USA
-
-Nicolas Tourasse (nicolas.tourasse&nbsp;&copy;&nbsp;biotek.uio.no)
-<br>
-Biotechnology Center of Oslo
-
-Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
-<br>
-Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-Richard Durbin (rd&nbsp;&copy;&nbsp;sanger.ac.uk)
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.                      
-
-Richard Bruskiewich (r.bruskiewich@cgiar.org)
-<br>
-while he was at:
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.                      
-
-Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
-<br>
-European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-Sinead O'Leary (current e-mail address unknown)
-<br>
-while she was at:
-<br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
-
-
-Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-Thomas Laurent (thomas.laurent&nbsp;&copy;&nbsp;uk.lionbioscience.com)
-<br>
-Lion Bioscience Ltd,
-     Compass House,
-     80-82 Newmarket Road,
-     Cambridge,
-     CB5 8DZ,
-     UK
-
-Val Curwen (vac&nbsp;&copy;&nbsp;sanger.ac.uk)
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK. 
-
-
-   -->
-
-**************** 
-EDIT HERE
-**************** 
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    History
-</H2>
-
-<!--
-        What changes have been made.
-   -->
-
-Written (date) - author.
-
-<!--
-<p>
-
-
+<!-- DIAGNOSTIC ERROR MESSAGES
+     Description of error messages or log file, if one is written.
 -->
+<a name="12.0"></a>
+<br><br><br><H2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2>
+None.
+
+
+
+<!-- AUTHORS
+     The main author first then all others. 
+-->
+<a name="13.0"></a>
+<br><br><br><H2> 13.0  AUTHORS                   </H2>
+Jon Ison <a href="mailto:jison@rfcgr.mrc.ac.uk">(jison@rfcgr.mrc.ac.uk)</a>
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+
+<!-- REFERENCES
+     Quote the paper where the application was first published, described, used etc. 
+-->
+<a name="14.0"></a>
+<br><br><br><H2> 14.0  REFERENCES                </H2>
+Please cite the authors and EMBOSS.
+<br><br>
+<i>Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+Molecular Biology Open Software Suite"  Trends in Genetics,
+15:276-278.
+
+<p>
+See also <a href="http://emboss.sourceforge.net/">http://emboss.sourceforge.net/</a></i>
+
+
+
+Automatic generation and evaluation of sparse protein signatures for families of protein 
+structural domains. MJ Blades, JC Ison, R Ranasinghe, and JBC Findlay. Protein Science. 2005 (accepted)
+
+<br><br>
+A key residues approach to the definition of protein families and analysis
+of sparse family signatures.  JC Ison, AJ Bleasby, MJ Blades, SC Daniel, 
+JH Parish, JBC Findlay.  PROTEINS: Structure, Function & Genetics.  2000, 
+40:330-341
+<br><br>
+Alignment of a sparse protein signature with protein sequences: application
+to fold prediction for three small globulins.  SC Daniel, JH Parish, 
+JC Ison, MJ Blades & JBC Findlay.  FEBS Letters.  1999, 459:349-352. 
 
 
 
 
 
-
-
-
-
-
-
-
-<H2>
-    Target users
-</H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-   -->
-
-This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
-
-
-
-
-
-
-
-
-
+<H3>14.1 Other useful references  </H3>
 
 
 </BODY>
 </HTML>
+
+
 

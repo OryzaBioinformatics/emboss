@@ -240,6 +240,47 @@ alignment XML format  </td></tr>
 <H2>
     Usage
 </H2>
+<b>Here is a sample session with fdiscboot</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fdiscboot -seed 3 </b>
+Bootstrapped discrete sites algorithm
+Input file: <b>discboot.dat</b>
+Output file [discboot.fdiscboot]: <b></b>
+Out ancestor file name [discboot.ancfile]: <b></b>
+Out mix file name [discboot.mixfile]: <b></b>
+Out fact file name [discboot.factfile]: <b></b>
+
+
+ bootstrap: true
+jackknife: false
+ permute: false
+ lockhart: false
+ ild: false
+ justwts: false 
+
+completed replicate number   10
+completed replicate number   20
+completed replicate number   30
+completed replicate number   40
+completed replicate number   50
+completed replicate number   60
+completed replicate number   70
+completed replicate number   80
+completed replicate number   90
+completed replicate number  100
+
+Output written to file "discboot.fdiscboot"
+
+Done.
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -484,6 +525,20 @@ alignment XML format  </td></tr>
 <p>
 
 
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: discboot.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+     5    6
+Alpha     110110
+Beta      110000
+Gamma     100110
+Delta     001001
+Epsilon   001110
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -498,6 +553,134 @@ writes a bootstrap multiple set of discrete character data
 
 <p>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: discboot.ancfile</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: discboot.factfile</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: discboot.mixfile</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: discboot.fdiscboot</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+    5     6
+Alpha     111001
+Beta      111000
+Gamma     100001
+Delta     000110
+Epsilon   000111
+    5     6
+Alpha     111011
+Beta      111000
+Gamma     100011
+Delta     000100
+Epsilon   000111
+    5     6
+Alpha     111110
+Beta      111000
+Gamma     110110
+Delta     000001
+Epsilon   000110
+    5     6
+Alpha     000001
+Beta      000000
+Gamma     000001
+Delta     111110
+Epsilon   111111
+    5     6
+Alpha     111100
+Beta      111000
+Gamma     110100
+Delta     000011
+Epsilon   000100
+    5     6
+Alpha     111100
+Beta      100000
+Gamma     111100
+Delta     000011
+Epsilon   011100
+    5     6
+Alpha     110011
+Beta      110000
+Gamma     100011
+Delta     001100
+Epsilon   001111
+    5     6
+Alpha     111100
+Beta      100000
+Gamma     111100
+Delta     000011
+Epsilon   011100
+    5     6
+Alpha     110100
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+Gamma     101111
+Delta     000000
+Epsilon   001111
+    5     6
+Alpha     110110
+Beta      110000
+Gamma     110110
+Delta     001001
+Epsilon   001110
+    5     6
+Alpha     110111
+Beta      110000
+Gamma     000111
+Delta     001000
+Epsilon   001111
+    5     6
+Alpha     101111
+Beta      100000
+Gamma     001111
+Delta     010000
+Epsilon   011111
+    5     6
+Alpha     011111
+Beta      000000
+Gamma     011111
+Delta     100000
+Epsilon   111111
+    5     6
+Alpha     011000
+Beta      000000
+Gamma     011000
+Delta     100111
+Epsilon   111000
+    5     6
+Alpha     101100
+Beta      100000
+Gamma     101100
+Delta     010011
+Epsilon   011100
+    5     6
+Alpha     111111
+Beta      111110
+Gamma     100001
+Delta     000000
+Epsilon   000001
+    5     6
+Alpha     110110
+Beta      110000
+Gamma     000110
+Delta     001001
+Epsilon   001110
+</pre>
+</td></tr></table><p>
 
 
 
@@ -548,8 +731,8 @@ None.
 <tr><td><a href="../phylip/ednacomp.html">ednacomp</a></td><td>DNA compatibility algorithm</td></tr>
 <tr><td><a href="../phylip/ednadist.html">ednadist</a></td><td>Nucleic acid sequence Distance Matrix program</td></tr>
 <tr><td><a href="../phylip/ednainvar.html">ednainvar</a></td><td>Nucleic acid sequence Invariants method</td></tr>
-<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood</td></tr>
-<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood with molecular clock</td></tr>
+<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Phylogenies from nucleic acid Maximum Likelihood</td></tr>
+<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Phylogenies from nucleic acid Maximum Likelihood with clock</td></tr>
 <tr><td><a href="../phylip/ednapars.html">ednapars</a></td><td>DNA parsimony algorithm</td></tr>
 <tr><td><a href="../phylip/ednapenny.html">ednapenny</a></td><td>Penny algorithm for DNA</td></tr>
 <tr><td><a href="../phylip/eprotdist.html">eprotdist</a></td><td>Protein distance algorithm</td></tr>
@@ -571,7 +754,7 @@ None.
 <tr><td><a href="fprotdist.html">fprotdist</a></td><td>Protein distance algorithm</td></tr>
 <tr><td><a href="fprotpars.html">fprotpars</a></td><td>Protein pasimony algorithm</td></tr>
 <tr><td><a href="frestboot.html">frestboot</a></td><td>Bootstrapped restriction sites algorithm</td></tr>
-<tr><td><a href="frestdist.html">frestdist</a></td><td>Computes distance matrix from restriction sites or fragments</td></tr>
+<tr><td><a href="frestdist.html">frestdist</a></td><td>Distance matrix from restriction sites or fragments</td></tr>
 <tr><td><a href="frestml.html">frestml</a></td><td>Restriction site maximum Likelihood method</td></tr>
 <tr><td><a href="fseqboot.html">fseqboot</a></td><td>Bootstrapped sequences algorithm</td></tr>
 <tr><td><a href="fseqbootall.html">fseqbootall</a></td><td>Bootstrapped sequences algorithm</td></tr>

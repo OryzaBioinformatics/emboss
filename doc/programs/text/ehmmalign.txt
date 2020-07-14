@@ -110,7 +110,7 @@ CS    no
 MAP   yes
 COM   ehmmbuild ../../data/hmm/globins50.msf globin.hmm -auto
 NSEQ  50
-DATE  Fri Feb 18 09:56:43 2005
+DATE  Fri Jul 15 12:00:00 2005
 CKSUM 5854
 XT      -8455     -4      0      *  -8455     -4      0      *
 NULT      -4  -8455

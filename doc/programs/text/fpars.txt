@@ -427,22 +427,20 @@ Known bugs
 
 See also
 
-   Program name Description
-   eclique Largest clique program
-   edollop Dollo and polymorphism parsimony algorithm
-   edolpenny Penny algorithm Dollo or polymorphism
-   efactor Multistate to binary recoding program
-   emix Mixed parsimony algorithm
-   epenny Penny algorithm, branch-and-bound to find all most parsimonious
-   trees
-   fclique Largest clique program
-   fdollop Dollo and polymorphism parsimony algorithm
-   fdolpenny Penny algorithm Dollo or polymorphism
-   ffactor Multistate to binary recoding program
-   fmix Mixed parsimony algorithm
-   fmove Interactive mixed method parsimony
-   fpenny Penny algorithm, branch-and-bound to find all most parsimonious
-   trees
+   Program name                Description
+   eclique      Largest clique program
+   edollop      Dollo and polymorphism parsimony algorithm
+   edolpenny    Penny algorithm Dollo or polymorphism
+   efactor      Multistate to binary recoding program
+   emix         Mixed parsimony algorithm
+   epenny       Penny algorithm, branch-and-bound
+   fclique      Largest clique program
+   fdollop      Dollo and polymorphism parsimony algorithm
+   fdolpenny    Penny algorithm Dollo or polymorphism
+   ffactor      Multistate to binary recoding program
+   fmix         Mixed parsimony algorithm
+   fmove        Interactive mixed method parsimony
+   fpenny       Penny algorithm, branch-and-bound
 
 Author(s)
 

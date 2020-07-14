@@ -247,7 +247,7 @@ Output file format
 
 ########################################
 # Program: etandem
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Report_format: table
 # Report_file: hhtetra.tan
 ########################################
@@ -318,8 +318,10 @@ See also
 
 Authors
 
-   This program was originally written by [an error occurred while
-   processing this directive]
+   This program was originally written by Richard Durbin
+   (rd © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
 
    This application was modified for inclusion in EMBOSS by Peter Rice
    (pmr © ebi.ac.uk)

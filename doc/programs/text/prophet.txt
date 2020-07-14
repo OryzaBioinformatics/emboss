@@ -85,8 +85,8 @@ Command line arguments
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-infile]
    (Parameter 2) Profile or matrix file Input file Required
-   -gapopen Gap opening coefficient Any numeric value 1.0
-   -gapextend Gap extension coefficient Any numeric value 1.0
+   -gapopen Gap opening coefficient Number from 0.000 to 100.000 1.0
+   -gapextend Gap extension coefficient Number from 0.000 to 100.000 1.0
    [-outfile]
    (Parameter 3) Output file name Output file <sequence>.prophet
    Additional (Optional) qualifiers Allowed values Default
@@ -436,9 +436,9 @@ See also
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

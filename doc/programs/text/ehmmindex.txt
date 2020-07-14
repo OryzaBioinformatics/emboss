@@ -82,7 +82,7 @@ MAP   yes
 COM   ehmmbuild ../../data/hmm/fn3.slx fn3.hmm
 COM   ehmmcalibrate myhmms -seed 1079460101
 NSEQ  109
-DATE  Fri Feb 18 09:57:19 2005
+DATE  Fri Jul 15 12:00:00 2005
 CKSUM 4633
 XT      -8455     -4      0      *  -8455     -4      0      *
 NULT      -4  -8455
