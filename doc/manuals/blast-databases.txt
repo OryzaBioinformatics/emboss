@@ -56,9 +56,24 @@ N   3   Uint  TotLen (v3 - for protein)
 N   2   Uint  CompLen - compressed db length (def=0)
 N   2   Uint  Cleancount - count of nt's cleaned (def=0)
 
-swnew.psq (sequence) - maybe the same as version 3
+
+swnew.psq (sequence) - same as version 3 for swnew
 
 swnew.phr (deflines file) - definitely strange
+
+Apparently some codes are the type of what follows:
+
+x30
+
+xa0
+
+xa1
+
+xaa
+
+x1a length plus string plus 0 0. For a long string, (x81 x97) = length
+of chars
+
 
 Byte Text
 30   0 (ASCII zero)
