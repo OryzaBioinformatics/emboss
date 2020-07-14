@@ -2,6 +2,8 @@
 
 SET emboss_qadata /homes/pmr/hgmp/test
 
+SET emboss_timetoday "2004-07-15 12:00:00"
+
 #######################################
 # Standard test databases
 #######################################
@@ -10,7 +12,7 @@ SET emboss_qadata /homes/pmr/hgmp/test
 
 ##################################################################
 # Test Databases
-# Used by the qatest.pl scriupt to test an EMBOSS installation.
+# Used by the qatest.pl script to test an EMBOSS installation.
 # Comment them out if you do not want your users to use them.
 # Examples in the EMBOSS documentation should all run by using
 # TEMBL: in place of EMBL:, TSW: in place of SW:, and so on.
@@ -277,3 +279,39 @@ DB qasrswww [ type: N format: embl method: srswww
   url: http://srs.ebi.ac.uk/srs6bin/cgi-bin/wgetz
   comment: "Remote SRS web server"
 ]
+
+############################
+### access method direct ###
+############################
+
+# embl (worm cosmid ZK637 and a few other entries)
+# ====
+
+DB temblall [ type: N dir: "$emboss_tempdata/embl"
+   method: direct format: embl release: 57 
+   fields: "sv des org key"
+   comment: "EMBL in native format with EMBL CD-ROM index"
+  filename: "*.dat"
+]
+
+# embl (worm cosmid ZK637 and a few other entries)
+# ====
+
+DB temblvrt [ type: N dir: "$emboss_tempdata/embl"
+   method: direct format: embl release: 57 
+   fields: "sv des org key"
+   comment: "EMBL in native format with EMBL CD-ROM index"
+  filename: "hum*.dat rod*.dat vrt*.dat"
+]
+
+# embl (worm cosmid ZK637 and a few other entries)
+# ====
+
+DB temblrest [ type: N dir: "$emboss_tempdata/embl"
+   method: direct format: embl release: 57 
+   fields: "sv des org key"
+   comment: "EMBL in native format with EMBL CD-ROM index"
+   filename: "*.dat"
+   exclude: "hum*.dat rod*.dat vrt*.dat"
+]
+
