@@ -1,8 +1,8 @@
 #!/bin/env icarus
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #    $RCSfile: efunc.is,v $
-#    $Revision: 1.4 $
-#    $Date: 2002/08/29 10:05:41 $
+#    $Revision: 1.5 $
+#    $Date: 2004/04/14 14:22:43 $
 #    $Author: rice $
 #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -124,7 +124,7 @@ $rules={
                dlines   {$Rep:
                     |<TR>
                     |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
-                    |<B>Description</B></TD><TD>
+                    |<B>Description</B></TD><TD width=500>
                     |($Foreach:[$ds in:$dtxt s:@"$ds"])
                     |</TD></TR>
                   }
@@ -214,27 +214,27 @@ $rules={
 		   $qup = $Query:"[efunc-id:$Ct]>efunc_up"
 #		   if:$qup.size>0 {$sup=
 #		    |<A HREF="wgetz?-sl+($ParStr:userIdOpt)\
-#		    |[efunc-id:$Ct]%3eefunc_up">
+#		    |[efunc-id:$Ct]%3eefunc_up+-page+qResult">
 #		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/up.gif 
 #		    |ALIGN=middle  ALT = "Up" WIDTH="16" HEIGHT="14"></A>  
 #		   }
 #		   $qdn = $Query:"[efunc-id:$Ct]>efunc_down"
 #		   if:$qdn.size>0 {$sdn=
 #		    | <A HREF="wgetz?-sl+($ParStr:userIdOpt)\
-#		    |[efunc-id:$Ct]%3eefunc_down">
+#		    |[efunc-id:$Ct]%3eefunc_down+-page+qResult">
 #		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/down.gif 
 #		    |ALIGN=middle  ALT = "Down" WIDTH="16" HEIGHT="14"></A> 
 #		   }
 		   if:$qup.size>0 {$sup=
 		    |<A HREF="wgetz?($ParStr:userIdOpt)\
-		    |[efunc-id:$Ct]%3eefunc_up">
+		    |[efunc-id:$Ct]%3eefunc_up+-page+qResult">
 		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/up.gif 
 		    |ALIGN=middle  ALT = "Up" WIDTH="16" HEIGHT="14"></A>  
 		   }
 		   $qdn = $Query:"[efunc-id:$Ct]>efunc_down"
 		   if:$qdn.size>0 {$sdn=
 		    | <A HREF="wgetz?($ParStr:userIdOpt)\
-		    |[efunc-id:$Ct]%3eefunc_down">
+		    |[efunc-id:$Ct]%3eefunc_down+-page+qResult">
 		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/down.gif 
 		    |ALIGN=middle  ALT = "Down" WIDTH="16" HEIGHT="14"></A> 
 		   }
