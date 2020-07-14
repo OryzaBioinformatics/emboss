@@ -19,7 +19,10 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
+
 #include "emboss.h"
+
+
 
 
 /* @prog preg *****************************************************************
@@ -30,62 +33,64 @@
 
 int main(int argc, char **argv)
 {
-
     AjPSeqall seqall;
-    AjPFile outf;
     AjPRegexp patexp;
+    AjPReport report;
+    AjPFeattable feat=NULL;
+    AjPFeature sf = NULL;
     AjPSeq seq = NULL;
     AjPStr str = NULL;
     AjPStr tmpstr = NULL;
     AjPStr substr = NULL;
-    AjBool found;
     ajint ioff;
     ajint ipos;
     ajint ilen;
 
-    embInit ("preg", argc, argv);
+    embInit("preg", argc, argv);
 
-    outf = ajAcdGetOutfile ("outfile");
-    seqall = ajAcdGetSeqall ("sequence");
-    patexp = ajAcdGetRegexp ("pattern");
+    report = ajAcdGetReport("outfile");
+    seqall = ajAcdGetSeqall("sequence");
+    patexp = ajAcdGetRegexp("pattern");
 
-    ajFmtPrintF (outf, "preg search of %S with pattern %S\n",
-		 ajAcdValue("sequence"), ajAcdValue("pattern"));
+    ajFmtPrintAppS (&tmpstr, "Pattern: %S\n", ajAcdValue("pattern"));
+    ajReportSetHeader (report, tmpstr);
 
-    while (ajSeqallNext(seqall, &seq))
+    while(ajSeqallNext(seqall, &seq))
     {
-	found = ajFalse;
 	ipos = 1;
-	ajStrAssS (&str, ajSeqStr(seq));
+	ajStrAssS(&str, ajSeqStr(seq));
 	ajStrToUpper(&str);
-	ajDebug ("Testing '%s' len: %d %d\n",
-		 ajSeqName(seq), ajSeqLen(seq), ajStrLen(str));
-	while (ajStrLen(str) && ajRegExec (patexp, str))
+	ajDebug("Testing '%s' len: %d %d\n",
+		ajSeqName(seq), ajSeqLen(seq), ajStrLen(str));
+        feat = ajFeattableNewProt(ajSeqGetName(seq));
+
+	while(ajStrLen(str) && ajRegExec(patexp, str))
 	{
-	    if (!found)
+	    ioff = ajRegOffset(patexp);
+	    ilen = ajRegLenI(patexp, 0);
+	    if(ioff || ilen)
 	    {
-		ajFmtPrintF (outf, "Matches in %s\n", ajSeqName(seq));
-		found = ajTrue;
+		ajRegSubI(patexp, 0, &substr);
+		ajRegPost(patexp, &tmpstr);
+		ajStrAssS(&str, tmpstr);
+		ipos += ioff;
+		sf = ajFeatNewII (feat,ipos,ipos+ilen-1);
+		ipos += ilen;
 	    }
-	    ioff = ajRegOffset (patexp);
-	    ilen = ajRegLenI (patexp, 0);
-	    if (ioff || ilen) {
-	      ajRegSubI (patexp, 0, &substr);
-	      ajRegPost (patexp, &tmpstr);
-	      ajStrAssS (&str, tmpstr);
-	      ipos += ioff;
-	      ajFmtPrintF (outf, "%15s %5d %S\n", ajSeqName(seq), ipos, substr);
-	      ipos += ilen;
-	    }
-	    else {
-	      ipos++;
-	      ajStrTrim(&str, 1);
+	    else
+	    {
+		ipos++;
+		ajStrTrim(&str, 1);
 	    }
 	}
+        (void) ajReportWrite (report,feat,seq);
+        ajFeattableDel(&feat);
     }
 
-    ajFileClose (&outf);
+    ajReportClose(report);
+    ajReportDel(&report);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }
