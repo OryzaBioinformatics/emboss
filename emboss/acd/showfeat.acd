@@ -22,7 +22,7 @@ section: advanced [
 ]
 
   string: matchsource  [
-    optional: "Y"
+    additional: "Y"
     default: "*"
     information: "Source of feature to display"
     help: "By default any feature source in the feature table is
@@ -38,7 +38,7 @@ section: advanced [
   ]
 
   string: matchtype  [
-    optional: "Y"
+    additional: "Y"
     default: "*"
     information: "Type of feature to display"
     help: "By default any feature type in the feature table is shown.
@@ -54,7 +54,7 @@ section: advanced [
   ]
 
   string: matchtag  [
-    optional: "Y"
+    additional: "Y"
     default: "*"
     information: "Tag of feature to display"
     help: "Tags are the types of extra values that a feature may have.
@@ -75,7 +75,7 @@ section: advanced [
   ]
 
   string: matchvalue  [
-    optional: "Y"
+    additional: "Y"
     default: "*"
     information: "Value of feature tags to display"
     help: "Tag values are the values associated with a feature tag.
@@ -96,7 +96,7 @@ section: advanced [
   ]
 
   list: sort  [
-    optional: "Y"
+    additional: "Y"
     default: "start"
     minimum: "1"
     maximum: "1"
@@ -260,9 +260,7 @@ section: output [
   outfile: outfile  [
     parameter: "Y"
     extension: "showfeat"
-    information: "Output feature details to a file"
-    help: "If you enter the name of a file here then this program will
-           write the feature details into that file."
+    knowntype: "showfeat output"
   ]
 
 endsection: output

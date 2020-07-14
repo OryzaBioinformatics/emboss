@@ -26,7 +26,7 @@ section: advanced [
   ]
 
   integer: window  [
-    optional: "Y"
+    additional: "Y"
     default: "30"
     minimum: "1"
     information: "Window size in codons"
@@ -40,12 +40,13 @@ section: output [
 ]
 
   xygraph: graph  [
-    required: "Y"
+    standard: "Y"
     multiple: "6"
   ]
 
-  outfile: outf  [
-    required: "Y"
+  outfile: outfile  [
+    standard: "Y"
+    knowntype: "wobble output"
   ]
 
 endsection: output

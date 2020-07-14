@@ -21,7 +21,7 @@ section: advanced [
 ]
 
   list: frame  [
-    optional: "Y"
+    additional: "Y"
     default: "1"
     minimum: "1"
     maximum: "6"
@@ -30,11 +30,11 @@ section: advanced [
              -3:-3, R:Reverse three frames, 6:All six frames"
     delimiter: ","
     codedelimiter: ":"
-    prompt: "Frame(s) to translate"
+    information: "Frame(s) to translate"
   ]
 
   list: table  [
-    optional: "Y"
+    additional: "Y"
     default: "0"
     minimum: "1"
     maximum: "1"
@@ -51,13 +51,13 @@ section: advanced [
              23:Thraustochytrium Mitochondrial"
     delimiter: ";"
     codedelimiter: ":"
-    prompt: "Code to use"
+    information: "Code to use"
   ]
 
   range: regions  [
-    optional: "Y"
+    additional: "Y"
     default: "$(sequence.begin)-$(sequence.end)"
-    prompt: "Regions to translate (eg: 4-57,78-94)"
+    information: "Regions to translate (eg: 4-57,78-94)"
     help: "Regions to translate. \
            If this is left blank, then the complete sequence is translated. \
            A set of regions is specified by a set of pairs of positions. \
@@ -73,18 +73,18 @@ section: advanced [
   ]
 
   boolean: trim  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
-    prompt: "Trim trailing X's and *'s"
+    information: "Trim trailing X's and *'s"
     help: "This removes all 'X' and '*' characters from the right end
            of the translation. The trimming process starts at the end and
            continues until the next character is not a 'X' or a '*'"
   ]
 
   boolean: clean  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
-    prompt: "Change all *'s to X's"
+    information: "Change all *'s to X's"
     help: "This changes all STOP codon positions from the '*'
            character to 'X' (an unknown residue). This is useful because some
            programs will not accept protein sequences with '*' characters in
@@ -93,7 +93,7 @@ section: advanced [
 
   boolean: alternative  [
     default: "N"
-    prompt: "Define frame '-1' as starting in the last codon"
+    information: "Define frame '-1' as starting in the last codon"
     help: "The default definition of frame '-1' is the
            reverse-complement of the set of codons used in frame 1. (Frame -2
            is the set of codons used by frame 2, similarly frames -3 and 3).

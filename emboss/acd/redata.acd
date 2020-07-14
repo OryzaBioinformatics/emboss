@@ -44,6 +44,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
+    knowntype: "redata output"
   ]
 
 endsection: output

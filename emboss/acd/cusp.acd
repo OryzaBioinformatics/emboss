@@ -32,7 +32,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    standardtype: "cusp output"
+    knowntype: "cusp output"
   ]
 
 endsection: output

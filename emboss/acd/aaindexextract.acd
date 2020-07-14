@@ -14,7 +14,7 @@ section: input [
   infile: infile  [
     parameter: "Y"
     information: "Full pathname of file aaindex1"
-    standardtype: "aaindex database"
+    knowntype: "aaindex database"
   ]
 
 endsection: input

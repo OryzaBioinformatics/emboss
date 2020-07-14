@@ -21,7 +21,7 @@ section: required [
 ]
 
   integer: sitelen  [
-    required: "Y"
+    standard: "Y"
     minimum: "2"
     maximum: "20"
     default: "4"
@@ -32,7 +32,7 @@ section: required [
   ]
 
   string: enzymes  [
-    required: "Y"
+    standard: "Y"
     default: "all"
     information: "Comma separated enzyme list"
     help: "The name 'all' reads in all enzyme names from the REBASE

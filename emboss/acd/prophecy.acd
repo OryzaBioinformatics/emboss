@@ -22,7 +22,7 @@ section: required [
 ]
 
   list: type  [
-    required: "Y"
+    standard: "Y"
     default: "F"
     minimum: "1"
     maximum: "1"
@@ -30,12 +30,12 @@ section: required [
     delimiter: ","
     codedelimiter: ":"
     header: "Profile type"
-    prompt: "Select type"
+    information: "Select type"
     button: "Y"
   ]
 
   string: name  [
-    required: "Y"
+    standard: "Y"
     default: "mymatrix"
     information: "Enter a name for the profile"
   ]
@@ -49,13 +49,13 @@ section: advanced [
 
   variable: dogap "@($(type) != f)"
 
-  section: typesection [
-    information: "typesection Section"
+  section: profiletypesection [
+    information: "Profile type specific options"
     type: "frame"
   ]
 
     integer: threshold  [
-      required: "@($(type)==F)"
+      standard: "@($(type)==F)"
       default: "75"
       minimum: "1"
       maximum: "100"
@@ -63,34 +63,34 @@ section: advanced [
     ]
 
     matrixf: datafile  [
-      required: "@($(type)!=F)"
+      standard: "@($(type)!=F)"
       information: "Scoring matrix"
       default: "@($(type) = G: Epprofile H: EBLOSUM62 F:
                 EBLOSUM62)"
-      protein: "$(sequence.protein)"
+      protein: "$(acdprotein)"
       expected: "'Epprofile' for Gribskov type, or EBLOSUM62"
     ]
 
-  endsection: typesection
+  endsection: profiletypesection
 
-  section: dogapsection [
-    information: "dogapsection Section"
+  section: gapsection [
+    information: "Gap options"
     type: "frame"
   ]
 
     float: open  [
-      required: "$(dogap)"
+      standard: "$(dogap)"
       information: "Gap opening penalty"
       default: "3.0"
     ]
 
     float: extension  [
-      required: "$(dogap)"
+      standard: "$(dogap)"
       information: "Gap extension penalty"
       default: "0.3"
     ]
 
-  endsection: dogapsection
+  endsection: gapsection
 
 endsection: advanced
 
@@ -99,8 +99,9 @@ section: output [
   type: "page"
 ]
 
-  outfile: outf  [
+  outfile: outfile  [
     parameter: "Y"
+    knowntype: "prophecy output"
   ]
 
 endsection: output

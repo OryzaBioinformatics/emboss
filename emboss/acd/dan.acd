@@ -21,7 +21,7 @@ section: required [
 ]
 
   integer: windowsize  [
-    required: "Y"
+    standard: "Y"
     minimum: "1"
     maximum: "100"
     default: "20"
@@ -35,7 +35,7 @@ section: required [
   ]
 
   integer: shiftincrement  [
-    required: "Y"
+    standard: "Y"
     minimum: "1"
     maximum: "$(windowSize)"
     default: "1"
@@ -46,7 +46,7 @@ section: required [
   ]
 
   float: dnaconc  [
-    required: "Y"
+    standard: "Y"
     minimum: "1."
     maximum: "100000."
     default: "50."
@@ -54,7 +54,7 @@ section: required [
   ]
 
   float: saltconc  [
-    required: "Y"
+    standard: "Y"
     minimum: "1."
     maximum: "1000."
     default: "50."
@@ -86,7 +86,7 @@ section: advanced [
     ]
 
     float: formamide  [
-      required: "$(product)"
+      standard: "$(product)"
       minimum: "0."
       maximum: "100."
       default: "0."
@@ -96,7 +96,7 @@ section: advanced [
     ]
 
     float: mismatch  [
-      required: "$(product)"
+      standard: "$(product)"
       minimum: "0."
       maximum: "100."
       default: "0."
@@ -106,7 +106,7 @@ section: advanced [
     ]
 
     integer: prodlen  [
-      required: "$(product)"
+      standard: "$(product)"
       minimum: "$(windowSize)"
       default: "$(windowSize)"
       information: "Enter the product length"
@@ -129,7 +129,7 @@ section: advanced [
     ]
 
     float: temperature  [
-      optional: "$(thermo)"
+      additional: "$(thermo)"
       minimum: "0."
       maximum: "100."
       default: "25."
@@ -156,7 +156,7 @@ section: output [
   ]
 
   float: mintemp  [
-    required: "$(plot)"
+    standard: "$(plot)"
     minimum: "0."
     maximum: "150."
     default: "55."
@@ -166,18 +166,19 @@ section: output [
   ]
 
   xygraph: graph  [
-    required: "$(plot)"
+    standard: "$(plot)"
     multiple: "1"
   ]
 
   report: outfile  [
-    required: "@(!$(plot))"
+    standard: "@(!$(plot))"
     help: "If a plot is not being produced then data on the melting
            point etc. in each window along the sequence is output to the
            file."
     rformat: "seqtable"
     taglist: "float:tm=Tm float:gc=GC float:dg=DeltaG
               float:dh=DeltaH float:ds=DeltaS float:tmprod=TmProd"
+    nullok: "@($(plot))"
   ]
 
 endsection: output

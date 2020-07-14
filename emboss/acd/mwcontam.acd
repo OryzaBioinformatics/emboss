@@ -12,7 +12,7 @@ section: input [
   filelist: files  [
     parameter: "Y"
     information: "Comma separated file list"
-    standardtype: "molwt list"
+    knowntype: "molwt list"
   ]
 
 endsection: input
@@ -23,7 +23,7 @@ section: required [
 ]
 
   float: tolerance  [
-    required: "Y"
+    standard: "Y"
     information: "ppm tolerance"
     default: "50.0"
   ]
@@ -38,7 +38,7 @@ section: output [
   outfile: outfile  [
     parameter: "Y"
     extension: "mwcontam"
-    standardtype: "molwt list"
+    knowntype: "molwt list"
   ]
 
 endsection: output

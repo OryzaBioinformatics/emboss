@@ -22,7 +22,7 @@ section: required [
 ]
 
   string: enzymes  [
-    required: "Y"
+    standard: "Y"
     default: "all"
     information: "Comma separated enzyme list"
     help: "The name 'all' reads in all enzyme names from the REBASE
@@ -46,7 +46,7 @@ section: required [
   ]
 
   integer: sitelen  [
-    required: "Y"
+    standard: "Y"
     minimum: "2"
     maximum: "20"
     default: "4"
@@ -64,7 +64,7 @@ section: advanced [
 ]
 
   integer: mincuts  [
-    optional: "Y"
+    additional: "Y"
     minimum: "1"
     maximum: "1000"
     default: "1"
@@ -75,7 +75,7 @@ section: advanced [
   ]
 
   integer: maxcuts  [
-    optional: "Y"
+    additional: "Y"
     minimum: "$(mincuts)"
     maximum: "2000000000"
     default: "2000000000"
@@ -86,7 +86,7 @@ section: advanced [
   ]
 
   boolean: single  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Force single site only cuts"
     help: "If this is set then this forces the values of the mincuts
@@ -95,7 +95,7 @@ section: advanced [
   ]
 
   boolean: blunt  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
     information: "Allow blunt end cutters"
     help: "This allows those enzymes which cut at the same position on
@@ -103,7 +103,7 @@ section: advanced [
   ]
 
   boolean: sticky  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
     information: "Allow sticky end cutters"
     help: "This allows those enzymes which cut at different positions
@@ -112,7 +112,7 @@ section: advanced [
   ]
 
   boolean: ambiguity  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
     information: "Allow ambiguous matches"
     help: "This allows those enzymes which have one or more 'N'
@@ -120,7 +120,7 @@ section: advanced [
   ]
 
   boolean: plasmid  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Allow circular DNA"
     help: "If this is set then this allows searches for restriction
@@ -129,7 +129,7 @@ section: advanced [
   ]
 
   boolean: commercial  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
     information: "Only enzymes with suppliers"
     help: "If this is set, then only those enzymes with a commercial
@@ -143,7 +143,7 @@ section: advanced [
   ]
 
   list: table  [
-    optional: "Y"
+    additional: "Y"
     default: "0"
     minimum: "1"
     maximum: "1"
@@ -160,7 +160,7 @@ section: advanced [
              23:Thraustochytrium Mitochondrial"
     delimiter: ";"
     codedelimiter: ":"
-    prompt: "Genetic code to use"
+    information: "Genetic code to use"
   ]
 
 endsection: advanced
@@ -172,15 +172,13 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    information: "Output sequence details to a file"
-    help: "If you enter the name of a file here then this program will
-           write the sequence details into that file."
+    knowntype: "remap output"
   ]
 
   boolean: cutlist  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
-    prompt: "List the enzymes that cut"
+    information: "List the enzymes that cut"
     help: "This produces lists in the output of the enzymes that cut,
            those that cut but are excluded because that cut fewer times than
            mincut or more times than maxcut and those enzymes that do not
@@ -188,9 +186,9 @@ section: output [
   ]
 
   boolean: flatreformat  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
-    prompt: "Display RE sites in flat format"
+    information: "Display RE sites in flat format"
     help: "This changes the output format to one where the recognition
            site is indicated by a row of '===' characters and the cut site
            is pointed to by a '>' character in the forward sense, or a '<' in
@@ -198,7 +196,7 @@ section: output [
   ]
 
   boolean: limit  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
     information: "Limits reports to one isoschizomer"
     help: "This limits the reporting of enzymes to just one enzyme

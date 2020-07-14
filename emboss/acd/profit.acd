@@ -11,7 +11,8 @@ section: input [
 
   infile: infile  [
     parameter: "Y"
-    prompt: "Profile or matrix file"
+    information: "Profile or matrix file"
+    knowntype: "profile file;matrix file"
   ]
 
   seqall: sequence  [
@@ -28,6 +29,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
+    knowntype: "profit output"
   ]
 
 endsection: output

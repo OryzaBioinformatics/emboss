@@ -14,7 +14,7 @@ section: input [
 
   string: infdat  [
     parameter: "Y"
-    prompt: "Enter name of prosite directory"
+    information: "Name of prosite directory"
   ]
 
 endsection: input

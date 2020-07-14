@@ -22,7 +22,7 @@ section: advanced [
 ]
 
   string: type  [
-    optional: "Y"
+    additional: "Y"
     default: "repeat*"
     information: "Type of feature to mask"
     help: "By default any feature in the feature table with a type
@@ -39,7 +39,7 @@ section: advanced [
   ]
 
   boolean: tolower  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Change masked region to lower-case"
     help: "The region can be 'masked' by converting the sequence
@@ -51,8 +51,8 @@ section: advanced [
   ]
 
   string: maskchar  [
-    optional: "@($(tolower)?N:Y)"
-    default: "@($(sequence.protein)?X:N)"
+    additional: "@(!$(tolower))"
+    default: "@($(acdprotein)?X:N)"
     information: "Character to mask with"
     help: "Character to use when masking. \
            Default is 'X' for protein sequences, 'N' for nucleic sequences. \

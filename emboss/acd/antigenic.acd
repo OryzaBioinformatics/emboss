@@ -21,7 +21,7 @@ section: required [
 ]
 
   integer: minlen  [
-    required: "Y"
+    standard: "Y"
     minimum: "1"
     maximum: "50"
     default: "6"

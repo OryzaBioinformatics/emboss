@@ -21,7 +21,7 @@ section: required [
 ]
 
   integer: emin  [
-    required: "Y"
+    standard: "Y"
     minimum: "1"
     maximum: "20"
     default: "2"
@@ -29,7 +29,7 @@ section: required [
   ]
 
   integer: emax  [
-    required: "Y"
+    standard: "Y"
     minimum: "$(emin)"
     maximum: "20"
     default: "20"
@@ -45,6 +45,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
+    knowntype: "pscan output"
   ]
 
 endsection: output

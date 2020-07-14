@@ -6,11 +6,11 @@ application: intconv [
 
 infile: infile  [
   parameter: "Y"
-  standardtype: "integer long data"
+  knowntype: "integer long data"
   information: "Input file"
 ]
 
 outfile: outfile  [
   parameter: "Y"
-  standardtype: "ajint ajlong data"
+  knowntype: "ajint ajlong data"
 ]

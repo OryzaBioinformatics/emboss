@@ -5,9 +5,11 @@ application: seqinfo [
 
 seqall: sequence  [
   parameter: "Y"
+  type: "gapany"
 ]
 
 outfile: outfile  [
   parameter: "Y"
   default: "stdout"
+  knowntype: "seqinfo output"
 ]

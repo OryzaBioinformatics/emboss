@@ -21,7 +21,7 @@ section: advanced [
 ]
 
   datafile: anglesfile  [
-    optional: "Y"
+    additional: "Y"
     information: "angles file"
     default: "Eangles_tri.dat"
   ]
@@ -33,27 +33,24 @@ section: output [
   type: "page"
 ]
 
-  boolean: data  [
-    information: "Output as data"
-    default: "N"
-  ]
-
   graph: graph  [
-    required: "@(!$(data))"
+    standard: "Y"
     gtitle: "Bending and curvature plot of $(sequence.name)"
+    nullok: "Y"
   ]
 
   integer: residuesperline  [
-    optional: "Y"
+    additional: "Y"
     default: "50"
     information: "Number of residues to be displayed on each
                   line"
   ]
 
   outfile: outfile  [
-    optional: "Y"
+    additional: "Y"
     default: "banana.profile"
-    standardtype: "banana output"
+    knowntype: "banana output"
+    nullok: "Y"
   ]
 
 endsection: output

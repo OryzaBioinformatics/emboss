@@ -12,6 +12,7 @@ section: input [
   seqall: sequence  [
     parameter: "Y"
     features: "Y"
+    type: "gapany"
   ]
 
 endsection: input
@@ -22,7 +23,7 @@ section: required [
 ]
 
   list: format  [
-    required: "Y"
+    standard: "Y"
     default: "2"
     minimum: "1"
     maximum: "1"
@@ -44,7 +45,7 @@ section: advanced [
 ]
 
   list: things  [
-    required: "@($(format) == 0)"
+    standard: "@(!$(format))"
     default: "B,N,T,S,A,F"
     minimum: "1"
     maximum: "100"
@@ -67,7 +68,7 @@ section: advanced [
   ]
 
   range: translate  [
-    optional: "Y"
+    additional: "Y"
     default: ""
     information: "Regions to translate (eg: 4-57,78-94)"
     help: "Regions to translate (if translating). \
@@ -93,7 +94,7 @@ section: advanced [
   ]
 
   range: uppercase  [
-    optional: "Y"
+    additional: "Y"
     default: ""
     information: "Regions to put in uppercase (eg: 4-57,78-94)"
     help: "Regions to put in uppercase. \
@@ -110,7 +111,7 @@ section: advanced [
   ]
 
   range: highlight  [
-    optional: "Y"
+    additional: "Y"
     default: ""
     information: "Regions to colour in HTML (eg: 4-57 red 78-94
                   green)"
@@ -127,7 +128,7 @@ section: advanced [
   ]
 
   range: annotation  [
-    optional: "Y"
+    additional: "Y"
     default: ""
     information: "Regions to mark (eg: 4-57 promoter region
                   78-94 first exon)"
@@ -147,14 +148,14 @@ section: advanced [
                added."
   ]
 
-  section: restrictsection [
-    information: "restriction Section"
+  section: remapsection [
+    information: "Restriction map options"
     type: "frame"
   ]
 
     boolean: flatreformat  [
       default: "N"
-      prompt: "Display RE sites in flat format"
+      information: "Display RE sites in flat format"
       help: "This changes the output format to one where the
              recognition site is indicated by a row of '===' characters and
              the cut site is pointed to by a '>' character in the forward
@@ -260,7 +261,7 @@ section: advanced [
     ]
 
     string: enzymes  [
-      optional: "Y"
+      additional: "Y"
       default: "all"
       information: "Comma separated restriction enzyme list"
       help: "The name 'all' reads in all enzyme names from the REBASE
@@ -283,10 +284,10 @@ section: advanced [
              PpiI"
     ]
 
-  endsection: restrictsection
+  endsection: remapsection
 
   list: table  [
-    optional: "Y"
+    additional: "Y"
     default: "0"
     minimum: "1"
     maximum: "1"
@@ -303,7 +304,7 @@ section: advanced [
              23:Thraustochytrium Mitochondrial"
     delimiter: ";"
     codedelimiter: ":"
-    prompt: "Genetic code to use"
+    information: "Genetic code to use"
   ]
 
   boolean: threeletter  [
@@ -360,12 +361,12 @@ section: advanced [
   ]
 
   section: featuresection [
-    information: "feature Section"
+    information: "Feature display options"
     type: "frame"
   ]
 
     string: matchsource  [
-      optional: "Y"
+      additional: "Y"
       default: "*"
       information: "Source of feature to display"
       help: "By default any feature source in the feature table is
@@ -381,7 +382,7 @@ section: advanced [
     ]
 
     string: matchtype  [
-      optional: "Y"
+      additional: "Y"
       default: "*"
       information: "Type of feature to display"
       help: "By default any feature type in the feature table is
@@ -398,7 +399,7 @@ section: advanced [
     ]
 
     integer: matchsense  [
-      optional: "Y"
+      additional: "Y"
       default: "0"
       information: "Sense of feature to display"
       expected: "0 - any sense, 1 - forward sense, -1 - reverse
@@ -409,7 +410,7 @@ section: advanced [
     ]
 
     float: minscore  [
-      optional: "Y"
+      additional: "Y"
       default: "0.0"
       information: "Minimum score of feature to display"
       help: "If this is greater than or equal to the maximum score,
@@ -417,7 +418,7 @@ section: advanced [
     ]
 
     float: maxscore  [
-      optional: "Y"
+      additional: "Y"
       default: "0.0"
       information: "Maximum score of feature to display"
       help: "If this is less than or equal to the maximum score, then
@@ -425,7 +426,7 @@ section: advanced [
     ]
 
     string: matchtag  [
-      optional: "Y"
+      additional: "Y"
       default: "*"
       information: "Tag of feature to display"
       help: "Tags are the types of extra values that a feature may
@@ -446,7 +447,7 @@ section: advanced [
     ]
 
     string: matchvalue  [
-      optional: "Y"
+      additional: "Y"
       default: "*"
       information: "Value of feature tags to display"
       help: "Tag values are the values associated with a feature tag.
@@ -468,7 +469,7 @@ section: advanced [
     ]
 
     boolean: stricttags  [
-      optional: "Y"
+      additional: "Y"
       default: "N"
       information: "Only display the matching tags"
       help: "By default if any tag/value pair in a feature matches the
@@ -489,10 +490,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    extension: "showseq"
-    information: "Output sequence details to a file"
-    help: "If you enter the name of a file here then this program will
-           write the sequence details into that file."
+    knowntype: "showseq output"
   ]
 
 endsection: output

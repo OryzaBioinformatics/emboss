@@ -23,7 +23,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    standardtype: "geecee output"
+    knowntype: "geecee output"
   ]
 
 endsection: output

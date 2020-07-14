@@ -17,7 +17,7 @@ section: input [
   infile: infile  [
     parameter: "Y"
     information: "Name of molecular weight data file"
-    standardtype: "peptide molweights"
+    knowntype: "peptide molweights"
   ]
 
 endsection: input
@@ -28,7 +28,7 @@ section: required [
 ]
 
   integer: weight  [
-    required: "Y"
+    standard: "Y"
     default: "0"
     information: "Whole sequence molwt"
   ]
@@ -93,7 +93,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    standardtype: "emowse output"
+    knowntype: "emowse output"
   ]
 
 endsection: output

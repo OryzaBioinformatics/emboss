@@ -35,7 +35,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    standardtype: "entry full text"
+    knowntype: "entry full text"
   ]
 
 endsection: output

@@ -22,14 +22,14 @@ section: advanced [
 
   boolean: reverse  [
     default: "Y"
-    prompt: "Reverse sequence"
+    information: "Reverse sequence"
     help: "Set this to be false if you do not wish to reverse the
            output sequence"
   ]
 
   boolean: complement  [
     default: "Y"
-    prompt: "Complement sequence"
+    information: "Complement sequence"
     help: "Set this to be false if you do not wish to complement the
            output sequence"
   ]

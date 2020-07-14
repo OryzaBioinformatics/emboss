@@ -4,7 +4,7 @@ application: ajbad [
 ]
 
 string: typea  [
-  required: "y"
+  standard: "y"
   information: "Sequence type"
   valid: "valid value test"
 ]
@@ -15,7 +15,7 @@ sequence: sequence  [
 ]
 
 string: typeb  [
-  required: "y"
+  standard: "y"
   default: "$(seqa.type)"
   expected: "expected value"
   information: "Second type"
@@ -28,7 +28,7 @@ sequence: bsequence  [
 
 outfile: outfile  [
   parameter: "y"
-  standardtype: "ajbad output"
+  knowntype: "ajbad output"
 ]
 
 codon: cod  [
@@ -36,7 +36,7 @@ codon: cod  [
 ]
 
 string: date  [
-  required: "Y"
+  standard: "Y"
   default: "00/00/00"
   maxlength: "8"
   information: "Index date"
@@ -62,7 +62,7 @@ float: c  [
 ]
 
 list: frames  [
-  required: "Y"
+  standard: "Y"
   default: "1,2,3,4,5,6"
   minimum: "0"
   maximum: "6"

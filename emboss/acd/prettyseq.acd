@@ -21,7 +21,7 @@ section: required [
 ]
 
   range: range  [
-    required: "Y"
+    standard: "Y"
     information: "Range(s) to translate"
     default: "$(sequence.begin)-$(sequence.end)"
     expected: "Whole sequence"
@@ -35,7 +35,6 @@ section: advanced [
 ]
 
   codon: cfile  [
-    information: "Codon usage file"
     default: "Ehum.cut"
   ]
 
@@ -46,19 +45,19 @@ section: advanced [
   ]
 
   boolean: ruler  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
     information: "Add a ruler"
   ]
 
   boolean: plabel  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
     information: "Number translations"
   ]
 
   boolean: nlabel  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
     information: "Number DNA sequence"
   ]
@@ -72,6 +71,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
+    knowntype: "prettyseq output"
   ]
 
 endsection: output

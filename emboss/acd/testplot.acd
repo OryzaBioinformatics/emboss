@@ -4,7 +4,7 @@ application: testplot [
 ]
 
 integer: points  [
-  required: "y"
+  standard: "y"
   default: "90"
   minimum: "2"
   maximum: "360"
@@ -12,12 +12,12 @@ integer: points  [
 ]
 
 boolean: overlap  [
-  required: "y"
+  standard: "y"
   default: "y"
   information: "Overlap the graphs"
 ]
 
 xygraph: graph  [
-  required: "y"
+  standard: "y"
   multiple: "3"
 ]

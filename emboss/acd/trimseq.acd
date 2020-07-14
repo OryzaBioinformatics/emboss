@@ -22,9 +22,9 @@ section: advanced [
 ]
 
   integer: window  [
-    optional: "Y"
+    additional: "Y"
     default: "1"
-    prompt: "Window size"
+    information: "Window size"
     help: "This determines the size of the region that is considered
            when deciding whether the percentage of ambiguity is greater than
            the threshold. A value of 5 means that a region of 5 letters in
@@ -34,17 +34,17 @@ section: advanced [
   ]
 
   float: percent  [
-    optional: "Y"
+    additional: "Y"
     default: "100.0"
-    prompt: "Percent threshold of ambiguity in window"
+    information: "Percent threshold of ambiguity in window"
     help: "This is the threshold of the percentage ambiguity in the
            window required in order to trim a sequence."
   ]
 
   boolean: strict  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
-    prompt: "Trim off all ambiguity codes, not just N or X"
+    information: "Trim off all ambiguity codes, not just N or X"
     help: "In nucleic sequences, trim off not only N's and X's, but
            also the nucleotide IUPAC ambiguity codes M, R, W, S, Y, K, V, H,
            D and B. In protein sequences, trim off not only X's but also B
@@ -52,21 +52,21 @@ section: advanced [
   ]
 
   boolean: star  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
-    prompt: "Trim off asterisks"
+    information: "Trim off asterisks"
     help: "In protein sequences, trim off not only X's, but also the
            *'s"
   ]
 
   boolean: left  [
     default: "Y"
-    prompt: "Trim at the start"
+    information: "Trim at the start"
   ]
 
   boolean: right  [
     default: "Y"
-    prompt: "Trim at the end"
+    information: "Trim at the end"
   ]
 
 endsection: advanced

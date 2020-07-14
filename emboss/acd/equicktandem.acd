@@ -21,13 +21,13 @@ section: required [
 ]
 
   integer: maxrepeat  [
-    required: "Y"
+    standard: "Y"
     default: "600"
     information: "Maximum repeat size"
   ]
 
   integer: threshold  [
-    required: "Y"
+    standard: "Y"
     default: "20"
     information: "Threshold score"
   ]
@@ -50,7 +50,7 @@ section: output [
   outfile: origfile  [
     extension: "oldqtan"
     nullok: "Y"
-    standardtype: "quicktandem output"
+    knowntype: "quicktandem output"
   ]
 
 endsection: output

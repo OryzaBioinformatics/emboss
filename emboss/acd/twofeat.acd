@@ -15,13 +15,13 @@ section: input [
     features: "Y"
   ]
 
-  section: afeature [
-    information: "Select feature a"
-    type: "page"
+  section: afeaturesection [
+    information: "First feature options"
+    type: "rame"
   ]
 
     string: asource  [
-      optional: "Y"
+      additional: "Y"
       default: "*"
       information: "Source of first feature"
       help: "By default any feature source in the feature table is
@@ -37,7 +37,7 @@ section: input [
     ]
 
     string: atype  [
-      required: "Y"
+      standard: "Y"
       default: "*"
       information: "Type of first feature"
       help: "By default every feature in the feature table is allowed.
@@ -53,7 +53,7 @@ section: input [
     ]
 
     list: asense  [
-      optional: "Y"
+      additional: "Y"
       default: "0"
       minimum: "1"
       maximum: "1"
@@ -67,7 +67,7 @@ section: input [
     ]
 
     float: aminscore  [
-      optional: "Y"
+      additional: "Y"
       default: "0.0"
       information: "Minimum score of first feature"
       help: "If this is greater than or equal to the maximum score,
@@ -75,7 +75,7 @@ section: input [
     ]
 
     float: amaxscore  [
-      optional: "Y"
+      additional: "Y"
       default: "0.0"
       information: "Maximum score of first feature"
       help: "If this is less than or equal to the maximum score, then
@@ -83,7 +83,7 @@ section: input [
     ]
 
     string: atag  [
-      optional: "Y"
+      additional: "Y"
       default: "*"
       information: "Tag of first feature"
       help: "Tags are the types of extra values that a feature may
@@ -104,7 +104,7 @@ section: input [
     ]
 
     string: avalue  [
-      optional: "Y"
+      additional: "Y"
       default: "*"
       information: "Value of first feature's tags"
       help: "Tag values are the values associated with a feature tag.
@@ -125,15 +125,15 @@ section: input [
              pax* | 10"
     ]
 
-  endsection: afeature
+  endsection: afeaturesection
 
-  section: bfeature [
-    information: "Select feature b"
-    type: "page"
+  section: bfeaturesection [
+    information: "Second feature options"
+    type: "frame"
   ]
 
     string: bsource  [
-      optional: "Y"
+      additional: "Y"
       default: "*"
       information: "Source of second feature"
       help: "By default any feature source in the feature table is
@@ -149,7 +149,7 @@ section: input [
     ]
 
     string: btype  [
-      required: "Y"
+      standard: "Y"
       default: "*"
       information: "Type of second feature"
       help: "By default every feature in the feature table is allowed.
@@ -165,7 +165,7 @@ section: input [
     ]
 
     list: bsense  [
-      optional: "Y"
+      additional: "Y"
       default: "0"
       minimum: "1"
       maximum: "1"
@@ -179,7 +179,7 @@ section: input [
     ]
 
     float: bminscore  [
-      optional: "Y"
+      additional: "Y"
       default: "0.0"
       information: "Minimum score of second feature"
       help: "If this is greater than or equal to the maximum score,
@@ -187,7 +187,7 @@ section: input [
     ]
 
     float: bmaxscore  [
-      optional: "Y"
+      additional: "Y"
       default: "0.0"
       information: "Maximum score of second feature"
       help: "If this is less than or equal to the maximum score, then
@@ -195,7 +195,7 @@ section: input [
     ]
 
     string: btag  [
-      optional: "Y"
+      additional: "Y"
       default: "*"
       information: "Tag of second feature"
       help: "Tags are the types of extra values that a feature may
@@ -216,7 +216,7 @@ section: input [
     ]
 
     string: bvalue  [
-      optional: "Y"
+      additional: "Y"
       default: "*"
       information: "Value of second feature's tags"
       help: "Tag values are the values associated with a feature tag.
@@ -237,15 +237,15 @@ section: input [
              pax* | 10"
     ]
 
-  endsection: bfeature
+  endsection: bfeaturesection
 
-  section: relation [
-    information: "relation Section"
-    type: "page"
+  section: featurerelationsection [
+    information: "Feature relation options"
+    type: "frame"
   ]
 
     list: overlap  [
-      optional: "Y"
+      additional: "Y"
       default: "A"
       minimum: "1"
       maximum: "1"
@@ -264,7 +264,7 @@ section: input [
     ]
 
     integer: minrange  [
-      required: "Y"
+      standard: "Y"
       default: "0"
       information: "The minimum distance between the features"
       help: "If this is greater or equal to 'maxrange', then no min or
@@ -272,7 +272,7 @@ section: input [
     ]
 
     integer: maxrange  [
-      required: "Y"
+      standard: "Y"
       default: "0"
       information: "The maximum distance between the features"
       help: "If this is less than or equal to 'minrange', then no min
@@ -280,7 +280,7 @@ section: input [
     ]
 
     list: rangetype  [
-      optional: "Y"
+      additional: "Y"
       default: "N"
       minimum: "1"
       maximum: "1"
@@ -296,7 +296,7 @@ section: input [
     ]
 
     list: sense  [
-      optional: "Y"
+      additional: "Y"
       default: "A"
       minimum: "1"
       maximum: "1"
@@ -311,7 +311,7 @@ section: input [
     ]
 
     list: order  [
-      optional: "Y"
+      additional: "Y"
       default: "A"
       minimum: "1"
       maximum: "1"
@@ -327,7 +327,7 @@ section: input [
              overlap type required."
     ]
 
-  endsection: relation
+  endsection: featurerelationsection
 
 endsection: input
 
@@ -337,7 +337,7 @@ section: output [
 ]
 
   boolean: twoout  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Do you want the two features written out
                   individually"
@@ -348,7 +348,7 @@ section: output [
   ]
 
   string: typeout  [
-    optional: "@(!$(twoout))"
+    additional: "@(!$(twoout))"
     default: "misc_feature"
     information: "Name of the output new feature"
     help: "If you have specified that the pairs of features that are
@@ -366,10 +366,6 @@ section: output [
     parameter: "Y"
     taglist: "int:starta int:enda int:startb int:endb"
     rformat: "table"
-    information: "Output feature report"
-    help: "File for output of neighbouring feature regions. This
-           contains details of the pairs of features. By default, it is
-           written in TABLE format."
   ]
 
 endsection: output

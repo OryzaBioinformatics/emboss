@@ -4,5 +4,5 @@ application: treetypedisplay [
 ]
 
 graph: graph  [
-  required: "Y"
+  standard: "Y"
 ]

@@ -21,7 +21,7 @@ section: advanced [
 ]
 
   integer: minlength  [
-    optional: "Y"
+    additional: "Y"
     default: "4"
     minimum: "1"
     information: "Minimum length of a poly-A tail"
@@ -32,7 +32,7 @@ section: advanced [
   ]
 
   integer: mismatches  [
-    optional: "Y"
+    additional: "Y"
     default: "1"
     minimum: "0"
     information: "Number of contiguous mismatches allowed in a
@@ -49,7 +49,7 @@ section: advanced [
   ]
 
   boolean: reverse  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
     information: "Write the reverse complement when poly-T is
                   removed"

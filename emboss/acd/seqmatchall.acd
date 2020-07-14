@@ -22,7 +22,7 @@ section: required [
 ]
 
   integer: wordsize  [
-    required: "Y"
+    standard: "Y"
     default: "4"
     minimum: "2"
     information: "Word size"
@@ -37,6 +37,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
+    knowntype: "seqmatchall output"
   ]
 
 endsection: output

@@ -12,6 +12,7 @@ section: input [
   sequence: sequence  [
     parameter: "Y"
     sask: "Y"
+    type: "gapany"
   ]
 
 endsection: input
@@ -29,7 +30,7 @@ section: output [
   outfile: outfile  [
     parameter: "Y"
     append: "@(!$(newfile))"
-    standardtype: "USA list"
+    knowntype: "USA list"
   ]
 
 endsection: output

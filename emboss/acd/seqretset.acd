@@ -16,6 +16,7 @@ section: input [
   seqset: sequence  [
     parameter: "Y"
     features: "$(feature)"
+    type: "gapany"
   ]
 
 endsection: input

@@ -21,7 +21,7 @@ section: required [
 ]
 
   integer: score  [
-    required: "Y"
+    standard: "Y"
     minimum: "1"
     maximum: "200"
     default: "17"
@@ -37,7 +37,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    standardtype: "cpgseek output"
+    knowntype: "cpgseek output"
   ]
 
 endsection: output

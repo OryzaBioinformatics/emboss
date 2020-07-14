@@ -27,7 +27,7 @@ section: advanced [
 ]
 
   list: operator  [
-    optional: "Y"
+    additional: "Y"
     default: "OR"
     minimum: "1"
     maximum: "1"
@@ -59,7 +59,7 @@ section: output [
   outfile: outfile  [
     parameter: "Y"
     extension: "list"
-    standardtype: "USA list"
+    knowntype: "USA list"
     help: "The list of sequence names will be written to this list
            file"
   ]

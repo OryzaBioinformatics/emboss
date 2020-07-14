@@ -37,7 +37,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    standardtype: "chips output"
+    knowntype: "chips output"
   ]
 
 endsection: output

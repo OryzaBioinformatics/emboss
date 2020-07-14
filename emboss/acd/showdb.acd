@@ -11,8 +11,8 @@ section: input [
 
   string: database  [
     default: ""
-    optional: "Y"
-    prompt: "Name of a single database to give information on"
+    additional: "Y"
+    information: "Name of a single database to give information on"
   ]
 
 endsection: input
@@ -23,21 +23,21 @@ section: advanced [
 ]
 
   boolean: html  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
-    prompt: "Format output as an HTML table"
+    information: "Format output as an HTML table"
   ]
 
   boolean: protein  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
-    prompt: "Display protein databases"
+    information: "Display protein databases"
   ]
 
   boolean: nucleic  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
-    prompt: "Display nucleic acid databases"
+    information: "Display nucleic acid databases"
   ]
 
   boolean: only  [
@@ -52,46 +52,46 @@ section: advanced [
 
   boolean: heading  [
     default: "@(!$(only))"
-    prompt: "Display column headings"
+    information: "Display column headings"
   ]
 
   boolean: type  [
     default: "@(!$(only))"
-    prompt: "Display 'type' column"
+    information: "Display 'type' column"
   ]
 
   boolean: id  [
     default: "@(!$(only))"
-    prompt: "Display 'id' column"
+    information: "Display 'id' column"
   ]
 
   boolean: query  [
     default: "@(!$(only))"
-    prompt: "Display 'qry' column"
+    information: "Display 'qry' column"
   ]
 
   boolean: all  [
     default: "@(!$(only))"
-    prompt: "Display 'all' column"
+    information: "Display 'all' column"
   ]
 
   boolean: fields  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
-    prompt: "Display 'fields' column"
+    information: "Display 'fields' column"
     help: "This displays the search fields that can be used on this
            database, other than the standard 'id' or 'acc' fields."
   ]
 
   boolean: comment  [
     default: "@(!$(only))"
-    prompt: "Display 'comment' column"
+    information: "Display 'comment' column"
   ]
 
   boolean: release  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
-    prompt: "Display 'release' column"
+    information: "Display 'release' column"
   ]
 
 endsection: advanced
@@ -102,11 +102,9 @@ section: output [
 ]
 
   outfile: outfile  [
-    optional: "Y"
+    additional: "Y"
     default: "stdout"
-    prompt: "Output database details to a file"
-    help: "If you enter the name of a file here then this program will
-           write the database details into that file."
+    knowntype: "showdb output"
   ]
 
 endsection: output

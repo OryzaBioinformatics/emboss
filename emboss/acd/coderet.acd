@@ -46,7 +46,7 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
-    type: "protein"
+    type: "any"
   ]
 
 endsection: output

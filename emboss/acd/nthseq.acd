@@ -22,7 +22,7 @@ section: required [
 ]
 
   integer: number  [
-    required: "Y"
+    standard: "Y"
     minimum: "1"
     default: "1"
     information: "The number of the sequence to output"

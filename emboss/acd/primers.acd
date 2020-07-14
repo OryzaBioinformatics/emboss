@@ -25,7 +25,7 @@ section: required [
 ]
 
   range: target  [
-    optional: "Y"
+    additional: "Y"
     default: ""
     information: "Target region(s)"
     help: "If one or more Targets is specified then a legal primer
@@ -43,12 +43,12 @@ section: required [
 endsection: required
 
 section: advanced [
-  information: "advanced section"
+  information: "Advanced section"
   type: "page"
 ]
 
   integer: minsize  [
-    optional: "Y"
+    additional: "Y"
     default: "18"
     minimum: "1"
     information: "Primer minimum size"
@@ -57,7 +57,7 @@ section: advanced [
   ]
 
   integer: maxsize  [
-    optional: "Y"
+    additional: "Y"
     default: "27"
     minimum: "$(MinSize)"
     maximum: "35"
@@ -69,7 +69,7 @@ section: advanced [
   ]
 
   float: maxdifftm  [
-    optional: "Y"
+    additional: "Y"
     default: "100.0"
     information: "Maximum difference in Tm of primers"
     help: "Maximum acceptable (unsigned) difference between the
@@ -84,7 +84,7 @@ section: output [
 ]
 
   boolean: explainflag  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Explain flag"
     help: "If this flag is non-0, produce LEFT-EXPLAIN and
@@ -94,7 +94,7 @@ section: output [
   ]
 
   integer: numreturn  [
-    optional: "Y"
+    additional: "Y"
     default: "5"
     minimum: "0"
     information: "Number of results to return"
@@ -107,6 +107,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
+    knowntype: "primer3 output"
   ]
 
 endsection: output

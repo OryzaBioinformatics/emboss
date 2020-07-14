@@ -7,14 +7,14 @@ application: printsextract [
 ]
 
 section: input [
-  information: "Required section"
+  information: "Input section"
   type: "page"
 ]
 
-  infile: inf  [
+  infile: infile  [
     parameter: "Y"
-    required: "Y"
     information: "Full pathname of prints.dat"
+    knowntype: "prints database"
   ]
 
 endsection: input

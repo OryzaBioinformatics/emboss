@@ -21,14 +21,14 @@ section: advanced [
 ]
 
   datafile: datafile  [
-    optional: "Y"
+    additional: "Y"
     information: "Aaindex database file"
     directory: "AAINDEX"
     default: "Enakai.dat"
   ]
 
   integer: length  [
-    optional: "Y"
+    additional: "Y"
     information: "window size"
     default: "7"
     minimum: "1"
@@ -43,7 +43,7 @@ section: output [
 ]
 
   xygraph: graph  [
-    required: "Y"
+    standard: "Y"
     multiple: "1"
     gxtitle: "$(sequence.name)"
     gytitle: "Hydropathy"

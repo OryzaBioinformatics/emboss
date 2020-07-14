@@ -4,6 +4,6 @@ application: demostring [
 ]
 
 string: instring  [
-  required: "Y"
+  standard: "Y"
   information: "Value for instr"
 ]

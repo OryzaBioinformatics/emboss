@@ -21,7 +21,7 @@ section: required [
 ]
 
   integer: window  [
-    required: "Y"
+    standard: "Y"
     minimum: "7"
     maximum: "28"
     default: "28"
@@ -53,6 +53,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
+    knowntype: "pepcoil output"
   ]
 
 endsection: output

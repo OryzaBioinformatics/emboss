@@ -22,13 +22,13 @@ section: advanced [
 ]
 
   string: name  [
-    optional: "Y"
+    additional: "Y"
     default: ""
     information: "Name of the sequence"
   ]
 
   string: description  [
-    optional: "Y"
+    additional: "Y"
     default: ""
     information: "Description of the sequence"
   ]

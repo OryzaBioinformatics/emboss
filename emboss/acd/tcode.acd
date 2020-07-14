@@ -22,7 +22,7 @@ section: required [
 ]
 
   integer: window  [
-    required: "Y"
+    standard: "Y"
     default: "200"
     minimum: "200"
     maximum: "$(sequence.length)"
@@ -76,7 +76,7 @@ section: output [
 ]
 
   report: outfile  [
-    required: "@(!$(plot))"
+    standard: "@(!$(plot))"
     rformat: "table"
     multiple: "Y"
     precision: "3"
@@ -84,7 +84,7 @@ section: output [
   ]
 
   xygraph: graph  [
-    required: "$(plot)"
+    standard: "$(plot)"
   ]
 
 endsection: output

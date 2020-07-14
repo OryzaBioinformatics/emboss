@@ -21,7 +21,7 @@ section: advanced [
 ]
 
   float: mean  [
-    optional: "Y"
+    additional: "Y"
     minimum: "1."
     maximum: "10000."
     default: "238.71"
@@ -29,7 +29,7 @@ section: advanced [
   ]
 
   float: sd  [
-    optional: "Y"
+    additional: "Y"
     minimum: "1."
     maximum: "10000."
     default: "293.61"
@@ -37,7 +37,7 @@ section: advanced [
   ]
 
   float: minsd  [
-    optional: "Y"
+    additional: "Y"
     minimum: "0."
     maximum: "100."
     default: "2.5"
@@ -45,7 +45,7 @@ section: advanced [
   ]
 
   boolean: eightyseven  [
-    optional: "Y"
+    additional: "Y"
     information: "Use the old (1987) weight data"
   ]
 

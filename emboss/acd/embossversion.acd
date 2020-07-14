@@ -3,15 +3,27 @@ application: embossversion [
   groups: "Utils:Misc"
 ]
 
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: full  [
+    additional: "Y"
+    information: "Show all EMBOSS version information fields"
+  ]
+
+endsection: advanced
+
 section: output [
   information: "Output section"
   type: "page"
 ]
 
   outfile: outfile  [
-    optional: "Y"
+    additional: "Y"
     default: "stdout"
-    standardtype: "embossversion output"
+    knowntype: "embossversion output"
   ]
 
 endsection: output

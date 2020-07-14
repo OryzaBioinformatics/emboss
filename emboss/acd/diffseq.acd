@@ -20,7 +20,7 @@ section: input [
 
   sequence: bsequence  [
     parameter: "Y"
-    type: "@($(asequence.protein) ? stopprotein : nucleotide)"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
     features: "Y"
   ]
 
@@ -32,7 +32,7 @@ section: required [
 ]
 
   integer: wordsize  [
-    required: "Y"
+    standard: "Y"
     default: "10"
     minimum: "2"
     information: "Word size"
@@ -61,25 +61,21 @@ section: output [
   ]
 
   featout: afeatout  [
-    optional: "Y"
+    parameter: "Y"
     default: "$(asequence.name).diffgff"
-    information: "Feature file for output asequence"
-    help: "File for output of first sequence's normal tab delimited
-           gff's"
-    type: "@($(asequence.protein) ? protein : nucleotide)"
+    help: "File for output of first sequence's features"
+    type: "@($(acdprotein) ? protein : nucleotide)"
   ]
 
-  featout: bfeatout  [
-    optional: "Y"
+  featout: bfeatout [
+    parameter: "Y"
     default: "$(bsequence.name).diffgff"
-    information: "Feature file for output bsequence"
-    help: "File for output of second sequence's normal tab delimited
-           gff's"
-    type: "@($(bsequence.protein) ? protein : nucleotide)"
+    help: "File for output of second sequence's features"
+    type: "@($(acdprotein) ? protein : nucleotide)"
   ]
 
   boolean: columns  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Output in columns format"
     help: "The default format for the output report file is to have

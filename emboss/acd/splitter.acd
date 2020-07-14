@@ -22,23 +22,23 @@ section: advanced [
 ]
 
   integer: size  [
-    optional: "Y"
+    additional: "Y"
     minimum: "1"
     default: "10000"
-    prompt: "Size to split at"
+    information: "Size to split at"
   ]
 
   integer: overlap  [
-    optional: "Y"
+    additional: "Y"
     minimum: "0"
     maximum: "@($(size)-1)"
     default: "0"
-    prompt: "Overlap between split sequences"
+    information: "Overlap between split sequences"
   ]
 
   boolean: addoverlap  [
     default: "N"
-    prompt: "Add overlap to size"
+    information: "Add overlap to size"
   ]
 
 endsection: advanced

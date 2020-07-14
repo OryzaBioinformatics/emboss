@@ -12,14 +12,14 @@ section: input [
   type: "page"
 ]
 
-  seqall: seqa  [
+  seqall: asequence  [
     parameter: "Y"
     type: "any"
   ]
 
-  seqset: seqb  [
+  seqset: bsequence  [
     parameter: "Y"
-    type: "@($(seqa.protein) ? stopprotein : nucleotide)"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
 
 endsection: input
@@ -30,20 +30,20 @@ section: required [
 ]
 
   float: gapopen  [
-    required: "Y"
+    standard: "Y"
     information: "Gap opening penalty"
     minimum: "1.0"
     maximum: "100.0"
-    default: "@($(seqa.protein)? 10.0 : 10.0)"
+    default: "@($(acdprotein)? 10.0 : 10.0)"
     expected: "10.0 for any sequence type"
   ]
 
   float: gapextend  [
-    required: "Y"
+    standard: "Y"
     information: "Gap extension penalty"
     minimum: "0.1"
     maximum: "10.0"
-    default: "@($(seqa.protein)? 0.5 : 0.5)"
+    default: "@($(acdprotein)? 0.5 : 0.5)"
     expected: "0.5 for any sequence type"
   ]
 
@@ -55,9 +55,9 @@ section: advanced [
 ]
 
   matrixf: datafile  [
-    optional: "Y"
+    additional: "Y"
     information: "Matrix file"
-    protein: "$(seqa.protein)"
+    protein: "$(acdprotein)"
     help: "This is the scoring matrix file used when comparing
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
@@ -65,13 +65,14 @@ section: advanced [
   ]
 
   integer: width  [
-    optional: "Y"
+    additional: "Y"
     default: "16"
+    minimum: "1"
     information: "Alignment width"
   ]
 
   integer: wordlen  [
-    optional: "Y"
+    additional: "Y"
     default: "6"
     minimum: "3"
     information: "word length for initial matching"
@@ -85,16 +86,17 @@ section: output [
 ]
 
   align: outfile  [
-    required: "Y"
+    standard: "Y"
     aformat: "simple"
     minseqs: "2"
     maxseqs: "2"
   ]
 
   outfile: errorfile  [
-    optional: "Y"
+    additional: "Y"
     default: "supermatcher.error"
-    information: "Error file to be written to"
+    help: "Error file to be written to"
+    knowntype: "supermatcher error file"
   ]
 
 endsection: output

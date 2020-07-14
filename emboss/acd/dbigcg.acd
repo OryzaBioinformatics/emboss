@@ -12,7 +12,7 @@ section: input [
 ]
 
   list: idformat  [
-    required: "y"
+    standard: "y"
     information: "Entry format"
     values: "EMBL:EMBL; SWISS:Swiss-Prot, SpTrEMBL, TrEMBLnew;
              GENBANK:Genbank, DDBJ; PIR:NBRF"
@@ -22,13 +22,13 @@ section: input [
   ]
 
   string: directory  [
-    required: "Y"
+    standard: "Y"
     default: "."
     information: "Database directory"
   ]
 
   string: filenames  [
-    required: "Y"
+    standard: "Y"
     default: "*.seq"
     information: "Wildcard database filename"
   ]
@@ -48,14 +48,14 @@ section: required [
   ]
 
   string: release  [
-    required: "Y"
+    standard: "Y"
     default: "0.0"
     maxlength: "9"
     information: "Release number"
   ]
 
   string: date  [
-    required: "Y"
+    standard: "Y"
     default: "00/00/00"
     maxlength: "8"
     valid: "Date string dd/mm/yy"

@@ -11,7 +11,6 @@ sequence: sequence  [
 string: expression  [
   parameter: "Y"
   default: ""
-  required: "Y"
   minlength: "2"
   information: "Regular expression to search sequence for."
 ]

@@ -9,14 +9,15 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequences  [
+  seqall: seqall  [
     parameter: "Y"
     type: "dna"
   ]
 
-  infile: primers  [
+  infile: primersfile  [
     parameter: "Y"
-    prompt: "Primer file"
+    information: "Primer file"
+    knowntype: "primer pairs file"
   ]
 
 endsection: input
@@ -26,8 +27,9 @@ section: output [
   type: "page"
 ]
 
-  outfile: out  [
+  outfile: outfile  [
     parameter: "Y"
+    knowntype: "stssearch output"
   ]
 
 endsection: output

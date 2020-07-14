@@ -19,13 +19,13 @@ section: input [
   ]
 
   string: directory  [
-    required: "Y"
+    standard: "Y"
     default: "."
     information: "Database directory"
   ]
 
   string: filenames  [
-    required: "Y"
+    standard: "Y"
     information: "Wildcard database filename"
     default: "$(dbname)"
     expected: "Database name"
@@ -39,14 +39,14 @@ section: required [
 ]
 
   string: release  [
-    required: "Y"
+    standard: "Y"
     default: "0.0"
     maxlength: "9"
     information: "Release number"
   ]
 
   string: date  [
-    required: "Y"
+    standard: "Y"
     default: "00/00/00"
     valid: "Date string dd/mm/yy"
     information: "Index date"
@@ -54,7 +54,7 @@ section: required [
   ]
 
   list: seqtype  [
-    required: "Y"
+    standard: "Y"
     information: "Sequence type"
     values: "N:nucleic;P:protein;?:unknown"
     maximum: "1"
@@ -63,7 +63,7 @@ section: required [
   ]
 
   list: blastversion  [
-    required: "Y"
+    standard: "Y"
     information: "Blast index version"
     values: "1:wublast and setdb/pressdb;2:formatdb;0:unknown"
     maximum: "1"

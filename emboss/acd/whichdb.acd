@@ -22,6 +22,7 @@ boolean: showall  [
 ]
 
 outfile: outfile  [
-  required: "@(!$(get))"
+  standard: "@(!$(get))"
   nullok: "$(get)"
+  knowntype: "whichdb output"
 ]

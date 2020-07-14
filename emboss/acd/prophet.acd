@@ -25,19 +25,20 @@ section: required [
 
   infile: infile  [
     parameter: "Y"
-    prompt: "Profile or matrix file"
+    information: "Profile or matrix file"
+    knowntype: "profile file;matrix file"
   ]
 
   float: gapopen  [
-    required: "Y"
+    standard: "Y"
     default: "1.0"
-    prompt: "Gap opening coefficient"
+    information: "Gap opening coefficient"
   ]
 
   float: gapextend  [
-    required: "Y"
+    standard: "Y"
     default: "1.0"
-    prompt: "Gap extension coefficient"
+    information: "Gap extension coefficient"
   ]
 
 endsection: required
@@ -49,6 +50,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
+    knowntype: "prophet output"
   ]
 
 endsection: output

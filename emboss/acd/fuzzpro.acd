@@ -24,7 +24,7 @@ section: required [
 ]
 
   string: pattern  [
-    required: "Y"
+    standard: "Y"
     information: "Search pattern"
     help: "The standard IUPAC one-letter codes for the amino acids are
            used. \
@@ -51,7 +51,7 @@ section: required [
   ]
 
   integer: mismatch  [
-    required: "Y"
+    standard: "Y"
     default: "0"
     minimum: "0"
     information: "Number of mismatches"

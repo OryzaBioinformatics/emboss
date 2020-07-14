@@ -6,11 +6,11 @@ application: entrails [
 
 outfile: outfile  [
   parameter: "Y"
-  standardtype: "entrails output"
+  knowntype: "entrails output"
 ]
 
 boolean: fullreport  [
-  optional: "Y"
+  additional: "Y"
   default: "N"
   information: "Full report"
   help: "By default, only the essential details are reported"

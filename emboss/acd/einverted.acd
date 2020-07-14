@@ -25,25 +25,25 @@ section: required [
 
   integer: gap  [
     default: "12"
-    required: "Y"
+    standard: "Y"
     information: "Gap penalty"
   ]
 
   integer: threshold  [
     default: "50"
-    required: "Y"
+    standard: "Y"
     information: "Minimum score threshold"
   ]
 
   integer: match  [
     default: "3"
-    required: "Y"
+    standard: "Y"
     information: "Match score"
   ]
 
   integer: mismatch  [
     default: "-4"
-    required: "Y"
+    standard: "Y"
     information: "Mismatch score"
   ]
 
@@ -55,7 +55,7 @@ section: advanced [
 ]
 
   integer: maxrepeat  [
-    optional: "Y"
+    additional: "Y"
     default: "4000"
     information: "Maximum extent of repeats"
     help: "Maximum separation between the start of repeat and the end
@@ -72,7 +72,7 @@ section: output [
   outfile: outfile  [
     parameter: "Y"
     extension: "inv"
-    standardtype: "inverted output"
+    knowntype: "inverted output"
   ]
 
 endsection: output

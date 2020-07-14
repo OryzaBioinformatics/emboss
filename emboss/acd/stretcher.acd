@@ -16,7 +16,7 @@ section: input [
 
   sequence: bsequence  [
     parameter: "Y"
-    type: "@($(asequence.protein) ? stopprotein : nucleotide)"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
 
 endsection: input
@@ -27,9 +27,9 @@ section: advanced [
 ]
 
   matrix: datafile  [
-    optional: "Y"
+    additional: "Y"
     information: "Matrix file"
-    protein: "$(asequence.protein)"
+    protein: "$(acdprotein)"
     help: "This is the scoring matrix file used when comparing
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
@@ -37,18 +37,18 @@ section: advanced [
   ]
 
   integer: gappenalty  [
-    optional: "Y"
+    additional: "Y"
     information: "Gap penalty"
-    default: "@($(asequence.protein)? 12 : 16)"
+    default: "@($(acdprotein)? 12 : 16)"
     minimum: "0"
     valid: "Positive integer"
     expected: "12 for protein, 16 for nucleic"
   ]
 
   integer: gaplength  [
-    optional: "Y"
+    additional: "Y"
     information: "Gap length penalty"
-    default: "@($(asequence.protein)? 2 : 4)"
+    default: "@($(acdprotein)? 2 : 4)"
     minimum: "0"
     valid: "Positive integer"
     expected: "2 for protein, 4 for nucleic"

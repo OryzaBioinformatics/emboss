@@ -23,7 +23,7 @@ section: advanced [
 ]
 
   string: refseq  [
-    optional: "Y"
+    additional: "Y"
     default: "0"
     information: "The number or the name of the reference
                   sequence"
@@ -36,9 +36,9 @@ section: advanced [
   ]
 
   matrix: matrix  [
-    optional: "Y"
+    additional: "Y"
     information: "Similarity scoring Matrix file"
-    protein: "$(sequence.protein)"
+    protein: "$(acdprotein)"
     help: "This is the scoring matrix file used when comparing
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
@@ -77,14 +77,13 @@ section: output [
   outfile: outfile  [
     parameter: "Y"
     extension: "infoalign"
-    standardtype: "infoalign output"
-    information: "Output file"
+    knowntype: "infoalign output"
     help: "If you enter the name of a file here then this program will
            write the sequence details into that file."
   ]
 
   boolean: html  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Format output as an HTML table"
   ]

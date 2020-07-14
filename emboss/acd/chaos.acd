@@ -21,19 +21,8 @@ section: output [
   type: "page"
 ]
 
-  boolean: data  [
-    default: "N"
-    information: "Display as data"
-  ]
-
   graph: graph  [
-    required: "@(!$(data))"
-  ]
-
-  outfile: outfile  [
-    required: "$(data)"
-    nullok: "Y"
-    standardtype: "chaos output"
+    standard: "Y"
   ]
 
 endsection: output

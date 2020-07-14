@@ -21,7 +21,7 @@ section: advanced [
 ]
 
   integer: window  [
-    optional: "Y"
+    additional: "Y"
     default: "10"
     information: "Window"
   ]
@@ -32,7 +32,7 @@ section: advanced [
   ]
 
   integer: bangle  [
-    optional: "Y"
+    additional: "Y"
     default: "160"
     information: "Beta sheet angle (degrees)"
   ]
@@ -60,12 +60,12 @@ section: output [
   ]
 
   xygraph: graph  [
-    required: "$(plot)"
+    standard: "$(plot)"
   ]
 
   outfile: outfile  [
-    required: "@(!$(plot))"
-    standardtype: "hmoment output"
+    standard: "@(!$(plot))"
+    knowntype: "hmoment output"
   ]
 
 endsection: output

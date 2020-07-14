@@ -21,7 +21,7 @@ section: advanced [
 ]
 
   integer: window  [
-    optional: "Y"
+    additional: "Y"
     minimum: "1"
     default: "5"
     information: "Window"
@@ -45,12 +45,12 @@ section: output [
   ]
 
   xygraph: graph  [
-    required: "$(plot)"
+    standard: "$(plot)"
   ]
 
   outfile: outfile  [
-    required: "@(!$(plot))"
-    standardtype: "charge output"
+    standard: "@(!$(plot))"
+    knowntype: "charge output"
   ]
 
 endsection: output

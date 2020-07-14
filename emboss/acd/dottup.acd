@@ -16,7 +16,7 @@ section: input [
 
   sequence: bsequence [
     parameter: "y"
-    type: "@($(asequence.protein) ? stopprotein : nucleotide)"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
 
 endsection: input
@@ -27,7 +27,7 @@ section: required [
 ]
 
   integer: wordsize  [
-    required: "Y"
+    standard: "Y"
     default: "10"
     minimum: "2"
     information: "Word size"
@@ -46,33 +46,20 @@ section: output [
     help: "Use non-proportional axes"
   ]
 
-  boolean: data  [
-    required: "@(!$(stretch))"
-    default: "N"
-    information: "Display as data"
-    help: "Output the match data to a file instead of plotting it"
-  ]
-
   graph: graph  [
-    required: "@(@(!$(data)) & @(!$(stretch)))"
+    standard: "@(!$(stretch))"
     gxtitle: "$(bsequence.name)"
     gytitle: "$(asequence.name)"
   ]
 
   xygraph: xygraph  [
-    required: "$(stretch)"
+    standard: "$(stretch)"
   ]
 
   boolean: boxit  [
     default: "Y"
-    optional: "@(!$(stretch))"
+    additional: "@(!$(stretch))"
     information: "Draw a box around dotplot"
-  ]
-
-  outfile: outfile  [
-    required: "@($(data) & @(!$(stretch)))"
-    nullok: "Y"
-    standardtype: "dotplot graph data"
   ]
 
 endsection: output

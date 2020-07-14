@@ -21,7 +21,7 @@ section: required [
 ]
 
   integer: count  [
-    required: "Y"
+    standard: "Y"
     default: "1"
     minimum: "0"
     information: "Number of times to perform the mutation
@@ -29,7 +29,7 @@ section: required [
   ]
 
   list: point  [
-    required: "Y"
+    standard: "Y"
     default: "0"
     minimum: "1"
     maximum: "4"
@@ -42,7 +42,7 @@ section: required [
   ]
 
   list: block  [
-    required: "Y"
+    standard: "Y"
     default: "0"
     minimum: "1"
     maximum: "4"
@@ -62,13 +62,13 @@ section: advanced [
 ]
 
   boolean: inframe  [
-    optional: "@($(sequence.protein)?N:Y)"
+    additional: "@(!$(acdprotein))"
     default: "N"
     information: "Do 'codon' and 'block' operations in frame"
   ]
 
   list: codon  [
-    required: "@($(sequence.protein)?N:Y)"
+    standard: "@(!$(acdprotein))"
     default: "0"
     minimum: "1"
     maximum: "4"
@@ -94,7 +94,7 @@ section: advanced [
     information: "Maximum size for a block mutation"
   ]
 
-  seqall: other [
+  seqall: othersequence [
     type: "any"
     default: "asis:N"
     information: "Other sequences that the mutated result
@@ -111,6 +111,7 @@ section: advanced [
            copy of the input sequence. If, after 10 such retries, there is
            still a match to the set of sequence given here, then the matching
            mutated sequence is written with a warning message."
+    nullok: "Y"
   ]
 
 endsection: advanced

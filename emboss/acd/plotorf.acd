@@ -38,7 +38,7 @@ section: output [
 ]
 
   xygraph: graph  [
-    required: "Y"
+    standard: "Y"
     multiple: "6"
   ]
 

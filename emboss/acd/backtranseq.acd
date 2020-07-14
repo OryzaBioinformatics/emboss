@@ -21,7 +21,7 @@ section: advanced [
 ]
 
   codon: cfile  [
-    optional: "Y"
+    additional: "Y"
   ]
 
 endsection: advanced

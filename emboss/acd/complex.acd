@@ -15,19 +15,15 @@ boolean: omnia  [
   help: "calculate over a set of sequences"
 ]
 
-seqoutall: outseq  [
-  required: "$(omnia)"
-]
-
 integer: lwin  [
-  required: "Y"
+  standard: "Y"
   default: "100"
   maximum: "$(sequence.length)"
   information: "Window length"
 ]
 
 integer: step  [
-  required: "Y"
+  standard: "Y"
   default: "5"
   maximum: "$(lwin)"
   information: "Step size"
@@ -42,7 +38,7 @@ integer: sim  [
 ]
 
 integer: jmin  [
-  required: "Y"
+  standard: "Y"
   default: "4"
   minimum: "2"
   maximum: "20"
@@ -51,7 +47,7 @@ integer: jmin  [
 ]
 
 integer: jmax  [
-  required: "Y"
+  standard: "Y"
   default: "6"
   minimum: "2"
   maximum: "50"
@@ -74,13 +70,20 @@ boolean: print  [
 ]
 
 outfile: outfile  [
-  required: "Y"
-  extension: "complex"
+  parameter: "Y"
+  knowntype: "complex output"
 ]
 
-outfile: ujtable  [
-  required: "@($(sim) & $(omnia))"
+outfile: ujtablefile  [
+  standard: "$(sim)"
   default: "complex.ujtable"
   information: "UjTable temporary file name"
+  knowntype: "complex temporary output"
   help: ""
+  nullok: "Y"
 ]
+seqoutall: outseq  [
+  standard: "$(omnia)"
+  nullok: "Y"
+]
+

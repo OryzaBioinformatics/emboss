@@ -22,15 +22,15 @@ section: output [
 ]
 
   outfile: outfile  [
-    optional: "Y"
+    additional: "Y"
     default: "stdout"
-    standardtype: "infoseq output"
+    knowntype: "infoseq output"
     help: "If you enter the name of a file here then this program will
            write the sequence details into that file."
   ]
 
   boolean: html  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Format output as an HTML table"
   ]

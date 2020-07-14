@@ -19,7 +19,7 @@ section: input [
 
   sequence: bsequence [
     parameter: "y"
-    type: "@($(asequence.protein) ? stopprotein : nucleotide)"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
 
 endsection: input
@@ -30,7 +30,7 @@ section: required [
 ]
 
   integer: wordsize  [
-    required: "Y"
+    standard: "Y"
     default: "4"
     minimum: "2"
     information: "Word size"
@@ -44,7 +44,7 @@ section: output [
 ]
 
   boolean: overlaps  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Display the overlapping matches"
     help: "Displays the overlapping matches (in red) as well as the
@@ -53,7 +53,7 @@ section: output [
 
   boolean: boxit  [
     default: "Y"
-    optional: "Y"
+    additional: "Y"
     information: "Draw a box around dotplot"
   ]
 
@@ -62,22 +62,10 @@ section: output [
     type: "frame"
   ]
 
-    boolean: data  [
-      default: "N"
-      information: "Display as data"
-      help: "Output the match data to a file instead of plotting it"
-    ]
-
     graph: graph  [
-      required: "@(!$(data))"
+      standard: "Y"
       gxtitle: "$(bsequence.name)"
       gytitle: "$(asequence.name)"
-    ]
-
-    outfile: outfile  [
-      required: "$(data)"
-      nullok: "Y"
-      standardtype: "dotplot graph data"
     ]
 
   endsection: datasection

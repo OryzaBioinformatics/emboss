@@ -21,13 +21,13 @@ section: advanced [
 ]
 
   datafile: datafile  [
-    optional: "Y"
+    additional: "Y"
     information: "White-Wimley data file (Ewhite-wimley.dat)"
     default: "Ewhite-wimley.dat"
   ]
 
   integer: width  [
-    optional: "Y"
+    additional: "Y"
     information: "window size"
     default: "19"
     minimum: "1"
@@ -50,19 +50,19 @@ section: output [
   ]
 
   boolean: octanolplot  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Display the octanol plot"
   ]
 
   boolean: interfaceplot  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Display the interface plot"
   ]
 
   boolean: differenceplot  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
     information: "Display the difference plot"
   ]

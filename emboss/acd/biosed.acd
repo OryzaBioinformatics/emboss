@@ -21,7 +21,7 @@ section: required [
 ]
 
   string: target  [
-    required: "Y"
+    standard: "Y"
     information: "Sequence section to match"
     default: "N"
   ]
@@ -39,7 +39,7 @@ section: advanced [
   ]
 
   string: replace  [
-    required: "@(!$(delete))"
+    standard: "@(!$(delete))"
     information: "Replacement sequence section"
     default: "A"
   ]

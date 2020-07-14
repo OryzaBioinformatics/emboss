@@ -12,7 +12,7 @@ section: input [
 ]
 
   list: idformat  [
-    required: "y"
+    standard: "y"
     information: "ID line format"
     values: "simple+ >ID; idacc+ >ID ACC; gcgid+ >db:ID; gcgidacc+
              >db:ID ACC; dbid+ >db ID; ncbi+ | formats;"
@@ -24,13 +24,13 @@ section: input [
   ]
 
   string: directory  [
-    required: "Y"
+    standard: "Y"
     default: "."
     information: "Database directory"
   ]
 
   string: filenames  [
-    required: "Y"
+    standard: "Y"
     default: "*.dat"
     information: "Wildcard database filename"
   ]
@@ -50,14 +50,14 @@ section: required [
   ]
 
   string: release  [
-    required: "Y"
+    standard: "Y"
     default: "0.0"
     maxlength: "9"
     information: "Release number"
   ]
 
   string: date  [
-    required: "Y"
+    standard: "Y"
     default: "00/00/00"
     valid: "Date string dd/mm/yy"
     information: "Index date"

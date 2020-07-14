@@ -22,7 +22,7 @@ section: advanced [
 ]
 
   integer: before  [
-    optional: "Y"
+    additional: "Y"
     default: "0"
     information: "Amount of sequence before feature to extract"
     help: "If this value is greater than 0 then that number of bases
@@ -39,7 +39,7 @@ section: advanced [
   ]
 
   integer: after  [
-    optional: "Y"
+    additional: "Y"
     default: "0"
     information: "Amount of sequence after feature to extract"
     help: "If this value is greater than 0 then that number of bases
@@ -55,7 +55,7 @@ section: advanced [
   ]
 
   string: source  [
-    optional: "Y"
+    additional: "Y"
     default: "*"
     information: "Source of feature to display"
     help: "By default any feature source in the feature table is
@@ -71,7 +71,7 @@ section: advanced [
   ]
 
   string: type  [
-    optional: "Y"
+    additional: "Y"
     default: "*"
     information: "Type of feature to extract"
     help: "By default every feature in the feature table is extracted.
@@ -87,7 +87,7 @@ section: advanced [
   ]
 
   integer: sense  [
-    optional: "Y"
+    additional: "Y"
     default: "0"
     information: "Sense of feature to extract"
     expected: "0 - any sense, 1 - forward sense, -1 - reverse
@@ -98,7 +98,7 @@ section: advanced [
   ]
 
   float: minscore  [
-    optional: "Y"
+    additional: "Y"
     default: "0.0"
     information: "Minimum score of feature to extract"
     help: "If this is greater than or equal to the maximum score, then
@@ -106,7 +106,7 @@ section: advanced [
   ]
 
   float: maxscore  [
-    optional: "Y"
+    additional: "Y"
     default: "0.0"
     information: "Maximum score of feature to extract"
     help: "If this is less than or equal to the maximum score, then
@@ -114,7 +114,7 @@ section: advanced [
   ]
 
   string: tag  [
-    optional: "Y"
+    additional: "Y"
     default: "*"
     information: "Tag of feature to extract"
     help: "Tags are the types of extra values that a feature may have.
@@ -135,7 +135,7 @@ section: advanced [
   ]
 
   string: value  [
-    optional: "Y"
+    additional: "Y"
     default: "*"
     information: "Value of feature tags to extract"
     help: "Tag values are the values associated with a feature tag.
@@ -163,7 +163,7 @@ section: output [
 ]
 
   boolean: join  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Output introns etc. as one sequence"
     help: "Some features, such as CDS (coding sequence) and mRNA are
@@ -176,7 +176,7 @@ section: output [
   ]
 
   boolean: featinname  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Append type of feature to output sequence
                   name"
@@ -190,7 +190,7 @@ section: output [
   ]
 
   string: describe  [
-    optional: "Y"
+    additional: "Y"
     default: ""
     information: "Feature tag names to add to the description"
     help: "To aid you in identifying some further properties of a
@@ -198,8 +198,8 @@ section: output [
            tag names that should be added to the output sequence Description
            text, together with their values (if any). For example, if this is
            set to be 'gene', then if any output feature has the tag (for
-           example) '/gene="BRCA1"' associated with it, then the text
-           '(gene="BRCA1")' will be added to the Description line. Tags are
+           example) '/gene=BRCA1' associated with it, then the text
+           '(gene=BRCA1)' will be added to the Description line. Tags are
            the types of extra values that a feature may have. For example in
            the EMBL feature table, a 'CDS' type of feature may have the tags
            '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence',

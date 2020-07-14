@@ -22,7 +22,7 @@ section: advanced [
 ]
 
   codon: cfile  [
-    information: "Codon usage file"
+    help: "Codon usage file"
   ]
 
   integer: window  [
@@ -54,12 +54,13 @@ section: output [
   ]
 
   xygraph: graph  [
-    required: "$(plot)"
+    standard: "$(plot)"
     multiple: "3"
   ]
 
   outfile: outfile  [
-    required: "@(!$(plot))"
+    standard: "@(!$(plot))"
+    knowntype: "syco output"
   ]
 
 endsection: output

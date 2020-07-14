@@ -9,14 +9,15 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequences  [
+  seqall: seqall  [
     parameter: "Y"
     type: "dna"
   ]
 
-  infile: primers  [
+  infile: primersfile  [
     parameter: "Y"
-    prompt: "Primer file"
+    information: "Primer file"
+    knowntype: "primer pairs file"
   ]
 
 endsection: input
@@ -29,7 +30,7 @@ section: required [
   integer: mismatchpercent  [
     parameter: "Y"
     default: "0"
-    prompt: "Allowed percent mismatch"
+    information: "Allowed percent mismatch"
   ]
 
 endsection: required
@@ -39,8 +40,9 @@ section: output [
   type: "page"
 ]
 
-  outfile: out  [
+  outfile: outfile  [
     parameter: "Y"
+    knowntype: "primer3 output"
   ]
 
 endsection: output

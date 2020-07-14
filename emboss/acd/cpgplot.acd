@@ -21,7 +21,7 @@ section: required [
 ]
 
   integer: window  [
-    required: "Y"
+    standard: "Y"
     minimum: "1"
     maximum: "$(sequence.end)"
     default: "100"
@@ -33,7 +33,7 @@ section: required [
   ]
 
   integer: shift  [
-    required: "Y"
+    standard: "Y"
     minimum: "1"
     maximum: "$(window)"
     default: "1"
@@ -44,7 +44,7 @@ section: required [
   ]
 
   integer: minlen  [
-    required: "Y"
+    standard: "Y"
     minimum: "1"
     maximum: "$(sequence.end)"
     default: "200"
@@ -54,7 +54,7 @@ section: required [
   ]
 
   float: minoe  [
-    required: "Y"
+    standard: "Y"
     minimum: "0."
     maximum: "10."
     default: "0.6"
@@ -65,7 +65,7 @@ section: required [
   ]
 
   float: minpc  [
-    required: "Y"
+    standard: "Y"
     minimum: "0."
     maximum: "100."
     default: "50."
@@ -86,7 +86,7 @@ section: output [
     help: "This sets the name of the file holding the report of the
            input sequence name, CpG island parameters and the output details
            of any CpG islands that are found."
-    standardtype: "cpgplot output"
+    knowntype: "cpgplot output"
   ]
 
   xygraph: graph  [
@@ -116,6 +116,7 @@ section: output [
   ]
 
   featout: featout  [
+    parameter: "Y"
     help: "File for output features"
     type: "nucleotide"
   ]

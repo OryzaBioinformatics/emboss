@@ -21,14 +21,14 @@ section: required [
   type: "page"
 ]
 
-  infile: compdata  [
+  infile: compdatafile  [
     parameter: "Y"
-    required: "Y"
     information: "'compseq' file to use for expected word
                   frequencies"
     help: "This is a file in the format of the output produced by
            'compseq' that is used to set the minimum frequencies of words in
            this analysis."
+    knowntype: "compseq output"
   ]
 
   integer: window  [
@@ -70,6 +70,7 @@ section: output [
     parameter: "Y"
     extension: "oddcomp"
     help: "This is the results file."
+    knowntype: "oddcomp output"
   ]
 
 endsection: output

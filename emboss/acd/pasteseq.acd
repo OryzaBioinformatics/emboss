@@ -8,15 +8,15 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: asequence  [
     parameter: "Y"
     type: "any"
   ]
 
-  sequence: insseq  [
+  sequence: bsequence  [
     parameter: "Y"
     information: "Sequence to insert"
-    type: "@($(sequence.protein) ? stopprotein : nucleotide)"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
 
 endsection: input
@@ -27,9 +27,9 @@ section: required [
 ]
 
   integer: pos  [
-    required: "Y"
-    default: "$(sequence.end)"
-    maximum: "$(sequence.end)"
+    standard: "Y"
+    default: "$(asequence.end)"
+    maximum: "$(asequence.end)"
     minimum: "0"
     information: "Position to insert after"
     help: "The position in the main input sequence to insert after. \
@@ -45,7 +45,6 @@ section: output [
 
   seqout: outseq  [
     parameter: "Y"
-    required: "Y"
   ]
 
 endsection: output

@@ -10,7 +10,7 @@ seqall: sequence  [
 ]
 
 integer: orfml  [
-  required: "Y"
+  standard: "Y"
   minimum: "1"
   default: "100"
   information: "Minimum ORF Length to report"
@@ -18,22 +18,22 @@ integer: orfml  [
 
 outfile: outfile  [
   parameter: "Y"
-  standardtype: "checktrans output"
+  knowntype: "checktrans output"
 ]
 
 seqoutall: outseq  [
-  required: "Y"
-  information: "Sequence file to hold output ORF sequences"
+  parameter: "Y"
+  help: "Sequence file to hold output ORF sequences"
 ]
 
 featout: featout  [
-  information: "Feature file for output"
+  parameter: "Y"
   help: "File for output features"
   type: "protein"
 ]
 
 boolean: addlast  [
-  optional: "Y"
+  additional: "Y"
   default: "Y"
   information: "Force the sequence to end with an asterisk"
   help: "An asterisk in the protein sequence indicates the position of

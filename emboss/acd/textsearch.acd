@@ -11,6 +11,7 @@ section: input [
 
   seqall: sequence  [
     parameter: "Y"
+    type: "gapany"
   ]
 
 endsection: input
@@ -22,7 +23,7 @@ section: required [
 
   string: pattern  [
     parameter: "Y"
-    prompt: "Enter a pattern to search for"
+    information: "Enter a pattern to search for"
     help: "The search pattern is a regular expression. Use a | to
            indicate OR. \
            For example: \
@@ -38,9 +39,9 @@ section: advanced [
 ]
 
   boolean: casesensitive  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
-    prompt: "Do a case-sensitive search"
+    information: "Do a case-sensitive search"
   ]
 
 endsection: advanced
@@ -51,9 +52,9 @@ section: output [
 ]
 
   boolean: html  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
-    prompt: "Format output as an HTML table"
+    information: "Format output as an HTML table"
   ]
 
   boolean: only  [
@@ -88,15 +89,12 @@ section: output [
 
   boolean: description  [
     default: "@(!$(only))"
-    prompt: "Display 'description' column"
+    information: "Display 'description' column"
   ]
 
   outfile: outfile  [
     parameter: "Y"
-    extension: "textsearch"
-    prompt: "Output sequence details to a file"
-    help: "If you enter the name of a file here then this program will
-           write the sequence details into that file."
+    knowntype: "textsearch output"
   ]
 
 endsection: output

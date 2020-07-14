@@ -22,14 +22,14 @@ section: advanced [
 ]
 
   boolean: full  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Provide full documentation for matching
                   patterns"
   ]
 
   boolean: prune  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
     information: "Ignore simple patterns"
     help: "Ignore simple patterns. If this is true then these simple

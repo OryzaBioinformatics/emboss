@@ -11,9 +11,10 @@ section: input [
   type: "page"
 ]
 
-  infile: inf  [
+  infile: infile  [
     parameter: "Y"
-    prompt: "Full pathname of transfac SITE.DAT"
+    information: "Full pathname of transfac SITE.DAT"
+    knowntype: "transfac site file"
   ]
 
 endsection: input

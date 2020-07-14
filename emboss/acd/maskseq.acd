@@ -21,7 +21,7 @@ section: required [
 ]
 
   range: regions  [
-    required: "Y"
+    standard: "Y"
     default: ""
     information: "Regions to mask (eg: 4-57,78-94)"
     help: "Regions to mask. \
@@ -36,7 +36,7 @@ section: required [
   ]
 
   boolean: tolower  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Change masked region to lower-case"
     help: "The region can be 'masked' by converting the sequence
@@ -48,8 +48,8 @@ section: required [
   ]
 
   string: maskchar  [
-    optional: "@($(tolower)?N:Y)"
-    default: "@($(sequence.protein)?X:N)"
+    additional: "@(!$(tolower))"
+    default: "@($(acdprotein)?X:N)"
     information: "Character to mask with"
     help: "Character to use when masking. \
            Default is 'X' for protein sequences, 'N' for nucleic sequences. \

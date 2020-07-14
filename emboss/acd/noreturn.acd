@@ -10,7 +10,7 @@ section: input [
 
   infile: infile  [
     parameter: "Y"
-    standardtype: "ascii text"
+    knowntype: "ascii text"
     information: "Input file"
   ]
 
@@ -23,7 +23,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    standardtype: "ascii text"
+    knowntype: "ascii text"
   ]
 
 endsection: output

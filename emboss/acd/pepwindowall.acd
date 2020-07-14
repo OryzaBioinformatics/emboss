@@ -9,9 +9,8 @@ section: input [
   type: "page"
 ]
 
-  seqset: msf  [
+  seqset: sequences  [
     parameter: "Y"
-    information: "Sequences file to be read in"
     help: "File containing a sequence alignment"
     type: "gapprotein"
   ]
@@ -24,14 +23,14 @@ section: advanced [
 ]
 
   datafile: datafile  [
-    optional: "Y"
+    additional: "Y"
     information: "Aaindex database file"
     directory: "AAINDEX"
     default: "Enakai.dat"
   ]
 
   integer: length  [
-    optional: "Y"
+    additional: "Y"
     information: "window size"
     default: "7"
     minimum: "1"
@@ -47,7 +46,7 @@ section: output [
 
   xygraph: graph  [
     parameter: "Y"
-    multiple: "$(msf.count)"
+    multiple: "$(sequences.count)"
     gytitle: "Hydropathy"
     gtitle: "Kyte-Doolittle Plot"
   ]

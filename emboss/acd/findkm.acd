@@ -12,7 +12,7 @@ section: input [
   infile: infile  [
     parameter: "Y"
     information: "Enter name of file containing data"
-    standardtype: "enzyme data"
+    knowntype: "enzyme data"
   ]
 
 endsection: input
@@ -36,11 +36,11 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    standardtype: "findkm output"
+    knowntype: "findkm output"
   ]
 
   xygraph: graphlb  [
-    required: "Y"
+    standard: "Y"
     multiple: "2"
   ]
 

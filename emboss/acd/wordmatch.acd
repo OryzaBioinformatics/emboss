@@ -16,7 +16,7 @@ section: input [
 
   sequence: bsequence  [
     parameter: "Y"
-    type: "@($(asequence.protein) ? stopprotein : nucleotide)"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
 
 endsection: input
@@ -27,7 +27,7 @@ section: required [
 ]
 
   integer: wordsize  [
-    required: "Y"
+    standard: "Y"
     default: "4"
     minimum: "2"
     information: "Word size"
@@ -48,17 +48,15 @@ section: output [
   ]
 
   featout: afeatout  [
+    parameter: "Y"
     ofname: "$(asequence.name)"
     offormat: "gff"
-    information: "feature file for output aseq"
-    help: "File for output of normal tab delimited GFF features"
   ]
 
   featout: bfeatout  [
+    parameter: "Y"
     ofname: "$(bsequence.name)"
     offormat: "gff"
-    information: "feature file for output bseq"
-    help: "File for output of normal tab delimited GFF features"
   ]
 
 endsection: output

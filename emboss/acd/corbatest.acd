@@ -5,10 +5,11 @@ application: corbatest [
 
 string: entry  [
   parameter: "Y"
-  prompt: "Enter an EMBL ID or ACCNO"
+  information: "Enter an EMBL ID or ACCNO"
   default: "hsfau"
 ]
 
 outfile: outfile  [
   parameter: "Y"
+  knowntype: "corbatest output"
 ]

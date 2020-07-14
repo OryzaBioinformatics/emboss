@@ -22,7 +22,7 @@ section: required [
 ]
 
   integer: minrepeat  [
-    required: "Y"
+    standard: "Y"
     default: "10"
     minimum: "2"
     information: "Minimum repeat size"
@@ -30,7 +30,7 @@ section: required [
   ]
 
   integer: maxrepeat  [
-    required: "Y"
+    standard: "Y"
     default: "$(minrepeat)"
     minimum: "$(minrepeat)"
     information: "Maximum repeat size"
@@ -77,7 +77,7 @@ section: output [
   outfile: origfile  [
     extension: "oldtan"
     nullok: "Y"
-    standardtype: "tandem output"
+    knowntype: "tandem output"
   ]
 
 endsection: output

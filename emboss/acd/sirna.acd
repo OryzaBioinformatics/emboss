@@ -14,13 +14,13 @@ section: input [
     features: "Y"
   ]
 
-  section: selection [
-    information: "selection Section"
-    type: "page"
+  section: seqinsection [
+    information: "Sequence input options"
+    type: "frame"
   ]
 
     boolean: poliii  [
-      optional: "Y"
+      additional: "Y"
       default: "N"
       information: "Select probes for Pol III expression
                     vectors"
@@ -31,7 +31,7 @@ section: input [
     ]
 
     boolean: aa  [
-      optional: "Y"
+      additional: "Y"
       default: "N"
       information: "Select only regions that start with AA"
       help: "This option allows you to select only those 23 base
@@ -42,7 +42,7 @@ section: input [
     ]
 
     boolean: tt  [
-      optional: "Y"
+      additional: "Y"
       default: "N"
       information: "Select only regions that end with TT"
       help: "This option allows you to select only those 23 base
@@ -53,7 +53,7 @@ section: input [
     ]
 
     boolean: polybase  [
-      optional: "Y"
+      additional: "Y"
       default: "Y"
       information: "Allow regions with 4 repeats of a base"
       help: "If this option is FALSE then only those 23 base regions
@@ -62,7 +62,7 @@ section: input [
              G's in a row."
     ]
 
-  endsection: selection
+  endsection: seqinsection
 
 endsection: input
 
@@ -73,7 +73,6 @@ section: output [
 
   report: outfile  [
     parameter: "Y"
-    information: "Output data file"
     help: "The output is a table of the forward and reverse parts of
            the 21 base siRNA duplex. Both the forward and reverse sequences
            are written 5' to 3', ready to be ordered. The last two bases have
@@ -91,7 +90,6 @@ section: output [
 
   seqoutall: outseq  [
     parameter: "Y"
-    information: "Output sequence file"
     help: "This is a file of the sequences of the 23 base regions that
            the siRNAs are selected from. You may use it to do searches of
            mRNA databases (e.g. REFSEQ) to confirm that the probes are unique
@@ -99,7 +97,7 @@ section: output [
   ]
 
   boolean: context  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Show the two bases before the output 21 base
                   probe"

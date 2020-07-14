@@ -31,32 +31,28 @@ section: advanced [
   ]
 
     boolean: onlydend  [
-      optional: "Y"
-      default: "No"
-      information: "only produce dendrogram file"
-      prompt: "Do you want to produce only the dendrogram file?"
+      additional: "Y"
+      default: "N"
+      information: "Only produce dendrogram file"
     ]
 
     boolean: dend  [
-      optional: "@(!$(onlydend))"
-      default: "No"
-      information: "select if you want to do alignment using an
-                    old dendrogram"
-      prompt: "Do you want to use an old dendrogram file?"
+      additional: "@(!$(onlydend))"
+      default: "N"
+      information: "Do alignment using an old dendrogram"
     ]
 
     string: dendfile  [
-      optional: "$(dend)"
+      additional: "$(dend)"
       default: "NULL"
-      information: "name of old dendrogram file"
-      prompt: "What is the name of the old dendrogram file"
+      information: "Name of old dendrogram file"
     ]
 
   endsection: dendsection
 
   boolean: insist  [
-    optional: "Y"
-    default: "No"
+    additional: "Y"
+    default: "N"
     information: "Insist that the sequence type is changed to
                   protein"
   ]
@@ -67,7 +63,7 @@ section: advanced [
   ]
 
     list: slowfast  [
-      optional: "Y"
+      additional: "Y"
       default: "s"
       header: "Do you want to carry out slow or fast pairwise
                alignment"
@@ -92,7 +88,7 @@ section: advanced [
     variable: slow "@($(slowfast) != f)"
 
     float: pwgapc  [
-      optional: "$(slow)"
+      additional: "$(slow)"
       default: "10.0"
       minimum: "0.0"
       information: "Slow pairwise alignment: gap opening
@@ -102,7 +98,7 @@ section: advanced [
     ]
 
     float: pwgapv  [
-      optional: "$(slow)"
+      additional: "$(slow)"
       default: "0.1"
       minimum: "0.0"
       information: "Slow pairwise alignment: gap extension
@@ -118,14 +114,11 @@ section: advanced [
     type: "frame"
   ]
 
-    boolean: prot  [
-      default: "@($(insist) ?
-                @(!$(sequence.protein)):$(sequence.protein))"
-      information: "Do not change this value"
-    ]
+    variable: prot  "@($(insist) ?
+                @(!$(acdprotein)):$(acdprotein))"
 
     list: pwmatrix  [
-      optional: "@($(prot)?$(slow):False)"
+      additional: "@($(prot)?$(slow):False)"
       default: "b"
       minimum: "1"
       maximum: "1"
@@ -164,7 +157,7 @@ section: advanced [
     ]
 
     list: pwdnamatrix  [
-      optional: "@($(prot)?False:$(slow))"
+      additional: "@($(prot)?False:$(slow))"
       default: "i"
       minimum: "1"
       maximum: "1"
@@ -181,7 +174,7 @@ section: advanced [
     variable: usermatrix "@($(pwmatrix) == o)"
 
     string: pairwisedata  [
-      optional: "$(usermatrix)"
+      additional: "$(usermatrix)"
       default: "NULL"
       information: "Filename of user pairwise matrix"
     ]
@@ -194,7 +187,7 @@ section: advanced [
   ]
 
     integer: ktup  [
-      optional: "@(!$(slow))"
+      additional: "@(!$(slow))"
       default: "@($(prot)?1:2)"
       minimum: "0"
       maximum: "4"
@@ -209,7 +202,7 @@ section: advanced [
     ]
 
     integer: gapw  [
-      optional: "@(!$(slow))"
+      additional: "@(!$(slow))"
       default: "@($(prot)?3:5)"
       minimum: "0"
       information: "Fast pairwise alignment: similarity scores:
@@ -222,7 +215,7 @@ section: advanced [
     ]
 
     integer: topdiags  [
-      optional: "@(!$(slow))"
+      additional: "@(!$(slow))"
       default: "@($(prot)?5:4)"
       minimum: "0"
       information: "Fast pairwise alignment: similarity scores:
@@ -237,7 +230,7 @@ section: advanced [
     ]
 
     integer: window  [
-      optional: "@(!$(slow))"
+      additional: "@(!$(slow))"
       default: "@($(prot)?5:4)"
       minimum: "0"
       information: "Fast pairwise alignment: similarity scores:
@@ -250,8 +243,8 @@ section: advanced [
     ]
 
     boolean: nopercent  [
-      optional: "@(!$(slow))"
-      default: "No"
+      additional: "@(!$(slow))"
+      default: "N"
       information: "Fast pairwise alignment: similarity scores:
                     suppresses percentage score"
     ]
@@ -264,7 +257,7 @@ section: advanced [
   ]
 
     list: matrix  [
-      optional: "$(prot)"
+      additional: "$(prot)"
       default: "b"
       minimum: "1"
       maximum: "1"
@@ -309,7 +302,7 @@ section: advanced [
     variable: usermamatrix "@($(matrix) == o)"
 
     list: dnamatrix  [
-      optional: "@(!$(prot))"
+      additional: "@(!$(prot))"
       default: "i"
       minimum: "1"
       maximum: "1"
@@ -326,10 +319,9 @@ section: advanced [
     variable: umamatrix "(@($(dnamatrix) == own) ? True : False)"
 
     string: mamatrix  [
-      optional: "@($(usermamatrix)?True:@$(umamatrix))"
+      additional: "@($(usermamatrix)?True:@$(umamatrix))"
       default: "NULL"
       information: "Filename of user multiple alignment matrix"
-      prompt: "Input the filename of your alignment matrix"
     ]
 
   endsection: matrixsection
@@ -340,11 +332,10 @@ section: advanced [
   ]
 
     float: gapc  [
-      optional: "Y"
+      additional: "Y"
       default: "10.0"
       minimum: "0.0"
       information: "Multiple alignment: Gap opening penalty"
-      prompt: "Enter gap penalty"
       valid: "Positive foating point number"
       help: "The penalty for opening a gap in the alignment.
              Increasing the gap opening penalty will make gaps less
@@ -352,11 +343,10 @@ section: advanced [
     ]
 
     float: gapv  [
-      optional: "Y"
+      additional: "Y"
       default: "5.0"
       minimum: "0.00"
       information: "Multiple alignment: Gap extension penalty"
-      prompt: "Enter variable gap penalty"
       valid: "Positive foating point number"
       help: "The penalty for extending a gap by 1 residue. Increasing
              the gap extension penalty will make gaps shorter. Terminal gaps
@@ -364,8 +354,8 @@ section: advanced [
     ]
 
     boolean: endgaps  [
-      optional: "Y"
-      default: "Yes"
+      additional: "Y"
+      default: "Y"
       information: "Use end gap separation penalty"
       help: "'End gap separation' treats end gaps just like internal
              gaps for the purposes of avoiding gaps that are too close (set
@@ -376,7 +366,7 @@ section: advanced [
     ]
 
     integer: gapdist  [
-      optional: "Y"
+      additional: "Y"
       default: "8"
       minimum: "0"
       information: "Gap separation distance"
@@ -389,8 +379,8 @@ section: advanced [
     ]
 
     boolean: norgap  [
-      optional: "$(prot)"
-      default: "No"
+      additional: "$(prot)"
+      default: "N"
       information: "No residue specific gaps"
       help: "'Residue specific penalties' are amino acid specific gap
              penalties that reduce or increase the gap opening penalties at
@@ -400,7 +390,7 @@ section: advanced [
     ]
 
     string: hgapres  [
-      optional: "$(prot)"
+      additional: "$(prot)"
       default: "GPSNDQEKR"
       information: "List of hydrophilic residues"
       help: "This is a set of the residues 'considered' to be
@@ -409,8 +399,8 @@ section: advanced [
     ]
 
     boolean: nohgap  [
-      optional: "$(prot)"
-      default: "No"
+      additional: "$(prot)"
+      default: "N"
       information: "No hydrophilic gaps"
       help: "'Hydrophilic gap penalties' are used to increase the
              chances of a gap within a run (5 or more residues) of
@@ -422,7 +412,7 @@ section: advanced [
   endsection: gapsection
 
   integer: maxdiv  [
-    optional: "Y"
+    additional: "Y"
     default: "30"
     minimum: "0"
     maximum: "100"
@@ -453,7 +443,7 @@ section: output [
     parameter: "Y"
     extension: "dnd"
     information: "Dendogram output filename"
-    standardtype: "dendrogram"
+    knowntype: "dendrogram"
   ]
 
 endsection: output

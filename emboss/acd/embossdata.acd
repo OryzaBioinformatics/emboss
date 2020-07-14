@@ -10,17 +10,17 @@ section: advanced [
 ]
 
   boolean: showall  [
-    optional: "Y"
+    additional: "Y"
     information: "Show all potential EMBOSS data files"
   ]
 
   boolean: fetch [
-    optional: "@($(showall)?N:Y)"
+    additional: "@(!$(showall))"
     information: "Fetch a data file"
   ]
 
   string: filename  [
-    required: "$(fetch)"
+    standard: "$(fetch)"
     default: ""
     information: "File to fetch or search for"
     help: "This specifies the name of the file that should be fetched
@@ -51,13 +51,13 @@ section: output [
 ]
 
   outfile: outfile  [
-    optional: "Y"
+    additional: "Y"
     default: "stdout"
     help: "This specifies the name of the file that the results of a
            search for a file in the various data directories is written to.
            By default these results are written to the screen
     (stdout)."
-    standardtype: "copy of datafile"
+    knowntype: "copy of datafile"
   ]
 
 endsection: output

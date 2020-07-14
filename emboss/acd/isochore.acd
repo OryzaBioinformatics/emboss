@@ -21,7 +21,7 @@ section: advanced [
 ]
 
   integer: window  [
-    optional: "Y"
+    additional: "Y"
     default: "1000"
     minimum: "1"
     maximum: "@($(sequence.end)/2)"
@@ -29,7 +29,7 @@ section: advanced [
   ]
 
   integer: shift  [
-    optional: "Y"
+    additional: "Y"
     default: "100"
     minimum: "1"
     maximum: "@($(sequence.end)/10)"
@@ -46,11 +46,11 @@ section: output [
   outfile: outfile  [
     parameter: "Y"
     extension: "iso"
-    standardtype: "isochore output"
+    knowntype: "isochore output"
   ]
 
   xygraph: graph  [
-    required: "Y"
+    standard: "Y"
   ]
 
 endsection: output

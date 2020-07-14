@@ -27,9 +27,9 @@ section: advanced [
 ]
 
   matrixf: datafile  [
-    optional: "Y"
+    additional: "Y"
     information: "Matrix file"
-    protein: "$(asequence.protein)"
+    protein: "$(acdprotein)"
     help: "This is the scoring matrix file used when comparing
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
@@ -37,7 +37,7 @@ section: advanced [
   ]
 
   float: gapopen  [
-    optional: "Y"
+    additional: "Y"
     information: "Gap opening penalty"
     minimum: "1."
     maximum: "100."
@@ -45,7 +45,7 @@ section: advanced [
   ]
 
   float: gapextend  [
-    optional: "Y"
+    additional: "Y"
     information: "Gap extension penalty"
     minimum: ".1"
     maximum: "10."

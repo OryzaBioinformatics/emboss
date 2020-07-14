@@ -12,6 +12,7 @@ section: input [
   seqall: sequence  [
     parameter: "Y"
     features: "Y"
+    type: "gapany"
   ]
 
 endsection: input

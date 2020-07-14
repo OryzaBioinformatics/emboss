@@ -122,6 +122,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
+    knowntype: "restover output"
   ]
 
 endsection: output

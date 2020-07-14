@@ -16,7 +16,7 @@ section: input [
 
   sequence: bsequence  [
     parameter: "y"
-    type: "@($(asequence.protein) ? stopprotein : nucleotide)"
+    type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
 
 endsection: input
@@ -27,23 +27,23 @@ section: advanced [
 ]
 
   integer: windowsize  [
-    optional: "Y"
+    additional: "Y"
     information: "window size over which to test threshhold"
     default: "10"
     minimum: "3"
   ]
 
   integer: threshold  [
-    optional: "Y"
+    additional: "Y"
     information: "threshold"
     default: "23"
     minimum: "0"
   ]
 
   matrix: matrixfile  [
-    optional: "Y"
+    additional: "Y"
     information: "Matrix file"
-    protein: "$(asequence.protein)"
+    protein: "$(acdprotein)"
     help: "This is the scoring matrix file used when comparing
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
@@ -63,32 +63,18 @@ section: output [
     help: "Display a non-proportional graph"
   ]
 
-  boolean: data  [
-    required: "@(!$(stretch))"
-    default: "N"
-    information: "Display as data"
-    help: "Output the match data to a file instead of plotting it"
-  ]
-
   graph: graph  [
-    required: "@(@(!$(data)) & @(!$(stretch)))"
+    standard: "@(!$(stretch))"
     gtitle: "Dotmatcher: $(asequence.name) vs $(bsequence.name)"
     gxtitle: "$(asequence.name)"
     gytitle: "$(bsequence.name)"
   ]
 
   xygraph: xygraph  [
-    required: "$(stretch)"
+    standard: "$(stretch)"
     gtitle: "Dotmatcher: $(asequence.name) vs $(bsequence.name)"
     gxtitle: "$(asequence.name)"
     gytitle: "$(bsequence.name)"
-  ]
-
-  outfile: outfile  [
-    required: "@($(data) & @(!$(stretch)))"
-    nullok: "Y"
-    information: "Display as data"
-    standardtype: "dotplot graph data"
   ]
 
 endsection: output

@@ -40,7 +40,7 @@ section: advanced [
 ]
 
   infile: infile  [
-    optional: "Y"
+    additional: "Y"
     nullok: "Y"
     information: "'compseq' file to use for expected word
                   frequencies"
@@ -51,11 +51,11 @@ section: advanced [
            protein sequences if you are counting protein sequence word
            frequencies, and you must use one made from nucleotide frequencies
            if you and analysing a nucleotide sequence."
-    standardtype: "compseq output"
+    knowntype: "compseq output"
   ]
 
   integer: frame  [
-    optional: "Y"
+    additional: "Y"
     default: "0"
     minimum: "0"
     maximum: "$(word)"
@@ -72,7 +72,7 @@ section: advanced [
   ]
 
   boolean: ignorebz  [
-    optional: "$(sequence.protein)"
+    additional: "$(acdprotein)"
     default: "Y"
     information: "Ignore the amino acids B and Z and just count
                   them as 'Other'"
@@ -84,7 +84,7 @@ section: advanced [
   ]
 
   boolean: reverse  [
-    optional: "@(!$(sequence.protein))"
+    additional: "@(!$(acdprotein))"
     default: "N"
     information: "Count words in the forward and reverse sense"
     help: "Set this to be true if you also wish to also count words in
@@ -102,11 +102,11 @@ section: output [
     parameter: "Y"
     extension: "composition"
     help: "This is the results file."
-    standardtype: "compseq output"
+    knowntype: "compseq output"
   ]
 
   boolean: zerocount  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
     information: "Display the words that have a frequency of
                   zero"

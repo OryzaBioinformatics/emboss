@@ -4,24 +4,24 @@ application: cirdna [
 ]
 
 graph: graphout  [
-  required: "Y"
+  standard: "Y"
 ]
 
 infile: infile  [
   parameter: "Y"
   default: "inputfile"
   information: "input file containing mapping data"
-  standardtype: "lindna mapping commands"
+  knowntype: "lindna mapping commands"
 ]
 
 boolean: ruler  [
-  required: "Y"
+  standard: "Y"
   default: "Y"
   information: "do you want a ruler"
 ]
 
 selection: blocktype  [
-  required: "Y"
+  standard: "Y"
   default: "Filled"
   values: "Open;Filled;Outline"
   information: "type of blocks"
@@ -30,7 +30,7 @@ selection: blocktype  [
 ]
 
 float: originangle  [
-  optional: "Y"
+  additional: "Y"
   default: "90"
   minimum: "0"
   maximum: "360"
@@ -39,7 +39,7 @@ float: originangle  [
 ]
 
 selection: posticks  [
-  required: "Y"
+  standard: "Y"
   default: "Out"
   values: "In;Out"
   information: "ticks inside or outside the circle (enter In or
@@ -47,7 +47,7 @@ selection: posticks  [
 ]
 
 selection: posblocks  [
-  required: "Y"
+  standard: "Y"
   default: "In"
   values: "In;Out"
   information: "text inside or outside the blocks (enter In or
@@ -55,14 +55,14 @@ selection: posblocks  [
 ]
 
 boolean: intersymbol  [
-  optional: "Y"
+  additional: "Y"
   default: "Y"
   information: "do you want horizontal junctions between
                 blocks"
 ]
 
 integer: intercolour  [
-  optional: "Y"
+  additional: "Y"
   default: "1"
   minimum: "0"
   maximum: "15"
@@ -71,13 +71,13 @@ integer: intercolour  [
 ]
 
 boolean: interticks  [
-  optional: "Y"
+  additional: "Y"
   default: "N"
   information: "do you want horizontal junctions between ticks"
 ]
 
 integer: gapsize  [
-  optional: "Y"
+  additional: "Y"
   default: "500"
   minimum: "0"
   information: "interval between ticks in the ruler (enter an
@@ -85,14 +85,14 @@ integer: gapsize  [
 ]
 
 boolean: ticklines  [
-  optional: "Y"
+  additional: "Y"
   default: "N"
   information: "do you want vertical lines at the ruler's
                 ticks"
 ]
 
 float: textheight  [
-  optional: "Y"
+  additional: "Y"
   default: "1"
   information: "height of text (enter a number to multiply the
                 default height)"
@@ -101,7 +101,7 @@ float: textheight  [
 ]
 
 float: textlength  [
-  optional: "Y"
+  additional: "Y"
   default: "1"
   information: "length of text (enter a number to multiply the
                 default length)"
@@ -110,7 +110,7 @@ float: textlength  [
 ]
 
 float: tickheight  [
-  optional: "Y"
+  additional: "Y"
   default: "1"
   information: "height of ticks (enter a number to multiply the
                 default height)"
@@ -119,7 +119,7 @@ float: tickheight  [
 ]
 
 float: blockheight  [
-  optional: "Y"
+  additional: "Y"
   default: "1"
   information: "height of blocks (enter a number to multiply
                 the default height)"
@@ -128,7 +128,7 @@ float: blockheight  [
 ]
 
 float: rangeheight  [
-  optional: "Y"
+  additional: "Y"
   default: "1"
   information: "height of range ends (enter a number to
                 multiply the default height)"
@@ -137,7 +137,7 @@ float: rangeheight  [
 ]
 
 float: gapgroup  [
-  optional: "Y"
+  additional: "Y"
   default: "1"
   information: "space between groups (enter a number to
                 multiply the default space)"
@@ -146,7 +146,7 @@ float: gapgroup  [
 ]
 
 float: postext  [
-  optional: "Y"
+  additional: "Y"
   default: "1"
   information: "space between text and ticks, blocks, and
                 ranges (enter a number to multiply the default space)"

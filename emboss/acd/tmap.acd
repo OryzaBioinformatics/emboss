@@ -8,10 +8,9 @@ section: input [
   type: "page"
 ]
 
-  seqset: msf  [
+  seqset: sequences  [
     parameter: "Y"
     type: "gapprotein"
-    information: "Sequences file to be read in"
     help: "File containing a sequence alignment"
   ]
 
@@ -23,15 +22,16 @@ section: output [
 ]
 
   xygraph: graph  [
-    required: "y"
+    standard: "y"
     multiple: "2"
     gxtitle: "Residue number"
     goutfile: "tmap"
   ]
 
-  outfile: outfile  [
-    optional: "Y"
-    default: "tmap.res"
-  ]
+ report: outfile  [
+   additional: "Y"
+   rformat: "seqtable"
+   taglist: "int:TM=TransMem"
+ ]
 
 endsection: output

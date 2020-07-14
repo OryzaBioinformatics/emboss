@@ -14,6 +14,27 @@ section: input [
     type: "dna"
   ]
 
+  section: vectorfilesection [
+    information: "Vector input options"
+    type: "frame"
+  ]
+
+    boolean: vectorfile  [
+      parameter: "Y"
+      default: "Y"
+      information: "Are your vector sequences in a file?"
+    ]
+
+    infile: vectorsfile  [
+      standard: "$(vectorfile)"
+      nullok: "Y"
+      default: ""
+      information: "Name of vectorfile"
+      knowntype: "vector file"
+    ]
+
+  endsection: vectorfilesection
+
 endsection: input
 
 section: required [
@@ -21,37 +42,16 @@ section: required [
   type: "page"
 ]
 
-  section: vectorfilesection [
-    information: "vectorfilesection Section"
-    type: "frame"
-  ]
-
-    boolean: vectorfile  [
-      parameter: "Y"
-      default: "Y"
-      prompt: "Are your vector sequences in a file?"
-    ]
-
-    infile: vectors  [
-      parameter: "Y"
-      required: "@($(vectorfile)?Y:N)"
-      nullok: "Y"
-      default: ""
-      prompt: "Name of vectorfile"
-    ]
-
-  endsection: vectorfilesection
-
   integer: mismatch  [
-    required: "Y"
+    standard: "Y"
     default: "10"
-    prompt: "Max allowed % mismatch"
+    information: "Max allowed % mismatch"
   ]
 
   boolean: besthits  [
-    required: "Y"
+    standard: "Y"
     default: "Y"
-    prompt: "Show only the best hits (minimise mismatches)?"
+    information: "Show only the best hits (minimise mismatches)?"
   ]
 
 endsection: required
@@ -62,13 +62,13 @@ section: advanced [
 ]
 
   string: linkera  [
-    required: "@(!$(vectorfile))"
-    prompt: "5' sequence"
+    standard: "@(!$(vectorfile))"
+    information: "5' sequence"
   ]
 
   string: linkerb  [
-    required: "@(!$(vectorfile))"
-    prompt: "3' sequence"
+    standard: "@(!$(vectorfile))"
+    information: "3' sequence"
   ]
 
 endsection: advanced
@@ -78,8 +78,9 @@ section: output [
   type: "page"
 ]
 
-  outfile: outf  [
+  outfile: outfile  [
     parameter: "Y"
+    knowntype: "vectorstrip output"
   ]
 
   seqoutall: outseq  [

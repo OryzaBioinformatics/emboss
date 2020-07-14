@@ -51,7 +51,7 @@ section: output [
   ]
 
   seqoutall: junkoutseq  [
-    optional: "Y"
+    additional: "Y"
     default: "/dev/null"
     information: "File of excluded sequences"
     help: "This file collects the sequences which you have excluded

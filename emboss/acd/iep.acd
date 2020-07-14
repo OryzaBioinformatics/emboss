@@ -56,12 +56,12 @@ section: output [
   ]
 
   xygraph: graph  [
-    required: "$(plot)"
+    standard: "$(plot)"
   ]
 
   outfile: outfile  [
-    required: "$(report)"
-    standardtype: "iep output"
+    standard: "$(report)"
+    knowntype: "iep output"
   ]
 
 endsection: output

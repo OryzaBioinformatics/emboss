@@ -9,10 +9,9 @@ section: input [
   type: "page"
 ]
 
-  seqset: msf  [
+  seqset: sequences  [
     parameter: "Y"
     type: "gapany"
-    information: "Sequences file to be read in"
     help: "File containing a sequence alignment"
   ]
 
@@ -24,7 +23,7 @@ section: required [
 ]
 
   integer: winsize  [
-    required: "Y"
+    standard: "Y"
     information: "Window size"
     help: "Number of columns to average alignment quality over. The
            larger this value is, the smoother the plot will be."
@@ -39,9 +38,9 @@ section: advanced [
 ]
 
   matrix: scorefile  [
-    optional: "Y"
+    additional: "Y"
     information: "Comparison matrix file"
-    protein: "$(msf.protein)"
+    protein: "$(acdprotein)"
     help: "This is the scoring matrix file used when comparing
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
@@ -55,22 +54,9 @@ section: output [
   type: "page"
 ]
 
-  boolean: data  [
-    default: "N"
-    information: "Display as data"
-    help: "Output the match data to a file instead of plotting it"
-  ]
-
   xygraph: graph  [
-    required: "@(!$(data))"
+    standard: "Y"
     gxtitle: "Relative Residue Position"
-  ]
-
-  outfile: outfile  [
-    required: "$(data)"
-    nullok: "Y"
-    information: "Display as data"
-    standardtype: "dotplot graph data"
   ]
 
 endsection: output

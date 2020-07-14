@@ -35,9 +35,9 @@ section: advanced [
 ]
 
   matrixf: floatmatrix  [
-    optional: "Y"
+    additional: "Y"
     information: "Matrix file"
-    protein: "$(sequence.protein)"
+    protein: "$(acdprotein)"
     help: "This is the scoring matrix file used when comparing
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
@@ -45,9 +45,9 @@ section: advanced [
   ]
 
   matrix: intmatrix  [
-    optional: "Y"
+    additional: "Y"
     information: "Matrix file"
-    protein: "$(sequence.protein)"
+    protein: "$(acdprotein)"
     help: "This is the scoring matrix file used when comparing
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are

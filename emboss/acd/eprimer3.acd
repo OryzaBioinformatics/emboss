@@ -52,7 +52,7 @@ section: advanced [
     ]
 
     list: task  [
-      optional: "Y"
+      additional: "Y"
       default: "0"
       minimum: "1"
       maximum: "1"
@@ -74,7 +74,7 @@ section: advanced [
     ]
 
     integer: numreturn  [
-      optional: "Y"
+      additional: "Y"
       default: "5"
       minimum: "0"
       information: "Number of results to return"
@@ -105,7 +105,7 @@ section: advanced [
   ]
 
     range: includedregion  [
-      optional: "Y"
+      additional: "Y"
       default: ""
       information: "Included region(s)"
       help: "A sub-region of the given sequence in which to pick
@@ -118,7 +118,7 @@ section: advanced [
     ]
 
     range: target  [
-      optional: "Y"
+      additional: "Y"
       default: ""
       information: "Target region(s)"
       help: "If one or more Targets is specified then a legal primer
@@ -134,7 +134,7 @@ section: advanced [
     ]
 
     range: excludedregion  [
-      optional: "Y"
+      additional: "Y"
       default: ""
       information: "Excluded region(s)"
       help: "Primer oligos may not overlap any region specified in
@@ -151,7 +151,7 @@ section: advanced [
     ]
 
     string: forwardinput  [
-      optional: "Y"
+      additional: "Y"
       default: ""
       information: "Forward input primer sequence to check"
       help: "The sequence of a forward primer to check and around
@@ -160,7 +160,7 @@ section: advanced [
     ]
 
     string: reverseinput  [
-      optional: "Y"
+      additional: "Y"
       default: ""
       information: "Reverse input primer sequence to check"
       help: "The sequence of a reverse primer to check and around
@@ -187,7 +187,7 @@ section: advanced [
       default: ""
       nullok: "Y"
       information: "Mispriming library"
-      standardtype: "dna fasta"
+      knowntype: "dna fasta"
       help: "The name of a file containing a nucleotide sequence
              library of sequences to avoid amplifying (for example repetitive
              sequences, or possibly the sequences of genes in a gene family
@@ -236,7 +236,7 @@ section: advanced [
     ]
 
     integer: gcclamp  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "0"
       minimum: "0"
       information: "GC clamp"
@@ -247,7 +247,7 @@ section: advanced [
     ]
 
     integer: osize  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "20"
       minimum: "1"
       information: "Primer optimum size"
@@ -256,7 +256,7 @@ section: advanced [
     ]
 
     integer: minsize  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "18"
       minimum: "1"
       information: "Primer minimum size"
@@ -265,7 +265,7 @@ section: advanced [
     ]
 
     integer: maxsize  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "27"
       minimum: "$(minsize)"
       maximum: "35"
@@ -277,7 +277,7 @@ section: advanced [
     ]
 
     float: otm  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "60.0"
       information: "Primer optimum Tm"
       help: "Optimum melting temperature(Celsius) for a primer oligo.
@@ -291,7 +291,7 @@ section: advanced [
     ]
 
     float: mintm  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "57.0"
       information: "Primer minimum Tm"
       help: "Minimum acceptable melting temperature(Celsius) for a
@@ -299,7 +299,7 @@ section: advanced [
     ]
 
     float: maxtm  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "63.0"
       minimum: "$(mintm)"
       information: "Primer maximum Tm"
@@ -308,7 +308,7 @@ section: advanced [
     ]
 
     float: maxdifftm  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "100.0"
       information: "Maximum difference in Tm of primers"
       help: "Maximum acceptable (unsigned) difference between the
@@ -316,21 +316,21 @@ section: advanced [
     ]
 
     float: ogcpercent  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "50.0"
       information: "Primer optimum GC percent"
       help: "Primer optimum GC percent."
     ]
 
     float: mingc  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "20.0"
       information: "Primer minimum GC percent"
       help: "Minimum allowable percentage of Gs and Cs in any primer."
     ]
 
     float: maxgc  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "80.0"
       minimum: "$(mingc)"
       information: "Primer maximum GC percent"
@@ -339,7 +339,7 @@ section: advanced [
     ]
 
     float: saltconc  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "50.0"
       information: "Salt concentration (mM)"
       help: "The millimolar concentration of salt (usually KCl) in the
@@ -348,7 +348,7 @@ section: advanced [
     ]
 
     float: dnaconc  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "50.0"
       information: "DNA concentration (nM)"
       help: "The nanomolar concentration of annealing oligos in the
@@ -440,7 +440,7 @@ section: advanced [
     ]
 
     integer: maxpolyx  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "5"
       minimum: "0"
       information: "Maximum polynucleotide repeat"
@@ -456,7 +456,7 @@ section: advanced [
   ]
 
     integer: productosize  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "200"
       minimum: "0"
       information: "Product optimum size"
@@ -465,7 +465,7 @@ section: advanced [
     ]
 
     range: productsizerange  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "100-300"
       information: "Product size range"
       help: "The associated values specify the lengths of the product
@@ -486,7 +486,7 @@ section: advanced [
     ]
 
     float: productotm  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "0.0"
       information: "Product optimum Tm"
       help: "The optimum melting temperature for the PCR product. 0
@@ -494,7 +494,7 @@ section: advanced [
     ]
 
     float: productmintm  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "-1000000.0"
       information: "Product minimum Tm"
       help: "The minimum allowed melting temperature of the amplicon.
@@ -503,7 +503,7 @@ section: advanced [
     ]
 
     float: productmaxtm  [
-      optional: "@($(task)!=4)"
+      additional: "@($(task)!=4)"
       default: "1000000.0"
       minimum: "$(productmintm)"
       information: "Product maximum Tm"
@@ -563,7 +563,7 @@ section: advanced [
   ]
 
     range: oligoexcludedregion  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: ""
       information: "Internal oligo excluded region"
       help: "Middle oligos may not overlap any region specified by
@@ -576,7 +576,7 @@ section: advanced [
     ]
 
     string: oligoinput  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: ""
       information: "Internal oligo input sequence (if any)"
       help: "The sequence of an internal oligo to check and around
@@ -592,7 +592,7 @@ section: advanced [
   ]
 
     integer: oligoosize  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "20"
       minimum: "0"
       information: "Internal oligo optimum size"
@@ -601,7 +601,7 @@ section: advanced [
     ]
 
     integer: oligominsize  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "18"
       minimum: "0"
       information: "Internal oligo minimum size"
@@ -611,7 +611,7 @@ section: advanced [
     ]
 
     integer: oligomaxsize  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "27"
       minimum: "$(oligominsize)"
       maximum: "35"
@@ -623,7 +623,7 @@ section: advanced [
     ]
 
     float: oligootm  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "60.0"
       information: "Internal oligo optimum Tm"
       help: "Optimum melting temperature (Celsius) for an internal
@@ -637,7 +637,7 @@ section: advanced [
     ]
 
     float: oligomintm  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "57.0"
       information: "Internal oligo minimum Tm"
       help: "Minimum acceptable melting temperature(Celsius) for an
@@ -645,7 +645,7 @@ section: advanced [
     ]
 
     float: oligomaxtm  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "63.0"
       minimum: "$(oligomintm)"
       information: "Internal oligo maximum Tm"
@@ -654,14 +654,14 @@ section: advanced [
     ]
 
     float: oligoogcpercent  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "50.0"
       information: "Internal oligo optimum GC percent"
       help: "Internal oligo optimum GC percent."
     ]
 
     float: oligomingc  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "20.0"
       information: "Internal oligo minimum GC"
       help: "Minimum allowable percentage of Gs and Cs in an internal
@@ -669,7 +669,7 @@ section: advanced [
     ]
 
     float: oligomaxgc  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "80.0"
       minimum: "$(oligomingc)"
       information: "Internal oligo maximum GC"
@@ -678,7 +678,7 @@ section: advanced [
     ]
 
     float: oligosaltconc  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "50.0"
       information: "Internal oligo salt concentration (mM)"
       help: "The millimolar concentration of salt (usually KCl) in the
@@ -687,7 +687,7 @@ section: advanced [
     ]
 
     float: oligodnaconc  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "50.0"
       information: "Internal oligo DNA concentration (nM)"
       help: "The nanomolar concentration of annealing internal oligo
@@ -695,7 +695,7 @@ section: advanced [
     ]
 
     float: oligoselfany  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "12.00"
       maximum: "9999.99"
       information: "Internal oligo maximum self
@@ -720,7 +720,7 @@ section: advanced [
     ]
 
     float: oligoselfend  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "12.00"
       minimum: "$(oligoselfany)"
       maximum: "9999.99"
@@ -743,7 +743,7 @@ section: advanced [
     ]
 
     integer: oligomaxpolyx  [
-      optional: "@(@($(task)==1) | @($(task)==4))"
+      additional: "@(@($(task)==1) | @($(task)==4))"
       default: "5"
       minimum: "0"
       information: "Internal oligo maximum polynucleotide
@@ -756,7 +756,7 @@ section: advanced [
       default: ""
       nullok: "Y"
       information: "Internal oligo mishybridizing library"
-      standardtype: "dna fasta"
+      knowntype: "dna fasta"
       help: "Similar to MISPRIMING-LIBRARY, except that the event we
              seek to avoid is hybridization of the internal oligo to
              sequences in this library rather than priming from them. \
@@ -806,7 +806,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    standardtype: "primer3 output"
+    knowntype: "primer3 output"
   ]
 
 endsection: output

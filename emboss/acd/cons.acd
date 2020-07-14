@@ -23,9 +23,9 @@ section: advanced [
 ]
 
   matrix: datafile  [
-    optional: "Y"
+    additional: "Y"
     information: "Scoring matrix"
-    protein: "$(sequence.protein)"
+    protein: "$(acdprotein)"
     help: "This is the scoring matrix file used when comparing
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
@@ -33,7 +33,7 @@ section: advanced [
   ]
 
   float: plurality  [
-    optional: "Y"
+    additional: "Y"
     information: "Plurality check value"
     help: "Set a cut-off for the number of positive matches below
            which there is no consensus. The default plurality is taken as
@@ -43,7 +43,7 @@ section: advanced [
   ]
 
   integer: identity  [
-    optional: "Y"
+    additional: "Y"
     information: "Required number of identities at a position"
     help: "Provides the facility of setting the required number of
            identities at a site for it to give a consensus at that position.
@@ -51,6 +51,17 @@ section: advanced [
            alignment only columns of identities contribute to the consensus."
     default: "0"
     minimum: "0"
+  ]
+
+
+  float: setcase  [
+    additional: "Y"
+    information: "Define a threshold above which the consensus
+                  is given in uppercase"
+    help: "Sets the threshold for the positive matches above which the
+           consensus is is upper-case and below which the consensus is in
+           lower-case."
+    default: "@( $(sequence.totweight) / 2)"
   ]
 
 endsection: advanced
@@ -65,19 +76,9 @@ section: output [
   ]
 
   string: name  [
-    optional: "Y"
+    additional: "Y"
     default: ""
     information: "Name of the consensus sequence"
-  ]
-
-  float: setcase  [
-    optional: "Y"
-    information: "Define a threshold above which the consensus
-                  is given in uppercase"
-    help: "Sets the threshold for the positive matches above which the
-           consensus is is upper-case and below which the consensus is in
-           lower-case."
-    default: "0"
   ]
 
 endsection: output

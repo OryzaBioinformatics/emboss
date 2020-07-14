@@ -22,7 +22,7 @@ section: advanced [
 ]
 
   list: table  [
-    optional: "Y"
+    additional: "Y"
     default: "0"
     minimum: "1"
     maximum: "1"
@@ -39,30 +39,30 @@ section: advanced [
              23:Thraustochytrium Mitochondrial"
     delimiter: ";"
     codedelimiter: ":"
-    prompt: "Code to use"
+    information: "Code to use"
     help: "Genetics code used for the translation"
   ]
 
   boolean: firstorf  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
-    prompt: "ORF at the beginning of the sequence"
+    information: "ORF at the beginning of the sequence"
     help: "Count the beginning of a sequence as a possible ORF, even
            if it's inferior to the minimal ORF size."
   ]
 
   boolean: lastorf  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
-    prompt: "ORF at the end of the sequence"
+    information: "ORF at the end of the sequence"
     help: "Count the end of a sequence as a possible ORF, even if it's
            not finishing with a STOP, or inferior to the minimal ORF size."
   ]
 
   boolean: mstart  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
-    prompt: "ORF start with an M"
+    information: "ORF start with an M"
     help: "Displays only ORFs starting with an M."
   ]
 
@@ -75,17 +75,13 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    information: "Output sequence details to a file"
-    help: "If you enter the name of a file here then this program will
-           write the sequence details into that file."
+    knowntype: "sixpack output"
   ]
 
   seqoutall: outseq  [
-    required: "Y"
-    information: "Output ORFs to a file"
+    standard: "Y"
     type: "stopprotein"
-    help: "If you enter the name of a file here then this program will
-           write the ORFs into that file."
+    help: "ORF sequence output"
   ]
 
   boolean: reverse  [

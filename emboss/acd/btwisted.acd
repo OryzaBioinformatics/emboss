@@ -40,7 +40,7 @@ section: output [
 
   outfile: outfile  [
     parameter: "Y"
-    standardtype: "btwisted output"
+    knowntype: "btwisted output"
   ]
 
 endsection: output

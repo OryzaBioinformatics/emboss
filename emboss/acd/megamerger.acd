@@ -30,14 +30,14 @@ section: required [
 ]
 
   integer: wordsize  [
-    required: "Y"
+    standard: "Y"
     default: "20"
     minimum: "2"
     information: "Word size"
   ]
 
   boolean: prefer  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
     information: "Use the first sequence when there is a
                   mismatch"
@@ -65,7 +65,7 @@ section: output [
   outfile: outfile  [
     parameter: "Y"
     extension: "megamerger"
-    standardtype: "megamerger report"
+    knowntype: "megamerger report"
   ]
 
 endsection: output

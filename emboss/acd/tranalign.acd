@@ -9,16 +9,14 @@ section: input [
   type: "page"
 ]
 
-  seqall: nsequence  [
+  seqall: asequence  [
     parameter: "Y"
     type: "nucleotide"
-    information: "Nucleotide sequences to be aligned"
   ]
 
-  seqset: psequence  [
+  seqset: bsequence  [
     parameter: "Y"
     type: "gapprotein"
-    information: "Protein sequence alignment"
   ]
 
 endsection: input
@@ -29,7 +27,7 @@ section: advanced [
 ]
 
   list: table  [
-    optional: "Y"
+    additional: "Y"
     default: "0"
     minimum: "1"
     maximum: "1"
@@ -46,7 +44,7 @@ section: advanced [
              23:Thraustochytrium Mitochondrial"
     delimiter: ";"
     codedelimiter: ":"
-    prompt: "Code to use"
+    information: "Code to use"
   ]
 
 endsection: advanced

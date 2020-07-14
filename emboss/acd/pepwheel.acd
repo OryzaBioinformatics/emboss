@@ -26,7 +26,7 @@ section: output [
   ]
 
   integer: steps  [
-    optional: "Y"
+    additional: "Y"
     minimum: "2"
     maximum: "100"
     default: "18"
@@ -36,7 +36,7 @@ section: output [
   ]
 
   integer: turns  [
-    optional: "Y"
+    additional: "Y"
     minimum: "1"
     maximum: "100"
     default: "5"
@@ -45,8 +45,8 @@ section: output [
            value divided by this value."
   ]
 
-  section: amphipathicsection [
-    information: "amphipathic Section"
+  section: markupsection [
+    information: "Markup section"
     type: "frame"
   ]
 
@@ -59,7 +59,7 @@ section: output [
     ]
 
     string: squares  [
-      optional: "@(!$(amphipathic))"
+      additional: "@(!$(amphipathic))"
       default: "ILVM"
       information: "Mark as squares"
       help: "By default the aliphatic residues ILVM are marked with
@@ -67,40 +67,29 @@ section: output [
     ]
 
     string: diamonds  [
-      optional: "@(!$(amphipathic))"
+      additional: "@(!$(amphipathic))"
       default: "DENQST"
       information: "Mark as diamonds"
       help: "By default the residues DENQST are marked with diamonds."
     ]
 
     string: octags  [
-      optional: "@(!$(amphipathic))"
+      additional: "@(!$(amphipathic))"
       default: "HKR"
       information: "Mark as octagons"
       help: "By default the positively charged residues HKR are marked
              with octagons."
     ]
 
-  endsection: amphipathicsection
+  endsection: markupsection
 
   section: datasection [
-    information: "Data section"
+    information: "Data output section"
     type: "frame"
   ]
 
-    boolean: data  [
-      default: "N"
-      information: "Display as data"
-      help: "Output the match data to a file instead of plotting it"
-    ]
-
-    outfile: outfile  [
-      required: "$(data)"
-      nullok: "Y"
-    ]
-
     graph: graph  [
-      required: "@(!$(data))"
+      standard: "Y"
       gxtitle: "$(sequence.name)"
     ]
 

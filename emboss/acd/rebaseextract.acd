@@ -11,20 +11,22 @@ section: input [
   type: "page"
 ]
 
-  infile: inf  [
+  infile: infile  [
     parameter: "Y"
-    prompt: "Full pathname of WITHREFM file"
+    information: "Full pathname of WITHREFM file"
+    knowntype: "rebase withrefm file"
   ]
 
-  infile: proto  [
+  infile: protofile  [
     parameter: "Y"
-    prompt: "Full pathname of PROTO file"
+    information: "Full pathname of PROTO file"
+    knowntype: "rebase proto file"
   ]
 
   boolean: equivalences  [
-    optional: "Y"
+    additional: "Y"
     default: "Y"
-    prompt: "Create prototype equivalence file"
+    information: "Create prototype equivalence file"
     help: "This option calculates an embossre.equ file using
            restriction enzyme prototypes in the withrefm file."
   ]

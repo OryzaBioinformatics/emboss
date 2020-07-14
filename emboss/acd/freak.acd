@@ -21,7 +21,7 @@ section: required [
 ]
 
   string: letters  [
-    required: "Y"
+    standard: "Y"
     default: "gc"
     information: "Residue letters"
   ]
@@ -34,13 +34,13 @@ section: advanced [
 ]
 
   integer: step  [
-    optional: "Y"
+    additional: "Y"
     default: "1"
     information: "Stepping value"
   ]
 
   integer: window  [
-    optional: "Y"
+    additional: "Y"
     default: "30"
     information: "Averaging window"
   ]
@@ -58,12 +58,12 @@ section: output [
   ]
 
   xygraph: graph  [
-    required: "$(plot)"
+    standard: "$(plot)"
   ]
 
   outfile: outfile  [
-    required: "@(!$(plot))"
-    standardtype: "freak output"
+    standard: "@(!$(plot))"
+    knowntype: "freak output"
   ]
 
 endsection: output

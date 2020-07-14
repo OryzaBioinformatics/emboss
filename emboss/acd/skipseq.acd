@@ -16,10 +16,11 @@ section: input [
   seqall: sequence  [
     parameter: "Y"
     features: "$(feature)"
+    type: "gapany"
   ]
 
   integer: skip  [
-    required: "Y"
+    standard: "Y"
     default: "0"
     information: "Number of sequences to skip at start"
   ]

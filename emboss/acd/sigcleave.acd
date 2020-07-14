@@ -21,7 +21,7 @@ section: required [
 ]
 
   float: minweight  [
-    required: "Y"
+    standard: "Y"
     minimum: "0."
     maximum: "100."
     default: "3.5"
@@ -38,7 +38,7 @@ section: advanced [
 ]
 
   boolean: prokaryote  [
-    optional: "Y"
+    additional: "Y"
     help: "Specifies the sequence is prokaryotic and changes the
            default scoring data file name"
     information: "Use prokaryotic cleavage data"

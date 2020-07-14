@@ -1,7 +1,7 @@
 application: distmat [
   documentation: "Creates a distance matrix from multiple
                   alignments"
-  groups: "Phylogeny"
+  groups: "Phylogeny:Distance matrix"
 ]
 
 section: input [
@@ -23,7 +23,7 @@ section: advanced [
 ]
 
   list: nucmethod  [
-    required: "@(!$(sequence.protein))"
+    standard: "@(!$(acdprotein))"
     default: "0"
     minimum: "1"
     maximum: "1"
@@ -38,7 +38,7 @@ section: advanced [
   ]
 
   list: protmethod  [
-    required: "$(sequence.protein)"
+    standard: "$(acdprotein)"
     default: "0"
     minimum: "1"
     maximum: "1"
@@ -51,17 +51,17 @@ section: advanced [
   ]
 
   boolean: ambiguous  [
-    optional: "@(@(@(!$sequence.protein)) & @($(nucmethod)==1)) |
-               @($(sequence.protein) & @($(protmethod)!=2)))"
+    additional: "@(@(@(!$acdprotein)) & @($(nucmethod)==1)) |
+               @($(acdprotein) & @($(protmethod)!=2)))"
     default: "N"
-    information: "Use the abiguous codes in the calculation."
-    help: "Option to use the abiguous codes in the calculation of the
+    information: "Use the ambiguous codes in the calculation."
+    help: "Option to use the ambiguous codes in the calculation of the
            Jukes-Cantor method or if the sequences are proteins."
   ]
 
   float: gapweight  [
-    optional: "@(@(@($(nucmethod)<2) & @(!$(sequence.protein))) |
-               @($(sequence.protein) & @($(protmethod)!=2)))"
+    additional: "@(@(@($(nucmethod)<2) & @(!$(acdprotein))) |
+               @($(acdprotein) & @($(protmethod)!=2)))"
     information: "Weight given to gaps"
     default: "0."
     help: "Option to weight gaps in the uncorrected (nucleotide) and
@@ -69,7 +69,7 @@ section: advanced [
   ]
 
   integer: position  [
-    optional: "@(@(!$(sequence.protein)) & @($(nucmethod)!=4))"
+    additional: "@(@(!$(acdprotein)) & @($(nucmethod)!=4))"
     default: "123"
     information: "Base position to analyse."
     help: "Choose base positions to analyse in each codon i.e. 123
@@ -78,7 +78,7 @@ section: advanced [
   ]
 
   boolean: calculatea  [
-    optional: "@(@(!$(sequence.protein)) & @($(nucmethod)==5))"
+    additional: "@(@(!$(acdprotein)) & @($(nucmethod)==5))"
     default: "N"
     information: "Calculate the a-parameter"
     help: "This will force the calculation of the a-parameter in the
@@ -87,7 +87,7 @@ section: advanced [
   ]
 
   float: parametera  [
-    optional: "@(@(!$(calculatea)) & @($(nucmethod)==5))"
+    additional: "@(@(!$(calculatea)) & @($(nucmethod)==5))"
     default: "1.0"
     information: "a-parameter"
     help: "User defined a parameter to be use in the Jin-Nei Gamma
@@ -103,7 +103,7 @@ section: output [
 ]
   outfile: outfile  [
     parameter: "Y"
-    standardtype: "distance matrix"
+    knowntype: "distance matrix"
   ]
 
 endsection: output
