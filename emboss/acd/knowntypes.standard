@@ -1,0 +1,38 @@
+#
+# Known Types
+# Type Knowntype_string Comment
+file usa_list List of USAs suitable for @list input
+file aaindex_database AAINDEX database file
+file abi_trace ABI sequencing trace file
+file ajint_ajlong_data Standard format info on ajint and ajlong
+file ascii_text ASCII text file
+file complex_temporary_output Program complex tenmporary file
+file copy_of_datafile An EMBOSS datafile ni its original format
+file dendrogram Dendrogram (tree file) from clustalw
+file distance_matrix Distance matrix usable by phylip
+file dna_fasta Nucleotide sequence in fasta format
+file entry_full_text Full text of a sequence database entry
+file enzyme_data enzyme kinetics data (application-specific)
+file gff feature file in GFF format
+file integer_long_data Standard format info on int and long
+file lindna_mapping_commands Commands to the lindna drawing program
+report megamerger_report report file from megamerger program
+file peptide_molweights Peptide molecular weight values
+file primer_pairs_file Primer pairs file
+file primer3_out Whitehead primer3 program output
+file prints_database PRINTS database file
+file profile_file profile data file
+file matrix_file weight matrix file
+file rebase_proto_file REBASE database proto file
+file rebase_withrefm_file REBASE database withrefm file
+file supermatcher_error_file error file from supermatcher program
+file text_documentation Program documentation in ASCII text
+file transfac_site_file TRANSFAC database site.dat file
+file vector_file vector definition file
+
+float float_gap_penalty Affine gap penalty
+float float_gap_extension Affine gap extension penalty
+
+integer integer_gap_penalty Affine gap penalty
+integer integer_gap_extension Affine gap extension penalty
+
