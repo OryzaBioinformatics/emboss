@@ -740,18 +740,19 @@ char* ajSysFgets(char *buf, int size, FILE *fp)
         return NULL;
 
     cnt = 0;
-    while((c=getc(fp))!=EOF && c!=0x0d && c!='\n' && cnt!=size)
+    while((c=getc(fp))!=EOF && c!=0x0d && c!='\n' && cnt!=size-1)
     {
         *(p++) = c;
         ++cnt;
     }
+
 
     *p ='\0';
 
     if(c==EOF && !cnt)
 	return NULL;
 
-    if(cnt == size)
+    if(cnt == size-1)
         return buf;
 
     if(c=='\r' || c=='\n')
