@@ -5,7 +5,7 @@
 
 Function
 
-   Finds or fetches the data files read in by the EMBOSS programs
+   Finds or fetches data files read by EMBOSS programs
 
 Description
 
@@ -52,7 +52,8 @@ Usage
 
 
 % embossdata 
-Finds or fetches the data files read in by the EMBOSS programs
+Finds or fetches data files read by EMBOSS programs
+Data file name: 
 
 # The following directories can contain EMBOSS data files.
 # They are searched in the following order until the file is found.
@@ -73,7 +74,8 @@ Finds or fetches the data files read in by the EMBOSS programs
 
 
 % embossdata -showall 
-Finds or fetches the data files read in by the EMBOSS programs
+Finds or fetches data files read by EMBOSS programs
+Data file name: 
 
 
 
@@ -212,6 +214,11 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   Etcode.dat
   Evdw.dat
   Ehet.dat
+  EGC.index
+  EGC.txt
+  Matrices.nucleotide
+  Matrices.protein
+  Matrices.proteinstructure
 
 
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/AAINDEX
@@ -719,7 +726,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
   Eadenovirus5.cut
   Eadenovirus7.cut
   Eaidlav.cut
-  Eanasp.cut
+  Cut.index
   Eani.cut
   Eani_h.cut
   Eanidmit.cut
@@ -764,7 +771,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
   Eeca.cut
   Eeco.cut
   Eeco_h.cut
-  Eecoli.cut
+  Eacica.cut
   Ef1.cut
   Efish.cut
   Efmdvpolyp.cut
@@ -773,15 +780,15 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
   Ehin.cut
   Ehma.cut
   Ehum.cut
-  Ehuman.cut
+  Eagrtu.cut
   Ekla.cut
   Ekpn.cut
   Ella.cut
   Emac.cut
-  Emaize.cut
+  Eanasp.cut
   Emam_h.cut
   Emixlg.cut
-  Emouse.cut
+  Earath.cut
   Emsa.cut
   Emse.cut
   Emta.cut
@@ -794,15 +801,15 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
   Encr.cut
   Eneu.cut
   Engo.cut
-  Eoncsp.cut
+  Eazovi.cut
   Epae.cut
-  Epea.cut
+  Ebacme.cut
   Epet.cut
   Epfa.cut
   Ephix174.cut
   Ephv.cut
   Ephy.cut
-  Epig.cut
+  Ebacst.cut
   Epolyomaa2.cut
   Epombe.cut
   Epombecai.cut
@@ -814,7 +821,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
   Erab.cut
   Erabbit.cut
   Erabsp.cut
-  Erat.cut
+  Ebacsu.cut
   Eratsp.cut
   Erca.cut
   Erhm.cut
@@ -842,7 +849,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
   Esta.cut
   Esty.cut
   Esus.cut
-  Esv40.cut
+  Ebommo.cut
   Esyhsp.cut
   Esynsp.cut
   Etbr.cut
@@ -857,7 +864,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
   Ewht.cut
   Exel.cut
   Exenopus.cut
-  Eyeast.cut
+  Ebovin.cut
   Eyeastcai.cut
   Eyen.cut
   Eysc.cut
@@ -879,6 +886,105 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
   EAgelenopsis_aperta.cut
   EAcrolepiopsis_assectella.cut
   EAnadara_trapezia.cut
+  Ebacsu_high.cut
+  Ebpphx.cut
+  Ebraja.cut
+  Ebrana.cut
+  Ebrare.cut
+  Ecaeel.cut
+  Ecanal.cut
+  Ecanfa.cut
+  Ecaucr.cut
+  Echick.cut
+  Echlre.cut
+  Echltr.cut
+  Ecloab.cut
+  Ecrigr.cut
+  Ecyapa.cut
+  Edicdi.cut
+  Edicdi_high.cut
+  Edrome.cut
+  Edrome_high.cut
+  Eecoli.cut
+  Eecoli_high.cut
+  Eemeni.cut
+  Eemeni_mit.cut
+  Eemeni_high.cut
+  Eerwct.cut
+  Ehaein.cut
+  Ehalma.cut
+  Ehalsa.cut
+  Ehorvu.cut
+  Ehuman.cut
+  Eklepn.cut
+  Eklula.cut
+  Elacdl.cut
+  Elyces.cut
+  Emacfa.cut
+  Emaize.cut
+  Emaize_chl.cut
+  Emammal_high.cut
+  Emanse.cut
+  Emarpo_chl.cut
+  Emedsa.cut
+  Emetth.cut
+  Emouse.cut
+  Emyctu.cut
+  Eneigo.cut
+  Eneucr.cut
+  Eoncmy.cut
+  Eorysa.cut
+  Eorysa_chl.cut
+  Epea.cut
+  Epethy.cut
+  Ephavu.cut
+  Epig.cut
+  Eplafa.cut
+  Eprovu.cut
+  Epseae.cut
+  Epsepu.cut
+  Epsesm.cut
+  Erabit.cut
+  Erat.cut
+  Erhile.cut
+  Erhime.cut
+  Erhoca.cut
+  Erhosh.cut
+  Esalsa.cut
+  Esalty.cut
+  Eschma.cut
+  Eschpo.cut
+  Eschpo_cai.cut
+  Eschpo_high.cut
+  Eserma.cut
+  Esheep.cut
+  Esoltu.cut
+  Esoybn.cut
+  Espiol.cut
+  Estaau.cut
+  Estrco.cut
+  Estrmu.cut
+  Estrpn.cut
+  Estrpu.cut
+  Esyncy.cut
+  Esynco.cut
+  Etetth.cut
+  Etheth.cut
+  Etobac.cut
+  Etobac_chl.cut
+  Etrybr.cut
+  Etrycr.cut
+  Evibch.cut
+  Ewheat.cut
+  Exenla.cut
+  Eyeast.cut
+  Eyeast_cai.cut
+  Eyeast_high.cut
+  Eyeast_mit.cut
+  Eyeren.cut
+  Eyerpe.cut
+  Eoncsp.cut
+  Esv40.cut
 
 
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/REBASE
@@ -893,8 +999,8 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/REBASE
    Make a copy of an EMBOSS data file in the current directory:
 
 
-% embossdata -fetch -filename Epepcoil.dat 
-Finds or fetches the data files read in by the EMBOSS programs
+% embossdata -fetch Epepcoil.dat 
+Finds or fetches data files read by EMBOSS programs
 
 File '/homes/pmr/local/share/EMBOSS/data/Epepcoil.dat' has been copied successf
 ully.
@@ -906,8 +1012,8 @@ ully.
    Display the directories which contain a particular EMBOSS data file:
 
 
-% embossdata -filename EPAM60 
-Finds or fetches the data files read in by the EMBOSS programs
+% embossdata EPAM60 
+Finds or fetches data files read by EMBOSS programs
 
 # The following directories can contain EMBOSS data files.
 # They are searched in the following order until the file is found.
@@ -926,8 +1032,8 @@ File /homes/pmr/local/share/EMBOSS/data/EPAM60                    Exists
 
 Command line arguments
 
-   Standard (Mandatory) qualifiers (* if not always prompted):
-*  -filename           string     This specifies the name of the file that
+   Standard (Mandatory) qualifiers:
+  [-filename]          string     This specifies the name of the file that
                                   should be fetched into the current directory
                                   or searched for in all of the directories
                                   that EMBOSS programs search when looking for
@@ -952,30 +1058,31 @@ Command line arguments
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
    Standard (Mandatory) qualifiers Allowed values Default
-   -filename This specifies the name of the file that should be fetched
-   into the current directory or searched for in all of the directories
-   that EMBOSS programs search when looking for a data file. The name of
-   the file is not altered when it is fetched. Any string is accepted An
-   empty string is accepted
+   [-filename]
+   (Parameter 1) This specifies the name of the file that should be
+   fetched into the current directory or searched for in all of the
+   directories that EMBOSS programs search when looking for a data file.
+   The name of the file is not altered when it is fetched. Any string is
+   accepted An empty string is accepted
    Additional (Optional) qualifiers Allowed values Default
    -showall Show all potential EMBOSS data files Toggle value Yes/No No
    -fetch Fetch a data file Boolean value Yes/No No
