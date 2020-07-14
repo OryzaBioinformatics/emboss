@@ -1,6 +1,80 @@
 # some simple testing stuff
 
-SET emboss_qadata /srsuser/rice/hgmp/emboss/test
+SET emboss_qadata /homes/pmr/hgmp/test
+
+#######################################
+# Standard test databases
+#######################################
+
+# Should be uncommented in the installed copy of emboss.default
+
+##################################################################
+# Test Databases
+# Used by the qatest.pl scriupt to test an EMBOSS installation.
+# Comment them out if you do not want your users to use them.
+# Examples in the EMBOSS documentation should all run by using
+# TEMBL: in place of EMBL:, TSW: in place of SW:, and so on.
+##################################################################
+
+
+# swissprot (Puffer fish entries)
+# =========
+
+DB tsw [ type: P dir: $emboss_tempdata/swiss
+   method: emblcd format: swiss release: 36
+   fields: "sv des org key"
+   comment: "Swissprot native format with EMBL CD-ROM index" ]
+
+# swnew (Puffer fish entries)
+# =====
+
+DB tswnew [ type: P dir: $emboss_tempdata/swnew
+   method: emblcd format: swiss release: 37 
+   fields: "sv des org key"
+   comment: "Swissnew as 3 files in native format with EMBL CD-ROM index" ]
+
+# wormpep (cosmid ZK637)
+# =======
+
+DB twp [ type: P dir: $emboss_tempdata/wormpep
+   method: emblcd format: fasta release: 16 
+   fields: "des"
+   comment: "EMBL new in native format with EMBL CD-ROM index" ]
+
+# embl (worm cosmid ZK637 and a few other entries)
+# ====
+
+DB tembl [ type: N dir: $emboss_tempdata/embl
+   method: emblcd format: embl release: 57 
+   fields: "sv des org key"
+   comment: "EMBL in native format with EMBL CD-ROM index" ]
+
+# pir (cytochrome C plus first entries in other divisions)
+# ===
+
+DB tpir [ type: P dir: $emboss_tempdata/pir
+   method: gcg
+   file: pir*.seq
+   format: nbrf
+   fields: "des org key"
+   comment: "PIR using NBRF access for 4 files" ]
+
+# Genbank (Canadian EMBnet node - so long as they are running SRS version 6)
+# =======
+
+DB tgb [ type: N method: srswww format: genbank
+   url: "http://www.cbr.nrc.ca/srs6bin/cgi-bin/wgetz"
+   dbalias: genbank
+   fields: "sv des org key"
+   comment: "Genbank IDs" ]
+
+# Genbank (local copy of the TEMBL entries from Genbank)
+# =======
+
+DB tgenbank [ type: N dir: $emboss_tempdata/genbank
+   method: emblcd format: genbank release: 01 
+   fields: "sv des org key"
+   comment: "GenBank in native format with EMBL CD-ROM index" ]
 
 #######################################
 ### Access method EMBLCD, flatfile data
