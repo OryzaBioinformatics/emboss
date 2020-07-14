@@ -6,13 +6,165 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 2.7.1)
+AM_INIT_AUTOMAKE(EMBOSS, 2.8.0)
+
+
+AC_PROG_AWK
+dnl Make sure CFLAGS is defined to stop AC_PROC_CC adding -g
+CFLAGS="$CFLAGS "
+AC_PROG_CC
+AC_PROG_CPP
+
+
+dnl Test whether --with-sgiabi given for IRIX (n32m3 n32m4 64m3 64m4)
+if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64" ; then
+if test "$CC" != "gcc"; then
+  CFLAGS="$CFLAGS -woff 1048"
+  CHECK_SGI
+fi
+fi
+
+
+dnl Test if --enable-64 is given
+if test "${enable_64+set}" != set; then
+enable_64=no
+fi
+
+
+AC_ARG_ENABLE(64,
+[ --enable-64   64 ])
+if test "${enable_64}" = "yes" ; then
+AC_MSG_CHECKING(for 64bit compilation support)
+
+dnl Test for Linux 64 bit
+if test "`uname`" = "Linux"; then
+CPPFLAGS="-DAJ_Linux64 $CPPFLAGS"
+fi
+
+dnl Test for Solaris 64 bit. This is done in the optimisation section...
+dnl Another Solaris feature is that -fast implies -xarch=v8 and
+dnl therefore switches off -xarch=v9 if it is given first.
+
+
+dnl Test for OSF1 64 bit (its always this anyway)
+if test "`uname`" = "OSF1"; then
+CPPFLAGS="-DAJ_OSF164 $CPPFLAGS"
+fi
+
+dnl Test for SGI 64 bit
+if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64"; then
+CPPFLAGS="-DAJ_IRIX64 $CPPFLAGS"
+fi
+
+dnl Test for AIX 64 bit
+if test "`uname`" = "AIX"; then
+CPPFLAGS="-DAJ_AIX64 $CPPFLAGS"
+if test "$CC" != "gcc"; then
+CC="$CC -q64"
+fi
+NM="nm -B -X 64"
+AR="ar -X 64"
+fi
+
+dnl Test for HP-UX 64 bit
+if test "`uname`" = "HP-UX"; then
+if test "$CC" != "gcc"; then
+CC="$CC +DD64"
+fi
+CPPFLAGS="-DAJ_HPUX64 $CPPFLAGS"
+fi
+
+AC_MSG_RESULT(done)
+fi
+
+
+
+
+
+
+
+dnl Set optimisation flags
+if test "$CC" != "gcc"; then
+
+dnl Test for AIX optimisation
+if test "`uname`" = "AIX"; then
+CFLAGS="$CFLAGS -O3 -qstrict -qarch=auto -qtune=auto"
+fi
+
+dnl test for SGI optimisation
+if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64" ; then
+LD="/usr/bin/ld -IPA"
+CFLAGS="$CFLAGS -Ofast"
+fi
+
+dnl Test for HP-UX optimisation
+if test "`uname`" = "HP-UX"; then
+CFLAGS="$CFLAGS -fast"
+fi
+
+dnl Test for OSF1 optimisation
+if test "`uname`" = "OSF1"; then
+CFLAGS="$CFLAGS -fast -U_FASTMATH"
+fi
+
+dnl test for Solaris optimisation
+if test "`uname`" = "SunOS"; then
+CFLAGS="$CFLAGS -O"
+dnl test for 64 bit ptr here (see Solaris 64bit above)
+if test "${enable_64}" = "yes" ; then
+CFLAGS="$CFLAGS -xtarget=ultra -xarch=v9"
+fi
+fi
+
+dnl Test for Linux optimisation
+if test "`uname`" = "Linux"; then
+CFLAGS="$CFLAGS -O2"
+fi
+
+else
+CFLAGS="$CFLAGS -O2"
+fi
+dnl End of Optimisation tests
+
+
+
+
+
+dnl Add extensions to Solaris for some reentrant functions
+if test "`uname`" = "SunOS"; then
+CFLAGS="$CFLAGS -D__EXTENSIONS__"
+fi
 
 
 dnl Use libtool to make a shared library.
 AM_PROG_LIBTOOL
 
+dnl endian test for indexing system
+AC_C_BIGENDIAN(CPPFLAGS="$CPPFLAGS -DBENDIAN",CPPFLAGS="$CPPFLAGS -DLENDIAN")
 
+dnl PCRE library definitions - see the MAJOR and MINOR values
+dnl to see which version's configure.in these lines come from
+
+dnl Provide the current PCRE version information. Do not use numbers
+dnl with leading zeros for the minor version, as they end up in a C
+dnl macro, and may be treated as octal constants. Stick to single
+dnl digits for minor numbers less than 10. There are unlikely to be
+dnl that many releases anyway.
+
+PCRE_MAJOR=4
+PCRE_MINOR=3
+PCRE_DATE=21-May-2003
+PCRE_VERSION=${PCRE_MAJOR}.${PCRE_MINOR}
+
+dnl Default values for miscellaneous macros
+
+POSIX_MALLOC_THRESHOLD=-DPOSIX_MALLOC_THRESHOLD=10
+
+dnl Provide versioning information for libtool shared libraries that
+dnl are built by default on Unix systems.
+
+PCRE_LIB_VERSION=0:1:0
+PCRE_POSIXLIB_VERSION=0:0:0
 
 
 dnl Define where the EMBOSS package is located
@@ -23,9 +175,6 @@ EMBOSS_TOP=`pwd`
 
 dnl Program checks
 #AC_PROG_CXX
-AC_PROG_AWK
-AC_PROG_CC
-AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
@@ -62,11 +211,25 @@ AC_CHECK_LIB(c, socket, LIBS="$LIBS" , LIBS="$LIBS -lsocket")
 AC_CHECK_LIB(m, main)
 
 AM_CONDITIONAL(AMPNG, false)
+
 CHECK_GENERAL
 CHECK_JAVA
 CHECK_JAVAOS
 CHECK_PNGDRIVER
 CHECK_AUTH
+CHECK_GROUT
+
+dnl "Export" these variables for PCRE
+
+AC_SUBST(HAVE_MEMMOVE)
+AC_SUBST(HAVE_STRERROR)
+AC_SUBST(PCRE_MAJOR)
+AC_SUBST(PCRE_MINOR)
+AC_SUBST(PCRE_DATE)
+AC_SUBST(PCRE_VERSION)
+AC_SUBST(PCRE_LIB_VERSION)
+AC_SUBST(PCRE_POSIXLIB_VERSION)
+AC_SUBST(POSIX_MALLOC_THRESHOLD)
 
 #dnl Test if --enable-corba is given
 #AC_ARG_ENABLE(corba,
@@ -88,12 +251,12 @@ dnl Test if --enable-debug given
 AC_ARG_ENABLE(debug,
 [  --enable-debug          debug (-g option on compiler)])
 if test "${enable_debug}" = "yes" ; then
-  CFLAGS="-g"
+CFLAGS="$CFLAGS -g"
 fi          
 
 
 dnl Turn off irritating linker warnings in IRIX
-if test "`uname`" = "IRIX"; then
+if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64"; then
 CFLAGS="-Wl,-LD_MSG:off=85:off=84:off=16:off=134 $CFLAGS"
 fi
 
@@ -101,6 +264,11 @@ fi
 
 
 dnl Test if --enable-large is given
+if test "${enable_large+set}" != set; then
+enable_large=yes
+fi
+
+
 AC_ARG_ENABLE(large,
 [ --enable-large   large ])
 if test "${enable_large}" = "yes" ; then
@@ -108,7 +276,7 @@ AC_MSG_CHECKING(for large file support)
 
 dnl Test for Linux large file support
 if test "`uname`" = "Linux"; then
-CPPFLAGS="-DAJ_LinuxLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE $CPPFLAGS"
+CPPFLAGS="-DAJ_LinuxLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE $CPPFLAGS"
 fi
 
 dnl Test for Solaris large file support
@@ -122,49 +290,37 @@ CPPFLAGS="-DAJ_OSF1LF $CPPFLAGS"
 fi
 
 dnl Test for SGI large file support
-dnl CPPFLAGS="-DAJ_IRIXLF -D_OFF64_T -D_LFAPI -D_NO_ANSIMODE $CPPFLAGS"
-if test "`uname`" = "IRIX"; then
-CPPFLAGS="-DAJ_IRIXLF $CPPFLAGS"
+dnl CPPFLAGS="-DAJ_IRIXLF -D_LARGEFILE64_SOURCE $CPPFLAGS"
+if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64"; then
+CPPFLAGS="-DAJ_IRIXLF -D_LARGEFILE64_SOURCE $CPPFLAGS"
 fi
 
-
-
-AC_MSG_RESULT(done)
+dnl Test for AIX large file support
+dnl CPPFLAGS="-DAJ_AIXLF $CPPFLAGS"
+if test "`uname`" = "AIX"; then
+CPPFLAGS="-DAJ_AIXLF -D_LARGE_FILES $CPPFLAGS"
 fi
 
-
-
-
-
-
-dnl Test if --enable-64 is given
-AC_ARG_ENABLE(64,
-[ --enable-64   64 ])
-if test "${enable_64}" = "yes" ; then
-AC_MSG_CHECKING(for 64bit compilation support)
-
-dnl Test for Linux 64 bit
-if test "`uname`" = "Linux"; then
-CPPFLAGS="-DAJ_Linux64 $CPPFLAGS"
+dnl Test for HP-UX large file support
+dnl CPPFLAGS="-DAJ_HPUXLF -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $CPPFLAGS"
+if test "`uname`" = "HP-UX"; then
+CPPFLAGS="-DAJ_HPUXLF -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $CPPFLAGS"
 fi
 
-dnl Test for Solaris 64 bit
-if test "`uname`" = "SunOS"; then
-CPPFLAGS="-DAJ_Solaris64 $CPPFLAGS"
-fi
-
-dnl Test for OSF1 64 bit (its always this anyway)
-if test "`uname`" = "OSF1"; then
-CPPFLAGS="-DAJ_OSF164 $CPPFLAGS"
-fi
-
-dnl Test for SGI 64 bit
-if test "`uname`" = "IRIX"; then
-CPPFLAGS="-DAJ_IRIX64 -mabi=64 $CPPFLAGS"
+dnl Test for MacOSX large file support off_t and fpos_t are always 64-bit
+dnl CPPFLAGS="-DAJ_MACOSXLF
+if test "`uname`" = "Darwin"; then
+CPPFLAGS="-DAJ_MACOSXLF $CPPFLAGS"
 fi
 
 AC_MSG_RESULT(done)
 fi
+
+
+
+
+
+
 
 
 
@@ -173,14 +329,15 @@ fi
 
 
 dnl Test if purify exists and if --enable-purify given if so
-dnl set "-g" else set "-O"
+dnl set "-g"
 
 AC_MSG_CHECKING(for purify)
 #if(purify -version) < /dev/null > /dev/null 2>&1; then
    AC_ARG_ENABLE(purify,
    [  --enable-purify          purify ])
 if test "${enable_purify}" = "yes" ; then
-     CFLAGS="$CFLAGS -g"
+     CC="purify --chain-length="20" -best-effort -windows=yes gcc -g"
+     LIBTOOL="$LIBTOOL --tag=CC"
      AC_MSG_RESULT(yes)
 else
    AC_MSG_RESULT(no)
