@@ -1151,6 +1151,32 @@ plLibOpen(char *fn)
     FILE *file;
     char *fs = NULL, *dn = NULL;
 
+    /* EMBOSS additions to avoid need for PLPLOT_LIB */
+    static char *prefix = PREFIX;
+    static char *top    = EMBOSS_TOP;
+    
+    if(!strcmp(prefix,"/usr/local"))
+    {
+        plGetName(prefix, "share/EMBOSS", fn, &fs);
+
+        if ((file = fopen(fs, "rb")) != NULL)
+            goto done;
+
+        plGetName(top, "plplot/lib", fn, &fs);
+
+        if ((file = fopen(fs, "rb")) != NULL)
+            goto done;
+    }
+    else
+    {
+        plGetName(prefix, "share/EMBOSS", fn, &fs);
+
+        if ((file = fopen(fs, "rb")) != NULL)
+            goto done;
+    }
+    /* End of EMBOSS additions */
+
+
 /****	search PLPLOT_LIB_ENV = $(PLPLOT_LIB)	****/
 
 #if defined(PLPLOT_LIB_ENV)
