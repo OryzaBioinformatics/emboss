@@ -13,7 +13,8 @@
 ##########################
 #
 #
-
+#######################################################################
+#
 # EMBOSS QA Test Processing
 #
 # Test line types:
@@ -27,11 +28,13 @@
 # IN Line(s) of standard input
 # FI File name (stdout and stderr assumed to exist and be empty unless stated)
 # FP File pattern - /regexp/ to be found. Optional count to check exact number.
-# FZ [<=>]number File size test. Implicit test for zero size stdout/stderr unless stated
+# FZ [<=>]number File size test. Implicit test for zero size stdout/stderr
+#                unless stated
 # FC [<=>]number File linecount test
 # UC Comment (used un documenting the usage)
 # IC Comment (used in documenting the input files)
 # OC Comment (used in documenting the output files)
+# RQ Requires (e.g. SRS for tests that need a local getz working)
 # // End of test entry
 # 
 # Return codes: see %retcode definition
@@ -41,7 +44,10 @@
 # timeout fails if the program reaches EOF on stdin
 # apparently because it waits for the user to enter something when there
 # is no piped input. Fixed by always providing piped stdin, usually empty.
-# 
+#
+# timeout also fails if the program fails to complete - or at least,
+# the child process still keeps running. So far, unable to find a way to
+# kill it.
 
 sub usage () {
   print STDERR "Usage:\n";
@@ -122,13 +128,45 @@ sub runtest ($) {
     elsif ($line =~ /^CC\s*(.*)/) {$globalcomment .= "** $1\n"}
     elsif ($line =~ /^TI\s+(\d+)/) {$timeout = $1}
     elsif ($line =~ /^ER\s+(\d+)/) {$testret = $1}
-    elsif ($line =~ /^AP\s+(\S+)/) {$testapp = $1; $apcount{$testapp}++}
+    elsif ($line =~ /^RQ\s+(\S+)/) {
+	if (defined($without{$1})) {
+	    $skipreq++;
+	    return 0;
+	}
+    }
+    elsif ($line =~ /^AP\s+(\S+)/) {
+	$testapp = $1;
+	$apcount{$testapp}++;
+	if (!defined($tfm{$testapp})) {
+	    $tfm{$testapp}=0;
+	    if (-e "../../doc/programs/html/$testapp.html") {$tfm{$testapp}++}
+	    else {print STDERR "No HTML docs for $testapp\n";$misshtml++;}
+	    if (-e "../../doc/programs/text/$testapp.txt") {$tfm{$testapp}++}
+	    else {print STDERR "No tfm text docs for $testapp\n";$misstext++;}
+	}
+    }
     elsif ($line =~ /^DL\s+(success|keep|all)/) {$globaltestdelete = $1}
     elsif ($line =~ /^PP\s*(.*)/) {$ppcmd .= "$1 ; "}
     elsif ($line =~ /^QQ\s*(.*)/) {$qqcmd .= " ; $1"}
     elsif ($line =~ /^IN\s*(.*)/) {$testin .= "$1\n"}
-    elsif ($line =~ /^AQ\s*(.*)/) {$testq = 1; $testapp = $1; $apcount{$testapp}++}
-    elsif ($line =~ /^AA\s*(.*)/) {$testa = 1; $testapp = $1; $apcount{$testapp}++}
+    elsif ($line =~ /^AQ\s*(.*)/) {
+	$testq = 1;
+	$testapp = $1;
+	$apcount{$testapp}++;
+	### no need to test docs for a make check application
+    }
+    elsif ($line =~ /^AA\s*(.*)/) {
+	$testa = 1;
+	$testapp = $1;
+	$apcount{$testapp}++;
+	if (!defined($tfm{$testapp})) {
+	    $tfm{$testapp}=0;
+	    if (-e "../../doc/programs/html/$testapp.html") {$tfm{$testapp}++}
+	    else {print STDERR "No HTML docs for $testapp\n";$misshtml++;}
+	    if (-e "../../doc/programs/text/$testapp.txt") {$tfm{$testapp}++}
+	    else {print STDERR "No tfm text docs for $testapp\n";$misstext++;}
+	}
+    }
     elsif ($line =~ /^AB\s*(.*)/) {$packa = $1}
     elsif ($line =~ /^CL\s+(.*)/) {
       if ($cmdline ne "") {$cmdline .= " "}
@@ -227,7 +265,7 @@ sub runtest ($) {
     $testpath = "../../emboss/"; #  up from the test/qa directory
     if (! (-e "$testpath$testapp")) {$skipcheck++; return 0} # make check not run
     if ($testappname && defined($acdname{$testapp}) && $acdname{$testapp}) {
-      print STDERR "check application $testapp installed - possible old version\n";
+      print STDERR "Check application $testapp installed - possible old version\n";
     }
     $testpath = "../$testpath";	# we run from the test/qa/* subdirectory
   }
@@ -616,14 +654,19 @@ $timeoutdef=60;			# default timeout in seconds
 
 $numtests = 0;
 $testappname=0;
-
+$misshtml=0;
+$misstext=0;
+%without = ();
 %dotest = ();
+%tfm = ();
+
 foreach $test (@ARGV) {
   if ($test =~ /^-(.*)/) {
     $opt=$1;
     if ($opt eq "kk") {$defdelete="keep"}
     elsif ($opt eq "ks") {$defdelete="success"}
     elsif ($opt eq "ka") {$defdelete="all"}
+    elsif ($opt =~ /without=(\S+)/) {$without{$1}=1}
     elsif ($opt =~ /t=([0-9]+)/) {$timeoutdef=int($1)}
     else {print STDERR "+++ unknown option '$opt'\n"; usage()}
   }
@@ -641,7 +684,9 @@ $lastid = "";
 $testdef = "";
 $tcount=0;
 $tfail=0;
+$tnotest=0;
 $skipcheck=0;
+$skipreq=0;
 $skipembassy=0;
 $globaltestdelete=$defdelete;
 $globalcomment = "";
@@ -820,23 +865,29 @@ while (<IN>) {
 
 # Final summary
 
-$tpass = $tcount - $tfail;
-$allendtime = time();
-$alltime = $allendtime - $allstarttime;
-
 if ($testappname) {
   foreach $x (sort (keys (%acdname))) {
     if ($acdname{$x}) {
-      if (!defined($apcount{$x})) { print STDERR "No test(s) for '$x'\n"}
+      if (!defined($apcount{$x})) {
+	  print STDERR "No test(s) for '$x'\n";
+	  $tnotest++;
+      }
     }
   }
 }
 
-$totskip = $skipcheck + $skipembassy;
+$totskip = $skipcheck + $skipembassy + $skipreq;
+$totall = $tcount - $totskip;
+$tpass = $totall - $tfail;
+$allendtime = time();
+$alltime = $allendtime - $allstarttime;
 
-print STDERR "Tests total: $tcount pass: $tpass fail: $tfail\n";
-print STDERR "Skipped: $totskip check: $skipcheck embassy: $skipembassy\n";
 
+print STDERR "Tests total: $totall pass: $tpass fail: $tfail\n";
+print STDERR "Skipped: $totskip check: $skipcheck embassy: $skipembassy requirements: $skipreq\n";
+
+print STDERR "No tests: $tnotest\n";
+print STDERR "Missing documentation html: $misshtml text: $misstext\n";
 print STDERR "Time: $alltime seconds\n";
 print LOG "Time: $alltime seconds\n";
 
