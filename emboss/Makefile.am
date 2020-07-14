@@ -15,7 +15,8 @@ endif
 check_PROGRAMS = acdlog ajtest \
 complex corbatest \
 demoalign demofeatures demolist demoreport demosequence demostring demotable \
-entrails histogramtest intconv \
+entrails giep histogramtest intconv \
+newcoils \
 patmattest \
 prima primers \
 seqinfo seqretall seqretallfeat seqretset seqretsingle seqrettype \
@@ -30,7 +31,7 @@ dan dbiblast dbifasta dbiflat dbigcg \
 degapseq descseq diffseq digest distmat \
 dotmatcher dotpath dottup dreg \
 einverted embossdata embossversion emma emowse entret \
-eprimer3 equicktandem est2genome etandem extractfeat extractseq \
+epestfind eprimer3 equicktandem est2genome etandem extractfeat extractseq \
 findkm freak fuzznuc fuzzpro fuzztran \
 garnier geecee getorf helixturnhelix hmoment \
 iep infoalign infoseq isochore jembossctl lindna listor \
@@ -42,7 +43,7 @@ octanol oddcomp \
 palindrome pasteseq patmatdb patmatmotifs \
 pepcoil pepinfo pepnet pepstats \
 pepwheel pepwindow pepwindowall \
-pestfind plotcon plotorf polydot preg \
+plotcon plotorf polydot preg \
 prettyplot prettyseq primersearch printsextract \
 profit prophecy prophet \
 prosextract pscan \
@@ -105,6 +106,7 @@ embossdata_SOURCES = embossdata.c
 emma_SOURCES = emma.c
 emowse_SOURCES = emowse.c
 entret_SOURCES = entret.c
+epestfind_SOURCES = epestfind.c
 eprimer3_SOURCES = eprimer3.c
 equicktandem_SOURCES = equicktandem.c
 est2genome_SOURCES = est2genome.c
@@ -139,6 +141,7 @@ merger_SOURCES = merger.c
 mwcontam_SOURCES = mwcontam.c
 mwfilter_SOURCES = mwfilter.c
 needle_SOURCES = needle.c
+newcoils_SOURCES = newcoils.c
 newcpgreport_SOURCES = newcpgreport.c
 newcpgseek_SOURCES = newcpgseek.c
 newseq_SOURCES = newseq.c
@@ -158,7 +161,6 @@ pepstats_SOURCES = pepstats.c
 pepwheel_SOURCES = pepwheel.c
 pepwindow_SOURCES = pepwindow.c
 pepwindowall_SOURCES = pepwindowall.c
-pestfind_SOURCES = pestfind.c
 plotcon_SOURCES = plotcon.c
 plotorf_SOURCES = plotorf.c
 polydot_SOURCES = polydot.c

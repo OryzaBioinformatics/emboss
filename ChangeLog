@@ -1,3 +1,161 @@
+Version 2.8.0
+	tfm accepts the PAGER environment variable. It can be overrided
+	by EMBOSS_PAGER.
+
+	Fix for HTTP 1.1 lines for MacOSX added (Cedric Rossi).
+
+	The home directory ~/.embossrc file can be turned off with
+	"setenv EMBOSS_HOMERC N" This was added for cleaner QA tests
+	but may have other uses.
+
+	Report format output added (by Henrikki Almusa) for dreg, preg,
+	recoder and silent.
+
+	pestfind renamed to epestfind and handling of terminal water
+	residue adjusted.
+
+	Align formats: Added "tcoffee" as a valid -aformat which writes a
+	T-Coffee library file suitable for input as -in=Lfilename to
+	T-Coffee.
+
+	Pepstats: added molar extinction coefficient and extinction
+	coefficient at 1mg/ml for A280.
+
+	Nexus format sequence input added, with new functions to parse all
+	standard nexus files. Later releases will accept nexus format for
+	other input data.
+
+	Jackknifer, Mega, Treecon Mase and Fitch formats parsed, at least in
+	their EMBOSS output forms.
+
+	Underscores are allowed in accession numbers and sequence versions
+	to handle REFSEQ fasta format entries.
+
+	New function ajRegPre returns the original string before the
+	regular expression match.
+
+	New function ajStrArrayDel deletes a string array.
+
+	New functions ajListstrToArrayApp appends strings in a list to the
+	end of a string array.
+
+	Sequence input changes: Allow '?' as a valid character (it has
+	been seen in phylip sequences) for 'unknown' and convert to X for
+	protein (or any) and 'N' for nucleotide. Note that this can give
+	an X or N depending on whether the program accepts nucleotide only
+	or any sequence. We may find a cleaner fix, but it would depend on
+	knowing the sequence type.
+	
+	Added binding factor output to tfscan plus option to specify a
+	custom data file
+
+	Removed the Henry Spencer regular expression libraries. There were
+	a few calls to the ajPosReg functions, but only to test it worked
+	the same way as ajReg. Added a case-insensitive ajRegComp and
+	ajRegCompC (which the ajPosReg functions had) using
+	PCRE. Farewell, Henry. You were a great servant to EMBOSS.
+
+	Water S-W alignment program no longer truncates some matches
+
+	Vector arithmetic added to ajax library.
+
+	Compilation now uses large file handling by default. To disable use
+	--disable-large when configuring. An effect is to make the default
+	size of ajlongs 64 bits.
+
+	Pepstats modified to allow multiple sequences
+
+	Major (well, obvious impact on ACD authors) ACD change - the
+	"required" attribute is renamed "standard" and the "optional"
+	attribute is renamed "additional". They have exactly the same
+	functions as before. The change is to (hopefully) make their
+	meannig more obvious to those developing ACD parsers and wrappers
+	for EMBOSS. ACD attribute "standardtype" clashed with "standard"
+	and is renamed "knowntype".
+
+	ACD attributes have been added for applications and for all ACD
+	types to make wrappers easier to control. These new attributes are
+	specifically for SoapLab from EBI, and need not have any impact on
+	other wrappers (SoapLab uses ACD to define non-EMBOSS applications
+	and needs extra attributes to define some additional properties).
+	
+	pepinfo now writes to a file with a standard output filename of
+	(sequenceid).pepinfio instead of pepinfo.out
+
+	Completed the standardization of ACD definitions, using "acdvalid"
+	to remove all errors and allowing only selected and hard to avoid
+	warnings to remain. The warnings are for calculated "required" or
+	"optional" definitions (simple true/false relations to another
+	boolean are accepted). In particular: all essential inputs and
+	outputs are parameters, with standardtype defined. Non-essential
+	niputs and outputs have the nullok attribute set. Information
+	strings are defined only where there is no standard prompt.
+
+	The definition of AjPStr and other "pointers to structs" is
+	causing strange problems in specifying "const" for structs that
+	are unchanged by function calls. In summary, it appears (for all
+	compilers we tried) that "const" only knows it is for a pointer if
+	it can see the "*" in the type. This means, for example, that
+	"const AjPStr" failed but "const AjOStr*" worked. With "const" if
+	it knows it is a pointer, it maked the data structure
+	constant. Otherwise it makes the pointer itself constant, the
+	equivalent of "AjOStr* const". We fixed this by changing AjPStr to
+	be a #define of AjOStr*. This has the advantages that most code is
+	unaffected and that const now works as expected. The only code
+	changes we needed are lines with multiple AjPStr definitions
+	(which is anyway deprecated), for example "AjPStr astr, bstr"
+	which clearly fail when you think about the #define (atr is an
+	AjPStr, but btr is now an AjOStr and will give strange compiler
+	errors). We may change this again to define a separate const data
+	type for each strucyt, but probably the #define is a good solution
+	and we expect to stay with it.
+	
+	PCRE is now the library of choice for regular expressions. This
+	allows the full Perl regular expression syntax, and was very easy
+	to integrate. Regular expressions are used internally for parsing
+	and for manipulating strings such as fiel ane directory names, and
+	also for matching by programs such as dreg and preg.
+
+	The previous Henry Spencer library functions are renamed from
+	ajReg to ajHsReg. The Posix version of the Henry Spencer library
+	remains available as ajPosReg but may be removed as it was not
+	used by the EMBOSS distribution, and PCRE can provide the same or
+	higher functionality.
+
+	acdpretty now writes the name of the output file to standard
+	output. For example "Created seqret.acdpretty".
+
+	The ACD qualifiers -acdpretty -acdtable and -acdlog are
+	removed. Programs acdpretty and acdtable do the first two tasks
+	(in the same way as before). To turn on the acdlog file, use
+	environment variable EMBOSS_ACDLOG.
+	
+	Graphs can now use "-graph data" to produce files compatible with
+	the Staden package's spin2 and spin GUIs. This makes some ACD
+	options obsolete, especially the various -data and -outfile
+	combinations. Banana already wrote an output file which caused
+	some confusion in these options. The outfile and the graph are
+	both produced by default, but have the nullok attribute and can be
+	turned off with -nooutfile or -nograph on the command line.
+
+	graph and xygraph output can now be optional - the ACD files can
+	have a nullok: "Y" attribute which allows -nograph on the command
+	line.
+	
+	In ACD files alternatives for protein and nucleotide input are
+	common. Added an automatic variable $(acdprotein) which is defined
+	as the calculated ".protein" attribute of the first input
+	sequence(s). The value will be "Y" or "N". Acdvalid will check
+	that this is how proteins are tested, so the original
+	"$(asequence.protein)" syntax will become obsolete. The intention is
+	that any wrappers can use this to make protein and nucleotide
+	versions of the ACD file, and in general to use only simple
+	boolean tests in calculated ACD values.
+
+	Added wait call to wait for a piped command to complete
+	before reading data (needed for listfile input with
+	many piped reads, for example getz calls from SRS databases.
+
 Version 2.7.1
 	Corrected Jemboss for displaying emma & prettyplot forms
 	Corrected display of recognition sequence for restrict -solofragment
