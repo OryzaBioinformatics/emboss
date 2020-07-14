@@ -15,19 +15,30 @@ required page Required section
 #
 # sub level (frame) sections
 # ==========================
+afeaturesection input First feature options
+bfeaturesection input Second feature options
+consensussection advanced Consensus section
 datasection output Data output section
 dendsection advanced Dendrogram options
 fastalignsection advanced Fast align options
+featuresection advanced Feature display options
+featurerelationsection input Feature relation options
 gapsection advanced Gap options
 htmlsection output Html section
+markupsection output Markup section
 matrixsection advanced Matrix options
 oligosinput advanced Internal oligo input
 oligosection advanced Internal oligo options
+profiletypesection advanced Profile type specific options
 primersection advanced Primer options
 primerweights advanced Primer penalty weights
 programsection advanced Program options
 productsection advanced Product options
 protalignsection advanced Protein align options
+remapsection advanced Restriction map options
+seqinsection input Sequence input options
 seqoptsection advanced Sequence options
 slowalignsection advanced Slow align options
+targetsection advanced Target options
 thermosection advanced Thermodynamic options
+vectorfilesection input Vector input options
