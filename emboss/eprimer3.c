@@ -33,7 +33,8 @@ static FILE * eprimer3_start_write(int fd);
 static void eprimer3_write(AjPStr str, FILE *stream);
 static void eprimer3_end_write(FILE *stream);
 static AjPStr eprimer3_read(int fd);
-static void eprimer3_send_range(FILE * stream, char * tag, AjPRange value);
+static void eprimer3_send_range(FILE * stream, char * tag, AjPRange value, 
+	ajint begin);
 static void eprimer3_send_range2(FILE * stream, char * tag, AjPRange value);
 static void eprimer3_send_int(FILE * stream, char * tag, ajint value);
 static void eprimer3_send_float(FILE * stream, char * tag, float value);
@@ -42,13 +43,14 @@ static void eprimer3_send_string(FILE * stream, char * tag, AjPStr value);
 static void eprimer3_send_stringC(FILE * stream, char * tag,
 				  const char * value);
 static void eprimer3_send_end(FILE * stream);
-static void eprimer3_report (AjPFile outfile, AjPStr output, ajint numreturn);
+static void eprimer3_report (AjPFile outfile, AjPStr output, 
+		ajint numreturn, ajint begin);
 static void eprimer3_output_report(AjPFile outfile, AjPTable table,
-	ajint numreturn);
+	ajint numreturn, ajint begin);
 static AjPStr eprimer3_tableget(char * key1, ajint number, char *key2,
 	AjPTable table);
 static void eprimer3_write_primer(AjPFile outfile, char *tag, AjPStr pos,
-	AjPStr tm, AjPStr gc, AjPStr seq, AjBool rev);
+	AjPStr tm, AjPStr gc, AjPStr seq, AjBool rev, ajint begin);
 
 
 /* @prog eprimer3 *************************************************************
@@ -162,8 +164,8 @@ int main(int argc, char **argv, char **env)
   AjPStr    result = NULL;
   AjPStr    strand = NULL;
   AjPStr    substr = NULL;
-  AjPSeq    seq = NULL;
-  ajint     begin;
+  AjPSeq    seq    = NULL;
+  ajint     begin  = 0;
   ajint     end;
   FILE *    stream;
   AjPStr    taskstr = NULL;
@@ -426,13 +428,13 @@ int main(int argc, char **argv, char **env)
 
 	while(ajSeqallNext(sequence, &seq))
 	{
-            begin = ajSeqallBegin(sequence);
-            end   = ajSeqallEnd(sequence);
+            begin = ajSeqallBegin(sequence) - 1;
+            end   = ajSeqallEnd(sequence) - 1;
 
             strand = ajSeqStrCopy(seq);
 
             ajStrToUpper(&strand);
-            ajStrAssSubC(&substr,ajStrStr(strand), begin-1, end-1);
+            ajStrAssSubC(&substr,ajStrStr(strand), begin, end);
 
 /* send flags to turn on using optimal product size */
 	   eprimer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_GT", 0.05);
@@ -448,16 +450,16 @@ int main(int argc, char **argv, char **env)
               eprimer3_send_string(stream, "PRIMER_SEQUENCE_ID",
 				   ajSeqGetName(seq));
             }
-            eprimer3_send_range(stream, "INCLUDED_REGION", included_region);
-	    eprimer3_send_range(stream, "TARGET", target);
-	    eprimer3_send_range(stream, "EXCLUDED_REGION", excluded_region);
+            eprimer3_send_range(stream, "INCLUDED_REGION", included_region, begin);
+	    eprimer3_send_range(stream, "TARGET", target, begin);
+	    eprimer3_send_range(stream, "EXCLUDED_REGION", excluded_region, begin);
 	    eprimer3_send_string(stream, "PRIMER_LEFT_INPUT", left_input);
 	    eprimer3_send_string(stream, "PRIMER_RIGHT_INPUT", right_input);
 
 /* send primer3 Internal Oligo "Sequence" parameters */
             eprimer3_send_range(stream,
 				"PRIMER_INTERNAL_OLIGO_EXCLUDED_REGION",
-				internal_oligo_excluded_region);
+				internal_oligo_excluded_region, begin);
 	    eprimer3_send_string(stream, "PRIMER_INTERNAL_OLIGO_INPUT",
 				 internal_oligo_input);
 
@@ -473,7 +475,7 @@ int main(int argc, char **argv, char **env)
 
         result = eprimer3_read(pipefrom[0]);
 
-       	eprimer3_report (outfile, result, num_return);
+       	eprimer3_report (outfile, result, num_return, begin);
     }
 
 /* tidy up */
@@ -535,7 +537,6 @@ static void eprimer3_send_end(FILE * stream)
   fputs( "=\n", stream );
 }
 
-/* display ranges as 'start,length start2,length2' */
 /* @funcstatic eprimer3_send_range ********************************************
 **
 ** Write range data to primer3_core as 'start,length start2,length2,etc'
@@ -543,10 +544,12 @@ static void eprimer3_send_end(FILE * stream)
 ** @param [r] stream [FILE *] File handle
 ** @param [r] tag [char *] Tag of primer3 data type
 ** @param [r] value [AjPRange] Ranges to write
+** @param [r] begin [ajint] Start position of subsequence (-sbegin)
 ** @return [void]
 **
 ******************************************************************************/
-static void eprimer3_send_range(FILE * stream, char * tag, AjPRange value)
+static void eprimer3_send_range(FILE * stream, char * tag, AjPRange value, 
+	ajint begin)
 {
 
   AjPStr str=ajStrNew();
@@ -559,6 +562,8 @@ static void eprimer3_send_range(FILE * stream, char * tag, AjPRange value)
       ajStrClear(&str);
       for (n=0; n < ajRangeNumber(value); n++) {
           ajRangeValues(value, n, &start, &end);
+          start -= begin;
+          end -= begin;
           (void) ajFmtPrintS(&str, "%d,%d ", start, end-start+1);
           eprimer3_write(str, stream);
 	  ajStrClear(&str);
@@ -771,10 +776,12 @@ static void eprimer3_end_write(FILE *stream)
 ** @param [r] outfile [AjPFile] Report outfile
 ** @param [r] output [AjPStr] Output from primer3_core
 ** @param [r] numreturn [ajint] Number of results to return for each sequence
+** @param [r] begin [ajint] Start position of subsequence (-sbegin)
 ** @return [void]
 **
 ******************************************************************************/
-static void eprimer3_report (AjPFile outfile, AjPStr output, ajint numreturn)
+static void eprimer3_report (AjPFile outfile, AjPStr output, 
+		ajint numreturn, ajint begin)
 {
 
   AjPStr line = NULL;
@@ -816,7 +823,7 @@ static void eprimer3_report (AjPFile outfile, AjPStr output, ajint numreturn)
 
       if (ajStrCmpC(line, "=") == 0) {
         gotsequenceid = AJFALSE;
-        eprimer3_output_report(outfile, table, numreturn);
+        eprimer3_output_report(outfile, table, numreturn, begin);
         ajStrTableFree(&table);
         continue;
       }
@@ -857,11 +864,12 @@ resulting primer are interleaved */
 ** @param [r] outfile [AjPFile] Report outfile
 ** @param [r] table [AjPTable] Table of tag/value result pairs
 ** @param [r] numreturn [ajint] Number of results to return for each sequence
+** @param [r] begin [ajint] Start position of subsequence (-sbegin)
 ** @return [void]
 **
 ******************************************************************************/
 static void eprimer3_output_report(AjPFile outfile, AjPTable table,
-	ajint numreturn)
+	ajint numreturn, ajint begin)
 {
   AjPStr key = NULL;
   AjPStr error = NULL;
@@ -979,7 +987,7 @@ PRIMER_PRODUCT_SIZE=137
     pos = eprimer3_tableget("PRIMER_LEFT", i, "", table);
     seq = eprimer3_tableget("PRIMER_LEFT", i, "SEQUENCE", table);
     eprimer3_write_primer(outfile, "FORWARD PRIMER",
-			  pos, tm, gc, seq, AJFALSE);
+			  pos, tm, gc, seq, AJFALSE, begin);
 
 
 /* right primer data */
@@ -987,7 +995,8 @@ PRIMER_PRODUCT_SIZE=137
     gc = eprimer3_tableget("PRIMER_RIGHT", i, "GC_PERCENT", table);
     pos = eprimer3_tableget("PRIMER_RIGHT", i, "", table);
     seq = eprimer3_tableget("PRIMER_RIGHT", i, "SEQUENCE", table);
-    eprimer3_write_primer(outfile, "REVERSE PRIMER", pos, tm, gc, seq, AJTRUE);
+    eprimer3_write_primer(outfile, "REVERSE PRIMER", 
+    			pos, tm, gc, seq, AJTRUE, begin);
 
 
 /* internal oligo data */
@@ -997,7 +1006,7 @@ PRIMER_PRODUCT_SIZE=137
     pos = eprimer3_tableget("PRIMER_INTERNAL_OLIGO", i, "", table);
     seq = eprimer3_tableget("PRIMER_INTERNAL_OLIGO", i, "SEQUENCE", table);
     eprimer3_write_primer(outfile, "INTERNAL OLIGO",
-			  pos, tm, gc, seq, AJFALSE);
+			  pos, tm, gc, seq, AJFALSE, begin);
 
     (void) ajFmtPrintF(outfile, "\n");
 
@@ -1057,12 +1066,13 @@ static AjPStr eprimer3_tableget(char *key1, ajint number, char *key2,
 ** @param [r] tm [AjPStr] Tm of primer
 ** @param [r] gc [AjPStr] GC% of primer
 ** @param [r] seq [AjPStr] Sequence of primer
-** @param [r] rev [AjBool] Sequence is reverse-complement
+** @param [r] rev [AjBool] Sequence is the reverse-complement primer
+** @param [r] begin [ajint] Start position of subsequence (-sbegin)
 ** @return [void]
 **
 ******************************************************************************/
 static void eprimer3_write_primer(AjPFile outfile, char *tag, AjPStr pos,
-	AjPStr tm, AjPStr gc, AjPStr seq, AjBool rev)
+	AjPStr tm, AjPStr gc, AjPStr seq, AjBool rev, ajint begin)
 {
 
   ajint startint;
@@ -1072,6 +1082,7 @@ static void eprimer3_write_primer(AjPFile outfile, char *tag, AjPStr pos,
   AjPStr start = NULL;
   ajint comma;
 
+
   if (pos != NULL) {
     ajStrToFloat(tm, &tmfloat);
     ajStrToFloat(gc, &gcfloat);
@@ -1079,6 +1090,7 @@ static void eprimer3_write_primer(AjPFile outfile, char *tag, AjPStr pos,
     ajStrAss(&start, pos);
     ajStrCut(&start, comma, ajStrLen(start)-1);
     ajStrToInt(start, &startint);
+    startint += begin;
     ajStrCut(&pos, 0, comma);
     ajStrToInt(pos, &lenint);
     if (rev) {
