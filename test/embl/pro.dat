@@ -576,7 +576,6 @@ SQ   Sequence 7477 BP; 1739 A; 1991 C; 2004 G; 1743 T; 0 other;
      actgatggcg acactgcgac gttcgctgac atgctgatga agccagcttc cggccagcgc      7440
      cagcccgccc atggtaacca ccggcagagc ggtcgac                               7477
 //
-
 ID   ECLACA     standard; DNA; PRO; 1832 BP.
 XX
 AC   X51872;
@@ -662,7 +661,6 @@ SQ   Sequence 1832 BP; 519 A; 510 C; 450 G; 353 T; 0 other;
      tggcgacact gcgacgttcg ctgacatgct gatgaagcca gcttccggcc agcgccagcc      1800
      cgcccatggt aaccaccggc agagcggtcg ac                                    1832
 //
-
 ID   ECLACI     standard; DNA; PRO; 1113 BP.
 XX
 AC   V00294;
@@ -730,7 +728,6 @@ SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
      gcgcccaata cgcaaaccgc ctctccccgc gcgttggccg attcattaat gcagctggca      1080
      cgacaggttt cccgactgga aagcgggcag tga                                   1113
 //
-
 ID   ECLACY     standard; DNA; PRO; 1500 BP.
 XX
 AC   V00295;
@@ -821,7 +818,6 @@ SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
      gcgacgctta tccgaccaac atatcataac ggagtgatcg cattgaacat gccaatgacc      1440
      gaaagaataa gagcaggcaa gctatttacc gatatgtgcg aaggcttacc ggaaaaaaga      1500
 //
-
 ID   ECLACZ     standard; DNA; PRO; 3078 BP.
 XX
 AC   V00296;
@@ -941,7 +937,6 @@ SQ   Sequence 3078 BP; 682 A; 841 C; 886 G; 669 T; 0 other;
      ccgtcagtat cggcggaatt ccagctgagc gccggtcgct accattacca gttggtctgg      3060
      tgtcaaaaat aataataa                                                    3078
 //
-
 ID   PAAMIB     standard; DNA; PRO; 1212 BP.
 XX
 AC   X77160;
@@ -1026,7 +1021,6 @@ SQ   Sequence 1212 BP; 193 A; 426 C; 403 G; 190 T; 0 other;
      ccgggcgacg ggaactgcac gatctacctg gcgagcctgg agcacgagcg ggttcgcttc      1200
      gtacggcgct ga                                                          1212
 //
-
 ID   PAAMIE     standard; DNA; PRO; 1065 BP.
 XX
 AC   M27612;
@@ -1092,7 +1086,6 @@ SQ   Sequence 1065 BP; 220 A; 337 C; 343 G; 165 T; 0 other;
      gagaaggcgc gcgacaatgt cgagcgactg acccgctcga ccaccggcgt ggcgcaatgc      1020
      ccggtcggcc ggctgcccta tgagggactg gagaaggaag cctga                      1065
 //
-
 ID   PAAMIR     standard; DNA; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
@@ -1237,7 +1230,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
      ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
      cctcgag                                                                2167
 //
-
 ID   PAAMIS     standard; DNA; PRO; 1130 BP.
 XX
 AC   X77161;
@@ -1317,4 +1309,3 @@ SQ   Sequence 1130 BP; 167 A; 335 C; 377 G; 251 T; 0 other;
      ggcagccgtc tggcgcgcgg tatggcgtgt cgggagaaat ccgcagtcct tggcggcagg      1080
      cgatgcgcag gcaggaagga cgcatcgttc agccaatcta cgccgtcgac                 1130
 //
-
