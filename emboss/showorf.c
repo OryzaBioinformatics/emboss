@@ -130,7 +130,7 @@ int main(int argc, char **argv)
     substr = ajStrNew();
     ajStrAssSubC(&substr,ajSeqChar(a),beg-1,end-1);
     len = ajStrLen(substr);
-
+    
     revstr = ajStrNewC(ajStrStr(substr));
     ajSeqReverseStr(&revstr);
 
@@ -259,9 +259,14 @@ static void showorf_DoTrans(const AjPStr s, const AjPStr r, ajint n, ajint len,
 	    continue;
 	}
 
-	tri[0] = p[i];
-	tri[1] = p[i+1];
-	tri[2] = p[i+2];
+	tri[0] = (char)toupper((int)p[i]);
+	tri[1] = (char)toupper((int)p[i+1]);
+	tri[2] = (char)toupper((int)p[i+2]);
+	if(!strcmp(tri,"NNN"))
+	{
+	    q[i] = 'X';
+	    continue;
+	}
 	idx = ajCodIndexC(tri);
 	if(codon->aa[idx]==27)
 	    q[i] = '*';

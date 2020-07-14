@@ -166,7 +166,7 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end,
     char tri[4];
     ajint idx;
 
-    tri[3]='0';
+    tri[3]='\0';
 
     ajStrToUpper(s);
 
@@ -208,7 +208,7 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end,
 	    q[i] = ' ';
 	    continue;
 	}
-	tri[0]=p[i];
+	tri[0]=toupper((int)p[i]);
 	if(!p[i+1] || isupper((ajint)p[i+1]) || !p[i+2] ||
 	   isupper((ajint)p[i+2]))
 	{
@@ -220,13 +220,20 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end,
 	    i += 2;
 	    continue;
 	}
-	tri[1] = p[i+1];
-	tri[2] = p[i+2];
-	idx = ajCodIndexC(tri);
-	if(codon->aa[idx]==27)
-	    c = '*';
+	tri[1] = toupper((int)p[i+1]);
+	tri[2] = toupper((int)p[i+2]);
+	
+	if(!strcmp(tri,"NNN"))
+	    c = 'X';
 	else
-	    c = (char)(codon->aa[idx]+'A');
+	{
+	    idx = ajCodIndexC(tri);
+	    if(codon->aa[idx]==27)
+		c = '*';
+	    else
+		c = (char)(codon->aa[idx]+'A');
+	}
+	
 	q[i] = c;
 	q[i+1] = q[i+2] = ' ';
 	i += 2;
