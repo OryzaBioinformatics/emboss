@@ -6,7 +6,7 @@ appl: datafile [
 section: advanced [ info: "advanced Section" type: page ]
 
 datafile: pepdatafile  [
-  optional: "Y"
+  additional: "Y"
   information: "Aaindex database file"
   directory: "AAINDEX"
   default: "Enakai.dat"

@@ -13,8 +13,8 @@ endsection: input
 
 section: output [ info: "Output section" type: "page" ]
 
-string: testA [ required: Y info: "Asequence end $(asequence.send)" ]
+string: testA [ standard: Y info: "Asequence end $(asequence.send)" ]
 
-string: testb [ required: Y info: "Bsequence end $(bsequence.send)" ]
+string: testb [ standard: Y info: "Bsequence end $(bsequence.send)" ]
 
 endsection: output

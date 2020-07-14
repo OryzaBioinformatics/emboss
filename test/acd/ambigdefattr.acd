@@ -1,8 +1,5 @@
-# ACD file for QA testing - missing the application definition
+# ACD file for QA testing - default/documentation ambiguity
 #
-appl: noleftq [ doc: "testing" group: "testing" ]
+appl: ambigdefattr [ std: N d: "testing" group: "testing" ]
 
 sequence: sequence [ param: Y ]
-
-outfile: outtest [ o: "ext"  prompt: "Some text" ]
-

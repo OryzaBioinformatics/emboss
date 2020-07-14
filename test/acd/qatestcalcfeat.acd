@@ -16,43 +16,43 @@ features: test [ param: Y ]
 #string: test [ param: Y info: "String" ]
 
 string: testflength [
-	 required: "Y"
+	 standard: "Y"
 	 info: "FLength"
 	 default: "$(test.flength)"
 ]
 
 string: testfname [
-	 required: "Y"
+	 standard: "Y"
 	 info: "FName"
 	 default: "$(test.fname)"
 ]
 
 string: testfbegin [
-	 required: "Y"
+	 standard: "Y"
 	 info: "FBegin"
 	 default: "$(test.fbegin)"
 ]
 
 string: testfend [
-	 required: "Y"
+	 standard: "Y"
 	 info: "FEnd"
 	 default: "$(test.fend)"
 ]
 
 string: testfprotein [
-	 required: "Y"
+	 standard: "Y"
 	 info: "FProtein"
 	 default: "$(test.fprotein)"
 ]
 
 string: testfnucleic [
-	 required: "Y"
+	 standard: "Y"
 	 info: "FNucleic"
 	 default: "$(test.fnucleic)"
 ]
 
 string: testfsize [
-	 required: "Y"
+	 standard: "Y"
 	 info: "FSize"
 	 default: "$(test.fsize)"
 ]

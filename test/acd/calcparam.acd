@@ -13,9 +13,9 @@ int: aint [ prompt: "first integer" ]
 
 int: bint [ prompt: "second integer" def: 57 ]
 
-string: testalen [ required: Y info: "asequence length $(asequence.length)" ]
+string: testalen [ standard: Y info: "asequence length $(asequence.length)" ]
 
-string: testblen [ required: "@(!$(aint))" info: "bsequence length $(bsequence.length)" ]
+string: testblen [ standard: "@(!$(aint))" info: "bsequence length $(bsequence.length)" ]
 
 string: outdir [ info: "output directory" ]
 

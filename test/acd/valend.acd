@@ -2,5 +2,5 @@
 #
 appl: noleftq [ doc: "testing" group: "testing" ]
 
-outfile: outtest [ required: Y prompt: "Some text"
+outfile: outtest [ standard: Y prompt: "Some text"
 

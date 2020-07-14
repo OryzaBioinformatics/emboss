@@ -13,9 +13,9 @@ endsection: input
 
 section: output [ info: "Output section" type: "page" ]
 
-string: testa [ required: Y info: "Asequence end $(asequence.end)" ]
+string: testa [ standard: Y info: "Asequence end $(asequence.end)" ]
 
-string: testb [ required: Y info: "Bsequence end $(bsequence.end)" ]
+string: testb [ standard: Y info: "Bsequence end $(bsequence.end)" ]
 
 string: testc [ info: "just another test" ]
 

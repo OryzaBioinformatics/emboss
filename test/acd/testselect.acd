@@ -6,7 +6,7 @@ appl: testselect [ doc: "testing" group: "testing" ]
 section: input [ info: "Input section" type: "page" ]
 
 select: test [
-      required: Y
+      standard: Y
       values: "one;two;three;four;five"
       info: "select value"
       max: 3

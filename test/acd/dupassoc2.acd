@@ -6,5 +6,5 @@ bool: mybool sbegin [ ]
 
 sequence: sequence [ param: Y ]
 
-outfile: outtest [ required: Y prompt: "Some text" ]
+outfile: outtest [ standard: Y prompt: "Some text" ]
 

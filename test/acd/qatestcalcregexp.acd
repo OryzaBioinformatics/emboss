@@ -6,7 +6,7 @@ appl: qatestcalcregexp [ groups: "test" doc: "ACD file for QA testing" ]
 regexp: test [ param: Y info: "Regular expression" ]
 
 string: testlength [
-	 required: "Y"
+	 standard: "Y"
 	 info: "Length"
 	 default: "$(test.length)"
 ]

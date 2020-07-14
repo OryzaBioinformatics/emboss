@@ -5,6 +5,6 @@ appl: testarray [ doc: "testing" group: "testing" ]
 
 section: advanced [ info: "Advanced section" type: "page" ]
 
-array: numlist [ required: Y info: "array with size zero" size: 0 ]
+array: numlist [ standard: Y info: "array with size zero" size: 0 ]
 
 endsection: advanced
