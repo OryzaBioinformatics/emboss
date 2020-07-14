@@ -8515,3 +8515,203 @@ SQ   SEQUENCE   269 AA;  28526 MW;  BA204D82FB26352E CRC64;
      LLAIDYTGCG INPARSFGSA VITHNFSNHW IFWVGPFIGG ALAVLIYDFI LAPRSSDLTD
      RVKVWTSGQV EEYDLDADDI NSRVEMKPK
 //
+ID   IFNA2_HUMAN    STANDARD;      PRT;   188 AA.
+AC   P01563; P01564; Q14606; Q96KI6;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   21-JUL-1986, sequence version 1.
+DT   27-JUN-2006, entry version 72.
+DE   Interferon alpha-2 precursor (Interferon alpha-A) (LeIF A).
+GN   Name=IFNA2;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=81052322; PubMed=6159538; DOI=10.1038/287411a0;
+RA   Goeddel D.V., Yelverton E., Ullrich A., Heyneker H.L., Miozzari G.,
+RA   Holmes W., Seeburg P.H., Dull T.J., May L., Stebbing N., Crea R.,
+RA   Maeda S., McCandliss R., Sloma A., Tabor J.M., Gross M.,
+RA   Familletti P.C., Pestka S.;
+RT   "Human leukocyte interferon produced by E. coli is biologically
+RT   active.";
+RL   Nature 287:411-416(1980).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=81148795; PubMed=6163083; DOI=10.1038/290020a0;
+RA   Goeddel D.V., Leung D.W., Dull T.J., Gross M., Lawn R.M.,
+RA   McCandliss R., Seeburg P.H., Ullrich A., Yelverton E., Gray P.W.;
+RT   "The structure of eight distinct cloned human leukocyte interferon
+RT   cDNAs.";
+RL   Nature 290:20-26(1981).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=82060261; PubMed=6170983;
+RA   Lawn R.M., Gross M., Houck C.M., Franke A.E., Gray P.V., Goeddel D.V.;
+RT   "DNA sequence of a major human leukocyte interferon gene.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 78:5435-5439(1981).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE.
+RC   TISSUE=Bone marrow tumor;
+RX   MEDLINE=86069501; PubMed=3906813;
+RA   Oliver G., Balbas P., Valle F., Soberon X., Bolivar F.;
+RT   "Cloning of human leukocyte interferon cDNA and a strategy for its
+RT   production in E. coli.";
+RL   Rev. Latinoam. Microbiol. 27:141-150(1985).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE.
+RC   TISSUE=Placenta;
+RX   MEDLINE=98357449; PubMed=9694076;
+RA   Austruy E., Bagnis C., Carbuccia N., Maroc C., Birg F., Dubreuil P.,
+RA   Mannoni P., Chabannon C.;
+RT   "A defective retroviral vector encoding human interferon alpha 2 can
+RT   transduce human leukemic cell lines.";
+RL   Cancer Gene Ther. 5:247-256(1998).
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE OF 7-188.
+RX   MEDLINE=81015442; PubMed=6158094;
+RA   Streuli M., Nagata S., Weissmann C.;
+RT   "At least three human type alpha interferons: structure of alpha 2.";
+RL   Science 209:1343-1347(1980).
+RN   [7]
+RP   NUCLEOTIDE SEQUENCE OF 24-188.
+RX   MEDLINE=83299241; PubMed=6310510;
+RA   Weber H., Weissmann C.;
+RT   "Formation of genes coding for hybrid proteins by recombination
+RT   between related, cloned genes in E. coli.";
+RL   Nucleic Acids Res. 11:5661-5669(1983).
+RN   [8]
+RP   PROTEIN SEQUENCE OF 24-112 AND 136-188.
+RX   MEDLINE=81052321; PubMed=6159537; DOI=10.1038/287408a0;
+RA   Allen G., Fantes K.H.;
+RT   "A family of structural genes for human lymphoblastoid (leukocyte-
+RT   type) interferon.";
+RL   Nature 287:408-411(1980).
+RN   [9]
+RP   PROTEIN SEQUENCE OF 24-58.
+RX   MEDLINE=98087498; PubMed=9425112;
+RA   Nyman T.A., Toeloe H., Parkkinen J., Kalkkinen N.;
+RT   "Identification of nine interferon-alpha subtypes produced by Sendai
+RT   virus-induced human peripheral blood leucocytes.";
+RL   Biochem. J. 329:295-302(1998).
+RN   [10]
+RP   DISULFIDE BONDS.
+RX   MEDLINE=81123083; PubMed=6162107; DOI=10.1038/289606a0;
+RA   Wetzel R.;
+RT   "Assignment of the disulphide bonds of leukocyte interferon.";
+RL   Nature 289:606-607(1981).
+RN   [11]
+RP   GLYCOSYLATION AT THR-129, AND VARIANTS ALPHA-2B AND ALPHA-2C.
+RX   MEDLINE=91264809; PubMed=2049076;
+RA   Adolf G.R., Kalsner I., Ahorn H., Maurer-Fogy I., Cantell K.;
+RT   "Natural human interferon-alpha 2 is O-glycosylated.";
+RL   Biochem. J. 276:511-518(1991).
+RN   [12]
+RP   POLYMORPHISM.
+RX   MEDLINE=95353982; PubMed=7627809;
+RA   Lee N., Ni D., Brissette R., Chou M., Hussain M., Gill D.S.,
+RA   Liao M.-J., Testa D.;
+RT   "Interferon-alpha 2 variants in the human genome.";
+RL   J. Interferon Cytokine Res. 15:341-349(1995).
+RN   [13]
+RP   3D-STRUCTURE MODELING.
+RX   MEDLINE=94052087; PubMed=8234245; DOI=10.1002/prot.340170109;
+RA   Murgolo N.J., Windsor W.T., Hruza A., Reichert P., Tsarbopoulos A.,
+RA   Baldwin S., Huang E., Pramanik B., Ealick S., Trotta P.P.;
+RT   "A homology model of human interferon alpha-2.";
+RL   Proteins 17:62-74(1993).
+RN   [14]
+RP   X-RAY CRYSTALLOGRAPHY (2.9 ANGSTROMS).
+RX   MEDLINE=97148339; PubMed=8994971; DOI=10.1016/S0969-2126(96)00152-9;
+RA   Radhakrishnan R., Walter L.J., Hruza A., Reichert P., Trotta P.P.,
+RA   Nagabhushan T.L., Walter M.R.;
+RT   "Zinc mediated dimer of human interferon-alpha 2b revealed by X-ray
+RT   crystallography.";
+RL   Structure 4:1453-1463(1996).
+RN   [15]
+RP   STRUCTURE BY NMR.
+RX   MEDLINE=98118493; PubMed=9417943; DOI=10.1006/jmbi.1997.1396;
+RA   Klaus W., Gsell B., Labhardt A.M., Wipf B., Senn H.;
+RT   "The three-dimensional high resolution structure of human interferon
+RT   alpha-2a determined by heteronuclear NMR spectroscopy in solution.";
+RL   J. Mol. Biol. 274:661-675(1997).
+CC   -!- FUNCTION: Produced by macrophages, IFN-alpha have antiviral
+CC       activities. Interferon stimulates the production of two enzymes: a
+CC       protein kinase and an oligoadenylate synthetase.
+CC   -!- SUBCELLULAR LOCATION: Secreted protein.
+CC   -!- POLYMORPHISM: Three forms exist; alpha-2a (shown here), alpha-2b
+CC       and alpha-2c.
+CC   -!- PHARMACEUTICAL: Available under the names Roferon-A (Roche) or
+CC       Intron-A (Schering-Plough). Used as an anticancer drug for its
+CC       antiproliferative activity.
+CC   -!- SIMILARITY: Belongs to the alpha/beta interferon family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; J00207; AAB59402.1; -; Genomic_DNA.
+DR   EMBL; V00544; CAA23805.1; -; mRNA.
+DR   EMBL; V00548; CAA23809.1; -; mRNA.
+DR   EMBL; V00549; CAA23810.1; -; mRNA.
+DR   EMBL; Y11834; CAA72532.1; -; Genomic_DNA.
+DR   EMBL; M54886; AAA59181.1; -; mRNA.
+DR   EMBL; M29883; AAA52715.1; -; Genomic_DNA.
+DR   EMBL; A04970; CAA00410.1; -; Unassigned_DNA.
+DR   PIR; A93234; IVHUA2.
+DR   PIR; I78570; I78570.
+DR   PDB; 1ITF; NMR; @=24-188.
+DR   PDB; 1RH2; X-ray; A/B/C/D/E/F=24-188.
+DR   PDB; 2HIE; Model; @=24-188.
+DR   GlycoSuiteDB; P01563; -.
+DR   Ensembl; ENSG00000188379; Homo sapiens.
+DR   HGNC; HGNC:5423; IFNA2.
+DR   MIM; 147562; gene.
+DR   LinkHub; P01563; -.
+DR   RZPD-ProtExp; A0813; -.
+DR   RZPD-ProtExp; IOH35221; -.
+DR   RZPD-ProtExp; RZPDo834E0933; -.
+DR   GO; GO:0005132; F:interferon-alpha/beta receptor binding; TAS.
+DR   GO; GO:0007166; P:cell surface receptor linked signal transdu...; TAS.
+DR   GO; GO:0007267; P:cell-cell signaling; TAS.
+DR   GO; GO:0006917; P:induction of apoptosis; TAS.
+DR   GO; GO:0006954; P:inflammatory response; TAS.
+DR   InterPro; IPR009079; 4_helix_cytokine.
+DR   InterPro; IPR000471; Interferon_abd.
+DR   PANTHER; PTHR11691; Interferon_abd; 1.
+DR   Pfam; PF00143; Interferon; 1.
+DR   PRINTS; PR00266; INTERFERONAB.
+DR   ProDom; PD000550; Interferon_abd; 1.
+DR   SMART; SM00076; IFabd; 1.
+DR   PROSITE; PS00252; INTERFERON_A_B_D; 1.
+KW   3D-structure; Antiviral defense; Cytokine; Direct protein sequencing;
+KW   Glycoprotein; Pharmaceutical; Polymorphism; Signal.
+FT   SIGNAL        1     23
+FT   CHAIN        24    188       Interferon alpha-2.
+FT                                /FTId=PRO_0000016360.
+FT   CARBOHYD    129    129       O-linked (GalNAc...).
+FT                                /FTId=CAR_000049.
+FT   DISULFID     24    121
+FT   DISULFID     52    161
+FT   VARIANT      46     46       K -> R (in alpha-2B and alpha-2C).
+FT                                /FTId=VAR_004012.
+FT   VARIANT      57     57       H -> R (in alpha-2C).
+FT                                /FTId=VAR_013001.
+FT   HELIX        33     44
+FT   TURN         49     54
+FT   HELIX        63     66
+FT   HELIX        76     91
+FT   HELIX        93     98
+FT   HELIX       101    123
+FT   TURN        126    127
+FT   TURN        133    133
+FT   HELIX       134    155
+FT   TURN        156    157
+FT   HELIX       160    178
+FT   TURN        179    182
+SQ   SEQUENCE   188 AA;  21550 MW;  101DD21D394CBF97 CRC64;
+     MALTFALLVA LLVLSCKSSC SVGCDLPQTH SLGSRRTLML LAQMRKISLF SCLKDRHDFG
+     FPQEEFGNQF QKAETIPVLH EMIQQIFNLF STKDSSAAWD ETLLDKFYTE LYQQLNDLEA
+     CVIQGVGVTE TPLMKEDSIL AVRKYFQRIT LYLKEKKYSP CAWEVVRAEI MRSFSLSTNL
+     QESLRSKE
+//
