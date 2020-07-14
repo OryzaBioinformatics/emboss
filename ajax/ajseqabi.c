@@ -339,7 +339,7 @@ void ajSeqABIGetSignal(AjPFile fp,ajlong fwo_,
 float ajSeqABIGetBaseSpace(AjPFile fp)
 {
 
-    float spacing;
+    float spacing = 0.;
     ajlong SPACINGtag;
 
     SPACINGtag = ((ajlong) ((((('S'<<8)+'P')<<8)+'A')<<8)+'C');

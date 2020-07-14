@@ -529,5 +529,7 @@ static AjBool abiview_drawbase(const char* res, const AjPStr baseN)
 
 static ajint abiview_getResColour(char B)
 {
-    return ((B)=='C'?RED:(B)=='A'?GREEN:(B)=='G'?BLUE:(B)=='T'?BLACK:YELLOW);
+  /*return ((B)=='C'?RED:(B)=='A'?GREEN:(B)=='G'?BLUE:(B)=='T'?BLACK:YELLOW);*/
+/* use ABI standard colours - Clemens Broger, Roche */
+    return ((B)=='C'?BLUE:(B)=='A'?GREEN:(B)=='G'?BLACK:(B)=='T'?RED:YELLOW);
 }
