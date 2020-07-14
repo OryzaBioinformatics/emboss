@@ -1007,6 +1007,8 @@ AcdOAttr acdAttrAppl[] =
 	 "Suitability for launching in a GUI"},
     {"batch", VT_STR, "",
 	 "Suitability for running in batch"},
+    {"embassy", VT_STR, "",
+         "EMBASSY package name"},
     {"external", VT_STR, "",
 	 "Third party tool(s) required by this program"},
     {"cpu", VT_STR, "",
