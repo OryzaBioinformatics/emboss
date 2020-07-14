@@ -130,6 +130,20 @@ Command line arguments
                                   Nosort (don't sort - use input order) or
                                   join coding regions together and leave other
                                   features in the input order
+   -annotation         range      Regions to annotate by marking.
+                                  If this is left blank, then no annotation is
+                                  added.
+                                  A set of regions is specified by a set of
+                                  pairs of positions followed by optional
+                                  text.
+                                  The positions are integers.
+                                  They are followed by any text (but not
+                                  digits when on the command-line).
+                                  Examples of region specifications are:
+                                  24-45 new domain 56-78 match to Mouse
+                                  1-100 First part 120-156 oligo
+                                  A file of ranges to annotate (one range per
+                                  line) can be specified as '@filename'.
 
    Advanced (Unprompted) qualifiers:
    -html               boolean    Use HTML formatting
@@ -210,8 +224,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -299,6 +313,14 @@ Command line arguments
    nosort (No sorting done)
    join   (Join coding regions together)
    start
+   -annotation Regions to annotate by marking. If this is left blank,
+   then no annotation is added. A set of regions is specified by a set of
+   pairs of positions followed by optional text. The positions are
+   integers. They are followed by any text (but not digits when on the
+   command-line). Examples of region specifications are: 24-45 new domain
+   56-78 match to Mouse 1-100 First part 120-156 oligo A file of ranges
+   to annotate (one range per line) can be specified as '@filename'.
+   Sequence range If this is left blank, then no annotation is added.
    Advanced (Unprompted) qualifiers Allowed values Default
    -html Use HTML formatting Boolean value Yes/No No
    -[no]id Set this to be false if you do not wish to display the ID name
@@ -626,8 +648,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

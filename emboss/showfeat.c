@@ -25,23 +25,26 @@
 
 
 
-static void showfeat_ShowFeatSeq(AjPFile outfile, AjPSeq seq, ajint beg,
-				 ajint end, AjPStr matchsource,
-				 AjPStr matchtype, AjPStr matchtag,
-				 AjPStr matchvalue, AjPStr *sortlist,
+static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
+				 ajint end, const AjPStr matchsource,
+				 const AjPStr matchtype, const AjPStr matchtag,
+				 const AjPStr matchvalue,
+				 AjPStr const *sortlist,
 				 ajint width, AjBool collapse,
 				 AjBool forward, AjBool reverse,
 				 AjBool unknown, AjBool strand,
 				 AjBool source, AjBool position,
 				 AjBool type, AjBool tags, AjBool values, 
-				 AjBool stricttags);
+				 AjBool stricttags, const AjPRange annotation);
 
 static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
 			       ajint fend, ajint width, ajint beg, ajint end);
 
-static void showfeat_FeatOut(AjPFile outfile, AjPStr lineout, char strandout,
-			     AjPStr sourceout, AjPStr posout, AjPStr typeout,
-			     AjPStr tagsout, ajint width, AjBool strand,
+static void showfeat_FeatOut(AjPFile outfile, const AjPStr lineout,
+			     char strandout,
+			     const AjPStr sourceout, const AjPStr posout,
+			     const AjPStr typeout,
+			     const AjPStr tagsout, ajint width, AjBool strand,
 			     AjBool source, AjBool type, AjBool tags,
 			     AjBool position);
 
@@ -51,8 +54,10 @@ static ajint showfeat_CompareFeatType(const void * a, const void * b);
 
 static ajint showfeat_CompareFeatPos(const void * a, const void * b);
 
-static AjBool showfeat_MatchPatternTags(AjPFeature feat, AjPStr tpattern,
-					AjPStr vpattern, AjBool stricttags,
+static AjBool showfeat_MatchPatternTags(const AjPFeature feat,
+					const AjPStr tpattern,
+					const AjPStr vpattern,
+					AjBool stricttags,
 					AjPStr *tagstmp, AjBool values);
 static void showfeat_AddPos(AjPStr *posout, ajint start, ajint end);
 
@@ -92,7 +97,8 @@ int main(int argc, char **argv)
     AjBool tags;
     AjBool values;
     AjBool stricttags;
-
+    AjPRange annotation;
+    
     ajint i;
     ajint beg;
     ajint end;
@@ -123,7 +129,8 @@ int main(int argc, char **argv)
     tags        = ajAcdGetBool("tags");
     values      = ajAcdGetBool("values");
     stricttags  = ajAcdGetBool("stricttags");
-
+    annotation  = ajAcdGetRange("annotation"); 
+    
     while(ajSeqallNext(seqall, &seq))
     {
 	/* get begin and end positions */
@@ -148,7 +155,7 @@ int main(int argc, char **argv)
 	    else
 	    {
 		descriptionline = ajStrNew();
-		ajStrAss(&descriptionline, ajSeqGetDesc(seq));
+		ajStrAssS(&descriptionline, ajSeqGetDesc(seq));
 		ajStrWrap(&descriptionline, 80);
 		ajFmtPrintF(outfile, "%S\n", descriptionline);
 		ajStrDel(&descriptionline);
@@ -180,7 +187,8 @@ int main(int argc, char **argv)
 			     matchtype, matchtag, matchvalue,
 			     sortlist, width, collapse, forward,
 			     reverse, unknown, strand, source,
-			     position, type, tags, values, stricttags);
+			     position, type, tags, values, stricttags,
+			     annotation);
 
 	/* end the HTML PRE block */
 	if(html)
@@ -206,14 +214,14 @@ int main(int argc, char **argv)
 ** Show the sequence features using clunky ascii graphics
 **
 ** @param [u] outfile [AjPFile] output file
-** @param [r] seq [AjPSeq] sequence
+** @param [r] seq [const AjPSeq] sequence
 ** @param [r] beg [ajint] sequence start position
 ** @param [r] end [ajint] sequence end position
-** @param [r] matchsource [AjPStr] source pattern to display
-** @param [r] matchtype [AjPStr] type pattern to display
-** @param [r] matchtag [AjPStr] tag pattern to display
-** @param [r] matchvalue [AjPStr] tag's value pattern to display
-** @param [r] sortlist [AjPStr *] type of sorting of features to do
+** @param [r] matchsource [const AjPStr] source pattern to display
+** @param [r] matchtype [const AjPStr] type pattern to display
+** @param [r] matchtag [const AjPStr] tag pattern to display
+** @param [r] matchvalue [const AjPStr] tag's value pattern to display
+** @param [r] sortlist [AjPStr const *] type of sorting of features to do
 ** @param [r] width [ajint] width of line of features
 ** @param [r] collapse [AjBool] show all features on separate lines
 ** @param [r] forward [AjBool] show forward sense features
@@ -226,21 +234,23 @@ int main(int argc, char **argv)
 ** @param [r] tags [AjBool] show tags and values of feature
 ** @param [r] values [AjBool] show tag values of feature
 ** @param [r] stricttags [AjBool] only show those tags that
-**            match the specified patterns
+**                                match the specified patterns
+** @param [r] annotation [const AjPRange] annotation range object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void showfeat_ShowFeatSeq(AjPFile outfile, AjPSeq seq, ajint beg,
-				 ajint end, AjPStr matchsource,
-				 AjPStr matchtype, AjPStr matchtag,
-				 AjPStr matchvalue, AjPStr *sortlist,
+static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
+				 ajint end, const AjPStr matchsource,
+				 const AjPStr matchtype, const AjPStr matchtag,
+				 const AjPStr matchvalue,
+				 AjPStr const *sortlist,
 				 ajint width, AjBool collapse,
 				 AjBool forward, AjBool reverse,
 				 AjBool unknown, AjBool strand,
 				 AjBool source, AjBool position,
 				 AjBool type, AjBool tags, AjBool values, 
-				 AjBool stricttags)
+				 AjBool stricttags, const AjPRange annotation)
 {
     AjIList    iter = NULL ;
     AjPFeature gf   = NULL ;
@@ -253,6 +263,11 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, AjPSeq seq, ajint beg,
     AjPStr tagstmp   = NULL;
     AjPStr tagsout   = NULL;
     AjPStr posout    = NULL;
+
+    ajint  count;	/* annotation range count */
+    ajint  rstart;	/* annotation range start */
+    ajint  rend;	/* annotation range end */
+    AjPStr ann_text;	/* annotation range text */
 
     AjBool gotoutput = ajFalse;		 /* have a line to output */
 
@@ -288,7 +303,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, AjPSeq seq, ajint beg,
             join = ajTrue;
 	/* else - no sort */
 
-	iter = ajListIter(feat->Features) ;
+	iter = ajListIterRead(feat->Features) ;
 
 	while(ajListIterMore(iter))
 	{
@@ -358,8 +373,8 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, AjPSeq seq, ajint beg,
 		/* reset the strings for the new line */
 		ajStrClear(&lineout);
 		ajStrAppKI(&lineout, ' ', width);
-		ajStrAss(&sourceout, gf->Source);
-		ajStrAss(&typeout, gf->Type);
+		ajStrAssS(&sourceout, gf->Source);
+		ajStrAssS(&typeout, gf->Type);
 		strandout = gf->Strand;
 		ajStrClear(&tagsout);
 		ajStrClear(&posout);
@@ -396,7 +411,65 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, AjPSeq seq, ajint beg,
 			     typeout, tagsout, width, strand, source, type,
 			     tags, position);
 
-	ajListIterFree(iter) ;
+
+
+        /* 
+        ** Now do the annotation range object, if we have one
+        */
+        if (annotation && ajRangeNumber(annotation)) {
+            ann_text = ajStrNew();
+            gotoutput = ajFalse;
+            for(count = 0; count < ajRangeNumber(annotation); count++)
+            {
+                ajRangeValues(annotation, count, &rstart, &rend);
+
+	    /* check that the feature is within the range we wish to
+               display */
+	        if(beg+1 > rend || end+1 < rstart)
+		    continue;
+
+                /* get the annotation text */                 
+                ajRangeText(annotation, count, &ann_text);
+
+           /* don't start a new line if collapse and previous text is
+              the same */
+                if (!collapse || ajStrCmpCase(ann_text, typeout)) {
+		    if(gotoutput)
+                        showfeat_FeatOut(outfile, lineout, strandout,
+					 sourceout, posout,
+					 typeout, tagsout, width, strand,
+					 source, type, tags, position);
+
+		    /* reset the strings for the new line */
+		    ajStrClear(&lineout);
+		    ajStrAppKI(&lineout, ' ', width);
+		    ajStrAssC(&sourceout, "Annotation");
+                    ajStrAssS(&typeout, ann_text);
+		    strandout = '\0';
+		    ajStrClear(&tagsout);
+		    ajStrClear(&posout);
+		    /* something to output */
+		    gotoutput = ajTrue;
+		}
+
+	        /* add positions to posout */
+	        showfeat_AddPos(&posout, rstart, rend);
+
+	        /* write the feature on the line */
+	        showfeat_WriteFeat(lineout, strandout, rstart, rend, width,
+			       beg, end);
+	    }
+	    /* print out any last line */
+	    if(gotoutput)
+	        showfeat_FeatOut(outfile, lineout, strandout,
+				 sourceout, posout,
+				 typeout, tagsout, width, strand, source, type,
+				 tags, position);
+
+            ajStrDel(&ann_text);
+        }
+
+	ajListIterFree(&iter) ;
 
     }
 
@@ -447,28 +520,29 @@ static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
     for(i=pos1; i<pos2; i++)
 	if(i >= 0 && i < width)
 	    /* don't overwrite any characters except space */
-	    if(*(ajStrStr(line)+i) == ' ')
-		*(ajStrStr(line)+i) = '-';
+	    if(ajStrChar(line,i) == ' ')
+		ajStrReplaceK(&line, i, '-', 1);
 
     /* write the end characters */
     if(pos1 >= 0 && pos1 < width)
     {
 	if(strand == '+')
-	    *(ajStrStr(line)+pos1) = '|';
+	    ajStrReplaceK(&line, pos1, '|', 1);
 	else if(strand == '-')
-	    *(ajStrStr(line)+pos1) = '<';
+	    ajStrReplaceK(&line, pos1, '<', 1);
 	else
-	    *(ajStrStr(line)+pos1) = '|';
+	    ajStrReplaceK(&line, pos1, '|', 1);
     }
 
     if(pos2 >= 0 && pos2 < width)
     {
 	if(strand == '+')
-	    *(ajStrStr(line)+pos2) = '>';
+	    ajStrReplaceK(&line, pos2, '>', 1);
 	else if(strand == '-')
-	    *(ajStrStr(line)+pos2) = '|';
+	    ajStrReplaceK(&line, pos2, '|', 1);
 	else
-	    *(ajStrStr(line)+pos2) = '|';
+	    ajStrReplaceK(&line, pos2, '|', 1);
+
     }
 
     return;
@@ -483,12 +557,12 @@ static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
 ** We guarantee to not have trailing whitespace at the end of a line.
 **
 ** @param [w] outfile [AjPFile] output file
-** @param [r] lineout [AjPStr] ASCII graphics line
+** @param [r] lineout [const AjPStr] ASCII graphics line
 ** @param [r] strandout [char] strand of feature
-** @param [r] sourceout [AjPStr] source of feature
-** @param [r] posout [AjPStr] positions of feature
-** @param [r] typeout [AjPStr] type of feature
-** @param [r] tagsout [AjPStr] tags string
+** @param [r] sourceout [const AjPStr] source of feature
+** @param [r] posout [const AjPStr] positions of feature
+** @param [r] typeout [const AjPStr] type of feature
+** @param [r] tagsout [const AjPStr] tags string
 ** @param [r] width [ajint] width of graphics lines
 ** @param [r] strand [AjBool] show strand of feature
 ** @param [r] source [AjBool] show source of feature
@@ -499,9 +573,11 @@ static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
 ** @@
 ******************************************************************************/
 
-static void showfeat_FeatOut(AjPFile outfile, AjPStr lineout, char strandout,
-			     AjPStr sourceout, AjPStr posout, AjPStr typeout,
-			     AjPStr tagsout, ajint width, AjBool strand,
+static void showfeat_FeatOut(AjPFile outfile,
+			     const AjPStr lineout, char strandout,
+			     const AjPStr sourceout, const AjPStr posout,
+			     const AjPStr typeout,
+			     const AjPStr tagsout, ajint width, AjBool strand,
 			     AjBool source, AjBool type, AjBool tags,
 			     AjBool position)
 {
@@ -720,20 +796,23 @@ static ajint showfeat_CompareFeatPos(const void * a, const void * b)
 ** Checks for a match of the tagpattern and valuepattern to at least one
 ** tag=value pair and returns the tag/value pairs ready for display in tagsout
 **
-** @param [r] feat [AjPFeature] Feature to process
-** @param [r] tpattern [AjPStr] tags pattern to match with
-** @param [r] vpattern [AjPStr] values pattern to match with
+** @param [r] feat [const AjPFeature] Feature to process
+** @param [r] tpattern [const AjPStr] tags pattern to match with
+** @param [r] vpattern [const AjPStr] values pattern to match with
 ** @param [r] stricttags [AjBool] remove any tag-value pairs that
 **                                don't match the patterns
-** @param [r] tagstmp [AjPStr *] tags out string
+** @param [w] tagstmp [AjPStr *] tags out string
 ** @param [r] values [AjBool] display values of tags
 **
 ** @return [AjBool] ajTrue = found a match
 ** @@
 ******************************************************************************/
 
-static AjBool showfeat_MatchPatternTags(AjPFeature feat, AjPStr tpattern,
-					AjPStr vpattern, AjBool stricttags, AjPStr *tagstmp, AjBool values)
+static AjBool showfeat_MatchPatternTags(const AjPFeature feat,
+					const AjPStr tpattern,
+					const AjPStr vpattern,
+					AjBool stricttags,
+					AjPStr *tagstmp, AjBool values)
 {
     AjIList titer;                      /* iterator for feat */
     static AjPStr tagnam = NULL;        /* tag structure */
@@ -825,7 +904,7 @@ static AjBool showfeat_MatchPatternTags(AjPFeature feat, AjPStr tpattern,
             }	
         }
     }
-    ajListIterFree(titer);
+    ajListIterFree(&titer);
 
      /*
      ** If no match, then clear the tagstmp string
@@ -843,7 +922,7 @@ static AjBool showfeat_MatchPatternTags(AjPFeature feat, AjPStr tpattern,
 **
 ** writes the positions to the positions string
 **
-** @param [r] posout [AjPStr *] position string
+** @param [w] posout [AjPStr *] position string
 ** @param [r] start [ajint] start position
 ** @param [r] end [ajint] end position
 **

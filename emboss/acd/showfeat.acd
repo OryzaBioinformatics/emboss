@@ -16,8 +16,8 @@ section: input [
 
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -35,6 +35,7 @@ section: advanced [
            If you wish to show more than one source, separate their names
            with the character '|', eg: \
            gene* | embl"
+    knowntype: "feature source list"
   ]
 
   string: matchtype  [
@@ -51,6 +52,7 @@ section: advanced [
            If you wish to show more than one type, separate their names with
            the character '|', eg: \
            *UTR | intron"
+    knowntype: "feature key list"
   ]
 
   string: matchtag  [
@@ -72,6 +74,7 @@ section: advanced [
            If you wish to show more than one tag, separate their names with
            the character '|', eg: \
            gene | label"
+    knowntype: "feature tag list"
   ]
 
   string: matchvalue  [
@@ -93,6 +96,7 @@ section: advanced [
            If you wish to show more than one tag value, separate their names
            with the character '|', eg: \
            pax* | 10"
+    knowntype: "feature tagvalue list"
   ]
 
   list: sort  [
@@ -111,6 +115,34 @@ section: advanced [
                   regions together and leave other features in the input
                   order"
   ]
+
+  range: annotation  [
+    additional: "Y"
+    default: ""
+    information: "Regions to mark (eg: 4-57 promoter region
+                  78-94 first exon)"
+    help: "Regions to annotate by marking. \
+           If this is left blank, then no annotation is added. \
+           A set of regions is specified by a set of pairs of positions
+           followed by optional text. \
+           The positions are integers. \
+           They are followed by any text (but not digits when on the
+           command-line). \
+           Examples of region specifications are: \
+           24-45 new domain 56-78 match to Mouse \
+           1-100 First part 120-156 oligo \
+           A file of ranges to annotate (one range per line) can be specified
+           as '@filename'."
+    expected: "If this is left blank, then no annotation is
+               added."
+  ]    
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
 
   boolean: html  [
     default: "N"
