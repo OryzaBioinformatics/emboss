@@ -1753,7 +1753,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=EMBOSS
- VERSION=2.7.0
+ VERSION=2.7.1
 
 
 cat >>confdefs.h <<_ACEOF
@@ -9802,7 +9802,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
 	  if test "$with_gnu_ld" = no; then
 	    archive_cmds_CXX='$CC -shared -nostdlib $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname ${wl}$soname ${wl}-update_registry ${wl}${objdir}/so_locations -o $lib'
 	  else
-	    archive_cmds_CXX='$CC -shared -nostdlib $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname ${wl}$soname `test -n "$verstring" && echo ${wl}-set_version ${wl}$verstring` -o $lib'
+	    archive_cmds_CXX='$CC -shared -nostdlib $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname ${wl}$soname -o $lib'
 	  fi
 	fi
 	link_all_deplibs_CXX=yes
