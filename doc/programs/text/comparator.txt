@@ -1,0 +1,184 @@
+
+                                comparator 
+
+
+
+Function
+
+   Compare contact scores of two sequence alignments
+
+Description
+
+   **************** EDIT HERE ****************
+
+Algorithm
+
+   **************** EDIT HERE ****************
+
+Usage
+
+   Under development, no final example yet
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-goldpairseqset]    seqset     pair of gold standard aligned aa sequences
+                                  to be substituted
+  [-testpairseqset]    seqset     pair of aligned aa sequences to be
+                                  substituted
+  [-contactscoringfile] matrixf    Matrix of scores for frequency of contacts
+                                  between specific amino acid residue types
+  [-cmaptemplate]      infile     contact map of template structure
+  [-scoringtrace]      outfile    scored vertical trace of template sequence
+                                  against both alignments
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-goldpairseqset" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-testpairseqset" associated qualifiers
+   -sbegin2            integer    Start of each sequence to be used
+   -send2              integer    End of each sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
+
+   "-scoringtrace" associated qualifiers
+   -odirectory5        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-goldpairseqset]
+   (Parameter 1) pair of gold standard aligned aa sequences to be
+   substituted Readable set of sequences contacttest/1hgxa0_1hmpa0.ali
+   [-testpairseqset]
+   (Parameter 2) pair of aligned aa sequences to be substituted Readable
+   set of sequences contacttest/1hgx_a_1hmp_a.fasta
+   [-contactscoringfile]
+   (Parameter 3) Matrix of scores for frequency of contacts between
+   specific amino acid residue types Comparison matrix file in EMBOSS
+   data path contactscores.dat
+   [-cmaptemplate]
+   (Parameter 4) contact map of template structure Input file 1hgx_a.con
+   [-scoringtrace]
+   (Parameter 5) scored vertical trace of template sequence against both
+   alignments Output file scored.trace
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   comparator reads any normal sequence USAs.
+
+   Under development, no example input file(s) yet
+
+Output file format
+
+   comparator outputs a graph to the specified graphics device. outputs a
+   report format file. The default format is ...
+
+   Under development, no example output file(s) yet
+
+Data files
+
+   **************** EDIT HERE ****************
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+     Program name                         Description
+   alignrunner      Align sequence pairs in a directory
+   contactalign     Damian Counsell's experimental 2.5-D alignment algorithm
+   esim4            Align an mRNA to a genomic DNA sequence
+   est2genome       Align EST and genomic DNA sequences
+   nawalign         Damian Counsell's NW implementation
+   nawalignrunner   Nawalign all sequence pairs in a directory
+   needle           Needleman-Wunsch global alignment
+   needlerunner     Needle all sequence pairs in a directory
+   scorer           Score alignments using structural alignments
+   scorerrunner     SCORER for ordered pairs of substituted seqs
+   stretcher        Finds the best global alignment between two sequences
+   substitute       Substitute matches into a template
+   substituterunner Run SUBSTITUTE on a directory of traces
+
+Author(s)
+
+   Damian Counsell (d.counsell © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None
