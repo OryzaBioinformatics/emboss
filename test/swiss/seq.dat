@@ -8263,3 +8263,255 @@ SQ   SEQUENCE   380 AA;  42530 MW;  113504F71027C07A CRC64;
      IGAFGNRAAL TPLSTMIPAV TAKIVSCIDP WVYAINHPRF RAEVQKRMKW LHLGEDARSS
      KSDTSSTATD RTVGNVSASA
 //
+ID   AQP1_HUMAN     STANDARD;      PRT;   269 AA.
+AC   P29972;
+DT   01-APR-1993 (Rel. 25, Created)
+DT   01-APR-1993 (Rel. 25, Last sequence update)
+DT   15-MAR-2004 (Rel. 43, Last annotation update)
+DE   Aquaporin-CHIP (Water channel protein for red blood cells and kidney
+DE   proximal tubule) (Aquaporin 1) (AQP-1) (Urine water channel).
+GN   AQP1 OR CHIP28.
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   SEQUENCE FROM N.A., AND PARTIAL SEQUENCE.
+RX   MEDLINE=92107900; PubMed=1722319;
+RA   Preston G.M., Agre P.;
+RT   "Isolation of the cDNA for erythrocyte integral membrane protein of
+RT   28 kilodaltons: member of an ancient channel family.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 88:11110-11114(1991).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE=93340184; PubMed=8340403;
+RA   Moon C., Preston G.M., Griffin C.A., Jabs E.W., Agre P.;
+RT   "The human aquaporin-CHIP gene. Structure, organization, and
+RT   chromosomal localization.";
+RL   J. Biol. Chem. 268:15772-15778(1993).
+RN   [3]
+RP   SEQUENCE FROM N.A.
+RC   TISSUE=Retinal pigment epithelium;
+RX   MEDLINE=96326579; PubMed=8703970;
+RA   Ruiz A.C., Bok D.;
+RT   "Characterization of the 3' UTR sequence encoded by the AQP-1 gene in
+RT   human retinal pigment epithelium.";
+RL   Biochim. Biophys. Acta 1282:174-178(1996).
+RN   [4]
+RP   SEQUENCE FROM N.A.
+RC   TISSUE=Uterus;
+RX   MEDLINE=94290349; PubMed=7517253;
+RA   Li X., Yu H., Koide S.S.;
+RT   "The water channel gene in human uterus.";
+RL   Biochem. Mol. Biol. Int. 32:371-377(1994).
+RN   [5]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE=22737999; PubMed=12853948;
+RA   Hillier L.W., Fulton R.S., Fulton L.A., Graves T.A., Pepin K.H.,
+RA   Wagner-McPherson C., Layman D., Maas J., Jaeger S., Walker R.,
+RA   Wylie K., Sekhon M., Becker M.C., O'Laughlin M.D., Schaller M.E.,
+RA   Fewell G.A., Delehaunty K.D., Miner T.L., Nash W.E., Cordes M., Du H.,
+RA   Sun H., Edwards J., Bradshaw-Cordum H., Ali J., Andrews S., Isak A.,
+RA   Vanbrunt A., Nguyen C., Du F., Lamar B., Courtney L., Kalicki J.,
+RA   Ozersky P., Bielicki L., Scott K., Holmes A., Harkins R., Harris A.,
+RA   Strong C.M., Hou S., Tomlinson C., Dauphin-Kohlberg S.,
+RA   Kozlowicz-Reilly A., Leonard S., Rohlfing T., Rock S.M.,
+RA   Tin-Wollam A.-M., Abbott A., Minx P., Maupin R., Strowmatt C.,
+RA   Latreille P., Miller N., Johnson D., Murray J., Woessner J.P.,
+RA   Wendl M.C., Yang S.-P., Schultz B.R., Wallis J.W., Spieth J.,
+RA   Bieri T.A., Nelson J.O., Berkowicz N., Wohldmann P.E., Cook L.L.,
+RA   Hickenbotham M.T., Eldred J., Williams D., Bedell J.A., Mardis E.R.,
+RA   Clifton S.W., Chissoe S.L., Marra M.A., Raymond C., Haugen E.,
+RA   Gillett W., Zhou Y., James R., Phelps K., Iadanoto S., Bubb K.,
+RA   Simms E., Levy R., Clendenning J., Kaul R., Kent W.J., Furey T.S.,
+RA   Baertsch R.A., Brent M.R., Keibler E., Flicek P., Bork P., Suyama M.,
+RA   Bailey J.A., Portnoy M.E., Torrents D., Chinwalla A.T., Gish W.R.,
+RA   Eddy S.R., McPherson J.D., Olson M.V., Eichler E.E., Green E.D.,
+RA   Waterston R.H., Wilson R.K.;
+RT   "The DNA sequence of human chromosome 7.";
+RL   Nature 424:157-164(2003).
+RN   [6]
+RP   FUNCTION.
+RX   MEDLINE=92229472; PubMed=1373524;
+RA   Preston G.M., Carroll T.P., Guggino W.B., Agre P.;
+RT   "Appearance of water channels in Xenopus oocytes expressing red cell
+RT   CHIP28 protein.";
+RL   Science 256:385-387(1992).
+RN   [7]
+RP   TARGET OF MERCURY INHIBITION.
+RX   MEDLINE=93106996; PubMed=7677994;
+RA   Preston G.M., Jung J.S., Guggino W.B., Agre P.;
+RT   "The mercury-sensitive residue at cysteine 189 in the CHIP28 water
+RT   channel.";
+RL   J. Biol. Chem. 268:17-20(1993).
+RN   [8]
+RP   TOPOLOGY.
+RX   MEDLINE=94124503; PubMed=7507481;
+RA   Preston G.M., Jung J.S., Guggino W.B., Agre P.;
+RT   "Membrane topology of aquaporin CHIP. Analysis of functional epitope-
+RT   scanning mutants by vectorial proteolysis.";
+RL   J. Biol. Chem. 269:1668-1673(1994).
+RN   [9]
+RP   STRUCTURE BY ELECTRON CRYO-MICROSCOPY.
+RX   MEDLINE=94313979; PubMed=7518771;
+RA   Walz T., Smith B.L., Agre P., Engel A.;
+RT   "The three-dimensional structure of human erythrocyte aquaporin
+RT   CHIP.";
+RL   EMBO J. 13:2985-2993(1994).
+RN   [10]
+RP   STRUCTURE BY ELECTRON CRYO-MICROSCOPY.
+RX   MEDLINE=97320502; PubMed=9177353;
+RA   Walz T., Hirai T., Murata K., Heymann J.B., Mitsuoka K.,
+RA   Fujiyoshi Y., Smith B.L., Agre P., Engel A.;
+RT   "The three-dimensional structure of aquaporin-1.";
+RL   Nature 387:624-627(1997).
+RN   [11]
+RP   X-RAY CRYSTALLOGRAPHY (3.8 ANGSTROMS).
+RX   MEDLINE=20487015; PubMed=11034202;
+RA   Murata K., Mitsuoka K., Hirai T., Walz T., Agre P., Heymann J.B.,
+RA   Engel A., Fujiyoshi Y.;
+RT   "Structural determinants of water permeation through aquaporin-1.";
+RL   Nature 407:599-605(2000).
+RN   [12]
+RP   X-RAY CRYSTALLOGRAPHY (3.54 ANGSTROMS).
+RX   MEDLINE=21423577; PubMed=11532455;
+RA   de Groot B.L., Engel A., Grubmueller H.;
+RT   "A refined structure of human aquaporin-1.";
+RL   FEBS Lett. 504:206-211(2001).
+RN   [13]
+RP   VARIANT BLOOD GROUP COLTON.
+RX   MEDLINE=94365170; PubMed=7521882;
+RA   Smith B.L., Preston G.M., Spring F., Anstee D.J., Agre P.;
+RT   "Human red cell aquaporin CHIP. I. Molecular characterization of ABH
+RT   and Colton blood group antigens.";
+RL   J. Clin. Invest. 94:1043-1049(1994).
+RN   [14]
+RP   VARIANT LEU-38.
+RX   MEDLINE=94360246; PubMed=7521540;
+RA   Preston G.M., Smith B.L., Zeidel M.L., Moulds J.J., Agre P.;
+RT   "Mutations in aquaporin-1 in phenotypically normal humans without
+RT   functional CHIP water channels.";
+RL   Science 265:1585-1587(1994).
+CC   -!- FUNCTION: Forms a water-specific channel that provides the plasma
+CC       membranes of red cells and kidney proximal tubules with high
+CC       permeability to water, thereby permitting water to move in the
+CC       direction of an osmotic gradient.
+CC   -!- SUBUNIT: Homotetramer.
+CC   -!- SUBCELLULAR LOCATION: Integral membrane protein.
+CC   -!- TISSUE SPECIFICITY: Expressed in a number of tissues including
+CC       erythrocytes, renal tubules, retinal pigment epithelium,
+CC       heart, lung, skeletal muscle, kidney and pancreas. Weakly
+CC       expressed in brain, placenta and liver.
+CC   -!- DOMAIN: Aquaporins contain two tandem repeats each containing
+CC       three membrane-spanning domains and a pore-forming loop with the
+CC       signature motif Asn-Pro-Ala (NPA).
+CC   -!- POLYMORPHISM: AQP1 is responsible for the Colton blood group
+CC       system. Approximately 92% of caucasians are Co(A+B-) (Ala-45),
+CC       approximately 8% are Co(A+B+), and only 0.2% are Co(A-B+) (Val-
+CC       45). Co(A-B-) which is very rare, is due to a complete absence of
+CC       AQP1.
+CC   -!- MISCELLANEOUS: Pharmacologically inhibited by submillimolar
+CC       concentrations of mercury.
+CC   -!- SIMILARITY: Belongs to the MIP/aquaporin (TC 1.A.8) family.
+CC   -!- DATABASE: NAME=Blood group antigen mutation database;
+CC       NOTE=Colton (Co) blood group system;
+CC       WWW="http://www.bioc.aecom.yu.edu/bgmut/colton.htm".
+CC   -!- DATABASE: NAME=Protein Spotlight;
+CC       NOTE=Issue 36 of July 2003;
+CC       WWW="http://www.expasy.org/spotlight/articles/sptlt036.html".
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; M77829; AAA58425.1; -.
+DR   EMBL; U41517; AAC50648.1; -.
+DR   EMBL; U41518; AAC50649.1; -.
+DR   EMBL; S73482; AAB31193.1; -.
+DR   EMBL; AC004691; AAC16481.1; -.
+DR   EMBL; AC005155; AAC23788.1; -.
+DR   PIR; A41616; A41616.
+DR   PDB; 1FQY; 18-OCT-00.
+DR   PDB; 1H6I; 10-MAY-02.
+DR   PDB; 1IH5; 25-APR-01.
+DR   Genew; HGNC:633; AQP1.
+DR   MIM; 107776; -.
+DR   MIM; 110450; -.
+DR   GO; GO:0005887; C:integral to plasma membrane; TAS.
+DR   GO; GO:0005372; F:water transporter activity; TAS.
+DR   GO; GO:0007588; P:excretion; TAS.
+DR   GO; GO:0006833; P:water transport; TAS.
+DR   InterPro; IPR000425; MIP.
+DR   Pfam; PF00230; MIP; 1.
+DR   PRINTS; PR00783; MINTRINSICP.
+DR   ProDom; PD000295; MIP_family; 1.
+DR   TIGRFAMs; TIGR00861; MIP; 1.
+DR   PROSITE; PS00221; MIP; 1.
+KW   Transport; Transmembrane; Repeat; Polymorphism; Blood group antigen;
+KW   Glycoprotein; 3D-structure.
+FT   DOMAIN        1      7       Cytoplasmic.
+FT   TRANSMEM      8     36       Helix 1.
+FT   DOMAIN       37     48       Extracellular.
+FT   TRANSMEM     49     66       Helix 2.
+FT   DOMAIN       67     70       Cytoplasmic.
+FT   DOMAIN       71     76       In membrane.
+FT   TRANSMEM     77     84       Helix B.
+FT   DOMAIN       85     94       Cytoplasmic.
+FT   TRANSMEM     95    115       Helix 3.
+FT   DOMAIN      116    136       Extracellular.
+FT   TRANSMEM    137    155       Helix 4.
+FT   DOMAIN      156    166       Cytoplasmic.
+FT   TRANSMEM    167    183       Helix 5.
+FT   DOMAIN      184    186       Extracellular.
+FT   DOMAIN      187    192       In membrane.
+FT   TRANSMEM    193    200       Helix E.
+FT   DOMAIN      201    207       Extracellular.
+FT   TRANSMEM    208    228       Helix 6.
+FT   DOMAIN      229    269       Cytoplasmic.
+FT   SITE         76     78       NPA 1.
+FT   SITE        192    194       NPA 2.
+FT   DOMAIN      159    162       Poly-Arg.
+FT   SITE         56     56       Substrate discrimination.
+FT   SITE        180    180       Substrate discrimination.
+FT   SITE        189    189       HG(2+)-SENSITIVE RESIDUE.
+FT   SITE        195    195       Substrate discrimination.
+FT   CARBOHYD     42     42       N-linked (GlcNAc...).
+FT   CARBOHYD    205    205       N-linked (GlcNAc...) (Potential).
+FT   VARIANT      38     38       P -> L (in Co(A-B-) antigen; non
+FT                                functional AQP1; red cells show low
+FT                                osmotic water permeability).
+FT                                /FTId=VAR_013279.
+FT   VARIANT      45     45       A -> V (in Co(A-B+) antigen).
+FT                                /FTId=VAR_004400.
+FT   HELIX        10     36
+FT   TURN         41     42
+FT   TURN         44     45
+FT   TURN         49     49
+FT   HELIX        50     66
+FT   HELIX        67     69
+FT   TURN         70     71
+FT   HELIX        77     85
+FT   TURN         86     87
+FT   TURN         90     90
+FT   HELIX        91    113
+FT   HELIX       135    156
+FT   TURN        157    157
+FT   TURN        165    166
+FT   HELIX       168    183
+FT   TURN        184    186
+FT   HELIX       193    203
+FT   TURN        204    204
+FT   HELIX       207    210
+FT   HELIX       211    230
+FT   TURN        231    231
+SQ   SEQUENCE   269 AA;  28526 MW;  BA204D82FB26352E CRC64;
+     MASEFKKKLF WRAVVAEFLA TTLFVFISIG SALGFKYPVG NNQTAVQDNV KVSLAFGLSI
+     ATLAQSVGHI SGAHLNPAVT LGLLLSCQIS IFRALMYIIA QCVGAIVATA ILSGITSSLT
+     GNSLGRNDLA DGVNSGQGLG IEIIGTLQLV LCVLATTDRR RRDLGGSAPL AIGLSVALGH
+     LLAIDYTGCG INPARSFGSA VITHNFSNHW IFWVGPFIGG ALAVLIYDFI LAPRSSDLTD
+     RVKVWTSGQV EEYDLDADDI NSRVEMKPK
+//
