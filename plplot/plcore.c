@@ -1457,7 +1457,7 @@ plGetDev()
     /* Final "\n" in response messes things up, so ignore it.  */
 
 	length = strlen(response);
-	if (*(response - 1 + length) == '\n')
+	if (*(response + length - 1) == '\n')
 	    length--;
 
 	for (i = 0; i < npldrivers; i++) {
