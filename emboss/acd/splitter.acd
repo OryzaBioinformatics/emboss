@@ -9,9 +9,15 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  boolean: feature [
+    default: "N"
+    information: "Use feature information"
+  ]
+
+  seqall: sequence [
     parameter: "Y"
     type: "any"
+    features: "$(feature)"
   ]
 
 endsection: input
@@ -21,19 +27,32 @@ section: additional [
   type: "page"
 ]
 
-  integer: size  [
+  integer: size [
     additional: "Y"
     minimum: "1"
     default: "10000"
     information: "Size to split at"
   ]
 
-  integer: overlap  [
+  integer: overlap [
     additional: "Y"
     minimum: "0"
     maximum: "@($(size)-1)"
     default: "0"
     information: "Overlap between split sequences"
+  ]
+
+  boolean: source [
+    additional: "Y"
+    default: "N"
+    information: "Split using source features with /oridif
+                  qualifiers"
+  ]
+
+  boolean: multifile [
+    additional: "Y"
+    default: "N"
+    information: "Split sequence into multiple files"
   ]
 
 endsection: additional
@@ -43,7 +62,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: addoverlap  [
+  boolean: addoverlap [
     default: "N"
     information: "Add overlap to size"
   ]
@@ -55,8 +74,9 @@ section: output [
   type: "page"
 ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
+    features: "$(feature)"
   ]
 
 endsection: output
