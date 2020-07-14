@@ -104,6 +104,7 @@ Transcription Factor Class
          P : plant
          V : vertebrate
          O : other
+         C : Custom
 Select class [V]: <b>v</b>
 Number of mismatches [0]: <b></b>
 Output file [hsfos.tfscan]: <b></b>
@@ -128,16 +129,21 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
    -menu               menu       Select class
+*  -custom             string     Name of data file
    -mismatch           integer    Number of mismatches
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -minlength          integer    Display matches equal to or above this
+                                  length
+
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -147,24 +153,21 @@ IT IS DONE FOR YOU.
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -181,7 +184,7 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -196,8 +199,15 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-menu</td>
 <td>Select class</td>
-<td><table><tr><td>F</td> <td><i>(fungi)</i></td></tr><tr><td>I</td> <td><i>(insect)</i></td></tr><tr><td>P</td> <td><i>(plant)</i></td></tr><tr><td>V</td> <td><i>(vertebrate)</i></td></tr><tr><td>O</td> <td><i>(other)</i></td></tr></table></td>
+<td><table><tr><td>F</td> <td><i>(fungi)</i></td></tr><tr><td>I</td> <td><i>(insect)</i></td></tr><tr><td>P</td> <td><i>(plant)</i></td></tr><tr><td>V</td> <td><i>(vertebrate)</i></td></tr><tr><td>O</td> <td><i>(other)</i></td></tr><tr><td>C</td> <td><i>(Custom)</i></td></tr></table></td>
 <td>V</td>
+</tr>
+
+<tr>
+<td>-custom</td>
+<td>Name of data file</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
@@ -215,17 +225,20 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-minlength</td>
+<td>Display matches equal to or above this length</td>
+<td>Integer 1 or more</td>
+<td>1</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -378,6 +391,7 @@ DR   TRANSFAC; R00466; HS$CFOS_09.
 TFSCAN of HSFOS from 1 to 6210
 
 MOUSE$FCGR3A_02      R04413   3287  3292  ttcctc
+                     T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
 HS$ALBU_03           R00079   5940  5944  tggca
 HS$ALBU_03           R00079   3757  3761  tggca
 HS$ALBU_03           R00079   2776  2780  tggca
@@ -385,6 +399,7 @@ HS$ALBU_03           R00079   2418  2422  tggca
 HS$ALBU_03           R00079   2010  2014  tggca
 HS$ALBU_03           R00079   1676  1680  tggca
 HS$ALBU_03           R00079   1356  1360  tggca
+                     T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus.
 HS$ALBU_02           R00078   2009  2014  ttggca
 </pre>
 </td></tr></table><p>
@@ -411,6 +426,9 @@ The third and fourth columns are the start and end positions of the match in you
 The fifth column is the sequence of the region where a match has been found.
 
 <p>
+
+Binding factor information, where available, is given at the end
+of the matches for each matching entry.
 
 
 

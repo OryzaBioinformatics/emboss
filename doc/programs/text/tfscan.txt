@@ -47,6 +47,7 @@ Transcription Factor Class
          P : plant
          V : vertebrate
          O : other
+         C : Custom
 Select class [V]: v
 Number of mismatches [0]: 
 Output file [hsfos.tfscan]: 
@@ -56,16 +57,21 @@ Output file [hsfos.tfscan]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
    -menu               menu       Select class
+*  -custom             string     Name of data file
    -mismatch           integer    Number of mismatches
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -minlength          integer    Display matches equal to or above this
+                                  length
+
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -75,24 +81,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -103,7 +106,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    -menu Select class
@@ -112,13 +115,17 @@ Command line arguments
    P (plant)
    V (vertebrate)
    O (other)
+   C (Custom)
    V
+   -custom Name of data file Any string is accepted An empty string is
+   accepted
    -mismatch Number of mismatches Integer 0 or more 0
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.tfscan
-   Optional qualifiers Allowed values Default
-   (none)
-   Advanced qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
+   -minlength Display matches equal to or above this length Integer 1 or
+   more 1
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -299,6 +306,7 @@ Output file format
 TFSCAN of HSFOS from 1 to 6210
 
 MOUSE$FCGR3A_02      R04413   3287  3292  ttcctc
+                     T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
 HS$ALBU_03           R00079   5940  5944  tggca
 HS$ALBU_03           R00079   3757  3761  tggca
 HS$ALBU_03           R00079   2776  2780  tggca
@@ -306,6 +314,8 @@ HS$ALBU_03           R00079   2418  2422  tggca
 HS$ALBU_03           R00079   2010  2014  tggca
 HS$ALBU_03           R00079   1676  1680  tggca
 HS$ALBU_03           R00079   1356  1360  tggca
+                     T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus
+.
 HS$ALBU_02           R00078   2009  2014  ttggca
    
    The output consists of a title line then 5 columns separated by
@@ -320,6 +330,9 @@ HS$ALBU_02           R00078   2009  2014  ttggca
    
    The fifth column is the sequence of the region where a match has been
    found.
+   
+   Binding factor information, where available, is given at the end of
+   the matches for each matching entry.
    
 Data files
 
