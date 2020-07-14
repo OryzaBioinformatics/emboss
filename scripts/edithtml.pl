@@ -135,12 +135,12 @@ chmod 0664, "$docdir/inc/$application.ione";
 print "$application.ione *created*\n";
 
 # create the new '-help' output
-system "acdc $application -help 2> $docdir/inc/$application.ihelp";
+system "acdc $application -help -verbose 2> $docdir/inc/$application.ihelp";
 chmod 0664, "$docdir/inc/$application.ihelp";
 print "$application.ihelp *created*\n";
 
 # create the new command table include file
-system "acdc $application -help -acdtable 2> $docdir/inc/$application.itable";
+system "acdtable $application 2> $docdir/inc/$application.itable";
 chmod 0664, "$docdir/inc/$application.itable";
 print "$application.itable *created*\n";
 
@@ -152,10 +152,6 @@ print "$application.isee *created*\n";
 
 # create the '.usage', '.input' and '.output' include files
 system "$scripts/makeexample.pl $application";
-
-###################################################################
-# create the .history include files for all applications   
-system "$scripts/makehistory.pl";   
 
 ###################################################################
 # edit the index.html file
