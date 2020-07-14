@@ -40,19 +40,23 @@ static void tranalign_AddGaps (AjPSeq newseq,
 
 int main(int argc, char **argv)
 {
-    AjPSeqall nucseq;	/* input nucleic sequences */
-    AjPSeqset protseq;	/* input aligned protein sequences */
+    AjPSeqall nucseq;		/* input nucleic sequences */
+    AjPSeqset protseq;		/* input aligned protein sequences */
     AjPSeqout seqout;
-    AjPSeq nseq;	/* next nucleic sequence to align */
-    const AjPSeq pseq;	/* next protein sequence use in alignmnet */
+    AjPSeq nseq;		/* next nucleic sequence to align */
+    const AjPSeq pseq;		/* next protein sequence use in alignment */
     AjPTrn trnTable;
-    AjPSeq pep;		/* translation of nseq */
+    AjPSeq pep;			/* translation of nseq */
     AjPStr *tablelist;
     ajint table;
-    AjPSeqset outseqset; /* set of aligned nucleic sequences */
+    AjPSeqset outseqset;	/* set of aligned nucleic sequences */
     ajint proteinseqcount = 0;
     AjPStr degapstr = NULL;
-    ajint pos = 0;       /* start position of guide protein in translation */
+    AjPStr degapstr2 = NULL;	/* used to check if it matches with START removed */
+    AjPStr codon = NULL;	/* holds temporary codon to check if is START */
+    char aa;			/* translated putative START codon */
+    ajint type;			/* returned type of the putative START codon */
+    ajint pos = 0;		/* start position of guide protein in translation */
     AjPSeq newseq = NULL;	/* output aligned nucleic sequence */
     ajint frame;
 
@@ -94,7 +98,41 @@ int main(int argc, char **argv)
 	{
 	    ajDebug("trying frame %d\n", frame);
             pep = ajTrnSeqOrig(trnTable, nseq, frame);
+            degapstr2 = ajStrNew();
+            ajStrAss(&degapstr2, degapstr);
             pos = ajStrFindCase(ajSeqStr(pep), degapstr);
+
+            /* 
+            ** we might have a START codon that should be translated as 'M'
+            ** we need to check if there is a match after a possible START codon 
+            */
+            if(pos == -1 && ajStrLen(degapstr) > 1 && 
+               (ajStrStr(degapstr)[0] == 'M' || ajStrStr(degapstr)[0] == 'm')) {
+                /* see if pep minus the first character is a match */
+                ajStrTrim(&degapstr2, 1);
+                pos = ajStrFindCase(ajSeqStr(pep), degapstr2); 
+                /* pos is >= 1 if we have a match that is after the first residue */
+                if (pos >= 1) {
+                    /* point back at the putative START Methionine */
+                    pos--;
+                    /* test if first codon is a START */
+                    codon = ajStrNew();
+                    ajStrAssSub(&codon, ajSeqStr(nseq), 
+                                (pos*3)+frame-1, (pos*3)+frame+2);
+                    type = ajTrnStartStop(trnTable, codon, &aa);
+                    if (type != 1) {
+                        /* first codon is not a valid START, force a mismatch */
+                        pos = -1;
+                    }
+                    ajStrDel(&codon);
+                
+            	} else {
+                    /* force 'pos == 0' to be treated as a mismatch */
+            	    pos = -1;
+            	}
+            }
+
+            ajStrDel(&degapstr2);
             ajSeqDel(&pep);
 
             if(pos != -1)
