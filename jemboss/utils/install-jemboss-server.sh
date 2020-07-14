@@ -153,7 +153,7 @@ embassy_install()
   echo
   echo "EMBASSY packages can optionally be installed along with"
   echo "the EMBOSS applications, see:"
-  echo "http://www.uk.embnet.org/Software/EMBOSS/EMBASSY/"
+  echo "http://emboss.sourceforge.net/apps/#Embassy"
   echo
   echo "--------------------------------------------------------------"
   echo
@@ -173,7 +173,7 @@ embassy_install()
     fi
     echo
     echo "To install EMBASSY Packages:"
-    echo "(1) Download these from ftp://ftp.uk.embnet.org/pub/EMBOSS/"
+    echo "(1) Download these from ftp://emboss.open-bio.org/pub/EMBOSS/"
     echo "(2) And unpack (gunzip and untar) them in: "
     echo "$EMBOSS_DOWNLOAD/embassy"
     echo "(3) *before* pressing return to continue!"
@@ -444,6 +444,7 @@ deploy_axis_services()
 #  CLASSPATH=${CLASSPATH}:$JEMBOSS_LIB/jnet.jar:$JEMBOSS_LIB/jsse.jar:$JEMBOSS_LIB/jcert.jar
   CLASSPATH=${CLASSPATH}:$JEMBOSS_LIB/xerces.jar
 
+  PROXY_OFF="-DproxySet=false -DproxyHost= -DproxyPort= -Dhttp.proxyHost= -Dhttp.proxyPort= -Dhttps.proxyHost= -Dhttps.proxyPort= "
   SERVICE=$2
   URL=$3
   URL2=$4
@@ -456,15 +457,15 @@ deploy_axis_services()
 # echo " org.apache.axis.client.AdminClient -l$URL/axis/services JembossServer.wsdd"
   echo
 
-  $JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 \
+  $JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 $PROXY_OFF \
         org.apache.axis.client.AdminClient \
         -l$URL/axis/services JembossServer.wsdd
 
   echo "#!/bin/csh " > deploy.csh
-  echo "$JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 org.apache.axis.client.AdminClient -l$URL/axis/services JembossServer.wsdd" >> deploy.csh
+  echo "$JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 $PROXY_OFF org.apache.axis.client.AdminClient -l$URL/axis/services JembossServer.wsdd" >> deploy.csh
   echo "" >> deploy.csh
   echo 'if ($status != 0) then' >> deploy.csh
-  echo "  $JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 org.apache.axis.client.AdminClient -l$URL2/axis/services JembossServer.wsdd" >> deploy.csh
+  echo "  $JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 $PROXY_OFF org.apache.axis.client.AdminClient -l$URL2/axis/services JembossServer.wsdd" >> deploy.csh
   echo "endif" >> deploy.csh
   chmod u+x deploy.csh
 }
@@ -596,7 +597,7 @@ $DIR/lib64"
     echo "      http://libpng.sourceforge.net/"
     echo
     echo "For details see the EMBOSS admin guide:"
-    echo "http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/"
+    echo "http://emboss.sourceforge.net/admin/"
     echo
     echo "To exit use Control C or press return to continue."
     echo
@@ -635,7 +636,7 @@ $DIR/lib64"
     echo "       http://www.boutell.com/gd/"
     echo
     echo "For details see the EMBOSS admin guide:"
-    echo "http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/"
+    echo "http://emboss.sourceforge.net/admin/"
     echo
     echo "To exit use Control C or press return to continue."
     echo
@@ -676,7 +677,7 @@ $DIR/lib64
     echo "       http://www.info-zip.org/pub/infozip/zlib/"
     echo
     echo "For details see the EMBOSS admin guide:"
-    echo "http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/"
+    echo "http://emboss.sourceforge.net/admin/"
     echo
     echo "To exit use Control C or press return to continue."
     echo
@@ -695,7 +696,7 @@ echo " "
 echo "Note: any default values are given in square brackets []. "
 echo " "
 echo "There are two types of installation see details at: "
-echo "http://www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/install/setup.html"
+echo "http://emboss.sourceforge.net/Jemboss/install/setup.html"
 echo " "
 echo "(1) CLIENT-SERVER"
 echo "(2) STANDALONE"
@@ -718,7 +719,7 @@ echo "*** be best done as root or as a tomcat user."
 echo
 echo "Before running this script you should download the latest:"
 echo
-echo "(1) EMBOSS release (contains Jemboss) ftp://ftp.uk.embnet.org/pub/EMBOSS/"
+echo "(1) EMBOSS release (contains Jemboss) ftp://emboss.open-bio.org/pub/EMBOSS/"
 
 
 if [ $INSTALL_TYPE = "1" ]; then
@@ -998,14 +999,14 @@ echo "$EMBOSS_INSTALL" >> $RECORD
 
 if [ $INSTALL_TYPE = "1" ]; then
   echo "Enter URL for emboss documentation for application "
-  echo "[http://www.uk.embnet.org/Software/EMBOSS/Apps/]:"
+  echo "[http://emboss.sourceforge.net/]:"
   read EMBOSS_URL
 
   echo "$EMBOSS_URL" >> $RECORD
 fi
 
 if [ "$EMBOSS_URL" = "" ]; then
-  EMBOSS_URL="http://www.uk.embnet.org/Software/EMBOSS/Apps/"
+  EMBOSS_URL="http://emboss.sourceforge.net/"
 fi
 echo
 
@@ -1062,7 +1063,7 @@ if [ "$AUTH" = "y" ]; then
 
   echo
   echo "Unix Authentication Method, see:"
-  echo "http://www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/install/authentication.html"
+  echo "http://emboss.sourceforge.net/Jemboss/install/authentication.html"
   echo
   echo "(1) shadow      (3) PAM         (5) HP-UX shadow"
   echo "(2) no shadow   (4) AIX shadow  (6) Re-entrant shadow"
@@ -1182,7 +1183,7 @@ if [ "$USER_CONFIG" = "" ]; then
   echo "flag --with-pngdriver to specify their location"
   echo
   echo "For details see the EMBOSS admin guide:"
-  echo "http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/"
+  echo "http://emboss.sourceforge.net/admin/"
   echo
   echo "Enter any other EMBOSS configuration options (e.g. --with-pngdriver=pathname)"
   echo "or press return to leave blank:"
@@ -1349,14 +1350,14 @@ fi
 
 
 if [ "$AUTH_TYPE" = "3" ]; then
-  if [ -f "/lib/libpam.so" ]; then
-    echo "setenv LD_PRELOAD /lib/libpam.so" >> tomstart
-  elif [ -f "/usr/lib/libpam.so" ]; then
-    echo "setenv LD_PRELOAD /usr/lib/libpam.so" >> tomstart
-  elif [ -f "/lib64/libpam.so" ]; then
+  if [ -f "/lib64/libpam.so" ]; then
     echo "setenv LD_PRELOAD /lib64/libpam.so" >> tomstart
   elif [ -f "/usr/lib64/libpam.so" ]; then
-    echo "setenv LD_PRELOAD /usr/lib64/libpam.so" >> tomstart  
+    echo "setenv LD_PRELOAD /usr/lib64/libpam.so" >> tomstart
+  elif [ -f "/lib/libpam.so" ]; then
+    echo "setenv LD_PRELOAD /lib/libpam.so" >> tomstart
+  elif [ -f "/usr/lib/libpam.so" ]; then
+    echo "setenv LD_PRELOAD /usr/lib/libpam.so" >> tomstart  
   else
     echo
     echo "WARNING: don't know what to set LD_PRELOAD to"
@@ -1504,7 +1505,7 @@ else
   echo "certificates."
   echo  
   echo "For details see:"
-  echo "http://www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/install/ssl.html"
+  echo "http://emboss.sourceforge.net/Jemboss/install/ssl.html"
   echo
   echo "--------------------------------------------------------------"
   echo 
@@ -1613,7 +1614,7 @@ echo "Try running Jemboss with the script:"
 echo "   $JEMBOSS/runJemboss.sh"
 echo
 echo "To create a web launch page see:"
-echo "http://www.uk.embnet.org/Software/EMBOSS/Jemboss/install/deploy.html"
+echo "http://emboss.sourceforge.net/Jemboss/install/deploy.html"
 echo
 
 chmod a+x $JEMBOSS/runJemboss.sh

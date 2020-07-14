@@ -218,7 +218,7 @@ echo '        href="'$JNLP'">'                          >> $JNLP
 echo '         <information>'                           >> $JNLP  
 echo '           <title>Jemboss</title>'                >> $JNLP  
 echo '           <vendor>HGMP-RC</vendor> '             >> $JNLP  
-echo '           <homepage href="http://www.uk.embnet.org/Software/EMBOSS/Jemboss/"/>' \
+echo '           <homepage href="http://emboss.sourceforge.net/Jemboss/"/>' \
                                                         >> $JNLP  
 echo '           <description>Jemboss</description>'    >> $JNLP  
 echo '           <description kind="short">A Java user interface to EMBOSS.' \

@@ -919,6 +919,27 @@ public class ParseAcd
 
   /**
   *
+  * Find URL prefix if an embassy application
+  * @return     url prefix 
+  *
+  */
+  public String getUrlPrefix()
+  {
+    int num = getNumofParams(0);
+    ApplicationFields aF = (ApplicationFields)vappF.get(0);
+    for(int i=0;i<num;i++)
+    {
+      if(getParameterAttribute(0,i).startsWith("embassy"))
+        return aF.getParamValueStr(i);
+    }
+
+    return null;
+  }
+
+
+
+  /**
+  *
   * Limits the length of the line for the help text used in
   * the tool tips.
   *

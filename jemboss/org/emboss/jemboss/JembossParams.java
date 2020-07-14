@@ -215,6 +215,10 @@ public class JembossParams
   private String userHome = System.getProperty("user.home");
   /** property name for user home directory  */
   private String userHomeName = "user.home";
+  
+  /** standalone results directory           */
+  private String resultsHome = System.getProperty("user.home")+ "/jemboss";
+  private String resultsHomeName = "results.home";
 
 
 /**
@@ -234,6 +238,7 @@ public class JembossParams
 
     // initialize settings from table above
     defaults.put(userHomeName,userHome);
+    defaults.put(resultsHomeName,resultsHome);
     defaults.put(embossURL,embURL);
     defaults.put(plplotName,plplot);
     defaults.put(embossDataName,embossData);
@@ -381,6 +386,7 @@ public class JembossParams
       String tmp;
 
       userHome = jembossSettings.getProperty(userHomeName);
+      resultsHome = jembossSettings.getProperty(resultsHomeName);
       embURL = jembossSettings.getProperty(embossURL);
       plplot = jembossSettings.getProperty(plplotName);
       embossData = jembossSettings.getProperty(embossDataName);
@@ -740,7 +746,7 @@ public class JembossParams
 *  @return      cygwin root
 *
 */
-  public String getCygwinRoot()
+  public static String getCygwinRoot()
   {
     return cygwin;
   }
@@ -779,6 +785,34 @@ public class JembossParams
   {
     userHome = s;
   }
+
+
+/**
+*
+* Get the standalone results directory
+* @return       the results directory
+*
+*/
+  public String getResultsHome()
+  {
+    String fs = System.getProperty("file.separator");
+
+    if(!resultsHome.endsWith(fs))
+      resultsHome = resultsHome + fs;
+    return resultsHome;
+  }
+
+/**
+*
+* Set the standalone results directoryproperty
+* @param s      the results directory
+*
+*/
+  public void setResultsHome(String s)
+  {
+    resultsHome = s;
+  }
+
 
 /**
 *

@@ -83,7 +83,7 @@ public class KeywordSearch implements HyperlinkListener
         else
           embRoot = embRoot.substring(0,embRoot.length()-3);
           
-        stub = "file://"+embRoot+"/share/EMBOSS/doc/programs/html/";
+        stub = "file://"+embRoot+"/share/EMBOSS/doc/html/emboss/apps/";
       }
  
       String line;

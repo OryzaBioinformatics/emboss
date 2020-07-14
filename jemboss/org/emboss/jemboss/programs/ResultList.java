@@ -27,6 +27,7 @@ import java.util.*;
 import org.emboss.jemboss.soap.JembossSoapException;
 import org.emboss.jemboss.soap.PrivateRequest;
 import org.emboss.jemboss.JembossParams;
+import org.emboss.jemboss.server.JembossServer;
 
 /**
 *
@@ -80,28 +81,56 @@ public class ResultList
    public ResultList(JembossParams mysettings, String dataset, 
                      String options, String methodname) throws JembossSoapException 
    {
-     PrivateRequest eRun;
-     Vector params = new Vector();
-
-     if(dataset != null) 
+ 
+     if(org.emboss.jemboss.Jemboss.withSoap)
      {
-       params.addElement(dataset);
-       params.addElement(options);
+       PrivateRequest eRun;
+       Vector params = new Vector();
+
+       if(dataset != null) 
+       {
+         params.addElement(dataset);
+         params.addElement(options);
+       }
+
+       try 
+       {
+         eRun = new PrivateRequest(mysettings,methodname, params);
+       } 
+       catch (JembossSoapException e) 
+       {
+         throw new JembossSoapException("Authentication Failed");
+       }
+
+       proganswer = eRun.getHash();
+     }
+     else   // handle standalone
+     {
+       JembossServer js = new JembossServer(mysettings.getResultsHome());
+       Vector vans;
+
+       if(methodname.equals("list_saved_results"))
+         vans = js.list_saved_results();
+       else if(methodname.equals("show_saved_results"))
+         vans = js.show_saved_results(dataset, options);
+       else
+         vans = js.delete_saved_results(dataset, options);
+
+       proganswer = org.emboss.jemboss.gui.form.BuildJembossForm.convert(vans,true);
      }
 
-     try 
+     try
      {
-       eRun = new PrivateRequest(mysettings,methodname, params);
-     } 
-     catch (JembossSoapException e) 
-     {
-       throw new JembossSoapException("Authentication Failed");
+       status = proganswer.get("status").toString();
      }
-
-     proganswer = eRun.getHash();
-     status = proganswer.get("status").toString();
-     statusmsg = proganswer.get("msg").toString();
-     
+     catch(NullPointerException npe){}
+    
+     try
+     {
+       statusmsg = proganswer.get("msg").toString();
+     }
+     catch(NullPointerException npe){}
+ 
      proganswer.remove("status");      //delete out of the hash
      proganswer.remove("msg");
    }

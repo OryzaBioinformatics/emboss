@@ -173,7 +173,7 @@ public class Jemboss implements ActionListener
 
     Dimension d = f.getToolkit().getScreenSize();
 
-    resultsManager = new PendingResults(mysettings);
+    resultsManager = new PendingResults(mysettings, withSoap);
     btmMenu.add(resultsManager.statusPanel(f));
     btmMenu.add(extend);
     pform.add(btmMenu,BorderLayout.SOUTH);

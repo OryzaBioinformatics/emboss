@@ -69,8 +69,12 @@ public class JembossServer
     "PATH=" + embossPath + System.getProperty("path.separator")
             + embossBin,
     "PLPLOT_LIB=" + plplot,
-    "EMBOSS_DATA=" + embossData,
-    "HOME=" + homeDirectory
+// cygwin: embossdata application does not like 
+//         EMBOSS_DATA specified - it fails to 
+//         fetch files
+//  "EMBOSS_DATA=" + embossData,
+    "HOME=" + homeDirectory,
+    "EMBOSSCYGROOT=" + JembossParams.getCygwinRoot()
 //  ,"LD_LIBRARY_PATH=/usr/local/lib"
 // FIX FOR SOME SUNOS OR USE embossEnvironment
 
@@ -79,6 +83,14 @@ public class JembossServer
   /** emboss run environment */
   private String[] envp = jp.getEmbossEnvironmentArray(envp_emboss);
  
+
+  public JembossServer(){}
+
+  public JembossServer(String tmproot)
+  {
+    this.tmproot = tmproot;
+    tmprootDir = new File(tmproot);
+  }
 
   public String name()
   {
@@ -464,27 +476,6 @@ public class JembossServer
   /**
   *
   * Run an EMBOSS application
-  * @param command line to run
-  * @param unused
-  * @param Hashtable of input files
-  * @return output files from application run
-  *
-  */
-/*
-  public Vector run_prog(String embossCommand, String options,
-                         Hashtable inFiles, String userName)
-  {
-    tmproot = tmproot.concat(userName+fs);
-    Vector result = new Vector();
-    result = run_prog(embossCommand,options,inFiles);
-
-    return result;
-  }
-*/
-
-  /**
-  *
-  * Run an EMBOSS application
   * @param embossCommand	command line to run
   * @param options		unused 
   * @param inFiles		input files
@@ -731,6 +722,23 @@ public class JembossServer
   /**
   *
   * Save a file to a project directory on the server.
+  * @param project      project directory to save file in
+  * @param filename     filename
+  * @param notes        text to write to file
+  * @param userName     username
+  * @return             message
+  *
+  */
+  public Vector save_project_file(String project, String filename,
+                                  String notes, String userName)
+  {
+    return save_project_file(userName+ fs +project, filename, notes);
+  }
+
+
+  /**
+  *
+  * Save a file to a project directory on the server.
   * @param project	project directory to save file in
   * @param filename	filename
   * @param notes	text to write to file
@@ -739,12 +747,12 @@ public class JembossServer
   *
   */
   public Vector save_project_file(String project, String filename,
-                                  String notes, String userName)
+                                  String notes)
   {
     Vector v = new Vector();
     String msg = "OK";
 
-    String fn = tmproot + fs + userName+ fs +
+    String fn = tmproot + fs + 
                      project + fs + filename;
 
     File f = new File(fn);

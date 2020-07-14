@@ -114,7 +114,7 @@ public class ShowResultSet extends JFrame
   public ShowResultSet(Hashtable reslist, Hashtable inputFiles, 
                        String project, JembossParams mysettings)
   {
-    super("Saved Results on the Server");
+    super("Saved Results");
     rtp = new JTabbedPane();
 
     setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

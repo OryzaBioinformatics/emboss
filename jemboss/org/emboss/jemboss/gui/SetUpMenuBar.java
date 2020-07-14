@@ -81,20 +81,20 @@ public class SetUpMenuBar
     JMenu fileMenu = new JMenu("File");
     fileMenu.setMnemonic(KeyEvent.VK_F);
 
+    fileMenuShowres = new JMenuItem("Saved Results");
+    fileMenuShowres.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e) 
+      {
+        f.setCursor(cbusy);
+        new ShowSavedResults(mysettings,f);
+        f.setCursor(cdone);
+      }
+    });
+    fileMenu.add(fileMenuShowres);
+ 
     if(withSoap)
     {
-      fileMenuShowres = new JMenuItem("Saved Results");
-      fileMenuShowres.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e) 
-        {
-	  f.setCursor(cbusy);
-          new ShowSavedResults(mysettings,f);
-	  f.setCursor(cdone);
-        }
-      });
-      fileMenu.add(fileMenuShowres);
- 
       showLocalRemoteFile = new JMenuItem("Local and Remote Files");
       showLocalRemoteFile.addActionListener(new ActionListener()
       {
@@ -165,9 +165,27 @@ public class SetUpMenuBar
     {
       public void actionPerformed(ActionEvent e)
       {
-        JOptionPane jao = new JOptionPane();
-        jao.showMessageDialog(f,ao,"Advanced Options",
-                              JOptionPane.PLAIN_MESSAGE);
+        Object[] options = { "APPLY", "CANCEL" };
+
+        int select = JOptionPane.showOptionDialog(null, 
+                    ao,"Advanced Options",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+
+        if(select == 0)
+        {
+          if(!ao.getHomeDirectory().equals(mysettings.getUserHome()))
+            mysettings.setUserHome(ao.getHomeDirectory());
+
+          if(!withSoap && !ao.getResultsDirectory().equals(mysettings.getResultsHome()))
+            mysettings.setResultsHome(ao.getResultsDirectory()); 
+        }
+//      JOptionPane jao = new JOptionPane();
+//      jao.showMessageDialog(f,ao,"Advanced Options",
+//                            JOptionPane.PLAIN_MESSAGE);
       }
     });
     prefsMenu.add(showAdvOpt);

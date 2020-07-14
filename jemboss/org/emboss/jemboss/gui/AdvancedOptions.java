@@ -54,6 +54,9 @@ public class AdvancedOptions extends JPanel
   private JCheckBox saveUserHome;
   /** user home directory */
   private JTextField userHome = new JTextField();
+  /** user home directory */
+  private JTextField resultsHome = new JTextField();
+
   /** current working directory */
   private String cwd;
   /** times for job manager updates */
@@ -97,8 +100,8 @@ public class AdvancedOptions extends JPanel
     bdown.add(Box.createVerticalStrut(5));
 
 //frequency of job manager updates
-    if(Jemboss.withSoap)
-    {
+//  if(Jemboss.withSoap)
+//  {
       jobMgr = new JComboBox(time);
       jobMgr.setSelectedIndex(2);
       int hgt = (new Double(jobMgr.getPreferredSize().getHeight())).intValue();
@@ -111,11 +114,26 @@ public class AdvancedOptions extends JPanel
       bleft.add(ljobMgr);
       bleft.add(Box.createHorizontalGlue());
       bdown.add(bleft);
-    }
+//  }
 
     bdown.add(Box.createVerticalStrut(5));
     bdown.add(new Separator(new Dimension(400,10)));
     bdown.add(Box.createVerticalStrut(5));
+
+    if(!Jemboss.withSoap)
+    {
+      bleft =  Box.createHorizontalBox();
+      JLabel lresults = new JLabel("Results Directory:");
+      lresults.setForeground(Color.black);
+      bleft.add(lresults);
+      bleft.add(Box.createHorizontalGlue());
+      bdown.add(bleft);
+
+      resultsHome.setText(mysettings.getResultsHome());
+      bleft =  Box.createHorizontalBox();
+      bleft.add(resultsHome);
+      bdown.add(bleft);
+    }
 
 //set users home root directory
     bleft =  Box.createHorizontalBox();         
@@ -194,6 +212,18 @@ public class AdvancedOptions extends JPanel
     this.add(bdown);
   }
 
+
+  /**
+  *
+  * Get the user home/working directory
+  * @return     user home directory
+  *
+  */
+  public String getResultsDirectory()
+  {
+    return resultsHome.getText();
+  }
+
   /**
   *
   * Get the user home/working directory
@@ -228,6 +258,9 @@ public class AdvancedOptions extends JPanel
     File fjemProp = new File(jemProp);
  
     String uHome = "user.home="+getHomeDirectory();
+    if(!Jemboss.withSoap)
+      uHome = uHome + "\nresults.home="+getResultsDirectory();
+
     uHome = addEscapeChars(uHome);
 
     if(fjemProp.exists())       // re-write jemboss.properties

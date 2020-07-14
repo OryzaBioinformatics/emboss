@@ -24,6 +24,7 @@ package org.emboss.jemboss.soap;
 import org.emboss.jemboss.JembossParams;
 import org.emboss.jemboss.gui.*;
 import org.emboss.jemboss.programs.*;
+import org.emboss.jemboss.server.JembossServer;
 
 import java.util.*;
 import javax.swing.*;
@@ -52,6 +53,20 @@ public class PendingResults
   private JComboBox jobComboBox = null;
   /** automatic job status updates */
   private boolean autoUpdates = false;
+  private boolean withSoap = true;
+
+
+  /**
+  *
+  * @param mysettings   jemboss properties
+  * @param withSoap     false if we are not connecting to a server
+  *
+  */
+  public PendingResults(JembossParams mysettings, final boolean withSoap)
+  {
+    this(mysettings);
+    this.withSoap = withSoap;
+  }
 
   /**
   *
@@ -223,7 +238,6 @@ public class PendingResults
   */
   public void updateStatus() 
   {
-    Vector params = new Vector();
     Hashtable resToQuery = new Hashtable();
 
     //initialize hash with project/jobid
@@ -233,26 +247,40 @@ public class PendingResults
       resToQuery.put(er.getJob(),er.getProject());
     }
 
+    Vector params = new Vector();
     params.addElement("");
     params.addElement("");
     params.addElement(getVector(resToQuery));
     try 
     {
-      PrivateRequest eq = new PrivateRequest(mysettings,
-                               "update_result_status", params);
+      final Hashtable hashStatus;
+
+      if(withSoap)
+      {
+        PrivateRequest eq = new PrivateRequest(mysettings,
+                          "update_result_status", params);
+        hashStatus = eq.getHash();
+      }
+      else
+      {
+        JembossServer js = new JembossServer(mysettings.getResultsHome());
+        Vector vecStatus = js.update_result_status("", "", resToQuery);
+        hashStatus = org.emboss.jemboss.gui.form.BuildJembossForm.convert(vecStatus, false);
+      }
+
       // update the results
       for(int i=0; i < pendingResults.size(); ++i) 
       {
         JembossProcess er = (JembossProcess)pendingResults.get(i);
         String jobid = er.getJob();
-        String s = (String)eq.getVal(jobid);
+        String s = (String)hashStatus.get(jobid);
         if (mysettings.getDebug()) 
           System.out.println("PendingResults: "+jobid+" : "+s);
 
         if (s.equals("complete"))
         {
           er.complete();
-          String sd = (String)eq.getVal(jobid+"-description");
+          String sd = (String)hashStatus.get(jobid+"-description");
           if (!sd.equals("")) 
             er.setDescription(sd);
         }
@@ -360,8 +388,6 @@ public class PendingResults
     {
       public void actionPerformed(ActionEvent e)
       {
-        if(!org.emboss.jemboss.Jemboss.withSoap)
-          return;
         jobPanel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         showPendingResults(f);
         jobPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));

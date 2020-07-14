@@ -667,7 +667,7 @@ public class Browser extends JFrame
           else if(selectedValue.equals("Home") && category.equals("EMBOSS"))
             loc = "http://emboss.sourceforge.net/";
           else if(selectedValue.equals("Apps") && category.equals("EMBOSS"))
-            loc = "http://emboss.sourceforge.net/apps";
+            loc = "http://emboss.sourceforge.net/apps/release/4.0/emboss/apps/";
 
           if(loc != null) 
           {

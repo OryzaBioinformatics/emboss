@@ -40,6 +40,7 @@ import org.emboss.jemboss.gui.sequenceChooser.SequenceFilter;
 import org.emboss.jemboss.gui.filetree.*;
 import org.emboss.jemboss.gui.AdvancedOptions;
 import org.emboss.jemboss.JembossParams;
+import org.emboss.jemboss.server.JembossServer;
 
 /**
 *
@@ -439,19 +440,28 @@ public class ResultsMenuBar extends JMenuBar
         {
           JTextComponent jtc = getJTextComponentAt(rtb,rtb.getSelectedIndex());      
           String tabTitle = rtb.getTitleAt(rtb.getSelectedIndex());
-          Vector params = new Vector();
-          params.addElement(project);
-          params.addElement(tabTitle);
-          // remove return characters for Win machines
-          params.addElement(jtc.getText().replace('\r',' '));
 
-          try
+          if(org.emboss.jemboss.Jemboss.withSoap)
           {
-            PrivateRequest gReq = new PrivateRequest(mysettings,
-                                    "save_project_file",params);
-          }
-          catch(JembossSoapException jse){}
+            Vector params = new Vector();
+            params.addElement(project);
+            params.addElement(tabTitle);
+            // remove return characters for Win machines
+            params.addElement(jtc.getText().replace('\r',' '));
 
+            try
+            {
+              PrivateRequest gReq = new PrivateRequest(mysettings,
+                                      "save_project_file",params);
+            }
+            catch(JembossSoapException jse){}
+          }
+          else
+          {
+            JembossServer js = new JembossServer(mysettings.getResultsHome());
+            js.save_project_file(project, tabTitle, 
+                                 jtc.getText().replace('\r',' '));
+          }
         }
       });
     } 
@@ -532,7 +542,11 @@ public class ResultsMenuBar extends JMenuBar
 
     if(addRemoteSaveMenu)
     {
-      saveToRemoteFile = new JMenuItem("Save to Server File");
+      if(org.emboss.jemboss.Jemboss.withSoap)
+        saveToRemoteFile = new JMenuItem("Save to Server File");
+      else
+        saveToRemoteFile = new JMenuItem("Save Back to Project Directory");
+
       fileMenu.add(saveToRemoteFile);
     }
     saveToLocalFile = new JMenuItem("Save to Local File...");

@@ -537,7 +537,7 @@ public class ShowSavedResults extends JFrame
 	    ResultList thisres = new ResultList(mysettings,project, 
                                              "show_saved_results");
 	    setCursor(cdone);
-	    if (thisres.getStatus().equals("0")) 
+	    if(thisres.getStatus().equals("0")) 
               new ShowResultSet(thisres.hash(),project,mysettings);
             else 
               JOptionPane.showMessageDialog(null,
@@ -572,9 +572,9 @@ public class ShowSavedResults extends JFrame
 	    setCursor(cbusy);
             String project = convertToOriginal(st.getSelectedValue());
 	    ResultList thisres = new ResultList(mysettings,project, 
-                                             "show_saved_results");
+                                                "show_saved_results");
 	    setCursor(cdone);
-	    if (thisres.getStatus().equals("0")) 
+	    if(thisres.getStatus().equals("0")) 
               new ShowResultSet(thisres.hash(),project,mysettings);
             else 
               JOptionPane.showMessageDialog(null,

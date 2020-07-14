@@ -30,6 +30,7 @@ import java.net.URL;
 import org.apache.regexp.*;
 
 import java.util.Hashtable;
+import java.util.Vector;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -42,6 +43,7 @@ import org.emboss.jemboss.gui.*;
 import org.emboss.jemboss.soap.*;
 import org.emboss.jemboss.gui.sequenceChooser.*;
 import org.emboss.jemboss.graphics.Graph2DPlot;
+import org.emboss.jemboss.server.JembossServer;
 
 /**
 *
@@ -78,7 +80,6 @@ public class BuildJembossForm implements ActionListener
   protected static JPanel outSection;
   protected static JPanel inpSection;
 
-//private JComboBox fieldOption[];
   private JembossComboPopup fieldOption[];
   private JList multiOption[];
   private SetInFileCard inSeq[];
@@ -163,8 +164,17 @@ public class BuildJembossForm implements ActionListener
         String url = null;
         if(!withSoap)
           text = helptext;
-        else
-          url = mysettings.getembURL()+applName+".html";
+        else 
+        {
+          String urlEmbassyPrefix = parseAcd.getUrlPrefix();
+          url = mysettings.getembURL();
+          if(urlEmbassyPrefix != null)
+            url = url + "apps/release/4.0/embassy/" +applName+ "/" ;
+          else
+            url = url + "apps/release/4.0/emboss/apps/";
+
+          url = url+applName+".html";
+        }
 
         JEditorPane htmlPane = null;
         if(url == null)
@@ -430,33 +440,25 @@ public class BuildJembossForm implements ActionListener
       f.setCursor(cbusy);
       if(!withSoap)
       {
-        String embossCommand = getCommand();;
+        Hashtable filesToMove = new Hashtable();
+        String embossCommand = getCommand(filesToMove);
+
+//      String embossCommand = getCommand();
 
         if(!embossCommand.equals("NOT OK"))
         {
-          RunEmbossApplication2 rea = new RunEmbossApplication2(
-                                           embossCommand,envp,null);
-
           if(mysettings.getCurrentMode().equals("batch"))
           {
-            BatchProcess bp = new BatchProcess(rea);
-            bp.start();
-            Jemboss.resultsManager.addRunningJob();
+            BatchSoapProcess bsp = new BatchSoapProcess(embossCommand,filesToMove,mysettings);
+            bsp.setWithSoap(false);
+            bsp.start();
           }
           else
           {
-            rea.waitFor();
-
-            String msg = rea.getProcessStderr().trim();
-            if(msg != null && !msg.equals(""))
-              JOptionPane.showMessageDialog(null, msg, "alert",
-                                   JOptionPane.ERROR_MESSAGE);
-
-            f.setCursor(cdone);
-            showStandaloneResults(rea.getProcessStdout());
-
-            if(applName.equals("emma"))
-              balign.setVisible(true);
+            JembossServer js = new JembossServer(mysettings.getResultsHome());
+            Vector result = js.run_prog(embossCommand, mysettings.getCurrentMode(), 
+                                        filesToMove);
+            new ShowResultSet(convert(result,false),filesToMove,mysettings);
           }
         }
       }
@@ -506,6 +508,26 @@ public class BuildJembossForm implements ActionListener
     }
   }
 
+  public static Hashtable convert(Vector vans, boolean keepStatus)
+  {
+    Hashtable proganswer = new Hashtable();
+    // assumes it's even sized
+    int n = vans.size();
+    for(int j=0;j<n;j+=2)
+    {
+      String s = (String)vans.get(j);
+      if(s.equals("msg"))
+      {
+        String msg = (String)vans.get(j+1);
+        if(msg.startsWith("Error"))
+          JOptionPane.showMessageDialog(null, msg, "alert",
+                                JOptionPane.ERROR_MESSAGE);
+      }
+      else if(keepStatus || !s.equals("status"))
+        proganswer.put(s,vans.get(j+1));
+    }
+    return proganswer;
+  }
 
   /**
   *
@@ -941,18 +963,39 @@ public class BuildJembossForm implements ActionListener
           }
           else
           {
+            String tmp = null;
             try
             {
-              File tf = File.createTempFile(fn, ".jembosstmp",
+              File tf;
+              try
+              {
+                if(mysettings.isCygwin())
+                  tmp = mysettings.getCygwinRoot()+System.getProperty("file.separator")+"tmp";
+                else
+                  tmp = System.getProperty("java.io.tmpdir");
+
+                tf = File.createTempFile(fn, ".jembosstmp", new File(tmp));
+              }
+              catch(IOException ioe)
+              {
+                tf = File.createTempFile(fn, ".jembosstmp",
                                             new File(cwd));
+              }
+
               PrintWriter out = new PrintWriter(new FileWriter(tf));
               out.println(cp);
               out.close();
-              if(mysettings.isCygwin())
-                fn = new String(tf.getName());
-              else
-                fn = new String(tf.getCanonicalPath());
-            } catch (IOException ioe) {}
+              fn = tf.getCanonicalPath();
+            }
+            catch (IOException ioe) 
+            {
+              JOptionPane.showMessageDialog(null,
+                       "Cannot write to\n"+
+                       tmp+"\n"+
+                       "or\n"+
+                       cwd,
+                       "Problem creating a temporary file!", JOptionPane.ERROR_MESSAGE);
+            }
             options = options.concat(" -" + val + " " + fn );
           }
         }
@@ -1106,36 +1149,12 @@ public class BuildJembossForm implements ActionListener
   }
 
 
-  public class BatchProcess extends Thread
-  {
-    private RunEmbossApplication2 rea;
-    public BatchProcess(RunEmbossApplication2 rea)
-    {
-      this.rea = rea;
-    }
- 
-    public void run()
-    {
-      rea.waitFor();
-
-      String msg = rea.getProcessStderr().trim();
-      if(msg != null && !msg.equals(""))
-        JOptionPane.showMessageDialog(null, msg, "alert",
-                              JOptionPane.ERROR_MESSAGE);
-
-      showStandaloneResults(rea.getProcessStdout());
-
-      if(applName.equals("emma"))
-        balign.setVisible(true);
-      Jemboss.resultsManager.deleteRunningJob();
-    }
-  }
-
   public class BatchSoapProcess extends Thread
   {
     private String embossCommand;
     private Hashtable filesToMove;
     private JembossParams mysettings;
+    private boolean withSoap = true;
 
     public BatchSoapProcess(String embossCommand, Hashtable filesToMove,
                             JembossParams mysettings)
@@ -1143,6 +1162,11 @@ public class BuildJembossForm implements ActionListener
       this.embossCommand = embossCommand;
       this.filesToMove   = filesToMove;
       this.mysettings    = mysettings;
+    }
+
+    public void setWithSoap(boolean withSoap)
+    {
+      this.withSoap = withSoap;
     }
 
     public void run()
@@ -1181,9 +1205,22 @@ public class BuildJembossForm implements ActionListener
         fsend.setVisible(true);
         batchWorker.start();
 
-        JembossRun thisrun = new JembossRun(embossCommand,"",
-                                   filesToMove,mysettings);
-        JembossProcess er = new JembossProcess((String)thisrun.get("jobid"));
+        final JembossProcess er;
+        if(withSoap)
+        {
+          JembossRun thisrun = new JembossRun(embossCommand,"",
+                                       filesToMove,mysettings);
+          er = new JembossProcess((String)thisrun.get("jobid"));
+        }
+        else
+        {
+          JembossServer js = new JembossServer(mysettings.getResultsHome());
+          Vector result = js.run_prog(embossCommand,mysettings.getCurrentMode(),
+                                        filesToMove);
+          Hashtable resultHash = convert(result, false);
+          er = new JembossProcess((String)resultHash.get("jobid"));
+        }
+
         Jemboss.resultsManager.addResult(er);
         Jemboss.resultsManager.updateStatus();
         if(!Jemboss.resultsManager.isAutoUpdate())
