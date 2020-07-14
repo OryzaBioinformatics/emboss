@@ -16,7 +16,7 @@ sub runtest ($) {
     my $posbytes = 0;
     my $rembytes = 0;
     my $errcount = 0;
-    my $timeout = 300;
+    my $timeout = 600;
     my $timealarm = 0;
 
     if (defined($tests{$name})) {
