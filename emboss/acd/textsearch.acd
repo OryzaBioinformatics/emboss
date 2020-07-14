@@ -29,12 +29,13 @@ section: required [
            For example: \
            human|mouse \
            will find text with either 'human' OR 'mouse' in the text"
+    knowntype: "regular expression"
   ]
 
 endsection: required
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -44,7 +45,7 @@ section: advanced [
     information: "Do a case-sensitive search"
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

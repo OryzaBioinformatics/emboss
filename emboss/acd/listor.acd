@@ -21,8 +21,8 @@ section: input [
 
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -49,7 +49,7 @@ section: advanced [
            that also occur in the second"
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

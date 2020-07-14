@@ -16,8 +16,8 @@ section: input [
 
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -66,7 +66,7 @@ section: advanced [
     help: "Displays only ORFs starting with an M."
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

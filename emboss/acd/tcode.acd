@@ -14,6 +14,15 @@ section: input [
     type: "dna"
   ]
 
+  datafile: datafile  [
+    information: "Testcode data file"
+    default: "Etcode.dat"
+    help: "The default data file is Etcode.dat and contains coding
+           probabilities for each base. The probabilities are for both
+           positional and compositional information."
+    knowntype: "testcode data"
+  ]
+
 endsection: input
 
 section: required [
@@ -31,15 +40,6 @@ section: required [
            TESTCODE statistic will be performed each time. The window will
            then slide along the sequence, covering the same number of bases
            each time."
-  ]
-
-  boolean: plot  [
-    information: "Graphical display"
-    default: "N"
-    help: "On selection a graph of the sequence (X axis) plotted
-           against the coding score (Y axis) will be displayed. Sequence
-           above the green line is coding, that below the red line is
-           non-coding."
   ]
 
 endsection: required
@@ -60,14 +60,6 @@ section: advanced [
            altered to increase or decrease the increment of the slide."
   ]
 
-  datafile: datafile  [
-    information: "Testcode data file"
-    default: "Etcode.dat"
-    help: "The default data file is Etcode.dat and contains coding
-           probabilities for each base. The probabilities are for both
-           positional and compositional information."
-  ]
-
 endsection: advanced
 
 section: output [
@@ -75,12 +67,22 @@ section: output [
   type: "page"
 ]
 
+  toggle: plot  [
+    information: "Graphical display"
+    default: "N"
+    help: "On selection a graph of the sequence (X axis) plotted
+           against the coding score (Y axis) will be displayed. Sequence
+           above the green line is coding, that below the red line is
+           non-coding."
+  ]
+
   report: outfile  [
     standard: "@(!$(plot))"
     rformat: "table"
     multiple: "Y"
     precision: "3"
     taglist: "str:Estimation"
+    nullok: "$(plot)"
   ]
 
   xygraph: graph  [

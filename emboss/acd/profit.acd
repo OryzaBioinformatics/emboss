@@ -12,7 +12,7 @@ section: input [
   infile: infile  [
     parameter: "Y"
     information: "Profile or matrix file"
-    knowntype: "profile file;matrix file"
+    knowntype: "profile or matrix"
   ]
 
   seqall: sequence  [

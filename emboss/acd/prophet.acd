@@ -16,18 +16,18 @@ section: input [
     type: "any"
   ]
 
+  infile: infile  [
+    parameter: "Y"
+    information: "Profile or matrix file"
+    knowntype: "profile or matrix"
+  ]
+
 endsection: input
 
 section: required [
   information: "Required section"
   type: "page"
 ]
-
-  infile: infile  [
-    parameter: "Y"
-    information: "Profile or matrix file"
-    knowntype: "profile file;matrix file"
-  ]
 
   float: gapopen  [
     standard: "Y"

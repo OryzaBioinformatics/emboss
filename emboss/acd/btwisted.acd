@@ -14,24 +14,19 @@ section: input [
     type: "PureDNA"
   ]
 
-endsection: input
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
-  string: angledata  [
+  datafile: angledata  [
     default: "Eangles.dat"
     information: "File containing base pair twist angles"
+    knowntype: "base pair twist angles"
   ]
 
-  string: energydata  [
+  datafile: energydata  [
     default: "Eenergy.dat"
     information: "File containing base pair stacking energies"
+    knowntype: "base pair stacking energies"
   ]
 
-endsection: advanced
+endsection: input
 
 section: output [
   information: "Output section"

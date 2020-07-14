@@ -14,16 +14,16 @@ section: input [
     type: "DNA"
   ]
 
+  codon: cfile  [
+    help: "Codon usage file"
+  ]
+
 endsection: input
 
 section: advanced [
   information: "Advanced section"
   type: "page"
 ]
-
-  codon: cfile  [
-    help: "Codon usage file"
-  ]
 
   integer: window  [
     default: "30"
@@ -49,8 +49,9 @@ section: output [
   type: "page"
 ]
 
-  boolean: plot  [
+  toggle: plot  [
     information: "Produce plot"
+    default: "Y"
   ]
 
   xygraph: graph  [
@@ -61,6 +62,7 @@ section: output [
   outfile: outfile  [
     standard: "@(!$(plot))"
     knowntype: "syco output"
+    nullok: "$(plot)"
   ]
 
 endsection: output

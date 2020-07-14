@@ -13,20 +13,14 @@ section: input [
     type: "puredna"
   ]
 
-endsection: input
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
   datafile: anglesfile  [
     additional: "Y"
-    information: "angles file"
+    information: "Angles data file"
     default: "Eangles_tri.dat"
+    knowntype: "base trimer roll angles"
   ]
 
-endsection: advanced
+endsection: input
 
 section: output [
   information: "Output section"

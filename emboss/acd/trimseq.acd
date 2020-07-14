@@ -16,8 +16,8 @@ section: input [
 
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -58,6 +58,13 @@ section: advanced [
     help: "In protein sequences, trim off not only X's, but also the
            *'s"
   ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
 
   boolean: left  [
     default: "Y"

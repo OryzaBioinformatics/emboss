@@ -24,12 +24,13 @@ section: required [
     standard: "Y"
     default: "gc"
     information: "Residue letters"
+    knowntype: "nucleotide sequence"
   ]
 
 endsection: required
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -45,14 +46,14 @@ section: advanced [
     information: "Averaging window"
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"
   type: "page"
 ]
 
-  boolean: plot  [
+  toggle: plot  [
     default: "N"
     information: "Produce graphic"
   ]
@@ -64,6 +65,7 @@ section: output [
   outfile: outfile  [
     standard: "@(!$(plot))"
     knowntype: "freak output"
+    nullok: "$(plot)"
   ]
 
 endsection: output

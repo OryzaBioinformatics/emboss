@@ -15,8 +15,8 @@ section: input [
 
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -90,6 +90,13 @@ section: advanced [
            programs will not accept protein sequences with '*' characters in
            them."
   ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
 
   boolean: alternative  [
     default: "N"

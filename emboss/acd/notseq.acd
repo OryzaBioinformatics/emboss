@@ -37,6 +37,7 @@ section: required [
            myseq, hs*, one two three \
            a file containing a list of sequence names can be specified by
            giving the file name preceeded by a '@', eg: '@names.dat'"
+    knowntype: "sequence id list"
   ]
 
 endsection: required

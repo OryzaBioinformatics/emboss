@@ -3,6 +3,11 @@ application: ajtest [
   groups: "Test"
 ]
 
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
 seqall: sequence  [
   parameter: "Y"
   type: "any"
@@ -12,3 +17,43 @@ seqset: bsequence  [
   parameter: "Y"
   type: "any"
 ]
+
+directory: directory [
+  information: "Temporary directory"
+  default: "/tmp"
+]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+  standard: "Y"
+    nullok: "Y"
+    nulldefault: "Y"
+    missing: "Y"
+    extension: "nulloutfile"
+    knowntype: "ajtest output"
+  ]
+
+  seqout: outseq [
+  standard: "Y"
+    nullok: "Y"
+    nulldefault: "Y"
+    missing: "Y"
+    type: "any"
+  ]
+
+  featout: outfeat [
+  standard: "Y"
+    nullok: "Y"
+    nulldefault: "Y"
+    missing: "Y"
+    type: "any"
+  ]
+
+endsection: output
+

@@ -15,10 +15,20 @@ section: input [
     help: "File containing a sequence alignment"
   ]
 
+  matrix: matrixfile  [
+    additional: "Y"
+    information: "Matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins)
+           or the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
+
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -49,18 +59,21 @@ section: advanced [
     additional: "Y"
     information: "Colour to display identical residues (RED)"
     default: "RED"
+    knowntype: "plot colour"
   ]
 
   string: csimilarity  [
     additional: "Y"
     information: "Colour to display similar residues (GREEN)"
     default: "GREEN"
+    knowntype: "plot colour"
   ]
 
   string: cother  [
     additional: "Y"
     information: "Colour to display other residues (BLACK)"
     default: "BLACK"
+    knowntype: "plot colour"
   ]
 
   boolean: docolour  [
@@ -77,7 +90,7 @@ section: advanced [
 
   string: shade  [
     additional: "Y"
-    information: "shading"
+    information: "Shading"
     help: "Set to BPLW for normal shading \
            so for pair = 1.5,1.0,0.5 and shade = BPLW \
            Residues score Colour \
@@ -87,6 +100,10 @@ section: advanced [
            under 0.5 ....... WHITE (W) \
            The only four letters allowed are BPLW, in any order."
     default: ""
+    maxlength: "4"
+    minlength: "0"
+    knowntype: "plot shading"
+    pattern: "^([BPLW]{4})?$"
   ]
 
   string: pair  [
@@ -94,6 +111,7 @@ section: advanced [
     information: "Values to represent identical similar
                   related"
     default: "1.5,1.0,0.5"
+    knowntype: "threshold identity similar related"
   ]
 
   integer: identity  [
@@ -120,6 +138,7 @@ section: advanced [
     additional: "Y"
     information: "Colour to be used for background. (GREY)"
     default: "GREY"
+    knowntype: "plot colour"
   ]
 
   boolean: name  [
@@ -188,16 +207,6 @@ section: advanced [
       maximum: "3"
     ]
 
-    matrix: matrixfile  [
-      additional: "Y"
-      information: "Matrix file"
-      protein: "$(acdprotein)"
-      help: "This is the scoring matrix file used when comparing
-             sequences. By default it is the file 'EBLOSUM62' (for proteins)
-             or the file 'EDNAFULL' (for nucleic sequences). These files are
-             found in the 'data' directory of the EMBOSS installation."
-    ]
-
   endsection: consensussection
 
   integer: showscore  [
@@ -212,7 +221,7 @@ section: advanced [
     default: "N"
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

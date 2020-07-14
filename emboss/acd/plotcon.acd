@@ -15,6 +15,16 @@ section: input [
     help: "File containing a sequence alignment"
   ]
 
+  matrix: scorefile  [
+    additional: "Y"
+    information: "Comparison matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
+
 endsection: input
 
 section: required [
@@ -31,23 +41,6 @@ section: required [
   ]
 
 endsection: required
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
-  matrix: scorefile  [
-    additional: "Y"
-    information: "Comparison matrix file"
-    protein: "$(acdprotein)"
-    help: "This is the scoring matrix file used when comparing
-           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
-           the file 'EDNAFULL' (for nucleic sequences). These files are
-           found in the 'data' directory of the EMBOSS installation."
-  ]
-
-endsection: advanced
 
 section: output [
   information: "Output section"

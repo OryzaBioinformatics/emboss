@@ -16,8 +16,8 @@ section: input [
 
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -80,6 +80,13 @@ section: advanced [
            potential START or STOP codons. The last option assumes that ORF
            lengths are calculated between two STOP codons."
   ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
 
   boolean: methionine  [
     default: "Y"

@@ -3,6 +3,11 @@ application: histogramtest [
   groups: "Test"
 ]
 
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
 integer: sets  [
   standard: "y"
   default: "1"
@@ -30,17 +35,26 @@ integer: bins  [
 integer: xstart  [
   additional: "y"
   default: "0"
-  information: "start value for x axis"
+  information: "Start value for x axis"
 ]
 
 integer: xend  [
   additional: "y"
   default: "@($(xstart)+$(points))"
   minimum: "@($(xstart)+1)"
-  information: "end value for x axis"
+  information: "End value for x axis"
   expected: "Start value plus number of data points"
+]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
 xygraph: graph  [
   standard: "Y"
 ]
+
+endsection: output

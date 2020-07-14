@@ -31,6 +31,7 @@ section: required [
            residue followed by Pro followed by two to four of any residue
            followed by Cys. The search is case-independent, so 'AAA' matches
            'aaa'."
+    knowntype: "prosite pattern"
   ]
 
 endsection: required

@@ -19,27 +19,6 @@ section: input [
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
 
-endsection: input
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
-  integer: windowsize  [
-    additional: "Y"
-    information: "window size over which to test threshhold"
-    default: "10"
-    minimum: "3"
-  ]
-
-  integer: threshold  [
-    additional: "Y"
-    information: "threshold"
-    default: "23"
-    minimum: "0"
-  ]
-
   matrix: matrixfile  [
     additional: "Y"
     information: "Matrix file"
@@ -50,14 +29,35 @@ section: advanced [
            found in the 'data' directory of the EMBOSS installation."
   ]
 
-endsection: advanced
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: windowsize  [
+    additional: "Y"
+    information: "Window size over which to test threshhold"
+    default: "10"
+    minimum: "3"
+  ]
+
+  integer: threshold  [
+    additional: "Y"
+    information: "Threshold"
+    default: "23"
+    minimum: "0"
+  ]
+
+endsection: additional
 
 section: output [
   information: "Output section"
   type: "page"
 ]
 
-  boolean: stretch  [
+  toggle: stretch  [
     default: "N"
     information: "Stretch plot"
     help: "Display a non-proportional graph"

@@ -14,6 +14,13 @@ section: input [
     type: "DNA"
   ]
 
+  datafile: datafile  [
+    default: ""
+    information: "Alternative RE data file"
+    nullok: Y
+    knowntype: "restriction enzyme data"
+  ]
+
 endsection: input
 
 section: required [
@@ -24,6 +31,7 @@ section: required [
   string: seqcomp  [
     parameter: "Y"
     information: "Overlap sequence"
+    knowntype: "nucleotide sequence"
   ]
 
 endsection: required
@@ -54,7 +62,7 @@ section: advanced [
 
   boolean: threeprime  [
     default: "N"
-    information: "3' overhang? (else 5') e.g. BamHI has CTAG as
+    information: "Use 3' overhang e.g. BamHI has CTAG as
                   a 5' overhang, and ApaI has CCGG as 3' overhang."
   ]
 
@@ -81,11 +89,6 @@ section: advanced [
   boolean: commercial  [
     default: "Y"
     information: "Only enzymes with suppliers"
-  ]
-
-  string: datafile  [
-    default: ""
-    information: "Alternative RE data file"
   ]
 
 endsection: advanced

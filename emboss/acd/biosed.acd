@@ -24,16 +24,10 @@ section: required [
     standard: "Y"
     information: "Sequence section to match"
     default: "N"
+    knowntype: "sequence"
   ]
 
-endsection: required
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
-  boolean: delete  [
+  toggle: delete  [
     information: "Delete the target sequence sections"
     default: "N"
   ]
@@ -42,9 +36,10 @@ section: advanced [
     standard: "@(!$(delete))"
     information: "Replacement sequence section"
     default: "A"
+    knowntype: "sequence"
   ]
 
-endsection: advanced
+endsection: required
 
 section: output [
   information: "Output section"

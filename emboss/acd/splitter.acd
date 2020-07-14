@@ -16,8 +16,8 @@ section: input [
 
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -35,6 +35,13 @@ section: advanced [
     default: "0"
     information: "Overlap between split sequences"
   ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
 
   boolean: addoverlap  [
     default: "N"

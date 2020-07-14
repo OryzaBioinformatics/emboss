@@ -75,6 +75,8 @@ section: output [
     additional: "Y"
     default: "GATC"
     information: "Base graphs to be displayed"
+    pattern: "[GATC]+"
+    knowntype: "nucleotide codes"
   ]
 
 endsection: output

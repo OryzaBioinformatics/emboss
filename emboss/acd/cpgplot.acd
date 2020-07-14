@@ -115,7 +115,7 @@ section: output [
            plus G within a window is displayed."
   ]
 
-  featout: featout  [
+  featout: outfeat  [
     parameter: "Y"
     help: "File for output features"
     type: "nucleotide"

@@ -15,8 +15,8 @@ section: input [
 
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -27,6 +27,7 @@ section: advanced [
   ]
 
   integer: aangle  [
+    additional: "Y"
     default: "100"
     information: "Alpha helix angle (degrees)"
   ]
@@ -36,6 +37,13 @@ section: advanced [
     default: "160"
     information: "Beta sheet angle (degrees)"
   ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
 
   float: baseline  [
     default: "0.35"
@@ -49,7 +57,7 @@ section: output [
   type: "page"
 ]
 
-  boolean: plot  [
+  toggle: plot  [
     default: "N"
     information: "Produce graphic"
   ]
@@ -66,6 +74,7 @@ section: output [
   outfile: outfile  [
     standard: "@(!$(plot))"
     knowntype: "hmoment output"
+    nullok: "$(plot)"
   ]
 
 endsection: output

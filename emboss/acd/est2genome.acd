@@ -11,13 +11,13 @@ section: input [
   type: "page"
 ]
 
-  seqall: est [
+  seqall: estsequence [
     parameter: "Y"
     type: "dna"
     information: "EST sequence(s)"
   ]
 
-  sequence: genome [
+  sequence: genomesequence [
     parameter: "Y"
     type: "dna"
     information: "Genomic sequence"
@@ -25,8 +25,8 @@ section: input [
 
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -72,6 +72,13 @@ section: advanced [
     help: "Exclude alignments with scores below this threshold score."
   ]
 
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
   boolean: reverse  [
     information: "Reverse orientation"
     help: "Reverse the orientation of the EST sequence"
@@ -84,7 +91,7 @@ section: advanced [
            donor-acceptor sites then set this to be false."
   ]
 
-  string: mode  [
+  list: mode  [
     default: "both"
     information: "Comparison mode"
     help: "This determines the comparion mode. The default value is
@@ -94,6 +101,9 @@ section: advanced [
            direction. The other allowed modes are 'forward', when just the
            forward strand is searched, and 'reverse', ditto for the reverse
            strand."
+   values: "both:Both strands;
+            forward:Forward strand only;
+            reverse:Reverse strand only"
   ]
 
   boolean: best  [
@@ -106,7 +116,7 @@ section: advanced [
   float: space  [
     default: "10.0"
     information: "Space threshold (in megabytes)"
-    help: "for linear-space recursion. If product of sequence lengths
+    help: "For linear-space recursion. If product of sequence lengths
            divided by 4 exceeds this then a divide-and-conquer strategy is
            used to control the memory requirements. In this way very long
            sequences can be aligned. \

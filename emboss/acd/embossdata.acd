@@ -4,12 +4,12 @@ application: embossdata [
   groups: "Utils:Misc"
 ]
 
-section: advanced [
-  information: "Advanced section"
+section: input [
+  information: "Input section"
   type: "page"
 ]
 
-  boolean: showall  [
+  toggle: showall  [
     additional: "Y"
     information: "Show all potential EMBOSS data files"
   ]
@@ -26,8 +26,17 @@ section: advanced [
     help: "This specifies the name of the file that should be fetched
            into the current directory or searched for in all of the
            directories that EMBOSS programs search when looking for a data
-           file. The name of the file is not altered when it is fetched."
+           file. The name of the file is not altered when it is
+    fetched."
+    knowntype: "filename"
   ]
+
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
 
   selection: reject  [
     default: "3, 5, 6"

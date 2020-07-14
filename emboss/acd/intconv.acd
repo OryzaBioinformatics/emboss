@@ -4,13 +4,27 @@ application: intconv [
   groups: "Test"
 ]
 
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
 infile: infile  [
   parameter: "Y"
   knowntype: "integer long data"
   information: "Input file"
 ]
 
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
 outfile: outfile  [
   parameter: "Y"
   knowntype: "ajint ajlong data"
 ]
+
+endsection: output

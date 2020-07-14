@@ -12,7 +12,7 @@ section: input [
   type: "page"
 ]
 
-  string: infdat  [
+  directory: infdat  [
     parameter: "Y"
     information: "Name of prosite directory"
   ]

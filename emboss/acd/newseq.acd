@@ -14,12 +14,14 @@ section: required [
     help: "The name of of the sequence should be a single word that
            you will use to identify the sequence. It should have no (or few)
            punctuation characters in it."
+    knowntype: "name"
   ]
 
   string: description  [
     parameter: "Y"
     information: "Description of the sequence"
     help: "Enter any description of the sequence that you require."
+    knowntype: "string"
   ]
 
   list: type  [
@@ -63,6 +65,7 @@ section: input [
            The keyboard will beep at you when you have reached this limit and
            you will not be able to press the RETURN/ENTER key until you have
            deleted a few characters."
+    knowntype: "sequence"
   ]
 
 endsection: input

@@ -36,18 +36,6 @@ section: output [
   type: "page"
 ]
 
-  section: datasection [
-    information: "Data output section"
-    type: "frame"
-  ]
-
-    graph: graph  [
-      standard: "Y"
-      gtitle: "Polydot:"
-    ]
-
-  endsection: datasection
-
   integer: gap  [
     default: "10"
     minimum: "0"
@@ -63,22 +51,21 @@ section: output [
     information: "Draw a box around each dotplot"
   ]
 
-  boolean: dumpfeat  [
+  toggle: dumpfeat  [
     default: "N"
     additional: "Y"
     information: "Dump all matches as feature files"
   ]
 
-  string: format  [
-    default: "gff"
-    additional: "Y"
-    information: "format to Dump out as"
+  featout: outfeat  [
+    standard: "$(dumpfeat)"
+    nullok: "@(!$(dumpfeat))"
+    nulldefault: "@(!$(dumpfeat))"
   ]
 
-  string: ext  [
-    default: "gff"
-    additional: "Y"
-    information: "Extension for feature file"
+  graph: graph  [
+    standard: "Y"
+    gtitle: "Polydot:"
   ]
 
 endsection: output

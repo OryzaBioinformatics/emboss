@@ -60,14 +60,14 @@ section: output [
               str:first_feature str:second_feature"
   ]
 
-  featout: afeatout  [
+  featout: aoutfeat  [
     parameter: "Y"
     default: "$(asequence.name).diffgff"
     help: "File for output of first sequence's features"
     type: "@($(acdprotein) ? protein : nucleotide)"
   ]
 
-  featout: bfeatout [
+  featout: boutfeat [
     parameter: "Y"
     default: "$(bsequence.name).diffgff"
     help: "File for output of second sequence's features"

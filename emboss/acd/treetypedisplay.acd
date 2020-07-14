@@ -3,6 +3,13 @@ application: treetypedisplay [
   groups: "Test"
 ]
 
-graph: graph  [
-  standard: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  graph: graph  [
+    standard: "Y"
+  ]
+
+endsection: output

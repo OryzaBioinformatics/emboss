@@ -48,6 +48,7 @@ section: required [
            respectively ends with a `>' symbol. \
            A period ends the pattern. (Optional in fuzzpro). \
            For example, [DE](2)HS{P}X(2)PX(2,4)C"
+     knowntype: "prosite pattern"
   ]
 
   integer: mismatch  [

@@ -15,25 +15,6 @@ section: input [
     type: "gapany"
   ]
 
-endsection: input
-
-section: output [
-  information: "Output section"
-  type: "page"
-]
-
-  align: outfile  [
-    parameter: "Y"
-    aformat: "SRS"
-  ]
-
-endsection: output
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
   matrixf: floatmatrix  [
     additional: "Y"
     information: "Matrix file"
@@ -54,8 +35,27 @@ section: advanced [
            found in the 'data' directory of the EMBOSS installation."
   ]
 
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
   boolean: dofloat  [
     information: "Use floating point matrix"
   ]
 
 endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  align: outfile  [
+    parameter: "Y"
+    aformat: "SRS"
+  ]
+
+endsection: output

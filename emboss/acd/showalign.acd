@@ -14,10 +14,20 @@ section: input [
     help: "The sequence alignment to be displayed."
   ]
 
+  matrix: matrix  [
+    additional: "Y"
+    information: "Similarity scoring Matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
+
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -33,6 +43,7 @@ section: advanced [
            then the consensus sequence will be used as the reference
            sequence. By default the consensus sequence is used as the
            reference sequence."
+    knowntype: "sequence id input"
   ]
 
   boolean: bottom  [
@@ -84,15 +95,19 @@ section: advanced [
            made on the basis of their similarity to the reference sequence."
   ]
 
-  matrix: matrix  [
+  boolean: consensus  [
     additional: "Y"
-    information: "Similarity scoring Matrix file"
-    protein: "$(acdprotein)"
-    help: "This is the scoring matrix file used when comparing
-           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
-           the file 'EDNAFULL' (for nucleic sequences). These files are
-           found in the 'data' directory of the EMBOSS installation."
+    default: "Y"
+    information: "Display the consensus line"
+    help: "If this is true then the consensus line is displayed."
   ]
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
 
   range: uppercase  [
     default: ""
@@ -196,13 +211,6 @@ section: advanced [
            identities at a position for it to give a consensus. Therefore, if
            this is set to 100% only columns of identities contribute to the
            consensus."
-  ]
-
-  boolean: consensus  [
-    additional: "Y"
-    default: "Y"
-    information: "Display the consensus line"
-    help: "If this is true then the consensus line is displayed."
   ]
 
 endsection: advanced

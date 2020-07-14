@@ -3,13 +3,27 @@ application: seqinfo [
   groups: "Test"
 ]
 
-seqall: sequence  [
-  parameter: "Y"
-  type: "gapany"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-  default: "stdout"
-  knowntype: "seqinfo output"
+  seqall: sequence  [
+    parameter: "Y"
+    type: "gapany"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+ outfile: outfile  [
+   parameter: "Y"
+   default: "stdout"
+   knowntype: "seqinfo output"
+ ]
+
+endsection: output

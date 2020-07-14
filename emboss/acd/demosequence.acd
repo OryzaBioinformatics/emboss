@@ -2,3 +2,10 @@ application: demosequence [
   documentation: "demonstration of the sequence functions"
   groups: "Test"
 ]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+endsection: input

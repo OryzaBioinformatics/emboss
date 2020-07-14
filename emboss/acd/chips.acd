@@ -13,15 +13,15 @@ section: input [
     type: "DNA"
   ]
 
+  codon: cfile  [
+  ]
+
 endsection: input
 
 section: advanced [
   information: "Advanced section"
   type: "page"
 ]
-
-  codon: cfile  [
-  ]
 
   boolean: sum  [
     default: "Y"

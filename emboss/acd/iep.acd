@@ -22,7 +22,7 @@ section: advanced [
 ]
 
   float: step  [
-    information: "pH step value"
+    information: "Step value for pH"
     minimum: ".01"
     maximum: "1."
     default: ".5"
@@ -45,12 +45,12 @@ section: output [
   type: "page"
 ]
 
-  boolean: plot  [
+  toggle: plot  [
     default: "N"
     information: "Plot charge vs pH"
   ]
 
-  boolean: report  [
+  toggle: report  [
     default: "Y"
     information: "Write results to a file"
   ]
@@ -62,6 +62,7 @@ section: output [
   outfile: outfile  [
     standard: "$(report)"
     knowntype: "iep output"
+    nullok: "@(!$(report))"
   ]
 
 endsection: output

@@ -14,6 +14,12 @@ section: input [
     knowntype: "molwt list"
   ]
 
+  datafile: datafile  [
+    default: "Emwfilter.dat"
+    information: "Data file of noisy molecular weights"
+    knowntype: "standard molwt list"
+  ]
+
 endsection: input
 
 section: required [
@@ -23,9 +29,16 @@ section: required [
 
   float: tolerance  [
     standard: "Y"
-    information: "ppm tolerance"
+    information: "Ppm tolerance"
     default: "50.0"
   ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
 
   boolean: showdel  [
     additional: "Y"
@@ -33,20 +46,7 @@ section: required [
     default: "N"
   ]
 
-endsection: required
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
-  datafile: datafile  [
-    default: "Emwfilter.dat"
-    information: "Data file of noisy molecular weights"
-    knowntype: "molwt list"
-  ]
-
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

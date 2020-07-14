@@ -24,7 +24,7 @@ section: required [
 
   float: tolerance  [
     standard: "Y"
-    information: "ppm tolerance"
+    information: "Ppm tolerance"
     default: "50.0"
   ]
 

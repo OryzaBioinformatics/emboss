@@ -57,17 +57,10 @@ section: output [
     information: "Draw a box around dotplot"
   ]
 
-  section: datasection [
-    information: "Data output section"
-    type: "frame"
+  graph: graph  [
+    standard: "Y"
+    gxtitle: "$(bsequence.name)"
+    gytitle: "$(asequence.name)"
   ]
-
-    graph: graph  [
-      standard: "Y"
-      gxtitle: "$(bsequence.name)"
-      gytitle: "$(asequence.name)"
-    ]
-
-  endsection: datasection
 
 endsection: output

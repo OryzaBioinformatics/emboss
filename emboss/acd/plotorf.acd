@@ -23,11 +23,13 @@ section: advanced [
   string: start  [
     default: "ATG"
     information: "Start codons"
+    knowntype: "codon list"
   ]
 
   string: stop  [
     default: "TAA,TAG,TGA"
     information: "Stop codons"
+    knowntype: "codon list"
   ]
 
 endsection: advanced

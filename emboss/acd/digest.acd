@@ -14,6 +14,13 @@ section: input [
     type: "Protein"
   ]
 
+  datafile: aadata  [
+    information: "Amino acid data file"
+    help: "Molecular weight data for amino acids"
+    default: "Eamino.dat"
+    knowntype: "amino acid properties"
+  ]
+
 endsection: input
 
 section: required [
@@ -47,12 +54,6 @@ section: advanced [
     help: "Trypsin will not normally cut after a K if it is followed
            by (e.g.) another K or a P. Specifying this shows those cuts. as
            well as the favoured ones."
-  ]
-
-  string: aadata  [
-    information: "Amino acid data file"
-    help: "Molecular weight data for amino acids"
-    default: "Eamino.dat"
   ]
 
 endsection: advanced

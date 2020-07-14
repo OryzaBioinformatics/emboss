@@ -4,9 +4,21 @@ application: checktrans [
   groups: "Protein:Composition"
 ]
 
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
 seqall: sequence  [
   parameter: "Y"
   type: "stopprotein"
+]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
 integer: orfml  [
@@ -16,20 +28,11 @@ integer: orfml  [
   information: "Minimum ORF Length to report"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-  knowntype: "checktrans output"
-]
+endsection: required
 
-seqoutall: outseq  [
-  parameter: "Y"
-  help: "Sequence file to hold output ORF sequences"
-]
-
-featout: featout  [
-  parameter: "Y"
-  help: "File for output features"
-  type: "protein"
+section: additional [
+  information: "Additional section"
+  type: "page"
 ]
 
 boolean: addlast  [
@@ -43,3 +46,29 @@ boolean: addlast  [
          an asterisk is added, it is not included in the reported count of
          STOPs."
 ]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+outfile: outfile  [
+  parameter: "Y"
+  knowntype: "checktrans output"
+]
+
+seqoutall: outseq  [
+  parameter: "Y"
+  help: "Sequence file to hold output ORF sequences"
+]
+
+featout: outfeat  [
+  parameter: "Y"
+  help: "File for output features"
+  type: "protein"
+]
+
+
+endsection: output

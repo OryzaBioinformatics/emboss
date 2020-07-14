@@ -17,9 +17,31 @@ section: input [
            for it will be made in the one-line documentation of all of the
            EMBOSS programs. If no keyword is specified, all programs will be
            listed."
+    knowntype: "emboss keyword"
   ]
 
 endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  boolean: explode  [
+    additional: "Y"
+    default: "N"
+    information: "Use the expanded group names"
+    help: "The groups that EMBOSS applications belong to have two
+           forms, exploded and not exploded. The exploded group names are
+           more numerous and often vaguely phrased than the non-exploded
+           ones. The exploded names are formed from definitions of the group
+           names that start like NAME1:NAME2 and which are then expanded into
+           many combinations of the names as: 'NAME1', 'NAME2', 'NAME1
+           NAME2', NAME2 NAME1'. The non-expanded names are simply like:
+           'NAME1 NAME2'."
+  ]
+
+endsection: additional
 
 section: advanced [
   information: "Advanced section"
@@ -50,20 +72,6 @@ section: advanced [
            generally developed by people who wish the programs to be outside
            of the GNU Public Licence sheme, ie. they may wish to charge money
            for them."
-  ]
-
-  boolean: explode  [
-    additional: "Y"
-    default: "N"
-    information: "Use the expanded group names"
-    help: "The groups that EMBOSS applications belong to have two
-           forms, exploded and not exploded. The exploded group names are
-           more numerous and often vaguely phrased than the non-exploded
-           ones. The exploded names are formed from definitions of the group
-           names that start like NAME1:NAME2 and which are then expanded into
-           many combinations of the names as: 'NAME1', 'NAME2', 'NAME1
-           NAME2', NAME2 NAME1'. The non-expanded names are simply like:
-           'NAME1 NAME2'."
   ]
 
   boolean: colon  [
@@ -107,7 +115,7 @@ section: output [
     type: "frame"
   ]
 
-    boolean: html  [
+    toggle: html  [
       additional: "Y"
       default: "N"
       information: "Format the output for HTML"
@@ -128,6 +136,7 @@ section: output [
              then if you enter \
              http://www.uk.embnet.org/Software/EMBOSS/Apps/ here, then the
              first half of the URL before the programname will be set."
+      knowntype: "url prefix"
     ]
 
     string: postlink  [
@@ -142,6 +151,7 @@ section: output [
              http://www.uk.embnet.org/Software/EMBOSS/Apps/programname.html \
              then if you enter '.html' here, the second half of the URL after
              the programname will be set."
+      knowntype: "url suffix"
     ]
 
   endsection: htmlsection

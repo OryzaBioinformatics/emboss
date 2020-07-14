@@ -13,6 +13,13 @@ section: input [
     type: "DNA"
   ]
 
+  datafile: datafile  [
+    default: ""
+    information: "Alternative RE data file"
+    knowntype: "restriction enzyme data"
+    nullok: "Y"
+  ]
+
 endsection: input
 
 section: required [
@@ -53,6 +60,7 @@ section: required [
            hindiii \
            HinfI \
            PpiI"
+    knowntype: "enzyme list"
   ]
 
 endsection: required
@@ -139,11 +147,6 @@ section: advanced [
            you probably know where to get it from and so all enzymes names
            that you have asked to be searched for, and which cut, will be
            reported whether or not they have a commercial supplier."
-  ]
-
-  string: datafile  [
-    default: ""
-    information: "Alternative RE data file"
   ]
 
 endsection: advanced

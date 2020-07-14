@@ -48,6 +48,7 @@ section: required [
            respectively ends with a `>' symbol. \
            A period ends the pattern. (Optional in fuzztran). \
            For example, [DE](2)HS{P}X(2)PX(2,4)C"
+    knowntype: "prosite pattern"
   ]
 
   integer: mismatch  [
@@ -59,8 +60,8 @@ section: required [
 
 endsection: required
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -98,7 +99,7 @@ section: advanced [
     information: "Code to use"
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

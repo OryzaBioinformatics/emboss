@@ -14,6 +14,7 @@ section: input [
     information: "Program to search for"
     help: "Enter the name of an EMBOSS program"
     minlength: "1"
+    knowntype: "emboss program"
   ]
 
 endsection: input
@@ -49,6 +50,13 @@ section: advanced [
            money for them."
   ]
 
+endsection: advanced
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
   boolean: explode  [
     additional: "Y"
     default: "N"
@@ -68,7 +76,7 @@ section: advanced [
            wish to use non-exploded names"
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"
@@ -86,7 +94,7 @@ section: output [
     type: "frame"
   ]
 
-    boolean: html  [
+    toggle: html  [
       additional: "Y"
       default: "N"
       information: "Format the output for HTML"
@@ -108,6 +116,7 @@ section: output [
              then if you enter \
              http://www.uk.embnet.org/Software/EMBOSS/Apps/ here, then the
              first half of the URL before the program name will be set."
+      knowntype: "url prefix"
     ]
 
     string: postlink  [
@@ -123,6 +132,7 @@ section: output [
              programname.html \
              then if you enter '.html' here, the second half of the URL after
              the program name will be set."
+      knowntype: "url suffix"
     ]
 
   endsection: htmlsection

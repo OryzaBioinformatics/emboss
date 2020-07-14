@@ -3,11 +3,9 @@ application: demofeatures [
   groups: "Test"
 ]
 
-featout: featout  [
-  parameter: "Y"
-  default: "gff:demofeatures.gff"
-  help: "File for output of normal tab delimited gff's"
-  type: "any"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
 boolean: typesort  [
@@ -22,15 +20,18 @@ boolean: startsort  [
   help: "Sort output features by their start position"
 ]
 
-boolean: dictionary  [
-  default: "Y"
-  information: "Read in the Gff Dictionary"
-  help: "No will mean no checking of values"
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-boolean: tracedict  [
-  default: "Y"
-  information: "Dump out the Dictionary at the end"
-  help: "Useful if you specify nodictionary as newly created one will
-         be produced"
+featout: outfeat  [
+  parameter: "Y"
+  default: "gff:demofeatures.gff"
+  help: "File for output of normal tab delimited gff's"
+  type: "any"
 ]
+
+endsection: output

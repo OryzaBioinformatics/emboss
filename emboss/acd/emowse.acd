@@ -20,6 +20,19 @@ section: input [
     knowntype: "peptide molweights"
   ]
 
+  datafile: aadata  [
+    information: "Amino acid data file"
+    help: "Molecular weight data for amino acids"
+    default: "Eamino.dat"
+    knowntype: "amino acid properties"
+  ]
+
+  datafile: frequencies  [
+    default: "Efreqs.dat"
+    information: "Frequencies file"
+    knowntype: "amino acid frequencies"
+  ]
+
 endsection: input
 
 section: required [
@@ -52,22 +65,11 @@ section: advanced [
     information: "Enzyme or reagent"
   ]
 
-  string: aadata  [
-    information: "Amino acid data file"
-    help: "Molecular weight data for amino acids"
-    default: "Eamino.dat"
-  ]
-
   integer: pcrange  [
     default: "25"
     minimum: "0"
     maximum: "75"
     information: "Allowed whole sequence weight variability"
-  ]
-
-  string: frequencies  [
-    default: "Efreqs.dat"
-    information: "Frequencies file"
   ]
 
   float: tolerance  [

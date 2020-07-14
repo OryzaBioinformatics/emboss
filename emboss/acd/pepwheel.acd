@@ -45,12 +45,17 @@ section: output [
            value divided by this value."
   ]
 
+  graph: graph  [
+    standard: "Y"
+    gxtitle: "$(sequence.name)"
+  ]
+
   section: markupsection [
     information: "Markup section"
     type: "frame"
   ]
 
-    boolean: amphipathic  [
+    toggle: amphipathic  [
       information: "Prompt for amphipathic residue marking"
       help: "If this is true then the residues ACFGILMVWY are marked
              as squares and all other residues are unmarked. This overrides
@@ -64,6 +69,7 @@ section: output [
       information: "Mark as squares"
       help: "By default the aliphatic residues ILVM are marked with
              squares."
+      knowntype: "protein codes"
     ]
 
     string: diamonds  [
@@ -71,6 +77,7 @@ section: output [
       default: "DENQST"
       information: "Mark as diamonds"
       help: "By default the residues DENQST are marked with diamonds."
+      knowntype: "protein codes"
     ]
 
     string: octags  [
@@ -79,20 +86,9 @@ section: output [
       information: "Mark as octagons"
       help: "By default the positively charged residues HKR are marked
              with octagons."
+      knowntype: "protein codes"
     ]
 
   endsection: markupsection
-
-  section: datasection [
-    information: "Data output section"
-    type: "frame"
-  ]
-
-    graph: graph  [
-      standard: "Y"
-      gxtitle: "$(sequence.name)"
-    ]
-
-  endsection: datasection
 
 endsection: output

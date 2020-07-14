@@ -14,13 +14,6 @@ section: input [
     type: "DNA"
   ]
 
-endsection: input
-
-section: required [
-  information: "Required section"
-  type: "page"
-]
-
   list: menu  [
     standard: "Y"
     default: "V"
@@ -34,10 +27,20 @@ section: required [
     button: "Y"
   ]
 
-  string: custom  [
+  datafile: custom  [
     standard: "@($(menu)==C)"
     information: "Name of data file"
+    nullok: "@($(menu)!=C)"
+    knowntype: "transfac data"
+    default: ""
   ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
 
   integer: mismatch  [
     standard: "Y"
@@ -48,8 +51,8 @@ section: required [
 
 endsection: required
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -60,7 +63,8 @@ section: advanced [
     information: "Display matches equal to or above this length"
   ]
  
-endsection: advanced
+endsection: additional
+
 section: output [
   information: "Output section"
   type: "page"

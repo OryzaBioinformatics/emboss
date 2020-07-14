@@ -13,18 +13,11 @@ section: input [
     type: "gapprotein"
   ]
 
-endsection: input
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
   codon: cfile  [
     additional: "Y"
   ]
 
-endsection: advanced
+endsection: input
 
 section: output [
   information: "Output section"

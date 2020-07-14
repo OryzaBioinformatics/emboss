@@ -14,7 +14,36 @@ section: input [
     type: "protein"
   ]
 
+  datafile: aaproperties  [
+    additional: "Y"
+    default: "Eaa_properties.dat"
+    information: "Amino acid properties filename"
+    knowntype: "amino acid classification"
+  ]
+
+  datafile: aahydropathy  [
+    additional: "Y"
+    default: "Eaa_hydropathy.dat"
+    information: "Hydropathy data filename"
+    knowntype: "amino acid hydropathy"
+  ]
+
 endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: hwindow  [
+    additional: "Y"
+    default: "9"
+    minimum: "1"
+    maximum: "$(sequence.length)"
+    information: "Window size for hydropathy averaging"
+  ]
+
+endsection: additional
 
 section: output [
   information: "Output section"
@@ -33,39 +62,13 @@ section: output [
 
   boolean: generalplot  [
     default: "Y"
-    information: "plot histogram of general properties"
+    information: "Plot histogram of general properties"
   ]
 
   boolean: hydropathyplot  [
     default: "Y"
-    information: "plot graphs of hydropathy"
+    information: "Plot graphs of hydropathy"
   ]
 
 endsection: output
 
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
-  integer: hwindow  [
-    additional: "Y"
-    default: "9"
-    minimum: "1"
-    maximum: "$(sequence.length)"
-    information: "Window size for hydropathy averaging"
-  ]
-
-  string: aaproperties  [
-    additional: "Y"
-    default: "Eaa_properties.dat"
-    information: "User defined amino acid properties filename"
-  ]
-
-  string: aahydropathy  [
-    additional: "Y"
-    default: "Eaa_hydropathy.dat"
-    information: "User defined hydropathy data filename"
-  ]
-
-endsection: advanced

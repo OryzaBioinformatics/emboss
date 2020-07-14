@@ -6,23 +6,38 @@ application: whichdb [
   cpu: "low"
 ]
 
-string: entry  [
-  parameter: "Y"
-  information: "ID or Accession number"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-boolean: get  [
-  default: "N"
-  information: "Retrieve sequences"
+  string: entry  [
+    parameter: "Y"
+    information: "ID or Accession number"
+    knowntype: "sequence id input"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-boolean: showall  [
-  default: "N"
-  information: "Show failed attempts"
-]
+  toggle: get  [
+    default: "N"
+    information: "Retrieve sequences"
+  ]
 
-outfile: outfile  [
-  standard: "@(!$(get))"
-  nullok: "$(get)"
-  knowntype: "whichdb output"
-]
+  boolean: showall  [
+    default: "N"
+    information: "Show failed attempts"
+  ]
+
+  outfile: outfile  [
+    standard: "@(!$(get))"
+    nullok: "$(get)"
+    knowntype: "whichdb output"
+  ]
+
+endsection: output

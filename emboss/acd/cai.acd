@@ -13,19 +13,12 @@ section: input [
     type: "DNA"
   ]
 
-endsection: input
-
-section: required [
-  information: "Required section"
-  type: "page"
-]
-
   codon: cfile  [
     standard: "Y"
     default: "Eyeastcai.cut"
   ]
 
-endsection: required
+endsection: input
 
 section: output [
   information: "Output section"

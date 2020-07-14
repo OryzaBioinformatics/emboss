@@ -4,15 +4,14 @@ application: complex [
   groups: "Nucleic:Composition"
 ]
 
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
 seqall: sequence  [
   parameter: "Y"
   type: "dna"
-]
-
-boolean: omnia  [
-  default: "N"
-  information: "All sequences"
-  help: "calculate over a set of sequences"
 ]
 
 integer: lwin  [
@@ -27,14 +26,7 @@ integer: step  [
   default: "5"
   maximum: "$(lwin)"
   information: "Step size"
-  help: "the displacement of the window over the sequence"
-]
-
-integer: sim  [
-  default: "0"
-  information: "Simulations"
-  help: "calculate the linguistic complexity by comparison with a
-         number of simulations having a uniform distribution of bases"
+  help: "Displacement of the window over the sequence"
 ]
 
 integer: jmin  [
@@ -55,17 +47,44 @@ integer: jmax  [
   help: ""
 ]
 
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+toggle: omnia  [
+  default: "N"
+  information: "All sequences"
+  help: "Calculate over a set of sequences"
+]
+
+integer: sim  [
+  default: "0"
+  information: "Simulations"
+  help: "Calculate the linguistic complexity by comparison with a
+         number of simulations having a uniform distribution of bases"
+]
+
 boolean: freq  [
   default: "N"
   information: "Calculate frequency"
-  help: "execute the simulation of a sequence based on the base
+  help: "Execute the simulation of a sequence based on the base
          frequency of the original sequence"
+]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
 boolean: print  [
   default: "N"
   information: "Print to file"
-  help: "generate a file named UjTable containing the values of Uj for
+  help: "Generate a file named UjTable containing the values of Uj for
          each word j in the real sequence(s) and in any simulated sequences"
 ]
 
@@ -75,7 +94,6 @@ outfile: outfile  [
 ]
 
 outfile: ujtablefile  [
-  standard: "$(sim)"
   default: "complex.ujtable"
   information: "UjTable temporary file name"
   knowntype: "complex temporary output"
@@ -87,3 +105,5 @@ seqoutall: outseq  [
   nullok: "Y"
 ]
 
+
+endsection: output

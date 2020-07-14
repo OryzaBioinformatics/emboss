@@ -1,58 +1,70 @@
-appl: giep [
+application: giep [
   documentation: "Calculates the isoelectric point of a protein"
   groups: "Protein:Composition"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "pureprotein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "pureprotein"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-float: step  [
-  standard: "N"
-  information: "pH step value"
-  minimum: ".01"
-  maximum: "1."
-  default: ".5"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: amino  [
-  standard: "N"
+  float: step  [
+    standard: "N"
+    information: "pH step value"
+    minimum: ".01"
+    maximum: "1."
+    default: ".5"
+  ]
+
+  integer: amino  [
+    standard: "N"
   information: "Number of N-termini"
-  default: "1"
-]
+    default: "1"
+  ]
 
-bool: termini  [
-  standard: "N"
-  default: "Y"
-  information: "Include charge at N and C terminus"
-]
+  bool: termini  [
+    standard: "N"
+    default: "Y"
+    information: "Include charge at N and C terminus"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-bool: plot  [
-  standard: "N"
-  default: "N"
-  information: "Plot charge vs pH"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: report  [
-  standard: "N"
-  default: "Y"
-  information: "Write results to a file"
-]
+  bool: plot  [
+    standard: "N"
+    default: "N"
+    information: "Plot charge vs pH"
+  ]
 
-xygraph: graph  [
-  standard: "$(plot)"
-]
+  bool: report  [
+    standard: "N"
+    default: "Y"
+    information: "Write results to a file"
+  ]
 
-outfile: outfile  [
-  standard: "$(report)"
-]
+  xygraph: graph  [
+    standard: "$(plot)"
+  ]
+
+  outfile: outfile  [
+    standard: "$(report)"
+  ]
 
 endsection: output

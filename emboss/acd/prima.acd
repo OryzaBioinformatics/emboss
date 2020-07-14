@@ -21,35 +21,16 @@ section: required [
   type: "page"
 ]
 
-  boolean: targetrange  [
-    parameter: "Y"
-    default: "N"
-    information: "Specify a Target Range?"
-  ]
-
-  float: minprimertm  [
-    standard: "Y"
-    default: "53"
-    information: "Minimum Primer Tm (deg Celsius)"
-  ]
-
-  float: maxprimertm  [
-    standard: "Y"
-    default: "58"
-    information: "Maximum Primer Tm (deg Celsius)"
-  ]
-
-endsection: required
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
   section: targetsection [
     information: "Target options"
     type: "frame"
   ]
+
+    toggle: targetrange  [
+      parameter: "Y"
+      default: "N"
+      information: "Specify a Target Range?"
+    ]
 
     integer: targetstart  [
       standard: "$(targetrange)"
@@ -66,6 +47,67 @@ section: advanced [
     ]
 
   endsection: targetsection
+
+  float: minprimertm  [
+    standard: "Y"
+    default: "53"
+    information: "Minimum Primer Tm (deg Celsius)"
+  ]
+
+  float: maxprimertm  [
+    standard: "Y"
+    default: "58"
+    information: "Maximum Primer Tm (deg Celsius)"
+  ]
+
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  section: productsection [
+    information: "Product options"
+    type: "frame"
+  ]
+
+    integer: minprodlen  [
+      additional: "@(!$(targetrange))"
+      default: "100"
+      information: "Minimum product length"
+    ]
+
+    integer: maxprodlen  [
+      additional: "@(!$(targetrange))"
+      default: "300"
+      information: "Maximum product length"
+    ]
+
+    float: minprodgccont  [
+      additional: "@(!$(targetrange))"
+      minimum: ".30"
+      maximum: ".70"
+      default: ".40"
+      information: "Minimum product GC fraction"
+    ]
+
+    float: maxprodgccont  [
+      additional: "@(!$(targetrange))"
+      minimum: ".30"
+      maximum: ".70"
+      default: ".55"
+      information: "Maximum product GC fraction"
+    ]
+
+  endsection: productsection
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
 
   integer: overlap  [
     default: "50"
@@ -102,39 +144,6 @@ section: advanced [
     ]
 
   endsection: primersection
-
-  section: productsection [
-    information: "Product options"
-    type: "frame"
-  ]
-
-    integer: minprodlen  [
-      standard: "@(!$(targetrange))"
-      default: "100"
-      information: "Minimum product length"
-    ]
-
-    integer: maxprodlen  [
-      standard: "@(!$(targetrange))"
-      default: "300"
-      information: "Maximum product length"
-    ]
-
-    float: minprodgccont  [
-      minimum: ".30"
-      maximum: ".70"
-      default: ".40"
-      information: "Minimum product GC fraction"
-    ]
-
-    float: maxprodgccont  [
-      minimum: ".30"
-      maximum: ".70"
-      default: ".55"
-      information: "Maximum product GC fraction"
-    ]
-
-  endsection: productsection
 
   float: saltconc  [
     minimum: "1"

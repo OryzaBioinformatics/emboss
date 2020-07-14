@@ -43,7 +43,7 @@ section: output [
     knowntype: "cpgreport output"
   ]
 
-  featout: featout  [
+  featout: outfeat  [
     parameter: "Y"
     help: "File for output features"
     type: "nucleotide"

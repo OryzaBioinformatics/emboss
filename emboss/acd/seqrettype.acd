@@ -1,4 +1,4 @@
-application: seqret [
+application: seqrettype [
   documentation: "Reads and writes (returns) sequences"
   groups: "Edit"
 ]
@@ -27,7 +27,7 @@ section: input [
              stopprotein:protein sequence with a possible stop;
              stopproteinstandard:protein sequence with a possible stop but no
              selenocysteine; gapany:any valid sequence with gaps"
-    information: "sequence type"
+    information: "Sequence type"
   ]
 
   seqall: sequence  [

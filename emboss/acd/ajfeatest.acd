@@ -4,12 +4,26 @@ application: ajfeatest [
   groups: "Test"
 ]
 
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
 sequence: sequence  [
   parameter: "Y"
   type: "any"
   features: "Y"
 ]
 
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
 seqout: outseq  [
   parameter: "Y"
 ]
+
+endsection: output

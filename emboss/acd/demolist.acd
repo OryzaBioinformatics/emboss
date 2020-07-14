@@ -3,9 +3,16 @@ application: demolist [
   groups: "Test"
 ]
 
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
 infile: infile [
   parameter: "Y"
-  information: "gff file to be read in"
+  information: "Gff file to be read in"
   help: "File containing normal tab delimited gff's"
   knowntype: "gff"
 ]
+
+endsection: input

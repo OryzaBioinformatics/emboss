@@ -13,17 +13,10 @@ section: input [
     type: "DNA"
   ]
 
-endsection: input
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
   codon: cfile  [
   ]
 
-endsection: advanced
+endsection: input
 
 section: output [
   information: "Output section"

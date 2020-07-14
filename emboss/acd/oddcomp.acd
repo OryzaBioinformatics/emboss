@@ -14,22 +14,22 @@ section: input [
     type: "Protein"
   ]
 
-endsection: input
-
-section: required [
-  information: "Required section"
-  type: "page"
-]
-
   infile: compdatafile  [
     parameter: "Y"
-    information: "'compseq' file to use for expected word
+    information: "Compseq output file to use for expected word
                   frequencies"
     help: "This is a file in the format of the output produced by
            'compseq' that is used to set the minimum frequencies of words in
            this analysis."
     knowntype: "compseq output"
   ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
 
   integer: window  [
     parameter: "Y"

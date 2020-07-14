@@ -15,13 +15,6 @@ section: input [
     help: "File containing a sequence alignment."
   ]
 
-endsection: input
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
   matrix: datafile  [
     additional: "Y"
     information: "Scoring matrix"
@@ -31,6 +24,13 @@ section: advanced [
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
   ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
 
   float: plurality  [
     additional: "Y"
@@ -64,7 +64,7 @@ section: advanced [
     default: "@( $(sequence.totweight) / 2)"
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"
@@ -79,6 +79,7 @@ section: output [
     additional: "Y"
     default: ""
     information: "Name of the consensus sequence"
+    knowntype: "sequence id output"
   ]
 
 endsection: output

@@ -3,8 +3,8 @@ application: embossversion [
   groups: "Utils:Misc"
 ]
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -13,7 +13,7 @@ section: advanced [
     information: "Show all EMBOSS version information fields"
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

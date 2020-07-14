@@ -4,14 +4,28 @@ application: entrails [
   groups: "Utils:Misc"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-  knowntype: "entrails output"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-boolean: fullreport  [
-  additional: "Y"
-  default: "N"
-  information: "Full report"
-  help: "By default, only the essential details are reported"
+  outfile: outfile  [
+    parameter: "Y"
+    knowntype: "entrails output"
+  ]
+
+endsection: output
+
+section: additional [
+  information: "Additional section"
+  type: "page"
 ]
+
+  boolean: fullreport  [
+    additional: "Y"
+    default: "N"
+    information: "Full report"
+    help: "By default, only the essential details are reported"
+  ]
+
+endsection: additional

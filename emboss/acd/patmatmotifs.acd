@@ -16,8 +16,8 @@ section: input [
 
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -38,7 +38,7 @@ section: advanced [
            ck2_phospho_site, and tyr_phospho_site."
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

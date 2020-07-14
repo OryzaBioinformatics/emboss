@@ -17,8 +17,8 @@ section: input [
 
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
+section: required [
+  information: "Required section"
   type: "page"
 ]
 
@@ -50,6 +50,13 @@ section: advanced [
     help: "Multiple substitution correction methods for proteins."
   ]
 
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
   boolean: ambiguous  [
     additional: "@(@(@(!$acdprotein)) & @($(nucmethod)==1)) |
                @($(acdprotein) & @($(protmethod)!=2)))"
@@ -71,7 +78,7 @@ section: advanced [
   integer: position  [
     additional: "@(@(!$(acdprotein)) & @($(nucmethod)!=4))"
     default: "123"
-    information: "Base position to analyse."
+    information: "Base position to analyse"
     help: "Choose base positions to analyse in each codon i.e. 123
            (all bases), 12 (the first two bases), 1, 2, or 3 individual
            bases."
@@ -80,8 +87,8 @@ section: advanced [
   boolean: calculatea  [
     additional: "@(@(!$(acdprotein)) & @($(nucmethod)==5))"
     default: "N"
-    information: "Calculate the a-parameter"
-    help: "This will force the calculation of the a-parameter in the
+    information: "Calculate the nucleotide Jin-Nei parameter 'a'"
+    help: "This will force the calculation of parameter 'a' in the
            Jin-Nei Gamma distance calculation, otherwise the default is 1.0
            (see -parametera option)."
   ]
@@ -89,13 +96,13 @@ section: advanced [
   float: parametera  [
     additional: "@(@(!$(calculatea)) & @($(nucmethod)==5))"
     default: "1.0"
-    information: "a-parameter"
-    help: "User defined a parameter to be use in the Jin-Nei Gamma
-           distance calculation. The suggested value to be used is 1.0 [Jin
-           et al.] and this is the default."
+    information: "Nucleotide Jin-Nei parameter 'a'"
+    help: "User defined parameter 'a' to be use in the Jin-Nei Gamma
+           distance calculation. The suggested value to be used is 1.0 (Jin
+           et al.) and this is the default."
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

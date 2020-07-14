@@ -35,9 +35,11 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  align: outfile  [
     parameter: "Y"
-    knowntype: "seqmatchall output"
+    aformat: "match"
+    minseqs: "2"
+    maxseqs: "2"
   ]
 
 endsection: output

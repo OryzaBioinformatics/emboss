@@ -19,7 +19,7 @@ section: input [
     type: "frame"
   ]
 
-    boolean: vectorfile  [
+    toggle: vectorfile  [
       parameter: "Y"
       default: "Y"
       information: "Are your vector sequences in a file?"
@@ -54,24 +54,19 @@ section: required [
     information: "Show only the best hits (minimise mismatches)?"
   ]
 
-endsection: required
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
   string: linkera  [
     standard: "@(!$(vectorfile))"
-    information: "5' sequence"
+    information: "The 5' sequence"
+    knowntype: "nucleotide sequence"
   ]
 
   string: linkerb  [
     standard: "@(!$(vectorfile))"
-    information: "3' sequence"
+    information: "The 3' sequence"
+    knowntype: "nucleotide sequence"
   ]
 
-endsection: advanced
+endsection: required
 
 section: output [
   information: "Output section"

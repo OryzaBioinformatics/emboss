@@ -19,8 +19,8 @@ section: input [
 
 endsection: input
 
-section: required [
-  information: "Required section"
+section: additional [
+  information: "Additional section"
   type: "page"
 ]
 
@@ -39,13 +39,6 @@ section: required [
            E.g. 50,51 requires primers to surround the 2 bases at positions
            50 and 51."
   ]
-
-endsection: required
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
 
   integer: minsize  [
     additional: "Y"
@@ -76,7 +69,7 @@ section: advanced [
            melting temperatures of the forward and reverse primers."
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

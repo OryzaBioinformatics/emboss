@@ -15,6 +15,20 @@ section: input [
 
 endsection: input
 
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: window  [
+    additional: "Y"
+    default: "30"
+    minimum: "1"
+    information: "Window size in codons"
+  ]
+
+endsection: additional
+
 section: advanced [
   information: "Advanced section"
   type: "page"
@@ -22,14 +36,8 @@ section: advanced [
 
   string: bases  [
     default: "GC"
-    information: "Bases used"
-  ]
-
-  integer: window  [
-    additional: "Y"
-    default: "30"
-    minimum: "1"
-    information: "Window size in codons"
+    information: "Bases used"	
+    knowntype: "nucleotide codes"
   ]
 
 endsection: advanced

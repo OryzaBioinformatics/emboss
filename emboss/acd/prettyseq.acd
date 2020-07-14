@@ -13,6 +13,10 @@ section: input [
     type: "DNA"
   ]
 
+  codon: cfile  [
+    default: "Ehum.cut"
+  ]
+
 endsection: input
 
 section: required [
@@ -34,15 +38,18 @@ section: advanced [
   type: "page"
 ]
 
-  codon: cfile  [
-    default: "Ehum.cut"
-  ]
-
   integer: width  [
     minimum: "10"
     default: "60"
     information: "Width of screen"
   ]
+
+endsection: advanced
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
 
   boolean: ruler  [
     additional: "Y"
@@ -62,7 +69,7 @@ section: advanced [
     information: "Number DNA sequence"
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

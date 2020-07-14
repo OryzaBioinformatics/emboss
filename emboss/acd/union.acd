@@ -1,6 +1,5 @@
 application: union [
-  documentation: "Reads sequence fragments and builds one
-                  sequence"
+  documentation: "Reads sequence fragments and builds one sequence"
   groups: "Edit"
 ]
 

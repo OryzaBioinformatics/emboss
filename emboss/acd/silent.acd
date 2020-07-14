@@ -24,6 +24,7 @@ section: required [
     standard: "Y"
     default: "all"
     information: "Comma separated enzyme list"
+    knowntype: "enzyme list"
   ]
 
 endsection: required

@@ -10,7 +10,14 @@ section: input [
 
   seqall: sequence  [
     parameter: "Y"
-    type: "PureProtein"
+    type: "pureprotein"
+  ]
+
+  datafile: aadata  [
+    information: "Amino acid data file"
+    help: "Molecular weight data for amino acids"
+    default: "Eamino.dat"
+    knowntype: "amino acid properties"
   ]
 
 endsection: input
@@ -25,12 +32,6 @@ section: advanced [
     information: "Include charge at N and C terminus"
   ]
 
-  string: aadata  [
-    information: "Amino acid data file"
-    help: "Molecular weight data for amino acids"
-    default: "Eamino.dat"
-  ]
-
 endsection: advanced
 
 section: output [
@@ -39,7 +40,7 @@ section: output [
 ]
 
   outfile: outfile  [
-    standard: "Y"
+    parameter: "Y"
     knowntype: "pepstats output"
   ]
 

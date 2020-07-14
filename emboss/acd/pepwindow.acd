@@ -13,29 +13,30 @@ section: input [
     type: "pureprotein"
   ]
 
-endsection: input
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
   datafile: datafile  [
     additional: "Y"
     information: "Aaindex database file"
     directory: "AAINDEX"
     default: "Enakai.dat"
+    knowntype: "aaindex data"
   ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
 
   integer: length  [
     additional: "Y"
-    information: "window size"
+    information: "Window size"
     default: "7"
     minimum: "1"
     maximum: "200"
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

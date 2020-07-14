@@ -40,7 +40,7 @@ section: output [
   type: "page"
 ]
 
-  boolean: stretch  [
+  toggle: stretch  [
     default: "N"
     information: "Stretch axes"
     help: "Use non-proportional axes"

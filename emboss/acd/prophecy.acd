@@ -14,13 +14,6 @@ section: input [
     type: "gapany"
   ]
 
-endsection: input
-
-section: required [
-  information: "Required section"
-  type: "page"
-]
-
   list: type  [
     standard: "Y"
     default: "F"
@@ -34,20 +27,28 @@ section: required [
     button: "Y"
   ]
 
+  matrixf: datafile  [
+    standard: "@($(type) != F)"
+    information: "Scoring matrix"
+    default: "@($(type) = G: Epprofile H: EBLOSUM62 F:
+              EBLOSUM62)"
+    protein: "$(acdprotein)"
+    expected: "'Epprofile' for Gribskov type, or EBLOSUM62"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
   string: name  [
     standard: "Y"
     default: "mymatrix"
     information: "Enter a name for the profile"
+    knowntype: "name"
   ]
-
-endsection: required
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
-  variable: dogap "@($(type) != f)"
 
   section: profiletypesection [
     information: "Profile type specific options"
@@ -55,20 +56,11 @@ section: advanced [
   ]
 
     integer: threshold  [
-      standard: "@($(type)==F)"
+      standard: "@($(type) == F)"
       default: "75"
       minimum: "1"
       maximum: "100"
       information: "Enter threshold reporting percentage"
-    ]
-
-    matrixf: datafile  [
-      standard: "@($(type)!=F)"
-      information: "Scoring matrix"
-      default: "@($(type) = G: Epprofile H: EBLOSUM62 F:
-                EBLOSUM62)"
-      protein: "$(acdprotein)"
-      expected: "'Epprofile' for Gribskov type, or EBLOSUM62"
     ]
 
   endsection: profiletypesection
@@ -79,20 +71,20 @@ section: advanced [
   ]
 
     float: open  [
-      standard: "$(dogap)"
+      standard: "@($(type) != F)"
       information: "Gap opening penalty"
       default: "3.0"
     ]
 
     float: extension  [
-      standard: "$(dogap)"
+      standard: "@($(type) != F)"
       information: "Gap extension penalty"
       default: "0.3"
     ]
 
   endsection: gapsection
 
-endsection: advanced
+endsection: required
 
 section: output [
   information: "Output section"

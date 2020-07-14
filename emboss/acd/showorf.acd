@@ -13,6 +13,10 @@ section: input [
     type: "DNA"
   ]
 
+  codon: cfile  [
+    default: "Ehum.cut"
+  ]
+
 endsection: input
 
 section: required [
@@ -34,17 +38,6 @@ section: required [
   ]
 
 endsection: required
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
-  codon: cfile  [
-    default: "Ehum.cut"
-  ]
-
-endsection: advanced
 
 section: output [
   information: "Output section"

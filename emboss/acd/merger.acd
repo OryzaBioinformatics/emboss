@@ -19,13 +19,6 @@ section: input [
     type: "DNA"
   ]
 
-endsection: input
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
   matrixf: datafile  [
     additional: "Y"
     information: "Matrix file"
@@ -35,6 +28,13 @@ section: advanced [
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
   ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
 
   float: gapopen  [
     additional: "Y"
@@ -52,7 +52,7 @@ section: advanced [
     default: "5"
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

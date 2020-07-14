@@ -37,15 +37,8 @@ section: required [
     information: "Display format"
   ]
 
-endsection: required
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
   list: things  [
-    standard: "@(!$(format))"
+    standard: "@($(format)==0)"
     default: "B,N,T,S,A,F"
     minimum: "1"
     maximum: "100"
@@ -67,6 +60,13 @@ section: advanced [
            translation, blank line; then you should enter 'S,C,T,1,B'."
   ]
 
+endsection: required
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
   range: translate  [
     additional: "Y"
     default: ""
@@ -82,15 +82,6 @@ section: advanced [
            1,5,8,10,23,45,57,99"
     expected: "If this is left blank the complete sequence is
                translated."
-  ]
-
-  integer: orfminsize  [
-    default: "0"
-    minimum: "0"
-    information: "Minimum size of ORFs"
-    help: "This sets the minimum size of Open Reading Frames (ORFs) to
-           display in the translations. All other translation regions are
-           masked by changing the amino acids to '-' characters."
   ]
 
   range: uppercase  [
@@ -147,6 +138,184 @@ section: advanced [
     expected: "If this is left blank, then no annotation is
                added."
   ]
+
+    string: enzymes  [
+      additional: "Y"
+      default: "all"
+      information: "Comma separated restriction enzyme list"
+      help: "The name 'all' reads in all enzyme names from the REBASE
+             database. You can specify enzymes by giving their names with
+             commas between then, such as: 'HincII,hinfI,ppiI,hindiii'. \
+             The case of the names is not important. You can specify a file
+             of enzyme names to read in by giving the name of the file
+             holding the enzyme names with a '@' character in front of it,
+             for example, '@enz.list'. \
+             Blank lines and lines starting with a hash character or '!' are
+             ignored and all other lines are concatenated together with a
+             comma character ',' and then treated as the list of enzymes to
+             search for. \
+             An example of a file of enzyme names is: \
+             ! my enzymes \
+             HincII, ppiII \
+             ! other enzymes \
+             hindiii \
+             HinfI \
+             PpiI"
+      knowntype: "enzyme list"
+    ]
+
+  list: table  [
+    additional: "Y"
+    default: "0"
+    minimum: "1"
+    maximum: "1"
+    header: "Genetic codes"
+    values: "0:Standard; 1:Standard (with alternative initiation
+             codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial;
+             4:Mold, Protozoan, Coelenterate Mitochondrial and
+             Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate
+             Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial;
+             10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear;
+             13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial;
+             15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial;
+             21:Trematode Mitochondrial; 22:Scenedesmus obliquus;
+             23:Thraustochytrium Mitochondrial"
+    delimiter: ";"
+    codedelimiter: ":"
+    information: "Genetic code to use"
+  ]
+
+ section: featuresection [
+    information: "Feature display options"
+    type: "frame"
+  ]
+
+    string: matchsource  [
+      additional: "Y"
+      default: "*"
+      information: "Source of feature to display"
+      help: "By default any feature source in the feature table is
+             shown. You can set this to match any feature source you wish to
+             show. \
+             The source name is usually either the name of the program that
+             detected the feature or it is the feature table (eg: EMBL) that
+             the feature came from. \
+             The source may be wildcarded by using '*'. \
+             If you wish to show more than one source, separate their names
+             with the character '|', eg: \
+             gene* | embl"
+      knowntype: "feature source list"
+    ]
+
+    string: matchtype  [
+      additional: "Y"
+      default: "*"
+      information: "Type of feature to display"
+      help: "By default any feature type in the feature table is
+             shown. You can set this to match any feature type you wish to
+             show. \
+             See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the
+             EMBL feature types and see Appendix A of the Swissprot user
+             manual in http://www.expasy.ch/txt/userman.txt for a list of the
+             Swissprot feature types. \
+             The type may be wildcarded by using '*'. \
+             If you wish to show more than one type, separate their names
+             with the character '|', eg: \
+             *UTR | intron"
+      knowntype: "feature key list"
+    ]
+
+    integer: matchsense  [
+      additional: "Y"
+      default: "0"
+      information: "Sense of feature to display"
+      expected: "0 - any sense, 1 - forward sense, -1 - reverse
+                 sense"
+      help: "By default any feature type in the feature table is
+             shown. You can set this to match any feature sense you wish to
+             show. 0 - any sense, 1 - forward sense, -1 - reverse sense"
+    ]
+
+    float: minscore  [
+      additional: "Y"
+      default: "0.0"
+      information: "Minimum score of feature to display"
+      help: "If this is greater than or equal to the maximum score,
+             then any score is permitted"
+    ]
+
+    float: maxscore  [
+      additional: "Y"
+      default: "0.0"
+      information: "Maximum score of feature to display"
+      help: "If this is less than or equal to the maximum score, then
+             any score is permitted"
+    ]
+
+     string: matchtag  [
+      additional: "Y"
+      default: "*"
+      information: "Tag of feature to display"
+      help: "Tags are the types of extra values that a feature may
+             have. For example in the EMBL feature table, a 'CDS' type of
+             feature may have the tags '/codon', '/codon_start', '/db_xref',
+             '/EC_number', '/evidence', '/exception', '/function', '/gene',
+             '/label', '/map', '/note', '/number', '/partial', '/product',
+             '/protein_id', '/pseudo', '/standard_name', '/translation',
+             '/transl_except', '/transl_table', or '/usedin'. Some of these
+             tags also have values, for example '/gene' can have the value of
+             the gene name. \
+             By default any feature tag in the feature table is shown. You
+             can set this to match any feature tag you wish to show. \
+             The tag may be wildcarded by using '*'. \
+             If you wish to show more than one tag, separate their names with
+             the character '|', eg: \
+             gene | label"
+      knowntype: "feature tag list"
+    ]
+
+    string: matchvalue  [
+      additional: "Y"
+      default: "*"
+      information: "Value of feature tags to display"
+      help: "Tag values are the values associated with a feature tag.
+             Tags are the types of extra values that a feature may have. For
+             example in the EMBL feature table, a 'CDS' type of feature may
+             have the tags '/codon', '/codon_start', '/db_xref',
+             '/EC_number', '/evidence', '/exception', '/function', '/gene',
+             '/label', '/map', '/note', '/number', '/partial', '/product',
+             '/protein_id', '/pseudo', '/standard_name', '/translation',
+             '/transl_except', '/transl_table', or '/usedin'. Only some of
+             these tags can have values, for example '/gene' can have the
+             value of the gene name. By default any feature tag value in the
+             feature table is shown. You can set this to match any feature
+             tag valueyou wish to show. \
+             The tag value may be wildcarded by using '*'. \
+             If you wish to show more than one tag value, separate their
+             names with the character '|', eg: \
+             pax* | 10"
+      knowntype: "feature tagvalue list"
+    ]
+
+    boolean: stricttags  [
+      additional: "Y"
+      default: "N"
+      information: "Only display the matching tags"
+      help: "By default if any tag/value pair in a feature matches the
+             specified tag and value, then all the tags/value pairs of that
+             feature will be displayed. If this is set to be true, then only
+             those tag/value pairs in a feature that match the specified tag
+             and value will be displayed."
+    ]
+
+  endsection: featuresection
+
+endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
 
   section: remapsection [
     information: "Restriction map options"
@@ -260,51 +429,15 @@ section: advanced [
              'all' of them."
     ]
 
-    string: enzymes  [
-      additional: "Y"
-      default: "all"
-      information: "Comma separated restriction enzyme list"
-      help: "The name 'all' reads in all enzyme names from the REBASE
-             database. You can specify enzymes by giving their names with
-             commas between then, such as: 'HincII,hinfI,ppiI,hindiii'. \
-             The case of the names is not important. You can specify a file
-             of enzyme names to read in by giving the name of the file
-             holding the enzyme names with a '@' character in front of it,
-             for example, '@enz.list'. \
-             Blank lines and lines starting with a hash character or '!' are
-             ignored and all other lines are concatenated together with a
-             comma character ',' and then treated as the list of enzymes to
-             search for. \
-             An example of a file of enzyme names is: \
-             ! my enzymes \
-             HincII, ppiII \
-             ! other enzymes \
-             hindiii \
-             HinfI \
-             PpiI"
-    ]
-
   endsection: remapsection
 
-  list: table  [
-    additional: "Y"
+  integer: orfminsize  [
     default: "0"
-    minimum: "1"
-    maximum: "1"
-    header: "Genetic codes"
-    values: "0:Standard; 1:Standard (with alternative initiation
-             codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial;
-             4:Mold, Protozoan, Coelenterate Mitochondrial and
-             Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate
-             Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial;
-             10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear;
-             13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial;
-             15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial;
-             21:Trematode Mitochondrial; 22:Scenedesmus obliquus;
-             23:Thraustochytrium Mitochondrial"
-    delimiter: ";"
-    codedelimiter: ":"
-    information: "Genetic code to use"
+    minimum: "0"
+    information: "Minimum size of ORFs"
+    help: "This sets the minimum size of Open Reading Frames (ORFs) to
+           display in the translations. All other translation regions are
+           masked by changing the amino acids to '-' characters."
   ]
 
   boolean: threeletter  [
@@ -359,127 +492,6 @@ section: advanced [
     default: "N"
     information: "Use HTML formatting"
   ]
-
-  section: featuresection [
-    information: "Feature display options"
-    type: "frame"
-  ]
-
-    string: matchsource  [
-      additional: "Y"
-      default: "*"
-      information: "Source of feature to display"
-      help: "By default any feature source in the feature table is
-             shown. You can set this to match any feature source you wish to
-             show. \
-             The source name is usually either the name of the program that
-             detected the feature or it is the feature table (eg: EMBL) that
-             the feature came from. \
-             The source may be wildcarded by using '*'. \
-             If you wish to show more than one source, separate their names
-             with the character '|', eg: \
-             gene* | embl"
-    ]
-
-    string: matchtype  [
-      additional: "Y"
-      default: "*"
-      information: "Type of feature to display"
-      help: "By default any feature type in the feature table is
-             shown. You can set this to match any feature type you wish to
-             show. \
-             See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the
-             EMBL feature types and see Appendix A of the Swissprot user
-             manual in http://www.expasy.ch/txt/userman.txt for a list of the
-             Swissprot feature types. \
-             The type may be wildcarded by using '*'. \
-             If you wish to show more than one type, separate their names
-             with the character '|', eg: \
-             *UTR | intron"
-    ]
-
-    integer: matchsense  [
-      additional: "Y"
-      default: "0"
-      information: "Sense of feature to display"
-      expected: "0 - any sense, 1 - forward sense, -1 - reverse
-                 sense"
-      help: "By default any feature type in the feature table is
-             shown. You can set this to match any feature sense you wish to
-             show. 0 - any sense, 1 - forward sense, -1 - reverse sense"
-    ]
-
-    float: minscore  [
-      additional: "Y"
-      default: "0.0"
-      information: "Minimum score of feature to display"
-      help: "If this is greater than or equal to the maximum score,
-             then any score is permitted"
-    ]
-
-    float: maxscore  [
-      additional: "Y"
-      default: "0.0"
-      information: "Maximum score of feature to display"
-      help: "If this is less than or equal to the maximum score, then
-             any score is permitted"
-    ]
-
-    string: matchtag  [
-      additional: "Y"
-      default: "*"
-      information: "Tag of feature to display"
-      help: "Tags are the types of extra values that a feature may
-             have. For example in the EMBL feature table, a 'CDS' type of
-             feature may have the tags '/codon', '/codon_start', '/db_xref',
-             '/EC_number', '/evidence', '/exception', '/function', '/gene',
-             '/label', '/map', '/note', '/number', '/partial', '/product',
-             '/protein_id', '/pseudo', '/standard_name', '/translation',
-             '/transl_except', '/transl_table', or '/usedin'. Some of these
-             tags also have values, for example '/gene' can have the value of
-             the gene name. \
-             By default any feature tag in the feature table is shown. You
-             can set this to match any feature tag you wish to show. \
-             The tag may be wildcarded by using '*'. \
-             If you wish to show more than one tag, separate their names with
-             the character '|', eg: \
-             gene | label"
-    ]
-
-    string: matchvalue  [
-      additional: "Y"
-      default: "*"
-      information: "Value of feature tags to display"
-      help: "Tag values are the values associated with a feature tag.
-             Tags are the types of extra values that a feature may have. For
-             example in the EMBL feature table, a 'CDS' type of feature may
-             have the tags '/codon', '/codon_start', '/db_xref',
-             '/EC_number', '/evidence', '/exception', '/function', '/gene',
-             '/label', '/map', '/note', '/number', '/partial', '/product',
-             '/protein_id', '/pseudo', '/standard_name', '/translation',
-             '/transl_except', '/transl_table', or '/usedin'. Only some of
-             these tags can have values, for example '/gene' can have the
-             value of the gene name. By default any feature tag value in the
-             feature table is shown. You can set this to match any feature
-             tag valueyou wish to show. \
-             The tag value may be wildcarded by using '*'. \
-             If you wish to show more than one tag value, separate their
-             names with the character '|', eg: \
-             pax* | 10"
-    ]
-
-    boolean: stricttags  [
-      additional: "Y"
-      default: "N"
-      information: "Only display the matching tags"
-      help: "By default if any tag/value pair in a feature matches the
-             specified tag and value, then all the tags/value pairs of that
-             feature will be displayed. If this is set to be true, then only
-             those tag/value pairs in a feature that match the specified tag
-             and value will be displayed."
-    ]
-
-  endsection: featuresection
 
 endsection: advanced
 

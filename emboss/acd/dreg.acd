@@ -14,20 +14,13 @@ section: input [
     type: "dna"
   ]
 
-endsection: input
-
-section: required [
-  information: "Required section"
-  type: "page"
-]
-
   regexp: pattern  [
     parameter: "Y"
     upper: "Y"
     information: "Regular expression pattern"
   ]
 
-endsection: required
+endsection: input
 
 section: output [
   information: "Output section"
