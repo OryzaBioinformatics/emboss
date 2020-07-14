@@ -25,33 +25,100 @@
 
 
 
-static void diffseq_diff(const AjPList matchlist,
-			 const AjPSeq seq1, const AjPSeq seq2,
-			 AjPFile outfile, AjBool columns);
-static void diffseq_diffrpt(const AjPList matchlist,
+/* @datastatic CdsPval ****************************************************
+**
+** CDS information object
+**
+** @alias CdsSval
+** @alias CdsOval
+**
+** @attr Start [ajint] Start of CDS (always less than End)
+** @attr End [ajint] End of CDS (always greater than Start)
+** @attr Phase [ajint] Phase of translation (0,1 or 2)
+** @attr Sense [char] Sense '+' or '-'
+** @attr Parent [AjBool] ajTrue is this CDS is a parent of a forward sense join
+**			or the last CDS of a reverse sense join
+** @attr Single [AjBool] ajTrue is this CDS is a not member of a join()
+** @attr ReverseParent [AjBool] ajTrue is this CDS is a parent of rev sense join
+**			or the last CDS in a forward sense join
+** @attr Local [AjBool] ajTrue is this CDS is local
+** @@
+******************************************************************************/
+
+typedef struct CdsSval
+{
+    ajint  Start;
+    ajint  End;
+    ajint  Phase;
+    char   Sense;
+    AjBool Parent;
+    AjBool Single;
+    AjBool ReverseParent;
+    AjBool Local;
+} CdsOval;
+#define CdsPval CdsOval*
+
+/* @datastatic PosPDiff ****************************************************
+**
+** Position of a difference between two matching regions
+** If there is something inserted in one sequence that does not
+** occur in the other, then the other has Start after the gap and
+** End before the gap and Len=0.
+**
+** @alias PosSDiff
+** @alias PosODiff
+**
+** @attr Start1 [ajint] Start of difference in sequence 1 (End1+1 if gap)
+** @attr Start2 [ajint] Start of difference in sequence 2 (End1+1 if gap)
+** @attr End1 [ajint] End of difference in seq 1 
+** @attr End2 [ajint] End of difference in seq 2
+** @attr Len1 [ajint] Length of difference in sequence 1 (0 = a gap)
+** @attr Len2 [ajint] Length of difference in sequence 2 (0 = a gap)
+** @@
+******************************************************************************/
+
+typedef struct PosSDiff
+{
+    ajint  Start1;
+    ajint  Start2;
+    ajint  End1;
+    ajint  End2;
+    ajint  Len1;
+    ajint  Len2;
+} PosODiff;
+#define PosPDiff PosODiff*
+
+  
+static void diffseq_Diff(const AjPList difflist,
 			    const AjPSeq seq1, const AjPSeq seq2,
 			    AjPReport report, AjPFeattable ftab,
-			    AjBool columns);
-
+			    ajint over1start, ajint over1end,
+			    ajint over2start, ajint over2end);
 
 static void diffseq_WordMatchListConvDiffToFeat(const AjPList list,
-						AjPFeattable *tab1,
-						AjPFeattable *tab2,
-						const AjPSeq seq1,
-						const AjPSeq seq2);
+                                                AjPFeattable *tab1,
+                                                AjPFeattable *tab2,
+                                                const AjPSeq seq1,
+                                                const AjPSeq seq2);
 
-static void diffseq_Features(AjPFile outfile,
-			     const AjPFeattable feat, ajint start,
-			     ajint end);
-static void diffseq_FeaturesRpt(const char* typefeat, AjPFeature rf,
+static void diffseq_Features(const char* typefeat, AjPFeature rf,
 				const AjPFeattable feat,
 				ajint start, ajint end);
-static void diffseq_AddTags(AjPFile outfile, const AjPFeature feat,
-			    AjBool values);
-static void diffseq_AddTagsRpt(AjPStr* strval, const AjPFeature feat,
+
+static void diffseq_AddTags(AjPStr* strval, const AjPFeature feat,
 			       AjBool values);
 
+static void diffseq_DiffList(const AjPList matchlist, AjPList difflist,
+                             AjBool global, const AjPSeq seq1,
+                             const AjPSeq seq2, ajint *over1start,
+                             ajint *over1end, ajint *over2start,
+                             ajint *over2end);
 
+static PosPDiff diffseq_PosPDiffNew(void);
+
+static void diffseq_PosPDiffDel(void **x, void *cl);
+
+static void diffseq_FeatSetCDSFrame(AjPFeattable ftab);
 
 
 /* @prog diffseq **************************************************************
@@ -67,16 +134,21 @@ int main(int argc, char **argv)
     ajint wordlen;
     AjPTable seq1MatchTable = 0;
     AjPList matchlist = NULL;
-    AjPFile outfile   = NULL;
+    AjPList difflist = NULL;
     AjPReport report;
     AjPFeattable Tab1 = NULL;
     AjPFeattable Tab2 = NULL;
     AjPFeattable TabRpt   = NULL;
     AjPFeattabOut seq1out = NULL;
     AjPFeattabOut seq2out = NULL;
-    AjBool columns;		/* format output report files in columns */
     AjPStr tmpstr=NULL;
+    AjBool global;	/* true if want to report the differences at the ends */
+    ajint over1start;	/* start and end positions of match overlap */
+    ajint over1end;	/* ... for sequence 1 */
+    ajint over2start;	/* overlap for sequence 2 */
+    ajint over2end;
 
+                         
     embInit("diffseq", argc, argv);
 
     wordlen = ajAcdGetInt("wordsize");
@@ -85,14 +157,10 @@ int main(int argc, char **argv)
     report  = ajAcdGetReport("outfile");
     seq1out = ajAcdGetFeatout("aoutfeat");
     seq2out = ajAcdGetFeatout("boutfeat");
-    columns = ajAcdGetBool("columns");
 
-    /*
-    ** Replaced by report. Original code exists
-    ** but is skipped if outfile is NULL
-    **
-    ** outfile = ajAcdGetOutfile("outfile");
-    */
+    /* advanced qualifiers */
+    global        = ajAcdGetBool("globaldifferences");
+		    
 
     ajSeqTrim(seq1);
     ajSeqTrim(seq2);
@@ -112,22 +180,28 @@ int main(int argc, char **argv)
 
     if(matchlist)
     {
+        /* convert the list of matches to a list of differences */
+        difflist = ajListNew();
+        diffseq_DiffList(matchlist, difflist, global, seq1, seq2,
+                         &over1start, &over1end, &over2start, &over2end);
+
+
 	/* output the gff files */
-	diffseq_WordMatchListConvDiffToFeat(matchlist, &Tab1, &Tab2,
+	diffseq_WordMatchListConvDiffToFeat(difflist, &Tab1, &Tab2,
 						   seq1, seq2);
 
-	/* make the output file */
-	if(outfile)
-	    diffseq_diff(matchlist, seq1, seq2, outfile, columns);
 
-	diffseq_diffrpt(matchlist, seq1, seq2,
-				report, TabRpt, columns);
+	diffseq_Diff(difflist, seq1, seq2, report, TabRpt,
+	             over1start, over1end, over2start, over2end);
+
 
 	embWordMatchListDelete(&matchlist); /* free the match structures */
-    }
 
-    if(outfile)
-      ajFileClose(&outfile);
+        /* delete difflist */
+        ajListMap(difflist, diffseq_PosPDiffDel, NULL);
+        ajListDel(&difflist);
+
+    }
 
     ajFeatWrite(seq1out, Tab1);
     ajFeatWrite(seq2out, Tab2);
@@ -140,8 +214,10 @@ int main(int argc, char **argv)
     ajReportFileAdd(report, ajFeattabOutFile(seq2out), tmpstr);
 
     ajReportWrite(report, TabRpt, seq1);
-    ajFeattableDel(&TabRpt);
     ajReportClose(report);
+
+    /* tidy up */
+    ajFeattableDel(&TabRpt);
     ajReportDel(&report);
 
     ajExit();
@@ -151,667 +227,41 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic diffseq_WordMatchListConvDiffToFeat ****************************
-**
-** convert the word table differences to feature tables.
-**
-** @param [r] list [const AjPList] non-overlapping match list to be printed
-**                            (sorted by position).
-** @param [u] tab1 [AjPFeattable*] feature table for sequence 1
-** @param [u] tab2 [AjPFeattable*] feature table for sequence 2
-** @param [r] seq1 [const AjPSeq] sequence 1
-** @param [r] seq2 [const AjPSeq] sequence 2
-** @return [void]
-** @@
-******************************************************************************/
-
-static void diffseq_WordMatchListConvDiffToFeat(const AjPList list,
-						AjPFeattable *tab1,
-						AjPFeattable *tab2,
-						const AjPSeq seq1,
-						const AjPSeq seq2)
-{
-    char strand = '+';
-    ajint frame = 0;
-    AjPStr source  = NULL;
-    AjPStr type    = NULL;
-    AjPStr note    = NULL;
-    AjPStr replace = NULL;
-    AjPFeature feature;
-    AjIList iter    = NULL;
-    ajint misstart1 = -1;		/* start of mismatch region in seq1 */
-    ajint misstart2 = -1;		/* start of mismatch region in seq2 */
-    ajint misend1;
-    ajint misend2;			/* end of mismatch region */
-    AjPStr notestr     = NULL;
-    AjPStr replacestr  = NULL;
-    AjPStr sourcestr   = NULL;
-    AjPStr conflictstr = NULL;
-    float score = 0.0;
-
-    if(!*tab1)
-	*tab1 = ajFeattableNewSeq(seq1);
-
-    if(!*tab2)
-	*tab2 = ajFeattableNewSeq(seq2);
-
-    source     = ajStrNew();
-    type       = ajStrNew();
-    note       = ajStrNew();
-    replace    = ajStrNew();
-    replacestr = ajStrNew();
-    notestr    = ajStrNew();
-
-    ajStrAssC(&source,"diffseq");
-    ajStrAssC(&type,"conflict");
-    ajStrAssC(&note,"note");
-    ajStrAssC(&replace,"replace");
-    score = 1.0;
-
-    iter = ajListIterRead(list);
-    while(ajListIterMore(iter))
-    {
-	EmbPWordMatch p =(EmbPWordMatch) ajListIterNext(iter) ;
-
-	misend1 = p->seq1start-1;
-	misend2 = p->seq2start-1;
-
-	if(misstart1 != -1)
-	{
-	    /* check if a  match already */
-	    if(misstart1 <= misend1)
-	    {	/* is there a gap between the matches? */
-		feature = ajFeatNew(*tab1, source, type,
-				    misstart1+1, misend1+1,
-				    score, strand, frame) ;
-		if(misstart1 == misend1 && misstart2 == misend2)
-		    ajFmtPrintS(&notestr, "SNP in %S", ajSeqGetName(seq2));
-		else if(misstart2 > misend2)
-		    ajFmtPrintS(&notestr, "Insertion of %d bases in %S",
-				misend1 - misstart1 +1, ajSeqGetName(seq1));
-		else
-		    ajFmtPrintS(&notestr, "%S", ajSeqGetName(seq2));
-
-		ajFeatTagSet(feature, note, notestr);
-
-		if(misstart2 <= misend2)
-		    ajStrAssSub(&replacestr, ajSeqStr(seq2), misstart2,
-				misend2);
-		else
-		    ajStrAssC(&replacestr, "");
-
-		if(ajFeattableIsProt(*tab1))
-		{
-		    if(ajStrLen(replacestr))
-		    {
-			ajStrAssSub(&sourcestr, ajSeqStr(seq1), misstart1,
-				    misend1);
-			ajFmtPrintS(&conflictstr, "%S -> %S",
-				    sourcestr, replacestr);
-		    }
-		    else
-			ajFmtPrintS(&conflictstr, "MISSING");
-		    ajFeatTagSet(feature, note, conflictstr);
-		}
-		else
-		    ajFeatTagSet(feature, replace, replacestr);
-	    }
-
-	    if(misstart2 <= misend2)
-	    {	/* is there a gap between the matches? */
-		feature = ajFeatNew(*tab2, source, type,
-				    misstart2+1, misend2+1,
-				    score, strand, frame) ;
-
-		if(misstart2 == misend2 && misstart1 == misend1)
-		    ajFmtPrintS(&notestr, "SNP in %S", ajSeqGetName(seq1));
-		else if(misstart1 > misend1)
-		    ajFmtPrintS(&notestr, "Insertion of %d bases in %S",
-				misend2 - misstart2 +1, ajSeqGetName(seq2));
-		else
-		    ajFmtPrintS(&notestr, "%S", ajSeqGetName(seq1));
-
-		ajFeatTagSet(feature, note, notestr);
-
-		if(misstart1 <= misend1)
-		    ajStrAssSub(&replacestr, ajSeqStr(seq1), misstart1,
-				misend1);
-		else
-		    ajStrAssC(&replacestr, "");
-
-		if(ajFeattableIsProt(*tab2))
-		{
-		    if(ajStrLen(replacestr))
-		    {
-			ajStrAssSub(&sourcestr, ajSeqStr(seq2), misstart2,
-				    misend2);
-			ajFmtPrintS(&conflictstr, "%S -> %S",
-				    sourcestr, replacestr);
-		    }
-		    else
-			ajFmtPrintS(&conflictstr, "MISSING");
-			
-		    ajFeatTagSet(feature, note, conflictstr);
-		}
-		else
-		    ajFeatTagSet(feature, replace, replacestr);
-	    }
-
-	}
-
-	/* note the start position of the mismatch */
-	misstart1 = misend1 + p->length +1;
-	misstart2 = misend2 + p->length +1;
-
-    }
-
-    ajListIterFree(&iter);
-    ajStrDel(&source);
-    ajStrDel(&type);
-    ajStrDel(&note);
-    ajStrDel(&replace);
-    ajStrDel(&replacestr);
-    ajStrDel(&sourcestr);
-    ajStrDel(&conflictstr);
-    ajStrDel(&notestr);
-
-    return;
-}
-
-
-
-
-/* @funcstatic diffseq_AddTags ************************************************
-**
-** Writes the tags to the output file
-** Don't write out the translation - is it often far too long!
-**
-** Obsolete. Not used unless outfile is reenabled.
-**
-** @param [u] outfile [AjPFile] output file
-** @param [r] feat [const AjPFeature] Feature to be processed
-** @param [r] values [AjBool] display values of tags
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void diffseq_AddTags(AjPFile outfile,
-			    const AjPFeature feat, AjBool values)
-{
-    AjIList titer;			/* iterator for taglist */
-    static AjPStr tagnam = NULL;
-    static AjPStr tagval = NULL;
-
-    /*
-    ** Obsolete. Return now unless outfile is defined
-    */
-
-    if(!outfile)
-	return;
-
-    /* iterate through the tags and test for match to patterns */
-
-    titer = ajFeatTagIter(feat);
-    while(ajFeatTagval(titer, &tagnam, &tagval))
-	/* don't display the translation tag */
-	if(ajStrCmpC(tagnam, "translation"))
-	{
-	    if(values == ajTrue)
-		ajFmtPrintF(outfile, " %S=%S", tagnam, tagval);
-	    else
-		ajFmtPrintF(outfile, " %S", tagnam);
-	}
-
-    ajListIterFree(&titer);
-    ajFmtPrintF(outfile, "\n");
-
-    return;
-}
-
-
-
-
-/* @funcstatic diffseq_AddTagsRpt *********************************************
-**
-** Appends feature tag values to a string in a simple format.
-** Don't write out the translation - is it often far too long!
-**
-** @param [u] strval [AjPStr*] String
-** @param [r] feat [const AjPFeature] Feature to be processed
-** @param [r] values [AjBool] display values of tags
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void diffseq_AddTagsRpt(AjPStr* strval,
-			       const AjPFeature feat, AjBool values)
-{
-    AjIList titer;			/* iterator for taglist */
-    static AjPStr tagnam = NULL;
-    static AjPStr tagval = NULL;
-
-    /* iterate through the tags and test for match to patterns */
-
-    titer = ajFeatTagIter(feat);
-    while(ajFeatTagval(titer, &tagnam, &tagval))
-	/* don't display the translation tag - it is far too long :-) */
-	if(ajStrCmpC(tagnam, "translation"))
-	{
-	    if(values == ajTrue)
-		ajFmtPrintAppS(strval, " %S='%S'", tagnam, tagval);
-	    else
-		ajFmtPrintAppS(strval, " %S", tagnam);
-	}
-
-    ajListIterFree(&titer);
-
-    return;
-}
-
-
-
-
-/* @funcstatic diffseq_Features ***********************************************
-**
-** Write out any features which overlap this region.
-** Don't write out the source feature - far too irritating!
-**
-** Obsolete. Only called if outfile is defined
-**
-** @param [u] outfile [AjPFile] Output file containing report.
-** @param [r] feat [const AjPFeattable] Feature table to search
-** @param [r] start [ajint] Start position of region (in human coordinates)
-** @param [r] end [ajint] End position of region (in human coordinates)
-** @return [void]
-** @@
-******************************************************************************/
-
-static void diffseq_Features(AjPFile outfile,
-			     const AjPFeattable feat, ajint start,
-			     ajint end)
-{
-    AjIList iter  = NULL;
-    AjPFeature gf = NULL;
-
-    /*
-     ** Obsolete. Return now unless outfile is defined.
-     */
-
-    if(!outfile)
-	return;
-
-    if(!feat)
-	return;
-
-    if(feat->Features)
-    {
-	iter = ajListIterRead(feat->Features);
-	while(ajListIterMore(iter))
-	{
-	    gf = ajListIterNext(iter);
-
-	    /* check that the feature is within the range for display */
-	    if(start > ajFeatGetEnd(gf) || end < ajFeatGetStart(gf))
-		continue;
-
-	    /* don't output the 'source' feature */
-	    if(!ajStrCmpC(ajFeatGetType(gf), "source"))
-		continue;
-
-	    /* write out the feature details */
-	    ajFmtPrintF(outfile, "Feature: %S %d-%d", ajFeatGetType(gf),
-			ajFeatGetStart(gf), ajFeatGetEnd(gf));
-	    diffseq_AddTags(outfile, gf, ajTrue);
-	}
-	ajListIterFree(&iter);
-    }
-
-    return;
-}
-
-
-
-
-/* @funcstatic diffseq_FeaturesRpt ********************************************
-**
-** Write out any features which overlap this region.
-** Don't write out the source feature - far too irritating!
-**
-** @param [r] typefeat [const char*] Report feature tag type
-** @param [u] rf [AjPFeature] Report feature to store results in
-** @param [r] feat [const AjPFeattable] Feature table to search
-** @param [r] start [ajint] Start position of region (in human coordinates)
-** @param [r] end [ajint] End position of region (in human coordinates)
-** @return [void]
-** @@
-******************************************************************************/
-
-static void diffseq_FeaturesRpt(const char* typefeat, AjPFeature rf,
-				const AjPFeattable feat,
-				ajint start, ajint end)
-{
-    AjIList iter  = NULL;
-    AjPFeature gf = NULL;
-    AjPStr tmp    = NULL;
-
-    if(!feat)
-	return;
-
-    if(feat->Features)
-    {
-	iter = ajListIterRead(feat->Features);
-	while(ajListIterMore(iter))
-	{
-	    gf = ajListIterNext(iter);
-
-	    /* check that the feature is within the range for display */
-	    if(start > ajFeatGetEnd(gf) || end < ajFeatGetStart(gf))
-		continue;
-
-	    /* don't output the 'source' feature */
-	    if(!ajStrCmpC(ajFeatGetType(gf), "source"))
-		continue;
-
-	    /* write out the feature details */
-	    ajFmtPrintS(&tmp, "*%s %S %d-%d",
-			       typefeat, ajFeatGetType(gf),
-			       ajFeatGetStart(gf), ajFeatGetEnd(gf));
-	    diffseq_AddTagsRpt(&tmp, gf, ajTrue);
-	    ajFeatTagAdd(rf, NULL,  tmp);
-	}
-	ajListIterFree(&iter) ;
-    }
-
-    ajStrDel(&tmp);
-
-    return;
-}
-
-
-
-
-/* @funcstatic diffseq_diff ***************************************************
-**
-** Do a diff and write a report on the diff of the two sequences.
-**
-** Obsolete. Only used if outfile is defined.
-**
-** @param [r] matchlist [const AjPList] List of minimal non-overlapping matches
-** @param [r] seq1 [const AjPSeq] Sequence to be diff'd.
-** @param [r] seq2 [const AjPSeq] Sequence to be diff'd.
-** @param [u] outfile [AjPFile] Output file containing report.
-** @param [r] columns [AjBool] format in columns
-** @return [void]
-** @@
-******************************************************************************/
-
-static void diffseq_diff(const AjPList matchlist,
-			 const AjPSeq seq1, const AjPSeq seq2,
-			 AjPFile outfile, AjBool columns)
-{
-
-    AjIList iter = NULL;       		/* match list iterator */
-    EmbPWordMatch p = NULL;		/* match structure */
-    ajint count = 0;			/* count of matches */
-    const AjPStr s1;				/* string of seq1 */
-    const AjPStr s2;				/* string of seq2 */
-    ajint prev1end = 0;
-    ajint prev2end = 0;		/* end positions (+1) of previous match */
-    AjPStr tmp;
-    AjPStr name1;
-    AjPStr name2;
-    ajint start;
-    ajint end;	/* start and end of the difference (using human coords) */
-
-    /* stuff for counting SNPs, transitions & transversions */
-    ajint snps = 0;
-    ajint transitions   = 0;
-    ajint transversions = 0;		/* counts of SNP types */
-    char base1='\0';
-    char base2='\0';
-    ajint len1;
-    ajint len2;
-    AjPFeattable feat1;
-    AjPFeattable feat2;
-
-    tmp = ajStrNew();
-    name1 = ajStrNewC(ajSeqName(seq1));
-    name2 = ajStrNewC(ajSeqName(seq2));
-
-    s1 = ajSeqStr(seq1);
-    s2 = ajSeqStr(seq2);
-
-
-    /* get the feature table of the sequences */
-    feat1 = ajSeqCopyFeat(seq1);
-    feat2 = ajSeqCopyFeat(seq2);
-
-
-     /*
-     ** Obsolete. Return now unless outfile is defined.
-     */
-    
-    if(!outfile)
-	return;
-    
-    /* title line */
-    ajFmtPrintF(outfile, "# Report of diffseq of: %S and %S\n\n",
-		name1, name2);
-    
-    iter = ajListIterRead(matchlist);
-    while(ajListIterMore(iter))
-    {
-	p = (EmbPWordMatch) ajListIterNext(iter) ;
-	/* first match? */
-	if(!count++)
-	{
-	    if(columns)
-		ajFmtPrintF(outfile, "# ");
-	    ajFmtPrintF(outfile, "%S overlap starts at %d\n", name1,
-			p->seq1start+1);
-	    if(columns)
-		ajFmtPrintF(outfile, "# ");
-	    ajFmtPrintF(outfile, "%S overlap starts at %d\n\n", name2,
-			p->seq2start+1);
-
-	    if(columns)
-		ajFmtPrintF(outfile, "# (%S) start end length sequence "
-			    " (%S) start end length sequence\n\n",
-			    name1, name2);
-
-	}
-	else
-	{
-	    /* output the difference between the matching regions */
-	    /* seq1 details */
-	    start = prev1end+1;
-	    end = p->seq1start;
-	    if(prev1end<p->seq1start)
-	    {
-		if(columns)
-		    ajFmtPrintF(outfile, "%d\t%d\t%d\t", start, end,
-				end-start+1);
-		else
-		    ajFmtPrintF(outfile, "\n%S %d-%d Length: %d\n",
-				name1, start, end, end-start+1);
-		ajStrAssSub(&tmp, s1, prev1end, p->seq1start-1);
-		len1=end-start+1;
-		base1 = * ajStrStr(tmp);
-	    }
-	    else
-	    {
-		if(columns)
-		    ajFmtPrintF(outfile, "%d\t%d\t0\t", start-1,
-				start-1);
-		else
-		    ajFmtPrintF(outfile, "\n%S %d Length: 0\n", name1,
-				start-1);
-		ajStrAssC(&tmp, "");
-		len1=0;
-	    }
-	    if(!columns)
-		diffseq_Features(outfile, feat1, start, end);
-
-	    if(columns)
-		ajFmtPrintF(outfile, "'%S'\t", tmp);
-	    else
-		ajFmtPrintF(outfile, "Sequence: %S\n", tmp);
-
-	    /* seq2 details */
-	    start = prev2end+1;
-	    end = p->seq2start;
-	    if(prev2end<p->seq2start)
-	    {
-		ajStrAssSub(&tmp, s2, prev2end, p->seq2start-1);
-		if(columns)
-		    ajFmtPrintF(outfile, "%d\t%d\t%d\t'%S'\n", start,
-				end, end-start+1, tmp);
-		else
-		{
-		    ajFmtPrintF(outfile, "Sequence: %S\n", tmp);
-		    if(!columns)
-			diffseq_Features(outfile, feat2, start, end);
-		    ajFmtPrintF(outfile, "%S %d-%d Length: %d\n",
-				name2, start, end, end-start+1);
-		}
-		len2=end-start+1;
-		base2 = * ajStrStr(tmp);
-	    }
-	    else
-	    {
-		ajStrAssC(&tmp, "");
-		if(columns)
-		    ajFmtPrintF(outfile, "%d\t%d\t0\t'%S'\n", start-1,
-				start-1, tmp);
-		else
-		{
-		    ajFmtPrintF(outfile, "Sequence: %S\n", tmp);
-		    if(!columns)
-			diffseq_Features(outfile, feat2, start, end);
-		    ajFmtPrintF(outfile, "%S %d Length: 0\n", name2,
-				start-1);
-		}
-		len2=0;
-	    }
-
-	    /* count SNPs, transitions & transversions */
-	    if(len1 == 1 && len2 == 1)
-	    {
-		snps++;
-		transitions += (ajint) embPropTransition(base1, base2);
-		transversions += (ajint) embPropTransversion(base1, base2);
-	    }
-
-	}
-
-	/* output the match */
-	/*
-	 *  ajFmtPrintF(outfile, "Matching region %S %d-%d : %S
-	 *  %d-%d\n", name1, p->seq1start+1, p->seq1start + p->length,
-	 *  name2, p->seq2start+1, p->seq2start + p->length);
-	 * ajFmtPrintF(outfile, "Length of match: %d\n", p->length);
-	 */
-
-	/*
-	 *  note the end positions (+1) to get the intervening region
-	 *  between matches
-	 */
-	prev1end = p->seq1start + p->length;
-	prev2end = p->seq2start + p->length;
-
-    }
-    
-    ajListIterFree(&iter);
-    
-    /* end of overlapping region */
-    if(p)
-    {	    /* no iterations of the match list done - ie no matches */
-	ajFmtPrintF(outfile, "\n\n");
-	if(columns)
-	    ajFmtPrintF(outfile, "# ");
-	ajFmtPrintF(outfile, "%S overlap ends at %d\n", name1,
-		    p->seq1start+p->length);
-	if(columns)
-	    ajFmtPrintF(outfile, "# ");
-	ajFmtPrintF(outfile, "%S overlap ends at %d\n\n", name2,
-		    p->seq2start+p->length);
-
-        if(ajSeqIsNuc(seq1)) {
-	    /* report the counts of SNP types */
-	    ajFmtPrintF(outfile, "\n\n");
-	    if(columns)
-	        ajFmtPrintF(outfile, "# ");
-	    ajFmtPrintF(outfile, "No. of SNPs = %d\n", snps);
-	    if(columns)
-	        ajFmtPrintF(outfile, "# ");
-	    ajFmtPrintF(outfile, "No. of transitions = %d\n", transitions);
-	    if(columns)
-	        ajFmtPrintF(outfile, "# ");
-	    ajFmtPrintF(outfile, "No. of transversions = %d\n",
-			transversions);
-	}
-    }
-    else
-    {
-	ajFmtPrintF(outfile, "\n\n");
-	if(columns)
-	    ajFmtPrintF(outfile, "# ");
-	ajFmtPrintF(outfile, "No regions of alignment found.\n");
-    }
-    
-    /* tidy up */
-    ajStrDel(&tmp);
-    ajStrDel(&name1);
-    ajStrDel(&name2);
-    ajFeattableDel(&feat1);
-    ajFeattableDel(&feat2);
-    
-    return;
-}
-
-
-
-
-/* @funcstatic diffseq_diffrpt ************************************************
+/* @funcstatic diffseq_Diff ************************************************
 **
 ** Do a diff and build a report on the diff of the two sequences.
 **
-** @param [r] matchlist [const AjPList] List of minimal non-overlapping matches
+** @param [r] difflist [const AjPList] List of differences
 ** @param [r] seq1 [const AjPSeq] Sequence to be diff'd.
 ** @param [r] seq2 [const AjPSeq] Sequence to be diff'd.
 ** @param [u] report [AjPReport] Report object.
 ** @param [u] ftab [AjPFeattable] Report feature table
-** @param [r] columns [AjBool] format in columns
+** @param [r] over1start [ajint] start of overlap region in sequence1
+** @param [r] over1end [ajint] end of overlap region in sequence1
+** @param [r] over2start [ajint] start of overlap region in sequence2
+** @param [r] over2end [ajint] end of overlap region in sequence2
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void diffseq_diffrpt(const AjPList matchlist,
+static void diffseq_Diff(const AjPList difflist,
 			    const AjPSeq seq1, const AjPSeq seq2,
 			    AjPReport report, AjPFeattable ftab,
-			    AjBool columns)
+			    ajint over1start, ajint over1end,
+			    ajint over2start, ajint over2end)
 {
-    AjIList iter = NULL;		/* match list iterator */
-    EmbPWordMatch p = NULL;		/* match structure */
-    ajint count = 0;			/* count of matches */
-    const AjPStr s1;			/* string of seq1 */
-    const AjPStr s2;			/* string of seq2 */
-    ajint prev1end = 0;
-    ajint prev2end = 0;		/* end positions (+1) of previous match */
-    AjPStr tmp;				/* temporary string */
-    ajint start;
-    ajint end;	/* start and end of the difference (using human coords) */
+    AjIList iter = NULL;	/* match list iterator */
+    PosPDiff diff = NULL;	/* difference structure */
+    const AjPStr s1;		/* string of seq1 */
+    const AjPStr s2;		/* string of seq2 */
+    AjPStr tmp;			/* temporary string */
 
     /* stuff for counting SNPs, transitions & transversions */
     ajint snps = 0;
     ajint transitions   = 0;
-    ajint transversions = 0;		/* counts of SNP types */
+    ajint transversions = 0;	/* counts of SNP types */
     char base1 = '\0';
     char base2 = '\0';
-    ajint len1;
-    ajint len2;
     AjPStr tmpstr = NULL;
     static AjPStr tmpseq = NULL;
 
@@ -832,130 +282,113 @@ static void diffseq_diffrpt(const AjPList matchlist,
     feat1 = ajSeqCopyFeat(seq1);
     feat2 = ajSeqCopyFeat(seq2);
 
+    /* 
+    ** Fix the Frame field in the CDS features of the feature table for
+    ** seq1. These are often left as 'unsure' by the ajfeat routines.
+    */
+    diffseq_FeatSetCDSFrame(feat1);
 
-    /* title line */
+    /* create report header */
     ajFmtPrintS(&tmpstr, "Compare: %S     from: %d   to: %d\n\n",
 		ajReportSeqName(report, seq2),
-		ajSeqBegin(seq2), ajSeqEnd(seq2));
-    
-    
-    iter = ajListIterRead(matchlist);
-    while(ajListIterMore(iter))
-    {
-	p = (EmbPWordMatch) ajListIterNext(iter) ;
-	/* first match? this is the start of the overall overlap region */
-	if(!count++)
-	{
-	    ajFmtPrintAppS(&tmpstr, "%S overlap starts at %d\n",
+		ajSeqBegin(seq2), ajSeqEnd(seq2));    
+    if (over1start != -1)   
+    { 
+        ajFmtPrintAppS(&tmpstr, "%S overlap starts at %d\n",
 			   ajReportSeqName(report, seq1),
-			   p->seq1start+1);
-	    ajFmtPrintAppS(&tmpstr, "%S overlap starts at %d\n\n",
+			   over1start);
+        ajFmtPrintAppS(&tmpstr, "%S overlap starts at %d\n\n",
 			   ajReportSeqName(report, seq2),
-			   p->seq2start+1);
-
-	    ajFmtPrintAppS(&tmpstr, "(%S) start end length sequence\n"
+			   over2start);
+        ajFmtPrintAppS(&tmpstr, "(%S) start end length sequence\n"
 			   "(%S) start end length sequence\n\n",
 			   ajReportSeqName(report, seq1),
 			   ajReportSeqName(report, seq2));
+    }
+    ajReportSetHeader(report, tmpstr);
 
-	    ajReportSetHeader(report, tmpstr);
 
-	}
-	else			  /* difference (gap to next match) */
+    iter = ajListIterRead(difflist);
+    while(ajListIterMore(iter))
+    {
+	diff = (PosPDiff) ajListIterNext(iter) ;
+
+        /* seq 1 details */
+        if(diff->Len1 > 0)
 	{
-	    /* save the difference between the matching regions */
-	    start = prev1end+1;
-	    end   = p->seq1start;
-	    if(prev1end<p->seq1start)
-	    {
-		gf = ajFeatNewII(ftab, start, end);
-		ajStrAssSub(&tmp, s1, prev1end, p->seq1start-1); /* subseq1 */
-		len1  = end-start+1;
-		base1 = * ajStrStr(tmp);
-	    }
-	    else
-	    {
-		gf = ajFeatNewII(ftab, start-1, start-2);
-		ajStrAssC(&tmp, "");
-		len1 = 0;
-	    }
-	    diffseq_FeaturesRpt("first_feature", gf,
-				feat1, start, end);
-
-	    /* seq2 details */
-	    start = prev2end+1;
-	    end   = p->seq2start;
-
-	    diffseq_FeaturesRpt("second_feature", gf,
-				feat2, start, end);
-
-	    ajFmtPrintS(&tmp, "*name %S", ajReportSeqName(report, seq2));
-	    ajFeatTagAdd(gf, NULL, tmp);
-	    len2=end-start+1;
-	    if(len2 > 0)
-	    {
-		ajFmtPrintS(&tmp, "*length %d", len2);
-		ajFeatTagAdd(gf, NULL, tmp);
-		ajFmtPrintS(&tmp, "*start %d", start);
-		ajFeatTagAdd(gf, NULL, tmp);
-		ajFmtPrintS(&tmp, "*end %d", end);
-		ajFeatTagAdd(gf, NULL, tmp);
-		ajStrAssSub(&tmpseq, s2, prev2end, p->seq2start-1);
-		ajFmtPrintS(&tmp, "*sequence %S", tmpseq);
-		ajFeatTagAdd(gf, NULL, tmp);
-		base2 = * ajStrStr(tmpseq);
-	    }
-	    else
-	    {
-		ajFmtPrintS(&tmp, "*length %d", 0);
-		ajFmtPrintS(&tmp, "*start %d", start-1);
-		ajFeatTagAdd(gf, NULL, tmp);
-		ajFmtPrintS(&tmp, "*end %d", start-2);
-		ajFeatTagAdd(gf, NULL, tmp);
-	    }
-
-	    /* count SNPs, transitions & transversions */
-	    if(len1 == 1 && len2 == 1)
-	    {
-		snps++;
-		transitions += (ajint) embPropTransition(base1, base2);
-		transversions += (ajint) embPropTransversion(base1, base2);
-	    }
-
+	    gf = ajFeatNewII(ftab, diff->Start1, diff->End1);
+	    ajStrAssSub(&tmp, s1, diff->Start1-1, diff->End1-1);
+            base1 = * ajStrStr(tmp);
 	}
+        else
+        {
+            gf = ajFeatNewII(ftab, diff->End1, diff->End1-1);
+            ajStrAssC(&tmp, "");
+        }
+        diffseq_Features("first_feature", gf,
+                            feat1, diff->Start1, diff->End1);
 
+        /* seq2 details */
+        diffseq_Features("second_feature", gf,
+                            feat2, diff->Start2, diff->End2);
 
-	/*
-	**  note the end positions (+1) to get the intervening region
-	**  between matches
-	*/
-	prev1end = p->seq1start + p->length;
-	prev2end = p->seq2start + p->length;
+        ajFmtPrintS(&tmp, "*name %S", ajReportSeqName(report, seq2));
+        ajFeatTagAdd(gf, NULL, tmp);
+
+        if(diff->Len2 > 0)
+        {
+            ajFmtPrintS(&tmp, "*length %d", diff->Len2);
+            ajFeatTagAdd(gf, NULL, tmp);
+            ajFmtPrintS(&tmp, "*start %d", diff->Start2);
+            ajFeatTagAdd(gf, NULL, tmp);
+            ajFmtPrintS(&tmp, "*end %d", diff->End2);
+            ajFeatTagAdd(gf, NULL, tmp);
+            ajStrAssSub(&tmpseq, s2, diff->Start2-1, diff->End2-1);
+            ajFmtPrintS(&tmp, "*sequence %S", tmpseq);
+            ajFeatTagAdd(gf, NULL, tmp);
+            base2 = * ajStrStr(tmpseq);
+        }
+        else
+        {
+            ajFmtPrintS(&tmp, "*length %d", diff->Len2);
+            ajFmtPrintS(&tmp, "*start %d", diff->End2);
+            ajFeatTagAdd(gf, NULL, tmp);
+            ajFmtPrintS(&tmp, "*end %d", diff->End2);
+            ajFeatTagAdd(gf, NULL, tmp);
+        }
+
+        /* count SNPs, transitions & transversions */
+        if(diff->Len1 == 1 && diff->Len2 == 1)
+        {
+            snps++;
+            transitions += (ajint) embPropTransition(base1, base2);
+            transversions += (ajint) embPropTransversion(base1, base2);
+        }
 
     }
     
     ajListIterFree(&iter);
     
-    /* end of overlapping region */
-    if(p)
+    /* create report tail */
+    if(over1start != -1)
     {
-	ajFmtPrintS(&tmp, "Overlap_end: %d in %S\n",
-		    p->seq1start+p->length,
-		    ajReportSeqName(report, seq1));
-	ajFmtPrintAppS(&tmp, "Overlap_end: %d in %S\n",
-		       p->seq2start+p->length,
-		       ajReportSeqName(report, seq2));
-	if(ajSeqIsNuc(seq1))
-	{
-	    ajFmtPrintAppS(&tmp, "\n");
-	    ajFmtPrintAppS(&tmp, "SNP_count: %d\n", snps);
-	    ajFmtPrintAppS(&tmp, "Transitions: %d\n", transitions);
-	    ajFmtPrintAppS(&tmp, "Transversions: %d\n", transversions);
-	}
+        ajFmtPrintS(&tmp, "Overlap_end: %d in %S\n",
+                    over1end,
+                    ajReportSeqName(report, seq1));
+        ajFmtPrintAppS(&tmp, "Overlap_end: %d in %S\n",
+                       over2end,
+                       ajReportSeqName(report, seq2));
+        if(ajSeqIsNuc(seq1))
+        {
+            ajFmtPrintAppS(&tmp, "\n");
+            ajFmtPrintAppS(&tmp, "SNP_count: %d\n", snps);
+            ajFmtPrintAppS(&tmp, "Transitions: %d\n", transitions);
+            ajFmtPrintAppS(&tmp, "Transversions: %d\n", transversions);
+        }
     }
     else
         /* no iterations of the match list done - ie no matches */
-	ajFmtPrintS(&tmp, "No regions of alignment found.\n");
+        ajFmtPrintS(&tmp, "No regions of alignment found.\n");
     
     ajReportSetTail(report, tmp);
     
@@ -968,3 +401,653 @@ static void diffseq_diffrpt(const AjPList matchlist,
     
     return;
 }
+
+/* @funcstatic diffseq_WordMatchListConvDiffToFeat ****************************
+**
+** Convert the differences list to feature tables for output.
+**
+** @param [r] list [const AjPList] differences list
+** @param [u] tab1 [AjPFeattable*] feature table for sequence 1
+** @param [u] tab2 [AjPFeattable*] feature table for sequence 2
+** @param [r] seq1 [const AjPSeq] sequence 1
+** @param [r] seq2 [const AjPSeq] sequence 2
+** @return [void]
+** @@
+******************************************************************************/
+
+static void diffseq_WordMatchListConvDiffToFeat(const AjPList list,
+                                                AjPFeattable *tab1,
+                                                AjPFeattable *tab2,
+                                                const AjPSeq seq1,
+                                                const AjPSeq seq2)
+{
+    char strand = '+';
+    ajint frame = 0;
+    AjPStr source  = NULL;
+    AjPStr type    = NULL;
+    AjPStr note    = NULL;
+    AjPStr replace = NULL;
+    AjPFeature feature = NULL;
+    AjIList iter    = NULL;
+    AjPStr notestr     = NULL;
+    AjPStr replacestr  = NULL;
+    AjPStr sourcestr   = NULL;
+    AjPStr conflictstr = NULL;
+    float score = 0.0;
+
+    if(!*tab1)
+        *tab1 = ajFeattableNewSeq(seq1);
+
+    if(!*tab2)
+        *tab2 = ajFeattableNewSeq(seq2);
+
+    source     = ajStrNew();
+    type       = ajStrNew();
+    note       = ajStrNew();
+    replace    = ajStrNew();
+    replacestr = ajStrNew();
+    notestr    = ajStrNew();
+
+    ajStrAssC(&source,"diffseq");
+    ajStrAssC(&type,"conflict");
+    ajStrAssC(&note,"note");
+    ajStrAssC(&replace,"replace");
+    score = 1.0;
+
+    iter = ajListIterRead(list);
+    while(ajListIterMore(iter))
+    {
+        PosPDiff diff = (PosPDiff) ajListIterNext(iter) ;
+
+        if(diff->Len1)
+        {        /* is there a gap between the matches? */
+            feature = ajFeatNew(*tab1, source, type,
+                                diff->Start1, diff->End1,
+                                score, strand, frame) ;
+            if(diff->Len1 == 1 && diff->Len2 == 1)
+                ajFmtPrintS(&notestr, "SNP in %S", ajSeqGetName(seq2));
+            else if(diff->Len2 == 0)
+                ajFmtPrintS(&notestr, "Insertion of %d bases in %S",
+                            diff->Len1, ajSeqGetName(seq1));
+            else
+                ajFmtPrintS(&notestr, "%S", ajSeqGetName(seq2));
+
+            ajFeatTagSet(feature, note, notestr);
+
+            if(diff->Len2 > 0)
+                ajStrAssSub(&replacestr, ajSeqStr(seq2), diff->Start2-1,
+                            diff->End2-1);
+            else
+                ajStrAssC(&replacestr, "");
+
+            if(ajFeattableIsProt(*tab1))
+            {
+                if(ajStrLen(replacestr))
+                {
+                    ajStrAssSub(&sourcestr, ajSeqStr(seq1), diff->Start1-1,
+                                diff->End1-1);
+                    ajFmtPrintS(&conflictstr, "%S -> %S",
+                                sourcestr, replacestr);
+                }
+                else
+                    ajFmtPrintS(&conflictstr, "MISSING");
+
+                ajFeatTagSet(feature, note, conflictstr);
+            }
+            else
+                ajFeatTagSet(feature, replace, replacestr);
+        }
+
+        if(diff->Len2)
+        {        /* is there a gap between the matches? */
+            feature = ajFeatNew(*tab2, source, type,
+                                diff->Start2, diff->End2,
+                                score, strand, frame) ;
+
+            if(diff->Len2 == 1 && diff->Len1 == 1)
+                ajFmtPrintS(&notestr, "SNP in %S", ajSeqGetName(seq1));
+            else if(diff->Len1 == 0)
+                ajFmtPrintS(&notestr, "Insertion of %d bases in %S",
+                            diff->Len2, ajSeqGetName(seq2));
+            else
+                ajFmtPrintS(&notestr, "%S", ajSeqGetName(seq1));
+
+            ajFeatTagSet(feature, note, notestr);
+
+            if(diff->Len1 > 0)
+                ajStrAssSub(&replacestr, ajSeqStr(seq1), diff->Start1-1,
+                            diff->End1-1);
+            else
+                ajStrAssC(&replacestr, "");
+
+            if(ajFeattableIsProt(*tab2))
+            {
+                if(ajStrLen(replacestr))
+                {
+                    ajStrAssSub(&sourcestr, ajSeqStr(seq2), diff->Start2-1,
+                                diff->End2-1);
+                    ajFmtPrintS(&conflictstr, "%S -> %S",
+                                sourcestr, replacestr);
+                }
+                else
+                    ajFmtPrintS(&conflictstr, "MISSING");
+                        
+                ajFeatTagSet(feature, note, conflictstr);
+            }
+            else
+                ajFeatTagSet(feature, replace, replacestr);
+
+        }
+
+    }
+
+    ajListIterFree(&iter);
+    ajStrDel(&source);
+    ajStrDel(&type);
+    ajStrDel(&note);
+    ajStrDel(&replace);
+    ajStrDel(&replacestr);
+    ajStrDel(&sourcestr);
+    ajStrDel(&conflictstr);
+    ajStrDel(&notestr);
+
+    return;
+}
+
+
+
+
+/* @funcstatic diffseq_Features ********************************************
+**
+** Write out any features which overlap this region.
+** Don't write out the source feature - far too irritating!
+**
+** @param [r] typefeat [const char*] Report feature tag type
+** @param [u] rf [AjPFeature] Report feature to store results in
+** @param [r] feat [const AjPFeattable] Feature table to search
+** @param [r] start [ajint] Start position of region (in human coordinates)
+** @param [r] end [ajint] End position of region (in human coordinates)
+** @return [void]
+** @@
+******************************************************************************/
+
+static void diffseq_Features(const char* typefeat, AjPFeature rf,
+                                const AjPFeattable feat,
+                                ajint start, ajint end)
+{
+    AjIList iter  = NULL;
+    AjPFeature gf = NULL;
+    AjPStr tmp    = NULL;
+
+    if(!feat)
+        return;
+
+    if(feat->Features)
+    {
+        iter = ajListIterRead(feat->Features);
+        while(ajListIterMore(iter))
+        {
+            gf = ajListIterNext(iter);
+
+
+            /* check that the feature is within the range for display */
+            if(start > ajFeatGetEnd(gf) || end < ajFeatGetStart(gf))
+                continue;
+
+            /* don't output the 'source' feature */
+            if(!ajStrCmpC(ajFeatGetType(gf), "source"))
+                continue;
+
+            /* write out the feature details */
+            ajFmtPrintS(&tmp, "*%s %S %d-%d",
+                               typefeat, ajFeatGetType(gf),
+                               ajFeatGetStart(gf), ajFeatGetEnd(gf));
+            diffseq_AddTags(&tmp, gf, ajTrue);
+            ajFeatTagAdd(rf, NULL,  tmp);
+
+        }
+        ajListIterFree(&iter) ;
+    }
+
+
+    ajStrDel(&tmp);
+
+    return;
+}
+
+
+
+
+/* @funcstatic diffseq_AddTags *********************************************
+**
+** Appends feature tag values to a string in a simple format.
+** Don't write out the translation - is it often far too long!
+**
+** @param [u] strval [AjPStr*] String
+** @param [r] feat [const AjPFeature] Feature to be processed
+** @param [r] values [AjBool] display values of tags
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void diffseq_AddTags(AjPStr* strval,
+                               const AjPFeature feat, AjBool values)
+{
+    AjIList titer;                        /* iterator for taglist */
+    static AjPStr tagnam = NULL;
+    static AjPStr tagval = NULL;
+
+    /* iterate through the tags and test for match to patterns */
+
+    titer = ajFeatTagIter(feat);
+    while(ajFeatTagval(titer, &tagnam, &tagval))
+        /* don't display the translation tag - it is far too long :-) */
+        if(ajStrCmpC(tagnam, "translation"))
+        {
+            if(values == ajTrue)
+                ajFmtPrintAppS(strval, " %S='%S'", tagnam, tagval);
+            else
+                ajFmtPrintAppS(strval, " %S", tagnam);
+        }
+
+    ajListIterFree(&titer);
+
+    return;
+}
+
+
+
+/* @funcstatic diffseq_DiffList ************************************************
+**
+** Converts a list of matching regions into a list of differences
+** The positions are held in human coordinates (starting at 1)
+** rather than computer coordinates (starting at 0) because
+** there will be a lot of comparing/writing to feature tables
+** which use human coordinates.
+** over1start is returned with value '-1' if no matching regions were found.
+**
+** @param [r] matchlist [const AjPList] List of minimal non-overlapping matches
+** @param [u] difflist [AjPList] Resulting list of differences
+** @param [r] global [AjBool] ajTrue if we want the differences at the ends
+** @param [r] seq1 [const AjPSeq] sequence 1
+** @param [r] seq2 [const AjPSeq] sequence 2
+** @param [w] over1start [ajint *] start of overlap region in sequence1
+** @param [w] over1end [ajint *] end of overlap region in sequence1
+** @param [w] over2start [ajint *] start of overlap region in sequence2
+** @param [w] over2end [ajint *] end of overlap region in sequence2
+** @return [void]
+** @@
+******************************************************************************/
+
+static void diffseq_DiffList(const AjPList matchlist, AjPList difflist,
+                             AjBool global, const AjPSeq seq1,
+                             const AjPSeq seq2, ajint *over1start,
+                             ajint *over1end, ajint *over2start,
+                             ajint *over2end)
+{
+
+    AjIList iter    = NULL;
+    ajint misstart1 = -1;                /* start of mismatch region in seq1 */
+    ajint misstart2 = -1;                /* start of mismatch region in seq2 */
+    ajint misend1;
+    ajint misend2;                        /* end of mismatch region */
+    PosPDiff diff = NULL;                /* Difference object */
+    ajint i;
+    ajint j;
+    const char *seqc1;
+    const char *seqc2;
+    
+    seqc1 = ajSeqChar(seq1);
+    seqc2 = ajSeqChar(seq2);
+
+    *over1start = -1;                        /* flag for no matches found */
+
+    iter = ajListIterRead(matchlist);
+    while(ajListIterMore(iter))
+    {
+        EmbPWordMatch p =(EmbPWordMatch) ajListIterNext(iter) ;
+
+        misend1 = p->seq1start;
+        misend2 = p->seq2start;
+
+        if (misstart1 == -1)        /* this is the first iteration */
+        {
+            /* note the end of the overlap (start of first match) */
+            *over1start = p->seq1start + 1;
+            *over2start = p->seq2start + 1;
+
+            /* add difference at the start, if required */
+            if(global &&                /* we want the global differences */
+              (p->seq1start != 0 || 
+               p->seq2start != 0))        /* no match at pos 1,1 */
+            {
+                diff = diffseq_PosPDiffNew();
+                /* 
+                ** look for matches of less than the size of a word that
+                ** will have been missed by the word-match routines, but which
+                ** look weird if they are described as differences in
+                ** the output. 
+                */
+                diff->Start1 = 1;
+                diff->Start2 = 1;
+                diff->End1 = misend1;
+                diff->End2 = misend2;
+                diff->Len1 = diff->End1 - diff->Start1 + 1;
+                diff->Len2 = diff->End2 - diff->Start2 + 1;
+                /* 
+                ** If there are mismatches on both sequences, see if we can
+                ** make a small match at the starts to tidy things up a bit.
+                ** In other words, we increase the start of the mismatch if 
+                ** there are any matching bases there.
+                */
+                for (i=0;
+                     diff->Len1 && diff->Len2 &&
+                     tolower((ajint)seqc1[i]) == tolower((ajint)seqc2[i]); i++)
+                {
+                    diff->Len1--;
+                    diff->Len2--;
+                    diff->Start1++;
+                    diff->Start2++;        
+                }
+               
+                /* add node to the end of the list */
+                ajListPushApp(difflist, diff);
+            }
+        }
+        else    /* this is a mismatch between two matches */
+        {
+            diff = diffseq_PosPDiffNew();
+            diff->Start1 = misstart1;
+            diff->Start2 = misstart2;
+            diff->End1 = misend1;
+            diff->End2 = misend2;
+            diff->Len1 = diff->End1 - diff->Start1 + 1;
+            diff->Len2 = diff->End2 - diff->Start2 + 1;
+
+            /* add node to the end of the list */
+            ajListPushApp(difflist, diff);
+        }
+
+        /* note the start position of the next mismatch */
+        misstart1 = p->seq1start + p->length + 1;
+        misstart2 = p->seq2start + p->length + 1;
+    }
+
+    /* note the end of the overlap (end of last match) */
+    *over1end = misstart1-1;
+    *over2end = misstart2-1;
+
+    /* add difference at the end, if required */
+    if(global &&                        /* we want the global differences */
+      (misstart1 <= ajSeqLen(seq1) ||        /* no match at the end */
+       misstart2 <= ajSeqLen(seq2)))
+    {
+        diff = diffseq_PosPDiffNew();
+        diff->Start1 = misstart1;
+        diff->Start2 = misstart2;
+        diff->End1 = ajSeqLen(seq1);
+        diff->End2 = ajSeqLen(seq2);
+        diff->Len1 = diff->End1 - diff->Start1 + 1;
+        diff->Len2 = diff->End2 - diff->Start2 + 1;
+
+        /* 
+        ** If there are mismatches on both sequences, see if we can
+        ** make a small match at the ends to tidy things up a bit.
+        ** In other words, we reduce the end of the mismatch if there
+        ** are any matching bases there.
+        */
+        for (i=ajSeqLen(seq1), j=ajSeqLen(seq2); 
+             diff->Len1 && diff->Len2 &&
+             tolower((ajint)seqc1[i-1]) == tolower((ajint)seqc2[j-1]);
+	     i--, j--)
+        {
+            diff->Len1--;
+            diff->Len2--;
+            diff->End1--;
+            diff->End2--;        
+        }
+        /* add node to the end of the list */
+        ajListPushApp(difflist, diff);
+    }
+
+    ajListIterFree(&iter);
+
+    return;
+}
+
+
+/* @funcstatic diffseq_PosPDiffNew ********************************************
+**
+** Constructor for an empty PosPDiff object
+**
+** @return [PosPDiff] Diference object
+** @category new [PosPDiff] Constructor
+** @@
+******************************************************************************/
+
+static PosPDiff diffseq_PosPDiffNew(void)
+{
+    PosPDiff pthis;
+    AJNEW0(pthis);
+                
+    ajDebug("diffseq_PosPDiffNew %x\n", pthis);
+                   
+    return pthis;
+}
+    
+/* @funcstatic diffseq_PosPDiffDel ********************************************
+**
+** Destructor for a PosPDiff object for use with ajListMap
+**
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented 
+** @return [void]
+** @@
+******************************************************************************/
+
+static void diffseq_PosPDiffDel(void **x, void *cl)
+{
+    PosPDiff thys;
+    thys = (PosPDiff)*x;
+
+    AJFREE(thys);
+                
+    ajDebug("diffseq_PosPDiffDel\n");
+                   
+    return;
+}
+    
+
+
+
+/* @funcstatic diffseq_FeatSetCDSFrame ****************************************
+**
+** The Feature object in the ajfeat library has a field 'Frame' but it is
+** often left as '0' (unknown) in CDS features. This routine fixes it.
+** This routine assumes that the CDS features within a join()
+** are sorted by start position.
+**
+** Frame value of 0 is unknown, values 1,2,3 are equal to GFF phases 0,1,2
+**
+** @param [u] ftab [AjPFeattable] Feature table
+** @return [void]
+** @@
+******************************************************************************/
+
+static void diffseq_FeatSetCDSFrame(AjPFeattable ftab)
+{
+
+    AjIList iter      = NULL;        /* feature table iterator */
+    AjIList titer     = NULL;        /* feature tags iterator */
+    AjPFeature gf     = NULL;
+    ajint phase = 0;                /* translation phase, 0,1 or 2 */
+    ajint prevstart = 0;        /* start and end of previous CDS in table */
+    ajint prevend = 0;
+    AjBool prevparent;                /* flag true if prev CDS was a parent */
+    AjBool unsure;                /* true if we are unsure of the phase */
+    static AjPStr tagnam = NULL;/* name and value of tags of the feature */
+    static AjPStr tagval = NULL;
+
+#define FEATFLAG_START_BEFORE_SEQ 0x0001 /* <start */
+#define FEATFLAG_END_AFTER_SEQ    0x0002 /* >end */
+#define FEATFLAG_START_TWO        0x0010  /* x.y.. */
+#define FEATFLAG_END_TWO          0x0020  /* ..x.y */
+#define FEATFLAG_START_UNSURE     0x4000  /* unsure position - SwissProt '?' */
+#define FEATFLAG_END_UNSURE       0x8000  /* unsure position - SwissProt '?' */
+
+    unsure = ajFalse;
+
+    if(!ftab)
+        return;
+	    
+    if(!ftab->Features)
+        return;
+        
+    iter = ajListIterRead(ftab->Features);
+    while(ajListIterMore(iter))
+    {
+        gf = ajListIterNext(iter);
+
+        /* is this a CDS feature? */
+        if (ajStrCmpC(ajFeatGetType(gf), "CDS"))
+            continue;
+
+        /* is this a forward sense CDS? */
+        if(gf->Strand == '+') 
+        {
+
+            /* is this the start of a new group of CDS in a multi-exon gene? */
+            /* reset the phase to zero, or continue it accordingly */
+            if(ajFeatIsChild(gf))
+            {
+                phase += (prevend + 1 - prevstart) % 3;
+                phase %= 3;
+            }
+            else
+            {
+                phase = 0;
+                unsure = ajFalse;
+            }
+            
+            /* are we unsure about the start of this CDS? */
+            if (gf->Flags & FEATFLAG_START_BEFORE_SEQ ||
+                gf->Flags & FEATFLAG_START_UNSURE ||
+                gf->Flags & FEATFLAG_START_TWO)
+                unsure = ajTrue;
+
+            /* check to see if the /codon_start tag is set on this feature */
+
+            /* check to see if the /codon_start tag is set on this feature */
+            titer = ajFeatTagIter(gf);
+            while(ajFeatTagval(titer, &tagnam, &tagval))
+                if(!ajStrCmpC(tagnam, "codon_start"))
+                {
+                    ajStrToInt(tagval, &phase);
+                    phase--;
+                    unsure = ajFalse;
+                }
+            ajListIterFree(&titer);
+
+
+            /* If we are sure, set the Frame field in the feature
+            ** object.
+            */
+            if (unsure)
+                gf->Frame = 0;
+            else
+                if (gf->Frame == 0)
+                    gf->Frame = phase+1;
+        }
+
+        /* are we unsure about the end of this CDS? */
+        if (gf->Flags & FEATFLAG_END_AFTER_SEQ ||
+            gf->Flags & FEATFLAG_END_UNSURE ||
+            gf->Flags & FEATFLAG_END_TWO)
+            unsure = ajTrue;
+
+        /* remember the start/end of this feature */
+        prevstart = ajFeatGetStart(gf);
+        prevend = ajFeatGetEnd(gf);
+    }
+
+    ajListIterFree(&iter);
+
+    /* 
+    ** Go back up through list filling in the frame of the reverse sense
+    ** CDS features.
+    */
+    unsure = ajFalse;
+    prevparent = ajTrue;
+    iter = ajListIterBack(ftab->Features);
+    while(ajListIterBackMore(iter))
+    {
+        gf = ajListIterBackNext(iter);
+
+        /* is this a CDS feature? */
+        if (ajStrCmpC(ajFeatGetType(gf), "CDS"))
+            continue;
+
+        /* is this a reverse sense CDS? */
+        if(gf->Strand == '-') 
+        {
+            /* is this a new CDS group? - set the phase */
+            if(prevparent) 
+            {
+                phase = 0;
+                unsure = ajFalse;
+            }
+            else
+            {
+                phase += (prevend + 1 - prevstart) % 3;
+                phase %= 3;
+            }
+
+            /* are we unsure about the end of this CDS? */
+            if (gf->Flags & FEATFLAG_END_AFTER_SEQ ||
+                gf->Flags & FEATFLAG_END_UNSURE ||
+                gf->Flags & FEATFLAG_END_TWO)
+                unsure = ajTrue;
+
+            /* check to see if the /codon_start tag is set on this feature */
+            titer = ajFeatTagIter(gf);
+            while(ajFeatTagval(titer, &tagnam, &tagval))
+                if(!ajStrCmpC(tagnam, "codon_start"))
+                {
+                    ajStrToInt(tagval, &phase);
+                    phase--;
+                    unsure = ajFalse;
+                }
+            ajListIterFree(&titer);
+
+            /* 
+            ** If we are sure, set the Frame field in the feature
+            ** object.
+            */
+            if (unsure)
+                gf->Frame = 0;
+            else
+                if (gf->Frame == 0)
+                    gf->Frame = phase+1;
+        }
+
+        /* remember the parental status of this CDS */
+        prevparent = !ajFeatIsChild(gf);
+
+        /* are we unsure about the start of this CDS? */
+        if (gf->Flags & FEATFLAG_START_BEFORE_SEQ ||
+            gf->Flags & FEATFLAG_START_UNSURE ||
+            gf->Flags & FEATFLAG_START_TWO)
+            unsure = ajTrue;
+
+        /* remember the start/end of this feature */
+        prevstart = ajFeatGetStart(gf);
+        prevend = ajFeatGetEnd(gf);
+    }
+
+    ajListIterFree(&iter);
+
+    return;
+}
+
+

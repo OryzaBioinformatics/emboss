@@ -48,6 +48,29 @@ section: required [
 
 endsection: required
 
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+    
+  boolean: globaldifferences  [
+    additional: "Y"
+    default: "N"
+    information: "Force reporting of differences at the start and end"
+    help: "Normally this program will find regions of identity 
+           that are the length of the specified word-size or greater and
+           will then report the regions of difference between these
+           matching regions. This works well and is what most people
+           want if they are working with long overlapping nucleic
+           acid sequences. You are usually not interested in the 
+           non-overlapping ends of these sequences. If you have protein
+           sequences or short RNA sequences however, you will be interested
+           in differences at the very ends . It this option is set to be true
+           then the differences at the ends will also be reported."
+  ]
+
+endsection: additional
+
 section: output [
   information: "Output section"
   type: "page"
@@ -72,17 +95,6 @@ section: output [
     default: "$(bsequence.name).diffgff"
     help: "File for output of second sequence's features"
     type: "@($(acdprotein) ? protein : nucleotide)"
-  ]
-
-  boolean: columns  [
-    additional: "Y"
-    default: "N"
-    information: "Output in columns format"
-    help: "The default format for the output report file is to have
-           several lines per difference giving the sequence positions,
-           sequences and features. \
-           If this option is set true then the output report file's format is
-           changed to a set of columns and no feature information is given."
   ]
 
 endsection: output
