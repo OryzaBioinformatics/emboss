@@ -2,8 +2,8 @@
 
 @validfile = ("acdvalid.txt", "acdvalidreport.txt",
 	      "myall.csh", "myconfig.csh", "mydoc.csh", "myembassyall.csh",
-	      "myembassyconfig.csh",
-	      "src-embassy", "summary.log", "x",
+	      "myembassyconfig.csh", "myefunc.csh", "myacdvalid.csh",
+	      "src-embassy", "summary.log", "x", "jembossctl"
 	      );
 
 @validbase = ( "aclocal.m4", "autom4te.cache",
@@ -11,12 +11,6 @@
 	      "configure", "configure.lineno", "libtool", "so_locations",
 	       "Makefile", "Makefile.in"
 	       );
-@memtestfiles = ( "hsfau.diffseq", "HSFAU.diffgff", "HSFAU1.diffgff",
-		  "hsfau.fasta", "hsfau.merger", "division.lkp",
-		  "entrynam.idx", "acnum.trg", "acnum.hit", "Eamino.dat",
-		  "valgrind.txt", "valgrind.summary", "valgrind.result",
-		  "valgrind.out", "valgrind.err"
-		  );
 
 %knownfile = ();
 %knownbase = ();
@@ -24,7 +18,6 @@
 
 foreach $x (@validfile) { $knownfile{$x} = 1 }
 foreach $x (@validbase) { $knownbase{$x} = 1 }
-foreach $x (@memtestfiles) { $memtest{$x} = 1 }
 
 open (VERS, "embossversion -full -auto|") || die "Cannot run embossversion";
 while (<VERS>) {
@@ -58,11 +51,9 @@ while (<CHECK>) {
 }
 close CHECK;
 
-$progs{"jembossctl"} = "jemboss"; # no ACD file, missed by wossname
-
 # Process the input file (cvs update output)
 # Look for lines that start with '?'
-# check for files that could reasonably be there
+# check for files that coul dreasonably be there
 # report everything else as a directory (d) or file.
 
 while (<>) {
@@ -76,11 +67,6 @@ while (<>) {
     if ($file =~ /[.]o$/) {next}
     if ($file =~ /^test\/qa\/\S+/) {
 	if (-d "$basedir/$file") {next}
-    }
-    if ($file =~ /^jemboss\/org\/emboss\/jemboss\/\S+/) {next}
-    if ($file =~ /^test\/memtest\/valgrind\/\S+/) {next}
-    if ($file =~ /^test\/memtest\/(\S+)/) {
-	if(defined($memtest{$1})) {next}
     }
     if ($base =~ /^Makefile$/) {next}
     if ($base =~ /^Makefile[.]in$/) {next}
