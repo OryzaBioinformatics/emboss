@@ -676,6 +676,32 @@ AjBool ajSeqTypeCheckIn(AjPSeq thys, const AjPSeqin seqin)
 
 
 
+/* @func ajSeqTypeNucS *****************************************************
+**
+** Checks sequence type for nucleotide without gaps.
+**
+** RNA and DNA codes are accepted as is.
+**
+** @param [r] pthys [const AjPStr] Sequence string (unchanged at present)
+** @return [char] invalid character if any.
+** @@
+******************************************************************************/
+
+char ajSeqTypeNucS(const AjPStr pthys)
+{
+    char ret;
+    ajDebug("seqTypeDnaS test\n");
+
+    ret = seqTypeTest(pthys, seqTypeCharNuc());
+    if (ret)
+	return ret;
+
+    return seqTypeTest(pthys, seqTypeCharNucGap());
+}
+
+
+
+
 /* @func ajSeqTypeDnaS *****************************************************
 **
 ** Checks sequence type for DNA without gaps.
@@ -817,6 +843,27 @@ char ajSeqTypeAnyprotS(const AjPStr pthys)
     ajDebug("seqTypeAnyprotS test\n");
 
     return seqTypeTest(pthys, seqTypeCharProtAny());
+}
+
+
+
+
+/* @func ajSeqTypeProtS ****************************************************
+**
+** Checks sequence type for anything that can be in a protein sequence
+**
+** Stop codes are replaced with gaps.
+**
+** @param [r] pthys [const AjPStr] Sequence string (unchanged at present)
+** @return [char] invalid character if any.
+** @@
+******************************************************************************/
+
+char ajSeqTypeProtS(const AjPStr pthys)
+{
+    ajDebug("seqTypeProtS test\n");
+
+    return seqTypeTest(pthys, seqTypeCharProt());
 }
 
 

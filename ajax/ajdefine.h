@@ -139,7 +139,8 @@ static const ajint ajIDX  = 1;    /* Use corrected residue numbering            
 #define ajINTRA  1                /* Type of contact */
 #define ajINTER  2                /* Type of contact */
 #define ajLIGAND 3                /* Type of contact */
-
+#define aj1D     1                /* Type of signature */
+#define aj3D     2                /* Type of signature */
 
 
 

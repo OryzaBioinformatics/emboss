@@ -29,7 +29,8 @@ typedef struct SeqSAccess SeqSAccess;
 ** @other AjPSeqset Sequence sets
 ** @other AjPSeqall Sequence streams
 **
-** @attr DbName [AjPStr] Database name
+** @attr DbName [AjPStr] Database name used by EMBOSS
+** @attr DbAlias [AjPStr] Database name used by access method
 ** @attr DbType [AjPStr] Database type
 ** @attr Id [AjPStr] ID Wildcard
 ** @attr Acc [AjPStr] Accession Wildcard
@@ -38,6 +39,7 @@ typedef struct SeqSAccess SeqSAccess;
 ** @attr Org [AjPStr] Taxonomy Wildcard
 ** @attr Sv [AjPStr] SeqVersion Wildcard
 ** @attr Gi [AjPStr] GenInfo Identifier Wildcard
+** @attr Wild [AjBool] True if query contains '*' or '?'
 ** @attr Method [AjPStr] Name of access method
 ** @attr Formatstr [AjPStr] Name of input sequence format
 ** @attr IndexDir [AjPStr] Index directory
@@ -69,6 +71,7 @@ typedef struct SeqSAccess SeqSAccess;
 
 typedef struct AjSSeqQuery {
   AjPStr DbName;
+  AjPStr DbAlias;
   AjPStr DbType;
   AjPStr Id;
   AjPStr Acc;
@@ -77,6 +80,7 @@ typedef struct AjSSeqQuery {
   AjPStr Org;
   AjPStr Sv;
   AjPStr Gi;
+  AjBool Wild;
   AjPStr Method;
   AjPStr Formatstr;
   AjPStr IndexDir;
@@ -502,6 +506,7 @@ typedef struct AjSSeqin {
 ** @attr Fttable [AjPFeattable] Feature table
 ** @attr Selexdata [AjPSelexdata] Selex data
 ** @attr Stock [AjPStockholmdata] Stockholm data
+** @attr Accuracy [ajint*] Accuracy values (one per base) from base calling
 **
 ** @new ajSeqNew Default constructor
 ** @new ajSeqNewL Constructor with expected maximum size.
@@ -586,6 +591,7 @@ typedef struct AjSSeq {
   AjPFeattable Fttable;
   AjPSelexdata Selexdata;
   AjPStockholmdata Stock;
+  ajint* Accuracy;
 } AjOSeq;
 
 #define AjPSeq AjOSeq*

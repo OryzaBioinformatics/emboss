@@ -119,6 +119,8 @@ extern "C"
 ** @use ajStrFindCase   Find
 ** @use ajStrFindCaseC  Find
 ** @use ajStrRFindC Reverse find.
+** @use ajStrFindAny   Find
+** @use ajStrFindAnyC  Find
 ** @use ajStrCmp  String compare
 ** @use ajStrCmpO  String compare
 ** @use ajStrCmpC  String compare
@@ -310,6 +312,8 @@ AjPStr     ajStrDup (AjPStr thys);
 void       ajStrExit (void);
 
 ajint      ajStrFind (const AjPStr thys, const AjPStr text);
+ajint      ajStrFindAny (const AjPStr thys, const AjPStr text);
+ajint      ajStrFindAnyC  (const AjPStr thys, const char* txt);
 ajint      ajStrFindC  (const AjPStr thys, const char* txt);
 ajint      ajStrFindCase (const AjPStr thys, const AjPStr text);
 ajint      ajStrFindCaseC (const AjPStr thys, const char* txt);

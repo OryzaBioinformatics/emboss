@@ -2008,6 +2008,7 @@ void ajSeqDel(AjPSeq* pthis)
     ajStrDel(&thys->Entryname);
     ajStrDel(&thys->TextPtr);
     ajStrDel(&thys->Seq);
+    AJFREE(thys->Accuracy);
 
     if(thys->Fttable)
 	ajFeattableDel(&thys->Fttable);
@@ -2293,6 +2294,8 @@ void ajSeqClear(AjPSeq thys)
     ajStrClear(&thys->Entryname);
     ajStrClear(&thys->TextPtr);
     ajStrClear(&thys->Seq);
+
+    AJFREE(thys->Accuracy);
 
     thys->Begin = 0;
     thys->End   = 0;
@@ -4540,14 +4543,23 @@ AjPSeqCvt ajSeqCvtNewZeroS (const AjPPStr bases, int n)
     ret->table = AJCALLOC0(ret->size, sizeof(char));
     ret->bases = ajStrNew();
     ret->missing = 0;
-    AJCNEW0(ret->labels, n);
-    for(i=0; i<n; i++)
-	ret->labels[i] = ajStrNew();
 
+
+    AJCNEW0(ret->rlabels, n);
+    for(i=0; i<n; i++)
+	ret->rlabels[i] = ajStrNew();
+    for(i=0; i<n; i++)
+	ajStrAssS(&ret->rlabels[i], bases[i]);
+
+
+    AJCNEW0(ret->clabels, n);
+    for(i=0; i<n; i++)
+	ret->clabels[i] = ajStrNew();
+    for(i=0; i<n; i++)
+	ajStrAssS(&ret->clabels[i], bases[i]);
 
     for(i=0; i<n; i++)
     {
-	ajStrAssS(&ret->labels[i], bases[i]);
 	ajStrAppK(&ret->bases, ajStrChar(bases[i], 0));
 	ret->table[toupper((ajint) ajStrChar(bases[i], 0))] = ajSysItoC(i+1);
 	ret->table[tolower((ajint) ajStrChar(bases[i], 0))] = ajSysItoC(i+1);
@@ -4556,6 +4568,71 @@ AjPSeqCvt ajSeqCvtNewZeroS (const AjPPStr bases, int n)
     return ret;
 }
 
+
+
+
+
+/* @func ajSeqCvtNewZeroSS ****************************************************
+**
+** Generates a new conversion table in which the first character of the first 
+** string in the array provided is converted to 1, the first character of the 
+** second string is converted to 2, the first character of the third string is
+** converted to 3 and so on.
+** Upper and lower case characters are converted to the same numbers.
+** All other characters are set to zero.
+** For use with assymetrical matrices. 
+**
+** @param [r] bases [const AjPPStr] Allowed sequence character strings (size
+**                            specified by parameter n)
+** @param [r] n [int] Number of strings
+** @param [r] rbases [const AjPPStr] Allowed sequence character strings for
+** rows (size specified by parameter rn)
+** @param [r] rn [int] Number of strings (rows)
+** @return [AjPSeqCvt] Conversion table.
+** @category new [AjPSeqCvt] Creates from arrays of strings of valid bases.
+** @@
+******************************************************************************/
+AjPSeqCvt ajSeqCvtNewZeroSS (const AjPPStr bases, int n, 
+			     const AjPPStr rbases, int rn)
+{
+    static AjPSeqCvt ret;
+    ajint i;
+    
+
+    AJNEW0(ret);
+    ret->len = n;
+    ret->nclabels = n;
+    ret->nrlabels = rn;
+    ret->size = CHAR_MAX - CHAR_MIN + 1;
+    ret->table = AJCALLOC0(ret->size, sizeof(char));
+    ret->bases = ajStrNew();
+    ret->missing = 0;
+
+
+    AJCNEW0(ret->rlabels, rn);
+    for(i=0; i<rn; i++)
+	ret->rlabels[i] = ajStrNew();
+    for(i=0; i<rn; i++)
+	ajStrAssS(&ret->rlabels[i], rbases[i]);
+
+
+    AJCNEW0(ret->clabels, n);
+    for(i=0; i<n; i++)
+	ret->clabels[i] = ajStrNew();
+    for(i=0; i<n; i++)
+	ajStrAssS(&ret->clabels[i], bases[i]);
+
+
+    for(i=0; i<n; i++)
+    {
+	/* ajStrAssS(&ret->labels[i], bases[i]); */
+	ajStrAppK(&ret->bases, ajStrChar(bases[i], 0));
+	ret->table[toupper((ajint) ajStrChar(bases[i], 0))] = ajSysItoC(i+1);
+	ret->table[tolower((ajint) ajStrChar(bases[i], 0))] = ajSysItoC(i+1);
+    }
+
+    return ret;
+}
 
 
 
@@ -4628,11 +4705,18 @@ void ajSeqCvtDel (AjPSeqCvt* thys)
     AJFREE((*thys)->table);
     ajStrDel(&(*thys)->bases);
 
-    if((*thys)->labels)
+    if((*thys)->rlabels)
     {
-	for(i=0;i<(*thys)->len;i++)
-	    ajStrDel(&(*thys)->labels[i]);
-	AJFREE((*thys)->labels);
+	for(i=0;i<(*thys)->nrlabels;i++)
+	    ajStrDel(&(*thys)->rlabels[i]);
+	AJFREE((*thys)->rlabels);
+    }
+    
+    if((*thys)->clabels)
+    {
+	for(i=0;i<(*thys)->nclabels;i++)
+	    ajStrDel(&(*thys)->clabels[i]);
+	AJFREE((*thys)->clabels);
     }
     
     AJFREE(*thys);
@@ -4737,7 +4821,7 @@ ajint ajSeqCvtK(const AjPSeqCvt thys, char ch)
 /* @func ajSeqCvtKS ***********************************************************
 **
 ** Returns the integer code corresponding to a sequence character string
-** in a conversion table
+** in a conversion table.  For use with symetrical matrices.
 **
 ** @param [r] thys [const AjPSeqCvt] Conversion table
 ** @param [r] ch [const AjPStr] Sequence character string
@@ -4748,19 +4832,79 @@ ajint ajSeqCvtK(const AjPSeqCvt thys, char ch)
 
 ajint ajSeqCvtKS (const AjPSeqCvt thys, const AjPStr ch)
 {
-    ajint i=0;
+    /* Row and column labels will be identical. */
+    return(ajSeqCvtKSRow(thys, ch));
     
-    for(i=0;i<thys->len;i++)
-	if(ajStrMatch(ch, thys->labels[i]))
+    /*    ajWarn("Sequence character string not found in ajSeqCvtKS");
+    return 0; */
+}
+
+
+
+
+
+
+/* @func ajSeqCvtKSRow ********************************************************
+**
+** Returns the integer code corresponding to a sequence character string
+** in a conversion table (for rows in assymetrical matrices).
+**
+** @param [r] thys [const AjPSeqCvt] Conversion table
+** @param [r] ch [const AjPStr] Sequence character string
+**
+** @return [ajint] Conversion code
+** @@
+******************************************************************************/
+
+ajint ajSeqCvtKSRow (const AjPSeqCvt thys, const AjPStr ch)
+{
+    ajint i=0;
+
+    for(i=0;i<thys->nrlabels;i++)
+	if(ajStrMatch(ch, thys->rlabels[i]))
 	    return i+1;
     /* i+1 is returned because the size of a matrix is always 1 bigger than
        the number of labels. This is the "padding" first row/column which 
        has all values of 0. */
 
 
-    ajWarn("Sequence character string not found in ajSeqCvtKS");
+    ajWarn("Sequence character string not found in ajSeqCvtKSRow");
     return 0;
 }
+
+
+
+
+/* @func ajSeqCvtKSColumn ****************************************************
+**
+** Returns the integer code corresponding to a sequence character string
+** in a conversion table (for columns in assymetrical matrices).
+**
+** @param [r] thys [const AjPSeqCvt] Conversion table
+** @param [r] ch [const AjPStr] Sequence character string
+**
+** @return [ajint] Conversion code
+** @@
+******************************************************************************/
+
+ajint ajSeqCvtKSColumn (const AjPSeqCvt thys, const AjPStr ch)
+{
+    ajint i=0;
+    
+    for(i=0;i<thys->nclabels;i++)
+	if(ajStrMatch(ch, thys->clabels[i]))
+	    return i+1;
+    /* i+1 is returned because the size of a matrix is always 1 bigger than
+       the number of labels. This is the "padding" first row/column which 
+       has all values of 0. */
+
+
+    ajWarn("Sequence character string not found in ajSeqCvtKSColumn");
+    return 0;
+}
+
+
+
 
 
 
@@ -5195,7 +5339,7 @@ void ajSeqoutDel(AjPSeqout* pthis)
     while(ajListPop(thys->Keylist,(void **)&tmpstr))
 	ajStrDel(&tmpstr);
     ajListDel(&thys->Keylist);
-
+    
     while(ajListPop(thys->Taxlist,(void **)&tmpstr))
 	ajStrDel(&tmpstr);
     ajListDel(&thys->Taxlist);
@@ -5204,6 +5348,7 @@ void ajSeqoutDel(AjPSeqout* pthis)
 	ajSeqDel(&seq);
     ajListDel(&thys->Savelist);
 
+    AJFREE(thys->Accuracy);
     AJFREE(thys->Ftquery);
     AJFREE(*pthis);
 

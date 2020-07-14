@@ -122,6 +122,7 @@ void   ajTrnRevSeq (const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep);
 void   ajTrnAltRevSeq (const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep);
 void   ajTrnCFrame (const AjPTrn trnObj, const char *seq, ajint len,
 		    ajint frame, AjPStr *pep);
+AjPStr ajTrnName(ajint trnFileNameInt);
 void   ajTrnStrFrame (const AjPTrn trnObj, const AjPStr seq, ajint frame,
 		      AjPStr *pep);
 void   ajTrnSeqFrame (const AjPTrn trnObj, const AjPSeq seq, ajint frame,
@@ -136,7 +137,6 @@ AjPStr ajTrnGetFileName (const AjPTrn thys);
 ajint  ajTrnStartStop (const AjPTrn trnObj, const AjPStr codon, char *aa);
 ajint  ajTrnStartStopC (const AjPTrn trnObj, const char *codon, char *aa);
 AjPSeq ajTrnSeqOrig (const AjPTrn trnObj, const AjPSeq seq, ajint frame);
-
 #endif
 
 #ifdef __cplusplus

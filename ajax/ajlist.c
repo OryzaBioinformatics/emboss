@@ -2373,6 +2373,60 @@ void ajListUnique(AjPList thys,
 
 
 
+/* @func ajListUnique2 *******************************************************
+**
+** Double-sort the items in a list, and remove duplicates
+**
+** @param [u] thys [AjPList] List.
+** @param [f] compar1 [int* function] Function to compare two list items.
+** @param [f] compar2 [int* function] Function to compare two list items.
+** @param [f] nodedelete [void function] Function to delete an item
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajListUnique2(AjPList thys,
+		   int (*compar1) (const void* x, const void* cl),
+		   int (*compar2) (const void* x, const void* cl),
+		   void nodedelete (void** x, void* cl))
+{
+    void* item;
+    void* previtem = NULL;
+    AjIList iter;
+
+    ajDebug("ajListUnique %d items\n", thys->Count);
+
+    if(thys->Count <= 1)		/* no duplicates */
+	return;
+
+    ajListSort2(thys, compar1, compar2);
+    ajListTrace(thys);
+
+    iter = ajListIter(thys);
+    while(ajListIterMore(iter))
+    {
+	item = ajListIterNext(iter);
+	if(previtem && !compar1(&item, &previtem) &&
+	   !compar2(&item, &previtem))
+	{
+	    nodedelete(&item, NULL);
+	    ajListRemove(iter);
+	}
+	else
+	    previtem=item;
+    }
+
+    ajListIterFree(&iter);
+
+    ajDebug("ajListUnique result %d items\n", thys->Count);
+    ajListTrace(thys);
+
+    return;
+}
+
+
+
+
 /* @func ajListPopEnd *********************************************************
 **
 ** remove the last node but set pointer to data first.

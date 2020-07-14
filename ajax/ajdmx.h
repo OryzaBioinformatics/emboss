@@ -103,6 +103,8 @@ extern "C"
 ** @use   ajDmxScophitCompStart  Function to sort Scophit object by Spr 
 **        element.
 ** @use   ajDmxScophitCompEnd  Function to sort Scophit object by End element. 
+** @use   ajDmxScophitCompClass  Function to sort Scophit object by Class
+**        element.
 ** @use   ajDmxScophitCompFold  Function to sort Scophit object by Fold 
 **        element.
 ** @use   ajDmxScophitCompSfam  Function to sort Scophit object by Superfamily 
@@ -257,6 +259,7 @@ AjBool        ajDmxScophitTargetLowPriority(AjPScophit *h);
 ajint         ajDmxScophitCompSpr(const void *hit1, const void *hit2);
 ajint         ajDmxScophitCompStart(const void *hit1, const void *hit2);
 ajint         ajDmxScophitCompEnd(const void *hit1, const void *hit2);
+ajint         ajDmxScophitCompClass(const void *hit1, const void *hit2);
 ajint         ajDmxScophitCompFold(const void *hit1, const void *hit2);
 ajint         ajDmxScophitCompSfam(const void *hit1, const void *hit2);
 ajint         ajDmxScophitCompFam(const void *hit1, const void *hit2);

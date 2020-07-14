@@ -98,8 +98,7 @@ void         ajReportSetHeader (AjPReport thys, const AjPStr header);
 void         ajReportSetHeaderC (AjPReport thys, const char* header);
 void         ajReportSetSubHeader (AjPReport thys, const AjPStr header);
 void         ajReportSetSubHeaderC (AjPReport thys, const char* header);
-AjBool       ajReportSetTags (AjPReport thys,
-			      const AjPStr taglist, ajint mintags);
+AjBool       ajReportSetTags (AjPReport thys, const AjPStr taglist);
 void         ajReportSetTail (AjPReport thys, const AjPStr tail);
 void         ajReportSetTailC (AjPReport thys, const char* tail);
 void         ajReportSetSubTail (AjPReport thys, const AjPStr tail);

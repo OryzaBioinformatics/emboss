@@ -92,6 +92,7 @@ AjPScophit ajDmxScophitNew(void)
 {
     AjPScophit ret = NULL;
 
+
     AJNEW0(ret);
 
     ret->Class        = ajStrNew();
@@ -537,6 +538,9 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 
 void ajDmxScophitDel(AjPScophit *pthis)
 {
+    if(!*pthis)
+	return;
+
     ajStrDel(&(*pthis)->Class);
     ajStrDel(&(*pthis)->Architecture);
     ajStrDel(&(*pthis)->Topology);
@@ -1185,6 +1189,31 @@ ajint ajDmxScophitCompSfam(const void *hit1, const void *hit2)
 
 
 
+/* @func ajDmxScophitCompClass **********************************************
+**
+** Function to sort Scophit object by Class element. 
+**
+** @param [r] hit1  [const void*] Pointer to Scophit object 1
+** @param [r] hit2  [const void*] Pointer to Scophit object 2
+**
+** @return [ajint] -1 if Class1 should sort before Class2, +1 if the Class2 
+** should sort first. 0 if they are identical.
+** @@
+****************************************************************************/
+ajint ajDmxScophitCompClass(const void *hit1, const void *hit2)
+{
+    AjPScophit p = NULL;
+    AjPScophit q = NULL;
+
+    p = (*(AjPScophit*)hit1);
+    q = (*(AjPScophit*)hit2);
+    
+    return ajStrCmpO(p->Class, q->Class);
+}
+
+
+
+
 
 /* @func ajDmxScophitCompFold ***********************************************
 **
@@ -1394,7 +1423,7 @@ AjBool ajDmxScophitsWrite(AjPFile outf, const AjPList list)
 
 /* @func ajDmxScophitsWriteFasta ********************************************
 **
-** Write contents of a list of Scophits to an output file in embl-like format
+** Write contents of a list of Scophits to an output file in DHF format
 ** (see scopalign.c documentation).
 ** Text for Class, Archhitecture, Topology, Fold, Superfamily and Family 
 ** is only written if the text is available.
@@ -1559,10 +1588,6 @@ AjPScophit ajDmxScophitReadFasta(AjPFile inf)
 		ajDmxScophitDel(&hit);
 		ajStrDel(&type);
 		return NULL;
-	    }
-	    else
-	    {
-		hit = ajDmxScophitNew();
 	    }
 	    	    
 	    /* Acc */

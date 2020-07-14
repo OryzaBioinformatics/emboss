@@ -270,7 +270,7 @@ AjPTrn ajTrnNewI(ajint trnFileNameInt)
 {
     AjPStr trnFileName = NULL;
     AjPStr value       = NULL;
-    AjPTrn ret;
+    AjPTrn ret = NULL;
 
     value       = ajStrNew();
     trnFileName = ajStrNewC(TGC);
@@ -292,7 +292,7 @@ AjPTrn ajTrnNewI(ajint trnFileNameInt)
 /* @func ajTrnNew *************************************************************
 **
 ** Initialises translation. Reads a translation data file
-** ajTrnDel(AjPTrn); should be called when translation has ceased.
+** ajTrnDel should be called when translation has ceased.
 **
 ** @param [r] trnFileName [const AjPStr] translation table file name
 ** @return [AjPTrn] Translation object
@@ -1932,4 +1932,67 @@ ajint ajTrnStartStopC(const AjPTrn trnObj, const char *codon, char *aa)
 	return -1;
 
     return 0;
+}
+/* @func ajTrnName ************************************************************
+**
+** Checks whether a const char * codon is a Start codon, a Stop codon or
+** something else
+**
+** @param [r] trnFileNameInt [ajint] translation table file name number
+** @return [AjPStr] Genetic code description
+** @@
+******************************************************************************/
+
+AjPStr ajTrnName(ajint trnFileNameInt)
+{
+    static AjPStr ret;
+    static AjPStr unknown = NULL;
+    AjPFile index = NULL;
+    static AjPStr indexfname = NULL;
+    AjPStr line = NULL;
+    static AjPTable trnCodes = NULL;
+    AjPStr tmpstr = NULL;
+    AjPStr tok1 = NULL;
+    AjPStr tok2 = NULL;
+    AjPStrTok handle = NULL;
+
+    if(!unknown)
+	unknown = ajStrNewC("unknown");
+
+    if(!trnCodes)
+    {
+	if(!indexfname)
+	    indexfname = ajStrNewC("EGC.index");
+	trnCodes = ajStrTableNew(20);
+
+	ajFileDataNew(indexfname, &index);
+	if(!index)
+	    return unknown;
+
+	while(ajFileReadLine(index, &line))
+	{
+	    ajStrChomp(&line);
+	    if(ajStrChar(line, 0) == '#')
+		continue;
+	    ajStrTokenAss(&handle, line, " ");
+	    ajStrToken(&tok1, &handle, NULL);
+	    ajStrTokenRest(&tok2, &handle);
+	    ajTablePut(trnCodes, tok1, tok2);
+	    tok1 = NULL;
+	    tok2 = NULL;
+	}
+	ajFileClose(&index);
+    }
+
+    ajFmtPrintS(&tmpstr, "%d", trnFileNameInt);
+    ret = (AjPStr) ajTableGet(trnCodes, tmpstr);
+
+    ajStrDel(&tok1);
+    ajStrDel(&tok2);
+    ajStrTokenClear(&handle);
+
+    if(ret)
+	return ret;
+
+    return unknown;
 }

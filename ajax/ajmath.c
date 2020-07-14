@@ -284,6 +284,7 @@ void ajRandomSeed(void)
     double x = 0.0;
     ajint seed;
     struct timeval tv;
+    AjPStr timestr = NULL;
     
     /*
      *  seed should be set to an integer between 0 and 9999 inclusive; a value
@@ -296,9 +297,17 @@ void ajRandomSeed(void)
     else
         return;
 
-    gettimeofday(&tv,NULL);
+    if(ajNamGetValueC("timetoday", &timestr))
+    {
+	seed = 0;   /* always zero microseconds in a defined time */
+	ajStrDel(&timestr);
+    }
+    else
+    {
+	gettimeofday(&tv,NULL);
+	seed = (tv.tv_usec % 9999)+1;
+    }
 
-    seed = (tv.tv_usec % 9999)+1;
 
     /*
      *  aj_rand_index must be initialised to an integer between 1 and 101

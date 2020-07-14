@@ -280,10 +280,10 @@ pcre_internal.h pcreposix.h
 
 @ISCYGWIN_FALSE@libajax_la_SOURCES = $(AJAXSRC)
 @ISCYGWIN_TRUE@libajax_la_SOURCES = $(AJAXSRC) $(AJAXGSRC)
-@ISCYGWIN_FALSE@libajax_la_LDFLAGS = -version-info 1:0:1
-@ISCYGWIN_TRUE@libajax_la_LDFLAGS = -version-info 1:0:1
+@ISCYGWIN_FALSE@libajax_la_LDFLAGS = -version-info 3:0:0
+@ISCYGWIN_TRUE@libajax_la_LDFLAGS = -version-info 3:0:0
 @ISCYGWIN_FALSE@libajaxg_la_SOURCES = $(AJAXGSRC)
-@ISCYGWIN_FALSE@libajaxg_la_LDFLAGS = -version-info 1:0:1
+@ISCYGWIN_FALSE@libajaxg_la_LDFLAGS = -version-info 3:0:0
 all: all-am
 
 .SUFFIXES:

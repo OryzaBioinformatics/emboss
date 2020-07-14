@@ -17,6 +17,7 @@ extern "C"
 ** @new ajSeqCvtNewText Creates from a character string of valid bases.
 ** @new ajSeqCvtNewZero Creates from a character string of valid bases.
 ** @new ajSeqCvtNewZeroS Creates from an array of strings of valid bases.
+** @new ajSeqCvtNewZeroSS Creates from an array of strings of valid bases.
 ** @output ajSeqCvtTrace Reports on contents for debugging
 *
 ** @alias AjSSeqCvt
@@ -27,7 +28,10 @@ extern "C"
 ** @attr len [ajint] Number of characters defined
 ** @attr missing [ajint] Index of the missing character value
 ** @attr bases [AjPStr] The bases which can be converted
-** @attr labels [AjPStr*] Unused
+** @attr nrlabels [ajint] Number of row labels
+** @attr rlabels [AjPStr*] Row labels 
+** @attr nclabels [ajint] Number of column labels
+** @attr clabels [AjPStr*] Column labels 
 ** @attr table [char*] Binary character value for each character in bases
 ** @@
 ******************************************************************************/
@@ -37,7 +41,10 @@ typedef struct AjSSeqCvt {
   ajint len;
   ajint missing;
   AjPStr bases;
-  AjPStr* labels;
+  ajint nrlabels;
+  AjPStr* rlabels;
+  ajint nclabels;
+  AjPStr* clabels;
   char *table;
 } AjOSeqCvt;
 
@@ -114,11 +121,15 @@ ajuint       ajSeqCrc(const AjPStr seq );
 void         ajSeqCvtDel (AjPSeqCvt* thys);
 ajint        ajSeqCvtK (const AjPSeqCvt thys, char ch);
 ajint        ajSeqCvtKS (const AjPSeqCvt thys, const AjPStr ch);
+ajint        ajSeqCvtKSRow (const AjPSeqCvt thys, const AjPStr ch);
+ajint        ajSeqCvtKSColumn (const AjPSeqCvt thys, const AjPStr ch);
 ajint        ajSeqCvtLen (const AjPSeqCvt thys);
 AjPSeqCvt    ajSeqCvtNew (const char* bases);
 AjPSeqCvt    ajSeqCvtNewText (const char* bases);
 AjPSeqCvt    ajSeqCvtNewZero (const char* bases);
 AjPSeqCvt    ajSeqCvtNewZeroS (const AjPPStr bases, int n);
+AjPSeqCvt    ajSeqCvtNewZeroSS (const AjPPStr bases, int n, 
+				const AjPPStr rbases, int rn);
 ajint        ajSeqCvtSize (const AjPSeqCvt cvt);
 void         ajSeqCvtTrace (const AjPSeqCvt cvt);
 void         ajSeqDel (AjPSeq* pthis);

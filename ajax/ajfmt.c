@@ -1423,7 +1423,8 @@ ajint ajFmtPrintCL(char* buf, ajint size, const char* fmt, ...)
 AjPStr ajFmtStr(const char* fmt, ...)
 {
     va_list ap;
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined (__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     va_list save_ap;
 #endif
     ajint len = 32;
@@ -1432,13 +1433,15 @@ AjPStr ajFmtStr(const char* fmt, ...)
     fnew = ajStrNewL(len);
     va_start(ap, fmt);
 
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     __va_copy(save_ap, ap);
 #endif
 
     fnew->Len = ajFmtVfmtStrCL(&fnew->Ptr, 0, &fnew->Res, fmt, ap);
 
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
 	__va_copy(ap, save_ap);
 #endif
 
@@ -1474,7 +1477,8 @@ AjPStr ajFmtPrintS(AjPStr* pthis, const char* fmt, ...)
     AjPStr thys;
     va_list ap;
 
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     va_list save_ap;
 #endif
 
@@ -1483,7 +1487,8 @@ AjPStr ajFmtPrintS(AjPStr* pthis, const char* fmt, ...)
     ajStrModL(pthis, 32);
     thys = *pthis;
 
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     __va_copy(save_ap, ap);
 #endif
 
@@ -1554,7 +1559,8 @@ AjPStr ajFmtPrintAppS(AjPStr* pthis, const char* fmt, ...)
 {
     AjPStr thys;
     va_list ap;
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     va_list save_ap;
 #endif
     ajint len;
@@ -1564,7 +1570,8 @@ AjPStr ajFmtPrintAppS(AjPStr* pthis, const char* fmt, ...)
     ajStrModL(pthis, 32);
     thys = *pthis;
 
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     __va_copy(save_ap, ap);
 #endif
 
@@ -1909,8 +1916,8 @@ void ajFmtPutd(const char* str, ajint len, int put(int c, void* cl), void* cl,
 
 	if(len < precision)
 	    n = precision;
-	else if(precision == 0 && len == 1 && str[0] == '0')
-	    n = 0;
+	/*else if(precision == 0 && len == 1 && str[0] == '0')
+	    n = 0;*/
 	else
 	    n = len;
 
@@ -2062,19 +2069,22 @@ ajint ajFmtScanS(const AjPStr thys, const char* fmt, ...)
 {
     va_list ap;
     ajint   n;
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     va_list save_ap;
 #endif
 
     va_start(ap, fmt);
 
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     __va_copy(save_ap,ap);
 #endif
 
     n = fmtVscan(thys->Ptr,fmt,ap);
 
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     __va_copy(ap,save_ap);
 #endif
 
@@ -2103,19 +2113,22 @@ ajint ajFmtScanC(const char* thys, const char* fmt, ...)
 {
     va_list ap;
     ajint   n;
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     va_list save_ap;
 #endif
 
     va_start(ap, fmt);
 
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     __va_copy(save_ap,ap);
 #endif
 
     n = fmtVscan(thys,fmt,ap);
 
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     __va_copy(ap,save_ap);
 #endif
 
@@ -2151,19 +2164,22 @@ ajint ajFmtScanF(AjPFile thys, const char* fmt, ...)
 
     file = ajFileFp(thys);
 
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     va_list save_ap;
 #endif
 
     va_start(ap, fmt);
 
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     __va_copy(save_ap,ap);
 #endif
 
     n = fscanf(file,fmt,ap);
 
-#if defined(__amd64__) || defined(__PPC__) && defined(_CALL_SYSV)
+#if defined(__amd64__) || defined(__EM64T__) || \
+    defined(__PPC__) && defined(_CALL_SYSV)
     __va_copy(ap,save_ap);
 #endif
 

@@ -282,7 +282,8 @@ void        ajFileBuffReset (AjPFileBuff thys);
 void        ajFileBuffResetPos (AjPFileBuff thys);
 void        ajFileBuffResetStore (AjPFileBuff thys,
 				  AjBool store, AjPStr *astr);
-AjBool      ajFileBuffSetFile (AjPFileBuff* pthys, AjPFile file);
+AjBool      ajFileBuffSetFile (AjPFileBuff* pthys, AjPFile file,
+			       AjBool samefile);
 ajint       ajFileBuffSize (void);
 void        ajFileBuffStripHtml (AjPFileBuff thys);
 AjBool      ajFileBuffStripHtmlPre (AjPFileBuff thys);
@@ -381,6 +382,7 @@ ajint       ajFileWriteStr  (AjPFile thys, const AjPStr str, ajint len);
 void        ajOutfileClose(AjPOutfile* pthis);
 void        ajOutfileDel(AjPOutfile* pthis);
 AjPFile     ajOutfileFile (const AjPOutfile thys);
+AjPStr      ajOutfileFormat (const AjPOutfile thys);
 FILE*       ajOutfileFp (const AjPOutfile thys);
 AjPOutfile  ajOutfileNew(const AjPStr name);
 

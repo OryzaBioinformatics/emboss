@@ -57,6 +57,7 @@ static TimeOFormat timeFormat[] =  /* formats for strftime */
     {"yyyy-mm-dd", "%Y-%m-%d"},
     {"dd Mon yyyy", "%d %b %Y"},
     {"day", "%d-%b-%Y"},
+    {"time", "%H:%M:%S"},
     {"daytime", "%d-%b-%Y %H:%M"},
     {"log", "%a %b %d %H:%M:%S %Y"},
     {"report", "%a %b %d %Y %H:%M:%S"},

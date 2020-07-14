@@ -2511,6 +2511,21 @@ FILE* ajOutfileFp (const AjPOutfile thys)
 
 
 
+/* @func ajOutfileFormat ******************************************************
+**
+** Returns the C FILE* for an AjPOutfile object
+**
+** @param [r] thys [const AjPOutfile] Outfile object
+** @return [AjPStr] Format name
+******************************************************************************/
+
+AjPStr ajOutfileFormat (const AjPOutfile thys)
+{
+    return thys->Formatstr;
+}
+
+
+
 /* @section File Casts ********************************************************
 **
 ** These functions examine the contents of a file object and return some
@@ -2858,11 +2873,12 @@ AjPFileBuff ajFileBuffNewFile(AjPFile file)
 **
 ** @param [w] pthys [AjPFileBuff*] Buffered file object.
 ** @param [u] file [AjPFile] File object to be buffered.
+** @param [r] samefile [AjBool] true if the buff currently uses this file
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-AjBool ajFileBuffSetFile(AjPFileBuff* pthys, AjPFile file)
+AjBool ajFileBuffSetFile(AjPFileBuff* pthys, AjPFile file, AjBool samefile)
 {
     AjPFileBuff thys;
 
@@ -2882,7 +2898,7 @@ AjBool ajFileBuffSetFile(AjPFileBuff* pthys, AjPFile file)
     thys = *pthys;
 
     /* same file ??? */
-    if(thys->File && (thys->File->Handle ==  file->Handle))
+    if(samefile)
     {
 	ajFileBuffClear(thys, -1);
 	return ajTrue;
@@ -3645,7 +3661,7 @@ AjBool ajFileBuffGetStore(AjPFileBuff thys, AjPStr* pdest,
 
     if(store && ret)
     {
-	/* ajDebug("ajFileBuffGetStore:\n%S", *pdest); */
+	ajDebug("ajFileBuffGetStore: '%S'", *pdest);
 	ajStrApp(astr,*pdest);
     }
 
@@ -3822,7 +3838,6 @@ void ajFileBuffStripHtml(AjPFileBuff thys)
     ajint ichunk;
     ajint chunkSize;
     ajint iline;
-    AjPStr nullLine = NULL;
     AjPStr saveLine = NULL;
     AjPStr hexstr   = NULL;
     
@@ -3832,8 +3847,8 @@ void ajFileBuffStripHtml(AjPFileBuff thys)
     nullexp  = ajRegCompC("^\r?\n?$");
     chunkexp = ajRegCompC("^Transfer-Encoding: +chunked");
     hexexp   = ajRegCompC("^([0-9a-fA-F]+) *\r?\n?$");
-    ncbiexp  = ajRegCompC("^Entrez Reports\n$");
-    ncbiexp2 = ajRegCompC("^----------------\n$");
+    ncbiexp  = ajRegCompC("^Entrez Reports\r?\n$");
+    ncbiexp2 = ajRegCompC("^----------------\r?\n$");
     srsdbexp = ajRegCompC("^([A-Za-z0-9_-]+)(:)([A-Za-z0-9_-]+)");
     
     /* first take out the HTTP header (HTTP 1.0 onwards) */
@@ -3861,21 +3876,14 @@ void ajFileBuffStripHtml(AjPFileBuff thys)
 	    }
 	    fileBuffLineDel(thys);
 	}
+
+	/* blank line after header */
+	fileBuffLineDel(thys);
     }
 
     if(doChunk)
     {
-	ajFileBuffTraceFull(thys, 999999, 0);
-	if(!ajRegExec(nullexp, thys->Curr->Line))
-	{
-	    ajFatal("Bad chunk data from HTTP, expect blank line got '%S'",
-		    thys->Curr->Line);
-	}
-	ajStrAssS(&nullLine, thys->Curr->Line);
-	ajDebug("###cleanup 1 %x '%S'\n",
-		thys->Curr->Line, thys->Curr->Line);
-	/* blank line after header */
-	fileBuffLineDel(thys);
+	/*ajFileBuffTraceFull(thys, 999999, 0);*/
 	
 	if(!ajRegExec(hexexp, thys->Curr->Line))
 	{
@@ -3900,9 +3908,9 @@ void ajFileBuffStripHtml(AjPFileBuff thys)
 	    /* process the chunk */
 	    ichunk += ajStrLen(thys->Curr->Line);
 	    
-	    ajDebug("++input line [%d] ichunk=%x:%x:%S",
-		     iline, ichunk, ajStrLen(thys->Curr->Line),
-		     thys->Curr->Line);
+	    /*ajDebug("++input line [%d] ichunk=%x:%x:%S",
+		    iline, ichunk, ajStrLen(thys->Curr->Line),
+		    thys->Curr->Line);*/
 	    if(ichunk >= chunkSize)
 	    {
 		if(ichunk == chunkSize)
@@ -3925,7 +3933,7 @@ void ajFileBuffStripHtml(AjPFileBuff thys)
 		    ajDebug("orig chlist->Line %d '%S'\n",
 			    ajStrLen(thys->Curr->Line), thys->Curr->Line);
 		    ajStrAssSub(&saveLine, thys->Curr->Line, 0,
-				-(ichunk-chunkSize));
+				-(ichunk-chunkSize+1));
 		    ajStrSub(&thys->Curr->Line, -(ichunk-chunkSize), -1);
 		    ajDebug("... saveLine %d '%S'\n",
 			    ajStrLen(saveLine), saveLine);
@@ -3956,18 +3964,21 @@ void ajFileBuffStripHtml(AjPFileBuff thys)
 		}
 		ajRegSubI(hexexp, 1, &hexstr);
 		ajStrToHex(hexstr, &chunkSize);
-		ichunk = 0;
 		ajDebug("## %4x:%S", chunkSize, thys->Curr->Line);
+		fileBuffLineDel(thys);
 	    }
-	    ajDebug("chlist time saveLine %x len:%d\n",
-		    saveLine, ajStrLen(saveLine));
+
 	    if(saveLine)
 	    {
 		if(ajStrLen(saveLine))
 		{
+		    ichunk = ajStrLen(thys->Curr->Line);
+		    ajDebug("chunklist ichunk %d len:%d '%S' + %S'\n",
+			    saveLine, ajStrLen(saveLine),
+			    saveLine, thys->Curr->Line);
 		    /* preserve the line split by chunksize */
 		    ajStrInsert(&thys->Curr->Line, 0, saveLine);
-		    ajDebug("new chlist->Line '%S'\n", thys->Curr->Line);
+		    ajDebug("new chunklist->Line '%S'\n", thys->Curr->Line);
 		    fileBuffLineNext(thys); /* after restored line */
 		}
 		else
@@ -3979,9 +3990,14 @@ void ajFileBuffStripHtml(AjPFileBuff thys)
 				thys->Curr->Line, thys->Curr->Line);
 			fileBuffLineDel(thys);
 		    }
-		    else
+		    else if (!chunkSize) /* final zero chunksize */
 		    {
 			ajDebug("###cleanup 6 %x '%S'\n",
+				thys->Curr->Line, thys->Curr->Line);
+		    }
+		    else
+		    {
+			ajDebug("###cleanup 7 %x '%S'\n",
 				thys->Curr->Line, thys->Curr->Line);
 			fileBuffLineDel(thys);
 		    }
@@ -3996,10 +4012,9 @@ void ajFileBuffStripHtml(AjPFileBuff thys)
 	}
 
 	ajFileBuffFix(thys);
-	ajFileBuffTraceFull(thys, 999999, 0);
+	/*ajFileBuffTraceFull(thys, 999999, 0);*/
 	ajStrDel(&hexstr);
-	ajStrDel(&nullLine);
-	ajFileBuffPrint(thys, "Chunks resolved");
+	/*ajFileBuffPrint(thys, "Chunks resolved");*/
     }
     
     ajFileBuffReset(thys);
@@ -4008,6 +4023,7 @@ void ajFileBuffStripHtml(AjPFileBuff thys)
      ** Now we have a clean single file to process
      */
     
+    ajFileBuffPrint(thys, "About to preprocess");
     ajFileBuffStripHtmlPre(thys);
 
     while(thys->Curr)
@@ -4292,18 +4308,27 @@ void ajFileBuffResetPos(AjPFileBuff thys)
 void ajFileBuffFix(AjPFileBuff thys)
 {
     AjPFileBuffList list;
-    ajint i = 0;
+    ajint i = 1;
 
     ajFileBuffReset(thys);
     thys->Pos  = 0;
     thys->Curr = thys->Lines;
 
     list = thys->Lines;
+    if(!list)
+    {
+	thys->Size = 0;
+	return;
+    }
+
     while(list->Next)
     {
 	i++;
 	list = list->Next;
     }
+
+    if(i != thys->Size)
+	ajDebug("ajFileBuffFix size was %d now %d\n", thys->Size, i);
 
     thys->Size=i;
     return;
@@ -5082,17 +5107,19 @@ ajint ajFileScan(const AjPStr path, const AjPStr filename, AjPList *result,
 #endif
     
     tpath = ajStrNew();
-    ajStrAssC(&tpath,ajStrStr(path));
+    ajStrAssS(&tpath,path);
     
     
     if(dolist)
     {
-	t=ajStrNewC(ajStrStr(path));
+	t=ajStrNewS(path);
 	ajListPushApp(*list,(void *)t);
     }
     
     if(show)
-	ajFmtPrintF(outf,"\n\nDIRECTORY: %s\n\n",ajStrStr(path));
+	ajFmtPrintF(outf,"\n\nDIRECTORY: %S\n\n",path);
+
+    ajDebug("ajFileScan directory: '%S'\n",path);
     
     if(!ajFileDir(&tpath))
     {
@@ -5137,7 +5164,7 @@ ajint ajFileScan(const AjPStr path, const AjPStr filename, AjPList *result,
 	   !strcmp(dp->d_name,".") ||
 	   !strcmp(dp->d_name,".."))
 	    continue;
-	ajStrAssC(&s,ajStrStr(tpath));
+	ajStrAssS(&s,tpath);
 	/*	ajStrAppC(&s,"/");*/
 	ajStrAppC(&s,dp->d_name);
 
@@ -5176,18 +5203,19 @@ ajint ajFileScan(const AjPStr path, const AjPStr filename, AjPList *result,
 	    if(filename)
 		if(ajStrMatchWildCC(dp->d_name,ajStrStr(filename)))
 		{
-		    t = ajStrNewC(ajStrStr(s));
+		    t = ajStrNewS(s);
 		    ajListPushApp(*result,(void *)t);
 		}
 	    
 	    if(dolist)
 	    {
-		t = ajStrNewC(ajStrStr(s));
+		t = ajStrNewS(s);
 		ajListPushApp(*list,(void *)t);
 	    }
 	    
 	    if(show)
 		ajFmtPrintF(outf,"  %s\n",dp->d_name);
+	    ajDebug("  %s\n",dp->d_name);
 	}
     }
     closedir(indir);
@@ -5914,11 +5942,13 @@ static void fileBuffLineAdd(AjPFileBuff thys, const AjPStr line)
 
 static void fileBuffLineDel(AjPFileBuff thys)
 {
+    AjPFileBuffList saveprev;
+
     if(!thys->Curr)
 	return;
 
-    ajDebug("fileBuffLineDel removing line [%d], '%S' len %d\n",
-	     ajStrRef(thys->Curr->Line), thys->Curr->Line,
+    ajDebug("fileBuffLineDel removing line [%d/%d], '%S' len %d\n",
+	     thys->Pos, thys->Size, thys->Curr->Line,
 	     ajStrLen(thys->Curr->Line));
 
     /* first line */
@@ -5941,19 +5971,34 @@ static void fileBuffLineDel(AjPFileBuff thys)
 	return;
     }
 
+    /* last line */
+    if(!thys->Curr->Next)
+    {
+	saveprev = thys->Prev;
+	thys->Prev = thys->Lines;
+	while(thys->Prev && thys->Prev->Next != saveprev)
+	    thys->Prev = thys->Prev->Next;
+	if(!thys->Prev)
+	    ajDebug("fileBuffLineDel last line, cannot reset Prev\n");
+	saveprev->Next = NULL;
+
+	AJFREE(thys->Curr);
+	thys->Curr = NULL;
+	--thys->Size;
+	thys->Pos = thys->Size;
+	ajDebug("delete: last line, Size %d Pos %d\n",
+		thys->Size, thys->Pos);
+	return;
+    }
+
     thys->Prev->Next = thys->Curr->Next;
     ajStrDel(&thys->Curr->Line);
-    AJFREE(thys->Curr);
     thys->Curr = thys->Prev->Next;
     --thys->Size;
-    if(thys->Curr)
-	ajDebug("new next line  [%d] %x, '%S' len %d\n",
-		 ajStrRef(thys->Curr->Line),
-		 thys->Curr->Line, thys->Curr->Line,
-		 ajStrLen(thys->Curr->Line));
-    else
-	ajDebug("no next line, Size %d Pos %d\n",
-		thys->Size, thys->Pos);
+    ajDebug("delete: new next line  [%d] %x, '%S' len %d\n",
+	    ajStrRef(thys->Curr->Line),
+	    thys->Curr->Line, thys->Curr->Line,
+	    ajStrLen(thys->Curr->Line));
 
     return;
 }

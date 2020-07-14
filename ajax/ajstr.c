@@ -4152,6 +4152,58 @@ ajint ajStrRFindC(const AjPStr thys, const char* text)
 
 
 
+/* @func ajStrFindAnyC ********************************************************
+**
+** Locates the first occurrence in the string of any character in
+** the second string.
+**
+** @param [r] thys [const AjPStr] String
+** @param [r] text [const char*] text to find
+** @return [ajint] Position of the start of text in string if found.
+**                Or -1 for text not found.
+** @category use [AjPStr] Find
+** @@
+******************************************************************************/
+
+ajint ajStrFindAnyC(const AjPStr thys, const char* text)
+{
+    ajint i;
+
+    i = strcspn(thys->Ptr, text);
+    if(i == thys->Len)
+	return -1;
+    return i;
+}
+
+
+
+
+/* @func ajStrFindAny *********************************************************
+**
+** Locates the first occurrence in the string of any character in
+** the second string.
+**
+** @param [r] thys [const AjPStr] String
+** @param [r] text [const AjPStr] text to find
+** @return [ajint] Position of the start of text in string if found.
+**                Or -1 for text not found.
+** @category use [AjPStr] Find
+** @@
+******************************************************************************/
+
+ajint ajStrFindAny(const AjPStr thys, const AjPStr text)
+{
+    ajint i;
+
+    i = strcspn(thys->Ptr, text->Ptr);
+    if(i == thys->Len)
+	return -1;
+    return i;
+}
+
+
+
+
 /* @func ajStrCmp *************************************************************
 **
 ** Compares the value of two strings for use in sorting (e.g. ajListSort)
