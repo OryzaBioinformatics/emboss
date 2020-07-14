@@ -154,8 +154,8 @@ void ajBaseInit(void)
     ajint y;
 
     ajint n;
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
 
     if(aj_base_I)
 	return;

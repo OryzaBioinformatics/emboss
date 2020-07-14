@@ -47,12 +47,12 @@ AjBool aj_melt_saveshift = 1;
 ** files are read for DNA or RNA heteroduplex. Also sets optional flag
 ** for array saving of the above.
 **
-** @param  [rP] type [AjPStr*] Pointer to a "dna" or "rna" string
+** @param  [r] type [const AjPStr] Pointer to a "dna" or "rna" string
 ** @param  [r]  savesize [ajint] Size of array to save, or zero if none
 ** @return [void] Number of energies to save
 ******************************************************************************/
 
-void ajMeltInit(AjPStr *type, ajint savesize)
+void ajMeltInit(const AjPStr type, ajint savesize)
 {
     AjPFile mfptr;
     AjPStr  mfname = NULL;
@@ -67,7 +67,7 @@ void ajMeltInit(AjPStr *type, ajint savesize)
     ajint k;
     
     char *p;
-    char *q;
+    const char *q;
     float enthalpy;
     float entropy;
     float energy;
@@ -84,13 +84,13 @@ void ajMeltInit(AjPStr *type, ajint savesize)
 
     mfname = ajStrNew();
 
-    if(!ajStrCmpC(*type, "rna"))
+    if(!ajStrCmpC(type, "rna"))
     {
 	ajStrSetC(&mfname,RNAMELTFILE);
 	ajFileDataNew(mfname, &mfptr);
     }
 
-    if(!ajStrCmpC(*type, "dna"))
+    if(!ajStrCmpC(type, "dna"))
     {
 	ajStrSetC(&mfname,DNAMELTFILE);
 	ajFileDataNew(mfname, &mfptr);
@@ -107,7 +107,7 @@ void ajMeltInit(AjPStr *type, ajint savesize)
 
     ajStrAssC(&pair,"AA");
     ajStrAssC(&acgt,"ACGT");
-    p = ajStrStr(pair);
+    p = ajStrStrMod(&pair);
     q = ajStrStr(acgt);
 
     for(i=0,k=0;i<4;++i)
@@ -123,7 +123,7 @@ void ajMeltInit(AjPStr *type, ajint savesize)
 
     while(ajFileGets(mfptr, &line))
     {
-	p = ajStrStr(line);
+	p = ajStrStrMod(&line);
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
 
@@ -189,28 +189,28 @@ void ajMeltInit(AjPStr *type, ajint savesize)
 **
 ** Gives a score for the probability of two sequences being the same.
 ** The sequences are the same length.
-** Uses UB ambiguity codes. The result is the sum of the probabilities
+** Uses IUB ambiguity codes. The result is the sum of the probabilities
 ** at each position.
 **
-** @param  [rP] seq1 [AjPStr*] Pointer to a sequence string
-** @param  [rP] seq2 [AjPStr*] Pointer to a another sequence
+** @param  [r] seq1 [const AjPStr] Pointer to a sequence string
+** @param  [r] seq2 [const AjPStr] Pointer to a another sequence
 ** @param  [r]  len [ajint] Length of sequences
 ** @return [float] Match probability
 ******************************************************************************/
 
-float ajProbScore(AjPStr *seq1, AjPStr *seq2, ajint len)
+float ajProbScore(const AjPStr seq1, const AjPStr seq2, ajint len)
 {
     ajint mlen;
     float score;
     ajint i;
     ajint x;
     ajint y;
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
 
 
-    mlen = (ajStrLen(*seq1) < ajStrLen(*seq2)) ? ajStrLen(*seq1) :
-	ajStrLen(*seq2);
+    mlen = (ajStrLen(seq1) < ajStrLen(seq2)) ? ajStrLen(seq1) :
+	ajStrLen(seq2);
 
     if(len > 0)
 	mlen = (mlen < len) ? mlen : len;
@@ -223,8 +223,8 @@ float ajProbScore(AjPStr *seq1, AjPStr *seq2, ajint len)
 	return score;
 
     score = 1.0;
-    p = ajStrStr(*seq1);
-    q = ajStrStr(*seq2);
+    p = ajStrStr(seq1);
+    q = ajStrStr(seq2);
 
     for(i=0; i<mlen; ++i)
     {
@@ -245,7 +245,7 @@ float ajProbScore(AjPStr *seq1, AjPStr *seq2, ajint len)
 ** An optional shift is given for stepping along the sequence and loading
 ** up energy arrays.
 **
-** @param  [rP] strand [AjPStr*] Pointer to a sequence string
+** @param  [r] strand [const AjPStr] Pointer to a sequence string
 ** @param  [r] len [ajint] Length of sequence
 ** @param  [r] shift [ajint] Stepping value
 ** @param  [r] isDNA [AjBool] DNA or RNA
@@ -256,7 +256,7 @@ float ajProbScore(AjPStr *seq1, AjPStr *seq2, ajint len)
 ** @return [float] Melt energy
 ******************************************************************************/
 
-float ajMeltEnergy(AjPStr *strand, ajint len, ajint shift, AjBool isDNA,
+float ajMeltEnergy(const AjPStr strand, ajint len, ajint shift, AjBool isDNA,
 		   AjBool maySave, float *enthalpy, float *entropy)
 {
     AjPStr fname;
@@ -265,7 +265,7 @@ float ajMeltEnergy(AjPStr *strand, ajint len, ajint shift, AjBool isDNA,
     ajint j;
     ajint k;
     ajint ipos;
-    char *p;
+    const char *p;
     static float energy;
     float ident;
     AjBool doShift;
@@ -280,12 +280,12 @@ float ajMeltEnergy(AjPStr *strand, ajint len, ajint shift, AjBool isDNA,
 	if(isDNA)
 	{
 	    fname = ajStrNewC("dna");
-	    ajMeltInit(&fname,len);
+	    ajMeltInit(fname,len);
 	}
 	else
 	{
 	    fname = ajStrNewC("rna");
-	    ajMeltInit(&fname,len);
+	    ajMeltInit(fname,len);
 	}
 	ajStrDel(&fname);
     }
@@ -333,7 +333,7 @@ float ajMeltEnergy(AjPStr *strand, ajint len, ajint shift, AjBool isDNA,
     }
 
     line = ajStrNew();
-    p = ajStrStr(*strand);
+    p = ajStrStr(strand);
 
     while(ipos < len-1)
     {
@@ -347,7 +347,7 @@ float ajMeltEnergy(AjPStr *strand, ajint len, ajint shift, AjBool isDNA,
 	for(j=0;j<16;++j)
 	{
 	    ajStrAssSubC(&line,p+ipos,0,1);
-	    ident = ajProbScore(&aj_m_table[j].pair, &line, 2);
+	    ident = ajProbScore(aj_m_table[j].pair, line, 2);
 
 	    if(ident>0.9)
 	    {
@@ -390,7 +390,7 @@ float ajMeltEnergy(AjPStr *strand, ajint len, ajint shift, AjBool isDNA,
 ** An optional shift is given for stepping along the sequence and loading
 ** up energy arrays.
 **
-** @param  [rP] strand [AjPStr*] Pointer to a sequence string
+** @param  [r] strand [const AjPStr] Pointer to a sequence string
 ** @param  [r] len [ajint] Length of sequence
 ** @param  [r] shift [ajint] Stepping value
 ** @param  [r] saltconc [float] mM salt concentration
@@ -400,7 +400,7 @@ float ajMeltEnergy(AjPStr *strand, ajint len, ajint shift, AjBool isDNA,
 ** @return [float] Melt temperature
 ******************************************************************************/
 
-float ajTm(AjPStr *strand, ajint len, ajint shift, float saltconc,
+float ajTm(const AjPStr strand, ajint len, ajint shift, float saltconc,
 	      float DNAconc, AjBool isDNA)
 {
     double entropy;
@@ -444,20 +444,20 @@ float ajTm(AjPStr *strand, ajint len, ajint shift, float saltconc,
 **
 ** Calculates GC fraction of a sequence allowing for ambiguity
 **
-** @param  [rP] strand [AjPStr*] Pointer to a sequence string
+** @param  [r] strand [const AjPStr] Pointer to a sequence string
 ** @param  [r] len [ajint] Length of sequence
 **
 ** @return [float] GC fraction
 ******************************************************************************/
 
-float ajMeltGC(AjPStr *strand, ajint len)
+float ajMeltGC(const AjPStr strand, ajint len)
 {
     ajint t;
     ajint i;
-    char *p;
+    const char *p;
     double count;
 
-    p=ajStrStr(*strand);
+    p=ajStrStr(strand);
     count = 0.0;
 
     for(i=0;i<len;++i)
@@ -485,7 +485,7 @@ float ajMeltGC(AjPStr *strand, ajint len)
 ** and enthalpy arrays. Subsequent calls will not look at the
 ** sequence directly.
 **
-** @param  [r] strand [char *] Pointer to a sequence string
+** @param  [r] strand [const char *] Pointer to a sequence string
 ** @param  [r] pos [ajint] Position within sequence
 ** @param  [r] len [ajint] Length of sequence segment
 ** @param  [r] isDNA [AjBool] true if dna
@@ -498,7 +498,7 @@ float ajMeltGC(AjPStr *strand, ajint len)
 ** @return [float] melt energy
 ******************************************************************************/
 
-float ajMeltEnergy2(char *strand, ajint pos, ajint len, AjBool isDNA,
+float ajMeltEnergy2(const char *strand, ajint pos, ajint len, AjBool isDNA,
 		    float *enthalpy, float *entropy, float **saveentr,
 		    float **saveenth, float **saveener)
 {
@@ -519,12 +519,12 @@ float ajMeltEnergy2(char *strand, ajint pos, ajint len, AjBool isDNA,
 	if(isDNA)
 	{
 	    fname = ajStrNewC("dna");
-	    ajMeltInit(&fname,len);
+	    ajMeltInit(fname,len);
 	}
 	else
 	{
 	    fname = ajStrNewC("rna");
-	    ajMeltInit(&fname,len);
+	    ajMeltInit(fname,len);
 	}
 	ajStrDel(&fname);
 
@@ -539,7 +539,7 @@ float ajMeltEnergy2(char *strand, ajint pos, ajint len, AjBool isDNA,
 	    for(j=0;j<16;++j)
 	    {
 		ajStrAssSubC(&line,strand+i,0,1);
-		ident = ajProbScore(&aj_m_table[j].pair,&line,2);
+		ident = ajProbScore(aj_m_table[j].pair,line,2);
 		if(ident>.9)
 		{
 		    (*saveentr)[i] += (ident * aj_m_table[j].entropy);
@@ -573,7 +573,7 @@ float ajMeltEnergy2(char *strand, ajint pos, ajint len, AjBool isDNA,
 **
 ** Calculates melt temperature of DNA or RNA
 **
-** @param  [r] strand [char *] Pointer to a sequence string
+** @param  [r] strand [const char*] Pointer to a sequence string
 ** @param  [r] pos [ajint] position within sequence
 ** @param  [r] len [ajint] Length of sequence (segment)
 ** @param  [r] saltconc [float] mM salt concentration
@@ -583,7 +583,7 @@ float ajMeltEnergy2(char *strand, ajint pos, ajint len, AjBool isDNA,
 ** @return [float] Melt temperature
 ******************************************************************************/
 
-float ajTm2(char *strand, ajint pos, ajint len, float saltconc,
+float ajTm2(const char *strand, ajint pos, ajint len, float saltconc,
 	    float DNAconc, AjBool isDNA)
 {
     static float *saveentr;

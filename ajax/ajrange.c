@@ -72,6 +72,7 @@
 ** @param [r] n [ajint] number of ranges
 **
 ** @return [AjPRange] Pointer to a range object
+** @category new [AjPRange] Default constructor for range objects
 ** @@
 ******************************************************************************/
 
@@ -99,13 +100,23 @@ AjPRange ajRangeNewI(ajint n)
 
 
 
+/* @section Range Destructors ************************************************
+**
+** Default destructor for AJAX range objects
+**
+******************************************************************************/
+
+
+
+
 /* @func ajRangeDel ***********************************************************
 **
 ** Default destructor for AJAX range objects.
 **
-** @param [w] thys [AjPRange *] range structure
+** @param [d] thys [AjPRange *] range structure
 **
 ** @return [void]
+** @category delete [AjPRange] Default destructor for range objects
 ** @@
 ******************************************************************************/
 
@@ -130,30 +141,40 @@ void ajRangeDel(AjPRange *thys)
 
 
 
+/* @section Range Functions ************************************************
+**
+** Other functions for AJAX range objects
+**
+******************************************************************************/
+
+
+
+
 /* @func ajRangeGet ***********************************************************
 **
-** Load a range object
+** Create a range object from a string
 **
-** @param [w] r [AjPRange *] range object
-** @param [r] str [AjPStr] range string
+** @param [r] str [const AjPStr] range string
 **
-** @return [AjBool] true if valid range
+** @return [AjPRange] range object
+** @category new [AjPRange] Create a range object from a string
 ** @@
 ******************************************************************************/
 
-AjBool ajRangeGet(AjPRange *r, AjPStr str)
+ AjPRange ajRangeGet(const AjPStr str)
 {
+    AjPRange ret = NULL;
     static AjPStr c1 = NULL;
     static AjPStr c2 = NULL;
     static AjPStr c3 = NULL;
     static AjPStr s   =NULL;
+    const char *cp;
     char *p;
     ajint n;
     ajint e;
     ajint f;
     ajint t;
     ajint i;
-    AjBool result  = ajTrue;
     AjBool doneone = ajFalse;
 
     char *nondigit="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -170,7 +191,7 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
     {
 	/* knock off the '@' */
 	ajStrSub(&s, 1, ajStrLen(s));
-	result = ajRangeFile(r, s);
+       ret = ajRangeFile(s);
     }
     else
     {
@@ -179,8 +200,8 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
 	ajStrAssS(&c2, s);
 	ajStrAssS(&c3, s);
 
-	p = ajStrStr(c1);
-	p = ajSysStrtok(p, nondigit);
+	cp = ajStrStr(c1);
+	p = ajSysStrtok(cp, nondigit);
 
 	n = 0;
 
@@ -197,36 +218,36 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
 	    if(n%2)
 	    {
 		ajWarn("Odd integer(s) in range specification [%d]",n);
-		return ajFalse;
+		return NULL;
 	    }
-	    *r=ajRangeNewI((e=n>>1));
+	    ret=ajRangeNewI((e=n>>1));
 
 	    /* get the pairs of numbers and put them in the AjPRange object */
-	    p = ajStrStr(c2);
-	    p = ajSysStrtok(p, nondigit);
+	    cp = ajStrStr(c2);
+	    p = ajSysStrtok(cp, nondigit);
 	    if(!sscanf(p,"%d",&f))
 	    {
 		ajWarn("Bad range value [%s]",p);
-		ajRangeDel(r);
-		return ajFalse;
+		ajRangeDel(&ret);
+		return NULL;
 	    }
 
 	    p = ajSysStrtok(NULL, nondigit);
 	    if(!sscanf(p,"%d",&t))
 	    {
 		ajWarn("Bad range value [%s]",p);
-		ajRangeDel(r);
-		return ajFalse;
+		ajRangeDel(&ret);
+		return NULL;
 	    }
 
 	    if(f>t)
 	    {
 		ajWarn("From range [%d] greater than To range [%d]",f,t);
-		ajRangeDel(r);
-		return ajFalse;
+		ajRangeDel(&ret);
+		return NULL;
 	    }
-	    (*r)->start[0]=f;
-	    (*r)->end[0]=t;
+	    ret->start[0]=f;
+	    ret->end[0]=t;
 
 	    for(i=1;i<e;++i)
 	    {
@@ -234,34 +255,34 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
 		if(!sscanf(p,"%d",&f))
 		{
 		    ajWarn("Bad range value [%s]",p);
-		    ajRangeDel(r);
-		    return ajFalse;
+		    ajRangeDel(&ret);
+		    return NULL;
 		}
 
 		p = ajSysStrtok(NULL, nondigit);
 		if(!sscanf(p,"%d",&t))
 		{
 		    ajWarn("Bad range value [%s]",p);
-		    ajRangeDel(r);
-		    return ajFalse;
+		    ajRangeDel(&ret);
+		    return NULL;
 		}
 
 		if(f>t)
 		{
 		    ajWarn("From range [%d] greater than To range [%d]",f,t);
-		    ajRangeDel(r);
-		    return ajFalse;
+		    ajRangeDel(&ret);
+		    return NULL;
 		}
-		(*r)->start[i] = f;
-		(*r)->end[i]   = t;
+		ret->start[i] = f;
+		ret->end[i]   = t;
 	    }
 
 	    /* now get any strings after the pairs of ranges */
-	    p = ajStrStr(c3);
-	    if(!isdigit((ajint)*p))
+	    cp = ajStrStr(c3);
+	    if(!isdigit((ajint)*cp))
 	    {
 		doneone = ajTrue;
-		p = ajSysStrtok(p, digit);
+		p = ajSysStrtok(cp, digit);
 	    }
 
 	    for(i=0; i<e; ++i)
@@ -269,7 +290,7 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
 		/* ignore anything between the two numbers */
 		if(!doneone)
 		{
-		    p = ajSysStrtok(p, digit);
+		    p = ajSysStrtok(cp, digit);
 		    doneone = ajTrue;
 		}
 		else
@@ -280,13 +301,13 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
 		p = ajSysStrtok(NULL, digit);
 		if(p)
 		{
-		    ajStrAssC(&((*r)->text[i]), p);
-		    ajStrChomp(&((*r)->text[i]));
+		    ajStrAssC(&(ret->text[i]), p);
+		    ajStrChomp(&(ret->text[i]));
 		}
 	    }
 	}
 	else
-	    *r=ajRangeNewI(0);
+	    ret=ajRangeNewI(0);
 
 	ajStrDelReuse(&c1);
 	ajStrDelReuse(&c2);
@@ -295,7 +316,7 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
 
     ajStrDelReuse(&s);
 
-    return result;
+    return ret;
 }
 
 
@@ -321,16 +342,16 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
 **  4	5	this is like 12-23, but smaller
 ** 67	10348	interesting region
 **
-** @param [w] r [AjPRange *] range object
-** @param [r] name [AjPStr] range file name
+** @param [r] name [const AjPStr] range file name
 **
-** @return [AjBool] true if valid range
+** @return [AjPRange] range object
+** @category new [AjPRange] Create a range object from a file
 ** @@
 ******************************************************************************/
 
-AjBool ajRangeFile(AjPRange *r, AjPStr name)
+AjPRange ajRangeFile(const AjPStr name)
 {
-    AjBool result = ajTrue;
+    AjPRange ret = NULL;
     AjPFile infile;
     AjPStr line   = NULL;
     char whiteSpace[] = " \t\n\r";
@@ -356,7 +377,7 @@ AjBool ajRangeFile(AjPRange *r, AjPStr name)
 
     
     if((infile = ajFileNewIn(name)) == NULL)
-	return ajFalse;
+	return NULL;
 
     while(ajFileReadLine(infile, &line))
     {
@@ -388,7 +409,7 @@ AjBool ajRangeFile(AjPRange *r, AjPStr name)
 	else
 	{
 	    ajWarn("Odd integer(s) in range specification:\n%S\n", line);
-	    return ajFalse;
+	    return NULL;
 	}
 	
 	/* get any remaining text and store in temporary list */
@@ -402,7 +423,7 @@ AjBool ajRangeFile(AjPRange *r, AjPStr name)
     
     /* now we know how many pairs of numbers to store, create ajRange object */
     n  = ajListstrLength(onelist);
-    *r = ajRangeNewI(n);
+    ret = ajRangeNewI(n);
     
     /* populate ajRange object from lists and check numbers are valid */
     for(k = 0; k < n; k++)
@@ -411,14 +432,16 @@ AjBool ajRangeFile(AjPRange *r, AjPStr name)
 	if(!ajStrToInt(one, &numone))
 	{
 	    ajWarn("Bad range value [%S]",one);
-	    return ajFalse;
+	    ajRangeDel(&ret);
+	    return NULL;
 	}
 	
 	ajListstrPop(twolist, &two);
 	if(!ajStrToInt(two, &numtwo))
 	{
 	    ajWarn("Bad range value [%S]",two);
-	    return ajFalse;
+	    ajRangeDel(&ret);
+	    return NULL;
 	}
 
 	ajStrDel(&one);
@@ -428,15 +451,16 @@ AjBool ajRangeFile(AjPRange *r, AjPStr name)
 	{
 	    ajWarn("From range [%d] greater than To range [%d]",
 		   numone, numtwo);
-	    return ajFalse;
+	    ajRangeDel(&ret);
+	    return NULL;
 	}
 	
-	(*r)->start[k] = numone;
-	(*r)->end[k]   = numtwo;
+	ret->start[k] = numone;
+	ret->end[k]   = numtwo;
 
 	/* do the text */
 	ajListstrPop(textlist, &text);
-	(*r)->text[k] = text;
+	ret->text[k] = text;
     }
 
 
@@ -444,7 +468,7 @@ AjBool ajRangeFile(AjPRange *r, AjPStr name)
     ajListstrFree(&twolist);
     ajListstrFree(&textlist);
 
-    return result;
+    return ret;
 }
 
 
@@ -454,13 +478,14 @@ AjBool ajRangeFile(AjPRange *r, AjPStr name)
 **
 ** Return the number of ranges in a range object
 **
-** @param [r] thys [AjPRange] range object
+** @param [r] thys [const AjPRange] range object
 **
 ** @return [ajint] number of ranges
+** @category use [AjPRange] Return the number of ranges in a range object
 ** @@
 ******************************************************************************/
 
-ajint ajRangeNumber(AjPRange thys)
+ajint ajRangeNumber(const AjPRange thys)
 {
     return thys->n;
 }
@@ -472,16 +497,19 @@ ajint ajRangeNumber(AjPRange thys)
 **
 ** Return (as parameters) start and end values in a range
 **
-** @param [r] thys [AjPRange] range object
+** @param [r] thys [const AjPRange] range object
 ** @param [r] element [ajint] range element (0 to n-1)
 ** @param [w] start [ajint *] start value
 ** @param [w] end [ajint *] end value
 **
 ** @return [AjBool] true if range exists
+** @category use [AjPRange] Return (as parameters) start and end values
+**                          in a range
 ** @@
 ******************************************************************************/
 
-AjBool ajRangeValues(AjPRange thys, ajint element, ajint *start, ajint *end)
+AjBool ajRangeValues(const AjPRange thys, ajint element,
+		     ajint *start, ajint *end)
 {
     if(element<0 || element>=thys->n)
 	return ajFalse;
@@ -502,24 +530,24 @@ AjBool ajRangeValues(AjPRange thys, ajint element, ajint *start, ajint *end)
 ** eg. in a pair of range '10-20 potential exon 50-60 repeat'
 ** the text values of the two ranges are: 'potential exon' and 'repeat'
 **
-** @param [r] thys [AjPRange] range object
+** @param [r] thys [const AjPRange] range object
 ** @param [r] element [ajint] range element (0 to n-1)
 ** @param [w] text [AjPStr *] text value
 **
 ** @return [AjBool] true if range exists
+** @category use [AjPRange] Return (as parameters) text value of a range
 ** @@
-** Modified: pmr 21-jan-00 return empty string if there is no text
 ******************************************************************************/
 
-AjBool ajRangeText(AjPRange thys, ajint element, AjPStr * text)
+AjBool ajRangeText(const AjPRange thys, ajint element, AjPStr * text)
 {
     if(element<0 || element>=thys->n)
 	return ajFalse;
 
     if(thys->text[element])
-      *text = ajStrDup(thys->text[element]);
+	ajStrAssS(text,thys->text[element]);
     else
-      *text = ajStrNew();
+	*text = ajStrNew();
 
     return ajTrue;
 }
@@ -531,12 +559,14 @@ AjBool ajRangeText(AjPRange thys, ajint element, AjPStr * text)
 **
 ** Set the values of a start and end in a (preexisting) range element
 **
-** @param [r] thys [AjPRange] range object
+** @param [w] thys [AjPRange] range object
 ** @param [r] element [ajint] range element (0 to n-1)
-** @param [w] start [ajint] start value
-** @param [w] end [ajint] end value
+** @param [r] start [ajint] start value
+** @param [r] end [ajint] end value
 **
 ** @return [AjBool] true if range exists
+** @category modify [AjPRange] Set the values of a start and end in a
+**                              range element
 ** @@
 ******************************************************************************/
 
@@ -566,6 +596,8 @@ AjBool ajRangeChange(AjPRange thys, ajint element, ajint start, ajint end)
 ** @param [r] begin [ajint] begin parameter obtained from ajSeqBegin(seq)
 **
 ** @return [AjBool] true if region values modified
+** @category modify [AjPRange] Sets the range values relative to the
+**                             Begin value
 ** @@
 ******************************************************************************/
 
@@ -604,16 +636,18 @@ AjBool ajRangeBegin(AjPRange thys, ajint begin)
 ** N.B. the resulting list will be regions of the input string listed
 ** in the order specified in the set of ranges. If these are not in ascending
 ** order, the resulting list of strings will not be in ascending order either.
+**
+** @param [r] thys [const AjPRange] range object
+** @param [r] instr [const AjPStr] string to extract from
 ** @param [w] outliststr [AjPList] resulting list of strings
-** @param [r] thys [AjPRange] range object
-** @param [r] instr [AjPStr] string to extract from
 **
 ** @return [AjBool] true if string modified
+** @category use [AjPRange] PushApp substrings defined by range onto list
 ** @@
 ******************************************************************************/
 
-AjBool ajRangeStrExtractList(AjPList outliststr, AjPRange thys,
-			     AjPStr instr)
+AjBool ajRangeStrExtractList(const AjPRange thys,
+			     const AjPStr instr, AjPList outliststr)
 {
     ajint nr;
     ajint i;
@@ -645,15 +679,18 @@ AjBool ajRangeStrExtractList(AjPList outliststr, AjPRange thys,
 ** N.B. the resulting string will be regions of the input string appended
 ** in the order specified in the set of ranges. If these are not in ascending
 ** order, the resulting string will not be in ascending order either.
+**
+** @param [r] thys [const AjPRange] range object
+** @param [r] instr [const AjPStr] string to extract from
 ** @param [w] outstr [AjPStr *] resulting extracted string
-** @param [r] thys [AjPRange] range object
-** @param [r] instr [AjPStr] string to extract from
 **
 ** @return [AjBool] true if string modified
+** @category use [AjPRange] Extract substrings defined by range
 ** @@
 ******************************************************************************/
 
-AjBool ajRangeStrExtract(AjPStr *outstr, AjPRange thys, AjPStr instr)
+AjBool ajRangeStrExtract(const AjPRange thys, const AjPStr instr,
+			 AjPStr *outstr)
 {
     ajint nr;
     ajint i;
@@ -686,15 +723,16 @@ AjBool ajRangeStrExtract(AjPStr *outstr, AjPRange thys, AjPStr instr)
 ** So starting with the string 'abcde' and the ranges 3-5,7-8 it will produce:
 ** '  abc de'
 **
+** @param [r] thys [const AjPRange] range object
+** @param [r] instr [const AjPStr] string to stuff
 ** @param [w] outstr [AjPStr *] resulting stuffed string
-** @param [r] thys [AjPRange] range object
-** @param [r] instr [AjPStr] string to stuff
 **
 ** @return [AjBool] true if string modified
+** @category use [AjPRange] The opposite of ajRangeStrExtract
 ** @@
 ******************************************************************************/
 
-AjBool ajRangeStrStuff(AjPStr *outstr, AjPRange thys, AjPStr instr)
+AjBool ajRangeStrStuff(const AjPRange thys, const AjPStr instr, AjPStr *outstr)
 {
     ajint nr;
     ajint i;
@@ -734,15 +772,17 @@ AjBool ajRangeStrStuff(AjPStr *outstr, AjPRange thys, AjPStr instr)
 /* @func ajRangeStrMask *******************************************************
 **
 ** Mask the range in a String
+**
+** @param [r] thys [const AjPRange] range object
+** @param [r] maskchar [const AjPStr] character to mask with
 ** @param [w] str [AjPStr *] string to be masked
-** @param [r] thys [AjPRange] range object
-** @param [r] maskchar [AjPStr] character to mask with
 **
 ** @return [AjBool] true if string modified
+** @category use [AjPRange] Mask the range in a String
 ** @@
 ******************************************************************************/
 
-AjBool ajRangeStrMask(AjPStr *str, AjPRange thys, AjPStr maskchar)
+AjBool ajRangeStrMask(const AjPRange thys, const AjPStr maskchar, AjPStr *str)
 {
     ajint nr;
     ajint i;
@@ -776,17 +816,19 @@ AjBool ajRangeStrMask(AjPStr *str, AjPRange thys, AjPStr maskchar)
 
 
 
-/* @func ajRangeStrToLower *******************************************************
+/* @func ajRangeStrToLower ****************************************************
 **
 ** Change the range in a String to lower-case
+**
+** @param [r] thys [const AjPRange] range object
 ** @param [w] str [AjPStr *] string to be lower-cased
-** @param [r] thys [AjPRange] range object
 **
 ** @return [AjBool] true if string modified
+** @category use [AjPRange] Change to lower-case the range in a String
 ** @@
 ******************************************************************************/
 
-AjBool ajRangeStrToLower(AjPStr *str, AjPRange thys)
+AjBool ajRangeStrToLower(const AjPRange thys, AjPStr *str)
 {
     ajint nr;
     ajint i;
@@ -876,15 +918,16 @@ ajint ajRangeOverlapSingle(ajint start, ajint end, ajint pos, ajint length)
 /* @func ajRangeOverlaps ******************************************************
 **
 ** Detect overlaps of a set of ranges to a region of a sequence
-** @param [r] thys [AjPRange] range object
+** @param [r] thys [const AjPRange] range object
 ** @param [r] pos [ajint] postion in sequence of start of region of sequence
 ** @param [r] length [ajint] length of region of sequence
 **
 ** @return [ajint] Number of ranges in range object with overlaps to the region
+** @category use [AjPRange] Detect overlaps of a set of ranges to a seq region
 ** @@
 ******************************************************************************/
 
-ajint ajRangeOverlaps(AjPRange thys, ajint pos, ajint length)
+ajint ajRangeOverlaps(const AjPRange thys, ajint pos, ajint length)
 {
     ajint nr;
     ajint i;
@@ -909,13 +952,15 @@ ajint ajRangeOverlaps(AjPRange thys, ajint pos, ajint length)
 /* @func ajRangeOrdered *******************************************************
 **
 ** Tests to see if the set of ranges are in ascending non-overlapping order
-** @param [r] thys [AjPRange] range object
+** @param [r] thys [const AjPRange] range object
 **
 ** @return [AjBool] ajTrue if in ascending non-overlapping order
+** @category use [AjPRange] Test if ranges are in ascending non-overlapping
+**                          order
 ** @@
 ******************************************************************************/
 
-AjBool ajRangeOrdered(AjPRange thys)
+AjBool ajRangeOrdered(const AjPRange thys)
 {
     ajint nr;
     ajint i;
@@ -946,14 +991,15 @@ AjBool ajRangeOrdered(AjPRange thys)
 ** IE tests whether the given range is a single range from the start to
 ** the end of a sequence string.
 **
-** @param [r] thys [AjPRange] range object
-** @param [r] s [AjPStr] string
+** @param [r] thys [const AjPRange] range object
+** @param [r] s [const AjPStr] string
 **
 ** @return [AjBool] true if default range
+** @category use [AjPRange] Test if the default range has been set
 ** @@
 ******************************************************************************/
 
-AjBool ajRangeDefault(AjPRange thys, AjPStr s)
+AjBool ajRangeDefault(const AjPRange thys, const AjPStr s)
 {
     if(thys->n==1 && thys->start[0]==1 && thys->end[0]==ajStrLen(s))
 	return ajTrue;

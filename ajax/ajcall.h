@@ -7,11 +7,11 @@ extern "C"
 #define ajcall_h
 
 #include "ajax.h"
-typedef void* (*CallFunc)(char *name, va_list args);
+typedef void* (*CallFunc)(const char *name, va_list args);
 
-void callRegister(char *name, CallFunc func);
+void callRegister(const char *name, CallFunc func);
 
-void* call(char *name, ...);
+void* call(const char *name, ...);
 
 #endif
 

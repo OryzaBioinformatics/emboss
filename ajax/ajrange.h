@@ -14,11 +14,11 @@ extern "C"
 ** @alias AjSRange
 **
 ** @new ajRangeNewI Default constructor for range objects
+** @new ajRangeGet Create a range object from a string
+** @new ajRangeFile Create a range object from a file
 ** @delete ajRangeDel Default destructor for range objects
-** @mod ajRangeGet Load a range object
-** @mod ajRangeFile Load a range object from a file
-** @mod ajRangeChange Set the values of a start and end in a range element
-** @mod ajRangeBegin Sets the range values relative to the Begin value
+** @modify ajRangeChange Set the values of a start and end in a range element
+** @modify ajRangeBegin Sets the range values relative to the Begin value
 ** @use ajRangeNumber Return the number of ranges in a range object
 ** @use ajRangeValues Return (as parameters) start and end values in a range
 ** @use ajRangeText Return (as parameters) text value of a range
@@ -27,48 +27,52 @@ extern "C"
 ** @use ajRangeStrStuff The opposite of ajRangeStrExtract
 ** @use ajRangeStrMask Mask the range in a String
 ** @use ajRangeStrToLower Change to lower-case the range in a String
-** @use ajRangeOverlapSingle Detect an overlap of a range to a sequence region
 ** @use ajRangeOverlaps Detect overlaps of a set of ranges to a seq region
 ** @use ajRangeOrdered Test if ranges are in ascending non-overlapping order
 ** @use ajRangeDefault Test if the default range has been set
+**
+** @attr n [ajint] Number of ranges
+** @attr start [ajint*] From positions
+** @attr end [ajint*] End positions
+** @attr text [AjPStr*] Associated text for each range
 ** @@
 ******************************************************************************/
 
 
 typedef struct AjSRange
 {
-    ajint n;			/* Number of ranges */
-    ajint *start;			/* From positions   */
-    ajint *end;                   /* End positions    */
-    AjPStr *text;		/* Associated text for each range */
-} AjORange,*AjPRange;
+    ajint n;
+    ajint *start;
+    ajint *end;
+    AjPStr *text;
+} AjORange;
+#define AjPRange AjORange*
 
-
-AjPRange  ajRangeNewI(ajint n);
-AjBool    ajRangeDefault(AjPRange thys, AjPStr s);
-
-void      ajRangeDel(AjPRange *thys);
-
-AjBool    ajRangeGet(AjPRange *r, AjPStr s);
-AjBool    ajRangeFile(AjPRange *r, AjPStr name);
-ajint     ajRangeNumber(AjPRange thys);
-AjBool    ajRangeText(AjPRange thys, ajint element, AjPStr * text);
-AjBool    ajRangeValues(AjPRange thys, ajint element,
-			ajint *start, ajint *end);
-AjBool    ajRangeChange(AjPRange thys, ajint element, ajint start, ajint end);
 
 AjBool    ajRangeBegin (AjPRange thys, ajint begin);
-
-AjBool    ajRangeStrExtractList (AjPList outliststr, AjPRange thys,
-				 AjPStr instr);
-AjBool    ajRangeStrExtract (AjPStr *outstr, AjPRange thys, AjPStr instr);
-AjBool    ajRangeStrStuff (AjPStr *outstr, AjPRange thys, AjPStr instr);
-AjBool    ajRangeStrMask (AjPStr *str, AjPRange thys, AjPStr maskchar);
-AjBool    ajRangeStrToLower (AjPStr *str, AjPRange thys);
+AjBool    ajRangeChange(AjPRange thys, ajint element, ajint start, ajint end);
+AjBool    ajRangeDefault(const AjPRange thys, const AjPStr s);
+void      ajRangeDel(AjPRange *thys);
+AjPRange  ajRangeFile(const AjPStr name);
+AjPRange  ajRangeGet(const AjPStr s);
+AjPRange  ajRangeNewI(ajint n);
+ajint     ajRangeNumber(const AjPRange thys);
+AjBool    ajRangeOrdered (const AjPRange thys);
+ajint	  ajRangeOverlaps (const AjPRange thys, ajint pos, ajint length);
 ajint	  ajRangeOverlapSingle (ajint start, ajint end,
 				ajint pos, ajint length);
-ajint	  ajRangeOverlaps (AjPRange thys, ajint pos, ajint length);
-AjBool    ajRangeOrdered (AjPRange thys);
+AjBool    ajRangeStrExtract (const AjPRange thys,
+			     const AjPStr instr, AjPStr *outstr);
+AjBool    ajRangeStrExtractList (const AjPRange thys,
+				 const AjPStr instr, AjPList outliststr);
+AjBool    ajRangeStrMask (const AjPRange thys,
+			  const AjPStr maskchar, AjPStr *str);
+AjBool    ajRangeStrStuff (const AjPRange thys,
+			   const AjPStr instr, AjPStr *outstr);
+AjBool    ajRangeStrToLower (const AjPRange thys, AjPStr *str);
+AjBool    ajRangeText(const AjPRange thys, ajint element, AjPStr * text);
+AjBool    ajRangeValues(const AjPRange thys, ajint element,
+			ajint *start, ajint *end);
 
 #endif
 

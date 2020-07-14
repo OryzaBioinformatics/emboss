@@ -40,12 +40,12 @@ ajint aj_hist_mark=GRAPH_HIST;
 **
 ** Display the histogram.
 **
-** @param [r] hist [AjPHist] Histogram Structure.
+** @param [r] hist [const AjPHist] Histogram Structure.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistDisplay(AjPHist hist)
+void ajHistDisplay(const AjPHist hist)
 {
     PLFLT *data    = NULL;
     PLFLT *totals  = NULL;
@@ -371,15 +371,19 @@ void ajHistClose(void)
 ** Delete and free all memory associated with the histogram.
 ** Does not delete the graph.
 **
-** @param [u] hist [AjPHist] Histogram to be deleted.
+** @param [d] phist [AjPHist*] Histogram to be deleted.
 ** @return [void]
 **
 ** @@
 ******************************************************************************/
 
-void ajHistDelete(AjPHist hist)
+void ajHistDelete(AjPHist* phist)
 {
     ajint i;
+    AjPHist hist = *phist;
+
+    if (!hist)
+	return;
 
     for(i=0;i<hist->numofsets; i++)
     {
@@ -394,7 +398,7 @@ void ajHistDelete(AjPHist hist)
     AJFREE(hist->yaxisleft);
     AJFREE(hist->yaxisright);
 
-    AJFREE(hist);
+    AJFREE(*phist);
     return;
 }
 
@@ -460,7 +464,9 @@ AjPHist ajHistNew(ajint numofsets, ajint numofpoints)
 **
 ** @param [r] numofsets [ajint] Number of sets of data.
 ** @param [r] numofpoints [ajint] Number of data points per set.
-** @param [r] graph [AjPGraph] Graph object.
+** @param [u] graph [AjPGraph] Graph object, device, multi and name are set.
+**                             The orignial AjPGraph object will be used
+**                             by the AjPHist
 ** @return [AjPHist] histogram structure.
 ** @@
 ******************************************************************************/
@@ -485,12 +491,12 @@ AjPHist ajHistNewG(ajint numofsets, ajint numofpoints, AjPGraph graph)
 **
 ** @param [u] hist [AjPHist]   Histogram to have ptr set.
 ** @param [r] index [ajint]       Index for the set number.
-** @param [r] title [AjPStr]    Title.
+** @param [r] title [const AjPStr]    Title.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetMultiTitle(AjPHist hist, ajint index, AjPStr title)
+void ajHistSetMultiTitle(AjPHist hist, ajint index, const AjPStr title)
 {
     if(index >= hist->numofdatapoints || index < 0)
     {
@@ -498,7 +504,7 @@ void ajHistSetMultiTitle(AjPHist hist, ajint index, AjPStr title)
 	      hist->numofdatapoints-1,index);
 	return;
     }
-    hist->hists[index]->title = title;
+    ajStrAssS(&hist->hists[index]->title, title);
 
     return;
 }
@@ -512,12 +518,12 @@ void ajHistSetMultiTitle(AjPHist hist, ajint index, AjPStr title)
 **
 ** @param [u] hist [AjPHist]   Histogram to have ptr set.
 ** @param [r]  index [ajint]      Index for the set number.
-** @param [r]  title  [char *]  Title.
+** @param [r]  title  [const char *]  Title.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetMultiTitleC(AjPHist hist, ajint index, char *title)
+void ajHistSetMultiTitleC(AjPHist hist, ajint index, const char *title)
 {
     if(index >= hist->numofdatapoints || index < 0)
     {
@@ -539,12 +545,12 @@ void ajHistSetMultiTitleC(AjPHist hist, ajint index, char *title)
 **
 ** @param [u] hist [AjPHist]   Histogram to have ptr set.
 ** @param [r] index [ajint]       Index for the set number.
-** @param [r] title [AjPStr]    x Title.
+** @param [r] title [const AjPStr]    x Title.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetMultiXTitle(AjPHist hist, ajint index, AjPStr title)
+void ajHistSetMultiXTitle(AjPHist hist, ajint index, const AjPStr title)
 {
     if(index >= hist->numofdatapoints || index < 0)
     {
@@ -552,7 +558,7 @@ void ajHistSetMultiXTitle(AjPHist hist, ajint index, AjPStr title)
 	      hist->numofdatapoints-1,index);
 	return;
     }
-    hist->hists[index]->xaxis = title;
+    ajStrAssS(&hist->hists[index]->xaxis, title);
 
     return;
 }
@@ -566,12 +572,12 @@ void ajHistSetMultiXTitle(AjPHist hist, ajint index, AjPStr title)
 **
 ** @param [u] hist [AjPHist]   Histogram to have ptr set.
 ** @param [r] index [ajint]       Index for the set number.
-** @param [r] title [char *]    x Title.
+** @param [r] title [const char *]    x Title.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetMultiXTitleC(AjPHist hist, ajint index, char *title)
+void ajHistSetMultiXTitleC(AjPHist hist, ajint index, const char *title)
 {
     if(index >= hist->numofdatapoints || index < 0)
     {
@@ -593,12 +599,12 @@ void ajHistSetMultiXTitleC(AjPHist hist, ajint index, char *title)
 **
 ** @param [u] hist [AjPHist]   Histogram to have ptr set.
 ** @param [r] index [ajint]       Index for the set number.
-** @param [r] title [AjPStr]    Y Title.
+** @param [r] title [const AjPStr]    Y Title.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetMultiYTitle(AjPHist hist, ajint index, AjPStr title)
+void ajHistSetMultiYTitle(AjPHist hist, ajint index, const AjPStr title)
 {
     if(index >= hist->numofdatapoints || index < 0)
     {
@@ -606,7 +612,7 @@ void ajHistSetMultiYTitle(AjPHist hist, ajint index, AjPStr title)
 	      hist->numofdatapoints-1,index);
 	return;
     }
-    hist->hists[index]->yaxis = title;
+    ajStrAssS(&hist->hists[index]->yaxis, title);
 
     return;
 }
@@ -620,12 +626,12 @@ void ajHistSetMultiYTitle(AjPHist hist, ajint index, AjPStr title)
 **
 ** @param [u] hist [AjPHist]   Histogram to have ptr set.
 ** @param [r] index [ajint]       Index for the set number.
-** @param [r] title [char *]    Y Title.
+** @param [r] title [const char *]    Y Title.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetMultiYTitleC(AjPHist hist, ajint index, char *title)
+void ajHistSetMultiYTitleC(AjPHist hist, ajint index, const char *title)
 {
     if(index >= hist->numofdatapoints || index < 0)
     {
@@ -647,7 +653,7 @@ void ajHistSetMultiYTitleC(AjPHist hist, ajint index, char *title)
 **
 ** @param [u] hist [AjPHist] Histogram to have ptr set.
 ** @param [r] index [ajint]     Index for the set number.
-** @param [r] data  [PLFLT*]  Ptr to the data.
+** @param [u] data  [PLFLT*]  Ptr to the data. Will now be used by the AjPHist
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -676,12 +682,12 @@ void ajHistSetPtrToData(AjPHist hist, ajint index, PLFLT *data)
 **
 ** @param [u] hist [AjPHist] Histogram to have ptr set.
 ** @param [r] index [ajint]     Index for the set number.
-** @param [r] data  [PLFLT*]  Ptr to the data.
+** @param [r] data  [const PLFLT*]  Ptr to the data.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistCopyData(AjPHist hist, ajint index, PLFLT *data)
+void ajHistCopyData(AjPHist hist, ajint index, const PLFLT *data)
 {
     ajint i;
 
@@ -710,12 +716,12 @@ void ajHistCopyData(AjPHist hist, ajint index, PLFLT *data)
 ** Copy Title for the histogram.
 **
 ** @param [u] hist [AjPHist] histogram to set string in.
-** @param [r] string [char*] text to be copied.
+** @param [r] string [const char*] text to be copied.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetTitleC(AjPHist hist, char* string)
+void ajHistSetTitleC(AjPHist hist, const char* string)
 {
     ajStrAssC(&hist->title,string);
 
@@ -730,12 +736,12 @@ void ajHistSetTitleC(AjPHist hist, char* string)
 ** Store X axis label for the histogram
 **
 ** @param [u] hist [AjPHist] histogram to set string in.
-** @param [r] string [char*] text to be copied.
+** @param [r] string [const char*] text to be copied.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetXAxisC(AjPHist hist, char* string)
+void ajHistSetXAxisC(AjPHist hist, const char* string)
 {
     ajStrAssC(&hist->xaxis,string);
 
@@ -750,12 +756,12 @@ void ajHistSetXAxisC(AjPHist hist, char* string)
 ** Store Y Axis Left Label for the histogram
 **
 ** @param [u] hist [AjPHist] histogram to set string in.
-** @param [r] string [char*] text to be copied.
+** @param [r] string [const char*] text to be copied.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetYAxisLeftC(AjPHist hist, char* string)
+void ajHistSetYAxisLeftC(AjPHist hist, const char* string)
 {
     ajStrAssC(&hist->yaxisleft,string);
 
@@ -770,12 +776,12 @@ void ajHistSetYAxisLeftC(AjPHist hist, char* string)
 ** Store Y Axis Right Label for the histogram
 **
 ** @param [u] hist [AjPHist] histogram to set string in.
-** @param [r] string [char*] text to be copied.
+** @param [r] string [const char*] text to be copied.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetYAxisRightC(AjPHist hist, char* string)
+void ajHistSetYAxisRightC(AjPHist hist, const char* string)
 {
     ajStrAssC(&hist->yaxisright,string);
 

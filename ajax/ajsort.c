@@ -30,7 +30,7 @@
 **
 ** Based on an array of floats, sort an ajint element array.
 **
-** @param [r] a [float*] Array of floats used in sort tests
+** @param [r] a [const float*] Array of floats used in sort tests
 ** @param [u] p [ajint*] Array of ints to be sorted depending on floats.
 ** @param [r] n [ajint] Number of elements to sort
 **
@@ -38,7 +38,7 @@
 ** @@
 ******************************************************************************/
 
-void ajSortFloatDecI(float *a, ajint *p, ajint n)
+void ajSortFloatDecI(const float *a, ajint *p, ajint n)
 {
     ajint s;
     ajint i;
@@ -64,7 +64,7 @@ void ajSortFloatDecI(float *a, ajint *p, ajint n)
 **
 ** Based on an array of ints, sort an ajint element array.
 **
-** @param [r] a [ajint*] Array of ints used in sort tests
+** @param [r] a [const ajint*] Array of ints used in sort tests
 ** @param [u] p [ajint*] Array of ints to be sorted depending on floats.
 ** @param [r] n [ajint] Number of elements to sort
 **
@@ -72,7 +72,7 @@ void ajSortFloatDecI(float *a, ajint *p, ajint n)
 ** @@
 ******************************************************************************/
 
-void ajSortIntDecI(ajint *a, ajint *p, ajint n)
+void ajSortIntDecI(const ajint *a, ajint *p, ajint n)
 {
     ajint s;
     ajint i;
@@ -98,7 +98,7 @@ void ajSortIntDecI(ajint *a, ajint *p, ajint n)
 **
 ** Based on an array of floats, sort (ascending) an ajint element array.
 **
-** @param [r] a [float*] Array of floats used in sort tests
+** @param [r] a [const float*] Array of floats used in sort tests
 ** @param [u] p [ajint*] Array of ints to be sorted depending on floats.
 ** @param [r] n [ajint] Number of elements to sort
 **
@@ -106,7 +106,7 @@ void ajSortIntDecI(ajint *a, ajint *p, ajint n)
 ** @@
 ******************************************************************************/
 
-void ajSortFloatIncI(float *a, ajint *p, ajint n)
+void ajSortFloatIncI(const float *a, ajint *p, ajint n)
 {
     ajint s;
     ajint i;
@@ -130,9 +130,9 @@ void ajSortFloatIncI(float *a, ajint *p, ajint n)
 
 /* @func ajSortIntIncI ********************************************************
 **
-** Based on an array of ints, sort (ascending) an ajint element array.
+** Based on an array of ints, sort (ascending) a second ajint element array.
 **
-** @param [r] a [ajint*] Array of ints used in sort tests
+** @param [r] a [const ajint*] Array of ints used in sort tests
 ** @param [u] p [ajint*] Array of ints to be sorted depending on floats.
 ** @param [r] n [ajint] Number of elements to sort
 **
@@ -140,7 +140,7 @@ void ajSortFloatIncI(float *a, ajint *p, ajint n)
 ** @@
 ******************************************************************************/
 
-void ajSortIntIncI(ajint *a, ajint *p, ajint n)
+void ajSortIntIncI(const ajint *a, ajint *p, ajint n)
 {
     ajint s;
     ajint i;
@@ -164,9 +164,9 @@ void ajSortIntIncI(ajint *a, ajint *p, ajint n)
 
 /* @func ajSortTwoIntIncI *****************************************************
 **
-** Based on an array of ints, sort (ascending) two ajint element array.
+** Based on an array of ints, sort (ascending) a second ajint element array.
 **
-** @param [r] a [ajint*] Array of ints used in sort tests
+** @param [u] a [ajint*] Array of ints used in sort tests and itself sorted
 ** @param [u] p [ajint*] Second array of ints to be sorted
 ** @param [r] n [ajint] Number of elements to sort
 **

@@ -49,12 +49,12 @@ the external pcre header. */
 ** @param [w]  start_bits [uschar*] points to the bit map
 ** @param [r]  c [int] is the character
 ** @param [r]  caseless [BOOL] the caseless flag
-** @param [r]  cd [compile_data*]  the block with char table pointers
+** @param [r]  cd [const compile_data*]  the block with char table pointers
 ** @return [void]
 ******************************************************************************/
 
 static void
-set_bit(uschar *start_bits, int c, BOOL caseless, compile_data *cd)
+set_bit(uschar *start_bits, int c, BOOL caseless, const compile_data *cd)
 {
     start_bits[c/8] |= (1 << (c&7));
     if (caseless && (cd->ctypes[c] & ctype_letter) != 0)
@@ -74,13 +74,13 @@ set_bit(uschar *start_bits, int c, BOOL caseless, compile_data *cd)
 ** @param [w]  start_bits [uschar*] points to a 32-byte table, initialized to 0
 ** @param [r]  caseless [BOOL] the current state of the caseless flag
 ** @param [r]  utf8 [BOOL] TRUE if in UTF-8 mode
-** @param [r]  cd [compile_data*]  the block with char table pointers
+** @param [r]  cd [const compile_data*]  the block with char table pointers
 ** @return [BOOL] TRUE if table built, FALSE otherwise
 ******************************************************************************/
 
 static BOOL
 set_start_bits(const uschar *code, uschar *start_bits, BOOL caseless,
-	       BOOL utf8, compile_data *cd)
+	       BOOL utf8, const compile_data *cd)
 {
     register int c;
 
@@ -349,7 +349,7 @@ while (*code == OP_ALT);
 ** information that will speed up the matching. It returns a pcre_extra block
 ** which then gets handed back to pcre_exec().
 **
-** @param [r]  re [const pcre*] points to the compiled expression
+** @param [r]  external_re [const pcre*] points to the compiled expression
 ** @param [r]  options [int] contains option bits
 ** @param [w]  errorptr [const char**] points to where to place error messages;
 **            set NULL unless error

@@ -6,6 +6,7 @@ extern "C"
 #ifndef ajmem_h
 #define ajmem_h
 
+#include "ajdefine.h"
 #include "ajexcept.h"
 
 #ifndef HAVE_MEMMOVE
@@ -15,29 +16,29 @@ extern "C"
 #endif
 
 void *ajMemAlloc (ajlong nbytes,
-	const char *file, ajint line);
+	const char *file, ajint line, AjBool nofail);
 void *ajMemCalloc(ajlong count, ajlong nbytes,
-	const char *file, ajint line);
+	const char *file, ajint line, AjBool nofail);
 void *ajMemCalloc0(ajlong count, ajlong nbytes,
-	const char *file, ajint line);
+	const char *file, ajint line, AjBool nofail);
 void ajMemFree(void *ptr,
 	const char *file, ajint line);
 void *ajMemResize(void *ptr, ajlong nbytes,
-	const char *file, ajint line);
+	const char *file, ajint line, AjBool nofail);
 ajint *ajMemArrB (size_t size);
 ajint *ajMemArrI (size_t size);
 float *ajMemArrF (size_t size);
-void ajMemStat (char* title);
+void ajMemStat (const char* title);
 void ajMemExit (void);
 
 #define AJALLOC(nbytes) \
-	ajMemAlloc((nbytes), __FILE__, __LINE__)
+	ajMemAlloc((nbytes), __FILE__, __LINE__, AJFALSE)
 #define AJALLOC0(nbytes) \
-	ajMemCalloc0(1, (nbytes), __FILE__, __LINE__)
+	ajMemCalloc0(1, (nbytes), __FILE__, __LINE__, AJFALSE)
 #define AJCALLOC(count, nbytes) \
-	ajMemCalloc((count), (nbytes), __FILE__, __LINE__)
+	ajMemCalloc((count), (nbytes), __FILE__, __LINE__, AJFALSE)
 #define AJCALLOC0(count, nbytes) \
-	ajMemCalloc0((count), (nbytes), __FILE__, __LINE__)
+	ajMemCalloc0((count), (nbytes), __FILE__, __LINE__, AJFALSE)
 
 #define AJNEW(p) ((p) = AJALLOC((ajlong)sizeof *(p)))
 #define AJCNEW(p,c) ((p) = AJCALLOC(c, (ajlong)sizeof *(p)))
@@ -47,9 +48,11 @@ void ajMemExit (void);
 #define AJFREE(ptr) ((void)(ajMemFree((ptr), \
 	__FILE__, __LINE__), (ptr) = 0))
 #define AJRESIZE(ptr, nbytes) 	((ptr) = ajMemResize((ptr), \
-	(nbytes), __FILE__, __LINE__))
+	(nbytes), __FILE__, __LINE__, AJFALSE))
 #define AJCRESIZE(ptr, nbytes) 	((ptr) = ajMemResize((ptr), \
-	(nbytes)*(ajlong)sizeof *(ptr), __FILE__, __LINE__))
+	(nbytes)*(ajlong)sizeof *(ptr), __FILE__, __LINE__, AJFALSE))
+#define AJCRESIZETRY(ptr, nbytes) 	((ptr) = ajMemResize((ptr), \
+	(nbytes)*(ajlong)sizeof *(ptr), __FILE__, __LINE__, AJTRUE))
 #endif
 
 #ifdef __cplusplus

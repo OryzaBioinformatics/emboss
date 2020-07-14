@@ -93,7 +93,7 @@ static AjPStr namFileOrig         = NULL;
 
 static AjPTable namMasterTable = NULL;
 static ajint namParseType      = 0;
-static AjPFile namFile         = NULL;
+static AjPStr namFileName      = NULL;
 static ajint namLine           = 0;
 static ajint namErrorCount     = 0;
 
@@ -242,7 +242,7 @@ typedef struct NamSEntry
     AjPStr value;
     ajint type;
     ajint scope;
-    void* data;		  /* Attribute values for databases */
+    void* data;
 } NamOEntry;
 
 #define NamPEntry NamOEntry*
@@ -285,7 +285,7 @@ static AjBool namVarResolve(AjPStr* var);
 **
 ** Deletes a variable, database, or resource entry from the internal table.
 **
-** @param [r] pentry [NamPEntry*] The entry to be deleted.
+** @param [d] pentry [NamPEntry*] The entry to be deleted.
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -411,12 +411,12 @@ static void namPrintResource(const AjPStr* rsattr)
 **
 ** Prints a report of the database attributes available (for entrails)
 **
-** @param [r] outf [const AjPFile] Output file
+** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full output if AjTrue
 ** @return [void]
 ******************************************************************************/
 
-void ajNamPrintDbAttr(const AjPFile outf, AjBool full)
+void ajNamPrintDbAttr(AjPFile outf, AjBool full)
 {
     ajint i;
 
@@ -440,12 +440,12 @@ void ajNamPrintDbAttr(const AjPFile outf, AjBool full)
 **
 ** Prints a report of the resource attributes available (for entrails)
 **
-** @param [r] outf [const AjPFile] Output file
+** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full output if AjTrue
 ** @return [void]
 ******************************************************************************/
 
-void ajNamPrintRsAttr(const AjPFile outf, AjBool full)
+void ajNamPrintRsAttr(AjPFile outf, AjBool full)
 {
     ajint i;
 
@@ -659,7 +659,7 @@ AjBool ajNamDbDetails(const AjPStr name, AjPStr* type, AjBool* id,
 	    if(ajStrLen(dbattr[i]))
 	    {
 		if(!strcmp("type", namDbAttrs[i].Name))
-		    ajStrAss(type, dbattr[i]);
+		    ajStrAssS(type, dbattr[i]);
 
 		if(!strcmp("method", namDbAttrs[i].Name))
 		{
@@ -689,10 +689,10 @@ AjBool ajNamDbDetails(const AjPStr name, AjPStr* type, AjBool* id,
 		}
 
 		if(!strcmp("comment", namDbAttrs[i].Name))
-		    ajStrAss(comment, dbattr[i]);
+		    ajStrAssS(comment, dbattr[i]);
 
 		if(!strcmp("release", namDbAttrs[i].Name))
-		    ajStrAss(release, dbattr[i]);
+		    ajStrAssS(release, dbattr[i]);
 	    }
 	}
 	
@@ -1004,16 +1004,16 @@ static void namDebugVariables(void)
 ** Derive environment variable and database definitions. Store
 ** all these in the internal tables.
 **
-** @param [r] listwords [AjPList] String list of word tokens to parse
-** @param [r] listcount [AjPList] List of word counts per line for
+** @param [u] listwords [AjPList] String list of word tokens to parse
+** @param [u] listcount [AjPList] List of word counts per line for
 **                                generating error messages
-** @param [r] file [AjPFile] Input file for messages
+** @param [u] file [AjPFile] Input file only for name in messages
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void namListParse(AjPList listwords, AjPList listcount,
-			  AjPFile file)
+			 AjPFile file)
 {
     static char* tabname   = 0;
     static AjPStr name     = 0;
@@ -1298,7 +1298,7 @@ static void namListParse(AjPList listwords, AjPList listcount,
 	    else
 	    {
 		includefn = ajStrNew();
-		ajStrAss(&includefn,curword);
+		ajStrAssS(&includefn,curword);
 
 		if(namFileOrig)
 		    ajStrAppC(&namFileOrig,", ");
@@ -1317,7 +1317,7 @@ static void namListParse(AjPList listwords, AjPList listcount,
 		{
 		    ajStrAppC(&namFileOrig,"(OK)");
 		    namstatus = namProcessFile(iinf); /* replaces namFile */
-		    namFile = file;	/* reset namFile */
+		    ajFmtPrintS(&namFileName, "%F",file);/* reset saved name */
 		    namLine = linecount-1;
 		    if(!namstatus)	/* test: badsummary.rc */
 			namError("Error(s) found in included file %F", iinf);
@@ -1334,7 +1334,7 @@ static void namListParse(AjPList listwords, AjPList listcount,
 	if(dbsave)
 	{
 	    /* Save the keyword value */
-	    ajStrAss(&dbattr[db_input], value);
+	    ajStrAssS(&dbattr[db_input], value);
 	    db_input =-1;
 	    ajStrDel(&value);
 	    dbsave = ajFalse;
@@ -1343,7 +1343,7 @@ static void namListParse(AjPList listwords, AjPList listcount,
 	if(rssave)
 	{
 	    /* Save the keyword value */
-	    ajStrAss(&rsattr[rs_input], value);
+	    ajStrAssS(&rsattr[rs_input], value);
 	    rs_input =-1;
 	    ajStrDel(&value);
 	    rssave = ajFalse;
@@ -1434,7 +1434,7 @@ static void namListParse(AjPList listwords, AjPList listcount,
 ** Looks for name as an environment variable.
 ** the AjPStr for this in "value". If not found returns NULL;
 **
-** @param [r] name [const AjPStr] character string find in hash table.
+** @param [r] name [const AjPStr] character string to find in getenv list
 ** @param [w] value [AjPStr*] String for the value.
 ** @return [AjBool] True if name was defined.
 ** @@
@@ -1444,9 +1444,30 @@ static void namListParse(AjPList listwords, AjPList listcount,
 AjBool ajNamGetenv(const AjPStr name,
 		    AjPStr* value)
 {
+    return ajNamGetenvC(ajStrStr(name), value);
+}
+
+
+
+
+/* @func ajNamGetenvC *********************************************************
+**
+** Looks for name as an environment variable.
+** the AjPStr for this in "value". If not found returns NULL;
+**
+** @param [r] name [const char*] character string to find in getenv list
+** @param [w] value [AjPStr*] String for the value.
+** @return [AjBool] True if name was defined.
+** @@
+**
+******************************************************************************/
+
+AjBool ajNamGetenvC(const char* name,
+		    AjPStr* value)
+{
     char *envval;
 
-    envval = getenv(ajStrStr(name));
+    envval = getenv(name);
     if(envval)
     {
 	ajStrAssC(value, envval);
@@ -1585,7 +1606,7 @@ AjBool ajNamDatabase(const AjPStr name)
 **
 ** Read the definitions file and append each token to the list.
 **
-** @param [r] file [AjPFile] Input file object
+** @param [u] file [AjPFile] Input file object
 ** @return [AjBool] ajTrue if no error were found
 ** @@
 ******************************************************************************/
@@ -1594,7 +1615,7 @@ static AjBool namProcessFile(AjPFile file)
 {
     AjPStr rdline = NULL;
     AjPStr word   = NULL;
-    char *ptr;
+    const char *ptr;
     ajint i = 0;
     ajint len;
     char quote = '\0';
@@ -1610,7 +1631,7 @@ static AjBool namProcessFile(AjPFile file)
     listcount = ajListNew();
     word      = ajStrNewL(128);
     
-    namFile = file;
+    ajFmtPrintS(&namFileName, "%F", file);
     namUser("namProcessFile '%F'\n", file);
     
     /* Read in the settings. */
@@ -1727,7 +1748,7 @@ static AjBool namProcessFile(AjPFile file)
 
 void ajNamInit(const char* prefix)
 {
-    char *prefixRoot;
+    const char *prefixRoot;
     AjPFile prefixRootFile;
     AjPStr prefixRootStr = NULL;
     AjPStr prefixStr     = NULL;
@@ -2429,7 +2450,7 @@ static void namError(const char* fmt, ...)
     ajFmtVPrintS(&errstr, fmt, args);
     va_end(args);
 
-    ajErr("File %F line %d: %S", namFile, namLine, errstr);
+    ajErr("File %S line %d: %S", namFileName, namLine, errstr);
     ajStrDel(&errstr);
 
     return;

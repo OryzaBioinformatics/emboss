@@ -26,8 +26,8 @@
 
 #ifdef HAVE_JAVA
 
-#include <jni.h>
 #include "ajax.h"
+#include <jni.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -56,6 +56,11 @@
 #include <signal.h>
 #endif
 
+#if defined(__CYGWIN__)
+#include <sys/termios.h>
+#endif
+
+
 #ifdef HAVE_POLL		/* Only for OSs without FD macros */
 #include <poll.h>
 #endif
@@ -78,7 +83,7 @@
 #define _XOPEN_SOURCE
 #endif
 
-#ifndef __ppc__
+#if !defined(__ppc__) && !defined(__FreeBSD__)
 #include <crypt.h>
 #endif
 
@@ -95,7 +100,11 @@
 #endif
 
 #ifdef PAM
+#if defined(__ppc__)
+#include <pam/pam_appl.h>
+#else
 #include <security/pam_appl.h>
+#endif
 #endif
 
 #ifdef AIX_SHADOW
@@ -130,7 +139,7 @@ static int PAM_conv(int num_msg, struct pam_message **msg,
  *  The following prototypes are used by the jembossctl authorisation
  *  system
  */
-static char **make_array(AjPStr str);
+static char **make_array(const AjPStr str);
 static void java_tidy_command(AjPStr *str1, AjPStr *str2, AjPStr *str3,
 			      AjPStr *str4, AjPStr *str5, AjPStr *str6);
 static void java_tidy_command2(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
@@ -143,36 +152,49 @@ static void java_tidy_command3(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
 
 
 
-static ajint java_send_auth(int tchan, int rchan, char *cuser, char *cpass,
+static ajint java_send_auth(int tchan, int rchan,
+			    const char *cuser, const char *cpass,
 			    AjPStr *errstd);
-static ajint java_emboss_fork(int tchan,char *cuser,char *cpass,
-			      AjPStr clemboss, AjPStr enviro, AjPStr dir,
+static ajint java_emboss_fork(int tchan,const char *cuser,const char *cpass,
+			      const AjPStr clemboss, const AjPStr enviro,
+			      const AjPStr dir,
 			      char *buf, AjPStr *errstd);
-static ajint java_batch_fork(int tchan,char *cuser,char *cpass,
-			     AjPStr clemboss, AjPStr enviro, AjPStr dir,
+static ajint java_batch_fork(int tchan,const char *cuser,const char *cpass,
+			     const AjPStr clemboss,const  AjPStr enviro,
+			     const AjPStr dir,
 			     char *buf, AjPStr *errstd);
-static ajint java_make_dir(int tchan, char *cuser, char *cpass, AjPStr dir,
+static ajint java_make_dir(int tchan, const char *cuser, const char *cpass,
+			   const AjPStr dir,
 			   char *buf, AjPStr *errstd);
-static ajint java_delete_file(int tchan, char *cuser, char *cpass,
-			      AjPStr ufile, char *buf, AjPStr *errstd);
-static ajint java_rename_file(int tchan, char *cuser, char *cpass,
-			      AjPStr ufile, AjPStr u2file, char *buf,
+static ajint java_delete_file(int tchan, const char *cuser, const char *cpass,
+			      const AjPStr ufile, char *buf, AjPStr *errstd);
+static ajint java_rename_file(int tchan, const char *cuser,const  char *cpass,
+			      const AjPStr ufile, const AjPStr u2file, char *buf,
 			      AjPStr *errstd);
-static ajint java_delete_dir(int tchan, char *cuser, char *cpass, AjPStr dir,
+static ajint java_delete_dir(int tchan, const char *cuser, const char *cpass,
+			     const AjPStr dir,
 			     char *buf, AjPStr *errstd);
-static ajint java_list_files(int tchan, char *cuser, char *cpass, AjPStr dir,
+static ajint java_list_files(int tchan, const char *cuser, const char *cpass,
+			     const AjPStr dir,
 			     char *buf, AjPStr *errstd);
-static ajint java_list_dirs(int tchan, char *cuser, char *cpass, AjPStr dir,
+static ajint java_list_dirs(int tchan, const char *cuser, const char *cpass,
+			    const AjPStr dir,
 			    char *buf, AjPStr *errstd);
-static ajint java_get_file(int tchan, int rchan, char *cuser, char *cpass,
-			   AjPStr file, char *buf, unsigned char **fbuf,
+static ajint java_get_file(int tchan, int rchan,
+			   const char *cuser, const char *cpass,
+			   const AjPStr file, char *buf, unsigned char **fbuf,
 			   int *size, AjPStr *errstd);
-static ajint java_put_file(int tchan, int rchan, char *cuser, char *cpass,
-			   AjPStr file, char *buf, unsigned char *fbuf,
+static ajint java_put_file(int tchan, int rchan,
+			   const char *cuser, const char *cpass,
+			   const AjPStr file, char *buf,
+			   const unsigned char *fbuf,
 			   int size, AjPStr *errstd);
-static ajint java_seq_attrib(int tchan,char *cuser,char *cpass,AjPStr usa,
+static ajint java_seq_attrib(int tchan,const char *cuser,const char *cpass,
+			     const AjPStr usa,
 			     char *buf, AjPStr *errstd);
-static ajint java_seqset_attrib(int tchan,char *cuser,char *cpass,AjPStr usa,
+static ajint java_seqset_attrib(int tchan,
+				const char *cuser,const char *cpass,
+				const AjPStr usa,
 				char *buf, AjPStr *errstd);
 
 static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
@@ -181,22 +203,23 @@ static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
 			       int *outpipe, int *errpipe, char *buf,
 			       unsigned char *fbuf,int size);
 
-static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
-			   AjPStr environment,
-			   AjPStr str1, AjPStr str2,
+static int java_jembossctl(ajint command,
+			   const AjPStr username, const AjPStr password,
+			   const AjPStr environment,
+			   const AjPStr str1, const AjPStr str2,
 			   AjPStr *outstd, AjPStr *errstd,
 			   unsigned char **fbuf, int *fsize);
 
 
-static AjBool ajJavaGetSeqFromUsa (AjPStr thys, AjPSeq *seq);
-static AjBool ajJavaGetSeqsetFromUsa (AjPStr thys, AjPSeqset *seq);
+static AjBool ajJavaGetSeqFromUsa (const AjPStr thys, AjPSeq *seq);
+static AjBool ajJavaGetSeqsetFromUsa (const AjPStr thys, AjPSeqset *seq);
 
 
-static int java_pipe_write(int tchan, char *buf, int n, int seconds,
+static int java_pipe_write(int tchan, const char *buf, int n, int seconds,
 			   AjPStr *errstd);
 static int java_pipe_read(int rchan, char *buf, int n, int seconds,
 			  AjPStr *errstd);
-static int java_snd(int tchan,char *buf,int len,AjPStr *errstd);
+static int java_snd(int tchan,const char *buf,int len,AjPStr *errstd);
 static int java_rcv(int rchan, char *buf, AjPStr *errstd);
 
 
@@ -209,7 +232,7 @@ static int java_block(int chan, unsigned long flag);
 **
 ** Return length, weight and type information for a sequence
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] usa [jstring] usa
 **
@@ -270,7 +293,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqType
 **
 ** Return length, weight and type information for a seqset
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] usa [jstring] usa
 **
@@ -330,12 +353,12 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetType
 **
 ** Return a sequence given a USA
 **
-** @param [r] thys [AjPStr] usa
+** @param [r] thys [const AjPStr] usa
 ** @param [w] seq [AjPSeq*] sequence
 ** @return [AjBool] ajTrue on success
 ******************************************************************************/
 
-static AjBool ajJavaGetSeqFromUsa(AjPStr thys, AjPSeq *seq)
+static AjBool ajJavaGetSeqFromUsa(const AjPStr thys, AjPSeq *seq)
 {
     AjPSeqin seqin;
     AjBool ok;
@@ -363,12 +386,12 @@ static AjBool ajJavaGetSeqFromUsa(AjPStr thys, AjPSeq *seq)
 **
 ** Return a seqset given a usa
 **
-** @param [r] thys [AjPStr] usa
+** @param [r] thys [const AjPStr] usa
 ** @param [w] seq [AjPSeqset*] seqset
 ** @return [AjBool] ajTrue on success
 ******************************************************************************/
 
-static AjBool ajJavaGetSeqsetFromUsa(AjPStr thys, AjPSeqset *seq)
+static AjBool ajJavaGetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq)
 {
     AjPSeqin seqin;
     AjBool ok;
@@ -397,7 +420,7 @@ static AjBool ajJavaGetSeqsetFromUsa(AjPStr thys, AjPSeqset *seq)
 **
 ** Return the uid, gid and home directory of a user
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
 ** @param [r] key [jstring] password
@@ -423,7 +446,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userInfo
 
     ajint uid = 0;
     ajint gid = 0;
-    char  *hp = NULL;
+    const char  *hp;
 
     jvc = (*env)->GetObjectClass(env,obj);
 
@@ -769,14 +792,14 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
     char *p = NULL;
     struct passwd result;
     char *buf = NULL;
-#if defined(_OSF_SOURCE)
+#if defined(_OSF_SOURCE) || defined(__FreeBSD__)
     int ret=0;
 #endif
 
     if(!(buf=(char *)malloc(R_BUFFER)))
 	return ajFalse;
 
-#if defined(_OSF_SOURCE)
+#if defined(_OSF_SOURCE) || defined(__FreeBSD__)
     ret = getpwnam_r(ajStrStr(username),&result,buf,R_BUFFER,&pwd);
     if(ret!=0)		 /* No such username */
     {
@@ -893,8 +916,8 @@ static AjBool java_pass(AjPStr username,AjPStr password,ajint *uid,
 
     struct passwd *pwd = NULL;
 
-    user_info.username = ajStrStr(username);
-    user_info.password = ajStrStr(password);
+    user_info.username = (char *) ajStrStr(username);
+    user_info.password = (char *) ajStrStr(password);
 
     conv.cv = PAM_conv;
     conv.userinfo = (void *)&user_info;
@@ -908,7 +931,7 @@ static AjBool java_pass(AjPStr username,AjPStr password,ajint *uid,
 
     ajStrAssC(home,pwd->pw_dir);
 
-    retval = pam_start("emboss_auth",ajStrStr(username),
+    retval = pam_start("login",ajStrStr(username),
 		       (struct pam_conv*)&conv,&pamh);
 
     if (retval == PAM_SUCCESS)
@@ -937,7 +960,7 @@ static AjBool java_pass(AjPStr username,AjPStr password,ajint *uid,
 **
 ** Set the uid of the current process
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] j [jclass] java class
 ** @param [r] uid [jint] uid
 **
@@ -958,7 +981,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setuid
 **
 ** Set the effective uid of the current process
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] j [jclass] java class
 ** @param [r] uid [jint] uid
 **
@@ -983,7 +1006,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_seteuid
 **
 ** Set the gid of the current process
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] j [jclass] java class
 ** @param [r] gid [jint] gid
 **
@@ -1004,7 +1027,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setgid
 **
 ** Set the effective gid of the current process
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] j [jclass] java class
 ** @param [r] gid [jint] gid
 **
@@ -1029,7 +1052,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setegid
 **
 ** Return the uid of the current process
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] j [jclass] java class
 **
 ** @return [jint] uid
@@ -1049,7 +1072,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_getuid
 **
 ** Return the gid of the current process
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] j [jclass] java class
 **
 ** @return [jint] gid
@@ -1069,7 +1092,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_getgid
 **
 ** Return the effective uid of the current process
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] j [jclass] java class
 **
 ** @return [jint] uid
@@ -1089,7 +1112,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_geteuid
 **
 ** Return the effective gid of the current process
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] j [jclass] java class
 **
 ** @return [jint] gid
@@ -1110,9 +1133,10 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_getegid
 ** Fork off new process with given uid & gid, chdir and execute command
 ** return stdout and stderr of the child process
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] commandline [jstring] command to execute
+** @param [r] environment [jstring] shell environment
 ** @param [r] directory [jstring] chdir here before execution
 ** @param [r] uid [jint] uid for setuid
 ** @param [r] gid [jint] gid for setgid
@@ -1441,12 +1465,12 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
 **
 ** Construct argv and env arrays for Ajax.fork
 **
-** @param [r] str [AjPStr] space separated tokens
+** @param [r] str [const AjPStr] space separated tokens
 **
 ** @return [char**] env or argv array
 ******************************************************************************/
 
-static char **make_array(AjPStr str)
+static char** make_array(const AjPStr str)
 {
     int n;
     char **ptr   = NULL;
@@ -1455,7 +1479,7 @@ static char **make_array(AjPStr str)
 
     buf = ajStrNew();
 
-    n = ajStrTokenCountR(&str," \t\n");
+    n = ajStrTokenCountR(str," \t\n");
 
     AJCNEW0(ptr,n+1);
 
@@ -1482,15 +1506,17 @@ static char **make_array(AjPStr str)
 **
 ** Send verification/homedir request to jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] rchan [int] return channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_send_auth(int tchan, int rchan, char *cuser, char *cpass,
+static ajint java_send_auth(int tchan, int rchan,
+			    const char *cuser, const char *cpass,
 			    AjPStr *errstd)
 {
     AjPStr cmnd = NULL;
@@ -1534,20 +1560,21 @@ static ajint java_send_auth(int tchan, int rchan, char *cuser, char *cpass,
 **
 ** Send an emboss fork request to jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
-** @param [r] clemboss [AjPStr] emboss command line
-** @param [r] envi [AjPStr] emboss environment
-** @param [r] dir [AjPStr] directory to invoke emboss from
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
+** @param [r] clemboss [const AjPStr] emboss command line
+** @param [r] envi [const AjPStr] emboss environment
+** @param [r] dir [const AjPStr] directory to invoke emboss from
 ** @param [w] buf [char*] socket buffer
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_emboss_fork(int tchan, char *cuser,char *cpass,
-			      AjPStr clemboss, AjPStr envi, AjPStr dir,
+static ajint java_emboss_fork(int tchan, const char *cuser, const char *cpass,
+			      const AjPStr clemboss, const AjPStr envi,
+			      const AjPStr dir,
 			      char *buf, AjPStr *errstd)
 {
     char *p = NULL;
@@ -1579,20 +1606,21 @@ static ajint java_emboss_fork(int tchan, char *cuser,char *cpass,
 **
 ** Send a detached emboss fork request to jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
-** @param [r] clemboss [AjPStr] emboss command line
-** @param [r] envi [AjPStr] emboss environment
-** @param [r] dir [AjPStr] directory to invoke emboss from
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
+** @param [r] clemboss [const AjPStr] emboss command line
+** @param [r] envi [const AjPStr] emboss environment
+** @param [r] dir [const AjPStr] directory to invoke emboss from
 ** @param [w] buf [char*] socket buffer
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_batch_fork(int tchan, char *cuser,char *cpass,
-			     AjPStr clemboss, AjPStr envi, AjPStr dir,
+static ajint java_batch_fork(int tchan, const char *cuser,const char *cpass,
+			     const AjPStr clemboss, const AjPStr envi,
+			     const AjPStr dir,
 			     char *buf, AjPStr *errstd)
 {
     char *p = NULL;
@@ -1624,17 +1652,18 @@ static ajint java_batch_fork(int tchan, char *cuser,char *cpass,
 **
 ** Send a make directory request to jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
-** @param [r] dir [AjPStr] directory to create
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
+** @param [r] dir [const AjPStr] directory to create
 ** @param [w] buf [char*] socket buffer
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_make_dir(int tchan,char *cuser,char *cpass,AjPStr dir,
+static ajint java_make_dir(int tchan,const char *cuser,const char *cpass,
+			   const AjPStr dir,
 			   char *buf, AjPStr *errstd)
 {
     char *p = NULL;
@@ -1662,17 +1691,18 @@ static ajint java_make_dir(int tchan,char *cuser,char *cpass,AjPStr dir,
 **
 ** Send a delete file request to jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
-** @param [r] ufile [AjPStr] file to delete
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
+** @param [r] ufile [const AjPStr] file to delete
 ** @param [w] buf [char*] socket buffer
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_delete_file(int tchan,char *cuser,char *cpass,AjPStr ufile,
+static ajint java_delete_file(int tchan,const char *cuser,const char *cpass,
+			      const AjPStr ufile,
 			      char *buf, AjPStr *errstd)
 {
     char *p = NULL;
@@ -1700,19 +1730,20 @@ static ajint java_delete_file(int tchan,char *cuser,char *cpass,AjPStr ufile,
 **
 ** Send a rename file request to jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
-** @param [r] ufile [AjPStr] file to rename
-** @param [r] u2file [AjPStr] new filename
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
+** @param [r] ufile [const AjPStr] file to rename
+** @param [r] u2file [const AjPStr] new filename
 ** @param [w] buf [char*] socket buffer
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_rename_file(int tchan,char *cuser,char *cpass,AjPStr ufile,
-			      AjPStr u2file, char *buf, AjPStr *errstd)
+static ajint java_rename_file(int tchan,const char *cuser,const char *cpass,
+			      const AjPStr ufile,
+			      const AjPStr u2file, char *buf, AjPStr *errstd)
 {
     char *p = NULL;
     int n;
@@ -1741,17 +1772,18 @@ static ajint java_rename_file(int tchan,char *cuser,char *cpass,AjPStr ufile,
 **
 ** Send a delete directory request to jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
-** @param [r] dir [AjPStr] directory to delete
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
+** @param [r] dir [const AjPStr] directory to delete
 ** @param [w] buf [char*] socket buffer
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_delete_dir(int tchan,char *cuser,char *cpass,AjPStr dir,
+static ajint java_delete_dir(int tchan,const char *cuser,const char *cpass,
+			     const AjPStr dir,
 			     char *buf, AjPStr *errstd)
 {
     char *p = NULL;
@@ -1779,17 +1811,18 @@ static ajint java_delete_dir(int tchan,char *cuser,char *cpass,AjPStr dir,
 **
 ** Send a list files request to jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
-** @param [r] dir [AjPStr] directory to scan
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
+** @param [r] dir [const AjPStr] directory to scan
 ** @param [w] buf [char*] socket buffer
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_list_files(int tchan,char *cuser,char *cpass,AjPStr dir,
+static ajint java_list_files(int tchan,const char *cuser,const char *cpass,
+			     const AjPStr dir,
 			     char *buf, AjPStr *errstd)
 {
     char *p = NULL;
@@ -1817,17 +1850,18 @@ static ajint java_list_files(int tchan,char *cuser,char *cpass,AjPStr dir,
 **
 ** Send a list directories request to jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
-** @param [r] dir [AjPStr] directory to scan
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
+** @param [r] dir [const AjPStr] directory to scan
 ** @param [w] buf [char*] socket buffer
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_list_dirs(int tchan,char *cuser,char *cpass,AjPStr dir,
+static ajint java_list_dirs(int tchan,const char *cuser,const char *cpass,
+			    const AjPStr dir,
 			    char *buf, AjPStr *errstd)
 {
     char *p = NULL;
@@ -1855,10 +1889,11 @@ static ajint java_list_dirs(int tchan,char *cuser,char *cpass,AjPStr dir,
 **
 ** Send a get file request to jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
-** @param [r] file [AjPStr] file to get
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] rchan [int] return channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
+** @param [r] file [const AjPStr] file to get
 ** @param [w] buf [char*] socket buffer
 ** @param [w] fbuf [unsigned char**] file buffer
 ** @param [w] size [int*] file size
@@ -1867,8 +1902,9 @@ static ajint java_list_dirs(int tchan,char *cuser,char *cpass,AjPStr dir,
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_get_file(int tchan,int rchan,char *cuser,char *cpass,
-			   AjPStr file, char *buf,unsigned char **fbuf,
+static ajint java_get_file(int tchan,int rchan,
+			   const char *cuser,const char *cpass,
+			   const AjPStr file, char *buf,unsigned char **fbuf,
 			   int *size, AjPStr *errstd)
 {
     char *p = NULL;
@@ -1931,20 +1967,23 @@ static ajint java_get_file(int tchan,int rchan,char *cuser,char *cpass,
 **
 ** Send a put file request to jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
-** @param [r] file [AjPStr] file to get
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] rchan [int] return channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
+** @param [r] file [const AjPStr] file to get
 ** @param [w] buf [char*] socket buffer
-** @param [r] fbuf [unsigned char*] file buffer
+** @param [r] fbuf [const unsigned char*] file buffer
 ** @param [r] size [int] file size
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_put_file(int tchan,int rchan,char *cuser,char *cpass,
-			   AjPStr file, char *buf,unsigned char *fbuf,int size,
+static ajint java_put_file(int tchan,int rchan,
+			   const char *cuser,const char *cpass,
+			   const AjPStr file,
+			   char *buf,const unsigned char *fbuf,int size,
 			   AjPStr *errstd)
 {
     char *p  = NULL;
@@ -2025,17 +2064,18 @@ static ajint java_put_file(int tchan,int rchan,char *cuser,char *cpass,
 **
 ** Get sequence attributes via jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
-** @param [r] usa [AjPStr] usa
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
+** @param [r] usa [const AjPStr] usa
 ** @param [w] buf [char*] socket buffer
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_seq_attrib(int tchan,char *cuser,char *cpass,AjPStr usa,
+static ajint java_seq_attrib(int tchan,const char *cuser,const char *cpass,
+			     const AjPStr usa,
 			     char *buf, AjPStr *errstd)
 {
     char *p = NULL;
@@ -2063,17 +2103,18 @@ static ajint java_seq_attrib(int tchan,char *cuser,char *cpass,AjPStr usa,
 **
 ** Get seqset attributes from jembossctl
 **
-** @param [rw] conndes [int] socket
-** @param [r] cuser [char*] username
-** @param [r] cpass [char*] password
-** @param [r] usa [AjPStr] usa
+** @param [r] tchan [int] to channel file descriptor
+** @param [r] cuser [const char*] username
+** @param [r] cpass [const char*] password
+** @param [r] usa [const AjPStr] usa
 ** @param [w] buf [char*] socket buffer
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_seqset_attrib(int tchan,char *cuser,char *cpass,AjPStr usa,
+static ajint java_seqset_attrib(int tchan,const char *cuser,const char *cpass,
+				const AjPStr usa,
 				char *buf, AjPStr *errstd)
 {
     char *p = NULL;
@@ -2108,7 +2149,7 @@ static ajint java_seqset_attrib(int tchan,char *cuser,char *cpass,AjPStr usa,
 ** @param [w] errpipe [int*] stderr pipe
 ** @param [w] buf [char*] pipe buffer
 **
-** @return [ajint] 0=success -1=failure
+** @return [void]
 ******************************************************************************/
 
 static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
@@ -2319,7 +2360,7 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 ** @param [w] fbuf [unsigned char*] buffer for file
 ** @param [r] size [int] size of file to receive
 **
-** @return [ajint] 0=success -1=failure
+** @return [void]
 ******************************************************************************/
 
 static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
@@ -2542,22 +2583,23 @@ static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
 ** fork jembossctl and broker requests
 **
 ** @param [r] command [ajint] command type
-** @param [r] username [AjPStr] username
-** @param [r] password [AjPStr] password
-** @param [r] environment [AjPStr] environment
-** @param [r] str1 [AjPStr] command string. depends on command
-** @param [r] str2 [AjPStr] command string. depends on command
+** @param [r] username [const AjPStr] username
+** @param [r] password [const AjPStr] password
+** @param [r] environment [const AjPStr] environment
+** @param [r] str1 [const AjPStr] command string. depends on command
+** @param [r] str2 [const AjPStr] command string. depends on command
 ** @param [w] outstd [AjPStr*] stdout from jembossctl
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
-** @param [r] fbuf [unsigned char**] file buffer
-** @param [r] fsize [int*] file size
+** @param [w] fbuf [unsigned char**] file buffer
+** @param [w] fsize [int*] file size
 **
-** @return [ajint] 0=success -1=failure
+** @return [int] 0=success -1=failure
 ******************************************************************************/
 
-static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
-			   AjPStr environment,
-			   AjPStr str1, AjPStr str2,
+static int java_jembossctl(ajint command,
+			   const AjPStr username, const AjPStr password,
+			   const AjPStr environment,
+			   const AjPStr str1, const AjPStr str2,
 			   AjPStr *outstd, AjPStr *errstd,
 			   unsigned char **fbuf, int *fsize)
 {
@@ -2572,8 +2614,8 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
     int    i=0;
 
 
-    char *cuser = NULL;
-    char *cpass = NULL;
+    const char *cuser;
+    const char *cpass;
 
     char *buff  = NULL;
     int size = 0;
@@ -2872,7 +2914,7 @@ static void java_tidy_command(AjPStr *str1, AjPStr *str2, AjPStr *str3,
 ** Delete allocated memory
 **
 ** @param [w] uniq [AjPStr*] unique name
-** @param [w] cl [AjPStr] command line
+** @param [w] cl [AjPStr*] command line
 ** @param [w] clemboss [AjPStr*] emboss command line
 ** @param [w] dir [AjPStr*] directory
 ** @param [w] envi [AjPStr*] environment
@@ -2896,21 +2938,20 @@ static void java_tidy_command2(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
 
 
 
-/* @funcstatic java_tidy_command2 *********************************************
+/* @funcstatic java_tidy_command3 *********************************************
 **
 ** Delete allocated memory and close pipes
 **
 ** @param [w] uniq [AjPStr*] unique name
-** @param [w] cl [AjPStr] command line
+** @param [w] cl [AjPStr*] command line
 ** @param [w] clemboss [AjPStr*] emboss command line
 ** @param [w] dir [AjPStr*] directory
 ** @param [w] envi [AjPStr*] environment
 ** @param [w] prog [AjPStr*] program name
 ** @param [w] buf [char*] socket buffer
-** @param [r] cuniq [char*] socket name
-** @param [w] sockdes [int] socket
-** @param [w] outpipe [int*] stdout pipe
-** @param [w] errpipe [int*] stderr pipe
+** @param [u] commpipe [int*] command pipe file descriptors
+** @param [u] outpipe [int*] stdout pipe
+** @param [u] errpipe [int*] stderr pipe
 **
 ** @return [void]
 ******************************************************************************/
@@ -2942,10 +2983,10 @@ static void java_tidy_command3(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
 ** Loads outStd,errStd within java.
 ** Sets 'home' in Java
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 **
 ** @return [jboolean] true if success
@@ -3068,10 +3109,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userAuth
 ** Run an EMBOSS program detached
 ** Loads outStd,errStd within java.
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 ** @param [r] cline [jstring] command line
 ** @param [r] direct [jstring] directory to create
@@ -3232,10 +3273,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkBatch
 ** Run an EMBOSS program
 ** Loads outStd,errStd within java.
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 ** @param [r] cline [jstring] command line
 ** @param [r] direct [jstring] directory to create
@@ -3398,10 +3439,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkEmboss
 ** Create a directory
 ** Loads outStd,errStd within java.
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 ** @param [r] direct [jstring] directory to create
 **
@@ -3538,10 +3579,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_makeDir
 ** Delete a file
 ** Loads outStd,errStd within java.
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 ** @param [r] filename [jstring] file to delete
 **
@@ -3681,10 +3722,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delFile
 ** Rename a file
 ** Loads outStd,errStd within java.
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 ** @param [r] filename [jstring] old filename
 ** @param [r] filename2 [jstring] new filename
@@ -3844,10 +3885,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_renameFile
 ** Recursively delete a directory
 ** Loads outStd,errStd within java.
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 ** @param [r] direct [jstring] directory to delete
 **
@@ -3987,10 +4028,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delDir
 ** Lists regular files
 ** Loads outStd,errStd within java. outStd contains the list
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 ** @param [r] direct [jstring] directory to scan
 **
@@ -4132,10 +4173,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listFiles
 ** Lists files of type 'directory'
 ** Loads outStd,errStd within java. outStd contains the list
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 ** @param [r] direct [jstring] directory to scan
 **
@@ -4278,10 +4319,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listDirs
 ** Sets size (of file),fileok (success) & prnt ([non]printable]
 ** variables in java
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 ** @param [r] filename [jstring] filename to get
 **
@@ -4444,10 +4485,10 @@ JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_parser_Ajax_getFile
 ** Write a user file
 ** Loads outStd,errStd within java
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 ** @param [r] filename [jstring] filename to create
 ** @param [r] arr [jbyteArray] contents for the file
@@ -4615,10 +4656,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_putFile
 ** Return sequence attributes
 ** Loads outStd,errStd within java.
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 ** @param [r] filename [jstring] file to delete
 **
@@ -4777,10 +4818,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqAttrib
 ** Return seqset attributes
 ** Loads outStd,errStd within java.
 **
-** @param [rw] env [JNIEnv*] java environment
+** @param [u] env [JNIEnv*] java environment
 ** @param [r] obj [jobject] java object
 ** @param [r] door [jstring] username
-** @param [r] key [jstring] password
+** @param [r] key [jbyteArray] password
 ** @param [r] environment [jstring] environment
 ** @param [r] filename [jstring] usa
 **
@@ -4939,8 +4980,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetAttrib
 **
 ** Write a byte stream down a file desriptor (unblocked)
 **
-** @param [w] tchan [int] file descriptor
-** @param [r] buf [char *] buffer to write
+** @param [r] tchan [int] file descriptor
+** @param [r] buf [const char *] buffer to write
 ** @param [r] n [int] number of bytes to write
 ** @param [r] seconds [int] time-out
 ** @param [w] errstd [AjPStr*] stderr
@@ -4949,7 +4990,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetAttrib
 ** @@
 ******************************************************************************/
 
-static int java_pipe_write(int tchan, char *buf, int n, int seconds,
+static int java_pipe_write(int tchan, const char *buf, int n, int seconds,
 			   AjPStr *errstd)
 {
 #ifdef HAVE_POLL
@@ -4964,7 +5005,7 @@ static int java_pipe_write(int tchan, char *buf, int n, int seconds,
     int  written;
     int  sent = 0;
     int  ret  = 0;
-    char *p;
+    const char *p;
     unsigned long block = 0;
     long then = 0;
     long now  = 0;
@@ -5070,8 +5111,8 @@ static int java_pipe_write(int tchan, char *buf, int n, int seconds,
 **
 ** Read a byte stream from a file desriptor (unblocked)
 **
-** @param [w] rchan [int] file descriptor
-** @param [r] buf [char *] buffer for read
+** @param [r] rchan [int] file descriptor
+** @param [w] buf [char *] buffer for read
 ** @param [r] n [int] number of bytes to read
 ** @param [r] seconds [int] time-out
 ** @param [w] errstd [AjPStr*] stderr
@@ -5204,8 +5245,8 @@ static int java_pipe_read(int rchan, char *buf, int n, int seconds,
 **
 ** Mimic socket write using pipes
 **
-** @param [w] tchan [int] file descriptor
-** @param [r] buf [char *] buffer to write
+** @param [r] tchan [int] file descriptor
+** @param [r] buf [const char *] buffer to write
 ** @param [r] len [int] number of bytes to write
 ** @param [w] errstd [AjPStr*] stderr
 **
@@ -5213,7 +5254,7 @@ static int java_pipe_read(int rchan, char *buf, int n, int seconds,
 ** @@
 ******************************************************************************/
 
-static int java_snd(int tchan,char *buf,int len,AjPStr *errstd)
+static int java_snd(int tchan,const char *buf,int len,AjPStr *errstd)
 {
 
     if(java_pipe_write(tchan,(char *)&len,sizeof(int),TIMEOUT,errstd)==-1)
@@ -5239,7 +5280,7 @@ static int java_snd(int tchan,char *buf,int len,AjPStr *errstd)
 ** Mimic socket read using pipes
 **
 ** @param [r] rchan [int] file descriptor
-** @param [r] buf [char *] buffer to write
+** @param [w] buf [char *] buffer to write
 ** @param [w] errstd [AjPStr*] stderr
 **
 ** @return [int] 0=success  -1=failure

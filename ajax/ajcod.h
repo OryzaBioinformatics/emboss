@@ -19,40 +19,54 @@ extern "C"
 ** @alias AjSCod
 ** @alias AjOCod
 **
+** @attr Name [AjPStr] Name of codon file
+** @attr Desc [AjPStr] Description
+** @attr aa [ajint*] Amino acid represented by codon
+** @attr num [ajint*] Number of codons
+** @attr tcount [double*] Codons per thousand
+** @attr fraction [double*] Fraction of amino acids of this type
+** @attr back [ajint*] Index of favoured amino acid
 ** @@
 ******************************************************************************/
 
 typedef struct AjSCod
 {
-    AjPStr name;		/* Name of codon file                   */
-    ajint *aa;			/* Amino acid represented by codon      */
-    ajint *num;			/* Number of codons                     */
-    double *tcount;		/* Codons per thousand                  */
-    double *fraction;		/* Fraction of amino acids of this type */
-    ajint *back;			/* Index of favoured amino acid         */
-} AjOCod, *AjPCod;
+    AjPStr Name;
+    AjPStr Desc;
+    ajint *aa;
+    ajint *num;
+    double *tcount;
+    double *fraction;
+    ajint *back;
+} AjOCod;
+#define AjPCod AjOCod*
 
 
-void    ajCodBacktranslate(AjPStr *b, AjPStr a, AjPCod thys);
-ajint   ajCodBase(ajint c);
-double  ajCodCai(AjPCod cod, AjPStr str);
-void    ajCodCalcGribskov(AjPCod *nrm, AjPStr s);
-double  ajCodCalcCai(AjPCod *thys);
-double  *ajCodCaiW(AjPCod cod);
-double  ajCodCalcNc(AjPCod *thys);
-void    ajCodCalculateUsage(AjPCod *thys, ajint c);
-void    ajCodClear(AjPCod *thys);
-void    ajCodComp(ajint *NA, ajint *NC, ajint *NG, ajint *NT, char *str);
-void    ajCodCountTriplets(AjPCod *thys, AjPStr s, ajint *c);
-void    ajCodDel (AjPCod *thys);
-AjPCod  ajCodDup (AjPCod thys);
-ajint     ajCodIndexC(char *codon);
-ajint     ajCodIndex(AjPStr s);
-AjPCod	ajCodNew(void);
-AjBool  ajCodRead(AjPStr fn, AjPCod *thys);
-void    ajCodSetBacktranslate(AjPCod *thys);
-char*   ajCodTriplet(ajint idx);
-void 	ajCodWrite(AjPFile outf, AjPCod thys);
+void         ajCodBacktranslate(AjPStr *b, const AjPStr a, const AjPCod thys);
+ajint        ajCodBase(ajint c);
+double       ajCodCai(const AjPCod cod, const AjPStr str);
+double*      ajCodCaiW(const AjPCod cod);
+void         ajCodCalcGribskov(AjPCod thys, const AjPStr s);
+double       ajCodCalcCai(const AjPCod thys);
+double       ajCodCalcNc(const AjPCod thys);
+void         ajCodCalculateUsage(AjPCod *thys, ajint c);
+void         ajCodClear(AjPCod *thys);
+void         ajCodComp(ajint *NA, ajint *NC, ajint *NG, ajint *NT,
+		       const char *str);
+void         ajCodCountTriplets(AjPCod *thys, const AjPStr s, ajint *c);
+void         ajCodDel (AjPCod *thys);
+AjPCod       ajCodDup (const AjPCod thys);
+const AjPStr ajCodGetDesc(const AjPCod thys);
+const char*  ajCodGetDescC(const AjPCod thys);
+const AjPStr ajCodGetName(const AjPCod thys);
+const char*  ajCodGetNameC(const AjPCod thys);
+ajint        ajCodIndex(const AjPStr s);
+ajint        ajCodIndexC(const char *codon);
+AjPCod	     ajCodNew(void);
+AjBool       ajCodRead(AjPCod thys, const AjPStr fn);
+void         ajCodSetBacktranslate(AjPCod *thys);
+char*        ajCodTriplet(ajint idx);
+void 	     ajCodWrite( const AjPCod thys, AjPFile outf);
 
 #endif
 

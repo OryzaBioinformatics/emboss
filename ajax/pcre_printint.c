@@ -58,18 +58,24 @@ static uschar utf8_t4[] = {
   2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
   3,3,3,3,3,3,3,3,4,4,4,4,5,5,5,5 };
 
+static int
+print_char(FILE *f, const uschar *ptr, BOOL utf8);
+
+static void
+print_internals(const pcre *external_re, FILE *f);
+
 /* @funcstatic print_char *****************************************************
 **
 ** Print single- or multi-byte character
 **
-** @param [r] f [FILE*] Output file
-** @param [r] ptr [uschar*] Character
+** @param [u] f [FILE*] Output file
+** @param [r] ptr [const uschar*] Character
 ** @param [r] utf8 [BOOL] true if UTF8
 ** @return [int] number of extra bytes for UTF8, or zero
 ******************************************************************************/
 
 static int
-print_char(FILE *f, uschar *ptr, BOOL utf8)
+print_char(FILE *f, const uschar *ptr, BOOL utf8)
 {
     int c = *ptr;
 
@@ -100,13 +106,13 @@ print_char(FILE *f, uschar *ptr, BOOL utf8)
 **
 ** Print compiled regex
 **
-** @param [r] external_re [pcre*] PCRE compiled expression
-** @param [r] f [FILE*] Output file
+** @param [r] external_re [const pcre*] PCRE compiled expression
+** @param [u] f [FILE*] Output file
 ** @return [void]
 ******************************************************************************/
 
 static void
-print_internals(pcre *external_re, FILE *f)
+print_internals(const pcre *external_re, FILE *f)
 {
     real_pcre *re = (real_pcre *)external_re;
     uschar *codestart =

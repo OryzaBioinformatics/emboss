@@ -21,17 +21,23 @@ extern "C"
 ** @alias AjSPhyloDist
 ** @alias AjOPhyloDist
 **
+** @attr Size [ajint] Size - number of rows and number of columns
+** @attr HasReplicates [AjBool] Has (some) replicates data in file
+** @attr HasMissing [AjBool] Has missing data in file
+** @attr Names [AjPStr*] Row names, NULL at end
+** @attr Data [float*] Distance matrix Size*Size with diagnoal 0.0
+** @attr Replicates [ajint*] Replicate count default=1 missing=0
 ** @@
 ******************************************************************************/
 
 typedef struct AjSPhyloDist
 {
     ajint Size;
-    AjBool HasReplicates;     /* Has (some) replicates data in file */
-    AjBool HasMissing;			/* Has missing data in file */
-    AjPStr* Names;			/* Row names, NULL at end */
-    float* Data;	      /* Distance matrix Size*Size diag=0.0 */
-    ajint* Replicates;	       /* Replicate count default=1 missing=0 */
+    AjBool HasReplicates;
+    AjBool HasMissing;
+    AjPStr* Names;
+    float* Data;
+    ajint* Replicates;
 } AjOPhyloDist;
 
 #define AjPPhyloDist AjOPhyloDist*
@@ -46,34 +52,48 @@ typedef struct AjSPhyloDist
 ** @alias AjSPhyloFreq
 ** @alias AjOPhyloFreq
 **
+** @attr Size [ajint] Number of rows 
+** @attr Loci [ajint] Number of loci per name
+** @attr Len [ajint] Number of values per name
+**                    may be more than 1 per locus
+** @attr ContChar [AjBool] Continuous character data if true
+** @attr Within [AjBool] Individual data within species if true
+** @attr Names [AjPStr*] Row names array (size is Size)
+**
+** @cc row grouping - multiple individual values for one 'species'
+**     ContChar data only, otherwise NULL
+**
+** @attr Species [ajint*] Species number 1, 2, 3 for each value
+**                    array size is Len
+** @attr Individuals [ajint*] Allele countNumber of individuals
+**                    1 or more per species
+**                    array size is Loci
+**
+** @cc column grouping - multiple frequence values for alleles of a locus
+**
+** @attr Locus [ajint*] Locus number 1, 2, 3 for each value
+**                     array size is Len
+** @attr Allele [ajint*] Allele count 2 or more per locus
+**                     array size is Loci
+** @attr Data [float*] Frequency for each allele for each Name
 ** @@
 ******************************************************************************/
 
 typedef struct AjSPhyloFreq
 {
     ajint Size;
-    ajint Loci;				/* Number of loci per name*/
-    ajint Len;				/* Number of values per name
-					 may be more than 1 per locus */
-    AjBool ContChar;			/* Continuous character data */
-    AjBool Within;		   /* Individual data within species*/
-    AjPStr* Names;			/* Row names array size is Size */
+    ajint Loci;
+    ajint Len;
+    AjBool ContChar;
+    AjBool Within;
+    AjPStr* Names;
 
-/* row grouping - multiple individual values for one 'species' */
-/* ContChar data only, otherwise NULL */
-    ajint* Species;		/* Species number 1, 2, 3 for each value
-				   array size is Len */
-    ajint* Individuals;			/* Allele countNumber of individuals1
-					   1 or more per species
-					   array size is Loci */
+    ajint* Species;
+    ajint* Individuals;
 
-/* column grouping - multiple frequence values for alleles of a locus */
-    ajint* Locus;		/* Locus number 1, 2, 3 for each value
-				   array size is Len */
-    ajint* Allele;			/* Allele count 2 or more per locus
-					 array size is Loci */
-    float* Data;			/* Frequency for each allele
-					 for each Name*/
+    ajint* Locus;
+    ajint* Allele;
+    float* Data;
 } AjOPhyloFreq;
 
 #define AjPPhyloFreq AjOPhyloFreq*
@@ -87,7 +107,7 @@ typedef struct AjSPhyloFreq
 ** Weights are converted to integers 0-9, A=10 Z=35 by phylip
 ** There are programs that can use multiple weights
 ** We can handle this by making all of these multiple,
-**  and using ACD to limit them to 1 for nonm-weight data.
+** and using ACD to limit them to 1 for non-weight data.
 **
 ** Ancestral states are character data
 **
@@ -102,16 +122,21 @@ typedef struct AjSPhyloFreq
 ** @alias AjSPhyloProperty
 ** @alias AjOPhyloProperty
 **
+** @attr Len [ajint] string length
+** @attr Size [ajint] number of strings
+** @attr IsWeight [AjBool] is phylip weight values if true
+** @attr IsFactor [AjBool] is phylip factor values if true
+** @attr Str [AjPStr*] The original string(s)
 ** @@
 ******************************************************************************/
 
 typedef struct AjSPhyloProp
 {
-    ajint Len;				/* string length */
-    ajint Size;				/* number of strings */
-    AjBool IsWeight;			/* is phylip weight values */
-    AjBool IsFactor;			/* is phylip factor values */
-    AjPStr* Str;			/* The original string(s) */
+    ajint Len;
+    ajint Size;
+    AjBool IsWeight;
+    AjBool IsFactor;
+    AjPStr* Str;
 } AjOPhyloProp;
 
 #define AjPPhyloProp AjOPhyloProp*
@@ -127,17 +152,23 @@ typedef struct AjSPhyloProp
 ** @alias AjSPhyloState
 ** @alias AjOPhyloState
 **
+** @attr Len [ajint] string length
+** @attr Size [ajint] number of strings
+** @attr Count [ajint] number of enzymes for restriction data
+** @attr Characters [AjPStr] The allowed state characters
+** @attr Names [AjPStr*] The names
+** @attr Str [AjPStr*] The original string(s)
 ** @@
 ******************************************************************************/
 
 typedef struct AjSPhyloState
 {
-    ajint Len;				/* string length */
-    ajint Size;				/* number of strings */
-    ajint Count;		  /* number of enzymes for restriction data */
-    AjPStr Characters;			/* The allowed state characters */
-    AjPStr* Names;			/* The names */
-    AjPStr* Str;			/* The original string(s) */
+    ajint Len;
+    ajint Size;
+    ajint Count;
+    AjPStr Characters;
+    AjPStr* Names;
+    AjPStr* Str;
 } AjOPhyloState;
 
 #define AjPPhyloState AjOPhyloState*
@@ -152,16 +183,21 @@ typedef struct AjSPhyloState
 ** @alias AjSPhyloTree
 ** @alias AjOPhyloTree
 **
+** @attr Multifurcated [AjBool] Multifurcating (..(a,b,c)..)
+** @attr BaseTrifurcated [AjBool] 3-way base (a,b,c)
+** @attr BaseBifurcated [AjBool] Rooted 2-way base (a,b)
+** @attr BaseQuartet [AjBool] Unrooted quartet ((a,b),(c,d));
+** @attr Tree [AjPStr] Newick tree string
 ** @@
 ******************************************************************************/
 
 typedef struct AjSPhyloTree
 {
-    AjBool Multifurcated;		/* Multifurcating (..(a,b,c)..) */
-    AjBool BaseTrifurcated;		/* 3-way base (a,b,c) */
-    AjBool BaseBifurcated;		/* Rooted 2-way base (a,b) */
-    AjBool BaseQuartet;			/* Unrooted quartet ((a,b),(c,d)); */
-    AjPStr Tree;			/* Newick tree */
+    AjBool Multifurcated;
+    AjBool BaseTrifurcated;
+    AjBool BaseBifurcated;
+    AjBool BaseQuartet;
+    AjPStr Tree;
 } AjOPhyloTree;
 
 #define AjPPhyloTree AjOPhyloTree*
@@ -169,28 +205,33 @@ typedef struct AjSPhyloTree
 
 void           ajPhyloDistDel (AjPPhyloDist* pthis);
 AjPPhyloDist   ajPhyloDistNew (void);
-AjPPhyloDist   ajPhyloDistRead (AjPStr filename, ajint size, AjBool missing);
-void           ajPhyloDistTrace (AjPPhyloDist thys);
+AjPPhyloDist   ajPhyloDistRead (const AjPStr filename, ajint size,
+				AjBool missing);
+void           ajPhyloDistTrace (const AjPPhyloDist thys);
 
 void           ajPhyloFreqDel (AjPPhyloFreq* pthis);
 AjPPhyloFreq   ajPhyloFreqNew (void);
-AjPPhyloFreq   ajPhyloFreqRead (AjPStr filename, AjBool contchar,
+AjPPhyloFreq   ajPhyloFreqRead (const AjPStr filename, AjBool contchar,
 				AjBool genedata, AjBool indiv);
-void           ajPhyloFreqTrace (AjPPhyloFreq thys);
+void           ajPhyloFreqTrace (const AjPPhyloFreq thys);
 
 void           ajPhyloPropDel (AjPPhyloProp* pthis);
-ajint          ajPhyloPropGetSize (AjPPhyloProp thys);
+ajint          ajPhyloPropGetSize (const AjPPhyloProp thys);
 AjPPhyloProp   ajPhyloPropNew (void);
-AjPPhyloProp   ajPhyloPropRead (AjPStr filename, AjPStr propchars,
-			       ajint len, ajint size);
+AjPPhyloProp   ajPhyloPropRead (const AjPStr filename, const AjPStr propchars,
+				ajint len, ajint size);
+void           ajPhyloPropTrace (const AjPPhyloProp thys);
 
 void           ajPhyloStateDel (AjPPhyloState* pthis);
 AjPPhyloState  ajPhyloStateNew (void);
-AjPPhyloState* ajPhyloStateRead (AjPStr filename, AjPStr statechars);
+AjPPhyloState* ajPhyloStateRead (const AjPStr filename,
+				 const AjPStr statechars);
+void           ajPhyloStateTrace (const AjPPhyloState thys);
 
 void           ajPhyloTreeDel (AjPPhyloTree* pthis);
 AjPPhyloTree   ajPhyloTreeNew (void);
-AjPPhyloTree*  ajPhyloTreeRead (AjPStr filename, ajint size);
+AjPPhyloTree*  ajPhyloTreeRead (const AjPStr filename, ajint size);
+void           ajPhyloTreeTrace (const AjPPhyloTree thys);
 
 #endif
 

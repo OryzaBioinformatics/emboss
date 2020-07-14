@@ -101,7 +101,7 @@ pcre_get_stringnumber(const pcre *code, const char *stringname)
 **  binary zeros in the string.
 **
 ** @param [r]  subject [const char*] the subject string that was matched
-** @param [r]  ovector [int*] pointer to the offsets table
+** @param [r]  ovector [const int*] pointer to the offsets table
 ** @param [r]  stringcount [int] the number of substrings that were captured
 **                   (i.e. the yield of the pcre_exec call, unless
 **                   that was zero, in which case it should be 1/3
@@ -118,7 +118,7 @@ pcre_get_stringnumber(const pcre *code, const char *stringname)
 ******************************************************************************/
 
 int
-pcre_copy_substring(const char *subject, int *ovector, int stringcount,
+pcre_copy_substring(const char *subject, const int *ovector, int stringcount,
 		    int stringnumber, char *buffer, int size)
 {
     int yield;
@@ -142,7 +142,7 @@ pcre_copy_substring(const char *subject, int *ovector, int stringcount,
 ** 
 ** @param [r]  code [const pcre*] the compiled regex
 ** @param [r]  subject [const char*] the subject string that was matched
-** @param [r]  ovector [int*] pointer to the offsets table
+** @param [r]  ovector [const int*] pointer to the offsets table
 ** @param [r]  stringcount [int] the number of substrings that were captured
 **                   (i.e. the yield of the pcre_exec call, unless
 **                   that was zero, in which case it should be 1/3
@@ -159,7 +159,8 @@ pcre_copy_substring(const char *subject, int *ovector, int stringcount,
 ******************************************************************************/
 
 int
-pcre_copy_named_substring(const pcre *code, const char *subject, int *ovector,
+pcre_copy_named_substring(const pcre *code, const char *subject,
+			  const int *ovector,
 			  int stringcount, const char *stringname,
 			  char *buffer, int size)
 {
@@ -178,7 +179,7 @@ pcre_copy_named_substring(const pcre *code, const char *subject, int *ovector,
 ** the list.
 **
 ** @param [r]  subject [const char*] the subject string that was matched
-** @param [w]  ovector [int*] pointer to the offsets table
+** @param [w]  ovector [const int*] pointer to the offsets table
 ** @param [r]  stringcount [int] the number of substrings that were captured
 **                   (i.e. the yield of the pcre_exec call, unless
 **                   that was zero, in which case it should be 1/3
@@ -190,7 +191,8 @@ pcre_copy_named_substring(const pcre *code, const char *subject, int *ovector,
 ******************************************************************************/
 
 int
-pcre_get_substring_list(const char *subject, int *ovector, int stringcount,
+pcre_get_substring_list(const char *subject, const int *ovector,
+			int stringcount,
 			const char ***listptr)
 {
     int i;
@@ -249,7 +251,7 @@ pcre_free_substring_list(const char **pointer)
 ** store
 **
 ** @param [r]  subject [const char*] the subject string that was matched
-** @param [r]  ovector [int*] pointer to the offsets table
+** @param [r]  ovector [const int*] pointer to the offsets table
 ** @param [r]  stringcount [int] the number of substrings that were captured
 **                   (i.e. the yield of the pcre_exec call, unless
 **                   that was zero, in which case it should be 1/3
@@ -265,7 +267,7 @@ pcre_free_substring_list(const char **pointer)
 ******************************************************************************/
 
 int
-pcre_get_substring(const char *subject, int *ovector, int stringcount,
+pcre_get_substring(const char *subject, const int *ovector, int stringcount,
 		   int stringnumber, const char **stringptr)
 {
     int yield;
@@ -292,7 +294,7 @@ pcre_get_substring(const char *subject, int *ovector, int stringcount,
 **
 ** @param [r]  code [const pcre*] the compiled regex
 ** @param [r]  subject [const char*] the subject string that was matched
-** @param [r]  ovector [int*] pointer to the offsets table
+** @param [r]  ovector [const int*] pointer to the offsets table
 ** @param [r]  stringcount [int]  the number of substrings that were captured
 **                   (i.e. the yield of the pcre_exec call, unless
 **                   that was zero, in which case it should be 1/3
@@ -308,8 +310,10 @@ pcre_get_substring(const char *subject, int *ovector, int stringcount,
 ******************************************************************************/
 
 int
-pcre_get_named_substring(const pcre *code, const char *subject, int *ovector,
-			 int stringcount, const char *stringname, const char **stringptr)
+pcre_get_named_substring(const pcre *code, const char *subject,
+			 const int *ovector,
+			 int stringcount, const char *stringname,
+			 const char **stringptr)
 {
     int n = pcre_get_stringnumber(code, stringname);
     if (n <= 0) return n;
@@ -326,15 +330,15 @@ pcre_get_named_substring(const pcre *code, const char *subject, int *ovector,
 ** programs that can call its functions, but not free() or (pcre_free)()
 ** directly.
 **
-** @param [d] pointer [const char*] the result of a previous
+** @param [d] pointer [const char**] the result of a previous
 **                                  pcre_get_substring()
 ** @return [void]
 ******************************************************************************/
 
 void
-pcre_free_substring(const char *pointer)
+pcre_free_substring(const char **pointer)
 {
-    (pcre_free)((void *)pointer);
+    (pcre_free)((void *)*pointer);
 }
 
 /* End of get.c */

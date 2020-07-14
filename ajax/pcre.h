@@ -104,41 +104,60 @@ extern "C" {
 struct real_pcre;                 /* declaration; the definition is private  */
 typedef struct real_pcre pcre;
 
-/* @data pcre_extra
+/* @data pcre_extra ***********************************************************
 **
 ** The structure for passing additional data to pcre_exec(). This is defined in
 ** such as way as to be extensible.
-*/
+**
+** @attr flags [unsigned long int] Bits for which fields are set
+** @attr study_data [void*] Opaque data from pcre_study()
+** @attr match_limit [unsigned long int] Maximum number of calls to match()
+** @attr callout_data [void*] Data passed back in callouts
+** @@
+******************************************************************************/
 
 typedef struct pcre_extra {
-  unsigned long int flags;        /* Bits for which fields are set */
-  void *study_data;               /* Opaque data from pcre_study() */
-  unsigned long int match_limit;  /* Maximum number of calls to match() */
-  void *callout_data;             /* Data passed back in callouts */
+  unsigned long int flags;
+  void *study_data;
+  unsigned long int match_limit;
+  void *callout_data;
 } pcre_extra;
 
-/* @data pcre_callout_block
+/* @data pcre_callout_block ***************************************************
 **
 ** The structure for passing out data via the pcre_callout_function. We use a
 ** structure so that new fields can be added on the end in future versions,
 ** without changing the API of the function,
 ** thereby allowing old clients to work
 ** without modification.
-*/
+**
+** @attr version [int] Identifies version of block (0)
+**
+** @cc ------------------------ Version 0 -------------------------------
+**
+** @attr callout_number [int] Number compiled into pattern
+** @attr offset_vector [int*] The offset vector
+** @attr subject [const char*] The subject being matched
+** @attr subject_length [int] The length of the subject
+** @attr start_match [int] Offset to start of this match attempt
+** @attr current_position [int] Where we currently are
+** @attr capture_top [int] Max current capture
+** @attr capture_last [int] Most recently closed capture
+** @attr callout_data [void*] Data passed in with the call
+** @@
+******************************************************************************/
 
 typedef struct pcre_callout_block {
-  int          version;           /* Identifies version of block */
-  /* ------------------------ Version 0 ------------------------------- */
-  int          callout_number;    /* Number compiled into pattern */
-  int         *offset_vector;     /* The offset vector */
-  const char  *subject;           /* The subject being matched */
-  int          subject_length;    /* The length of the subject */
-  int          start_match;       /* Offset to start of this match attempt */
-  int          current_position;  /* Where we currently are */
-  int          capture_top;       /* Max current capture */
-  int          capture_last;      /* Most recently closed capture */
-  void        *callout_data;      /* Data passed in with the call */
-  /* ------------------------------------------------------------------ */
+  int          version;
+  int          callout_number;
+  int         *offset_vector;
+  const char  *subject;
+  int          subject_length;
+  int          start_match;
+  int          current_position;
+  int          capture_top;
+  int          capture_last;
+  void        *callout_data;
 } pcre_callout_block;
 
 /* Indirection for store get and free functions. These can be set to
@@ -163,21 +182,21 @@ extern pcre *pcre_compile(const char *, int, const char **,
               int *, const unsigned char *);
 extern int  pcre_config(int, void *);
 extern int  pcre_copy_named_substring(const pcre *, const char *,
-              int *, int, const char *, char *, int);
-extern int  pcre_copy_substring(const char *, int *, int, int,
+              const int *, int, const char *, char *, int);
+extern int  pcre_copy_substring(const char *, const int *, int, int,
               char *, int);
 extern int  pcre_exec(const pcre *, const pcre_extra *,
               const char *, int, int, int, int *, int);
-extern void pcre_free_substring(const char *);
+extern void pcre_free_substring(const char **);
 extern void pcre_free_substring_list(const char **);
 extern int  pcre_fullinfo(const pcre *, const pcre_extra *, int,
               void *);
 extern int  pcre_get_named_substring(const pcre *, const char *,
               int *, int,  const char *, const char **);
 extern int  pcre_get_stringnumber(const pcre *, const char *);
-extern int  pcre_get_substring(const char *, int *, int, int,
+extern int  pcre_get_substring(const char *, const int *, int, int,
               const char **);
-extern int  pcre_get_substring_list(const char *, int *, int,
+extern int  pcre_get_substring_list(const char *, const int *, int,
               const char ***);
 extern int  pcre_info(const pcre *, int *, int *);
 extern const unsigned char *pcre_maketables(void);

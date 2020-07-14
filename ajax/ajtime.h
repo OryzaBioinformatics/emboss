@@ -12,6 +12,10 @@ extern "C"
 ** AJAX time and data data structure. The same structure is used for both.
 **
 ** @alias AjPDate
+**
+** @attr time [struct tm] Time in C standard structure
+** @attr format [char*] Format string if specified
+** @@
 ******************************************************************************/
 
 typedef struct AjSTime {
@@ -20,7 +24,7 @@ typedef struct AjSTime {
 } AjOTime, AjODate;
 
 #define AjPTime AjOTime*
-#define AjPDate AjODate*
+#define AjPDate AjODate*a
 
 AjBool  ajTimeLocal(const time_t timer, AjPTime thys);
 AjPTime ajTimeToday (void);

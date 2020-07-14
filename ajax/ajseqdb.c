@@ -279,41 +279,41 @@ typedef struct SeqSCdTrg
 
 typedef struct SeqSCdQry
 {
-    AjPStr divfile;			/* division.lkp */
-    AjPStr idxfile;			/* entryname.idx */
-    AjPStr datfile;			/* main data reference */
-    AjPStr seqfile;			/* sequence */
-    AjPStr tblfile;			/* BLAST table */
-    AjPStr srcfile;			/* BLAST FASTA source data */
+    AjPStr divfile;
+    AjPStr idxfile;
+    AjPStr datfile;
+    AjPStr seqfile;
+    AjPStr tblfile;
+    AjPStr srcfile;
 
-    SeqPCdFile dfp;			/* division.lkp */
-    SeqPCdFile ifp;			/* entryname.idx */
-    SeqPCdFile trgfp;			/* acnum.trg */
-    SeqPCdFile hitfp;			/* acnum.hit */
-    SeqPCdTrg trgLine;			/* acnum input line */
+    SeqPCdFile dfp;
+    SeqPCdFile ifp;
+    SeqPCdFile trgfp;
+    SeqPCdFile hitfp;
+    SeqPCdTrg trgLine;
 
-    char* name;			        /* filename from division.lkp */
-    ajint nameSize;		        /* division.lkp filename length */
-    ajint div;				/* current division number */
-    ajint maxdiv;			/* max division number */
+    char* name;
+    ajint nameSize;
+    ajint div;
+    ajint maxdiv;
 
-    ajint type;				/* BLAST type */
-    ajint idnum;		        /* current BLAST entry offset */
+    ajint type;
+    ajint idnum;
 
-    AjPFile libr;	     /* main data reference or BLAST header */
-    AjPFile libs;	   /* sequence or BLAST compressed sequence */
-    AjPFile libt;			/* blast table */
-    AjPFile libf;			/* blast FASTA source data */
+    AjPFile libr;
+    AjPFile libs;
+    AjPFile libt;
+    AjPFile libf;
 
-    ajint TopHdr;		        /* BLAST table headers offset */
-    ajint TopCmp;		        /* BLAST table sequence offset */
-    ajint TopAmb;		        /* BLAST table ambiguities offset */
-    ajint TopSrc;		        /* BLAST table FASTA source offset */
-    ajint Size;				/* BLAST database size */
+    ajint TopHdr;
+    ajint TopCmp;
+    ajint TopAmb;
+    ajint TopSrc;
+    ajint Size;
 
-    AjPList List;			/* list of entries */
-    AjBool* Skip;		    /* skip file(s) in division.lkp */
-    SeqPCdIdx idxLine;			/* entryname.idx input line */
+    AjPList List;
+    AjBool* Skip;
+    SeqPCdIdx idxLine;
 } SeqOCdQry;
 
 #define SeqPCdQry SeqOCdQry*
@@ -351,12 +351,12 @@ static void       seqCdFileClose(SeqPCdFile *thys);
 static SeqPCdFile seqCdFileOpen(const AjPStr dir, const char* name,
 				AjPStr* fullname);
 static size_t     seqCdFileRead(void* ptr, size_t element_size,
-				const SeqPCdFile thys);
-static size_t     seqCdFileReadInt(ajint* i, const SeqPCdFile thys);
+				SeqPCdFile thys);
+static size_t     seqCdFileReadInt(ajint* i, SeqPCdFile thys);
 static size_t     seqCdFileReadName(char* name, size_t namesize,
-				    const SeqPCdFile thys);
-static size_t     seqCdFileReadShort(short* i, const SeqPCdFile thys);
-static size_t     seqCdFileReadUInt(ajuint* i, const SeqPCdFile thys);
+				    SeqPCdFile thys);
+static size_t     seqCdFileReadShort(short* i, SeqPCdFile thys);
+static size_t     seqCdFileReadUInt(ajuint* i, SeqPCdFile thys);
 static ajint      seqCdFileSeek(SeqPCdFile fil, ajuint ipos);
 static void       seqCdIdxLine(SeqPCdIdx idxLine,  ajuint ipos,
 			       SeqPCdFile fp);
@@ -378,32 +378,32 @@ static ajint      seqCdTrgFind(AjPSeqQuery qry, const char* indexname,
 static void       seqCdTrgLine(SeqPCdTrg trgLine, ajuint ipos,
 			       SeqPCdFile fp);
 static char*      seqCdTrgName(ajuint ipos, SeqPCdFile fp);
-static AjBool     seqCdTrgOpen(AjPStr dir, const char* name,
+static AjBool     seqCdTrgOpen(const AjPStr dir, const char* name,
 			       SeqPCdFile *trgfil, SeqPCdFile *hitfil);
 static AjBool     seqCdTrgQuery(AjPSeqQuery qry);
 static ajint      seqCdTrgSearch(SeqPCdTrg trgLine, const AjPStr name,
 				SeqPCdFile fp);
 
 static AjBool     seqGcgAll(AjPSeqin seqin);
-static void       seqGcgBinDecode(AjPStr thys, ajint rdlen);
+static void       seqGcgBinDecode(AjPStr *pthis, ajint rdlen);
 static void       seqGcgLoadBuff(AjPSeqin seqin);
 static AjBool     seqGcgReadRef(AjPSeqin seqin);
 static AjBool     seqGcgReadSeq(AjPSeqin seqin);
-static FILE*      seqHttpGet(AjPSeqQuery qry,
+static FILE*      seqHttpGet(const AjPSeqQuery qry,
 			     const AjPStr host, ajint iport, const AjPStr get);
-static FILE*      seqHttpGetProxy(AjPSeqQuery qry,
+static FILE*      seqHttpGetProxy(const AjPSeqQuery qry,
 				  const AjPStr proxyname, ajint proxyport,
 				  const AjPStr host, ajint iport,
 				  const AjPStr get);
-static AjBool     seqHttpProxy(AjPSeqQuery qry,
+static AjBool     seqHttpProxy(const AjPSeqQuery qry,
 			       ajint* iport, AjPStr* proxyname);
-static AjBool     seqHttpUrl(AjPSeqQuery qry,
+static AjBool     seqHttpUrl(const AjPSeqQuery qry,
 			     ajint* iport, AjPStr* host, AjPStr* urlget);
-static FILE*      seqHttpSocket(AjPSeqQuery qry,
-				struct hostent *hp, ajint hostport,
+static FILE*      seqHttpSocket(const AjPSeqQuery qry,
+				const struct hostent *hp, ajint hostport,
 				const AjPStr host, ajint iport,
 				const AjPStr get);
-static AjBool     seqHttpVersion(AjPSeqQuery qry, AjPStr* httpver);
+static AjBool     seqHttpVersion(const AjPSeqQuery qry, AjPStr* httpver);
 static void       seqSocketTimeout(int sig);
 
 
@@ -467,12 +467,13 @@ AjBool ajSeqMethodTest(const AjPStr method)
 ** Sets the access function for a named method for sequence reading.
 **
 ** @param [r] method [const AjPStr] Method required.
-** @param [w] access [SeqPAccess*] Access function to use.
-** @return [AjBool] ajTrue on success.
+** @return [SeqPAccess] Access function to use
+** @category new [SeqPAccess] returns a copy of a known access
+**                method definition.
 ** @@
 ******************************************************************************/
 
-AjBool ajSeqMethod(const AjPStr method, SeqPAccess* access)
+SeqPAccess ajSeqMethod(const AjPStr method)
 {
     ajint i = 0;
 
@@ -481,13 +482,12 @@ AjBool ajSeqMethod(const AjPStr method, SeqPAccess* access)
 	if(ajStrMatchCaseC(method, seqAccess[i].Name))
 	{
 	    ajDebug("Matched seqAccess[%d] '%s'\n", i, seqAccess[i].Name);
-	    *access = &seqAccess[i];
-	    return ajTrue;
+	    return &seqAccess[i];
 	}
 	i++;
     }
 
-    return ajFalse;
+    return NULL;
 }
 
 
@@ -522,7 +522,7 @@ AjBool ajSeqMethod(const AjPStr method, SeqPAccess* access)
 **
 ** Reads a sequence using EMBL CD-ROM index files.
 **
-** @param [r] seqin [AjPSeqin] Sequence input, including query data.
+** @param [u] seqin [AjPSeqin] Sequence input, including query data.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -756,7 +756,7 @@ static AjBool seqCdAll(AjPSeqin seqin)
 
     seqCdFileClose(&dfp);
     ajStrDelReuse(&divfile);
-    ajCharFree(name);
+    ajCharFree(&name);
 
     qry->QryDone = ajTrue;
 
@@ -842,7 +842,7 @@ static SeqPCdFile seqCdFileOpen(const AjPStr dir, const char* name,
 **
 ** Sets the file position in an EMBL CD-ROM index file.
 **
-** @param [r] fil [SeqPCdFile] EMBL CD-ROM index file object.
+** @param [u] fil [SeqPCdFile] EMBL CD-ROM index file object.
 ** @param [r] ipos [ajuint] Offset.
 ** @return [ajint] Return value from the seek operation.
 ** @@
@@ -874,13 +874,13 @@ static ajint seqCdFileSeek(SeqPCdFile fil, ajuint ipos)
 **
 ** @param [w] ptr [void*] Buffer to read into.
 ** @param [r] element_size [size_t] Number of bytes to read.
-** @param [r] thys [const SeqPCdFile] EMBL CD-ROM index file.
+** @param [u] thys [SeqPCdFile] EMBL CD-ROM index file.
 ** @return [size_t] Number of bytes read.
 ** @@
 ******************************************************************************/
 
 static size_t seqCdFileRead(void* ptr, size_t element_size,
-			    const SeqPCdFile thys)
+			    SeqPCdFile thys)
 {
     return ajFileRead(ptr, element_size, 1, thys->File);
 }
@@ -897,13 +897,13 @@ static size_t seqCdFileRead(void* ptr, size_t element_size,
 ** @param [w] name [char*] Buffer to read into. Must be at least namesize
 **                         bytes in size.
 ** @param [r] namesize [size_t] Number of bytes to read from index file.
-** @param [r] thys [const SeqPCdFile] EMBL CD-ROM index file.
+** @param [u] thys [SeqPCdFile] EMBL CD-ROM index file.
 ** @return [size_t] Number of bytes read.
 ** @@
 ******************************************************************************/
 
 static size_t seqCdFileReadName(char* name, size_t namesize,
-				const SeqPCdFile thys)
+				SeqPCdFile thys)
 {
     size_t ret;
     char* sp;
@@ -937,12 +937,12 @@ static size_t seqCdFileReadName(char* name, size_t namesize,
 ** are reversed automatically.
 **
 ** @param [w] i [ajint*] Integer read from file.
-** @param [r] thys [const SeqPCdFile] EMBL CR-ROM index file.
+** @param [u] thys [SeqPCdFile] EMBL CR-ROM index file.
 ** @return [size_t] Number of bytes read.
 ** @@
 ******************************************************************************/
 
-static size_t seqCdFileReadInt(ajint* i, const SeqPCdFile thys)
+static size_t seqCdFileReadInt(ajint* i, SeqPCdFile thys)
 {
     size_t ret;
 
@@ -964,12 +964,12 @@ static size_t seqCdFileReadInt(ajint* i, const SeqPCdFile thys)
 ** are reversed automatically.
 **
 ** @param [w] i [ajuint*] Integer read from file.
-** @param [r] thys [const SeqPCdFile] EMBL CR-ROM index file.
+** @param [u] thys [SeqPCdFile] EMBL CR-ROM index file.
 ** @return [size_t] Number of bytes read.
 ** @@
 ******************************************************************************/
 
-static size_t seqCdFileReadUInt(ajuint* i, const SeqPCdFile thys)
+static size_t seqCdFileReadUInt(ajuint* i, SeqPCdFile thys)
 {
     size_t ret;
 
@@ -991,12 +991,12 @@ static size_t seqCdFileReadUInt(ajuint* i, const SeqPCdFile thys)
 ** are reversed automatically.
 **
 ** @param [w] i [short*] Integer read from file.
-** @param [r] thys [const SeqPCdFile] EMBL CR-ROM index file.
+** @param [u] thys [SeqPCdFile] EMBL CR-ROM index file.
 ** @return [size_t] Number of bytes read.
 ** @@
 ******************************************************************************/
 
-static size_t seqCdFileReadShort(short* i, const SeqPCdFile thys)
+static size_t seqCdFileReadShort(short* i, SeqPCdFile thys)
 {
     size_t ret;
 
@@ -1015,7 +1015,7 @@ static size_t seqCdFileReadShort(short* i, const SeqPCdFile thys)
 **
 ** Closes an EMBL CD-ROM index file.
 **
-** @param [u] pthis [SeqPCdFile*] EMBL CD-ROM index file.
+** @param [d] pthis [SeqPCdFile*] EMBL CD-ROM index file.
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -1044,7 +1044,7 @@ static void seqCdFileClose(SeqPCdFile* pthis)
 **
 ** @param [u] idxLine [SeqPCdIdx] Index file record.
 ** @param [r] entry [const AjPStr] Entry name to search for.
-** @param [r] fil [SeqPCdFile] EMBL CD-ROM index file.
+** @param [u] fil [SeqPCdFile] EMBL CD-ROM index file.
 ** @return [ajint] Record number on success, -1 on failure.
 ** @@
 ******************************************************************************/
@@ -1101,7 +1101,7 @@ static ajint seqCdIdxSearch(SeqPCdIdx idxLine, const AjPStr entry,
 ** Binary search of an EMBL CD-ROM index file for entries matching a
 ** wildcard entry name.
 **
-** @param [r] qry [AjPSeqQuery] Sequence query object.
+** @param [u] qry [AjPSeqQuery] Sequence query object.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -1290,7 +1290,7 @@ static AjBool seqCdIdxQuery(AjPSeqQuery qry)
 **
 ** @param [u] trgLine [SeqPCdTrg] Target file record.
 ** @param [r] entry [const AjPStr] Entry name or accession number.
-** @param [r] fp [SeqPCdFile] EMBL CD-ROM target file
+** @param [u] fp [SeqPCdFile] EMBL CD-ROM target file
 ** @return [ajint] Record number, or -1 on failure.
 ** @@
 ******************************************************************************/
@@ -1364,7 +1364,7 @@ static ajint seqCdTrgSearch(SeqPCdTrg trgLine, const AjPStr entry,
 ** The name length is known from the index file object.
 **
 ** @param [r] ipos [ajuint] Record number.
-** @param [r] fil [SeqPCdFile] EMBL CD-ROM index file.
+** @param [u] fil [SeqPCdFile] EMBL CD-ROM index file.
 ** @return [char*] Name read from file.
 ** @@
 ******************************************************************************/
@@ -1381,7 +1381,7 @@ static char* seqCdIdxName(ajuint ipos, SeqPCdFile fil)
     {
 	maxNameSize = nameSize;
 	if(name)
-	    ajCharFree(name);
+	    ajCharFree(&name);
 	name = ajCharNewL(maxNameSize);
     }
 
@@ -1400,7 +1400,7 @@ static char* seqCdIdxName(ajuint ipos, SeqPCdFile fil)
 **
 ** @param [u] idxLine [SeqPCdIdx] Index file record.
 ** @param [r] ipos [ajuint] Record number.
-** @param [r] fil [SeqPCdFile] EMBL CD-ROM index file.
+** @param [u] fil [SeqPCdFile] EMBL CD-ROM index file.
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -1417,7 +1417,7 @@ static void seqCdIdxLine(SeqPCdIdx idxLine, ajuint ipos, SeqPCdFile fil)
     {
 	maxNameSize = nameSize;
 	if(name)
-	    ajCharFree(name);
+	    ajCharFree(&name);
 	name = ajCharNewL(maxNameSize);
     }
 
@@ -1441,7 +1441,7 @@ static void seqCdIdxLine(SeqPCdIdx idxLine, ajuint ipos, SeqPCdFile fil)
 ** Reads the target name from an EMBL CD-ROM index target file.
 **
 ** @param [r] ipos [ajuint] Record number.
-** @param [r] fil [SeqPCdFile] EMBL CD-ROM index target file.
+** @param [u] fil [SeqPCdFile] EMBL CD-ROM index target file.
 ** @return [char*] Name.
 ** @@
 ******************************************************************************/
@@ -1459,7 +1459,7 @@ static char* seqCdTrgName(ajuint ipos, SeqPCdFile fil)
     {
 	maxNameSize = nameSize;
 	if(name)
-	    ajCharFree(name);
+	    ajCharFree(&name);
 	name = ajCharNewL(maxNameSize);
     }
 
@@ -1483,7 +1483,7 @@ static char* seqCdTrgName(ajuint ipos, SeqPCdFile fil)
 **
 ** @param [w] trgLine [SeqPCdTrg] Target file record.
 ** @param [r] ipos [ajuint] Record number.
-** @param [r] fil [SeqPCdFile] EMBL CD-ROM index target file.
+** @param [u] fil [SeqPCdFile] EMBL CD-ROM index target file.
 ** @return [void].
 ** @@
 ******************************************************************************/
@@ -1500,7 +1500,7 @@ static void seqCdTrgLine(SeqPCdTrg trgLine, ajuint ipos, SeqPCdFile fil)
     {
 	maxNameSize = nameSize;
 	if(name)
-	    ajCharFree(name);
+	    ajCharFree(&name);
 	name = ajCharNewL(maxNameSize);
     }
 
@@ -1525,7 +1525,7 @@ static void seqCdTrgLine(SeqPCdTrg trgLine, ajuint ipos, SeqPCdFile fil)
 **
 ** Reads the header of an EMBL CD-ROM index file.
 **
-** @param [r] fil [SeqPCdFile] EMBL CD-ROM index file.
+** @param [u] fil [SeqPCdFile] EMBL CD-ROM index file.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -1566,7 +1566,7 @@ static AjBool seqCdReadHeader(SeqPCdFile fil)
 **
 ** Opens an EMBL CD-ROM target file pair.
 **
-** @param [r] dir [AjPStr] Directory.
+** @param [r] dir [const AjPStr] Directory.
 ** @param [r] name [const char*] File name.
 ** @param [w] trgfil [SeqPCdFile*] Target file.
 ** @param [w] hitfil [SeqPCdFile*] Hit file.
@@ -1574,8 +1574,8 @@ static AjBool seqCdReadHeader(SeqPCdFile fil)
 ** @@
 ******************************************************************************/
 
-static AjBool seqCdTrgOpen(AjPStr dir, const char* name, SeqPCdFile* trgfil,
-			    SeqPCdFile* hitfil)
+static AjBool seqCdTrgOpen(const AjPStr dir, const char* name,
+			   SeqPCdFile* trgfil, SeqPCdFile* hitfil)
 {
     static AjPStr tmpname  = NULL;
     static AjPStr fullname = NULL;
@@ -1632,7 +1632,7 @@ static AjBool seqCdTrgClose(SeqPCdFile* ptrgfil, SeqPCdFile* phitfil)
 ** Reads sequence(s) using SRS. Opens a file using the results of an SRS
 ** query and returns to the caller to read the data.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -1706,7 +1706,7 @@ static AjBool seqAccessSrs(AjPSeqin seqin)
 ** query with FASTA format sequence output and returns to the caller to
 ** read the data.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -1782,7 +1782,7 @@ static AjBool seqAccessSrsfasta(AjPSeqin seqin)
 ** Opens a file using the results and returns to the caller to
 ** read the data.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -1879,8 +1879,7 @@ static AjBool seqAccessSrswww(AjPSeqin seqin)
 
     alarm(0);
 
-    if(!ajFileBuffStripSrs(seqin->Filebuff))
-	ajFileBuffStripHtml(seqin->Filebuff);
+    ajFileBuffStripHtml(seqin->Filebuff);
 
     ajStrAssS(&seqin->Db, qry->DbName);
 
@@ -1904,7 +1903,7 @@ static AjBool seqAccessSrswww(AjPSeqin seqin)
 **
 ** Clears qryData structure when finished.
 **
-** @param [r] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPSeqQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
@@ -1954,7 +1953,7 @@ static AjBool seqCdQryReuse(AjPSeqQuery qry)
 **
 ** Opens everything for a new CD query
 **
-** @param [r] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPSeqQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
@@ -2020,7 +2019,7 @@ static AjBool seqCdQryOpen(AjPSeqQuery qry)
     }
 
     ajStrDel(&fullName);
-    ajCharFree(name);
+    ajCharFree(&name);
 
     return ajTrue;
 }
@@ -2032,7 +2031,7 @@ static AjBool seqCdQryOpen(AjPSeqQuery qry)
 **
 ** Queries for a single entry in an EMBLCD index
 **
-** @param [r] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPSeqQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
@@ -2291,7 +2290,7 @@ static AjBool seqCdQryEntry(AjPSeqQuery qry)
 **
 ** Queries for one or more entries in an EMBLCD index
 **
-** @param [r] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPSeqQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
@@ -2385,7 +2384,7 @@ static void seqCdEntryDel(void** pentry, void* cl)
 **
 ** Processes the next query for an EMBLCD index
 **
-** @param [r] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPSeqQuery] Query data
 ** @return [AjBool] ajTrue if successful
 ** @@
 ******************************************************************************/
@@ -2443,7 +2442,7 @@ static AjBool seqCdQryNext(AjPSeqQuery qry)
 **
 ** Processes the next query for an EMBLCD index for a Blast index
 **
-** @param [r] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPSeqQuery] Query data
 ** @return [AjBool] ajTrue if successful
 ** @@
 ******************************************************************************/
@@ -2497,7 +2496,7 @@ static AjBool seqBlastQryNext(AjPSeqQuery qry)
 **
 ** Closes query data for an EMBLCD index
 **
-** @param [r] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPSeqQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
@@ -2511,7 +2510,7 @@ static AjBool seqCdQryClose(AjPSeqQuery qry)
 
     qryd = qry->QryData;
 
-    ajCharFree(qryd->name);
+    ajCharFree(&qryd->name);
     ajStrDel(&qryd->divfile);
     ajStrDel(&qryd->idxfile);
     ajStrDel(&qryd->datfile);
@@ -2555,7 +2554,7 @@ static AjBool seqCdQryClose(AjPSeqQuery qry)
 ** files. Returns with the file pointer set to the position in the
 ** sequence file.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -2646,7 +2645,7 @@ static AjBool seqAccessGcg(AjPSeqin seqin)
 ** Copies text data to a buffered file, and sequence data for an
 ** AjPSeqin internal data structure for reading later
 **
-** @param [r] seqin [AjPSeqin] Sequence input object
+** @param [u] seqin [AjPSeqin] Sequence input object
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -2684,7 +2683,7 @@ static void seqGcgLoadBuff(AjPSeqin seqin)
 **
 ** Copies text data to a buffered file for reading later
 **
-** @param [r] seqin [AjPSeqin] Sequence input object
+** @param [u] seqin [AjPSeqin] Sequence input object
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
@@ -2728,10 +2727,10 @@ static AjBool seqGcgReadRef(AjPSeqin seqin)
 	if(ajStrSuffixC(id,"_0") || ajStrSuffixC(id,"_00"))
 	{
 	    continued = ajTrue;
-	    p = ajStrStr(id);
+	    p = ajStrStrMod(&id);
 	    p = strrchr(p,(ajint)'_');
 	    *(++p)='\0';
-	    ajStrFix(id);
+	    ajStrFix(&id);
 	}
     }
     else
@@ -2795,7 +2794,7 @@ static AjBool seqGcgReadRef(AjPSeqin seqin)
 ** Copies sequence data with a reformatted sequence to the "Inseq"
 ** data structure of the AjPSeqin object for later reuse.
 **
-** @param [r] seqin [AjPSeqin] Sequence input object
+** @param [u] seqin [AjPSeqin] Sequence input object
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
@@ -2849,10 +2848,10 @@ static AjBool seqGcgReadSeq(AjPSeqin seqin)
 	if(ajStrSuffixC(id,"_0") || ajStrSuffixC(id,"_00"))
 	{
 	    continued = ajTrue;
-	    p = ajStrStr(id);
+	    p = ajStrStrMod(&id);
 	    p = strrchr(p,(ajint)'_');
 	    *(++p)='\0';
-	    ajStrFix(id);
+	    ajStrFix(&id);
 	    if(!contseq)
 		contseq = ajStrNew();
 	    if(!dstr)
@@ -2904,16 +2903,16 @@ static AjBool seqGcgReadSeq(AjPSeqin seqin)
 	if(ajStrChar(gcgtype, 0) == '2')
 	    rblock = (rblock+3)/4;
 
-	if(!ajFileRead(ajStrStr(seqin->Inseq), 1, rblock, qryd->libs))
+	if(!ajFileRead(ajStrStrMod(&seqin->Inseq), 1, rblock, qryd->libs))
 	    ajFatal("error reading file %F", qryd->libs);
 
 	/* convert 2bit to ascii */
 	if(ajStrChar(gcgtype, 0) == '2')
-	    seqGcgBinDecode(seqin->Inseq, gcglen);
+	    seqGcgBinDecode(&seqin->Inseq, gcglen);
 	else if(ajStrChar(gcgtype, 0) == 'A')
 	{
 	    /* are seq chars OK? */
-	    ajStrFixI(seqin->Inseq, gcglen);
+	    ajStrFixI(&seqin->Inseq, gcglen);
 	}
 	else
 	{
@@ -2950,16 +2949,16 @@ static AjBool seqGcgReadSeq(AjPSeqin seqin)
 		if(ajStrChar(gcgtype, 0) == '2')
 		    rblock = (rblock+3)/4;
 
-		if(!ajFileRead(ajStrStr(contseq), 1, rblock, qryd->libs))
+		if(!ajFileRead(ajStrStrMod(&contseq), 1, rblock, qryd->libs))
 		    ajFatal("error reading file %F", qryd->libs);
 
 		/* convert 2bit to ascii */
 		if(ajStrChar(gcgtype, 0) == '2')
-		    seqGcgBinDecode(contseq, gcglen);
+		    seqGcgBinDecode(&contseq, gcglen);
 		else if(ajStrChar(gcgtype, 0) == 'A')
 		{
 		    /* are seq chars OK? */
-		    ajStrFixI(contseq, gcglen);
+		    ajStrFixI(&contseq, gcglen);
 		}
 		else
 		{
@@ -2997,13 +2996,13 @@ static AjBool seqGcgReadSeq(AjPSeqin seqin)
 **
 ** Convert GCG binary to ASCII sequence.
 **
-** @param [r] thys [AjPStr] Binary string
+** @param [u] pthis [AjPStr*] Binary string
 ** @param [r] sqlen [ajint] Expected sequence length
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void seqGcgBinDecode(AjPStr thys, ajint sqlen)
+static void seqGcgBinDecode(AjPStr *pthis, ajint sqlen)
 {
     char* seqp;
     char* cp;
@@ -3012,7 +3011,7 @@ static void seqGcgBinDecode(AjPStr thys, ajint sqlen)
     char stmp;
     ajint rdlen;
 
-    start = ajStrStr(thys);
+    start = ajStrStrMod(pthis);
     rdlen = (sqlen+3)/4;
 
     seqp = start + rdlen;
@@ -3020,7 +3019,7 @@ static void seqGcgBinDecode(AjPStr thys, ajint sqlen)
 
     ajDebug("seqp:%x start:%x cp:%x sqlen:%d len:%d size:%d (seqp-start):%d\n",
 	    seqp, start, cp, sqlen,
-	    ajStrLen(thys), ajStrSize(thys),
+	    ajStrLen(*pthis), ajStrSize(*pthis),
 	    (seqp - start));
 
     while(seqp > start)
@@ -3033,7 +3032,7 @@ static void seqGcgBinDecode(AjPStr thys, ajint sqlen)
     }
 
     start[sqlen] = '\0';
-    ajStrFixI(thys, sqlen);
+    ajStrFixI(pthis, sqlen);
 
     return;
 }
@@ -3124,7 +3123,7 @@ static AjBool seqGcgAll(AjPSeqin seqin)
 ** Reads sequence(s) using BLAST index files. Returns with the file pointer
 ** set to the position in the sequence file.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -3227,7 +3226,7 @@ static AjBool seqAccessBlast(AjPSeqin seqin)
 ** Opens a blast database. The query object can specify protein or DNA type.
 ** The blast version (1 or 2) is derived from the table file name.
 **
-** @param [r] qry [AjPSeqQuery] Sequence query object
+** @param [u] qry [AjPSeqQuery] Sequence query object
 ** @param [r] next [AjBool] Skip to next file (when reading all entries)
 ** @return [AjBool] ajTrue on success
 ** @@
@@ -3357,16 +3356,17 @@ static AjBool seqBlastOpen(AjPSeqQuery qry, AjBool next)
 
     if(rdtmp)
     {
-	if(!ajFileRead(ajStrStr(Title), (size_t)1, (size_t)rdtmp, qryd->libt))
+	if(!ajFileRead(ajStrStrMod(&Title),
+		       (size_t)1, (size_t)rdtmp, qryd->libt))
 	    ajFatal("error reading file %F", qryd->libt);
     }
     else
 	ajStrAssC(&Title, "");
 
     if(isblast2)
-	ajStrFixI(Title, TitleLen);
+	ajStrFixI(&Title, TitleLen);
     else
-	ajStrFixI(Title, TitleLen-1);
+	ajStrFixI(&Title, TitleLen-1);
 
     ajDebug("title_len: %d rdtmp: %d title_str: '%S'\n",
 	    TitleLen, rdtmp, Title);
@@ -3380,9 +3380,10 @@ static AjBool seqBlastOpen(AjPSeqQuery qry, AjBool next)
 	DateLen = ajFileReadUint(qryd->libt, bigend);
 	rdtmp2 = DateLen;
 	ajStrAssCL(&Date, "", rdtmp2+1);
-	if(!ajFileRead(ajStrStr(Date),(size_t)1,(size_t)rdtmp2,qryd->libt))
+	if(!ajFileRead(ajStrStrMod(&Date),
+		       (size_t)1,(size_t)rdtmp2,qryd->libt))
 	    ajFatal("error reading file %F", qryd->libt);
-	ajStrFixI(Date, DateLen);
+	ajStrFixI(&Date, DateLen);
 	ajDebug("datelen: %d rdtmp: %d date_str: '%S'\n",
 		DateLen, rdtmp2, Date);
 	HeaderLen += 4 + rdtmp2;
@@ -3484,7 +3485,7 @@ static AjBool seqBlastOpen(AjPSeqQuery qry, AjBool next)
 ** Sets the division count to the next included file. We need the division
 ** file to be already open.
 **
-** @param [r] qry [AjPSeqQuery] sequence query object.
+** @param [u] qry [AjPSeqQuery] sequence query object.
 ** @return [ajint] File number (starting at 1) or zero if all files are done.
 ** @@
 ******************************************************************************/
@@ -3521,7 +3522,7 @@ static ajint seqCdDivNext(AjPSeqQuery qry)
 ** Fill a buffered file with text data and preloads the sequence in
 ** an AjPSeqin data structure for reuse.
 **
-** @param [r] seqin [AjPSeqin] AjPSeqin sequence input object.
+** @param [u] seqin [AjPSeqin] AjPSeqin sequence input object.
 ** @return [AjBool] true if text data loaded.
 ** @@
 ******************************************************************************/
@@ -3627,7 +3628,7 @@ static AjBool seqBlastAll(AjPSeqin seqin)
 **
 ** Opens a specific file number for an EMBLCD index
 **
-** @param [r] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPSeqQuery] Query data
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
@@ -3709,7 +3710,7 @@ static AjBool seqCdQryFile(AjPSeqQuery qry)
 ** Reads sequence(s) using a remote URL. Reads the results into a buffer
 ** and strips out HTML before returning to the caller.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -3780,8 +3781,7 @@ static AjBool seqAccessUrl(AjPSeqin seqin)
 
     alarm(0);
 
-    if(!ajFileBuffStripSrs(seqin->Filebuff))
-	ajFileBuffStripHtml(seqin->Filebuff);
+    ajFileBuffStripHtml(seqin->Filebuff);
 
     ajStrAssS(&seqin->Db, qry->DbName);
 
@@ -3822,7 +3822,7 @@ static void seqSocketTimeout(int sig)
 **
 ** Returns the components of a URL
 **
-** @param [r] qry [AjPSeqQuery] Query object
+** @param [r] qry [const AjPSeqQuery] Query object
 ** @param [w] iport [ajint*] Port
 ** @param [w] host [AjPStr*] Host name
 ** @param [w] urlget [AjPStr*] URL for the HTTP header GET
@@ -3830,7 +3830,7 @@ static void seqSocketTimeout(int sig)
 ** @@
 ******************************************************************************/
 
-static AjBool seqHttpUrl(AjPSeqQuery qry, ajint* iport, AjPStr* host,
+static AjBool seqHttpUrl(const AjPSeqQuery qry, ajint* iport, AjPStr* host,
 			 AjPStr* urlget)
 {
     AjPStr url              = NULL;
@@ -3873,14 +3873,14 @@ static AjBool seqHttpUrl(AjPSeqQuery qry, ajint* iport, AjPStr* host,
 **
 ** Returns a proxy definition (if any)
 **
-** @param [r] qry [AjPSeqQuery] Query object
+** @param [r] qry [const AjPSeqQuery] Query object
 ** @param [w] proxyport [ajint*] Proxy port
 ** @param [w] proxyname [AjPStr*] Proxy name
 ** @return [AjBool] ajTrue is a proxy was defined
 ** @@
 ******************************************************************************/
 
-static AjBool seqHttpProxy(AjPSeqQuery qry, ajint* proxyport,
+static AjBool seqHttpProxy(const AjPSeqQuery qry, ajint* proxyport,
 			   AjPStr* proxyname)
 {
     static AjPRegexp proxexp = NULL;
@@ -3921,13 +3921,13 @@ static AjBool seqHttpProxy(AjPSeqQuery qry, ajint* proxyport,
 **
 ** Returns the HTTP version
 **
-** @param [r] qry [AjPSeqQuery] Query object
+** @param [r] qry [const AjPSeqQuery] Query object
 ** @param [w] httpver [AjPStr*] HTTP version
 ** @return [AjBool] ajTrue if a version was defined
 ** @@
 ******************************************************************************/
 
-static AjBool seqHttpVersion(AjPSeqQuery qry, AjPStr* httpver)
+static AjBool seqHttpVersion(const AjPSeqQuery qry, AjPStr* httpver)
 {
     ajNamGetValueC("httpversion", httpver);
     ajDebug("httpver getValueC '%S'\n", *httpver);
@@ -3962,7 +3962,7 @@ static AjBool seqHttpVersion(AjPSeqQuery qry, AjPStr* httpver)
 **
 ** Opens an HTTP connection via a proxy
 **
-** @param [r] qry [AjPSeqQuery] Query object
+** @param [r] qry [const AjPSeqQuery] Query object
 ** @param [r] proxyname [const AjPStr] Proxy name
 ** @param [r] proxyport [ajint] Proxy port
 ** @param [r] host [const AjPStr] Host name
@@ -3972,7 +3972,7 @@ static AjBool seqHttpVersion(AjPSeqQuery qry, AjPStr* httpver)
 ** @@
 ******************************************************************************/
 
-static FILE* seqHttpGetProxy(AjPSeqQuery qry,
+static FILE* seqHttpGetProxy(const AjPSeqQuery qry,
 			     const AjPStr proxyname, ajint proxyport,
 			     const AjPStr host, ajint iport, const AjPStr get)
 {
@@ -4009,7 +4009,7 @@ static FILE* seqHttpGetProxy(AjPSeqQuery qry,
 **
 ** Opens an HTTP connection
 **
-** @param [r] qry [AjPSeqQuery] Query object
+** @param [r] qry [const AjPSeqQuery] Query object
 ** @param [r] host [const AjPStr] Host name
 ** @param [r] iport [ajint] Port
 ** @param [r] get [const AjPStr] GET string
@@ -4017,7 +4017,7 @@ static FILE* seqHttpGetProxy(AjPSeqQuery qry,
 ** @@
 ******************************************************************************/
 
-static FILE* seqHttpGet(AjPSeqQuery qry, const AjPStr host, ajint iport,
+static FILE* seqHttpGet(const AjPSeqQuery qry, const AjPStr host, ajint iport,
 			const AjPStr get)
 {
     FILE* fp;
@@ -4055,8 +4055,8 @@ static FILE* seqHttpGet(AjPSeqQuery qry, const AjPStr host, ajint iport,
 **
 ** Opens an HTTP socket
 **
-** @param [r] qry [AjPSeqQuery] Query object
-** @param [r] hp [struct hostent*] Host entry struct
+** @param [r] qry [const AjPSeqQuery] Query object
+** @param [r] hp [const struct hostent*] Host entry struct
 ** @param [r] hostport [ajint] Host port
 ** @param [r] host [const AjPStr] Host name for Host header line
 ** @param [r] iport [ajint] Port for Host header line
@@ -4065,7 +4065,8 @@ static FILE* seqHttpGet(AjPSeqQuery qry, const AjPStr host, ajint iport,
 ** @@
 ******************************************************************************/
 
-static FILE* seqHttpSocket(AjPSeqQuery qry, struct hostent *hp, ajint hostport,
+static FILE* seqHttpSocket(const AjPSeqQuery qry,
+			   const struct hostent *hp, ajint hostport,
 			   const AjPStr host, ajint iport, const AjPStr get)
 {
     FILE* fp       = NULL;
@@ -4173,7 +4174,7 @@ static FILE* seqHttpSocket(AjPSeqQuery qry, struct hostent *hp, ajint hostport,
 ** Reads sequence data using an application which can accept a specification
 ** in the form "database:entry" such as Erik Sonnhammer's 'efetch'.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -4201,6 +4202,9 @@ static AjBool seqAccessApp(AjPSeqin seqin)
 	else if(ajStrLen(qry->Acc))
 	    ajFmtPrintS(&pipename, ajStrStr(qry->Application),
 			ajStrStr(qry->Acc));
+	else
+	    ajFmtPrintS(&pipename, ajStrStr(qry->Application),
+			"*");
 	ajStrAppC(&pipename, " |");
     }
     else
@@ -4211,6 +4215,9 @@ static AjBool seqAccessApp(AjPSeqin seqin)
 	else if(ajStrLen(qry->Acc))
 	    ajFmtPrintS(&pipename, "%S %S:%S|",
 			qry->Application, qry->DbName, qry->Acc);
+ 	else
+	    ajFmtPrintS(&pipename, "%S %S:*|",
+			qry->Application, qry->DbName);
     }
 
     if(!ajStrLen(pipename))
@@ -4254,7 +4261,7 @@ static AjBool seqAccessApp(AjPSeqin seqin)
 **
 ** Reads a sequence using the 'filename' as the sequence data.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -4299,7 +4306,7 @@ AjBool ajSeqAccessAsis(AjPSeqin seqin)
 **
 ** Reads a sequence from a named file.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -4343,7 +4350,7 @@ AjBool ajSeqAccessFile(AjPSeqin seqin)
 **
 ** Reads a sequence from a named file, at a given offset within the file.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -4397,7 +4404,7 @@ AjBool ajSeqAccessOffset(AjPSeqin seqin)
 ** The sequence input object holds a directory name and a (wildcard)
 ** file specification.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -4442,7 +4449,7 @@ static AjBool seqAccessDirect(AjPSeqin seqin)
 ** load the header and sequence for it. All that is needed is
 ** a set of open blast files (in qryd) and an idnum set.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [u] seqin [AjPSeqin] Sequence input.
 ** @param [w] hline [AjPStr*] header line.
 ** @param [w] sline [AjPStr*] sequence line.
 ** @return [AjBool] ajTrue on success
@@ -4535,9 +4542,9 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 	    qryd->type, hsize, start, end, qryd->Size);
 
     ajFileSeek(qryd->libr, start, 0);
-    if(!ajFileRead(ajStrStr(*hline), 1, hsize, qryd->libr))
+    if(!ajFileRead(ajStrStrMod(hline), 1, hsize, qryd->libr))
 	ajFatal("error reading file %F", qryd->libr);
-    ajStrFixI(*hline, hsize);
+    ajStrFixI(hline, hsize);
 
 
     if(qryd->type >= 2)
@@ -4599,7 +4606,7 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 	if(tmpbyte)
 	    ajErr(" phase error: %d:%d found\n",qryd->idnum,(ajint)tmpbyte);
 
-	if((tmp=ajFileRead(ajStrStr(*sline),(size_t)1,(size_t)seq_len,
+	if((tmp=ajFileRead(ajStrStrMod(sline),(size_t)1,(size_t)seq_len,
 			   qryd->libs)) != (size_t)seq_len)
 	{
 	    ajErr(" could not read sequence record (a): %d %d != %d\n",
@@ -4615,13 +4622,13 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 	}
 	else seqcnt=seq_len;
 
-	seq = ajStrStr(*sline);
+	seq = ajStrStrMod(sline);
 	sptr = seq+seqcnt;
 
 	while(--sptr >= seq)
 	    *sptr = btoa[(ajint)*sptr];
 
-	ajStrFixI(*sline, seqcnt);
+	ajStrFixI(sline, seqcnt);
 	ajDebug("Read sequence %d %d\n'%S'\n", seqcnt, ajStrLen(*sline),
 		*sline);
 	ajStrAssS(&seqin->Inseq, *sline);
@@ -4640,12 +4647,12 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 
 	ajStrAssCL(sline, "", seq_len+1);
 
-	seq = ajStrStr(*sline);
+	seq = ajStrStrMod(sline);
 
 	/* read the sequence here */
 
 	seqcnt = c_len;
-	if((tmp=ajFileRead(ajStrStr(*sline),(size_t)1,(size_t)seqcnt,
+	if((tmp=ajFileRead(ajStrStrMod(sline),(size_t)1,(size_t)seqcnt,
 			   qryd->libs)) != (size_t)seqcnt)
 	{
 	    ajErr(" could not read sequence record (c): %d %d != %d: %d\n",
@@ -4761,7 +4768,7 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 	else
 	    a_len = 0;
 
-	ajStrFixI(*sline, seq_len);
+	ajStrFixI(sline, seq_len);
 	ajStrAssS(&seqin->Inseq, *sline);
 	return ajTrue;
 
@@ -4826,7 +4833,7 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 	    seqcnt=(seq_len+3)/4;
 	    if(seqcnt==0)
 		seqcnt++;
-	    if((tmp=ajFileRead(ajStrStr(*sline),(size_t)1,(size_t)seqcnt,
+	    if((tmp=ajFileRead(ajStrStrMod(sline),(size_t)1,(size_t)seqcnt,
 			       qryd->libs)) != (size_t)seqcnt)
 	    {
 		ajDebug(
@@ -4866,7 +4873,7 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 	     ** read 4 cycles before it is written
 	     */
 
-	    seq = ajStrStr(*sline);
+	    seq = ajStrStrMod(sline);
 
 	    sptr = seq + seqcnt;
 	    tptr = seq + 4*seqcnt;
@@ -4892,7 +4899,7 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 			seqcnt, seq_len);
 	    }
 
-	    ajStrFixI(*sline, seq_len);
+	    ajStrFixI(sline, seq_len);
 	    ajStrAssS(&seqin->Inseq, *sline);
 	    return ajTrue;
 	}
@@ -4910,8 +4917,10 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 /* @funcstatic seqBlastStripNcbi **********************************************
 **
 ** Removes the extra part of an NCBI style header from the BLAST header table.
+** Function name no longer appropriate as it is now done by prefixing
+** with '>' where this is missing.
 **
-** @param [r] line [AjPStr*] Input line
+** @param [u] line [AjPStr*] Input line
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -4939,7 +4948,7 @@ static void seqBlastStripNcbi(AjPStr* line)
 ** Where more than one query field is defined (usually acc and sv) it
 ** can test all and append to a single list.
 **
-** @param [r] qry [AjPSeqQuery] Sequence query object.
+** @param [u] qry [AjPSeqQuery] Sequence query object.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -4981,7 +4990,7 @@ static AjBool seqCdTrgQuery(AjPSeqQuery qry)
 ** Where more than one query field is defined (usually acc and sv) it
 ** can test all and append to a single list.
 **
-** @param [r] qry [AjPSeqQuery] Sequence query object.
+** @param [u] qry [AjPSeqQuery] Sequence query object.
 ** @param [r] indexname [const char*] Index name.
 ** @param [r] queryName [const AjPStr] Query string.
 ** @return [ajint] Number of matches found
@@ -5188,13 +5197,13 @@ static ajint seqCdTrgFind(AjPSeqQuery qry, const char* indexname,
 **
 ** Reports the internal data structures
 **
-** @param [r] outf [const AjPFile] Output file
+** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajSeqPrintAccess(const AjPFile outf, AjBool full)
+void ajSeqPrintAccess(AjPFile outf, AjBool full)
 {
     ajint i = 0;
 

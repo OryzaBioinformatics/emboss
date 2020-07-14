@@ -248,9 +248,9 @@ pcre_regcomp(regex_t *preg, const char *pattern, int cflags)
 ** The threshold is in a macro that can be changed at configure time.
 **
 ** @param [r] preg [const regex_t*] Undocumented
-** @param [?] string [const char*] Undocumented
+** @param [r] string [const char*] Undocumented
 ** @param [r] nmatch [size_t] Undocumented
-** @param [?] pmatch [regmatch_t[]] Undocumented
+** @param [u] pmatch [regmatch_t[]] Undocumented
 ** @param [r] eflags [int] Undocumented
 ** @return [int] Undocumented
 ******************************************************************************/

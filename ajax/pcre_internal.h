@@ -541,113 +541,180 @@ Unix, where it is defined in sys/types, so use "uschar" instead. */
 
 typedef unsigned char uschar;
 
-/* @data real_pcre
+/* @data real_pcre ************************************************************
 **
 ** The real format of the start of the pcre block; the index of names and the
 ** code vector run on as long as necessary after the end.
-*/
+**
+** @attr magic_number [unsigned long int] Magic number
+** @attr size [size_t] Total that was malloced
+** @attr tables [const unsigned char*] Pointer to tables
+** @attr options [unsigned long int] Undocumented
+** @attr top_bracket [unsigned short int] Undocumented
+** @attr top_backref [unsigned short int] Undocumented
+** @attr first_byte [unsigned short int] Undocumented
+** @attr req_byte [unsigned short int] Undocumented
+** @attr name_entry_size [unsigned short int] Size of any name items; 0 => none
+** @attr name_count [unsigned short int] Number of name items
+** @@
+******************************************************************************/
 
 typedef struct real_pcre {
   unsigned long int magic_number;
-  size_t size;                        /* Total that was malloced */
-  const unsigned char *tables;        /* Pointer to tables */
+  size_t size;
+  const unsigned char *tables;
   unsigned long int options;
   unsigned short int top_bracket;
   unsigned short int top_backref;
   unsigned short int first_byte;
   unsigned short int req_byte;
-  unsigned short int name_entry_size; /* Size of any name items; 0 => none */
-  unsigned short int name_count;      /* Number of name items */
+  unsigned short int name_entry_size;
+  unsigned short int name_count;
 } real_pcre;
 
-/* @data pcre_study_data
+/* @data pcre_study_data ******************************************************
 **
 ** The format of the block used to store data from pcre_study().
-*/
+**
+** @attr size [size_t] Total that was malloced
+** @attr options [uschar] Undocumented
+** @attr start_bits [uschar[32]] Undocumented
+** @@
+******************************************************************************/
 
 typedef struct pcre_study_data {
-  size_t size;                        /* Total that was malloced */
+  size_t size;
   uschar options;
   uschar start_bits[32];
 } pcre_study_data;
 
-/* @data compile_data
+/* @data compile_data *********************************************************
 **
 ** Structure for passing "static" information around between the functions
 ** doing the compiling, so that they are thread-safe.
-*/
+**
+** @attr lcc [const uschar*] Points to lower casing table
+** @attr fcc [const uschar*] Points to case-flipping table
+** @attr cbits [const uschar*] Points to character type table
+** @attr ctypes [const uschar*] Points to table of type maps
+** @attr start_code [const uschar*] The start of the compiled code
+** @attr name_table [uschar*] The name/number table
+** @attr names_found [int] Number of entries so far
+** @attr name_entry_size [int] Size of each entry
+** @attr top_backref [int] Maximum back reference
+** @attr backref_map [unsigned int] Bitmap of low back refs
+** @attr req_varyopt [int] "After variable item" flag for reqbyte
+** @@
+******************************************************************************/
 
 typedef struct compile_data {
-  const uschar *lcc;            /* Points to lower casing table */
-  const uschar *fcc;            /* Points to case-flipping table */
-  const uschar *cbits;          /* Points to character type table */
-  const uschar *ctypes;         /* Points to table of type maps */
-  const uschar *start_code;     /* The start of the compiled code */
-  uschar *name_table;           /* The name/number table */
-  int  names_found;             /* Number of entries so far */
-  int  name_entry_size;         /* Size of each entry */
-  int  top_backref;             /* Maximum back reference */
-  unsigned int backref_map;     /* Bitmap of low back refs */
-  int  req_varyopt;             /* "After variable item" flag for reqbyte */
+  const uschar *lcc;
+  const uschar *fcc;
+  const uschar *cbits;
+  const uschar *ctypes;
+  const uschar *start_code;
+  uschar *name_table;
+  int  names_found;
+  int  name_entry_size;
+  int  top_backref;
+  unsigned int backref_map;
+  int  req_varyopt;
 } compile_data;
 
-/* @data branch_chain
+/* @data branch_chain *********************************************************
 **
 ** Structure for maintaining a chain of pointers to the currently incomplete
 ** branches, for testing for left recursion.
-*/
+**
+** @attr outer [struct branch_chain*] Pointer to next
+** @attr current [uschar*] Current incomplete branch
+** @@
+******************************************************************************/
 
 typedef struct branch_chain {
   struct branch_chain *outer;
   uschar *current;
 } branch_chain;
 
-/* @data recursion_info
+/* @data recursion_info *******************************************************
 **
 ** Structure for items in a linked list that represents an explicit recursive
 ** call within the pattern.
-*/
+**
+** @attr prev [struct recursion_info*] Previous recursion record (or NULL)
+** @attr group_num [int] Number of group that was called
+** @attr after_call [const uschar*] "Return value":
+**                                  points after the call in the expr
+** @attr save_start [const uschar*] Old value of md->start_match
+** @attr offset_save [int*] Pointer to start of saved offsets
+** @attr saved_max [int] Number of saved offsets
+** @@
+******************************************************************************/
 
 typedef struct recursion_info {
-  struct recursion_info *prev;  /* Previous recursion record (or NULL) */
-  int group_num;                /* Number of group that was called */
-  const uschar *after_call;     /* "Return value":
-				   points after the call in the expr */
-  const uschar *save_start;     /* Old value of md->start_match */
-  int *offset_save;             /* Pointer to start of saved offsets */
-  int saved_max;                /* Number of saved offsets */
+  struct recursion_info *prev;
+  int group_num;
+  const uschar *after_call;
+  const uschar *save_start;
+  int *offset_save;
+  int saved_max;
 } recursion_info;
 
-/* @data match_data
+/* @data match_data ***********************************************************
 **
 ** Structure for passing "static" information around between the functions
 ** doing the matching, so that they are thread-safe.
-*/
+**
+** @attr match_call_count [unsigned long int] Match call count
+** @attr match_limit [unsigned long int] Match limit
+** @attr offset_vector [int*] Offset vector
+** @attr offset_end [int] One past the end
+** @attr offset_max [int] The maximum usable for return data
+** @attr lcc [const uschar*] Points to lower casing table
+** @attr ctypes [const uschar*] Points to table of type maps
+** @attr offset_overflow [BOOL] Set if too many extractions
+** @attr notbol [BOOL] NOTBOL flag
+** @attr noteol [BOOL] NOTEOL flag
+** @attr utf8 [BOOL] UTF8 flag
+** @attr endonly [BOOL] Dollar not before final newline
+** @attr notempty [BOOL] Empty string match not wanted
+** @attr start_code [const uschar*] For use when recursing
+** @attr start_subject [const uschar*] Start of the subject string
+** @attr end_subject [const uschar*] End of the subject string
+** @attr start_match [const uschar*] Start of this match attempt
+** @attr end_match_ptr [const uschar*] Subject position at end match
+** @attr end_offset_top [int] Highwater mark at end of match
+** @attr capture_last [int] Most recent capture number
+** @attr start_offset [int] The start offset value
+** @attr recursive [recursion_info*] Linked list of recursion data
+** @attr callout_data [void*] To pass back to callouts
+** @@
+******************************************************************************/
 
 typedef struct match_data {
-  unsigned long int match_call_count; /* As it says */
-  unsigned long int match_limit;/* As it says */
-  int   *offset_vector;         /* Offset vector */
-  int    offset_end;            /* One past the end */
-  int    offset_max;            /* The maximum usable for return data */
-  const uschar *lcc;            /* Points to lower casing table */
-  const uschar *ctypes;         /* Points to table of type maps */
-  BOOL   offset_overflow;       /* Set if too many extractions */
-  BOOL   notbol;                /* NOTBOL flag */
-  BOOL   noteol;                /* NOTEOL flag */
-  BOOL   utf8;                  /* UTF8 flag */
-  BOOL   endonly;               /* Dollar not before final \n */
-  BOOL   notempty;              /* Empty string match not wanted */
-  const uschar *start_code;     /* For use when recursing */
-  const uschar *start_subject;  /* Start of the subject string */
-  const uschar *end_subject;    /* End of the subject string */
-  const uschar *start_match;    /* Start of this match attempt */
-  const uschar *end_match_ptr;  /* Subject position at end match */
-  int    end_offset_top;        /* Highwater mark at end of match */
-  int    capture_last;          /* Most recent capture number */
-  int    start_offset;          /* The start offset value */
-  recursion_info *recursive;    /* Linked list of recursion data */
-  void  *callout_data;          /* To pass back to callouts */
+  unsigned long int match_call_count;
+  unsigned long int match_limit;
+  int   *offset_vector;
+  int    offset_end;
+  int    offset_max;
+  const uschar *lcc;
+  const uschar *ctypes;
+  BOOL   offset_overflow;
+  BOOL   notbol;
+  BOOL   noteol;
+  BOOL   utf8;
+  BOOL   endonly;
+  BOOL   notempty;
+  const uschar *start_code;
+  const uschar *start_subject;
+  const uschar *end_subject;
+  const uschar *start_match;
+  const uschar *end_match_ptr;
+  int    end_offset_top;
+  int    capture_last;
+  int    start_offset;
+  recursion_info *recursive;
+  void  *callout_data;
 } match_data;
 
 /* Bit definitions for entries in the pcre_ctypes table. */

@@ -3,7 +3,7 @@ extern "C"
 {
 #endif
 
-/* @source embGraph.h
+/* @source ajhist.h
 **
 ** General Plot/Printing routines.
 **
@@ -48,62 +48,87 @@ extern ajint aj_hist_mark;
 **
 ** AJAX data structure for histogram graph data
 **
+** @attr data [float*] y coordinates
+** @attr deletedata [AjBool] if true, delete data
+** @attr colour [ajint] colour code
+** @attr pattern [ajint] pattern code
+** @attr title [AjPStr] graph title
+** @attr xaxis [AjPStr] x axis title
+** @attr yaxis [AjPStr] y axis title
+** @@
 ******************************************************************************/
 
 typedef struct AjSHistData {
-  float *data; /* y coors */
+  float *data;
   AjBool deletedata;
   ajint colour;
   ajint pattern;
-  /*  AjPStr label;*/
   AjPStr title;
   AjPStr xaxis;
   AjPStr yaxis;
-  /*  AjPStr yaxisright;*/
-} AjOHistData, *AjPHistData;
+} AjOHistData;
+#define AjPHistData AjOHistData*
 
 /* @data AjPHist **************************************************************
 **
 ** AJAX data structure for histogram graph objects
 **
+**
+** @attr numofsets [ajint] number of current sets
+** @attr numofsetsmax [ajint] maximum number of sets
+** @attr numofdatapoints [ajint] numbr of data points
+** @attr xmin [float] Lowest x value
+** @attr xmax [float] Highest x value
+** @attr displaytype [ajint] Display type index
+** @attr bins [ajint] Number of histogram bins
+** @attr BaW [AjBool] Black and white rendering if ajTrue
+** @attr title [AjPStr] Plot title
+** @attr xaxis [AjPStr] x axis title
+** @attr yaxisleft [AjPStr] y axis title
+** @attr yaxisright [AjPStr] second y axis title for right side
+** @attr graph [AjPGraph] Graph
+** @attr hists [AjPHistData*] Hiostogram bin data
+** @@
 ******************************************************************************/
 
 typedef struct AjSHist {
-  ajint numofsets;        /* number of current sets */
-  ajint numofsetsmax;     /* maximum number of sets */
+  ajint numofsets;
+  ajint numofsetsmax;
   ajint numofdatapoints;
-  float xmin,xmax;
+  float xmin;
+  float xmax;
   ajint displaytype;
   ajint bins;
-  AjBool BaW;           /* Black and White */
+  AjBool BaW;
   AjPStr title;
   AjPStr xaxis;
   AjPStr yaxisleft;
   AjPStr yaxisright;
   AjPGraph graph;
   AjPHistData *hists;
-} AjOHist, *AjPHist;
+} AjOHist;
+#define AjPHist AjOHist*
 
 void    ajHistClose (void);
-void    ajHistCopyData (AjPHist hist, ajint index, PLFLT *data);
-void    ajHistDelete (AjPHist hist);
-void    ajHistDisplay (AjPHist hist);
+void    ajHistCopyData (AjPHist hist, ajint index, const PLFLT *data);
+void    ajHistDelete (AjPHist* hist);
+void    ajHistDisplay (const AjPHist hist);
 AjPHist ajHistNew (ajint numofsets, ajint numofpoints);
 AjPHist ajHistNewG (ajint numofsets, ajint numofpoints, AjPGraph graph);
 void    ajHistSetBlackandWhite (AjPHist hist, AjBool set);
 void    ajHistSetColour(AjPHist hist, ajint index, ajint colour);
-void    ajHistSetMultiTitle  (AjPHist hist, ajint index, AjPStr title);
-void    ajHistSetMultiTitleC (AjPHist hist, ajint index, char *title);
-void    ajHistSetMultiXTitle  (AjPHist hist, ajint index, AjPStr title);
-void    ajHistSetMultiXTitleC (AjPHist hist, ajint index, char *title);
-void    ajHistSetMultiYTitle  (AjPHist hist, ajint index, AjPStr title);
-void    ajHistSetMultiYTitleC (AjPHist hist, ajint index, char *title);
+void    ajHistSetMultiTitle  (AjPHist hist, ajint index, const AjPStr title);
+void    ajHistSetMultiTitleC (AjPHist hist, ajint index, const char *title);
+void    ajHistSetMultiXTitle  (AjPHist hist, ajint index, const AjPStr title);
+void    ajHistSetMultiXTitleC (AjPHist hist, ajint index, const char *title);
+void    ajHistSetMultiYTitle  (AjPHist hist, ajint index, const AjPStr title);
+void    ajHistSetMultiYTitleC (AjPHist hist, ajint index, const char *title);
 void    ajHistSetPattern (AjPHist hist, ajint index, ajint style);
 void    ajHistSetPtrToData (AjPHist hist, ajint index, PLFLT *data);
-void    ajHistSetTitleC (AjPHist hist, char* string);
-void    ajHistSetXAxisC (AjPHist hist, char* string);
-void    ajHistSetYAxisLeftC (AjPHist hist, char* string);
-void    ajHistSetYAxisRightC (AjPHist hist, char* string);
+void    ajHistSetTitleC (AjPHist hist, const char* string);
+void    ajHistSetXAxisC (AjPHist hist, const char* string);
+void    ajHistSetYAxisLeftC (AjPHist hist,const  char* string);
+void    ajHistSetYAxisRightC (AjPHist hist, const char* string);
 
 #endif /* ajhist_h */
 

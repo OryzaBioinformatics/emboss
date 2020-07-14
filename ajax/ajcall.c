@@ -75,13 +75,13 @@ static unsigned callStrHash(const void *key, unsigned hashsize)
 **
 ** Create hash value pair using the name and function.
 **
-** @param [r] name [char *] name which is ysed later..
-** @param [r] func [CallFunc] function to be called on name being called.
+** @param [r] name [const char*] name which is used later..
+** @param [f] func [CallFunc] function to be called on name being called.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void callRegister(char *name, CallFunc func)
+void callRegister(const char *name, CallFunc func)
 {
     void *rec;
 
@@ -104,12 +104,12 @@ void callRegister(char *name, CallFunc func)
 ** Call a function by its name. If it does not exist then give
 ** an error message saying so.
 **
-** @param [r] name [char *] name of the function to call.
+** @param [r] name [const char*] name of the function to call.
 ** @param [v] [...] Optional arguments
 ** @return [void*] NULL if function call not found.
 ** @@
 ******************************************************************************/
-void* call(char *name, ...)
+void* call(const char *name, ...)
 {
     va_list args;
     CallFunc rec;
@@ -117,7 +117,7 @@ void* call(char *name, ...)
 
     if(!calls)
     {
-	ajMessCrash("Graphics calls not Registered. "
+	ajMessCrash("Graphics calls not registered. "
 		    "Use ajGraphInit in main function first",name);
 	return retval;
     }

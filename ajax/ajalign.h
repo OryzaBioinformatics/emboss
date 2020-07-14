@@ -14,60 +14,100 @@ extern "C"
 **
 ** @new ajAlignNew Default constructor
 ** @delete ajAlignDel Default destructor
-** @set ajAlignReset Resets ready for reuse.
-** @use ajAlignWrite Master alignment output routine
-** @use ajAlignWriteHeader Master header output routine
-** @use ajAlignWriteTail Master footer output routine
+** @modify ajAlignReset Resets ready for reuse.
+** @output ajAlignWrite Master alignment output routine
+** @output ajAlignWriteHeader Master header output routine
+** @output ajAlignWriteTail Master footer output routine
+**
 ** @other AjPSeqout Sequence output
 ** @other AjPFeatout Feature output
 ** @other AjPReport Report output
 ** @other AjPFile Input and output files
+**
+** @attr Name [AjPStr] As "Source" for features, usually empty
+** @attr Usa [AjPStr] Name built from input USA, usually empty
+** @attr Type [AjPStr] "P" Protein or "N" Nucleotide
+** @attr Formatstr [AjPStr] Report format (-aformat qualifier)
+** @attr Format [AjEnum] Report format (index number)
+** @attr Extension [AjPStr] Output file extension
+** @attr File [AjPFile] Output file object
+** @attr Header [AjPStr] Text to add to header with newlines
+** @attr SubHeader [AjPStr] Text to add to align subheader with newlines
+** @attr Tail [AjPStr] Text to add to tail with newlines
+** @attr SubTail [AjPStr] Text to add to subtail with newlines
+** @attr Showacc [AjBool] Report accession number if ajTrue
+** @attr Showdes [AjBool] Report sequence description if ajTrue
+** @attr Showusa [AjBool] Report full USA (-ausaqualifier) if ajTrue
+**                        or only seqname if ajFalse
+** @attr Multi [AjBool] if true, assume >1 alignment
+** @attr Global [AjBool] if true, show full sequence beyond match
+** @attr Data [AjPList] Alignment specific data - see ajalign.c
+** @attr Nseqs [ajint] Number of sequences in all alignments
+** @attr Nmin [ajint] Minimum number of sequences e.g. 2
+** @attr Nmax [ajint] Maximum number of sequences e.g. 2
+** @attr Width [ajint] Output width (minimum 10)
+** @attr Count [ajint] Use count
+** @attr IMatrix [AjPMatrix] Integer matrix (see also FMatrix)
+** @attr FMatrix [AjPMatrixf] Floating Pt matrix (see also IMatrix)
+** @attr Matrix [AjPStr] Matrix name
+** @attr GapPen [AjPStr] Gap penalty (converted to string)
+** @attr ExtPen [AjPStr] Gap extend penalty (converted to string)
+** @attr SeqOnly [AjBool] Sequence output only, no head or tail
+** @attr SeqExternal [AjBool] Sequence is non-local, do not delete
 ** @@
 ******************************************************************************/
 
 typedef struct AjSAlign {
-  AjPStr Name;			/* As "Source" for features, usually empty */
-  AjPStr Usa;			/* Name built from input USA, usually empty  */
-  AjPStr Type;			/* "P" Protein or "N" Nucleotide */
-  AjPStr Formatstr;		/* Report format (-aformat) */
-  AjEnum Format;		/* Report format (index number) */
-  AjPStr Extension;		/* Output file extension */
-  AjPFile File;			/* Output file object */
-  AjPStr Header;		/* Text to add to header with newlines */
-  AjPStr SubHeader;		/* Text to add to align subheader */
-  AjPStr Tail;			/* Text to add to tail with newlines */
-  AjBool Showacc;		/* Report accession number */
-  AjBool Showdes;		/* Report sequence description */
-  AjBool Showusa;		/* Report USA (-ausa) or only seqname */
-  AjBool Multi;			/* if true, assume >1 alignment */
-  AjBool Global;		/* if true, show full sequence beyond match */
-  AjPList Data;			/* Alignment specific data - see ajalign.c */
-  ajint Nseqs;			/* Number of sequences in all alignments */
-  ajint Nmin;			/* Minimum number of sequences e.g. 2 */
-  ajint Nmax;			/* Maximum number of sequences e.g. 2 */
-  ajint Width;			/* Output width (minimum 10) */
-  ajint Count;			/* Use count */
-  AjPMatrix  IMatrix;		/* Integer matrix (see also FMatrix) */
-  AjPMatrixf FMatrix;		/* Floating Pt matrix (see also IMatrix) */
-  AjPStr Matrix;		/* Matrix name */
-  AjPStr GapPen;		/* Gap penalty (converted to string)  */
-  AjPStr ExtPen;		/* Gap extend penalty (to string) */
-  AjBool SeqOnly;		/* Sequence output only, no head or tail */
-  AjBool SeqExternal;		/* Sequence is non-local, do not delete */
+  AjPStr Name;
+  AjPStr Usa;
+  AjPStr Type;
+  AjPStr Formatstr;
+  AjEnum Format;
+  AjPStr Extension;
+  AjPFile File;
+  AjPStr Header;
+  AjPStr SubHeader;
+  AjPStr Tail;
+  AjPStr SubTail;
+  AjBool Showacc;
+  AjBool Showdes;
+  AjBool Showusa;
+  AjBool Multi;
+  AjBool Global;
+  AjPList Data;
+  ajint Nseqs;
+  ajint Nmin;
+  ajint Nmax;
+  ajint Width;
+  ajint Count;
+  AjPMatrix  IMatrix;
+  AjPMatrixf FMatrix;
+  AjPStr Matrix;
+  AjPStr GapPen;
+  AjPStr ExtPen;
+  AjBool SeqOnly;
+  AjBool SeqExternal;
 } AjOAlign;
 
 #define AjPAlign AjOAlign*
 
 void         ajAlignClose (AjPAlign thys);
+AjBool       ajAlignConsStats(const AjPSeqset thys, AjPMatrix mymatrix,
+			      AjPStr *cons, ajint* retident, 
+			      ajint* retsim, ajint* retgap,
+			      ajint* retlen);
 AjBool       ajAlignDefine (AjPAlign pthys, AjPSeqset seqset);
 AjBool       ajAlignDefineSS (AjPAlign pthys,
 			      AjPSeq seqa, AjPSeq seqb);
+AjBool       ajAlignDefineCC (AjPAlign pthys,
+			      const char* seqa, const char* seqb,
+			      const char* namea,const  char* nameb);
 void         ajAlignDel (AjPAlign* pthys);
 AjBool       ajAlignOpen (AjPAlign thys, const AjPStr name);
 AjBool       ajAlignFindFormat (const AjPStr format, ajint* iformat);
 AjBool       ajAlignFormatDefault (AjPStr* pformat);
 AjPAlign     ajAlignNew (void);
-void         ajAlignPrintFormat (const AjPFile outf, AjBool full);
+void         ajAlignPrintFormat (AjPFile outf, AjBool full);
 void         ajAlignReset (AjPAlign thys);
 void         ajAlignSetExternal (AjPAlign thys, AjBool external);
 void         ajAlignSetHeader (AjPAlign thys, const AjPStr header);

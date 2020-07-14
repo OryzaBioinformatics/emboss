@@ -4,7 +4,7 @@ extern "C"
 #endif
 
 /*  File: ajmess.h
- *  Author: Richard Durbin (rd@mrc-lmb.cam.ac.uk) and Ed Griffiths.
+ *  Original author: Richard Durbin (rd@mrc-lmb.cam.ac.uk) and Ed Griffiths.
  *  as part of the ACEDB package (messubs.h)
  *  Modified: by I Longden for the EMBOSS package.
  */
@@ -23,6 +23,10 @@ extern AjPStr acdProgram;
 **
 ** Ajax error message levels object
 **
+** @attr warning [AjBool] Display ajWarn messages 
+** @attr error [AjBool] Display ajErr messages 
+** @attr fatal [AjBool] Display ajFatal messages 
+** @attr die [AjBool] Display ajDie messages 
 ** @@
 ******************************************************************************/
 typedef struct AjSError
@@ -42,22 +46,22 @@ extern AjOError AjErrorLevel;
 typedef void (*AjMessVoidRoutine)(void) ;
 typedef void (*AjMessOutRoutine)(const char*) ;
 
-void ajMessDie (const char *format, ...);
 
-AjMessVoidRoutine ajMessBeepReg (AjMessVoidRoutine func) ;
-AjMessOutRoutine  ajMessOutReg (AjMessOutRoutine func) ;
-AjMessOutRoutine  ajMessDumpReg (AjMessOutRoutine func) ;
-AjMessOutRoutine  ajMessErrorReg (AjMessOutRoutine func) ;
-AjMessOutRoutine  ajMessExitReg (AjMessOutRoutine func) ;
-AjMessOutRoutine  ajMessCrashReg (AjMessOutRoutine func) ;
+AjMessVoidRoutine ajMessRegBeep (AjMessVoidRoutine func) ;
+AjMessOutRoutine  ajMessRegCrash (AjMessOutRoutine func) ;
+AjMessOutRoutine  ajMessRegDump (AjMessOutRoutine func) ;
+AjMessOutRoutine  ajMessRegErr (AjMessOutRoutine func) ;
+AjMessOutRoutine  ajMessRegExit (AjMessOutRoutine func) ;
+AjMessOutRoutine  ajMessRegOut (AjMessOutRoutine func) ;
+AjMessOutRoutine  ajMessRegWarn (AjMessOutRoutine func) ;
 
-void ajMessSetErr(const char *filename, ajint line_num);
-void ajMessCrashFL (const char *format, ...);
-void ajMessVCrashFL (const char *format, va_list args);
-void ajMessCrashCodeFL (const char *code);
+void              ajMessSetErr(const char *filename, ajint line_num);
+void              ajMessCrashFL (const char *format, ...);
+void              ajMessVCrashFL (const char *format, va_list args);
+void              ajMessCrashCodeFL (const char *code);
 
 /* External Interface.                                                       */
-/* Note: ajMesscrash is a macro and that it makes use of the ',' operator    */
+/* Note: ajMesscrash is a macro and makes use of the ',' operator    */
 /* in C. This means that the ajMesscrash macro will only produce a single C  */
 /* statement and hence can be used within brackets etc. and will not break   */
 /* existing code, e.g.                                                       */
@@ -66,64 +70,78 @@ void ajMessCrashCodeFL (const char *code);
 /* funcblah(uMessSetErrorOrigin(__FILE__, __LINE__), uMessCrash("hello")) ;  */
 /*                                                                           */
 
-void ajMessErrorInit(const char *progname) ; /* Record the application's
-					     name for use in error messages. */
+void              ajMessErrorInit(const char *progname) ; /* Record
+							     the application's
+							     name for use in
+							     error messages. */
 
-void ajMessBeep (void) ; /* make a beep */
+void              ajMessBeep (void) ; /* make a beep */
 
-AjBool ajMessErrorSetFile(const char *errfile);   /* set file to read
-					       codes/messages from */
-void ajMessCodesDelete(void);               /* Delete the code/message pairs */
+AjBool            ajMessErrorSetFile(const char *errfile);  /* set file to
+							       read codes +
+							       messages from */
+void              ajMessCodesDelete(void);  /* Delete the code/message pairs */
 
-void ajMessOut (const char *format, ...) ;  /* simple message, no newline */
-void ajMessOutCode(const char *name);       /* as above but uses codes to
-					 get message */
-void ajMessOutLine (const char *format, ...) ;  /* simple msg with newline */
-void ajMessDump (const char *format, ...) ; /* write to log file */
-void ajMessError (const char *format, ...) ; /* error message and write to
-					  log file */
-void ajMessVError (const char *format, va_list args) ; /* error message and
-						    write to log
-						    file */
-void ajMessErrorCode(const char *name);      /* as above but uses code to
-					  get message */
-void ajMessExit (void);
-void ajMessExitmsg(const char *format, ...) ;  /* error message, write to log
-					 file & exit */
-void ajMessWarning (const char *format, ...); /* warning message */
-void ajMessSetErr (const char *filename, ajint line_num);
+void              ajMessOut (const char *format, ...) ;  /* simple message,
+							    no newline */
+void              ajMessOutCode(const char *name);       /* as above but uses
+							    codes to get
+							    message */
+void              ajMessDump (const char *format, ...) ; /* write to
+							    log file */
+void              ajMessErrorCode(const char *name);      /* as above but
+							     uses code to
+							     get message */
+void              ajMessExit (void);
+void              ajMessExitmsg(const char *format, ...) ;  /* error message,
+							       write to log
+							       file & exit */
+void              ajMessSetErr (const char *filename, ajint line_num);
+
+void              ajDebug (const char *fmt, ...);
+FILE*             ajDebugFile (void);
+void              ajDie (const char *format, ...);
+void              ajErr (const char *format, ...) ; /* error message and
+						       write to
+						       log file */
+ajint             ajUserGet (AjPStr *pthis, const char *fmt, ...);
+void              ajUser (const char *format, ...) ;  /* simple msg with
+							 newline */
+void              ajVDie (const char *format, va_list args) ; /* error message
+								 and
+								 write to log
+								 file */
+void              ajVErr (const char *format, va_list args) ; /* error message
+								 and
+								 write to log
+								 file */
+void              ajVWarn (const char *format, va_list args) ; /* warning
+								  message */
+void              ajWarn (const char *format, ...); /* warning message */
 
 #define ajMessCrash   ajMessSetErr(__FILE__, __LINE__), ajMessCrashFL
 #define ajMessCrashCode ajMessSetErr(__FILE__, __LINE__), ajMessCrashCodeFL
 #define ajFatal   ajMessSetErr(__FILE__, __LINE__), ajMessCrashFL
 #define ajVFatal   ajMessSetErr(__FILE__, __LINE__), ajMessVCrashFL
                                                   /* abort - but see below */
-#define ajWarn ajMessWarning
-#define ajVWarn ajMessVWarning
-#define ajErr ajMessError
-#define ajVErr ajMessVError
-#define ajUser ajMessOutLine
-#define ajVUser ajMessVOut
-#define ajDie ajMessDie
-#define ajVDie ajMessDie
-
-AjBool ajMessQuery (const char *text,...) ;   /* ask yes/no question */
-AjBool ajMessPrompt (const char *prompt, const char *dfault, const char *fmt) ;
+AjBool            ajMessQuery (const char *text,...); /* ask yes/no question */
+AjBool            ajMessPrompt (const char *prompt, const char *dfault,
+				const char *fmt) ;
         /* ask for data satisfying format get results via freecard() */
 
-char* ajMessSysErrorText (void) ;
+char*             ajMessSysErrorText (void) ;
         /* wrapped system error message for use in ajMesserror/crash() */
 
-ajint ajMessErrorCount (void);
+ajint             ajMessErrorCount (void);
         /* return numbers of error so far */
 
-/**** routines to catch crashes if necessary, e.g. when acedb dumping ****/
+/**** routines to catch crashes if necessary, e.g. when dumping ****/
 
 #include <setjmp.h>
 
-jmp_buf*  ajMessCatchCrash (jmp_buf* ) ;
-jmp_buf*  ajMessCatchError (jmp_buf* ) ;
-char*     ajMessCaughtMessage (void) ;
+const jmp_buf*          ajMessCatchCrash (const jmp_buf* ) ;
+const jmp_buf*          ajMessCatchError (const jmp_buf* ) ;
+char*             ajMessCaughtMessage (void) ;
 
   /* if a setjmp() stack context is set using ajMessCatch*() then rather than
      exiting or giving an error message, ajMessCrash() and messError() will
@@ -133,9 +151,6 @@ char*     ajMessCaughtMessage (void) ;
      the error message that would have been printed.
   */
 
-void        ajDebug (const char *fmt, ...);
-FILE*       ajDebugFile (void);
-ajint         ajUserGet (AjPStr *pthis, const char *fmt, ...);
 
 #endif /* defined(DEF_REGULAR_H) */
 

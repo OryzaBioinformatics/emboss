@@ -132,7 +132,7 @@ void ajLogInfo(void)
 **
 ** Returns the user's userid
 **
-** @param [r] dest [AjPStr*] String to return result
+** @param [w] dest [AjPStr*] String to return result
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
@@ -399,7 +399,7 @@ void ajUtilRevInt(ajint* ival)
 **
 ** Reverses the byte order in a long.
 **
-** @param [u] ival [ajlong*] Integer in wrong byte order.
+** @param [u] lval [ajlong*] Integer in wrong byte order.
 **                           Returned in correct order.
 ** @return [void]
 ** @@

@@ -26,16 +26,17 @@ unsigned char ajSysItoUC(ajint v);
 AjBool ajSysIsDirectory(const char *s);
 AjBool ajSysIsRegular(const char *s);
 FILE *ajSysFdopen(ajint filedes, const char *mode);
-void ajSystem(AjPStr *cl);
-void ajSystemEnv(AjPStr *cl, char **environment);
+void ajSystem(const AjPStr cl);
+void ajSystemEnv(const AjPStr cl, char * const env[]);
 char *ajSysStrdup(const char *s);
-AjBool ajSysUnlink(AjPStr *s);
+AjBool ajSysUnlink(const AjPStr s);
 AjBool ajSysWhich(AjPStr *exefile);
-AjBool ajSysWhichEnv(AjPStr *exefile, char **environment);
+AjBool ajSysWhichEnv(AjPStr *exefile, char * const env[]);
 void ajSysPrintlist(char **a);
 char *ajSysStrtok(const char *s, const char *t);
 char *ajSysStrtokR(const char *s, const char *t, char **ptrptr, AjPStr *buf);
 char *ajSysFgets(char *buf, int size, FILE *fp);
+FILE *ajSysFopen(const char *name, const char *flags);
 
 /*
  * S_IFREG is non-ANSI therefore define it here

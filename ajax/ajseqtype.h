@@ -9,33 +9,28 @@ extern "C"
 void         ajSeqGap (AjPSeq thys, char gapc, char padc);
 void         ajSeqGapLen (AjPSeq thys, char gapc, char padc, ajint ilen);
 void         ajSeqGapS (AjPStr* seq, char gapc);
-void         ajSeqPrintType (const AjPFile outf, AjBool full);
+void         ajSeqPrintType (AjPFile outf, AjBool full);
 void         ajSeqSetNuc (AjPSeq thys);
 void         ajSeqSetProt (AjPSeq thys);
 void         ajSeqsetSetNuc (AjPSeqset thys);
 void         ajSeqsetSetProt (AjPSeqset thys);
-char         ajSeqTypeAnyS (AjPStr* pthys);
-char         ajSeqTypeDnaS (AjPStr* pthys);
-char         ajSeqTypeGapanyS (AjPStr* pthys);
-char         ajSeqTypeGapdnaS (AjPStr* pthys);
-char         ajSeqTypeGapnucS (AjPStr* pthys);
-char         ajSeqTypeAnyprotS (AjPStr* pthys);
-char         ajSeqTypeGapprotS (AjPStr* pthys);
-char         ajSeqTypeGaprnaS (AjPStr* pthys);
+
+char         ajSeqTypeAnyprotS (const AjPStr pthys);
+char         ajSeqTypeDnaS (const AjPStr pthys);
+char         ajSeqTypeGapanyS (const AjPStr pthys);
+char         ajSeqTypeGapdnaS (const AjPStr pthys);
+char         ajSeqTypeGapnucS (const AjPStr pthys);
+char         ajSeqTypeGaprnaS (const AjPStr pthys);
+char         ajSeqTypeRnaS (const AjPStr pthys);
+
 AjBool       ajSeqTypeIsAny (const AjPStr type_name);
 AjBool       ajSeqTypeIsNuc (const AjPStr type_name);
 AjBool       ajSeqTypeIsProt (const AjPStr type_name);
-char         ajSeqTypeNucS (AjPStr* pthys);
-char         ajSeqTypeProtS (AjPStr* pthys);
-char         ajSeqTypePurednaS (AjPStr* pthys);
-char         ajSeqTypePurenucS (AjPStr* pthys);
-char         ajSeqTypePureprotS (AjPStr* pthys);
-char         ajSeqTypePurernaS (AjPStr* pthys);
-char         ajSeqTypeRnaS (AjPStr* pthys);
-char         ajSeqTypeStopprotS (AjPStr* pthys);
+
+
 void         ajSeqType (AjPSeq thys);
 AjBool       ajSeqTypeCheckIn (AjPSeq thys, const AjPSeqin seqin);
-AjBool       ajSeqTypeCheckS (AjPStr* pthys, AjPStr type_name);
+AjBool       ajSeqTypeCheckS (AjPStr* pthys, const AjPStr type_name);
 
 #endif
 

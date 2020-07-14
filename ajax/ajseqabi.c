@@ -39,7 +39,7 @@ static ajshort seqABIBaseIdx(char B);
 ** Test file type is ABI format - look for 'ABIF' flag (which may be in one
 ** of 2 places).
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
@@ -86,7 +86,7 @@ AjBool ajSeqABITest(AjPFile fp)
 **
 ** Read in a sequence from an ABI trace file.
 **
-** @param [r] fp [AjPFile] ABI format input file
+** @param [u] fp [AjPFile] ABI format input file
 ** @param [r] baseO [ajlong] BASE offset in an ABI file
 ** @param [r] numBases [ajlong] number of bases
 ** @param [w] nseq [AjPStr*] read sequence
@@ -119,7 +119,7 @@ AjBool ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
 **
 ** Get the name of the machine used to obtain an ABI trace file.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @param [w] machine [AjPStr*] machine name
 ** @return [AjBool] ajTrue on success
 ** @@
@@ -139,8 +139,8 @@ AjBool ajSeqABIMachineName(AjPFile fp,AjPStr *machine)
 	{
 	    ajFileRead(&l,sizeof(char),1,fp);
 	    *machine = ajStrNewL(l+1);
-	    ajFileRead((void*)ajStrStr(*machine),l,1,fp);
-	    *(ajStrStr(*machine)+l)='\0';
+	    ajFileRead((void*)ajStrStrMod(machine),l,1,fp);
+	    *(ajStrStrMod(machine)+l)='\0';
 	}
 	else
 	    return ajFalse;
@@ -158,7 +158,7 @@ AjBool ajSeqABIMachineName(AjPFile fp,AjPStr *machine)
 **
 ** Find 'DATA' tag and get the number of data points.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] Number of data points in file
 ** @@
 ******************************************************************************/
@@ -186,7 +186,7 @@ ajint ajSeqABIGetNData(AjPFile fp)
 **
 ** Find the 'BASE' tag in an ABI trace file and get the number of bases.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] Number of bases in file
 ** @@
 ******************************************************************************/
@@ -211,15 +211,15 @@ ajint ajSeqABIGetNBase(AjPFile fp)
 **
 ** Read in the processed trace data from an ABI file.
 **
-** @param [r] fp [AjPFile] ABI format file
-** @param [r] Offset [ajlong*] data offset in ABI file
+** @param [u] fp [AjPFile] ABI format file
+** @param [r] Offset [const ajlong*] data offset in ABI file
 ** @param [r] numPoints [ajlong] number of data points
 ** @param [w] trace [AjPInt2d] (4xnumPoints) array of trace data
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajSeqABIGetData(AjPFile fp,ajlong *Offset,ajlong numPoints,
+void ajSeqABIGetData(AjPFile fp,const ajlong *Offset,ajlong numPoints,
                      AjPInt2d trace)
 {
     ajint i;
@@ -249,7 +249,7 @@ void ajSeqABIGetData(AjPFile fp,ajlong *Offset,ajlong numPoints,
 **
 ** Read in the base positions from an ABI file.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @param [r] numBases [ajlong] number of bases to be read
 ** @param [w] basePositions [AjPShort*] base positions output
 ** @return [void]
@@ -280,19 +280,19 @@ void ajSeqABIGetBasePosition(AjPFile fp,ajlong numBases,
 **
 ** Read in the signal strength information from an ABI file.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @param [r] fwo_ [ajlong] field order
-** @param [w] sigC [ajshort] average signal strength for C
-** @param [w] sigA [ajshort] average signal strength for A
-** @param [w] sigG [ajshort] average signal strength for G
-** @param [w] sigT [ajshort] average signal strength for T
+** @param [w] sigC [ajshort*] average signal strength for C
+** @param [w] sigA [ajshort*] average signal strength for A
+** @param [w] sigG [ajshort*] average signal strength for G
+** @param [w] sigT [ajshort*] average signal strength for T
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 void ajSeqABIGetSignal(AjPFile fp,ajlong fwo_,
-		       ajshort sigC,ajshort sigA,
-		       ajshort sigG,ajshort sigT)
+		       ajshort *sigC,ajshort *sigA,
+		       ajshort *sigG,ajshort *sigT)
 {
     ajlong signalO;
     ajshort* base[4];
@@ -304,10 +304,10 @@ void ajSeqABIGetSignal(AjPFile fp,ajlong fwo_,
     /* Get signal strength info */
     if (seqABIGetFlag(fp,SIGNALtag,1,5,&signalO))
     {
-        base[0] = &sigC;
-        base[1] = &sigA;
-        base[2] = &sigG;
-        base[3] = &sigT;
+        base[0] = sigC;
+        base[1] = sigA;
+        base[2] = sigG;
+        base[3] = sigT;
         if (ajFileSeek(fp, signalO, SEEK_SET) >= 0 &&
             seqABIReadInt2(fp, base[seqABIBaseIdx((char)(fwo_>>24&255))]) &&
             seqABIReadInt2(fp, base[seqABIBaseIdx((char)(fwo_>>16&255))]) &&
@@ -331,7 +331,7 @@ void ajSeqABIGetSignal(AjPFile fp,ajlong fwo_,
 **
 ** Read in the base spacing from an ABI file.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @return [float] base spacing
 ** @@
 ******************************************************************************/
@@ -356,7 +356,7 @@ float ajSeqABIGetBaseSpace(AjPFile fp)
 **
 ** Routine to get the 'BASE' tag offset in an ABI file.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] 'BASE' tag offset in an ABI file
 ** @@
 ******************************************************************************/
@@ -382,7 +382,7 @@ ajint ajSeqABIGetBaseOffset(AjPFile fp)
 **
 ** Routine to get the 'PLOC', base position, tag offset in an ABI file
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] base position offset in an ABI file
 ** @@
 ******************************************************************************/
@@ -408,7 +408,7 @@ ajint ajSeqABIGetBasePosOffset(AjPFile fp)
 **
 ** Routine to get the "FWO" tag, field order ("GATC"), tag.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] field order
 ** @@
 ******************************************************************************/
@@ -435,7 +435,7 @@ ajint ajSeqABIGetFWO(AjPFile fp)
 **
 ** Routine to get the primer offset in an ABI file.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] primer offset
 ** @@
 ******************************************************************************/
@@ -461,7 +461,7 @@ ajint ajSeqABIGetPrimerOffset(AjPFile fp)
 **
 ** Routine to get the primer position in an ABI file.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] primer position
 ** @@
 ******************************************************************************/
@@ -491,7 +491,7 @@ ajint ajSeqABIGetPrimerPosition(AjPFile fp)
 **
 ** Get the processed trace data ('DATA' tag) offset in an ABI file.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @param [w] Offset [ajlong *] trace data offset, used in ajSeqABIGetData
 ** @return [AjBool]  ajTrue on success
 ** @@
@@ -542,7 +542,7 @@ AjBool ajSeqABIGetTraceOffset(AjPFile fp, ajlong *Offset)
 **
 ** Routine to read 4 bytes from a file and return the integer.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @param [w] i4 [ajlong *] ajlong integer read in from ABI file
 ** @return [AjBool] true if read successfully
 ** @@
@@ -573,7 +573,7 @@ static AjBool seqABIReadInt4(AjPFile fp,ajlong *i4)
 **
 ** Routine to read 4 bytes from a file and return the float.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @param [w] f4 [float *] float read in from ABI file
 ** @return [AjBool] true if read successfully
 ** @@
@@ -602,7 +602,7 @@ static AjBool seqABIReadFloat4(AjPFile fp,float* f4)
 **
 ** Routine to read 2 bytes from a file and return the short integer.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @param [w] i2 [ajshort *] short integer read in from ABI file
 ** @return [AjBool] true if read successfully
 ** @@
@@ -632,7 +632,7 @@ static AjBool seqABIReadInt2(AjPFile fp, ajshort *i2)
 ** It  will then return the *integer* value (val) of the word+1 from
 ** that flag record.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @param [r] flagLabel [ajlong] flag in the ABI file
 ** @param [r] flagInstance [ajlong] flag instance in the ABI file
 ** @param [r] word [ajlong] number of fields to ignore in this record
@@ -690,7 +690,7 @@ static AjBool seqABIGetFlag(AjPFile fp, ajlong flagLabel,
 ** It  will then return the *float* value (val) of the word+1 from
 ** that flag record.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @param [r] flagLabel [ajlong] flag in the ABI file
 ** @param [r] flagInstance [ajlong] flag instance in the ABI file
 ** @param [r] word [ajlong] number of fields to ignore in this record
@@ -746,7 +746,7 @@ static AjBool seqABIGetFlagF(AjPFile fp, ajlong flagLabel,
 ** It  will then return the *short ajint* value (val) of the word+1 from
 ** that flag record.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @param [r] flagLabel [ajlong] flag in the ABI file
 ** @param [r] word [ajlong] number of fields to ignore in this record
 ** @param [w] val [ajshort*] integer value of the word+1
@@ -814,7 +814,7 @@ static ajshort seqABIBaseIdx(char B)
 **
 ** Get the sample name from an ABI trace file.
 **
-** @param [r] fp [AjPFile] ABI format file
+** @param [u] fp [AjPFile] ABI format file
 ** @param [w] sample [AjPStr*] sample name
 ** @return [AjBool] true if read successfully
 ** @@
@@ -833,8 +833,8 @@ AjBool ajSeqABISampleName(AjPFile fp, AjPStr *sample)
     {
 	ajFileRead(&l,sizeof(char),1,fp);
 	*sample = ajStrNewL(l+1);
-	ajFileRead((void*)ajStrStr(*sample),l,1,fp);
-	*(ajStrStr(*sample)+l)='\0';
+	ajFileRead((void*)ajStrStrMod(sample),l,1,fp);
+	*(ajStrStrMod(sample)+l)='\0';
     }
 
     return ajTrue;

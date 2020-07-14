@@ -24,20 +24,31 @@ extern "C"
 ** @alias AjSFeattabIn
 ** @alias AjOFeattabIn
 **
-** @new    ajFeatUfoProcess Constructor based upon a 'UFO' and file mode (rwa)
-** @delete ajFeattabInClose Destructor, closes file and releases resources
+** @new    ajFeattabInNew Constructor
+** @new    ajFeattabInNewSS Constructor with format, name and type
+** @new    ajFeattabInNewSSF Constructor with format, name, type and input file
+** @delete ajFeattabInDel Destructor
+**
+** @attr Ufo [AjPStr] Original UFO
+** @attr Formatstr [AjPStr] Input format name
+** @attr Format [ajint] Input format index
+** @attr Filename [AjPStr] Original filename
+** @attr Seqid [AjPStr] Sequence entryname
+** @attr Type [AjPStr] Type N or P
+** @attr Handle [AjPFileBuff] Input buffered file
+** @attr Seqname [AjPStr] name of AjPSeq assoc. with feature table
 ** @@
 ******************************************************************************/
 
 typedef struct AjSFeattabIn {
-  AjPStr        Ufo;		/* Original UFO */
-  AjPStr        Formatstr;	/* Input format name */
-  ajint         Format;		/* Input format enum */
-  AjPStr        Filename;	/* Original filename */
-  AjPStr        Seqid;		/* Sequence entryname */
-  AjPStr        Type;		/* Type N or P */
-  AjPFileBuff   Handle ;	/* Input buffered file */
-  AjPStr        Seqname ;	/* name of AjPSeq assoc. with feature table */
+  AjPStr        Ufo;
+  AjPStr        Formatstr;
+  ajint         Format;
+  AjPStr        Filename;
+  AjPStr        Seqid;
+  AjPStr        Type;
+  AjPFileBuff   Handle;
+  AjPStr        Seqname;
 }  AjOFeattabIn;
 
 #define AjPFeattabIn AjOFeattabIn*
@@ -49,23 +60,37 @@ typedef struct AjSFeattabIn {
 ** @alias AjSFeattabOut
 ** @alias AjOFeattabOut
 **
-** @new    ajFeatUfoProcess Constructor based upon a 'UFO' and file mode (rwa)
-** @delete ajFeattabOutClose Destructor, closes file and releases resources
+** @new    ajFeattabOutNew Constructor
+** @new    ajFeattabOutNewSSF Constructor with format, name, type and
+**                            output file
+** @delete ajFeattabOutDel Destructor
+**
+** @attr Ufo [AjPStr] Original output UFO
+** @attr Formatstr [AjPStr] Output format name
+** @attr Format [ajint] Output format index
+** @attr Filename [AjPStr] Output filename
+** @attr Directory [AjPStr] Output directory
+** @attr Seqid [AjPStr] Output entryname
+** @attr Type [AjPStr] Type N or P
+** @attr Handle [AjPFile] Output file
+** @attr Seqname [AjPStr] AjPSeq assoc. with feature table
+** @attr Basename [AjPStr] Basename for output file
+** @attr Local [AjBool] Opened as a local file if ajTrue
 ** @@
 ******************************************************************************/
 
 typedef struct AjSFeattabOut {
-  AjPStr        Ufo;			/* Original output UFO */
-  AjPStr        Formatstr;		/* Output format name */
-  ajint         Format;			/* Output format enum */
-  AjPStr        Filename;		/* Output filename */
-  AjPStr        Directory;		/* Output directory */
-  AjPStr        Seqid;			/* Output entryname */
-  AjPStr        Type;			/* Type N or P */
-  AjPFile       Handle;			/* Output file */
-  AjPStr        Seqname;	        /* AjPSeq assoc. with feature table */
-  AjPStr        Basename;		/* Basename for output file */
-  AjBool        Local;			/* Opened as a local file */
+  AjPStr        Ufo;
+  AjPStr        Formatstr;
+  ajint         Format;
+  AjPStr        Filename;
+  AjPStr        Directory;
+  AjPStr        Seqid;
+  AjPStr        Type;
+  AjPFile       Handle;
+  AjPStr        Seqname;
+  AjPStr        Basename;
+  AjBool        Local;
 }  AjOFeattabOut;
 
 #define AjPFeattabOut AjOFeattabOut*
@@ -80,23 +105,32 @@ typedef struct AjSFeattabOut {
 ** @alias AjOFeattable
 **
 ** @new    ajFeattableNew        Constructor
-** @delete ajFeattabDel          Default destructor
-** @mod    ajFeattabAdd          Adds an AjPFeature to a set
-** @mod    ajFeaturesRead        Reads in a feature set in a specified format
+** @delete ajFeattableDel        Default destructor
+** @modify ajFeattableAdd        Adds an AjPFeature to a set
+** @new    ajFeatRead            Reads in a feature set in a specified format
+**
+** @attr Seqid [AjPStr] Sequence name
+** @attr Type [AjPStr] Sequence type: P or N
+** @attr DefFormat [ajint] Original input or 'source' format of feature table
+** @attr Features [AjPList] List of AjPFeatures...
+** @attr Start [ajint] First position used (like sequence begin)
+** @attr End [ajint] Last position used (like sequence end)
+** @attr Len [ajint] Maximum length
+** @attr Offset [ajint] Offset when trimmed
+** @attr Groups [ajint] Number of current group being added
 ** @@
 ******************************************************************************/
 
 typedef struct AjSFeattable {
-  AjPStr            Seqid ;	/* Sequence name */
-  AjPStr            Type ;	/* Sequence type: P or N */
-  ajint             DefFormat ; /* Original input or 'source' format
-				   of the feature table */
-  AjPList           Features ;	/* List of AjPFeatures... */
-  ajint             Start;      /* First position used (like sequence begin) */
-  ajint             End;        /* Last position used (like sequence end) */
-  ajint             Len;        /* Maximum length */
-  ajint             Offset;     /* Offset when trimmed */
-  ajint             Groups;	/* Number of current group being added */
+  AjPStr            Seqid;
+  AjPStr            Type;
+  ajint             DefFormat;
+  AjPList           Features;
+  ajint             Start;
+  ajint             End;
+  ajint             Len;
+  ajint             Offset;
+  ajint             Groups;
 }  AjOFeattable;
 
 #define AjPFeattable AjOFeattable*
@@ -127,70 +161,56 @@ typedef struct AjSFeattable {
 ** @alias AjOFeature
 **
 ** @new    ajFeatNew             Constructor - must specify the associated
-**                               (non-null) AjPFeattable?
-** @new    ajFeatNewFromTPS      Constructor: given type, position & score,
-**                               assumes default Source
-** @new    ajFeatNewFromPS       Constructor: given position & score,
-**                               assumes default Source and Type
+**                               (non-null) AjPFeattable
+** @new    ajFeatNewII           Simple constructor with only start and end
+**                               positions
+** @new    ajFeatNewIIRev        Simple constructor with only start and end
+**                               positions, sets feature to be
+**                               on the reverse strand
+** @new    ajFeatNewProt         Protein-specific constructor -
+**                               must specify the associated
+**                               (non-null) AjPFeattable
 ** @delete ajFeatDel             Default destructor
-** @assign ajFeatCopy            Copy constructor
-** @set    ajFeatSetSource       Sets the name of the analysis which
-**                               ascertained the feature
-** @set    ajFeatSetType         Sets the type of feature (e.g. exon, etc.)
-** @set    ajFeatSetScore        Sets the score associated with the feature,
-**                               if any
-** @set    ajFeatSetTagValue     Sets a specified tag for a feature and any
-**                               (optional) value associated with it
-**                               If a value is unspecified (NULL), then the
-**                               current value associated with the tag
-**                               if returned. If a new value is specified,
-**                               the old value is returned.
-** @set    ajFeatClearTags       Clears all tags (except Source and Type tag)
-** @set    ajFeatAddSubFeature   Adds a subsidiary AjFeature to the feature
-** @cast   ajFeatSource          Returns the name of the analysis which
-**                               ascertained the feature
-** @cast   ajFeatType            Returns the type of feature (e.g. exon, etc.)
-** @cast   ajFeatScore           Returns the score associated with the
-**                               feature, if any
-** @cast   ajFeatTag             Returns the value associated with a
-**                               specified tag associated with the feature
-** @cast   ajFeatTagSet          Returns a list of the tags associated
-**                               with the feature, including the source and
-**                               type tags
-** @cast   ajFeatSubFeatures     Returns the AjPFeattable of subfeatures of
-**                               the feature
-** @mod    ajFeatFromLine        Parses in a string, in a specified feature
-**                               format
-** @use    ajFeatDumpString      Dumps the feature to a string, in a
-**                               specified format
-** @use    ajFeatDump            Dumps the feature to a file, in a specified
-**                               format
+** @new    ajFeatCopy            Copy constructor
+**
+** @attr Protein [AjBool] true for a protein feature
+** @attr Source [AjPStr] Source program name (or EMBL)
+** @attr Type [AjPStr] Feature type (feature key) from internal list
+**                    for protein or nucleotide
+** @attr Start [ajint] Start position
+** @attr End [ajint] End position
+** @attr Start2 [ajint] Second start position - EMBL (a.b)
+** @attr End2 [ajint] Second end position - EMBL ..(a.b)
+** @attr Score [float] Score or 0.0 if none
+** @attr Tags [AjPList] Tag-value list (qualifier list)
+** @attr Strand [char] Strand +/- or NULL
+** @attr Frame [ajint] Frame 1..3, -1..-3 or 0
+** @attr Flags [ajint] Flag bit mask for EMBL location
+** @attr Group [ajint] Group for join/order/one-of
+** @attr Exon [ajint] Exon number
+** @attr Remote [AjPStr] Remote ID - EMBL Remote:a.b
+** @attr Label [AjPStr] Label name for location - EMBL legacy
 ** @@
 ******************************************************************************/
 
 typedef struct AjSFeature {
-  AjBool            Protein ;	/* true for a protein feature */
-  AjPStr            Source ;	/* Source program name (or EMBL) */
-  AjPStr            Type ;	/* Feature type (feature key) */
-  ajint             Start ;	/* Start position */
-  ajint             End;	/* End position */
-  ajint             Start2;	/* Second start position - EMBL (a.b)*/
-  ajint             End2;	/* Second end position - EMBL ..(a.b) */
-  float             Score ;	/* Score or 0.0 if none */
-  AjPList           Tags ;	/* Tag-value list (qualifier list) */
-  char              Strand ;	/* Strand +/- or NULL */
-  ajint             Frame ;	/* Frame 1..3, -1..-3 or 0 */
-  ajint             Flags;	/* Flag bit mask for EMBL location */
-  ajint             Group;	/* Group for join/order/one-of */
-  ajint             Exon;	/* Exon number */
-  AjPStr            Remote ;	/* Remote ID - EMBL Remote:a.b */
+  AjBool            Protein;
+  AjPStr            Source;
+  AjPStr            Type;
+  ajint             Start;
+  ajint             End;
+  ajint             Start2;
+  ajint             End2;
+  float             Score;
+  AjPList           Tags;
+  char              Strand;
+  ajint             Frame;
+  ajint             Flags;
+  ajint             Group;
+  ajint             Exon;
+  AjPStr            Remote;
 
-  /* Label is obsolete - remove if not in databases */
-  AjPStr            Label ;	/* Label name for location - EMBL legacy */
-
-  /*AjPStr            Desc ;*/	/* One-line description obsolete */
-  /*AjPStr            Comment ;*/	/* Comment - obsolete */
-
+  AjPStr            Label;
 } AjOFeature;
 
 #define AjPFeature AjOFeature*

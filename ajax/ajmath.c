@@ -215,12 +215,12 @@ double ajGaussProb(float mean, float sd, float score)
 **
 ** Calculate a geometric mean
 **
-** @param [r] s [float*] array of values
+** @param [r] s [const float*] array of values
 ** @param [r] n [ajint] number of values
 ** @return [float] geometric mean
 ******************************************************************************/
 
-float ajGeoMean(float *s, ajint n)
+float ajGeoMean(const float *s, ajint n)
 {
     float x;
     ajint i;
@@ -472,19 +472,19 @@ static void spcrc64calctab(unsigned long long *crctab)
 **
 ** Calculate 64-bit crc
 **
-** @param [r] thys [AjPStr] sequence
+** @param [r] thys [const AjPStr] sequence
 **
 ** @return [unsigned long long] 64-bit CRC
 ******************************************************************************/
 
-unsigned long long ajSp64Crc(AjPStr thys)
+unsigned long long ajSp64Crc(const AjPStr thys)
 {
     static ajint initialised = 0;
     static unsigned long long crctab[AJCRC64LEN];
     unsigned long long crc;
     ajint i;
     ajint len;
-    char *p = NULL;
+    const char *p = NULL;
     
 
     if(!initialised)

@@ -44,10 +44,10 @@ typedef struct AjSRegexp {
 
 /* constructors */
 
-AjPRegexp ajRegComp (AjPStr exp);
+AjPRegexp ajRegComp (const AjPStr exp);
 AjPRegexp ajRegCompC (const char* exp);
 
-AjPRegexp ajRegCompCase (AjPStr exp);
+AjPRegexp ajRegCompCase (const AjPStr exp);
 AjPRegexp ajRegCompCaseC (const char* exp);
 
 /* execute expression match */
@@ -57,21 +57,21 @@ AjBool ajRegExecC (AjPRegexp prog, const char* str);
 
 /* test substrings */
 
-ajint  ajRegLenI (AjPRegexp rp, ajint isub);
-ajint  ajRegOffset (AjPRegexp rp);
-ajint  ajRegOffsetI (AjPRegexp rp, ajint isub);
+ajint  ajRegLenI (const AjPRegexp rp, ajint isub);
+ajint  ajRegOffset (const AjPRegexp rp);
+ajint  ajRegOffsetI (const AjPRegexp rp, ajint isub);
 
 /* get substrings */
 
-AjBool ajRegPre (AjPRegexp rp, AjPStr* dest);
-AjBool ajRegPost (AjPRegexp rp, AjPStr* post);
-AjBool ajRegPostC (AjPRegexp rp, const char** post);
-AjBool ajRegSubI (AjPRegexp rp, ajint isub, AjPStr* dest);
+AjBool ajRegPre (const AjPRegexp rp, AjPStr* dest);
+AjBool ajRegPost (const AjPRegexp rp, AjPStr* post);
+AjBool ajRegPostC (const AjPRegexp rp, const char** post);
+AjBool ajRegSubI (const AjPRegexp rp, ajint isub, AjPStr* dest);
 
 /* destructor */
 
 void   ajRegFree (AjPRegexp* pexp);
-void   ajRegTrace (AjPRegexp exp);
+void   ajRegTrace (const AjPRegexp exp);
 
 void   ajRegExit (void);
 #endif

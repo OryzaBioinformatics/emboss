@@ -20,6 +20,8 @@ extern "C"
 **
 ** @delete nexusTaxaDel Default destructor
 **
+** @attr Ntax [ajint] Number of taxons
+** @attr TaxLabels [AjPStr*] Taxon names
 ** @@
 ******************************************************************************/
 
@@ -42,6 +44,28 @@ typedef struct AjSNexusTaxa {
 **
 ** @delete nexusCharactersDel Default destructor
 **
+** @attr NewTaxa [AjBool] New taxa read from data block
+** @attr Ntax [ajint] Number of taxons
+** @attr Nchar [ajint] Number of characters
+** @attr DataType [AjPStr] Data type
+** @attr RespectCase [AjBool] Respect case if true
+** @attr Missing [char] Missing character in input data
+** @attr Gap [char] Gap character in input data
+** @attr Symbols [AjPStr] Character symbols
+** @attr Equate [AjPStr] Character equivalent names
+** @attr MatchChar [char] Matching charater in input
+** @attr Labels [AjBool] Labels if true
+** @attr Transpose [AjBool] Transpose data if true
+** @attr Interleave [AjBool] Interleaved input if true
+** @attr Items [AjPStr] Character items
+** @attr StatesFormat [AjPStr] Statesformat string
+** @attr Tokens [AjBool] If true, tokens set
+** @attr Eliminate [AjPStr] Elimioate string
+** @attr CharStateLabels [AjPStr*] Character and state labels
+** @attr CharLabels [AjPStr*] Character labels
+** @attr StateLabels [AjPStr*] State labels
+** @attr Matrix [AjPStr*] Matrix data
+** @attr Sequences [AjPStr*] Sequence data
 ** @@
 ******************************************************************************/
 
@@ -77,6 +101,9 @@ typedef struct AjSNexusCharacters {
 **
 ** Ajax nexus data unaligned block object.
 **
+** Very similar to a character block and will be merged with AjPNexusCharacter
+** in the near future
+**
 ** @alias AjSNexusUnaligned
 ** @alias AjONexusUnaligned
 **
@@ -84,6 +111,15 @@ typedef struct AjSNexusCharacters {
 **
 ** @delete nexusUnalignedDel Default destructor
 **
+** @attr NewTaxa [AjBool] New taxa read from data block
+** @attr Ntax [ajint] Number of taxons
+** @attr DataType [AjPStr] Data type
+** @attr RespectCase [AjBool] Respect case if true
+** @attr Missing [char] Missing character in input data
+** @attr Symbols [AjPStr] Character symbols
+** @attr Equate [AjPStr] Character equivalent names
+** @attr Labels [AjBool] Labels if true
+** @attr Matrix [AjPStr*] Matrix data
 ** @@
 ******************************************************************************/
 
@@ -113,6 +149,15 @@ typedef struct AjSNexusUnaligned {
 **
 ** @delete nexusDistancesDel Default destructor
 **
+** @attr NewTaxa [AjBool] New taxa read from data block
+** @attr Ntax [ajint] Number of taxons
+** @attr Nchar [ajint] Number of characters
+** @attr Triangle [AjPStr] Triangular distances block type
+** @attr Diagonal [AjBool] If true, expect to read diagonal of matrix
+** @attr Missing [char] Missing character in input data
+** @attr Labels [AjBool] Labels if true
+** @attr Interleave [AjBool] Interleaved input if true
+** @attr Matrix [AjPStr*] Matrix data
 ** @@
 ******************************************************************************/
 
@@ -122,8 +167,8 @@ typedef struct AjSNexusDistances {
     ajint Nchar;
     AjPStr Triangle;
     AjBool Diagonal;
-    AjBool Labels;
     char Missing;
+    AjBool Labels;
     AjBool Interleave;
     AjPStr* Matrix;
 } AjONexusDistances;
@@ -135,6 +180,8 @@ typedef struct AjSNexusDistances {
 **
 ** Ajax nexus data sets block object.
 **
+** The data is generally the NEXUS command strings as in the original file.
+**
 ** @alias AjSNexusSets
 ** @alias AjONexusSets
 **
@@ -142,6 +189,14 @@ typedef struct AjSNexusDistances {
 **
 ** @delete nexusSetsDel Default destructor
 **
+** @attr CharSet [AjPStr*] Character set commands
+** @attr StateSet [AjPStr*] State set commands
+** @attr ChangeSet [AjPStr*] Change set commands
+** @attr TaxSet [AjPStr*] Taxon set commands
+** @attr TreeSet [AjPStr*] Tree set commands
+** @attr CharPartition [AjPStr*] Character partition statements
+** @attr TaxPartition [AjPStr*] Taxa partition statements
+** @attr TreePartition [AjPStr*] Tree partition statements
 ** @@
 ******************************************************************************/
 
@@ -170,6 +225,14 @@ typedef struct AjSNexusSets {
 **
 ** @delete nexusAssumptionsDel Default destructor
 **
+** @attr DefType [AjPStr] Options deftype subcommand
+** @attr PolyTCount [AjPStr] Options polytcount subcommand
+** @attr GapMode [AjPStr] Options gapmode subcommand
+** @attr UserType [AjPStr*] Usertype commands
+** @attr TypeSet [AjPStr*] Typeset commands
+** @attr WtSet [AjPStr*] Wtset commands
+** @attr ExSet [AjPStr*] Exset commands
+** @attr AncStates [AjPStr*] Ancstates commands
 ** @@
 ******************************************************************************/
 
@@ -198,6 +261,9 @@ typedef struct AjSNexusAssumptions {
 **
 ** @delete nexusCodonsDel Default destructor
 **
+** @attr CodonPosSet [AjPStr*] CodonPosSetcommands
+** @attr GeneticCode [AjPStr*] GeneticCodecommands
+** @attr CodeSet [AjPStr*] CodeSetcommands
 ** @@
 ******************************************************************************/
 
@@ -221,6 +287,8 @@ typedef struct AjSNexusCodons {
 **
 ** @delete nexusTreesDel Default destructor
 **
+** @attr Translate [AjPStr*] Translate commands
+** @attr Tree [AjPStr*] Tree commands
 ** @@
 ******************************************************************************/
 
@@ -243,6 +311,8 @@ typedef struct AjSNexusTrees {
 **
 ** @delete nexusNotesDel Default destructor
 **
+** @attr Text [AjPStr*] Text commands
+** @attr Picture [AjPStr*] Picture commands
 ** @@
 ******************************************************************************/
 
@@ -265,6 +335,16 @@ typedef struct AjSNexusNotes {
 **
 ** @delete ajNexusDel Default destructor
 **
+** @attr Ntax [ajint] Number of taxa (wherever they were defined)
+** @attr Taxa [AjPNexusTaxa] Taxa
+** @attr Characters [AjPNexusCharacters] Characters (or data)
+** @attr Unaligned [AjPNexusUnaligned] Unaligned
+** @attr Distances [AjPNexusDistances] Distances
+** @attr Sets [AjPNexusSets] Sets
+** @attr Assumptions [AjPNexusAssumptions] Assumptions
+** @attr Codons [AjPNexusCodons] Codons
+** @attr Trees [AjPNexusTrees] Trees
+** @attr Notes [AjPNexusNotes] Notes
 ** @@
 ******************************************************************************/
 
@@ -279,17 +359,16 @@ typedef struct AjSNexus {
     AjPNexusCodons Codons;
     AjPNexusTrees Trees;
     AjPNexusNotes Notes;
-    char *Ptr;
 } AjONexus;
 #define AjPNexus AjONexus*
 
 void     ajNexusDel(AjPNexus* pthys);
-ajint    ajNexusGetNtaxa(AjPNexus thys);
-AjPStr*  ajNexusGetTaxa(AjPNexus thys);
+ajint    ajNexusGetNtaxa(const AjPNexus thys);
+AjPStr*  ajNexusGetTaxa(const AjPNexus thys);
 AjPStr*  ajNexusGetSequences(AjPNexus thys);
 AjPNexus ajNexusNew(void);
 AjPNexus ajNexusParse(AjPFileBuff buff);
-void     ajNexusTrace(AjPNexus thys);
+void     ajNexusTrace(const AjPNexus thys);
 #endif
 
 #ifdef __cplusplus

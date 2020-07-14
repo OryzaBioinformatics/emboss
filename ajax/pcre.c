@@ -212,7 +212,7 @@ stack, for holding the values of the subject pointer at the start of each
 subpattern, so as to detect when an empty string has been matched by a
 subpattern - to break infinite loops. */
 
-/* @data eptrblock ************************************************************
+/* @datastatic eptrblock ******************************************************
 **
 ** PCRE internals
 **
@@ -648,13 +648,13 @@ pcre_config(int what, void *where)
 ** @param [r]  p [const uschar*]          points to characters
 ** @param [r]  length [int]     number to print
 ** @param [r]  is_subject [BOOL] TRUE if printing from within md->start_subject
-** @param [r]  md [match_data*]  pointer to matching data block,
+** @param [r]  md [const match_data*]  pointer to matching data block,
 **                             if is_subject is TRUE
 ** @return [void]
 ******************************************************************************/
 
 static void
-pchars(const uschar *p, int length, BOOL is_subject, match_data *md)
+pchars(const uschar *p, int length, BOOL is_subject, const match_data *md)
 {
     int c;
     if (is_subject && length > md->end_subject - p)
@@ -685,7 +685,7 @@ pchars(const uschar *p, int length, BOOL is_subject, match_data *md)
 ** @param [r]  bracount [int]  number of previous extracting brackets
 ** @param [r]  options [int]   the options bits
 ** @param [r]  isclass [BOOL]   TRUE if inside a character class
-** @param [r]  cd [compile_data*] pointer to char tables block
+** @param [r]  cd [const compile_data*] pointer to char tables block
 **
 ** @return [int]  zero or positive => a data character
              negative => a special escape sequence
@@ -694,7 +694,7 @@ pchars(const uschar *p, int length, BOOL is_subject, match_data *md)
 
 static int
 check_escape(const uschar **ptrptr, const char **errorptr, int bracount,
-	     int options, BOOL isclass, compile_data *cd)
+	     int options, BOOL isclass, const compile_data *cd)
 {
     const uschar *ptr = *ptrptr;
     int c, i;
@@ -825,7 +825,8 @@ check_escape(const uschar **ptrptr, const char **errorptr, int bracount,
 	    c = 0;
 	    while (i++ < 2 && (digitab[ptr[1]] & ctype_xdigit) != 0)
 	    {
-		int cc = *(++ptr);
+		int cc;
+		cc = *(++ptr);
 		if (cc >= 'a') cc -= 32; /* Convert to upper case */
 		c = c * 16 + cc - ((cc < 'A')? '0' : ('A' - 10));
 	    }
@@ -884,13 +885,13 @@ check_escape(const uschar **ptrptr, const char **errorptr, int bracount,
 ** where the ddds are digits.
 **
 ** @param [r]  p [const uschar*]        pointer to the first char after '{'
-** @param [r]  cd [compile_data*]       pointer to char tables block
+** @param [r]  cd [const compile_data*]       pointer to char tables block
 **
 ** @return [BOOL] TRUE or FALSE
 ******************************************************************************/
 
 static BOOL
-is_counted_repeat(const uschar *p, compile_data *cd)
+is_counted_repeat(const uschar *p, const compile_data *cd)
 {
     if ((digitab[*p++] && ctype_digit) == 0) return FALSE;
     while ((digitab[*p] & ctype_digit) != 0) p++;
@@ -921,7 +922,7 @@ is_counted_repeat(const uschar *p, compile_data *cd)
 ** @param [w]  maxp [int*] pointer to int for max
              returned as -1 if no max
 ** @param [w]  errorptr [const char**]  points to pointer to error message
-** @param [r]  cd [compile_data*] pointer to character tables clock
+** @param [r]  cd [const compile_data*] pointer to character tables clock
 **
 ** @return [const uschar*] pointer to '}' on success;
                            current ptr on error, with errorptr set
@@ -929,7 +930,7 @@ is_counted_repeat(const uschar *p, compile_data *cd)
 
 static const uschar *
 read_repeat_counts(const uschar *p, int *minp, int *maxp,
-		   const char **errorptr, compile_data *cd)
+		   const char **errorptr, const compile_data *cd)
 {
     int min = 0;
     int max = -1;
@@ -975,7 +976,7 @@ read_repeat_counts(const uschar *p, int *minp, int *maxp,
 ** that do not influence this. For some calls, a change of option is important.
 **
 ** @param [r]  code [const uschar*]      pointer to the start of the group
-** @param [r]  options [int*]   pointer to external options
+** @param [w]  options [int*]   pointer to external options
 ** @param [r]  optbit [int]    the option bit whose changing is significant, or
 **               zero if none are
 **
@@ -1026,7 +1027,8 @@ first_significant_code(const uschar *code, int *options, int optbit)
 ** if the length is fixed. This is needed for dealing with backward assertions.
 ** In UTF8 mode, the result is in characters rather than bytes.
 ** 
-** @param [r] code [uschar*] points to the start of the pattern (the bracket)
+** @param [r] code [const uschar*] points to the start of the pattern
+**                                (the bracket)
 ** @param [r]  options [int] the compiling options
 **
 ** @return [int] the fixed length, or -1 if there is no fixed length,
@@ -1034,12 +1036,12 @@ first_significant_code(const uschar *code, int *options, int optbit)
 ******************************************************************************/
 
 static int
-find_fixedlength(uschar *code, int options)
+find_fixedlength(const uschar *code, int options)
 {
     int length = -1;
     
     register int branchlength = 0;
-    register uschar *cc = code + 1 + LINK_SIZE;
+    register const uschar *cc = code + 1 + LINK_SIZE;
     
     /* Scan along the opcodes for this branch. If we get to the end of the
        branch, check the length against that of the other branches. */
@@ -1423,7 +1425,7 @@ could_be_empty_branch(const uschar *code, const uschar *endcode, BOOL utf8)
 ** @param [r]  code [const uschar*]points to start of the recursion
 ** @param [r]  endcode [const uschar*] points to where to stop
 **                                    (current RECURSE item)
-** @param [r]  bcptr [branch_chain*] points to the chain of current
+** @param [u]  bcptr [branch_chain*] points to the chain of current
 **                                  (unclosed) branch starts
 ** @param [r]  utf8 [BOOL] TRUE if in UTF-8 mode
 **
@@ -1455,12 +1457,13 @@ could_be_empty(const uschar *code, const uschar *endcode, branch_chain *bcptr,
 ** 
 ** @param [r]  ptr [const uschar*] pointer to the initial [
 ** @param [r]  endptr [const uschar**] where to return the end pointer
-** @param [r]  cd [compile_data*]  pointer to compile data
+** @param [r]  cd [const compile_data*]  pointer to compile data
 ** @return [BOOL] TRUE or FALSE
 ******************************************************************************/
 
 static BOOL
-check_posix_syntax(const uschar *ptr, const uschar **endptr, compile_data *cd)
+check_posix_syntax(const uschar *ptr, const uschar **endptr,
+		   const compile_data *cd)
 {
     int terminator;    /* Don't combine these lines; the Solaris cc */
     terminator = *(++ptr); /* compiler warns about "non-constant"
@@ -1515,9 +1518,9 @@ check_posix_name(const uschar *ptr, int len)
 ** changed during the branch, the pointer is used to change the external
 ** options bits.
 **
-** @param [?]  optionsptr [int*] pointer to the option bits
-** @param [?]  brackets [int*] points to number of extracting brackets used
-** @param [r] codeptr [uschar**] points to the pointer to the current
+** @param [u]  optionsptr [int*] pointer to the option bits
+** @param [u]  brackets [int*] points to number of extracting brackets used
+** @param [u] codeptr [uschar**] points to the pointer to the current
 **                               code point
 ** @param [r]  ptrptr [const uschar**] points to the current pattern pointer
 ** @param [w]  errorptr [const char**] points to pointer to error message
@@ -1525,8 +1528,8 @@ check_posix_name(const uschar *ptr, int len)
 **                                 or < 0 (REQ_UNSET, REQ_NONE)
 ** @param [w]  reqbyteptr [int*] set to the last literal character required,
 **                               else < 0
-** @param [r]  bcptr [branch_chain*]  points to current branch chain
-** @param [?]  cd [compile_data*] contains pointers to tables etc.
+** @param [u]  bcptr [branch_chain*]  points to current branch chain
+** @param [w]  cd [compile_data*] contains pointers to tables etc.
 ** @return [BOOL] TRUE on success
 **                 FALSE, with *errorptr set on error
 ******************************************************************************/
@@ -3523,9 +3526,9 @@ return FALSE;
 **                                  or a negative number
 ** @param [w]  reqbyteptr [int*] place to put the last required character,
 **                               or a negative number
-** @param [?]  bcptr [branch_chain*] pointer to the chain of currently
+** @param [w]  bcptr [branch_chain*] pointer to the chain of currently
 **                                  open branches
-** @param [?]  cd [compile_data*]  points to the data block with
+** @param [w]  cd [compile_data*]  points to the data block with
 **                               tables pointers etc.
 ** @return [BOOL]  TRUE on success
 ******************************************************************************/
@@ -3869,7 +3872,7 @@ return TRUE;
 ** @param [r]  code [const uschar*]  points to start of expression
 **                                  (the bracket)
 ** @param [w]  options [int*] pointer to the options
-**                          (used to check casing changes)
+**                            (used to check casing changes)
 ** @param [r]  inassert [BOOL] TRUE if in an assertion
 ** @return [int] -1 or the fixed first char
 ******************************************************************************/
@@ -5041,13 +5044,14 @@ return (pcre *)re;
 ** @param [r]  offset [int] index into the offset vector
 ** @param [r]  eptr [register const uschar*] points into the subject
 ** @param [r]  length [int] length to be matched
-** @param [r]  md [match_data*] points to match data block
+** @param [r]  md [const match_data*] points to match data block
 ** @param [r]  ims [unsigned long int] the ims flags
 ** @return [BOOL] TRUE if matched
 ******************************************************************************/
 
 static BOOL
-match_ref(int offset, register const uschar *eptr, int length, match_data *md,
+match_ref(int offset, register const uschar *eptr, int length,
+  const match_data *md,
   unsigned long int ims)
 {
 const uschar *p = md->start_subject + md->offset_vector[offset];
@@ -5158,9 +5162,9 @@ return negated;   /* char was not found */
 ** @param [r]   eptr [register const uschar*]  pointer in subject
 ** @param [r]   ecode [register const uschar*]  position in code
 ** @param [r]   offset_top [int] current top pointer
-** @param [r]   md [match_data*]  pointer to "static" info for the match
+** @param [u]   md [match_data*]  pointer to "static" info for the match
 ** @param [r]   ims [unsigned long int]  current /i, /m, and /s options
-** @param [r]   eptrb [eptrblock*] pointer to chain of blocks containing
+** @param [u]   eptrb [eptrblock*] pointer to chain of blocks containing
 **               eptr at start of
 **                 brackets - for testing for empty matches
 ** @param [r]   flags [int] can contain
@@ -5175,8 +5179,9 @@ return negated;   /* char was not found */
 
 static int
 match(register const uschar *eptr, register const uschar *ecode,
-  int offset_top, match_data *md, unsigned long int ims, eptrblock *eptrb,
-  int flags)
+      int offset_top, match_data *md,
+      unsigned long int ims, eptrblock *eptrb,
+      int flags)
 {
 unsigned long int original_ims = ims;   /* Save for resetting on ')' */
 register int rrc;
