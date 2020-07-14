@@ -196,7 +196,7 @@ void          ajGraphxyDataSetYtitle  (AjPGraphData graphdata,
 				       AjPStr title);
 void          ajGraphxyDataSetYtitleC (AjPGraphData graphdata,
 				       char *title);
-void          ajGraphxyDel (AjPGraph mult);
+void          ajGraphxyDel (AjPGraph* pmult);
 void          ajGraphxyDisplay (AjPGraph graphs, AjBool closeit );
 AjPGraph      ajGraphxyInitGraphCalcPtr (ajint numofpoints, float start,
 					 float incr, float *y);

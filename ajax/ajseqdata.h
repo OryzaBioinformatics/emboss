@@ -61,7 +61,9 @@ typedef struct AjSSeqQuery {
   AjBool QryDone;		/* Has the query been done yet */
   SeqSAccess* Access;	        /* Access function : see ajseqread.h */
   void* QryData;		/* Private data for access function */
-} AjOSeqQuery, *AjPSeqQuery;
+} AjOSeqQuery;
+
+#define AjPSeqQuery AjOSeqQuery*
 
 
 /* @data AjPSelexSQ ***********************************************************
@@ -83,7 +85,9 @@ typedef struct AjSSelexSQ
     ajint  start;
     ajint  stop;
     ajint  len;
-} AjOSelexSQ, *AjPSelexSQ;
+} AjOSelexSQ;
+
+#define AjPSelexSQ AjOSelexSQ*
 
 /* @data AjPSelex *************************************************************
 **
@@ -111,7 +115,9 @@ typedef struct AjSSelex
     AjPSelexSQ *sq;
     ajint  n;
     ajint  Count;
-} AjOSelex,*AjPSelex;
+} AjOSelex;
+
+#define AjPSelex AjOSelex*
 
 
 /* @data AjPSelexdata *********************************************************
@@ -138,7 +144,9 @@ typedef struct AjSSelexdata
     float  tc[2];
     float  nc[2];
     AjPSelexSQ sq;
-} AjOSelexdata,*AjPSelexdata;
+} AjOSelexdata;
+
+#define AjPSelexdata AjOSelexdata*
 
 
 /* @data AjPStockholm *********************************************************
@@ -174,7 +182,9 @@ typedef struct AjSStockholm
     AjPStr *str;
     ajint  n;
     ajint  Count;
-} AjOStockholm,*AjPStockholm;
+} AjOStockholm;
+
+#define AjPStockholm AjOStockholm*
 
 
 /* @data AjPStockholmdata *****************************************************
@@ -206,7 +216,9 @@ typedef struct AjSStockholmdata
     float  ga[2];
     float  tc[2];
     float  nc[2];
-} AjOStockholmdata,*AjPStockholmdata;
+} AjOStockholmdata;
+
+#define AjPStockholmdata AjOStockholmdata*
 
 
 /* @data AjPSeqin *************************************************************
@@ -264,20 +276,25 @@ typedef struct AjSSeqin {
   AjBool IsNuc;			/* true: known to be nucleic */
   AjBool IsProt;		/* true: known to be protein */
   AjBool multi;			/* ???? see also Single */
+  AjBool multiset;		/* true: seqsetall input */
+  AjBool multidone;		/* seqsetall input: true when set completed */
   AjBool Lower;			/* true: convert to lower case -slower */
   AjBool Upper;			/* true: convert to upper case -supper */
   AjBool Text;			/* true: save full text of entry */
   ajint Count;			/* count of entries so far. Used
 			           when ACD reads first sequence and
 				   we need to reuse it in a Next loop */
-  ajint Filecount;		/* Unused */
+  ajint Filecount;	   /* Number of files read - used by seqsetall input */
+  ajint Fileseqs;	 /* Number of seqs in file - used by seqsetall input */
   ajlong Fpos;			/* File position (fseek) for building USA */
   AjPSeqQuery Query;		/* Query data - see AjPSeqQuery */
   AjPSelex Selex;
   AjPStockholm Stockholm;
   void *Data;			/* Format data for reuse,
 				   e.g. multiple sequence input */
-} AjOSeqin, *AjPSeqin;
+} AjOSeqin;
+
+#define AjPSeqin AjOSeqin*
 
 
 
@@ -378,7 +395,9 @@ typedef struct AjSSeq {
   AjPStr Seq;			/* The sequence */
   AjPSelexdata Selexdata;
   AjPStockholmdata Stock;
-} AjOSeq, *AjPSeq;
+} AjOSeq;
+
+#define AjPSeq AjOSeq*
 
 /* @data AjPSeqset ************************************************************
 **
@@ -430,7 +449,9 @@ typedef struct AjSSeqset {
   AjPStr Ufo;			/* UFO for re-reading */
   AjPSeq* Seq;			/* Sequence array (see Size) */
   float* Seqweight;		/* Sequence weights (see also AjPSeq) */
-} AjOSeqset, *AjPSeqset;
+} AjOSeqset;
+
+#define AjPSeqset AjOSeqset*
 
 
 
@@ -458,7 +479,9 @@ typedef struct AjSSeqall {
   ajint Begin;			/* start position */
   ajint End;			/* end position */
   AjBool Rev;			/* true: reverse-complement */
-} AjOSeqall, *AjPSeqall;
+} AjOSeqall;
+
+#define AjPSeqall AjOSeqall*
 
 #endif
 

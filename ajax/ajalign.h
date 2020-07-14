@@ -54,50 +54,52 @@ typedef struct AjSAlign {
   AjPStr ExtPen;		/* Gap extend penalty (to string) */
   AjBool SeqOnly;		/* Sequence output only, no head or tail */
   AjBool SeqExternal;		/* Sequence is non-local, do not delete */
-} AjOAlign, *AjPAlign;
+} AjOAlign;
+
+#define AjPAlign AjOAlign*
 
 void         ajAlignClose (AjPAlign thys);
 AjBool       ajAlignDefine (AjPAlign pthys, AjPSeqset seqset);
 AjBool       ajAlignDefineSS (AjPAlign pthys,
 			      AjPSeq seqa, AjPSeq seqb);
 void         ajAlignDel (AjPAlign* pthys);
-AjBool       ajAlignOpen (AjPAlign thys, AjPStr name);
-AjBool       ajAlignFindFormat (AjPStr format, ajint* iformat);
+AjBool       ajAlignOpen (AjPAlign thys, const AjPStr name);
+AjBool       ajAlignFindFormat (const AjPStr format, ajint* iformat);
 AjBool       ajAlignFormatDefault (AjPStr* pformat);
 AjPAlign     ajAlignNew (void);
-void         ajAlignPrintFormat (AjPFile outf, AjBool full);
+void         ajAlignPrintFormat (const AjPFile outf, AjBool full);
 void         ajAlignReset (AjPAlign thys);
 void         ajAlignSetExternal (AjPAlign thys, AjBool external);
-void         ajAlignSetHeader (AjPAlign thys, AjPStr header);
-void         ajAlignSetHeaderApp (AjPAlign thys, AjPStr header);
+void         ajAlignSetHeader (AjPAlign thys, const AjPStr header);
+void         ajAlignSetHeaderApp (AjPAlign thys, const AjPStr header);
 void         ajAlignSetHeaderC (AjPAlign thys, const char* header);
 void         ajAlignSetGapI (AjPAlign thys, ajint gappen, ajint extpen);
 void         ajAlignSetGapR (AjPAlign thys, float gappen, float extpen);
-void         ajAlignSetMatrixName (AjPAlign thys, AjPStr matrix);
+void         ajAlignSetMatrixName (AjPAlign thys, const AjPStr matrix);
 void         ajAlignSetMatrixNameC (AjPAlign thys, const char* matrix);
-void         ajAlignSetMatrixInt (AjPAlign thys, AjPMatrix matrix);
-void         ajAlignSetMatrixFloat (AjPAlign thys, AjPMatrixf matrix);
+void         ajAlignSetMatrixInt (AjPAlign thys, const AjPMatrix matrix);
+void         ajAlignSetMatrixFloat (AjPAlign thys, const AjPMatrixf matrix);
 AjBool       ajAlignSetRange (AjPAlign thys,
 			      ajint start1, ajint end1,
 			      ajint start2, ajint end2);
 void         ajAlignSetScoreI (AjPAlign thys, ajint score);
 void         ajAlignSetScoreR (AjPAlign thys, float score);
-void         ajAlignSetSubHeader (AjPAlign thys, AjPStr subheader);
-void         ajAlignSetSubHeaderApp (AjPAlign thys, AjPStr subheader);
+void         ajAlignSetSubHeader (AjPAlign thys, const AjPStr subheader);
+void         ajAlignSetSubHeaderApp (AjPAlign thys, const AjPStr subheader);
 void         ajAlignSetSubHeaderC (AjPAlign thys, const char* subheader);
-void         ajAlignSetSubHeaderPre (AjPAlign thys, AjPStr subheader);
+void         ajAlignSetSubHeaderPre (AjPAlign thys, const AjPStr subheader);
 void         ajAlignSetStats (AjPAlign thys, ajint iali, ajint len,
 				    ajint ident, ajint sim, ajint gaps,
-				    AjPStr score);
+				    const AjPStr score);
 AjBool       ajAlignSetSubRange (AjPAlign thys, ajint substart1, ajint start1,
 				 ajint end1, ajint substart2, ajint start2,
 				 ajint end2);
 void         ajAlignSetSubStandard (AjPAlign thys, ajint iali);
-void         ajAlignSetTail (AjPAlign thys, AjPStr tail);
-void         ajAlignSetTailApp (AjPAlign thys, AjPStr tail);
+void         ajAlignSetTail (AjPAlign thys, const AjPStr tail);
+void         ajAlignSetTailApp (AjPAlign thys, const AjPStr tail);
 void         ajAlignSetTailC (AjPAlign thys, const char* tail);
 void         ajAlignSetType (AjPAlign thys);
-void         ajAlignTrace (AjPAlign thys);
+void         ajAlignTrace (const AjPAlign thys);
 AjBool       ajAlignValid (AjPAlign thys);
 void         ajAlignWrite (AjPAlign thys);
 void         ajAlignWriteClose (AjPAlign thys);

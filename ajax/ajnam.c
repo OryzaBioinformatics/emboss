@@ -28,7 +28,8 @@
 #include <dirent.h>
 #include <unistd.h>
 
-enum NamEType {
+enum NamEType
+{
     TYPE_UNKNOWN,			/* no type set */
     TYPE_ENV,				/* env or set variable */
     TYPE_DB,				/* database definition */
@@ -46,8 +47,9 @@ enum NamEType {
 #define SLOW_ENTRY 8
 #define SLOW_QUERY 16
 
-static AjBool namDoDebug = AJFALSE;
-static AjBool namDoValid = AJFALSE;
+static AjBool namDoDebug  = AJFALSE;
+static AjBool namDoValid  = AJFALSE;
+static AjBool namDoHomeRc = AJTRUE;
 static AjPStr namRootStr  = NULL;
 
 static AjBool namListParseOK = AJFALSE;
@@ -86,17 +88,20 @@ static char namVersion[] = "1.x";
 #endif
 
 static AjPStr namFixedRootBaseStr = NULL;
-static AjPStr namPrefixStr = NULL;
-static AjPStr namFileOrig = NULL;
+static AjPStr namPrefixStr        = NULL;
+static AjPStr namFileOrig         = NULL;
 
 static AjPTable namMasterTable = NULL;
-static ajint namParseType = 0;
-static AjPFile namFile=NULL;
-static ajint namLine=0;
-static ajint namErrorCount=0;
+static ajint namParseType      = 0;
+static AjPFile namFile         = NULL;
+static ajint namLine           = 0;
+static ajint namErrorCount     = 0;
 
 static AjPRegexp namNameExp = 0;
-static AjPRegexp namVarExp = NULL;
+static AjPRegexp namVarExp  = NULL;
+
+
+
 
 /* @datastatic NamPAttr *******************************************************
 **
@@ -111,19 +116,43 @@ static AjPRegexp namVarExp = NULL;
 ** @@
 ******************************************************************************/
 
-typedef struct NamSAttr {
+typedef struct NamSAttr
+{
     char* Name;
     char* Defval;
     char* Comment;
-} NamOAttr, *NamPAttr;
+} NamOAttr;
 
-typedef struct NamSValid {
+#define NamPAttr NamOAttr*
+
+
+
+
+/* @datastatic NamPValid ******************************************************
+**
+** Resource attribute validation structure
+**
+** @alias NamSValid
+** @alias NamOValid
+**
+** @attr Name [char*] Attribute name
+** @attr Comment [char*] Comment for documentation purposes
+** @@
+******************************************************************************/
+
+typedef struct NamSValid
+{
     char* Name;
     char* Comment;
-} NamOValid, *NamPValid;
+} NamOValid;
+
+#define NamPValid NamOValid*
 
 
-NamOAttr namDbAttrs[] = {
+
+
+NamOAttr namDbAttrs[] =
+{
     {"name", "", "database name (required)"},
     {"format", "", "database entry format (required, at some level)"},
     {"method", "", "access method (required, at some level)"},
@@ -162,7 +191,8 @@ NamOAttr namDbAttrs[] = {
     {NULL, NULL, NULL}
 };
 
-NamOAttr namRsAttrs[] = {
+NamOAttr namRsAttrs[] =
+{
     {"name", "", "resource name (required)"},
     {"type", "", "resource type (required)"},
 
@@ -171,7 +201,8 @@ NamOAttr namRsAttrs[] = {
     {NULL, NULL, NULL}
 };
 
-NamOValid namDbTypes[] = {
+NamOValid namDbTypes[] =
+{
     {"N", "Nucleotide (obsolete short name)"},
     {"P", "Protein (obsolete short name)"},
     {"Nucleotide", "Nucleotide sequence data"},
@@ -180,10 +211,14 @@ NamOValid namDbTypes[] = {
     {NULL, NULL}
 };
 
-NamOValid namRsTypes[] = {
+NamOValid namRsTypes[] =
+{
     {"Blast", "Blast database file"},
     {NULL, NULL}
 };
+
+
+
 
 /* @datastatic NamPEntry ******************************************************
 **
@@ -201,56 +236,68 @@ NamOValid namRsTypes[] = {
 ** @@
 ******************************************************************************/
 
-typedef struct NamSEntry {
+typedef struct NamSEntry
+{
     AjPStr name;
     AjPStr value;
     ajint type;
     ajint scope;
-    void* data ;		  /* Attribute values for databases */
-} NamOEntry, *NamPEntry;
+    void* data;		  /* Attribute values for databases */
+} NamOEntry;
 
-static ajint  namDbAttr (AjPStr thys);
-static ajint  namDbAttrC (char* str);
-static AjBool namDbSetAttr (AjPStr* dbattr, char* attrib, AjPStr* qrystr);
-static void   namDebugDatabase (AjPStr* dbattr);
-static void   namDebugResource (AjPStr* dbattr);
-static void   namDebugVariables (void);
-static void   namDebugMaster (ajint which);
-static void   namEntryDelete (NamPEntry* pentry);
-static void   namError (char* fmt, ...);
-static void   namListParse (AjPList listwords, AjPList listcount,
-			    AjPFile file);
-static void   namListMaster (ajint which);
-static void   namListMasterDelete (void);
-static ajint  namMethod2Scope (AjPStr method);
-static void   namNoColon (AjPStr *thys);
-static void   namPrintDatabase (AjPStr* dbattr);
-static void   namPrintResource (AjPStr* rsattr);
-static AjBool namProcessFile (AjPFile file);
-static ajint  namRsAttr (AjPStr thys);
-static ajint  namRsAttrC (char* str);
-static void   namUser (char *fmt, ...);
-static AjBool namValid(NamPEntry entry);
-static AjBool namValidDatabase(NamPEntry entry);
-static AjBool namValidResource(NamPEntry entry);
-static AjBool namValidVariable(NamPEntry entry);
-static AjBool namVarResolve (AjPStr* var);
+#define NamPEntry NamOEntry*
+
+
+
+
+static ajint  namDbAttr(const AjPStr thys);
+static ajint  namDbAttrC(const char* str);
+static AjBool namDbSetAttr(const AjPStr* dbattr, const char* attrib,
+			   AjPStr* qrystr);
+static void   namDebugDatabase(const AjPStr* dbattr);
+static void   namDebugResource(const AjPStr* dbattr);
+static void   namDebugVariables(void);
+static void   namDebugMaster(ajint which);
+static void   namEntryDelete(NamPEntry* pentry);
+static void   namError(const char* fmt, ...);
+static void   namListParse(AjPList listwords, AjPList listcount,
+			   AjPFile file);
+static void   namListMaster(ajint which);
+static void   namListMasterDelete(void);
+static ajint  namMethod2Scope(const AjPStr method);
+static void   namNoColon(AjPStr *thys);
+static void   namPrintDatabase(const AjPStr* dbattr);
+static void   namPrintResource(const AjPStr* rsattr);
+static AjBool namProcessFile(AjPFile file);
+static ajint  namRsAttr(const AjPStr thys);
+static ajint  namRsAttrC(const char* str);
+static void   namUser(const char *fmt, ...);
+static AjBool namValid(const NamPEntry entry);
+static AjBool namValidDatabase(const NamPEntry entry);
+static AjBool namValidResource(const NamPEntry entry);
+static AjBool namValidVariable(const NamPEntry entry);
+static AjBool namVarResolve(AjPStr* var);
+
+
+
 
 /* @funcstatic namEntryDelete *************************************************
 **
 ** Deletes a variable, database, or resource entry from the internal table.
 **
-** @param [P] pentry [NamPEntry*] The entry to be deleted.
+** @param [r] pentry [NamPEntry*] The entry to be deleted.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namEntryDelete (NamPEntry* pentry)	
+static void namEntryDelete(NamPEntry* pentry)	
 {
 
     ajint j;
     AjPStr* attrs;
-    NamPEntry entry = *pentry;
+    NamPEntry entry;
+
+    entry = *pentry;
 
     ajStrDel(&entry->name);
     ajStrDel(&entry->value);
@@ -258,19 +305,16 @@ static void namEntryDelete (NamPEntry* pentry)
     if(entry->type == TYPE_DB)
     {
 	attrs = entry->data;
-	for (j=0; namDbAttrs[j].Name; j++)
-	{
+	for(j=0; namDbAttrs[j].Name; j++)
 	    ajStrDel(&attrs[j]);
-	}
 	AJFREE(entry->data);
     }
+
     if(entry->type == TYPE_RESOURCE)
     {
 	attrs = entry->data;
-	for (j=0; namRsAttrs[j].Name; j++)
-	{
+	for(j=0; namRsAttrs[j].Name; j++)
 	    ajStrDel(&attrs[j]);
-	}
 	AJFREE(entry->data);
     }
     else if(entry->type == TYPE_ENV)
@@ -282,6 +326,9 @@ static void namEntryDelete (NamPEntry* pentry)
     return;
 }
 
+
+
+
 /* @funcstatic namListMasterDelete *****************************************
 **
 ** Deletes all databases in the internal table. The table is converted to
@@ -291,168 +338,178 @@ static void namEntryDelete (NamPEntry* pentry)
 ** @@
 ******************************************************************************/
 
-static void namListMasterDelete (void)
+static void namListMasterDelete(void)
 {
     ajint i;
     NamPEntry fnew = 0;
-    void **array = ajTableToarray(namMasterTable, NULL);
+    void **array;
 
-    for (i = 0; array[i]; i += 2)
+
+    array = ajTableToarray(namMasterTable, NULL);
+
+    for(i = 0; array[i]; i += 2)
     {
 	AJFREE(array[i]);		/* the key */
 	fnew = (NamPEntry) array[i+1];
-	namEntryDelete (&fnew);
+	namEntryDelete(&fnew);
     }
     AJFREE(array);
 
     return;
 }
 
+
+
+
 /* @funcstatic namPrintDatabase ***********************************************
 **
 ** Prints a report of defined attributes for a database definition.
 **
-** @param [P] dbattr [AjPStr*] Attribute list from a database entry.
+** @param [r] dbattr [const AjPStr*] Attribute list from a database entry.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namPrintDatabase (AjPStr* dbattr)
+static void namPrintDatabase(const AjPStr* dbattr)
 {
     ajint i;
 
-    for (i=0; namDbAttrs[i].Name; i++)
-    {
-	if (ajStrLen(dbattr[i]))
-	{
-	    ajUser ("\t%s: %S", namDbAttrs[i].Name, dbattr[i]);
-	}
-    }
+    for(i=0; namDbAttrs[i].Name; i++)
+	if(ajStrLen(dbattr[i]))
+	    ajUser("\t%s: %S", namDbAttrs[i].Name, dbattr[i]);
 
     return;
 }
+
+
+
 
 /* @funcstatic namPrintResource ***********************************************
 **
 ** Prints a report of defined attributes for a resource definition.
 **
-** @param [P] rsattr [AjPStr*] Attribute list from a resource entry.
+** @param [r] rsattr [const AjPStr*] Attribute list from a resource entry.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namPrintResource (AjPStr* rsattr)
+static void namPrintResource(const AjPStr* rsattr)
 {
     ajint i;
 
-    for (i=0; namRsAttrs[i].Name; i++) 
-    {
-	if (ajStrLen(rsattr[i]))
-	{
-	    ajUser ("\t%s: %S", namRsAttrs[i].Name, rsattr[i]);
-	}
-    }
+    for(i=0; namRsAttrs[i].Name; i++) 
+	if(ajStrLen(rsattr[i]))
+	    ajUser("\t%s: %S", namRsAttrs[i].Name, rsattr[i]);
 
     return;
 }
+
+
+
 
 /* @func ajNamPrintDbAttr *****************************************************
 **
 ** Prints a report of the database attributes available (for entrails)
 **
-** @param [R] outf [AjPFile] Output file
-** @param [R] full [AjBool] Full output if AjTrue
+** @param [r] outf [const AjPFile] Output file
+** @param [r] full [AjBool] Full output if AjTrue
 ** @return [void]
 ******************************************************************************/
 
-void ajNamPrintDbAttr (AjPFile outf, AjBool full)
+void ajNamPrintDbAttr(const AjPFile outf, AjBool full)
 {
     ajint i;
-    ajFmtPrintF (outf, "# Database attributes\n");
-    ajFmtPrintF (outf, "%12s %10s %s\n", "Attribute", "default", "Comment");
-    ajFmtPrintF (outf, "namDbAttrs {\n");
-    for (i=0; namDbAttrs[i].Name; i++)
-    {
-	ajFmtPrintF (outf, "%12s %10s %s\n",
+
+    ajFmtPrintF(outf, "# Database attributes\n");
+    ajFmtPrintF(outf, "%12s %10s %s\n", "Attribute", "default", "Comment");
+    ajFmtPrintF(outf, "namDbAttrs {\n");
+    for(i=0; namDbAttrs[i].Name; i++)
+	ajFmtPrintF(outf, "%12s %10s %s\n",
 		     namDbAttrs[i].Name, namDbAttrs[i].Defval,
 		     namDbAttrs[i].Comment);
-    }
-    ajFmtPrintF (outf, "}\n");
+
+    ajFmtPrintF(outf, "}\n");
+
     return;
 }
+
+
+
 
 /* @func ajNamPrintRsAttr *****************************************************
 **
 ** Prints a report of the resource attributes available (for entrails)
 **
-** @param [R] outf [AjPFile] Output file
-** @param [R] full [AjBool] Full output if AjTrue
+** @param [r] outf [const AjPFile] Output file
+** @param [r] full [AjBool] Full output if AjTrue
 ** @return [void]
 ******************************************************************************/
 
-void ajNamPrintRsAttr (AjPFile outf, AjBool full)
+void ajNamPrintRsAttr(const AjPFile outf, AjBool full)
 {
     ajint i;
-    ajFmtPrintF (outf, "# Resource attributes\n");
-    ajFmtPrintF (outf, "%12s %10s %s\n", "Attribute", "default", "Comment");
-    ajFmtPrintF (outf, "namRsAttrs {\n");
-    for (i=0; namRsAttrs[i].Name; i++)
-    {
-	ajFmtPrintF (outf, "%12s %10s %s\n",
+
+    ajFmtPrintF(outf, "# Resource attributes\n");
+    ajFmtPrintF(outf, "%12s %10s %s\n", "Attribute", "default", "Comment");
+    ajFmtPrintF(outf, "namRsAttrs {\n");
+    for(i=0; namRsAttrs[i].Name; i++)
+	ajFmtPrintF(outf, "%12s %10s %s\n",
 		     namRsAttrs[i].Name, namRsAttrs[i].Defval,
 		     namRsAttrs[i].Comment);
-    }
-    ajFmtPrintF (outf, "}\n");
+
+    ajFmtPrintF(outf, "}\n");
+
     return;
 }
+
+
+
 
 /* @funcstatic namDebugDatabase ***********************************************
 **
 ** Prints a report of defined attributes for a database definition.
 **
-** @param [P] dbattr [AjPStr*] Attribute list from a database entry.
+** @param [r] dbattr [const AjPStr*] Attribute list from a database entry.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namDebugDatabase (AjPStr* dbattr)
+static void namDebugDatabase(const AjPStr* dbattr)
 {
     ajint i;
 
-    for (i=0; namDbAttrs[i].Name; i++)
-    {
-	if (ajStrLen(dbattr[i]))
-	{
-	    ajDebug ("\t%s: %S\n", namDbAttrs[i].Name, dbattr[i]);
-	}
-    }
+    for(i=0; namDbAttrs[i].Name; i++)
+	if(ajStrLen(dbattr[i]))
+	    ajDebug("\t%s: %S\n", namDbAttrs[i].Name, dbattr[i]);
 
     return;
 }
+
+
+
 
 /* @funcstatic namDebugResource ***********************************************
 **
 ** Prints a report of defined attributes for a resource definition.
 **
-** @param [P] dbattr [AjPStr*] Attribute list from a database entry.
+** @param [r] rsattr [const AjPStr*] Attribute list from a database entry.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namDebugResource (AjPStr* rsattr)
+static void namDebugResource(const AjPStr* rsattr)
 {
     ajint i;
 
-    for (i=0; namRsAttrs[i].Name; i++)
-    {
-	if (ajStrLen(rsattr[i]))
-	{
-	    ajDebug ("\t%s: %S\n", namRsAttrs[i].Name, rsattr[i]);
-	}
-    }
+    for(i=0; namRsAttrs[i].Name; i++)
+	if(ajStrLen(rsattr[i]))
+	    ajDebug("\t%s: %S\n", namRsAttrs[i].Name, rsattr[i]);
 
     return;
 }
+
+
+
 
 /* @funcstatic namListMaster **************************************************
 **
@@ -465,34 +522,36 @@ static void namDebugResource (AjPStr* rsattr)
 ** @@
 ******************************************************************************/
 
-static void namListMaster (ajint which)
+static void namListMaster(ajint which)
 {
     ajint i;
     NamPEntry fnew;
-    void **array = ajTableToarray(namMasterTable, NULL);
+    void **array;
     char *key;
 
-    for (i = 0; array[i]; i += 2)
+    array = ajTableToarray(namMasterTable, NULL);
+
+    for(i = 0; array[i]; i += 2)
     {
-	fnew = (NamPEntry) array[i+1];
+	fnew =(NamPEntry) array[i+1];
 	key = (char*) array[i];
 	if(fnew->type == which)
 	{
 	    if(TYPE_DB == which)
 	    {
-		ajUser ("DB %S\t *%s*", fnew->name, key);
+		ajUser("DB %S\t *%s*", fnew->name, key);
 		namPrintDatabase(fnew->data);
-		ajUser ("");
+		ajUser("");
 	    }
 	    else if(TYPE_RESOURCE == which) 
 	    {
-		ajUser ("RES %S\t *%s*", fnew->name, key);
+		ajUser("RES %S\t *%s*", fnew->name, key);
 		namPrintResource(fnew->data);
-		ajUser ("");
+		ajUser("");
 	    }
 	    else if(TYPE_ENV == which)
 	    {
-		ajUser ("ENV %S\t%S\t *%s*",fnew->name,fnew->value,key);
+		ajUser("ENV %S\t%S\t *%s*",fnew->name,fnew->value,key);
 	    }
 	}
     }
@@ -500,6 +559,9 @@ static void namListMaster (ajint which)
 
     return;
 }
+
+
+
 
 /* @funcstatic namDebugMaster **********************************************
 **
@@ -512,14 +574,16 @@ static void namListMaster (ajint which)
 ** @@
 ******************************************************************************/
 
-static void namDebugMaster (ajint which)
+static void namDebugMaster(ajint which)
 {
     ajint i;
     NamPEntry fnew;
-    void **array = ajTableToarray(namMasterTable, NULL);
+    void **array;
     char *key;
 
-    for (i = 0; array[i]; i += 2)
+    array = ajTableToarray(namMasterTable, NULL);
+
+    for(i = 0; array[i]; i += 2)
     {
 	fnew = (NamPEntry) array[i+1];
 	key = (char*) array[i];
@@ -527,19 +591,20 @@ static void namDebugMaster (ajint which)
 	{
 	    if(TYPE_DB == which)
 	    {
-		ajDebug ("DB %S\t *%s*\n", fnew->name, key);
+		ajDebug("DB %S\t *%s*\n", fnew->name, key);
 		namDebugDatabase(fnew->data);
-		ajDebug ("\n");
+		ajDebug("\n");
 	    }
+
 	    if(TYPE_RESOURCE == which)
 	    {
-		ajDebug ("RES %S\t *%s*\n", fnew->name, key);
+		ajDebug("RES %S\t *%s*\n", fnew->name, key);
 		namDebugResource(fnew->data);
-		ajDebug ("\n");
+		ajDebug("\n");
 	    }
 	    else if(TYPE_ENV == which)
 	    {
-		ajDebug ("ENV %S\t%S\t *%s*\n",fnew->name,fnew->value,key);
+		ajDebug("ENV %S\t%S\t *%s*\n",fnew->name,fnew->value,key);
 	    }
 	}
     }
@@ -548,11 +613,14 @@ static void namDebugMaster (ajint which)
     return;
 }
 
+
+
+
 /* @func ajNamDbDetails *******************************************************
 **
 ** Returns database access method information
 **
-** @param [r] name [AjPStr] Database name
+** @param [r] name [const AjPStr] Database name
 ** @param [w] type [AjPStr*] sequence type - 'P' or 'N'
 ** @param [w] id [AjBool*] ajTrue = can access single entries
 ** @param [w] qry [AjBool*] ajTrue = can access wild/query entries
@@ -563,8 +631,9 @@ static void namDebugMaster (ajint which)
 ** @@
 ******************************************************************************/
 
-AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id, AjBool* qry,
-		       AjBool* all, AjPStr* comment, AjPStr* release)
+AjBool ajNamDbDetails(const AjPStr name, AjPStr* type, AjBool* id,
+		      AjBool* qry, AjBool* all,
+		      AjPStr* comment, AjPStr* release)
 {
     NamPEntry fnew = 0;
     AjPStr* dbattr = NULL;
@@ -573,117 +642,127 @@ AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id, AjBool* qry,
     
     *id = *qry = *all = ajFalse;
     
-    (void) ajStrDelReuse (type);
-    (void) ajStrDelReuse (comment);
-    (void) ajStrDelReuse (release);
+    ajStrDelReuse(type);
+    ajStrDelReuse(comment);
+    ajStrDelReuse(release);
     
     fnew = ajTableGet(namMasterTable, ajStrStr(name));
-    if (fnew)
+    if(fnew)
     {
-	/* ajDebug ("  '%S' found\n", name); */
+	/* ajDebug("  '%S' found\n", name); */
 	
 	dbattr = fnew->data;
-	for (i=0; namDbAttrs[i].Name; i++)
+	for(i=0; namDbAttrs[i].Name; i++)
 	{
 	    /* ajDebug("Attribute name = %s, value = %S\n",
 	       namDbAttrs[i].Name, dbattr[i]); */
-	    if (ajStrLen(dbattr[i]))
+	    if(ajStrLen(dbattr[i]))
 	    {
-		if (!strcmp ("type", namDbAttrs[i].Name))
-		    (void) ajStrAss(type, dbattr[i]);
-		if (!strcmp ("method", namDbAttrs[i].Name))
+		if(!strcmp("type", namDbAttrs[i].Name))
+		    ajStrAss(type, dbattr[i]);
+
+		if(!strcmp("method", namDbAttrs[i].Name))
 		{
 		    scope = namMethod2Scope(dbattr[i]);
-		    if (scope & METHOD_ENTRY) *id = ajTrue;
-		    if (scope & METHOD_QUERY) *qry = ajTrue;
-		    if (scope & METHOD_ALL) *all = ajTrue;
+		    if(scope & METHOD_ENTRY) *id = ajTrue;
+		    if(scope & METHOD_QUERY) *qry = ajTrue;
+		    if(scope & METHOD_ALL) *all = ajTrue;
 		}
-		if (!strcmp ("methodentry", namDbAttrs[i].Name))
+
+		if(!strcmp("methodentry", namDbAttrs[i].Name))
 		{
 		    scope = namMethod2Scope(dbattr[i]);
-		    if (scope & METHOD_ENTRY) *id = ajTrue;
+		    if(scope & METHOD_ENTRY) *id = ajTrue;
 		}
-		if (!strcmp ("methodquery", namDbAttrs[i].Name))
+
+		if(!strcmp("methodquery", namDbAttrs[i].Name))
 		{
 		    scope = namMethod2Scope(dbattr[i]);
-		    if (scope & METHOD_ENTRY) *id = ajTrue;
-		    if (scope & METHOD_QUERY) *qry = ajTrue;
+		    if(scope & METHOD_ENTRY) *id = ajTrue;
+		    if(scope & METHOD_QUERY) *qry = ajTrue;
 		}
-		if (!strcmp ("methodall", namDbAttrs[i].Name))
+
+		if(!strcmp("methodall", namDbAttrs[i].Name))
 		{
 		    scope = namMethod2Scope(dbattr[i]);
-		    if (scope & METHOD_ALL) *all = ajTrue;
+		    if(scope & METHOD_ALL) *all = ajTrue;
 		}
-		if (!strcmp ("comment", namDbAttrs[i].Name))
-		    (void) ajStrAss(comment, dbattr[i]);
-		if (!strcmp ("release", namDbAttrs[i].Name))
-		    (void) ajStrAss(release, dbattr[i]);
+
+		if(!strcmp("comment", namDbAttrs[i].Name))
+		    ajStrAss(comment, dbattr[i]);
+
+		if(!strcmp("release", namDbAttrs[i].Name))
+		    ajStrAss(release, dbattr[i]);
 	    }
 	}
 	
-	if (!ajStrLen(*type))
+	if(!ajStrLen(*type))
 	{
 	    ajWarn("Bad database definition for %S: No type. 'P' assumed",
 		   name);
-	    ajStrAssC (type, "P");
+	    ajStrAssC(type, "P");
 	}
-	if (!*id && !*qry && !*all)
-	{
+
+	if(!*id && !*qry && !*all)
 	    ajWarn("Bad database definition for %S: No method(s) for access",
 		   name);
-	}
-	
 	
 	return ajTrue;
     }
     
-    ajDebug ("  '%S' not found\n", name);
+    ajDebug("  '%S' not found\n", name);
+
     return ajFalse;
 }
+
+
+
 
 /* @funcstatic namMethod2Scope ************************************************
 **
 ** Returns OR'ed values of METHOD_ENTRY, METHOD_QUERY and METHOD_ALL
 ** for the various types of access method for databases.
 **
-** @param [r] method [AjPStr] Variable type, either TYPE_ENV for environment
-**
+** @param [r] method [const AjPStr] Access method string
 ** @return [ajint] OR'ed values for the valid scope of the access method given
 ** @@
 ******************************************************************************/
-static ajint namMethod2Scope (AjPStr method)
+static ajint namMethod2Scope(const AjPStr method)
 {
 
     ajint result = 0;
 
-    if (!ajStrCmpC(method, "emblcd"))
+    if(!ajStrCmpC(method, "emblcd"))
 	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-    else if (!ajStrCmpC(method, "srs"))
+    else if(!ajStrCmpC(method, "srs"))
 	result = (METHOD_ENTRY | METHOD_QUERY);
-    else if (!ajStrCmpC(method, "srsfasta"))
+    else if(!ajStrCmpC(method, "srsfasta"))
 	result = (METHOD_ENTRY | METHOD_QUERY);
-    else if (!ajStrCmpC(method, "srswww"))
+    else if(!ajStrCmpC(method, "srswww"))
 	result = METHOD_ENTRY;
-    else if (!ajStrCmpC(method, "url"))
+    else if(!ajStrCmpC(method, "url"))
 	result = METHOD_ENTRY;
-    else if (!ajStrCmpC(method, "app"))
+    else if(!ajStrCmpC(method, "app"))
 	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-    else if (!ajStrCmpC(method, "external"))
+    else if(!ajStrCmpC(method, "external"))
 	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-    else if (!ajStrCmpC(method, "direct"))
+    else if(!ajStrCmpC(method, "direct"))
 	result = (METHOD_ALL | SLOW_QUERY | SLOW_ENTRY );
-    else if (!ajStrCmpC(method, "blast"))
+    else if(!ajStrCmpC(method, "blast"))
 	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
-    else if (!ajStrCmpC(method, "gcg"))
+    else if(!ajStrCmpC(method, "gcg"))
 	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
     /* not in ajseqdb seqAccess list */
     /*
-       else if (!ajStrCmpC(method, "corba"))
+       else if(!ajStrCmpC(method, "corba"))
        result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
        */
 
     return result;
 }
+
+
+
 
 /* @func ajNamListOrigin ******************************************************
 **
@@ -693,13 +772,18 @@ static ajint namMethod2Scope (AjPStr method)
 ** @@
 ******************************************************************************/
 
-void ajNamListOrigin (void)
+void ajNamListOrigin(void)
 {
     ajUser("SOURCE---------->");
     ajUser("%S", namFileOrig);
     ajUser("SOURCE---------->");
     ajUser("");
+
+    return;
 }
+
+
+
 
 /* @func ajNamDebugOrigin *****************************************************
 **
@@ -709,10 +793,15 @@ void ajNamListOrigin (void)
 ** @@
 ******************************************************************************/
 
-void ajNamDebugOrigin (void)
+void ajNamDebugOrigin(void)
 {
     ajDebug("Defaults and .rc files: %S\n", namFileOrig);
+
+    return;
 }
+
+
+
 
 /* @func ajNamListDatabases ***************************************************
 **
@@ -722,7 +811,7 @@ void ajNamDebugOrigin (void)
 ** @@
 ******************************************************************************/
 
-void ajNamListDatabases (void)
+void ajNamListDatabases(void)
 {
     ajUser("DB---------->");
     namListMaster(TYPE_DB);
@@ -732,6 +821,9 @@ void ajNamListDatabases (void)
     return;
 }
 
+
+
+
 /* @func ajNamDebugDatabases **************************************************
 **
 ** Writes a simple debug report of all databases in the internal table.
@@ -740,7 +832,7 @@ void ajNamListDatabases (void)
 ** @@
 ******************************************************************************/
 
-void ajNamDebugDatabases (void)
+void ajNamDebugDatabases(void)
 {
     ajDebug("DB databases\n");
     ajDebug("============\n");
@@ -750,6 +842,9 @@ void ajNamDebugDatabases (void)
     return;
 }
 
+
+
+
 /* @func ajNamDebugResources **************************************************
 **
 ** Writes a simple debug report of all databases in the internal table.
@@ -758,7 +853,7 @@ void ajNamDebugDatabases (void)
 ** @@
 ******************************************************************************/
 
-void ajNamDebugResources (void)
+void ajNamDebugResources(void)
 {
     ajDebug("RES resources\n");
     ajDebug("=============\n");
@@ -767,6 +862,9 @@ void ajNamDebugResources (void)
 
     return;
 }
+
+
+
 
 /* @func ajNamDebugVariables *********************************************
 **
@@ -777,7 +875,7 @@ void ajNamDebugResources (void)
 ** @@
 ******************************************************************************/
 
-void ajNamDebugVariables (void)
+void ajNamDebugVariables(void)
 {
     ajDebug("ENV variables\n");
     ajDebug("=============\n");
@@ -786,6 +884,9 @@ void ajNamDebugVariables (void)
 
     return;
 }
+
+
+
 
 /* @func ajNamListListDatabases ***********************************************
 **
@@ -796,16 +897,18 @@ void ajNamDebugVariables (void)
 ** @@
 ******************************************************************************/
 
-void ajNamListListDatabases (AjPList dbnames)
+void ajNamListListDatabases(AjPList dbnames)
 {
     ajint i;
     NamPEntry fnew;
-    void **array = ajTableToarray(namMasterTable, NULL);
+    void **array;
 
-    for (i = 0; array[i]; i += 2)
+    array = ajTableToarray(namMasterTable, NULL);
+
+    for(i = 0; array[i]; i += 2)
     {
 	fnew = (NamPEntry) array[i+1];
-	if (fnew->type == TYPE_DB)
+	if(fnew->type == TYPE_DB)
 	{
 	    ajDebug("DB: %S\n", fnew->name);
 	    ajListstrPushApp(dbnames, fnew->name);
@@ -816,6 +919,9 @@ void ajNamListListDatabases (AjPList dbnames)
     return;
 }
 
+
+
+
 /* @func ajNamListListResources ***********************************************
 **
 ** Creates a AjPList list of all databases in the internal table.
@@ -825,16 +931,18 @@ void ajNamListListDatabases (AjPList dbnames)
 ** @@
 ******************************************************************************/
 
-void ajNamListListResources (AjPList rsnames)
+void ajNamListListResources(AjPList rsnames)
 {
     ajint i;
     NamPEntry fnew;
-    void **array = ajTableToarray(namMasterTable, NULL);
+    void **array;
 
-    for (i = 0; array[i]; i += 2)
+    array = ajTableToarray(namMasterTable, NULL);
+
+    for(i = 0; array[i]; i += 2)
     {
 	fnew = (NamPEntry) array[i+1];
-	if (fnew->type == TYPE_RESOURCE)
+	if(fnew->type == TYPE_RESOURCE)
 	{
 	    ajDebug("RES: %S\n", fnew->name);
 	    ajListstrPushApp(rsnames, fnew->name);
@@ -844,6 +952,9 @@ void ajNamListListResources (AjPList rsnames)
 
     return;
 }
+
+
+
 
 /* @func ajNamVariables **************************************************
 **
@@ -863,6 +974,9 @@ void ajNamVariables(void)
     return;
 }
 
+
+
+
 /* @funcstatic namDebugVariables *****************************************
 **
 ** Writes a simple list of all variables in the internal table.
@@ -871,15 +985,18 @@ void ajNamVariables(void)
 ** @@
 ******************************************************************************/
 
-static void namDebugVariables (void)
+static void namDebugVariables(void)
 {
-    namUser ("ENV---------->\n");
+    namUser("ENV---------->\n");
     namDebugMaster(TYPE_ENV);
-    namUser ("ENV---------->\n");
-    namUser ("\n");
+    namUser("ENV---------->\n");
+    namUser("\n");
 
     return;
 }
+
+
+
 
 /* @funcstatic namListParse ***************************************************
 **
@@ -887,62 +1004,70 @@ static void namDebugVariables (void)
 ** Derive environment variable and database definitions. Store
 ** all these in the internal tables.
 **
-** @param [R] listwords [AjPList] String list of word tokens to parse
-** @param [R] listcount [AjPList] List of word counts per line for
+** @param [r] listwords [AjPList] String list of word tokens to parse
+** @param [r] listcount [AjPList] List of word counts per line for
 **                                generating error messages
-** @param [R] file [AjPFile] Input file for messages
+** @param [r] file [AjPFile] Input file for messages
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namListParse (AjPList listwords, AjPList listcount,
+static void namListParse(AjPList listwords, AjPList listcount,
 			  AjPFile file)
 {
-    static char* tabname = 0;
-    static AjPStr name = 0;
-    static AjPStr value = 0;
-    static char quoteopen = 0, quoteclose = 0;
-    static AjPStr* dbattr = 0;
-    static AjPStr* rsattr = 0;
+    static char* tabname   = 0;
+    static AjPStr name     = 0;
+    static AjPStr value    = 0;
+    static char quoteopen  = 0;
+    static char quoteclose = 0;
+    static AjPStr* dbattr  = 0;
+    static AjPStr* rsattr  = 0;
     static ajint  db_input = -1;
     static ajint  rs_input = -1;
-    NamPEntry fnew = 0, entry=0;
+
+    NamPEntry fnew  = NULL;
+    NamPEntry entry = NULL;
+
     AjBool dbsave = ajFalse;
     AjBool rssave = ajFalse;
     AjBool saveit = ajFalse;
     ajint ndbattr = 0;
     ajint nrsattr = 0;
-    AjPStr includefn=NULL;
-    AjPFile iinf=NULL;
-    AjPStr key=NULL;
-    AjPStr val=NULL;
-    static AjPTable Ifiles=NULL;
+
+    AjPStr includefn = NULL;
+    AjPFile iinf     = NULL;
+    AjPStr key       = NULL;
+    AjPStr val       = NULL;
+
+    static AjPTable Ifiles = NULL;
     AjPStr curword;
-    ajint wordcount=0;
-    ajint linecount=0;
-    ajint lineword=0;
-    ajint *iword = NULL;
+
+    ajint wordcount = 0;
+    ajint linecount = 0;
+    ajint lineword  = 0;
+    ajint *iword    = NULL;
     AjBool namstatus;
     
     /* ndbattr = count database attributes */
-    if (!ndbattr)
-	for (ndbattr=0; namDbAttrs[ndbattr].Name; ndbattr++) ;
+    if(!ndbattr)
+	for(ndbattr=0; namDbAttrs[ndbattr].Name; ndbattr++);
+
     /* nrsattr = count resource attributes */
-    if (!nrsattr)
-	for (nrsattr=0; namRsAttrs[nrsattr].Name; nrsattr++) ;
+    if(!nrsattr)
+	for(nrsattr=0; namRsAttrs[nrsattr].Name; nrsattr++);
     
-    ajStrDel (&name);
-    ajStrDel (&value);
-    quoteopen = 0;
+    ajStrDel(&name);
+    ajStrDel(&value);
+    quoteopen  = 0;
     quoteclose = 0;
     
     namLine = 1;
     namUser("namListParse of %F words: %d lines: %d\n", 
 	    file, ajListLength(listwords), ajListLength(listcount));
     
-    while (ajListstrPop(listwords, &curword))
+    while(ajListstrPop(listwords, &curword))
     {
-	while (ajListLength(listcount) && (lineword < wordcount))
+	while(ajListLength(listcount) && (lineword < wordcount))
 	{
 	    namUser("ajListPop %d < %d list %d\n",
 		    lineword, wordcount, ajListLength(listcount));
@@ -950,48 +1075,52 @@ static void namListParse (AjPList listwords, AjPList listcount,
 	    lineword = *iword;
 	    linecount++;
 	    namLine = linecount-1;
-	    AJFREE (iword);
+	    AJFREE(iword);
 	}
 	wordcount++;
 	namUser("namListParse word: %d line: %d (%d) <%S>\n",
 		wordcount, namLine, lineword, curword);
 	
-	if (!namParseType)
+	if(!namParseType)
 	{
 	    namNoColon(&curword);
-	    (void) ajStrToLower(&curword);
-	    if (ajStrPrefixCO ("env", curword))
+	    ajStrToLower(&curword);
+	    if(ajStrPrefixCO("env", curword))
 		namParseType = TYPE_ENV;
-	    if (ajStrPrefixCO ("setenv", curword))
+	    if(ajStrPrefixCO("setenv", curword))
 		namParseType = TYPE_ENV;
-	    else if(ajStrPrefixCO ("dbname",curword))
+	    else if(ajStrPrefixCO("dbname",curword))
 		namParseType = TYPE_DB;
-	    else if(ajStrPrefixCO ("resource",curword))
+	    else if(ajStrPrefixCO("resource",curword))
 		namParseType = TYPE_RESOURCE;
 	    else if(ajStrPrefixCO("include",curword))
 		namParseType = TYPE_IFILE;
 
-	    if (!namParseType)		/* test: badtype.rc */
-		namError ("Invalid definition type '%S'", curword);
+	    if(!namParseType)		/* test: badtype.rc */
+		namError("Invalid definition type '%S'", curword);
 	    namUser("type set to %s curword '%S'\n",
 		    namTypes[namParseType], curword);
 	}
-	else if (quoteopen && ajStrMatchC(curword, "]"))
+	else if(quoteopen && ajStrMatchC(curword, "]"))
 	{				/* test; dbnoquote.rc */
-	    namError ("']' found, unclosed quotes in '%S'\n", value);
-	    quoteopen = 0;
+	    namError("']' found, unclosed quotes in '%S'\n", value);
+	    quoteopen    = 0;
 	    namParseType = 0;
 	}
-	else if (quoteopen)
-	{ /* quote is open, so append word until close quote is found, */
-	    /* and set the appropriate save flag */
-	    namUser ("<%c>..<%c> quote processing\n", quoteopen, quoteclose);
-	    (void) ajStrAppC(&value," ");
-	    (void) ajStrApp(&value,curword);
-	    if(ajStrChar(curword,-1) == quoteclose) /* close quote here ?? */
+	else if(quoteopen)
+	{
+	    /*
+	    ** quote is open, so append word until close quote is found,
+	    ** and set the appropriate save flag
+	    */
+	    namUser("<%c>..<%c> quote processing\n", quoteopen, quoteclose);
+	    ajStrAppC(&value," ");
+	    ajStrApp(&value,curword);
+	    /* close quote here ?? */
+	    if(ajStrChar(curword,-1) == quoteclose)
 	    {
-		namUser ("close quotes\n");
-		(void) ajStrTrim(&value, -1);
+		namUser("close quotes\n");
+		ajStrTrim(&value, -1);
 		quoteopen = quoteclose = 0;
 		if(namParseType == TYPE_ENV) /* set save flag, value found */
 		    saveit = ajTrue;
@@ -1003,38 +1132,41 @@ static void namListParse (AjPList listwords, AjPList listcount,
 	}
 	else if(namParseType == TYPE_ENV)
 	{
-	    if (name && value)
+	    if(name && value)
 		saveit= ajTrue;
-	    else if (name)
-	    {		     /* if name already got then it must be */
-		/* the value */
+	    else if(name)
+	    {
+		/* if name already got then it must be the value */
 		if(ajStrChar(curword,0) == '\'')
 		    quoteopen = quoteclose = '\'';
-		else if (ajStrChar(curword,0) == '\"')
+		else if(ajStrChar(curword,0) == '\"')
 		    quoteopen = quoteclose = '\"';
 
-		(void) ajStrAssS (&value, curword);
-		if (quoteopen)
+		ajStrAssS(&value, curword);
+		if(quoteopen)
 		{
-		    (void) ajStrTrim(&value, 1); /* trim the opening quote */
-		    if (!ajStrLen(value))
-			ajErr ("Bare quote %c found in namListParse",
+		    /* trim the opening quote */
+		    ajStrTrim(&value, 1);
+		    if(!ajStrLen(value))
+			ajErr("Bare quote %c found in namListParse",
 			       quoteopen);
 		}
 		else
 		    saveit = ajTrue;
 
 		if(ajStrChar(curword, -1) == quoteclose)
-		{		       /* end of quote on same word */
+		{
+		    /* end of quote on same word */
 		    quoteopen = quoteclose = 0;
 		    saveit= ajTrue;
-		    (void) ajStrTrim(&value, -1); /* remove quote at the end */
+		    /* remove quote at the end */
+		    ajStrTrim(&value, -1);
 		}
 		namUser("save value '%S'\n", value);
 	    }
 	    else
 	    {
-		(void) ajStrAssS (&name, curword);
+		ajStrAssS(&name, curword);
 		namUser("save name '%S'\n", name);
 	    }
 	}
@@ -1044,35 +1176,38 @@ static void namListParse (AjPList listwords, AjPList listcount,
 	{
 	    if(ajStrMatchC(curword, "[")) /* [ therefore new database */
 		dbattr = AJCALLOC0(ndbattr, sizeof(AjPStr)); /* new db obj */
-	    else if (ajStrMatchC(curword, "]"))	/* ] therefore end of db */
+	    else if(ajStrMatchC(curword, "]"))	/* ] therefore end of db */
 		saveit = ajTrue;
 	    else if(name)
 	    {
-		if(ajStrChar(curword, -1) == ':') /* if last character is : */
-		{			          /* then it a keyword */
-		    (void) ajStrToLower(&curword); /* make it lower case */
+		if(ajStrChar(curword, -1) == ':')
+		{
+		    /* if last character is : then its a keyword */
+		    ajStrToLower(&curword); /* make it lower case */
 		    namNoColon(&curword);
 		    db_input = namDbAttr(curword);
-		    if (db_input < 0)
-			ajWarn ("%S: bad attribute '%S' for database '%S'\n",
+		    if(db_input < 0)
+			ajWarn("%S: bad attribute '%S' for database '%S'\n",
 				namRootStr, curword, name);
 		}
 		else if(db_input >= 0)
-		{		 /* So if keyword type has been set */
+		{
+		    /* So if keyword type has been set */
 		    if(ajStrChar(curword, 0) == '\'')
-		    {	      /* is there a quote? If so expect the */
+		    {
+			/* is there a quote? If so expect the */
 			/* same at the end. No ()[] etc here*/
 			quoteopen = quoteclose = '\'';
 		    }
-		    else if (ajStrChar(curword, 0) == '\"')
+		    else if(ajStrChar(curword, 0) == '\"')
 			quoteopen = quoteclose = '\"';
 
-		    (void) ajStrAssS (&value, curword);
-		    if (quoteopen)
+		    ajStrAssS(&value, curword);
+		    if(quoteopen)
 		    {
-			(void) ajStrTrim(&value, 1); /* trim opening quote */
-			if (!ajStrLen(value))
-			    ajErr ("Bare quote %c found in namListParse",
+			ajStrTrim(&value, 1); /* trim opening quote */
+			if(!ajStrLen(value))
+			    ajErr("Bare quote %c found in namListParse",
 				   quoteopen);
 		    }
 		    else
@@ -1081,7 +1216,7 @@ static void namListParse (AjPList listwords, AjPList listcount,
 		    if(ajStrChar(curword, -1) == quoteclose)
 		    {
 			quoteopen = quoteclose = 0;
-			(void) ajStrTrim(&value,-1); /* trim closing quote */
+			ajStrTrim(&value,-1); /* trim closing quote */
 			dbsave = ajTrue;
 		    }
 		    if(!quoteopen)     /* if we just reset it above */
@@ -1090,7 +1225,7 @@ static void namListParse (AjPList listwords, AjPList listcount,
 	    }
 	    else
 	    {
-		(void) ajStrAssS (&name, curword);
+		ajStrAssS(&name, curword);
 		namUser("saving db name '%S'\n", name);
 	    }
 	}
@@ -1100,17 +1235,17 @@ static void namListParse (AjPList listwords, AjPList listcount,
 	{
 	    if(ajStrMatchC(curword, "[")) /* [ therefore new resource */
 		rsattr = AJCALLOC0(nrsattr, sizeof(AjPStr)); /* new resource*/
-	    else if (ajStrMatchC(curword, "]"))	/* ] end of resource */
+	    else if(ajStrMatchC(curword, "]"))	/* ] end of resource */
 		saveit = ajTrue;
 	    else if(name)
 	    {
 		if(ajStrChar(curword, -1) == ':') /* if last character is : */
 		{		     	          /* then it is a keyword */
-		    (void) ajStrToLower(&curword); /* make it lower case */
+		    ajStrToLower(&curword); /* make it lower case */
 		    namNoColon(&curword);
 		    rs_input = namRsAttr(curword);
-		    if (rs_input < 0)	/* test: badresattr.rc */
-			namError ("Bad attribute '%S' for resource '%S'",
+		    if(rs_input < 0)	/* test: badresattr.rc */
+			namError("Bad attribute '%S' for resource '%S'",
 				  curword, name);
 		}
 		else if(rs_input >= 0)
@@ -1120,15 +1255,15 @@ static void namListParse (AjPList listwords, AjPList listcount,
 			/* same at the end. No ()[] etc here */
 			quoteopen = quoteclose = '\'';
 		    }
-		    else if (ajStrChar(curword, 0) == '\"')
+		    else if(ajStrChar(curword, 0) == '\"')
 			quoteopen = quoteclose = '\"';
 
-		    (void) ajStrAssS (&value, curword);
-		    if (quoteopen)
+		    ajStrAssS(&value, curword);
+		    if(quoteopen)
 		    {
-			(void) ajStrTrim(&value, 1); /* trim opening quote */
-			if (!ajStrLen(value))
-			    ajErr ("Bare quote %c found in namListParse",
+			ajStrTrim(&value, 1); /* trim opening quote */
+			if(!ajStrLen(value))
+			    ajErr("Bare quote %c found in namListParse",
 				   quoteopen);
 		    }
 		    else
@@ -1137,7 +1272,7 @@ static void namListParse (AjPList listwords, AjPList listcount,
 		    if(ajStrChar(curword, -1) == quoteclose)
 		    {
 			quoteopen = quoteclose = 0;
-			(void) ajStrTrim(&value,-1); /* ignore quote if */
+			ajStrTrim(&value,-1); /* ignore quote if */
 					             /* one at end */
 			rssave = ajTrue;
 		    }
@@ -1147,7 +1282,7 @@ static void namListParse (AjPList listwords, AjPList listcount,
 	    }
 	    else
 	    {
-		(void) ajStrAssS (&name, curword);
+		ajStrAssS(&name, curword);
 		namUser("saving resource name '%S'\n", name);
 	    }
 	}
@@ -1166,7 +1301,7 @@ static void namListParse (AjPList listwords, AjPList listcount,
 		ajStrAss(&includefn,curword);
 
 		if(namFileOrig)
-		    (void) ajStrAppC(&namFileOrig,", ");
+		    ajStrAppC(&namFileOrig,", ");
 		ajStrApp(&namFileOrig,includefn);
 
 		key = ajStrNewC(ajStrStr(includefn));
@@ -1175,16 +1310,16 @@ static void namListParse (AjPList listwords, AjPList listcount,
 
 		if(!(iinf = ajFileNewIn(includefn))) /* test: badinclude.rc */
 		{
-		    namError ("Failed to open include file '%S'\n", includefn);
-		    (void) ajStrAppC(&namFileOrig,"(Failed)");
+		    namError("Failed to open include file '%S'\n", includefn);
+		    ajStrAppC(&namFileOrig,"(Failed)");
 		}
 		else
 		{
-		    (void) ajStrAppC(&namFileOrig,"(OK)");
+		    ajStrAppC(&namFileOrig,"(OK)");
 		    namstatus = namProcessFile(iinf); /* replaces namFile */
 		    namFile = file;	/* reset namFile */
 		    namLine = linecount-1;
-		    if (!namstatus)	/* test: badsummary.rc */
+		    if(!namstatus)	/* test: badsummary.rc */
 			namError("Error(s) found in included file %F", iinf);
 		    ajFileClose(&iinf);
 		}
@@ -1196,18 +1331,19 @@ static void namListParse (AjPList listwords, AjPList listcount,
 	}
 	
 	
-	
-	if (dbsave)
-	{				/* Save the keyword value */
-	    (void) ajStrAss(&dbattr[db_input], value);
+	if(dbsave)
+	{
+	    /* Save the keyword value */
+	    ajStrAss(&dbattr[db_input], value);
 	    db_input =-1;
 	    ajStrDel(&value);
 	    dbsave = ajFalse;
 	}
 	
-	if (rssave)
-	{				/* Save the keyword value */
-	    (void) ajStrAss(&rsattr[rs_input], value);
+	if(rssave)
+	{
+	    /* Save the keyword value */
+	    ajStrAss(&rsattr[rs_input], value);
 	    rs_input =-1;
 	    ajStrDel(&value);
 	    rssave = ajFalse;
@@ -1236,21 +1372,24 @@ static void namListParse (AjPList listwords, AjPList listcount,
 
 	    /* Validate the master table entry */
 
-	    if (namDoValid)
+	    if(namDoValid)
 		namValid(fnew);
 
-	    /* Add new one to table */
-	    /* be very careful that everything in the table */
-	    /* is not about to be deallocated - so do not use "name" here */
+	    /*
+	    ** Add new one to table 
+	    ** be very careful that everything in the table 
+	    ** is not about to be deallocated - so do not use "name" here
+	    */
 
-	    entry = ajTablePut (namMasterTable, tabname, fnew);
-	    if (entry)
-	    {	   /* it existed so over wrote previous table entry */
-		namUser ("%S: replaced previous definition of '%S'\n",
+	    entry = ajTablePut(namMasterTable, tabname, fnew);
+	    if(entry)
+	    {
+		/* it existed so over wrote previous table entry */
+		namUser("%S: replaced previous definition of '%S'\n",
 			 namRootStr,
 			 entry->name);
-		namEntryDelete (&entry); /* we can delete the previous entry */
-		AJFREE(tabname);   /* ajTablePut reused the old key */
+		namEntryDelete(&entry); /* we can delete the previous entry */
+		AJFREE(tabname);        /* ajTablePut reused the old key */
 	    }
 	    
 	    saveit = ajFalse;
@@ -1258,54 +1397,59 @@ static void namListParse (AjPList listwords, AjPList listcount,
 	    db_input = -1;
 	    dbattr = 0;
 	}
-	ajStrDel (&curword);
+	ajStrDel(&curword);
     }
     
-    if (namParseType)
-    {				       /* test: badset.rc baddb.rc  */
+    if(namParseType)
+    {
+	/* test: badset.rc baddb.rc  */
 	namError("Unexpected end of file in %s definition",
 		 namTypes[namParseType]);
 	namParseType = 0;
     }
     
-    if (ajListLength(listcount))	/* cleanup the wordcount list */
+    if(ajListLength(listcount))	/* cleanup the wordcount list */
     {
 	namUser("** remaining wordcount items: %d\n", ajListLength(listcount));
-	while (ajListLength(listcount))
+	while(ajListLength(listcount))
 	{
 	    ajListPop(listcount, (void**) &iword);
-	    AJFREE (iword);
+	    AJFREE(iword);
 	}
     }
-    if (value)
+
+    if(value)
     {
-	ajUser ("++ namListParse value %x '%S'", value, value);
+	ajUser("++ namListParse value %x '%S'", value, value);
     }
     
     return;
 }
+
+
+
 
 /* @func ajNamGetenv **********************************************************
 **
 ** Looks for name as an environment variable.
 ** the AjPStr for this in "value". If not found returns NULL;
 **
-** @param [r] name [AjPStr] character string find in hash table.
-** @param [wP] value [AjPStr*] String for the value.
+** @param [r] name [const AjPStr] character string find in hash table.
+** @param [w] value [AjPStr*] String for the value.
 ** @return [AjBool] True if name was defined.
 ** @@
 **
 ******************************************************************************/
 
-AjBool ajNamGetenv (AjPStr name,
+AjBool ajNamGetenv(const AjPStr name,
 		    AjPStr* value)
 {
     char *envval;
 
     envval = getenv(ajStrStr(name));
-    if (envval)
+    if(envval)
     {
-	(void) ajStrAssC (value, envval);
+	ajStrAssC(value, envval);
 	return ajTrue;
     }
 
@@ -1313,23 +1457,29 @@ AjBool ajNamGetenv (AjPStr name,
     return ajFalse;
 }
 
+
+
+
 /* @func ajNamGetValue ********************************************************
 **
 ** Looks for name as an (upper case) environment variable,
 ** and then as-is in the hash table and if found returns
 ** the AjPStr for this in "value". If not found returns NULL;
 **
-** @param [r] name [AjPStr] character string find in hash table.
-** @param [wP] value [AjPStr*] String for the value.
+** @param [r] name [const AjPStr] character string find in hash table.
+** @param [w] value [AjPStr*] String for the value.
 ** @return [AjBool] True if name was defined.
 ** @@
 **
 ******************************************************************************/
 
-AjBool ajNamGetValue (AjPStr name, AjPStr* value)
+AjBool ajNamGetValue(const AjPStr name, AjPStr* value)
 {
-    return ajNamGetValueC (ajStrStr(name), value);
+    return ajNamGetValueC(ajStrStr(name), value);
 }
+
+
+
 
 /* @func ajNamGetValueC *******************************************************
 **
@@ -1337,129 +1487,134 @@ AjBool ajNamGetValue (AjPStr name, AjPStr* value)
 ** and then as-is in the hash table and if found returns
 ** the AjPStr for this in "value". If not found returns NULL;
 **
-** @param [r] name [char*] character string find in hash table.
-** @param [wP] value [AjPStr*] Str for the value.
+** @param [r] name [const char*] character string find in hash table.
+** @param [w] value [AjPStr*] Str for the value.
 ** @return [AjBool] True if name was defined.
 ** @@
 **
 ******************************************************************************/
 
-AjBool ajNamGetValueC (char* name, AjPStr* value)
+AjBool ajNamGetValueC(const char* name, AjPStr* value)
 {
-    NamPEntry fnew = 0;
+    NamPEntry fnew       = 0;
     static AjPStr namstr = NULL;
-    AjBool hadPrefix = ajFalse;
-    AjBool ret = ajFalse;
+    AjBool hadPrefix     = ajFalse;
+    AjBool ret           = ajFalse;
     
-    if (ajStrPrefixCO(name, namPrefixStr)) /* may already have the prefix */
+    if(ajStrPrefixCO(name, namPrefixStr)) /* may already have the prefix */
     {
-	(void) ajStrAssC (&namstr, name);
+	ajStrAssC(&namstr, name);
 	hadPrefix = ajTrue;
     }
     else
     {
-	(void) ajStrAssS (&namstr, namPrefixStr);
-	(void) ajStrAppC (&namstr, name);
+	ajStrAssS(&namstr, namPrefixStr);
+	ajStrAppC(&namstr, name);
     }
+
     /* upper case for ENV, otherwise don't care */
-    (void) ajStrToUpper (&namstr);
+    ajStrToUpper(&namstr);
     
     /* first test for an ENV variable */
     
     ret = ajNamGetenv(namstr, value);
-    if (ret)
-    {
+    if(ret)
 	return ajTrue;
-    }
 
     /* then test the table definitions - with the prefix */
     
     fnew = ajTableGet(namMasterTable, ajStrStr(namstr));
-    if (fnew)
+    if(fnew)
     {
-	(void) ajStrAssS (value, fnew->value);
+	ajStrAssS(value, fnew->value);
 	return ajTrue;
     }
     
-    if (!hadPrefix)
+    if(!hadPrefix)
     {
 
 	/* then test the table definitions - as originally specified */
 
 	fnew = ajTableGet(namMasterTable, name);
-	if (fnew)
+	if(fnew)
 	{
-	    (void) ajStrAssS (value, fnew->value);
+	    ajStrAssS(value, fnew->value);
 	    return ajTrue;
 	}
     }
     
-    
     return ajFalse;
 }
+
+
+
 
 /* @func ajNamDatabase ********************************************************
 **
 ** Looks for name in the hash table and if found returns
 ** the attribute for this. If not found returns  NULL;
 **
-** @param [r] name [AjPStr] character string find in hash table.
+** @param [r] name [const AjPStr] character string find in hash table.
 ** @return [AjBool] true if database name is valid.
 ** @error  NULL if name not found in the table
 ** @@
 **
 ******************************************************************************/
 
-AjBool ajNamDatabase(AjPStr name)
+AjBool ajNamDatabase(const AjPStr name)
 {
     NamPEntry fnew = 0;
 
-    /* ajDebug ("ajNamDatabase '%S'\n", name); */
+    /* ajDebug("ajNamDatabase '%S'\n", name); */
 
     fnew = ajTableGet(namMasterTable, ajStrStr(name));
     if(fnew)
     {
-	/* ajDebug ("  '%S' found\n", name); */
+	/* ajDebug("  '%S' found\n", name); */
 	return ajTrue;
     }
 
-    /* ajDebug ("  '%S' not found\n", name); */
+    /* ajDebug("  '%S' not found\n", name); */
     return ajFalse;
 }
+
+
+
 
 /* @funcstatic namProcessFile *************************************************
 **
 ** Read the definitions file and append each token to the list.
 **
-** @param [P] file [AjPFile] Input file object
+** @param [r] file [AjPFile] Input file object
 ** @return [AjBool] ajTrue if no error were found
 ** @@
 ******************************************************************************/
 
-static AjBool namProcessFile (AjPFile file)
+static AjBool namProcessFile(AjPFile file)
 {
-    AjPStr rdline=NULL;
-    AjPStr word=NULL;
+    AjPStr rdline = NULL;
+    AjPStr word   = NULL;
     char *ptr;
-    ajint i=0,len;
-    char quote='\0';
+    ajint i = 0;
+    ajint len;
+    char quote = '\0';
     AjPList listwords;
     AjPList listcount;
     AjPStr wordptr;
-    ajint iline=0;
-    ajint *k = NULL;
+    ajint iline = 0;
+    ajint *k    = NULL;
     
     ajint preverrorcount = namErrorCount;
     
     listwords = ajListstrNew();
     listcount = ajListNew();
-    word = ajStrNewL(128);
+    word      = ajStrNewL(128);
     
     namFile = file;
-    namUser ("namProcessFile '%F'\n", file);
+    namUser("namProcessFile '%F'\n", file);
     
     /* Read in the settings. */
-    while (ajFileReadLine(file, &rdline))
+    while(ajFileReadLine(file, &rdline))
     {
 	
 	AJNEW0(k);
@@ -1476,7 +1631,7 @@ static AjBool namProcessFile (AjPFile file)
 	if(len)
 	{
 	    ptr = ajStrStr(rdline);
-	    i=0;
+	    i = 0;
 	    while(*ptr && i < len)
 	    {
 		if(*ptr == ' ' || *ptr == '\t')
@@ -1494,9 +1649,9 @@ static AjBool namProcessFile (AjPFile file)
 		else if(*ptr == '\'' || *ptr == '\"')
 		{
 		    ajStrAppK(&word,*ptr);
-		    if (quote)
+		    if(quote)
 		    {
-			if (quote == *ptr)
+			if(quote == *ptr)
 			    quote = '\0';
 		    }
 		    else
@@ -1505,7 +1660,7 @@ static AjBool namProcessFile (AjPFile file)
 		else if(!quote && ajStrLen(word) && *ptr == ']')
 		{
 		    wordptr = ajStrNewS(word);
-		    ajListstrPushApp (listwords, wordptr);
+		    ajListstrPushApp(listwords, wordptr);
 		    ajStrAssC(&word, "");
 		    wordptr = ajStrNewC("]");
 		    ajListstrPushApp(listwords, wordptr);
@@ -1515,6 +1670,7 @@ static AjBool namProcessFile (AjPFile file)
 		    ajStrAppK(&word,*ptr);
 		i++;ptr++;
 	    }
+
 	    if(ajStrLen(word))
 	    {
 		wordptr = ajStrNewS(word);
@@ -1533,9 +1689,9 @@ static AjBool namProcessFile (AjPFile file)
     namListParseOK = ajTrue;
     
     namUser("ready to parse\n");
-    namListParse (listwords, listcount, file);
+    namListParse(listwords, listcount, file);
     
-    if (!namListParseOK)
+    if(!namListParseOK)
 	namUser("Unexpected end of file in %S at line %d\n",
 		namRootStr, iline);
     
@@ -1549,61 +1705,69 @@ static AjBool namProcessFile (AjPFile file)
     ajStrDel(&word);
     
     namUser("namProcessFile done '%F'\n", file);
-    if (namErrorCount > preverrorcount)
+    if(namErrorCount > preverrorcount)
 	return ajFalse;
+
     return ajTrue;
 }
+
+
+
 
 /* @func ajNamInit ************************************************************
 **
 ** Initialise the variable and database definitions. Find the definition
 ** files and read them.
 **
-** @param [P] prefix [char*] Default prefix for all file and variable names.
+** @param [r] prefix [const char*] Default prefix for all file
+**                                 and variable names.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajNamInit (char* prefix)
+void ajNamInit(const char* prefix)
 {
     char *prefixRoot;
     AjPFile prefixRootFile;
     AjPStr prefixRootStr = NULL;
-    AjPStr prefixStr = NULL;
-    AjPStr prefixCap = NULL;
-    AjPStr debugStr = NULL;
-    AjPStr debugVal = NULL;
+    AjPStr prefixStr     = NULL;
+    AjPStr prefixCap     = NULL;
+    AjPStr debugStr      = NULL;
+    AjPStr debugVal      = NULL;
     
     /* create new table to hold the values */
     
     namMasterTable = ajStrTableNewCaseC(0);
     
-    /* for each type of file read it and save the values */
-    /* Start at system level then go to user */
-    
-    /* static namPrefixStr is the prefix for all variable names */
+    /*
+    ** for each type of file read it and save the values 
+    ** Start at system level then go to user 
+    ** static namPrefixStr is the prefix for all variable names
+    */
     
     ajStrAssC(&namPrefixStr, prefix);
     
-    (void) ajStrAppC(&namPrefixStr, "_");
+    ajStrAppC(&namPrefixStr, "_");
     
-    /* local prefixRoot is the root directory */
-    /* it is the value of (PREFIX)_ROOT (if set) or namFixedRoot */
+    /*
+    ** local prefixRoot is the root directory 
+    ** it is the value of (PREFIX)_ROOT (if set) or namFixedRoot
+    */
     
     ajStrAssC(&debugStr, prefix);
     
-    (void) ajStrAppC(&debugStr, "_namdebug");
-    (void) ajStrToUpper (&debugStr);
+    ajStrAppC(&debugStr, "_namdebug");
+    ajStrToUpper(&debugStr);
     
-    if (ajNamGetenv (debugStr, &debugVal))
+    if(ajNamGetenv(debugStr, &debugVal))
 	ajStrToBool(debugVal, &namDoDebug);
     
     ajStrAssC(&debugStr, prefix);
     
-    (void) ajStrAppC(&debugStr, "_namvalid");
-    (void) ajStrToUpper (&debugStr);
+    ajStrAppC(&debugStr, "_namvalid");
+    ajStrToUpper(&debugStr);
     
-    if (ajNamGetenv (debugStr, &debugVal))
+    if(ajNamGetenv(debugStr, &debugVal))
 	ajStrToBool(debugVal, &namDoValid);
     
     ajStrDel(&debugStr);
@@ -1611,215 +1775,252 @@ void ajNamInit (char* prefix)
     
     ajStrAssC(&prefixStr, prefix);
     
-    (void) ajStrAppC(&prefixStr, "_ROOT");
-    (void) ajStrToUpper (&prefixStr);
+    ajStrAppC(&prefixStr, "_ROOT");
+    ajStrToUpper(&prefixStr);
     
-    (void) ajStrAppC(&prefixCap, prefix);
-    (void) ajStrToUpper (&prefixCap);
+    ajStrAppC(&prefixCap, prefix);
+    ajStrToUpper(&prefixCap);
     
-    if (ajNamGetenv (prefixStr, &prefixRootStr))
+    if(ajNamGetenv(prefixStr, &prefixRootStr))
 	prefixRoot = ajStrStr(prefixRootStr);
     else
 	prefixRoot = namFixedRoot;
     
     /* namFixedRootBaseStr is the directory above the source root */
     
-    ajStrAssC (&namFixedRootBaseStr, prefixRoot);
-    ajFileDirUp (&namFixedRootBaseStr);
+    ajStrAssC(&namFixedRootBaseStr, prefixRoot);
+    ajFileDirUp(&namFixedRootBaseStr);
     
     /* look for default file in the install directory as
        <install-prefix>/share/PREFIX/emboss.default */
     
-    ajFmtPrintS (&namRootStr, "%s/share/%S/%s.default",
+    ajFmtPrintS(&namRootStr, "%s/share/%S/%s.default",
 		 namInstallRoot, prefixCap, prefix);
-    prefixRootFile = ajFileNewIn (namRootStr);
+    prefixRootFile = ajFileNewIn(namRootStr);
     
     /* look for $(PREFIX)_ROOT/../emboss.default */
     
-    if (!prefixRootFile)
-    {					/* try original directory */
-	ajFmtPrintS (&namRootStr, "%s/%s.default", prefixRoot, prefix);
+    if(!prefixRootFile)
+    {
+	/* try original directory */
+	ajFmtPrintS(&namRootStr, "%s/%s.default", prefixRoot, prefix);
 	prefixRootFile = ajFileNewIn(namRootStr);
     }
     
-    if (namFileOrig)
-	(void) ajStrAppC (&namFileOrig, ", ");
-    (void) ajStrApp (&namFileOrig, namRootStr);
+    if(namFileOrig)
+	ajStrAppC(&namFileOrig, ", ");
+    ajStrApp(&namFileOrig, namRootStr);
     
-    if (prefixRootFile)
+    if(prefixRootFile)
     {
-	(void) ajStrAppC (&namFileOrig, "(OK)");
+	ajStrAppC(&namFileOrig, "(OK)");
 	namProcessFile(prefixRootFile);
 	ajFileClose(&prefixRootFile);
     }
     else
-	(void) ajStrAppC (&namFileOrig, "(failed)");
+	ajStrAppC(&namFileOrig, "(failed)");
     
     
     
     /* look for .embossrc in an arbitrary directory */
     
+    ajStrAssC(&debugStr, prefix);
+    
     prefixRoot= getenv("EMBOSSRC");
     
-    if (prefixRoot)
+    if(prefixRoot)
     {
-	(void) ajStrAssC(&namRootStr, prefixRoot);
-	(void) ajStrAppC(&namRootStr, "/.");
-	(void) ajStrAppC(&namRootStr, prefix);
-	(void) ajStrAppC(&namRootStr, "rc");
-	if (namFileOrig) (void) ajStrAppC (&namFileOrig, ", ");
-	(void) ajStrApp (&namFileOrig, namRootStr);
+	ajStrAssC(&namRootStr, prefixRoot);
+	ajStrAppC(&namRootStr, "/.");
+	ajStrAppC(&namRootStr, prefix);
+	ajStrAppC(&namRootStr, "rc");
+	if(namFileOrig)
+	    ajStrAppC(&namFileOrig, ", ");
+	ajStrApp(&namFileOrig, namRootStr);
 
 	prefixRootFile = ajFileNewIn(namRootStr);
-	if (prefixRootFile)
+	if(prefixRootFile)
 	{
-	    (void) ajStrAppC (&namFileOrig, "(OK)");
+	    ajStrAppC(&namFileOrig, "(OK)");
 	    namProcessFile(prefixRootFile);
 	    ajFileClose(&prefixRootFile);
 	}
 	else
-	    (void) ajStrAppC (&namFileOrig, "(failed)");
+	    ajStrAppC(&namFileOrig, "(failed)");
     }
     
     /* look for $HOME/.embossrc */
     
     prefixRoot= getenv("HOME");
     
-    if (prefixRoot)
+    ajStrAppC(&debugStr, "_RCHOME");
+    ajStrToUpper(&debugStr);
+    
+    if(ajNamGetenv(debugStr, &debugVal))
+	ajStrToBool(debugVal, &namDoHomeRc);
+
+    ajStrDel(&debugStr);
+    ajStrDel(&debugVal);
+    
+    if(namDoHomeRc &&prefixRoot)
     {
-	(void) ajStrAssC(&namRootStr, prefixRoot);
-	(void) ajStrAppC(&namRootStr, "/.");
-	(void) ajStrAppC(&namRootStr, prefix);
-	(void) ajStrAppC(&namRootStr, "rc");
-	if (namFileOrig) (void) ajStrAppC (&namFileOrig, ", ");
-	(void) ajStrApp (&namFileOrig, namRootStr);
+	ajStrAssC(&namRootStr, prefixRoot);
+	ajStrAppC(&namRootStr, "/.");
+	ajStrAppC(&namRootStr, prefix);
+	ajStrAppC(&namRootStr, "rc");
+	if(namFileOrig)
+	    ajStrAppC(&namFileOrig, ", ");
+	ajStrApp(&namFileOrig, namRootStr);
 
 	prefixRootFile = ajFileNewIn(namRootStr);
-	if (prefixRootFile)
+	if(prefixRootFile)
 	{
-	    (void) ajStrAppC (&namFileOrig, "(OK)");
+	    ajStrAppC(&namFileOrig, "(OK)");
 	    namProcessFile(prefixRootFile);
 	    ajFileClose(&prefixRootFile);
 	}
 	else
-	    (void) ajStrAppC (&namFileOrig, "(failed)");
+	    ajStrAppC(&namFileOrig, "(failed)");
     }
     
     ajStrDel(&prefixRootStr);
     ajStrDel(&prefixStr);
     ajStrDel(&prefixCap);
     
-    if (namErrorCount)		/* test: badsummary.rc */
-	ajDie ("Error(s) in configuration files");
+    if(namErrorCount)		/* test: badsummary.rc */
+	ajDie("Error(s) in configuration files");
+
     return;
 }
+
+
+
 
 /* @funcstatic namNoColon *****************************************************
 **
 ** Remove any trailing colon ':' in the input string.
 **
-** @param [P] thys [AjPStr*] String.
+** @param [u] thys [AjPStr*] String.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namNoColon (AjPStr* thys)
+static void namNoColon(AjPStr* thys)
 {
-    if (ajStrChar(*thys, -1) == ':')
-	(void) ajStrTrim (thys, -1);
+    if(ajStrChar(*thys, -1) == ':')
+	ajStrTrim(thys, -1);
 
     return;
 }
+
+
+
 
 /* @funcstatic namDbAttr ******************************************************
 **
 ** Return the index for a database attribute name.
 **
-** @param [P] thys [AjPStr] Attribute name.
+** @param [r] thys [const AjPStr] Attribute name.
 ** @return [ajint] Index in namDbAttrs, or -1 on failure.
 ** @@
 ******************************************************************************/
 
-static ajint namDbAttr (AjPStr thys)
+static ajint namDbAttr(const AjPStr thys)
 {
     return namDbAttrC(ajStrStr(thys));
 }
+
+
+
 
 /* @funcstatic namDbAttrC *****************************************************
 **
 ** Return the index for a database attribute name.
 **
-** @param [P] str [char*] Attribute name.
+** @param [r] str [const char*] Attribute name.
 ** @return [ajint] Index in namDbAttrs, or -1 on failure.
 ** @@
 ******************************************************************************/
 
-static ajint namDbAttrC (char* str)
+static ajint namDbAttrC(const char* str)
 {
     ajint i = 0;
     ajint j = 0;
     ajint ifound = 0;
 
-    for (i=0; namDbAttrs[i].Name; i++)
+    for(i=0; namDbAttrs[i].Name; i++)
     {
-	if (!strcmp (str, namDbAttrs[i].Name))
+	if(!strcmp(str, namDbAttrs[i].Name))
 	    return i;
-	if (ajStrPrefixCC (namDbAttrs[i].Name, str))
+
+	if(ajStrPrefixCC(namDbAttrs[i].Name, str))
 	{
 	    ifound++;
 	    j = i;
 	}
     }
-    if (ifound == 1)
+
+    if(ifound == 1)
 	return j;
 
     return -1;
 }
+
+
+
 
 /* @funcstatic namRsAttr ******************************************************
 **
 ** Return the index for a resource attribute name.
 **
-** @param [P] thys [AjPStr] Attribute name.
+** @param [r] thys [const AjPStr] Attribute name.
 ** @return [ajint] Index in namRsAttrs, or -1 on failure.
 ** @@
 ******************************************************************************/
 
-static ajint namRsAttr (AjPStr thys)
+static ajint namRsAttr(const AjPStr thys)
 {
     return namRsAttrC(ajStrStr(thys));
 }
+
+
+
 
 /* @funcstatic namRsAttrC *****************************************************
 **
 ** Return the index for a resource attribute name.
 **
-** @param [P] str [char*] Attribute name.
+** @param [r] str [const char*] Attribute name.
 ** @return [ajint] Index in namRsAttrs, or -1 on failure.
 ** @@
 ******************************************************************************/
 
-static ajint namRsAttrC (char* str)
+static ajint namRsAttrC(const char* str)
 {
     ajint i = 0;
     ajint j = 0;
     ajint ifound = 0;
 
-    for (i=0; namRsAttrs[i].Name; i++)
+    for(i=0; namRsAttrs[i].Name; i++)
     {
-	if (!strcmp (str, namRsAttrs[i].Name))
+	if(!strcmp(str, namRsAttrs[i].Name))
 	    return i;
-	if (ajStrPrefixCC (namRsAttrs[i].Name, str))
+
+	if(ajStrPrefixCC(namRsAttrs[i].Name, str))
 	{
 	    ifound++;
 	    j = i;
 	}
     }
-    if (ifound == 1)
+
+    if(ifound == 1)
 	return j;
 
     return -1;
 }
+
+
+
 
 /* @func ajNamExit ************************************************************
 **
@@ -1828,7 +2029,7 @@ static ajint namRsAttrC (char* str)
 ** @@
 ******************************************************************************/
 
-void ajNamExit (void)
+void ajNamExit(void)
 {
 
     namListMasterDelete(); /* Delete elements from database structure */
@@ -1838,115 +2039,133 @@ void ajNamExit (void)
     ajStrDel(&namFileOrig);		/* allocated in ajNamInit */
     ajStrDel(&namRootStr);		/* allocated in ajNamInit */
 
-    ajRegFree (&namNameExp);
-    ajRegFree (&namVarExp);
+    ajRegFree(&namNameExp);
+    ajRegFree(&namVarExp);
 
     ajDebug("ajNamExit done\n");
+
     return;
 }
+
+
+
 
 /* @func ajNamDbTest **********************************************************
 **
 ** Looks for a database name in the known definitions.
 **
-** @param [P] dbname [AjPStr] Database name.
+** @param [r] dbname [const AjPStr] Database name.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-AjBool ajNamDbTest (AjPStr dbname)
+AjBool ajNamDbTest(const AjPStr dbname)
 {
     NamPEntry data;
 
     data = ajTableGet(namMasterTable, ajStrStr(dbname));
-    if (!data)
+
+    if(!data)
 	return ajFalse;
 
-    if (data->type != TYPE_DB)
+    if(data->type != TYPE_DB)
 	return ajFalse;
 
     return ajTrue;
 }
 
+
+
+
 /* @func ajNamDbGetUrl ********************************************************
 **
 ** Gets the URL definition for a database definition.
 **
-** @param [P] dbname [AjPStr] Database name.
-** @param [P] url [AjPStr*] URL returned.
+** @param [r] dbname [const AjPStr] Database name.
+** @param [w] url [AjPStr*] URL returned.
 ** @return [AjBool] ajTrue if success.
 ** @@
 ******************************************************************************/
 
-AjBool ajNamDbGetUrl (AjPStr dbname, AjPStr* url)
+AjBool ajNamDbGetUrl(const AjPStr dbname, AjPStr* url)
 {
 
     NamPEntry data;
     AjPStr* dbattr;
     static ajint calls = 0;
-    static ajint iurl = 0;
-    if (!calls)
+    static ajint iurl  = 0;
+
+    if(!calls)
     {
 	iurl = namDbAttrC("url");
 	calls = 1;
     }
     data = ajTableGet(namMasterTable, ajStrStr(dbname));
-    if (!data)
-	ajFatal ("%S is not a known database\n", dbname);
 
-    if (data->type != TYPE_DB)
-	ajFatal ("%S is not a database\n", dbname);
+    if(!data)
+	ajFatal("%S is not a known database\n", dbname);
+
+    if(data->type != TYPE_DB)
+	ajFatal("%S is not a database\n", dbname);
 
     dbattr = data->data;
 
-    if (ajStrLen(dbattr[iurl]))
+    if(ajStrLen(dbattr[iurl]))
     {
-	(void) ajStrAssS (url, dbattr[iurl]);
+	ajStrAssS(url, dbattr[iurl]);
 	return ajTrue;
     }
 
     return ajFalse;
 }
+
+
+
 
 /* @func ajNamDbGetDbalias ****************************************************
 **
 ** Gets an alias name for a database.
 **
-** @param [P] dbname [AjPStr] Database name.
-** @param [P] dbalias [AjPStr*] Alias returned.
+** @param [r] dbname [const AjPStr] Database name.
+** @param [w] dbalias [AjPStr*] Alias returned.
 ** @return [AjBool] ajTrue if success.
 ** @@
 ******************************************************************************/
 
-AjBool ajNamDbGetDbalias (AjPStr dbname, AjPStr* dbalias)
+AjBool ajNamDbGetDbalias(const AjPStr dbname, AjPStr* dbalias)
 {
 
     NamPEntry data;
     AjPStr* dbattr;
     static ajint calls = 0;
-    static ajint idba = 0;
-    if (!calls)
+    static ajint idba  = 0;
+
+    if(!calls)
     {
 	idba = namDbAttrC("dbalias");
 	calls = 1;
     }
     data = ajTableGet(namMasterTable, ajStrStr(dbname));
-    if (!data)
-	ajFatal ("%S is not a known database\n", dbname);
 
-    if (data->type != TYPE_DB)
-	ajFatal ("%S is not a database\n", dbname);
+    if(!data)
+	ajFatal("%S is not a known database\n", dbname);
+
+    if(data->type != TYPE_DB)
+	ajFatal("%S is not a database\n", dbname);
 
     dbattr = data->data;
 
-    if (ajStrLen(dbattr[idba]))
+    if(ajStrLen(dbattr[idba]))
     {
-	(void) ajStrAssS (dbalias, dbattr[idba]);
+	ajStrAssS(dbalias, dbattr[idba]);
 	return ajTrue;
     }
 
     return ajFalse;
 }
+
+
+
 
 /* @func ajNamDbData **********************************************************
 **
@@ -1959,54 +2178,58 @@ AjBool ajNamDbGetDbalias (AjPStr dbname, AjPStr* dbalias)
 ** See also ajNamDbQuery, which calls this function if the common
 ** query data is not yet set.
 **
-** @param [u] qry [AjPSeqQuery] Query structure with at least dbname filled in
+** @param [u] qry [AjPSeqQuery] Query structure with at least
+**                                    dbname filled in
 ** @return [AjBool] ajTrue if success.
 ** @@
 ******************************************************************************/
 
-AjBool ajNamDbData (AjPSeqQuery qry)
+AjBool ajNamDbData(AjPSeqQuery qry)
 {
 
     NamPEntry data;
 
-    AjPStr* dbattr;
+    const AjPStr* dbattr;
 
     data = ajTableGet(namMasterTable, ajStrStr(qry->DbName));
 
-    if (!data || (data->type != TYPE_DB))
-	ajFatal ("database %S unknown\n", qry->DbName);
+    if(!data || (data->type != TYPE_DB))
+	ajFatal("database %S unknown\n", qry->DbName);
 
     dbattr = data->data;
 
     /* general defaults */
 
-    (void) namDbSetAttr(dbattr, "type", &qry->DbType);
-    (void) namDbSetAttr(dbattr, "method", &qry->Method);
-    (void) namDbSetAttr(dbattr, "format", &qry->Formatstr);
-    (void) namDbSetAttr(dbattr, "app", &qry->Application);
-    (void) namDbSetAttr(dbattr, "directory", &qry->IndexDir);
-    (void) namDbSetAttr(dbattr, "indexdirectory", &qry->IndexDir);
-    (void) namDbSetAttr(dbattr, "indexdirectory", &qry->Directory);
-    (void) namDbSetAttr(dbattr, "directory", &qry->Directory);
-    (void) namDbSetAttr(dbattr, "exclude", &qry->Exclude);
-    (void) namDbSetAttr(dbattr, "filename", &qry->Filename);
-    (void) namDbSetAttr(dbattr, "fields", &qry->DbFields);
-    (void) namDbSetAttr(dbattr, "proxy", &qry->DbProxy);
-    (void) namDbSetAttr(dbattr, "httpversion", &qry->DbHttpVer);
+    namDbSetAttr(dbattr, "type", &qry->DbType);
+    namDbSetAttr(dbattr, "method", &qry->Method);
+    namDbSetAttr(dbattr, "format", &qry->Formatstr);
+    namDbSetAttr(dbattr, "app", &qry->Application);
+    namDbSetAttr(dbattr, "directory", &qry->IndexDir);
+    namDbSetAttr(dbattr, "indexdirectory", &qry->IndexDir);
+    namDbSetAttr(dbattr, "indexdirectory", &qry->Directory);
+    namDbSetAttr(dbattr, "directory", &qry->Directory);
+    namDbSetAttr(dbattr, "exclude", &qry->Exclude);
+    namDbSetAttr(dbattr, "filename", &qry->Filename);
+    namDbSetAttr(dbattr, "fields", &qry->DbFields);
+    namDbSetAttr(dbattr, "proxy", &qry->DbProxy);
+    namDbSetAttr(dbattr, "httpversion", &qry->DbHttpVer);
     /*
-       ajDebug ("ajNamDbQuery DbName '%S'\n", qry->DbName);
-       ajDebug ("    Id '%S' Acc '%S' Des '%S'\n",
+       ajDebug("ajNamDbQuery DbName '%S'\n", qry->DbName);
+       ajDebug("    Id '%S' Acc '%S' Des '%S'\n",
                 qry->Id, qry->Acc, qry->Des);
-       ajDebug ("    Method      '%S'\n", qry->Method);
-       ajDebug ("    Formatstr   '%S'\n", qry->Formatstr);
-       ajDebug ("    Application '%S'\n", qry->Application);
-       ajDebug ("    IndexDir    '%S'\n", qry->IndexDir);
-       ajDebug ("    Directory   '%S'\n", qry->Directory);
-       ajDebug ("    Filename    '%S'\n", qry->Filename);
+       ajDebug("    Method      '%S'\n", qry->Method);
+       ajDebug("    Formatstr   '%S'\n", qry->Formatstr);
+       ajDebug("    Application '%S'\n", qry->Application);
+       ajDebug("    IndexDir    '%S'\n", qry->IndexDir);
+       ajDebug("    Directory   '%S'\n", qry->Directory);
+       ajDebug("    Filename    '%S'\n", qry->Filename);
        */
 
     return ajTrue;
 }
+
+
+
 
 /* @func ajNamDbQuery *********************************************************
 **
@@ -2014,133 +2237,139 @@ AjBool ajNamDbData (AjPSeqQuery qry)
 ** fill in the access method and some common fields according
 ** to the query level.
 **
-** @param [u] qry [AjPSeqQuery] Query structure with at least dbname filled in
+** @param [u] qry [AjPSeqQuery] Query structure with at least
+**                                    dbname filled in
 ** @return [AjBool] ajTrue if success.
 ** @@
 ******************************************************************************/
 
-AjBool ajNamDbQuery (AjPSeqQuery qry)
+AjBool ajNamDbQuery(AjPSeqQuery qry)
 {
 
     NamPEntry data;
 
-    AjPStr* dbattr;
+    const AjPStr* dbattr;
 
     data = ajTableGet(namMasterTable, ajStrStr(qry->DbName));
 
-    if (!data || (data->type != TYPE_DB))
-	ajFatal ("database %S unknown\n", qry->DbName);
+    if(!data || (data->type != TYPE_DB))
+	ajFatal("database %S unknown\n", qry->DbName);
 
     dbattr = data->data;
 
-    if (!ajStrLen(qry->DbType))
-	(void) ajNamDbData (qry);
+    if(!ajStrLen(qry->DbType))
+	ajNamDbData(qry);
 
-    if (!ajSeqQueryIs(qry))   /* must have a method for all entries */
+    if(!ajSeqQueryIs(qry))   /* must have a method for all entries */
     {
 
-	(void) namDbSetAttr(dbattr, "methodall", &qry->Method);
-	(void) namDbSetAttr(dbattr, "formatall", &qry->Formatstr);
-	(void) namDbSetAttr(dbattr, "appall", &qry->Application);
+	namDbSetAttr(dbattr, "methodall", &qry->Method);
+	namDbSetAttr(dbattr, "formatall", &qry->Formatstr);
+	namDbSetAttr(dbattr, "appall", &qry->Application);
 	qry->Type = QRY_ALL;
     }
-
     else		      /* must be able to query the database */
     {
-	(void) namDbSetAttr(dbattr, "methodquery", &qry->Method);
-	(void) namDbSetAttr(dbattr, "formatquery", &qry->Formatstr);
-	(void) namDbSetAttr(dbattr, "appquery", &qry->Application);
+	namDbSetAttr(dbattr, "methodquery", &qry->Method);
+	namDbSetAttr(dbattr, "formatquery", &qry->Formatstr);
+	namDbSetAttr(dbattr, "appquery", &qry->Application);
 
-	if (!ajSeqQueryWild (qry)) /* ID - single entry may be available */
+	if(!ajSeqQueryWild(qry)) /* ID - single entry may be available */
 	{
-	    (void) namDbSetAttr(dbattr, "methodentry", &qry->Method);
-	    (void) namDbSetAttr(dbattr, "formatentry", &qry->Formatstr);
-	    (void) namDbSetAttr(dbattr, "appentry", &qry->Application);
+	    namDbSetAttr(dbattr, "methodentry", &qry->Method);
+	    namDbSetAttr(dbattr, "formatentry", &qry->Formatstr);
+	    namDbSetAttr(dbattr, "appentry", &qry->Application);
 	    qry->Type = QRY_ENTRY;
 	}
-	else {
+	else
 	    qry->Type = QRY_QUERY;
-	}
     }
 
 
-    if (!ajStrLen(qry->Formatstr))
+    if(!ajStrLen(qry->Formatstr))
     {
-	ajErr ("No format defined for database '%S'", qry->DbName);
+	ajErr("No format defined for database '%S'", qry->DbName);
 	return ajFalse;
     }
 
-    if (!ajStrLen(qry->Method))
+    if(!ajStrLen(qry->Method))
     {
-	ajErr ("No access method for database '%S'", qry->DbName);
+	ajErr("No access method for database '%S'", qry->DbName);
 	return ajFalse;
     }
 
     return ajTrue;
 }
+
+
+
 
 /* @funcstatic namDbSetAttr ***************************************************
 **
 ** Sets a named attribute value from an attribute list.
 **
-** @param [P] dbattr [AjPStr*] Attribute definitions.
-** @param [P] attrib [char*] Attribute name.
-** @param [P] qrystr [AjPStr*] Returned attribute value.
+** @param [r] dbattr [const AjPStr*] Attribute definitions.
+** @param [r] attrib [const char*] Attribute name.
+** @param [w] qrystr [AjPStr*] Returned attribute value.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-static AjBool namDbSetAttr (AjPStr* dbattr, char* attrib, AjPStr* qrystr)
+static AjBool namDbSetAttr(const AjPStr* dbattr, const char* attrib,
+			    AjPStr* qrystr)
 {
+    ajint i;
 
-    ajint i = namDbAttrC(attrib);
+    i = namDbAttrC(attrib);
 
-    if (!i)
-    {
+    if(!i)
 	ajFatal("unknown attribute '%s' requested",  attrib);
-    }
 
-    if (!ajStrLen(dbattr[i])) return ajFalse;
+    if(!ajStrLen(dbattr[i]))
+	return ajFalse;
 
-    (void) ajStrAssS (qrystr, dbattr[i]);
+    ajStrAssS(qrystr, dbattr[i]);
     /* ajDebug("namDbSetAttr('%S')\n", *qrystr); */
 
-    (void) namVarResolve (qrystr);
+    namVarResolve(qrystr);
 
     return ajTrue;
 }
+
+
+
 
 /* @funcstatic namVarResolve **************************************************
 **
 ** Resolves any variable or function references in a string.
 ** Yet to be implemented, but called in the right places.
 **
-** @param [uP] var [AjPStr*] String value
+** @param [u] var [AjPStr*] String value
 ** @return [AjBool] Always ajTrue so far
 ** @@
 ******************************************************************************/
 
-static AjBool namVarResolve (AjPStr* var)
+static AjBool namVarResolve(AjPStr* var)
 {
 
     AjPStr varname = NULL;
-    AjPStr newvar = NULL;
+    AjPStr newvar  = NULL;
     AjPStr restvar = NULL;
 
-    if (!namVarExp) namVarExp = ajRegCompC("^\\$([a-zA-Z0-9_.]+)");
+    if(!namVarExp)
+	namVarExp = ajRegCompC("^\\$([a-zA-Z0-9_.]+)");
 
-    while (ajRegExec (namVarExp, *var))
+    while(ajRegExec(namVarExp, *var))
     {
-
 	ajRegSubI(namVarExp, 1, &varname); /* variable name */
 
-	(void) ajNamGetValue(varname, &newvar);
+	ajNamGetValue(varname, &newvar);
 
 	ajDebug("namVarResolve '%S' = '%S'\n", varname, newvar);
 
-	if (ajRegPost(namVarExp, &restvar)) /* any more? */
-	    (void) ajStrApp (&newvar, restvar);
-	(void) ajStrAssS (var, newvar);
+	if(ajRegPost(namVarExp, &restvar)) /* any more? */
+	    ajStrApp(&newvar, restvar);
+	ajStrAssS(var, newvar);
     }
 
     ajStrDel(&varname);
@@ -2150,48 +2379,55 @@ static AjBool namVarResolve (AjPStr* var)
     return ajFalse;
 }
 
+
+
+
 /* @funcstatic namUser ********************************************************
 **
 ** Formatted write as an error message.
 **
-** @param [P] fmt [char*] Format string
+** @param [r] fmt [const char*] Format string
 ** @param [v] [...] Format arguments.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namUser (char* fmt, ...)
+static void namUser(const char* fmt, ...)
 {
-    va_list args ;
+    va_list args;
 
-    if (!namDoDebug) return;
-    va_start (args, fmt) ;
-    ajFmtVError(fmt, args) ;
-    va_end (args) ;
+    if(!namDoDebug)
+	return;
+    va_start(args, fmt);
+    ajFmtVError(fmt, args);
+    va_end(args);
 
     return;
 }
+
+
+
 
 /* @funcstatic namError *******************************************************
 **
 ** Formatted write as an error message.
 **
-** @param [P] fmt [char*] Format string
+** @param [r] fmt [const char*] Format string
 ** @param [v] [...] Format arguments.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namError (char* fmt, ...)
+static void namError(const char* fmt, ...)
 {
-    va_list args ;
-    AjPStr errstr=NULL;
+    va_list args;
+    AjPStr errstr = NULL;
   
     namErrorCount++;
 
-    va_start (args, fmt) ;
-    ajFmtVPrintS (&errstr, fmt, args);
-    va_end (args) ;
+    va_start(args, fmt);
+    ajFmtVPrintS(&errstr, fmt, args);
+    va_end(args);
 
     ajErr("File %F line %d: %S", namFile, namLine, errstr);
     ajStrDel(&errstr);
@@ -2199,127 +2435,145 @@ static void namError (char* fmt, ...)
     return;
 }
 
+
+
+
 /* @func ajNamRootInstall *****************************************************
 **
 ** Returns the install directory root for all file searches
 ** (package level)
 **
-** @param [P] root [AjPStr*] Root.
+** @param [w] root [AjPStr*] Root.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-AjBool ajNamRootInstall (AjPStr* root)
+AjBool ajNamRootInstall(AjPStr* root)
 {
-    (void) ajStrAssC (root, namInstallRoot);
+    ajStrAssC(root, namInstallRoot);
 
     return ajTrue;
 }
+
+
+
 
 /* @func ajNamRootPack ********************************************************
 **
 ** Returns the package name for the library
 **
-** @param [P] pack [AjPStr*] Package name.
+** @param [w] pack [AjPStr*] Package name.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-AjBool ajNamRootPack (AjPStr* pack)
+AjBool ajNamRootPack(AjPStr* pack)
 {
-    (void) ajStrAssC (pack, namPackage);
+    ajStrAssC(pack, namPackage);
 
     return ajTrue;
 }
+
+
+
 
 /* @func ajNamRootVersion *****************************************************
 **
 ** Returns the version number for the library
 **
-** @param [P] version [AjPStr*] Version number.
+** @param [w] version [AjPStr*] Version number.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-AjBool ajNamRootVersion (AjPStr* version)
+AjBool ajNamRootVersion(AjPStr* version)
 {
-    (void) ajStrAssC (version, namVersion);
+    ajStrAssC(version, namVersion);
 
     return ajTrue;
 }
+
+
+
 
 /* @func ajNamRoot ************************************************************
 **
 ** Returns the directory for all file searches
 ** (package level)
 **
-** @param [P] root [AjPStr*] Root.
+** @param [w] root [AjPStr*] Root.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-AjBool ajNamRoot (AjPStr* root)
+AjBool ajNamRoot(AjPStr* root)
 {
-    (void) ajStrAssC (root, namFixedRoot);
+    ajStrAssC(root, namFixedRoot);
 
     return ajTrue;
 }
+
+
+
 
 /* @func ajNamRootBase ********************************************************
 **
 ** Returns the base directory for all for all file searches
 ** (above package level).
 **
-** @param [P] rootbase [AjPStr*] Root.
+** @param [w] rootbase [AjPStr*] Root.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-AjBool ajNamRootBase (AjPStr* rootbase)
+AjBool ajNamRootBase(AjPStr* rootbase)
 {
-    (void) ajStrAssS (rootbase, namFixedRootBaseStr);
+    ajStrAssS(rootbase, namFixedRootBaseStr);
 
     return ajTrue;
 }
+
+
+
 
 /* @func ajNamResolve *********************************************************
 **
 ** Resolves a variable name if the input string starts with a dollar sign.
 **
-** @param [P] name [AjPStr*] String
+** @param [w] name [AjPStr*] String
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-AjBool ajNamResolve (AjPStr* name)
+AjBool ajNamResolve(AjPStr* name)
 {
 
-    AjPStr varname = NULL;
+    AjPStr varname  = NULL;
     AjPStr varvalue = NULL;
     AjPStr restname = NULL;
     AjBool ret;
 
-    if (!namNameExp)
-	namNameExp = ajRegCompC ("^\\$([A-Za-z0-9_]+)");
+    if(!namNameExp)
+	namNameExp = ajRegCompC("^\\$([A-Za-z0-9_]+)");
 
-    namUser ("ajNamResolve of '%S'\n", *name);
-    ret = ajRegExec (namNameExp, *name);
-    if (ret)
+    namUser("ajNamResolve of '%S'\n", *name);
+    ret = ajRegExec(namNameExp, *name);
+    if(ret)
     {
 	ajRegSubI(namNameExp, 1, &varname);
-	namUser ("variable '%S' found\n", varname);
-	(void) ajRegPost(namNameExp, &restname);
-	ret = ajNamGetValue (varname, &varvalue);
-	if (ret)
+	namUser("variable '%S' found\n", varname);
+	ajRegPost(namNameExp, &restname);
+	ret = ajNamGetValue(varname, &varvalue);
+	if(ret)
 	{
-	    (void) ajStrAssS (name, varvalue);
-	    (void) ajStrApp (name, restname);
-	    namUser ("converted to '%S'\n", *name);
+	    ajStrAssS(name, varvalue);
+	    ajStrApp(name, restname);
+	    namUser("converted to '%S'\n", *name);
 	}
 	else
 	{
-	    namUser ("Variable unknown '$%S'\n", varname);
-	    ajWarn ("Variable unknown in '%S'", *name);
+	    namUser("Variable unknown '$%S'\n", varname);
+	    ajWarn("Variable unknown in '%S'", *name);
 	}
 	ajStrDel(&varname);
 	ajStrDel(&varvalue);
@@ -2329,174 +2583,197 @@ AjBool ajNamResolve (AjPStr* name)
     return ret;
 }
 
+
+
+
 /* @funcstatic namValid *******************************************************
 **
 ** Validation of a master table entry
 **
-** @param [R] entry [NamPEntry] Internal table entry
+** @param [r] entry [const NamPEntry] Internal table entry
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool namValid(NamPEntry entry)
+static AjBool namValid(const NamPEntry entry)
 {
-    if (entry->type == TYPE_ENV)
-	return namValidVariable (entry);
-    else if (entry->type == TYPE_DB)
-	return namValidDatabase (entry);
-    else if (entry->type == TYPE_RESOURCE)
-	return namValidResource (entry);
+    if(entry->type == TYPE_ENV)
+	return namValidVariable(entry);
+    else if(entry->type == TYPE_DB)
+	return namValidDatabase(entry);
+    else if(entry->type == TYPE_RESOURCE)
+	return namValidResource(entry);
 
     /* fatal: cannot test - should not happen */
-    namError ("Unknown definition type number %d",
+    namError("Unknown definition type number %d",
 	      entry->type);
+
     return ajFalse;
 }
+
+
+
 
 /* @funcstatic namValidDatabase ***********************************************
 **
 ** Validation of a master table database entry
 **
-** @param [R] entry [NamPEntry] Internal table entry
+** @param [r] entry [const NamPEntry] Internal table entry
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool namValidDatabase(NamPEntry entry)
+static AjBool namValidDatabase(const NamPEntry entry)
 {
-    ajint iattr=0;
+    ajint iattr = 0;
     ajint j;
     ajint k;
     AjBool ok;
     AjBool oktype;
     AjPStr* attrs;
-    AjBool hasformat=ajFalse;
-    AjBool hasmethod=ajFalse;
-    AjBool hastype=ajFalse;
+    AjBool hasformat = ajFalse;
+    AjBool hasmethod = ajFalse;
+    AjBool hastype   = ajFalse;
     
     attrs = entry->data;
-    if (!attrs)
+    if(!attrs)
     {			 /* fatal - should be set for all databases */
-	namError ("Database '%S' has no list of valid attributes",
+	namError("Database '%S' has no list of valid attributes",
 		  entry->name);
 	return ajFalse;
     }
     
-    for (j=0; namDbAttrs[j].Name; j++)
+    for(j=0; namDbAttrs[j].Name; j++)
     {
-	if (attrs[j])
+	if(attrs[j])
 	{
 	    iattr++;
-	    if (ajStrPrefixCC(namDbAttrs[j].Name, "format"))
+	    if(ajStrPrefixCC(namDbAttrs[j].Name, "format"))
 	    {
 		hasformat=ajTrue;
-		if (!ajSeqFormatTest(attrs[j]))	/* test: dbunknowns.rc */
+		if(!ajSeqFormatTest(attrs[j]))	/* test: dbunknowns.rc */
 		    namError("Database '%S' %s: '%S' unknown\n",
 			     entry->name, namDbAttrs[j].Name, attrs[j]);
 	    }
-	    if (ajStrPrefixCC(namDbAttrs[j].Name, "method"))
+
+	    if(ajStrPrefixCC(namDbAttrs[j].Name, "method"))
 	    {
 		hasmethod=ajTrue;
-		if (!ajSeqMethodTest(attrs[j]))	/* test: dbunknowns.rc */
+		if(!ajSeqMethodTest(attrs[j]))	/* test: dbunknowns.rc */
 		    namError("Database '%S' %s: '%S' unknown\n",
 			     entry->name, namDbAttrs[j].Name, attrs[j]);
 	    }
-	    if (ajStrPrefixCC(namDbAttrs[j].Name, "type"))
+
+	    if(ajStrPrefixCC(namDbAttrs[j].Name, "type"))
 	    {
 		hastype=ajTrue;
 		oktype = ajFalse;
-		for (k=0; namDbTypes[k].Name; k++)
+		for(k=0; namDbTypes[k].Name; k++)
 		{
-		    if (ajStrMatchCaseC(attrs[j], namDbTypes[k].Name)) 
+		    if(ajStrMatchCaseC(attrs[j], namDbTypes[k].Name)) 
 			oktype = ajTrue;
 		}
-		if (!oktype)		/* test: dbunknowns.rc */
-		    namError ("Database '%S' %s: '%S' unknown\n",
+		if(!oktype)		/* test: dbunknowns.rc */
+		    namError("Database '%S' %s: '%S' unknown\n",
 			      entry->name, namDbAttrs[j].Name, attrs[j]);
 	    }
 	}
     }
+
     ok = ajTrue;
-    if (!iattr)
+    if(!iattr)
     {					/* test: dbempty.rc */
-	namError ("Database '%S' has no attributes", entry->name);
+	namError("Database '%S' has no attributes", entry->name);
 	ok = ajFalse;
     }
-    if (!hasformat)		/* test: dbempty.rc */
+
+    if(!hasformat)		/* test: dbempty.rc */
     {
-	namError ("Database '%S' has no format definition", entry->name);
+	namError("Database '%S' has no format definition", entry->name);
 	ok = ajFalse;
     }
-    if (!hastype)			/* test: dbempty.rc */
+
+    if(!hastype)			/* test: dbempty.rc */
     {
-	namError ("Database '%S' has no type definition", entry->name);
+	namError("Database '%S' has no type definition", entry->name);
 	ok = ajFalse;
     }
-    if (!hasmethod)		/* test: dbempty.rc */
+
+    if(!hasmethod)		/* test: dbempty.rc */
     {
-	namError ("Database '%S' has no access method definition",
+	namError("Database '%S' has no access method definition",
 		  entry->name);
 	ok = ajFalse;
     }
+
     return ok;
 }
+
+
+
 
 /* @funcstatic namValidResource ***********************************************
 **
 ** Validation of a master table resource entry
 **
-** @param [R] entry [NamPEntry] Internal table entry
+** @param [r] entry [const NamPEntry] Internal table entry
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool namValidResource (NamPEntry entry)
+static AjBool namValidResource(const NamPEntry entry)
 {
-    ajint iattr=0;
+    ajint iattr = 0;
     ajint j;
     AjPStr* attrs;
-    AjBool hastype=ajFalse;
+    AjBool hastype = ajFalse;
     AjBool ok;
 
     attrs = entry->data;
-    if (!attrs)
+    if(!attrs)
     {			 /* fatal - should be set for all databases */
-	namError ("Resource '%S' has no list of valid attributes",
+	namError("Resource '%S' has no list of valid attributes",
 		  entry->name);
 	return ajFalse;
     }
 
-    for (j=0; namRsAttrs[j].Name; j++)
-    {
-	if (attrs[j])
+    for(j=0; namRsAttrs[j].Name; j++)
+	if(attrs[j])
 	{
 	    iattr++;
-	    if (ajStrPrefixCC(namDbAttrs[j].Name, "type"))
+	    if(ajStrPrefixCC(namDbAttrs[j].Name, "type"))
 		hastype=ajTrue;
 	}
-    }
+
     ok = ajTrue;
-    if (!iattr)
+    if(!iattr)
     {					/* test: dbempty.rc */
-	namError ("Resource '%S' has no attributes", entry->name);
+	namError("Resource '%S' has no attributes", entry->name);
 	ok =  ajFalse;
     }
+
     return ok;
 }
+
+
+
 
 /* @funcstatic namValidVariable ***********************************************
 **
 ** Validation of a master table variable entry
 **
-** @param [R] entry [NamPEntry] Internal table entry
+** @param [r] entry [const NamPEntry] Internal table entry
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool namValidVariable(NamPEntry entry)
+static AjBool namValidVariable(const NamPEntry entry)
 {
     return ajTrue;
 }
+
+
+
 
 /* @func ajNamSetControl ******************************************************
 **
@@ -2504,38 +2781,27 @@ static AjBool namValidVariable(NamPEntry entry)
 **
 ** Currently these are "namdebug, namvalid"
 **
-** @param [r] argstr [char*] option name
+** @param [r] optionName [const char*] option name
 ** @return [AjBool] ajTrue if option was recognised
 ** @@
 ******************************************************************************/
 
-AjBool ajNamSetControl (char* optionName)
+AjBool ajNamSetControl(const char* optionName)
 {
 
-    if (!ajStrCmpCaseCC(optionName, "namdebug"))
+    if(!ajStrCmpCaseCC(optionName, "namdebug"))
     {
 	namDoDebug = ajTrue;
 	return ajTrue;
     }
-    if (!ajStrCmpCaseCC(optionName, "namvalid"))
+
+    if(!ajStrCmpCaseCC(optionName, "namvalid"))
     {
 	namDoValid = ajTrue;
 	return ajTrue;
     }
+
     ajDie("Unknown ajNamSetControl control option '%s'", optionName);
 
     return ajFalse;
-}
-
-/* @func ajNamUnused **********************************************************
-**
-** Dummy function to prevent compiler warnings
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajNamUnused(void)
-{
-    return;
 }

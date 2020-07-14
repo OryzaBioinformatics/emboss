@@ -17,7 +17,7 @@ extern "C"
 typedef struct AjSMatrix {
   ajint Size;
   AjPStr Name;
-  AjPStr Codes;
+  AjPStr* Codes;
   ajint** Matrix;
   AjPSeqCvt Cvt;
 } AjOMatrix, *AjPMatrix;
@@ -34,31 +34,34 @@ typedef struct AjSMatrix {
 typedef struct AjSMatrixf {
   ajint Size;
   AjPStr Name;
-  AjPStr Codes;
+  AjPStr* Codes;
   float** Matrixf;
   AjPSeqCvt Cvt;
 } AjOMatrixf, *AjPMatrixf;
 
 ajint**    ajMatrixArray (AjPMatrix thys);
-char       ajMatrixChar (AjPMatrix thys, ajint i);
+void       ajMatrixChar (AjPMatrix thys, ajint i, AjPStr *label);
 AjPSeqCvt  ajMatrixCvt (AjPMatrix thys);
 void       ajMatrixDel (AjPMatrix *thys);
 AjPStr     ajMatrixName (AjPMatrix thys);
-AjPMatrix  ajMatrixNew (char* codes, AjPStr filename);
+AjPMatrix  ajMatrixNew (AjPStr* codes, ajint n, AjPStr filename);
 AjBool     ajMatrixSeqNum (AjPMatrix thys, AjPSeq seq, AjPStr* numseq);
-AjBool     ajMatrixRead (AjPMatrix* matrix, AjPStr filename) ;
+AjBool     ajMatrixRead (AjPMatrix* pthis, AjPStr filename);
 ajint      ajMatrixSize (AjPMatrix thys);
 
 float**    ajMatrixfArray (AjPMatrixf thys);
-char       ajMatrixfChar (AjPMatrixf thys, ajint i);
+void       ajMatrixfChar (AjPMatrixf thys, ajint i, AjPStr *label);
 AjPSeqCvt  ajMatrixfCvt (AjPMatrixf thys);
 void       ajMatrixfDel (AjPMatrixf *thys);
 AjPStr     ajMatrixfName (AjPMatrixf thys);
-AjPMatrixf ajMatrixfNew (char* codes, AjPStr filename);
+AjPMatrixf ajMatrixfNew (AjPStr* codes, ajint n, AjPStr filename);
 AjBool     ajMatrixfSeqNum (AjPMatrixf thys, AjPSeq seq, AjPStr* numseq);
-AjBool     ajMatrixfRead (AjPMatrixf* matrix, AjPStr filename) ;
+AjBool     ajMatrixfRead (AjPMatrixf* pthis, AjPStr filename);
 ajint      ajMatrixfSize (AjPMatrixf thys);
 
+AjBool     ajSeqsetConsStats(AjPSeqset thys, AjPMatrix mymatrix, AjPStr *cons,
+			     ajint* retident, ajint* retsim, ajint* retgap,
+			     ajint* retlen);
 
 #endif
 

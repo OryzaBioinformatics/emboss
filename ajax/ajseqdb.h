@@ -9,9 +9,9 @@ extern "C"
 AjBool     ajSeqAccessAsis (AjPSeqin seqin);
 AjBool     ajSeqAccessFile (AjPSeqin seqin);
 AjBool     ajSeqAccessOffset (AjPSeqin seqin);
-AjBool     ajSeqMethod (AjPStr method, SeqPAccess* access);
-AjBool     ajSeqMethodTest (AjPStr method);
-void       ajSeqPrintAccess (AjPFile outf, AjBool full);
+AjBool     ajSeqMethod (const AjPStr method, SeqPAccess* access);
+AjBool     ajSeqMethodTest (const AjPStr method);
+void       ajSeqPrintAccess (const AjPFile outf, AjBool full);
 
 #endif
 

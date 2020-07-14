@@ -38,7 +38,9 @@ typedef struct AjSFeattabIn {
   AjPStr        Type;		/* Type N or P */
   AjPFileBuff   Handle ;	/* Input buffered file */
   AjPStr        Seqname ;	/* name of AjPSeq assoc. with feature table */
-}  AjOFeattabIn, *AjPFeattabIn ;
+}  AjOFeattabIn;
+
+#define AjPFeattabIn AjOFeattabIn*
 
 /* @data AjPFeattabOut ********************************************************
 **
@@ -64,7 +66,9 @@ typedef struct AjSFeattabOut {
   AjPStr        Seqname;	        /* AjPSeq assoc. with feature table */
   AjPStr        Basename;		/* Basename for output file */
   AjBool        Local;			/* Opened as a local file */
-}  AjOFeattabOut, *AjPFeattabOut ;
+}  AjOFeattabOut;
+
+#define AjPFeattabOut AjOFeattabOut*
 
 
 /* @data AjPFeattable *********************************************************
@@ -93,7 +97,9 @@ typedef struct AjSFeattable {
   ajint             Len;        /* Maximum length */
   ajint             Offset;     /* Offset when trimmed */
   ajint             Groups;	/* Number of current group being added */
-}  AjOFeattable, *AjPFeattable ;
+}  AjOFeattable;
+
+#define AjPFeattable AjOFeattable*
 
 
 /******************************************************************************
@@ -185,7 +191,9 @@ typedef struct AjSFeature {
   /*AjPStr            Desc ;*/	/* One-line description obsolete */
   /*AjPStr            Comment ;*/	/* Comment - obsolete */
 
-} AjOFeature, *AjPFeature ;
+} AjOFeature;
+
+#define AjPFeature AjOFeature*
 
 
 #endif /* ajfeatdata_h */

@@ -76,8 +76,8 @@ typedef struct AjSGraph {
   float yend;			/* Last y value to plot */
   AjBool ready;			/* Set by plplot device init */
   AjBool minmaxcalc;		/* Set true when (xy)start/end are set */
+  AjBool isdata;		/* True for a data type graph */
   ajint displaytype;		/* Displaytype index to graphType */
-  AjPFile file;			/* Output file */
   AjPStr title;			/* Plot title */
   AjPStr subtitle;		/* Plot subtitle */
   AjPStr xaxis;			/* Plot x axis title */

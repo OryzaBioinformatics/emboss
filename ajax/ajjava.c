@@ -221,15 +221,17 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqType
            (JNIEnv *env, jobject obj, jstring usa)
 {
 
-    AjPStr name=NULL;
-    char *javaname=NULL;
-    AjBool ok=ajFalse;
-    AjPSeq seq=NULL;
-    AjBool nuc=ajFalse;
-    ajint  len=0;
-    float  weight=0.;
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    AjPStr name    = NULL;
+    char *javaname = NULL;
+    AjBool ok      = ajFalse;
+    AjPSeq seq     = NULL;
+    AjBool nuc     = ajFalse;
+    ajint  len     = 0;
+    float  weight  = 0.;
+    jclass jvc;
     jfieldID field;
+
+    jvc = (*env)->GetObjectClass(env,obj);
 
     name = ajStrNew();
     seq  = ajSeqNew();
@@ -261,6 +263,9 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqType
     return (unsigned char) ok;
 }
 
+
+
+
 /* @func Ajax.seqsetType ******************************************************
 **
 ** Return length, weight and type information for a seqset
@@ -276,18 +281,20 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqType
 JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetType
            (JNIEnv *env, jobject obj, jstring usa)
 {
-    AjPStr name=NULL;
-    char *javaname=NULL;
-    AjBool ok=ajFalse;
-    AjPSeqset seq=NULL;
-    AjBool nuc=ajFalse;
-    ajint  len=0;
-    float  weight=0.;
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    AjPStr name    = NULL;
+    char *javaname = NULL;
+    AjBool ok      = ajFalse;
+    AjPSeqset seq  = NULL;
+    AjBool nuc     = ajFalse;
+    ajint  len     = 0;
+    float  weight  = 0.;
+    jclass jvc;
     jfieldID field;
 
     name = ajStrNew();
     seq  = ajSeqsetNew();
+
+    jvc = (*env)->GetObjectClass(env,obj);
 
     javaname = (char *) (*env)->GetStringUTFChars(env,usa,0);
     ajStrAssC(&name,javaname);
@@ -315,6 +322,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetType
 
     return (unsigned char) ok;
 }
+
 
 
 
@@ -350,6 +358,7 @@ static AjBool ajJavaGetSeqFromUsa(AjPStr thys, AjPSeq *seq)
 
 
 
+
 /* @funcstatic ajJavaGetSeqsetFromUsa *****************************************
 **
 ** Return a seqset given a usa
@@ -382,6 +391,8 @@ static AjBool ajJavaGetSeqsetFromUsa(AjPStr thys, AjPSeqset *seq)
 }
 
 
+
+
 /* @func Ajax.userInfo ********************************************************
 **
 ** Return the uid, gid and home directory of a user
@@ -399,20 +410,22 @@ static AjBool ajJavaGetSeqsetFromUsa(AjPStr thys, AjPSeqset *seq)
 JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userInfo
 (JNIEnv *env, jobject obj, jstring door, jstring key)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr home=NULL;
-    char *juser=NULL;
-    char *jpass=NULL;
-    AjBool ok=ajFalse;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr home     = NULL;
+    char *juser     = NULL;
+    char *jpass     = NULL;
+    AjBool ok       = ajFalse;
 
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass jvc;
     jfieldID field;
     jstring  jhpstr;
 
-    ajint uid=0;
-    ajint gid=0;
-    char  *hp=NULL;
+    ajint uid = 0;
+    ajint gid = 0;
+    char  *hp = NULL;
+
+    jvc = (*env)->GetObjectClass(env,obj);
 
     java_core_dump();
 
@@ -547,6 +560,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 
 
 
+
 #ifdef R_SHADOW
 static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 			ajint *gid, AjPStr *home)
@@ -555,7 +569,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
     struct spwd sresult;
     struct passwd *pwd  = NULL;
     struct passwd presult;
-    char *p = NULL;
+    char *p    = NULL;
     char *sbuf = NULL;
     char *buf  = NULL;
 #ifdef _POSIX_C_SOURCE
@@ -618,6 +632,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 
 
 
+
 #ifdef AIX_SHADOW
 static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 			ajint *gid, AjPStr *home)
@@ -650,6 +665,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 
 
 
+
 #ifdef HPUX_SHADOW
 static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 			ajint *gid, AjPStr *home)
@@ -658,7 +674,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
     struct spwd sresult;
     struct passwd *pwd  = NULL;
     struct passwd presult;
-    char *p = NULL;
+    char *p    = NULL;
     char *epwd = NULL;
     char *buf  = NULL;
     int ret=0;
@@ -715,6 +731,8 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 #endif
 
 
+
+
 #ifdef NO_SHADOW
 static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 			ajint *gid, AjPStr *home)
@@ -742,6 +760,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 
 
 
+
 #ifdef RNO_SHADOW
 static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 			ajint *gid, AjPStr *home)
@@ -749,7 +768,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
     struct passwd *pwd  = NULL;
     char *p = NULL;
     struct passwd result;
-    char *buf=NULL;
+    char *buf = NULL;
 #if defined(_OSF_SOURCE)
     int ret=0;
 #endif
@@ -807,9 +826,11 @@ struct ad_user
 static int PAM_conv(int num_msg, struct pam_message **msg,
 		    struct pam_response **resp, void *appdata_ptr)
 {
-    struct ad_user *user=(struct ad_user *)appdata_ptr;
+    struct ad_user *user;
     struct pam_response *response;
     int i;
+
+    user = (struct ad_user *)appdata_ptr;
 
     if (msg == NULL || resp == NULL || user == NULL)
     	return PAM_CONV_ERR;
@@ -851,6 +872,8 @@ static int PAM_conv(int num_msg, struct pam_message **msg,
     *resp= response;
     return PAM_SUCCESS;
 }
+
+
 
 
 static AjBool java_pass(AjPStr username,AjPStr password,ajint *uid,
@@ -909,6 +932,7 @@ static AjBool java_pass(AjPStr username,AjPStr password,ajint *uid,
 
 
 
+
 /* @func Ajax.setuid **********************************************************
 **
 ** Set the uid of the current process
@@ -926,6 +950,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setuid
 {
     return((jint)setuid((uid_t)uid));
 }
+
+
 
 
 /* @func Ajax.seteuid *********************************************************
@@ -951,6 +977,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_seteuid
 }
 
 
+
+
 /* @func Ajax.setgid **********************************************************
 **
 ** Set the gid of the current process
@@ -968,6 +996,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setgid
 {
     return((jint)setgid((gid_t)gid));
 }
+
+
 
 
 /* @func Ajax.setegid *********************************************************
@@ -993,6 +1023,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setegid
 }
 
 
+
+
 /* @func Ajax.getuid **********************************************************
 **
 ** Return the uid of the current process
@@ -1011,6 +1043,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_getuid
 }
 
 
+
+
 /* @func Ajax.getgid **********************************************************
 **
 ** Return the gid of the current process
@@ -1027,6 +1061,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_getgid
 {
     return((jint)getgid());
 }
+
+
 
 
 /* @func Ajax.geteuid *********************************************************
@@ -1048,6 +1084,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_geteuid
 
 
 
+
 /* @func Ajax.getegid *********************************************************
 **
 ** Return the effective gid of the current process
@@ -1064,6 +1101,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_getegid
 {
     return((jint)getegid());
 }
+
 
 
 
@@ -1087,21 +1125,21 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
 (JNIEnv *env, jobject obj, jstring commandline,
  jstring environment, jstring directory, jint uid, jint gid)
 {
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass jvc;
     jfieldID field;
     jstring  ostr;
     jstring  estr;
 
     char  *sptr;
 
-    AjPStr prog=NULL;
-    AjPStr cl=NULL;
-    AjPStr envi=NULL;
-    AjPStr dir=NULL;
+    AjPStr prog = NULL;
+    AjPStr cl   = NULL;
+    AjPStr envi = NULL;
+    AjPStr dir  = NULL;
 
 
-    char **argp=NULL;
-    char **envp=NULL;
+    char **argp = NULL;
+    char **envp = NULL;
     int  pid;
     int  status = 0;
     int  i=0;
@@ -1117,12 +1155,14 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
     struct timeval t;
 #endif
 
-    int nread=0;
+    int nread = 0;
     char *buf;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
-    int retval=0;
+    AjPStr outstd = NULL;
+    AjPStr errstd = NULL;
+    int retval    = 0;
     char *save;
+
+    jvc = (*env)->GetObjectClass(env,obj);
 
     if(!uid || !gid)
 	return (unsigned char)ajFalse;
@@ -1395,6 +1435,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
 }
 
 
+
+
 /* @funcstatic make_array *****************************************************
 **
 ** Construct argv and env arrays for Ajax.fork
@@ -1407,9 +1449,9 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
 static char **make_array(AjPStr str)
 {
     int n;
-    char **ptr=NULL;
+    char **ptr   = NULL;
     AjPStr buf;
-    char   *save=NULL;
+    char   *save = NULL;
 
     buf = ajStrNew();
 
@@ -1435,6 +1477,7 @@ static char **make_array(AjPStr str)
 
 
 
+
 /* @funcstatic java_send_auth *************************************************
 **
 ** Send verification/homedir request to jembossctl
@@ -1450,7 +1493,7 @@ static char **make_array(AjPStr str)
 static ajint java_send_auth(int tchan, int rchan, char *cuser, char *cpass,
 			    AjPStr *errstd)
 {
-    AjPStr cmnd=NULL;
+    AjPStr cmnd = NULL;
     char   c;
     int    n;
 
@@ -1487,7 +1530,6 @@ static ajint java_send_auth(int tchan, int rchan, char *cuser, char *cpass,
 
 
 
-
 /* @funcstatic java_emboss_fork ***********************************************
 **
 ** Send an emboss fork request to jembossctl
@@ -1508,12 +1550,12 @@ static ajint java_emboss_fork(int tchan, char *cuser,char *cpass,
 			      AjPStr clemboss, AjPStr envi, AjPStr dir,
 			      char *buf, AjPStr *errstd)
 {
-    char *p=NULL;
+    char *p = NULL;
     int n;
 
 
     n = sprintf(buf,"%d %s %s",EMBOSS_FORK,cuser,cpass);
-    p=buf+n+1;
+    p = buf+n+1;
     sprintf(p,"%s",ajStrStr(clemboss));
     p += (ajStrLen(clemboss)+1);
     sprintf(p,"%s",ajStrStr(envi));
@@ -1529,6 +1571,9 @@ static ajint java_emboss_fork(int tchan, char *cuser,char *cpass,
 
     return 0;
 }
+
+
+
 
 /* @funcstatic java_batch_fork ************************************************
 **
@@ -1550,12 +1595,12 @@ static ajint java_batch_fork(int tchan, char *cuser,char *cpass,
 			     AjPStr clemboss, AjPStr envi, AjPStr dir,
 			     char *buf, AjPStr *errstd)
 {
-    char *p=NULL;
+    char *p = NULL;
     int n;
 
 
     n = sprintf(buf,"%d %s %s",BATCH_FORK,cuser,cpass);
-    p=buf+n+1;
+    p = buf+n+1;
     sprintf(p,"%s",ajStrStr(clemboss));
     p += (ajStrLen(clemboss)+1);
     sprintf(p,"%s",ajStrStr(envi));
@@ -1571,6 +1616,9 @@ static ajint java_batch_fork(int tchan, char *cuser,char *cpass,
 
     return 0;
 }
+
+
+
 
 /* @funcstatic java_make_dir **************************************************
 **
@@ -1589,12 +1637,12 @@ static ajint java_batch_fork(int tchan, char *cuser,char *cpass,
 static ajint java_make_dir(int tchan,char *cuser,char *cpass,AjPStr dir,
 			   char *buf, AjPStr *errstd)
 {
-    char *p=NULL;
+    char *p = NULL;
     int n;
 
 
     n = sprintf(buf,"%d %s %s",MAKE_DIRECTORY,cuser,cpass);
-    p=buf+n+1;
+    p = buf+n+1;
     sprintf(p,"%s",ajStrStr(dir));
     n = (p-buf) + ajStrLen(dir) +1;
 
@@ -1606,6 +1654,7 @@ static ajint java_make_dir(int tchan,char *cuser,char *cpass,AjPStr dir,
 
     return 0;
 }
+
 
 
 
@@ -1626,12 +1675,12 @@ static ajint java_make_dir(int tchan,char *cuser,char *cpass,AjPStr dir,
 static ajint java_delete_file(int tchan,char *cuser,char *cpass,AjPStr ufile,
 			      char *buf, AjPStr *errstd)
 {
-    char *p=NULL;
+    char *p = NULL;
     int n;
 
 
     n = sprintf(buf,"%d %s %s",DELETE_FILE,cuser,cpass);
-    p=buf+n+1;
+    p = buf+n+1;
     sprintf(p,"%s",ajStrStr(ufile));
     n = (p-buf) + ajStrLen(ufile) +1;
 
@@ -1643,6 +1692,8 @@ static ajint java_delete_file(int tchan,char *cuser,char *cpass,AjPStr ufile,
 
     return 0;
 }
+
+
 
 
 /* @funcstatic java_rename_file ***********************************************
@@ -1663,12 +1714,12 @@ static ajint java_delete_file(int tchan,char *cuser,char *cpass,AjPStr ufile,
 static ajint java_rename_file(int tchan,char *cuser,char *cpass,AjPStr ufile,
 			      AjPStr u2file, char *buf, AjPStr *errstd)
 {
-    char *p=NULL;
+    char *p = NULL;
     int n;
 
 
     n = sprintf(buf,"%d %s %s",RENAME_FILE,cuser,cpass);
-    p=buf+n+1;
+    p = buf+n+1;
     sprintf(p,"%s",ajStrStr(ufile));
     p += (ajStrLen(ufile)+1);
     sprintf(p,"%s",ajStrStr(u2file));
@@ -1682,6 +1733,8 @@ static ajint java_rename_file(int tchan,char *cuser,char *cpass,AjPStr ufile,
 
     return 0;
 }
+
+
 
 
 /* @funcstatic java_delete_dir ************************************************
@@ -1701,12 +1754,12 @@ static ajint java_rename_file(int tchan,char *cuser,char *cpass,AjPStr ufile,
 static ajint java_delete_dir(int tchan,char *cuser,char *cpass,AjPStr dir,
 			     char *buf, AjPStr *errstd)
 {
-    char *p=NULL;
+    char *p = NULL;
     int n;
 
 
     n = sprintf(buf,"%d %s %s",DELETE_DIR,cuser,cpass);
-    p=buf+n+1;
+    p = buf+n+1;
     sprintf(p,"%s",ajStrStr(dir));
     n = (p-buf) + ajStrLen(dir) +1;
 
@@ -1718,6 +1771,8 @@ static ajint java_delete_dir(int tchan,char *cuser,char *cpass,AjPStr dir,
 
     return 0;
 }
+
+
 
 
 /* @funcstatic java_list_files ************************************************
@@ -1737,12 +1792,12 @@ static ajint java_delete_dir(int tchan,char *cuser,char *cpass,AjPStr dir,
 static ajint java_list_files(int tchan,char *cuser,char *cpass,AjPStr dir,
 			     char *buf, AjPStr *errstd)
 {
-    char *p=NULL;
+    char *p = NULL;
     int n;
 
 
     n = sprintf(buf,"%d %s %s",LIST_FILES,cuser,cpass);
-    p=buf+n+1;
+    p = buf+n+1;
     sprintf(p,"%s",ajStrStr(dir));
     n = (p-buf) + ajStrLen(dir) +1;
 
@@ -1754,6 +1809,7 @@ static ajint java_list_files(int tchan,char *cuser,char *cpass,AjPStr dir,
 
     return 0;
 }
+
 
 
 
@@ -1774,12 +1830,12 @@ static ajint java_list_files(int tchan,char *cuser,char *cpass,AjPStr dir,
 static ajint java_list_dirs(int tchan,char *cuser,char *cpass,AjPStr dir,
 			    char *buf, AjPStr *errstd)
 {
-    char *p=NULL;
+    char *p = NULL;
     int n;
 
 
     n = sprintf(buf,"%d %s %s",LIST_DIRS,cuser,cpass);
-    p=buf+n+1;
+    p = buf+n+1;
     sprintf(p,"%s",ajStrStr(dir));
     n = (p-buf) + ajStrLen(dir) +1;
 
@@ -1791,6 +1847,7 @@ static ajint java_list_dirs(int tchan,char *cuser,char *cpass,AjPStr dir,
 
     return 0;
 }
+
 
 
 
@@ -1814,12 +1871,12 @@ static ajint java_get_file(int tchan,int rchan,char *cuser,char *cpass,
 			   AjPStr file, char *buf,unsigned char **fbuf,
 			   int *size, AjPStr *errstd)
 {
-    char *p=NULL;
+    char *p = NULL;
     int n;
-    int rlen=0;
+    int rlen = 0;
 
     n = sprintf(buf,"%d %s %s",GET_FILE,cuser,cpass);
-    p=buf+n+1;
+    p = buf+n+1;
     sprintf(p,"%s",ajStrStr(file));
     n = (p-buf) + ajStrLen(file) +1;
 
@@ -1868,6 +1925,8 @@ static ajint java_get_file(int tchan,int rchan,char *cuser,char *cpass,
 }
 
 
+
+
 /* @funcstatic java_put_file **************************************************
 **
 ** Send a put file request to jembossctl
@@ -1888,14 +1947,14 @@ static ajint java_put_file(int tchan,int rchan,char *cuser,char *cpass,
 			   AjPStr file, char *buf,unsigned char *fbuf,int size,
 			   AjPStr *errstd)
 {
-    char *p=NULL;
+    char *p  = NULL;
     int n;
-    int pos=0;
-    int rlen=0;
+    int pos  = 0;
+    int rlen = 0;
 
 
     n = sprintf(buf,"%d %s %s",PUT_FILE,cuser,cpass);
-    p=buf+n+1;
+    p = buf+n+1;
     sprintf(p,"%s",ajStrStr(file));
     n = (p-buf) + ajStrLen(file) +1;
 
@@ -1960,6 +2019,8 @@ static ajint java_put_file(int tchan,int rchan,char *cuser,char *cpass,
 }
 
 
+
+
 /* @funcstatic java_seq_attrib ************************************************
 **
 ** Get sequence attributes via jembossctl
@@ -1977,7 +2038,7 @@ static ajint java_put_file(int tchan,int rchan,char *cuser,char *cpass,
 static ajint java_seq_attrib(int tchan,char *cuser,char *cpass,AjPStr usa,
 			     char *buf, AjPStr *errstd)
 {
-    char *p=NULL;
+    char *p = NULL;
     int n;
 
 
@@ -1994,6 +2055,8 @@ static ajint java_seq_attrib(int tchan,char *cuser,char *cpass,AjPStr usa,
 
     return 0;
 }
+
+
 
 
 /* @funcstatic java_seqset_attrib *********************************************
@@ -2013,12 +2076,12 @@ static ajint java_seq_attrib(int tchan,char *cuser,char *cpass,AjPStr usa,
 static ajint java_seqset_attrib(int tchan,char *cuser,char *cpass,AjPStr usa,
 				char *buf, AjPStr *errstd)
 {
-    char *p=NULL;
+    char *p = NULL;
     int n;
 
 
     n = sprintf(buf,"%d %s %s",SEQSET_ATTRIB,cuser,cpass);
-    p=buf+n+1;
+    p = buf+n+1;
     sprintf(p,"%s",ajStrStr(usa));
     n = (p-buf) + ajStrLen(usa) +1;
 
@@ -2030,6 +2093,8 @@ static ajint java_seqset_attrib(int tchan,char *cuser,char *cpass,AjPStr usa,
 
     return 0;
 }
+
+
 
 
 /* @funcstatic java_wait_for_term *********************************************
@@ -2057,10 +2122,10 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
     struct timeval t;
 #endif
 
-    int nread=0;
+    int nread  = 0;
     int  status;
-    int retval=0;
-    unsigned long block=0;
+    int retval = 0;
+    unsigned long block = 0;
 
 
     block = 1;
@@ -2239,6 +2304,8 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 }
 
 
+
+
 /* @funcstatic java_wait_for_file *********************************************
 **
 ** Wait for jembossctl to terminate. Receive a file from stdout pipe
@@ -2267,11 +2334,11 @@ static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
     struct timeval t;
 #endif
 
-    int nread=0;
+    int nread  = 0;
     int  status;
-    int retval=0;
-    unsigned char *ptr=NULL;
-    unsigned long block=0;
+    int retval = 0;
+    unsigned char *ptr  = NULL;
+    unsigned long block = 0;
 
 
     block = 1;
@@ -2469,6 +2536,7 @@ static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
 
 
 
+
 /* @funcstatic java_jembossctl ************************************************
 **
 ** fork jembossctl and broker requests
@@ -2493,27 +2561,27 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
 			   AjPStr *outstd, AjPStr *errstd,
 			   unsigned char **fbuf, int *fsize)
 {
-    AjPStr dir=NULL;
-    AjPStr unused=NULL;
+    AjPStr dir    = NULL;
+    AjPStr unused = NULL;
 
-    AjPStr prog=NULL;    /* Fork strings */
-    AjPStr cl=NULL;
-    AjPStr clemboss=NULL;
-    AjPStr envi=NULL;
+    AjPStr prog     = NULL;    /* Fork strings */
+    AjPStr cl       = NULL;
+    AjPStr clemboss = NULL;
+    AjPStr envi     = NULL;
 
     int    i=0;
 
 
-    char *cuser=NULL;
-    char *cpass=NULL;
+    char *cuser = NULL;
+    char *cpass = NULL;
 
-    char *buff=NULL;
-    int size=0;
+    char *buff  = NULL;
+    int size = 0;
 
-    int rlen=0;
+    int rlen = 0;
 
-    char **argp=NULL;
-    char **envp=NULL;
+    char **argp = NULL;
+    char **envp = NULL;
     int  pid;
 
     int  outpipe[2];
@@ -2522,7 +2590,7 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
     int  tchan;
     int  rchan;
 
-    int retval=0;
+    int retval = 0;
     char c;
     int  n;
 
@@ -2766,6 +2834,8 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
 }
 
 
+
+
 /* @funcstatic java_tidy_command **********************************************
 **
 ** Delete allocated memory
@@ -2794,6 +2864,9 @@ static void java_tidy_command(AjPStr *str1, AjPStr *str2, AjPStr *str3,
     return;
 }
 
+
+
+
 /* @funcstatic java_tidy_command2 *********************************************
 **
 ** Delete allocated memory
@@ -2819,6 +2892,8 @@ static void java_tidy_command2(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
 
     return;
 }
+
+
 
 
 /* @funcstatic java_tidy_command2 *********************************************
@@ -2859,6 +2934,8 @@ static void java_tidy_command3(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
 }
 
 
+
+
 /* @func Ajax.userAuth ********************************************************
 **
 ** Verify user and retrieve home directory
@@ -2879,23 +2956,23 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userAuth
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
 
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass jvc;
     jfieldID field;
     jstring  hstr;    /* Java returned strings */
     jstring  ostr;
     jstring  estr;
-    char   *juser=NULL;
-    char   *jpass=NULL;
-    char   *jenv =NULL;
-    jsize  plen = (*env)->GetArrayLength(env,key);
-    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    char   *juser = NULL;
+    char   *jpass = NULL;
+    char   *jenv  = NULL;
+    jsize  plen;
+    jbyte  *ca;
 
     AjPStr home=NULL;
 
@@ -2909,6 +2986,11 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userAuth
     envi     = ajStrNew();
     outstd   = ajStrNew();
     errstd   = ajStrNew();
+
+    jvc  = (*env)->GetObjectClass(env,obj);
+    plen = (*env)->GetArrayLength(env,key);
+    ca   = (*env)->GetByteArrayElements(env,key,0);
+
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -2980,6 +3062,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userAuth
 
 
 
+
 /* @func Ajax.forkBatch *******************************************************
 **
 ** Run an EMBOSS program detached
@@ -3001,28 +3084,28 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkBatch
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring cline, jstring direct)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
     jclass jvc = (*env)->GetObjectClass(env,obj);
     jfieldID field;
     jstring  ostr;
     jstring  estr;
-    char   *juser=NULL;
-    char   *jpass=NULL;
-    char   *jenv =NULL;
-    char   *jcl =NULL;
-    char   *jdir =NULL;
+    char   *juser = NULL;
+    char   *jpass = NULL;
+    char   *jenv  = NULL;
+    char   *jcl   = NULL;
+    char   *jdir  = NULL;
 
-    AjPStr commandline=NULL;
-    AjPStr directory=NULL;
+    AjPStr commandline = NULL;
+    AjPStr directory   = NULL;
 
-    AjBool ok=ajFalse;
-    jsize  plen = (*env)->GetArrayLength(env,key);
-    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    AjBool ok = ajFalse;
+    jsize  plen;
+    jbyte  *ca;
     int i;
 
     username = ajStrNew();
@@ -3033,6 +3116,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkBatch
 
     commandline = ajStrNew();
     directory   = ajStrNew();
+
+    jvc = (*env)->GetObjectClass(env,obj);
+    plen = (*env)->GetArrayLength(env,key);
+    ca = (*env)->GetByteArrayElements(env,key,0);
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -3138,6 +3225,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkBatch
 }
 
 
+
+
 /* @func Ajax.forkEmboss ******************************************************
 **
 ** Run an EMBOSS program
@@ -3159,29 +3248,29 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkEmboss
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring cline, jstring direct)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
 
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass jvc;
     jfieldID field;
     jstring  ostr;
     jstring  estr;
-    char   *juser=NULL;
-    char   *jpass=NULL;
-    char   *jenv =NULL;
-    char   *jcl =NULL;
-    char   *jdir =NULL;
+    char   *juser = NULL;
+    char   *jpass = NULL;
+    char   *jenv  = NULL;
+    char   *jcl   = NULL;
+    char   *jdir  = NULL;
 
-    AjPStr commandline=NULL;
-    AjPStr directory=NULL;
+    AjPStr commandline = NULL;
+    AjPStr directory   = NULL;
 
-    AjBool ok=ajFalse;
-    jsize  plen = (*env)->GetArrayLength(env,key);
-    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    AjBool ok = ajFalse;
+    jsize  plen;
+    jbyte  *ca;
     int i;
 
 
@@ -3193,6 +3282,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkEmboss
 
     commandline = ajStrNew();
     directory   = ajStrNew();
+
+    plen = (*env)->GetArrayLength(env,key);
+    ca   = (*env)->GetByteArrayElements(env,key,0);
+    jvc  = (*env)->GetObjectClass(env,obj);
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -3298,6 +3391,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkEmboss
 }
 
 
+
+
 /* @func Ajax.makeDir *********************************************************
 **
 ** Create a directory
@@ -3318,27 +3413,27 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_makeDir
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring direct)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
 
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass jvc;
     jfieldID field;
     jstring  ostr;
     jstring  estr;
-    char   *juser=NULL;
-    char   *jpass=NULL;
-    char   *jenv =NULL;
-    char   *jdir =NULL;
+    char   *juser = NULL;
+    char   *jpass = NULL;
+    char   *jenv  = NULL;
+    char   *jdir  = NULL;
 
-    AjPStr directory=NULL;
+    AjPStr directory = NULL;
 
-    AjBool ok=ajFalse;
-    jsize  plen = (*env)->GetArrayLength(env,key);
-    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    AjBool ok = ajFalse;
+    jsize  plen;
+    jbyte  *ca;
     int i;
 
 
@@ -3349,6 +3444,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_makeDir
     errstd   = ajStrNew();
 
     directory  = ajStrNew();
+
+    jvc  = (*env)->GetObjectClass(env,obj);
+    plen = (*env)->GetArrayLength(env,key);
+    ca   = (*env)->GetByteArrayElements(env,key,0);
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -3433,6 +3532,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_makeDir
 
 
 
+
 /* @func Ajax.delFile *********************************************************
 **
 ** Delete a file
@@ -3453,27 +3553,26 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delFile
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
-
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass   jvc;
     jfieldID field;
     jstring  ostr;
     jstring  estr;
-    char   *juser=NULL;
-    char   *jpass=NULL;
-    char   *jenv =NULL;
-    char   *jfil =NULL;
+    char   *juser = NULL;
+    char   *jpass = NULL;
+    char   *jenv  = NULL;
+    char   *jfil  = NULL;
 
     AjPStr file=NULL;
 
-    AjBool ok=ajFalse;
-    jsize  plen = (*env)->GetArrayLength(env,key);
-    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    AjBool ok = ajFalse;
+    jsize  plen;
+    jbyte  *ca;
     int i;
 
 
@@ -3484,6 +3583,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delFile
     errstd   = ajStrNew();
 
     file     = ajStrNew();
+
+    jvc  = (*env)->GetObjectClass(env,obj);
+    plen = (*env)->GetArrayLength(env,key);
+    ca   = (*env)->GetByteArrayElements(env,key,0);
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -3571,6 +3674,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delFile
 }
 
 
+
+
 /* @func Ajax.renameFile ******************************************************
 **
 ** Rename a file
@@ -3592,14 +3697,14 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_renameFile
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename, jstring filename2)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
 
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass   jvc;
     jfieldID field;
     jstring  ostr;
     jstring  estr;
@@ -3612,11 +3717,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_renameFile
     AjPStr file  = NULL;
     AjPStr file2 = NULL;
 
-    AjBool ok=ajFalse;
-    jsize  plen = (*env)->GetArrayLength(env,key);
-    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    AjBool ok = ajFalse;
+    jsize  plen;
+    jbyte  *ca;
     int i;
-
 
     username = ajStrNew();
     password = ajStrNew();
@@ -3625,6 +3729,11 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_renameFile
     errstd   = ajStrNew();
 
     file     = ajStrNew();
+
+
+    jvc = (*env)->GetObjectClass(env,obj);
+    plen = (*env)->GetArrayLength(env,key);
+    ca = (*env)->GetByteArrayElements(env,key,0);
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -3728,6 +3837,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_renameFile
 }
 
 
+
+
 /* @func Ajax.delDir **********************************************************
 **
 ** Recursively delete a directory
@@ -3748,27 +3859,27 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delDir
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring direct)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
 
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass   jvc;
     jfieldID field;
     jstring  ostr;
     jstring  estr;
-    char   *juser=NULL;
-    char   *jpass=NULL;
-    char   *jenv =NULL;
-    char   *jdir =NULL;
+    char   *juser = NULL;
+    char   *jpass = NULL;
+    char   *jenv  = NULL;
+    char   *jdir  = NULL;
 
-    AjPStr directory=NULL;
+    AjPStr directory = NULL;
 
-    AjBool ok=ajFalse;
-    jsize  plen = (*env)->GetArrayLength(env,key);
-    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    AjBool ok = ajFalse;
+    jsize  plen;
+    jbyte  *ca;
     int i;
 
 
@@ -3779,6 +3890,11 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delDir
     errstd   = ajStrNew();
 
     directory  = ajStrNew();
+
+
+    jvc  = (*env)->GetObjectClass(env,obj);
+    plen = (*env)->GetArrayLength(env,key);
+    ca   = (*env)->GetByteArrayElements(env,key,0);
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -3865,6 +3981,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delDir
 
 
 
+
 /* @func Ajax.listFiles *******************************************************
 **
 ** Lists regular files
@@ -3885,27 +4002,27 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listFiles
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring direct)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
 
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass jvc;
     jfieldID field;
     jstring  ostr;
     jstring  estr;
-    char   *juser=NULL;
-    char   *jpass=NULL;
-    char   *jenv =NULL;
-    char   *jdir =NULL;
+    char   *juser = NULL;
+    char   *jpass = NULL;
+    char   *jenv  = NULL;
+    char   *jdir  = NULL;
 
-    AjPStr directory=NULL;
+    AjPStr directory = NULL;
 
     AjBool ok=ajFalse;
-    jsize  plen = (*env)->GetArrayLength(env,key);
-    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    jsize  plen;
+    jbyte  *ca;
     int i;
 
 
@@ -3916,6 +4033,12 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listFiles
     errstd   = ajStrNew();
 
     directory  = ajStrNew();
+
+
+    jvc  = (*env)->GetObjectClass(env,obj);
+    plen = (*env)->GetArrayLength(env,key);
+    ca   = (*env)->GetByteArrayElements(env,key,0);
+
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -4003,6 +4126,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listFiles
 
 
 
+
 /* @func Ajax.listDirs ********************************************************
 **
 ** Lists files of type 'directory'
@@ -4023,27 +4147,27 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listDirs
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring direct)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
 
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass   jvc;
     jfieldID field;
     jstring  ostr;
     jstring  estr;
-    char   *juser=NULL;
-    char   *jpass=NULL;
-    char   *jenv =NULL;
-    char   *jdir =NULL;
+    char   *juser = NULL;
+    char   *jpass = NULL;
+    char   *jenv  = NULL;
+    char   *jdir  = NULL;
 
-    AjPStr directory=NULL;
+    AjPStr directory = NULL;
 
-    AjBool ok=ajFalse;
-    jsize  plen = (*env)->GetArrayLength(env,key);
-    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    AjBool ok = ajFalse;
+    jsize  plen;
+    jbyte  *ca;
     int i;
 
 
@@ -4054,6 +4178,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listDirs
     errstd   = ajStrNew();
 
     directory  = ajStrNew();
+
+    jvc = (*env)->GetObjectClass(env,obj);
+    plen = (*env)->GetArrayLength(env,key);
+    ca = (*env)->GetByteArrayElements(env,key,0);
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -4142,6 +4270,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listDirs
 
 
 
+
 /* @func Ajax.getFile *********************************************************
 **
 ** Get a user file
@@ -4165,28 +4294,28 @@ JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_parser_Ajax_getFile
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass jvc;
     jfieldID field;
     jstring  ostr;
     jstring  estr;
     jbyteArray jb;
 
-    char   *juser=NULL;
-    char   *jpass=NULL;
-    char   *jenv =NULL;
-    char   *jfil =NULL;
+    char   *juser = NULL;
+    char   *jpass = NULL;
+    char   *jenv  = NULL;
+    char   *jfil  = NULL;
 
     AjPStr file=NULL;
-    unsigned char *fbuf=NULL;
-    int size=0;
-    int prnt=1;
-    int fileok=0;
+    unsigned char *fbuf = NULL;
+    int size   = 0;
+    int prnt   = 1;
+    int fileok = 0;
     int c;
     int i;
 
@@ -4202,6 +4331,11 @@ JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_parser_Ajax_getFile
     errstd   = ajStrNew();
 
     file     = ajStrNew();
+
+
+    jvc  = (*env)->GetObjectClass(env,obj);
+    plen = (*env)->GetArrayLength(env,key);
+    ca   = (*env)->GetByteArrayElements(env,key,0);
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -4304,6 +4438,7 @@ JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_parser_Ajax_getFile
 
 
 
+
 /* @func Ajax.putFile *********************************************************
 **
 ** Write a user file
@@ -4325,33 +4460,35 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_putFile
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename, jbyteArray arr)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
 
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass   jvc;
     jfieldID field;
     jstring  ostr;
     jstring  estr;
-    jsize    len = (*env)->GetArrayLength(env,arr);
-    jbyte    *ba = (*env)->GetByteArrayElements(env,arr,0);
-    char   *juser=NULL;
-    char   *jpass=NULL;
-    char   *jenv =NULL;
-    char   *jfil =NULL;
+    jsize    len;
+    jbyte    *ba;
+    char   *juser = NULL;
+    char   *jpass = NULL;
+    char   *jenv  = NULL;
+    char   *jfil  = NULL;
 
-    AjPStr file=NULL;
+    AjPStr file = NULL;
     unsigned char *fbuf;
     int size;
     int i;
 
-    AjBool ok=ajFalse;
-    jsize  plen = (*env)->GetArrayLength(env,key);
-    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    AjBool ok = ajFalse;
+    jsize  plen;
+    jbyte  *ca;
 
+    len = (*env)->GetArrayLength(env,arr);
+    ba  = (*env)->GetByteArrayElements(env,arr,0);
 
     size = len;
     if(size)
@@ -4368,6 +4505,11 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_putFile
     errstd   = ajStrNew();
 
     file     = ajStrNew();
+
+    jvc  = (*env)->GetObjectClass(env,obj);
+    plen = (*env)->GetArrayLength(env,key);
+    ca   = (*env)->GetByteArrayElements(env,key,0);
+
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -4488,30 +4630,30 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqAttrib
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
 
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass   jvc;
     jfieldID field;
     jstring  ostr;
     jstring  estr;
-    char   *juser=NULL;
-    char   *jpass=NULL;
-    char   *jenv =NULL;
-    char   *jfil =NULL;
+    char   *juser = NULL;
+    char   *jpass = NULL;
+    char   *jenv  = NULL;
+    char   *jfil  = NULL;
 
-    AjPStr file=NULL;
+    AjPStr file = NULL;
 
-    AjBool ok=ajFalse;
-    jsize  plen = (*env)->GetArrayLength(env,key);
-    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    AjBool ok = ajFalse;
+    jsize  plen;
+    jbyte  *ca;
     int i;
-    ajint len = 0;
-    float weight=0.;
+    ajint len    = 0;
+    float weight = 0.;
     AjBool nuc = ajFalse;
 
 
@@ -4522,6 +4664,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqAttrib
     errstd   = ajStrNew();
 
     file     = ajStrNew();
+
+    jvc  = (*env)->GetObjectClass(env,obj);
+    plen = (*env)->GetArrayLength(env,key);
+    ca   = (*env)->GetByteArrayElements(env,key,0);
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -4646,31 +4792,31 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetAttrib
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename)
 {
-    AjPStr username=NULL;
-    AjPStr password=NULL;
-    AjPStr envi=NULL;
-    AjPStr outstd=NULL;
-    AjPStr errstd=NULL;
+    AjPStr username = NULL;
+    AjPStr password = NULL;
+    AjPStr envi     = NULL;
+    AjPStr outstd   = NULL;
+    AjPStr errstd   = NULL;
 
 
-    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jclass   jvc;
     jfieldID field;
     jstring  ostr;
     jstring  estr;
-    char   *juser=NULL;
-    char   *jpass=NULL;
-    char   *jenv =NULL;
-    char   *jfil =NULL;
+    char   *juser = NULL;
+    char   *jpass = NULL;
+    char   *jenv  = NULL;
+    char   *jfil  = NULL;
 
-    AjPStr file=NULL;
+    AjPStr file = NULL;
 
-    AjBool ok=ajFalse;
-    jsize  plen = (*env)->GetArrayLength(env,key);
-    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    AjBool ok = ajFalse;
+    jsize  plen;
+    jbyte  *ca;
     int i;
-    ajint  len=0;
-    float  weight=0.;
-    AjBool nuc=ajFalse;
+    ajint  len    = 0;
+    float  weight = 0.;
+    AjBool nuc = ajFalse;
 
     username = ajStrNew();
     password = ajStrNew();
@@ -4679,6 +4825,11 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetAttrib
     errstd   = ajStrNew();
 
     file     = ajStrNew();
+
+
+    jvc  = (*env)->GetObjectClass(env,obj);
+    plen = (*env)->GetArrayLength(env,key);
+    ca   = (*env)->GetByteArrayElements(env,key,0);
 
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
@@ -4811,10 +4962,10 @@ static int java_pipe_write(int tchan, char *buf, int n, int seconds,
 #endif
 
     int  written;
-    int  sent=0;
-    int  ret=0;
+    int  sent = 0;
+    int  ret  = 0;
     char *p;
-    unsigned long block=0;
+    unsigned long block = 0;
     long then = 0;
     long now  = 0;
     struct timeval tv;
@@ -4914,6 +5065,7 @@ static int java_pipe_write(int tchan, char *buf, int n, int seconds,
 
 
 
+
 /* @funcstatic java_pipe_read *************************************************
 **
 ** Read a byte stream from a file desriptor (unblocked)
@@ -4941,10 +5093,10 @@ static int java_pipe_read(int rchan, char *buf, int n, int seconds,
 #endif
 
     int  sum;
-    int  got=0;
-    int  ret=0;
+    int  got = 0;
+    int  ret = 0;
     char *p;
-    unsigned long block=0;
+    unsigned long block = 0;
     long then = 0;
     long now  = 0;
     struct timeval tv;
@@ -5047,6 +5199,7 @@ static int java_pipe_read(int rchan, char *buf, int n, int seconds,
 
 
 
+
 /* @funcstatic java_snd *******************************************************
 **
 ** Mimic socket write using pipes
@@ -5068,6 +5221,7 @@ static int java_snd(int tchan,char *buf,int len,AjPStr *errstd)
 	ajStrAppC(errstd,"java_snd error\n");
 	return -1;
     }
+
     if(java_pipe_write(tchan,buf,len,TIMEOUT,errstd)==-1)
     {
 	ajStrAppC(errstd,"java_snd error\n");
@@ -5076,6 +5230,9 @@ static int java_snd(int tchan,char *buf,int len,AjPStr *errstd)
 
     return 0;
 }
+
+
+
 
 /* @funcstatic java_rcv *******************************************************
 **
@@ -5106,6 +5263,7 @@ static int java_rcv(int rchan, char *buf, AjPStr *errstd)
 
     return len;
 }
+
 
 
 

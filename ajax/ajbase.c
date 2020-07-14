@@ -28,12 +28,12 @@
 #define IUBFILE "Ebases.iub"
 
 AjIUB aj_base_iubS[256];	/* Base letters and their alternatives */
-ajint aj_base_table[256];		/* Base letter numerical codes         */
+ajint aj_base_table[256];	/* Base letter numerical codes         */
 float aj_base_prob[32][32];     /* Assym base probability matches      */
 
 
 
-AjBool aj_base_I= 0;
+AjBool aj_base_I = 0;
 
 
 
@@ -50,12 +50,11 @@ AjBool aj_base_I= 0;
 
 ajint ajAZToInt(ajint c)
 {
-  if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') )
-    return(toupper(c)-(ajint)'A');
-  return 27;
+    if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') )
+	return(toupper(c)-(ajint)'A');
+
+    return 27;
 }
-
-
 
 
 
@@ -78,7 +77,6 @@ ajint ajIntToAZ(ajint n)
 
 
 
-
 /* @func ajAZToBin ************************************************************
 **
 ** Returns a binary OR'd representation of an IUB base where A=1, C=2,
@@ -92,9 +90,12 @@ ajint ajIntToAZ(ajint n)
 
 ajint ajAZToBin(ajint c)
 {
-    if(!aj_base_I) ajBaseInit();
+    if(!aj_base_I)
+	ajBaseInit();
+
     return (aj_base_table[toupper(c)]);
 }
+
 
 
 
@@ -111,10 +112,11 @@ ajint ajAZToBin(ajint c)
 
 char ajAZToBinC(char c)
 {
-    if(!aj_base_I) ajBaseInit();
+    if(!aj_base_I)
+	ajBaseInit();
+
     return ajSysItoC(aj_base_table[toupper((ajint) c)]);
 }
-
 
 
 
@@ -133,11 +135,11 @@ char ajAZToBinC(char c)
 
 void ajBaseInit(void)
 {
-    AjPFile bfptr=NULL;
-    AjPStr  bfname=NULL;
-    AjPStr  line=NULL;
-    AjPStr  code=NULL;
-    AjPStr  list=NULL;
+    AjPFile bfptr  = NULL;
+    AjPStr  bfname = NULL;
+    AjPStr  line   = NULL;
+    AjPStr  code   = NULL;
+    AjPStr  list   = NULL;
 
     ajint i;
     ajint j;
@@ -155,7 +157,8 @@ void ajBaseInit(void)
     char *p;
     char *q;
 
-    if(aj_base_I) return;
+    if(aj_base_I)
+	return;
 
 
     for(i=0;i<256;++i)
@@ -167,14 +170,12 @@ void ajBaseInit(void)
 
     code = ajStrNew();
     list = ajStrNew();
-    (void) ajStrAssC(&code,"");
-    (void) ajStrAssC(&list,"ACGT");
+    ajStrAssC(&code,"");
+    ajStrAssC(&list,"ACGT");
 
 
-
-
-    bfname=ajStrNew();
-    (void) ajStrAssC(&bfname,IUBFILE);
+    bfname = ajStrNew();
+    ajStrAssC(&bfname,IUBFILE);
     ajFileDataNew(bfname, &bfptr);
     if(!bfptr) ajFatal("Ebases.iub file not found\n");
 
@@ -184,21 +185,22 @@ void ajBaseInit(void)
 
     while(ajFileGets(bfptr, &line))
     {
-	p=ajStrStr(line);
-	if(*p=='#' || *p=='!' || *p=='\n') continue;
-	p=ajSysStrtok(p," \t\r");
-	(void) ajStrAssC(&code,p);
+	p = ajStrStr(line);
+	if(*p=='#' || *p=='!' || *p=='\n')
+	    continue;
+	p = ajSysStrtok(p," \t\r");
+	ajStrAssC(&code,p);
 	p=ajSysStrtok(NULL," \t\r");
 	if(sscanf(p,"%d",&n)!=1)
 	    ajFatal("Bad format IUB file");
-	p=ajSysStrtok(NULL," \t\r");
-	(void) ajStrAssC(&list,p);
-	q=ajStrStr(code);
-	p=ajStrStr(list);
-	(void) ajStrAssC(&aj_base_iubS[toupper((ajint) *q)].code,q);
-	(void) ajStrAssC(&aj_base_iubS[toupper((ajint) *q)].list,p);
-	(void) ajStrAssC(&aj_base_iubS[tolower((ajint) *q)].code,q);
-	(void) ajStrAssC(&aj_base_iubS[tolower((ajint) *q)].list,p);
+	p = ajSysStrtok(NULL," \t\r");
+	ajStrAssC(&list,p);
+	q = ajStrStr(code);
+	p = ajStrStr(list);
+	ajStrAssC(&aj_base_iubS[toupper((ajint) *q)].code,q);
+	ajStrAssC(&aj_base_iubS[toupper((ajint) *q)].list,p);
+	ajStrAssC(&aj_base_iubS[tolower((ajint) *q)].code,q);
+	ajStrAssC(&aj_base_iubS[tolower((ajint) *q)].list,p);
 	aj_base_table[toupper((ajint) *q)] = n;
 	aj_base_table[tolower((ajint) *q)] = n;
     }
@@ -222,7 +224,8 @@ void ajBaseInit(void)
 		aj_base_prob[i][j]=0.0;
 		continue;
 	    }
-	    if(l1!=1) ajFatal("Bad IUB letter");
+	    if(l1!=1)
+		ajFatal("Bad IUB letter");
 
 
 	    p = ajStrStr(aj_base_iubS[x].list);
@@ -231,13 +234,19 @@ void ajBaseInit(void)
 	    l2 = strlen(q);
 	    for(k=0,c=0;k<l1;++k)
 		if(strchr(q,(ajint)*(p+k))) ++c;
-	    if(l2) aj_base_prob[i][j] = (float)c / (float)l2;
-	    else aj_base_prob[i][j]=0.0;
+	    if(l2)
+		aj_base_prob[i][j] = (float)c / (float)l2;
+	    else
+		aj_base_prob[i][j]=0.0;
 	}
     }
 
     aj_base_I = ajTrue;
+
+    return;
 }
+
+
 
 
 /* @func ajBaseAa1ToAa3 *******************************************************

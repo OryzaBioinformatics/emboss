@@ -16,6 +16,9 @@
 
 #include "ajax.h"
 
+
+
+
 static AjBool  seqABIReadInt4(AjPFile fp,ajlong *i4);
 static AjBool  seqABIReadFloat4(AjPFile fp,float* f4);
 static AjBool  seqABIReadInt2(AjPFile fp, ajshort *i2);
@@ -26,6 +29,9 @@ static AjBool  seqABIGetFlagF(AjPFile fp, ajlong flagLabel,
 static AjBool  seqABIGetFlagW(AjPFile fp, ajlong flagLabel,
 			      ajlong word, ajshort* val);
 static ajshort seqABIBaseIdx(char B);
+
+
+
 
 
 /* @func ajSeqABITest *********************************************************
@@ -40,40 +46,41 @@ static ajshort seqABIBaseIdx(char B);
 
 AjBool ajSeqABITest(AjPFile fp)
 {
-  char pabi[5];
-  pabi[4] = '\0';
+    char pabi[5];
+    pabi[4] = '\0';
 
-  ajDebug("ajSeqABITest file %F end: %B\n", fp, fp->End);
+    ajDebug("ajSeqABITest file %F end: %B\n", fp, fp->End);
 
-  if (fp->End && ajFileStdin(fp))
-  {
-    ajDebug("EOF: ajSeqABITest already at end file %F\n", fp);
-    return ajFalse;
-  }
-
-  if(ajFileSeek(fp,0,SEEK_SET) >= 0)
-  {
-    if(ajFileRead((void *)pabi,4,1,fp))
-      {
-	ajDebug("ajSeqABITest was at '%s'\n", pabi);
-	if(ajStrPrefixCC(pabi,"ABIF"))
-	  return ajTrue;
-      }
-  }
-
-  if(ajFileSeek(fp,26,SEEK_SET) >= 0)
-  {
-    ajDebug("ajSeqABITest seek to pos 26\n");
-    if(ajFileRead((void*)pabi,4,1,fp))
+    if (fp->End && ajFileStdin(fp))
     {
-     ajDebug("ajSeqABITest seek to '%s'\n", pabi);
-     if(ajStrPrefixCC(pabi,"ABIF"))
-	return ajTrue;
+	ajDebug("EOF: ajSeqABITest already at end file %F\n", fp);
+	return ajFalse;
     }
-  }
 
-  return ajFalse;
+    if(ajFileSeek(fp,0,SEEK_SET) >= 0)
+	if(ajFileRead((void *)pabi,4,1,fp))
+	{
+	    ajDebug("ajSeqABITest was at '%s'\n", pabi);
+	    if(ajStrPrefixCC(pabi,"ABIF"))
+		return ajTrue;
+	}
+
+    if(ajFileSeek(fp,26,SEEK_SET) >= 0)
+    {
+	ajDebug("ajSeqABITest seek to pos 26\n");
+	if(ajFileRead((void*)pabi,4,1,fp))
+	{
+	    ajDebug("ajSeqABITest seek to '%s'\n", pabi);
+	    if(ajStrPrefixCC(pabi,"ABIF"))
+		return ajTrue;
+	}
+    }
+
+    return ajFalse;
 }
+
+
+
 
 /* @func ajSeqABIReadSeq ******************************************************
 **
@@ -88,7 +95,7 @@ AjBool ajSeqABITest(AjPFile fp)
 ******************************************************************************/
 
 AjBool ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
-	AjPStr* nseq)
+		       AjPStr* nseq)
 {
     ajint i;
     char pseq;
@@ -98,13 +105,14 @@ AjBool ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
     ajFileSeek(fp,baseO,SEEK_SET);
     for (i=0;i<(ajint)numBases;i++)
     {
-          ajFileRead(&pseq,1,1,fp);
-
-          /* if(pseq == 'N') pseq='-'; */
-          ajStrAppK(nseq,pseq);
+	ajFileRead(&pseq,1,1,fp);
+	ajStrAppK(nseq,pseq);
     }
+
     return ajTrue;
 }
+
+
 
 
 /* @func ajSeqABIMachineName **************************************************
@@ -120,29 +128,30 @@ AjBool ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
 AjBool ajSeqABIMachineName(AjPFile fp,AjPStr *machine)
 {
     ajlong mchn;
-    const ajlong MCHNtag = ((ajlong) ((((('M'<<8)+'C')<<8)+'H')<<8)+'N');
+    ajlong MCHNtag;
     unsigned char l;
 
+    MCHNtag = ((ajlong) ((((('M'<<8)+'C')<<8)+'H')<<8)+'N');
 
     if(seqABIGetFlag(fp,MCHNtag,1,5,&mchn))
     {
-       if (ajFileSeek(fp,mchn,SEEK_SET) >= 0)
-       {
-        ajFileRead(&l,sizeof(char),1,fp);
-        *machine = ajStrNewL(l+1);
-        ajFileRead((void*)ajStrStr(*machine),l,1,fp);
-        *(ajStrStr(*machine)+l)='\0';
-       } else
-       {
-         return ajFalse;
-       }
-    } else
-    {
-      return ajFalse;
+	if (ajFileSeek(fp,mchn,SEEK_SET) >= 0)
+	{
+	    ajFileRead(&l,sizeof(char),1,fp);
+	    *machine = ajStrNewL(l+1);
+	    ajFileRead((void*)ajStrStr(*machine),l,1,fp);
+	    *(ajStrStr(*machine)+l)='\0';
+	}
+	else
+	    return ajFalse;
     }
+    else
+	return ajFalse;
 
     return ajTrue;
 }
+
+
 
 
 /* @func ajSeqABIGetNData *****************************************************
@@ -158,14 +167,20 @@ ajint ajSeqABIGetNData(AjPFile fp)
 {
 
     ajlong numPoints;
-    const ajlong DATAtag = ((ajlong) ((((('D'<<8)+'A')<<8)+'T')<<8)+'A');
-    const ajshort TRACE_INDEX = 9;
+    ajlong DATAtag;
+    ajshort TRACE_INDEX;
+
+    DATAtag = ((ajlong) ((((('D'<<8)+'A')<<8)+'T')<<8)+'A');
+    TRACE_INDEX = 9;
 
     if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX,3,&numPoints))
-          ajFatal("Error - locating DATA tag");
+	ajFatal("Error - locating DATA tag");
 
     return numPoints;
 }
+
+
+
 
 /* @func ajSeqABIGetNBase *****************************************************
 **
@@ -178,15 +193,18 @@ ajint ajSeqABIGetNData(AjPFile fp)
 
 ajint ajSeqABIGetNBase(AjPFile fp)
 {
-
     ajlong numBases;
-    const ajlong BASEtag = ((ajlong) ((((('P'<<8)+'B')<<8)+'A')<<8)+'S');
+    ajlong BASEtag;
+
+    BASEtag = ((ajlong) ((((('P'<<8)+'B')<<8)+'A')<<8)+'S');
 
     if (!seqABIGetFlag(fp,BASEtag,1,3,&numBases))
-         ajFatal("Error - locating BASE tag");
+	ajFatal("Error - locating BASE tag");
 
     return numBases;
 }
+
+
 
 
 /* @func ajSeqABIGetData ******************************************************
@@ -212,9 +230,8 @@ void ajSeqABIGetData(AjPFile fp,ajlong *Offset,ajlong numPoints,
     for (i=0;i<4;i++)
     {
         if (ajFileSeek(fp,Offset[i],SEEK_SET))
-	{
 	    ajFatal("Error - reading trace");
-	}
+
         for (j=0;j<(ajint)numPoints;j++)
             if (seqABIReadInt2(fp,&traceValue))
                 ajInt2dPut(&trace,i,j,(ajint)traceValue);
@@ -224,6 +241,8 @@ void ajSeqABIGetData(AjPFile fp,ajlong *Offset,ajlong numPoints,
 
     return;
 }
+
+
 
 
 /* @func ajSeqABIGetBasePosition **********************************************
@@ -247,12 +266,14 @@ void ajSeqABIGetBasePosition(AjPFile fp,ajlong numBases,
     for (i=0;i<(ajint)numBases;i++)
     {
         if (!seqABIReadInt2(fp,&bP))
-         ajFatal("Error - in finding Base Position");
+	    ajFatal("Error - in finding Base Position");
         ajShortPut(basePositions,i,bP);
     }
 
     return;
 }
+
+
 
 
 /* @func ajSeqABIGetSignal ****************************************************
@@ -270,13 +291,15 @@ void ajSeqABIGetBasePosition(AjPFile fp,ajlong numBases,
 ******************************************************************************/
 
 void ajSeqABIGetSignal(AjPFile fp,ajlong fwo_,
-                  ajshort sigC,ajshort sigA,
-                  ajshort sigG,ajshort sigT)
+		       ajshort sigC,ajshort sigA,
+		       ajshort sigG,ajshort sigT)
 {
     ajlong signalO;
     ajshort* base[4];
 
-    const ajlong SIGNALtag    = ((ajlong) ((((('S'<<8)+'/')<<8)+'N')<<8)+'%');
+    ajlong SIGNALtag;
+
+    SIGNALtag    = ((ajlong) ((((('S'<<8)+'/')<<8)+'N')<<8)+'%');
 
     /* Get signal strength info */
     if (seqABIGetFlag(fp,SIGNALtag,1,5,&signalO))
@@ -290,15 +313,18 @@ void ajSeqABIGetSignal(AjPFile fp,ajlong fwo_,
             seqABIReadInt2(fp, base[seqABIBaseIdx((char)(fwo_>>16&255))]) &&
             seqABIReadInt2(fp, base[seqABIBaseIdx((char)(fwo_>>8&255))]) &&
             seqABIReadInt2(fp, base[seqABIBaseIdx((char)(fwo_&255))]))
-            {
-/*            ajUser("avg_signal_strength = C:%d A:%d G:%d T:%d",sigC,sigA,
-	sigG,sigT);
-*/
-            }
+	{
+	    /*
+	       ajUser("avg_signal_strength = C:%d A:%d G:%d T:%d",sigC,sigA,
+			  sigG,sigT);
+	    */
+	}
     }
 
     return;
 }
+
+
 
 
 /* @func ajSeqABIGetBaseSpace *************************************************
@@ -314,12 +340,17 @@ float ajSeqABIGetBaseSpace(AjPFile fp)
 {
 
     float spacing;
-    const ajlong SPACINGtag = ((ajlong) ((((('S'<<8)+'P')<<8)+'A')<<8)+'C');
+    ajlong SPACINGtag;
+
+    SPACINGtag = ((ajlong) ((((('S'<<8)+'P')<<8)+'A')<<8)+'C');
 
     seqABIGetFlagF(fp,SPACINGtag,1,5,&spacing);
 
     return spacing;
 }
+
+
+
 
 /* @func ajSeqABIGetBaseOffset ************************************************
 **
@@ -333,14 +364,18 @@ float ajSeqABIGetBaseSpace(AjPFile fp)
 ajint ajSeqABIGetBaseOffset(AjPFile fp)
 {
     ajlong baseO;
-    const ajlong BASEtag = ((ajlong) ((((('P'<<8)+'B')<<8)+'A')<<8)+'S');
+    ajlong BASEtag;
+
+    BASEtag = ((ajlong) ((((('P'<<8)+'B')<<8)+'A')<<8)+'S');
 
     /* Find BASE tag & get offset                                */
     if (!seqABIGetFlag(fp,BASEtag,1,5,&baseO))
-           ajFatal("Error - in finding Base Offset");
+	ajFatal("Error - in finding Base Offset");
 
     return baseO;
 }
+
+
 
 
 /* @func ajSeqABIGetBasePosOffset *********************************************
@@ -355,7 +390,9 @@ ajint ajSeqABIGetBaseOffset(AjPFile fp)
 ajint ajSeqABIGetBasePosOffset(AjPFile fp)
 {
     ajlong basePosO;
-    const ajlong BASEPOStag = ((ajlong) ((((('P'<<8)+'L')<<8)+'O')<<8)+'C');
+    ajlong BASEPOStag;
+
+    BASEPOStag = ((ajlong) ((((('P'<<8)+'L')<<8)+'O')<<8)+'C');
 
     /* Find BASEPOS tag & get base position offset               */
     if (!seqABIGetFlag(fp,BASEPOStag,1,5,&basePosO))
@@ -363,6 +400,8 @@ ajint ajSeqABIGetBasePosOffset(AjPFile fp)
 
     return basePosO;
 }
+
+
 
 
 /* @func ajSeqABIGetFWO *******************************************************
@@ -378,14 +417,18 @@ ajint ajSeqABIGetFWO(AjPFile fp)
 {
 
     ajlong fwo_;
-    const ajlong FWO_tag = ((ajlong) ((((('F'<<8)+'W')<<8)+'O')<<8)+'_');
+    ajlong FWO_tag;
+
+    FWO_tag = ((ajlong) ((((('F'<<8)+'W')<<8)+'O')<<8)+'_');
 
     /* Find FWO tag */
     if (!seqABIGetFlag(fp,FWO_tag,1,5,&fwo_))
-            ajFatal("Error - in finding field order");
+	ajFatal("Error - in finding field order");
 
     return fwo_;
 }
+
+
 
 
 /* @func ajSeqABIGetPrimerOffset **********************************************
@@ -399,10 +442,10 @@ ajint ajSeqABIGetFWO(AjPFile fp)
 
 ajint ajSeqABIGetPrimerOffset(AjPFile fp)
 {
-
     ajshort primerPos;
-    const ajlong PPOStag = ((ajlong) ((((('P'<<8)+'P')<<8)+'O')<<8)+'S');
+    ajlong PPOStag;
 
+    PPOStag = ((ajlong) ((((('P'<<8)+'P')<<8)+'O')<<8)+'S');
 
     /* Find PPOS tag (Primer Position) & get offset              */
     if (!seqABIGetFlagW(fp,PPOStag,6,&primerPos))
@@ -410,6 +453,8 @@ ajint ajSeqABIGetPrimerOffset(AjPFile fp)
 
     return primerPos;
 }
+
+
 
 
 /* @func ajSeqABIGetPrimerPosition ********************************************
@@ -424,19 +469,21 @@ ajint ajSeqABIGetPrimerOffset(AjPFile fp)
 ajint ajSeqABIGetPrimerPosition(AjPFile fp)
 {
     ajlong primerPosition;
-    const ajlong PPOStag = ((ajlong) ((((('P'<<8)+'P')<<8)+'O')<<8)+'S');
+    ajlong PPOStag;
 
+    PPOStag = ((ajlong) ((((('P'<<8)+'P')<<8)+'O')<<8)+'S');
 
     if (!seqABIGetFlag(fp,PPOStag,1,5,&primerPosition))
-          ajFatal("Error - in getting primer position");
-        {
+	ajFatal("Error - in getting primer position");
+    {
         /* ppos stored in MBShort of pointer */
         primerPosition = primerPosition>>16;
-        }
+    }
 
 
     return primerPosition;
 }
+
 
 
 
@@ -457,25 +504,28 @@ AjBool ajSeqABIGetTraceOffset(AjPFile fp, ajlong *Offset)
 
     /* BYTE[i] is a byte mask for byte i */
     const ajlong BYTE[] = { 0x000000ff };
-    const ajshort TRACE_INDEX = 9;
-    const ajlong DATAtag      = ((ajlong) ((((('D'<<8)+'A')<<8)+'T')<<8)+'A');
+    ajshort TRACE_INDEX;
+    ajlong DATAtag;
 
-    /* Find FWO tag - Field order "GATC"                         */
+    TRACE_INDEX = 9;
+    DATAtag     = ((ajlong) ((((('D'<<8)+'A')<<8)+'T')<<8)+'A');
+
+    /* Find FWO tag - Field order "GATC" */
     fwo_ = ajSeqABIGetFWO(fp);
 
-    /* Get data trace offsets                                    */
+    /* Get data trace offsets            */
     if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX,
-         5,&dataxO[seqABIBaseIdx((char)(fwo_>>24&BYTE[0]))]))
-              return ajFalse;
+		       5,&dataxO[seqABIBaseIdx((char)(fwo_>>24&BYTE[0]))]))
+	return ajFalse;
     if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX+1,
-         5,&dataxO[seqABIBaseIdx((char)(fwo_>>16&BYTE[0]))]))
-              return ajFalse;
+		       5,&dataxO[seqABIBaseIdx((char)(fwo_>>16&BYTE[0]))]))
+	return ajFalse;
     if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX+2,
-         5,&dataxO[seqABIBaseIdx((char)(fwo_>>8&BYTE[0]))]))
-              return ajFalse;
+		       5,&dataxO[seqABIBaseIdx((char)(fwo_>>8&BYTE[0]))]))
+	return ajFalse;
     if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX+3,
-         5,&dataxO[seqABIBaseIdx((char)(fwo_&BYTE[0]))]))
-              return ajFalse;
+		       5,&dataxO[seqABIBaseIdx((char)(fwo_&BYTE[0]))]))
+	return ajFalse;
 
     Offset[0]=dataxO[seqABIBaseIdx((char)(fwo_>>24&BYTE[0]))];
     Offset[1]=dataxO[seqABIBaseIdx((char)(fwo_>>16&BYTE[0]))];
@@ -484,6 +534,8 @@ AjBool ajSeqABIGetTraceOffset(AjPFile fp, ajlong *Offset)
 
     return ajTrue;
 }
+
+
 
 
 /* @funcstatic seqABIReadInt4  ************************************************
@@ -501,7 +553,8 @@ static AjBool seqABIReadInt4(AjPFile fp,ajlong *i4)
 
     unsigned char buf[sizeof(ajlong)];
 
-    if (ajFileRead((void *)buf,4,1,fp) != 1) return ajFalse;
+    if (ajFileRead((void *)buf,4,1,fp) != 1)
+	return ajFalse;
     *i4 = (ajlong)
         (((ajulong)buf[3]) +
          ((ajulong)buf[2]<<8) +
@@ -509,8 +562,11 @@ static AjBool seqABIReadInt4(AjPFile fp,ajlong *i4)
          ((ajulong)buf[0]<<24));
 
     ajDebug("seqABIReadInt4 %c %c %c %c\n",buf[0],buf[1],buf[2],buf[3]);
+
     return (AJTRUE);
 }
+
+
 
 
 /* @funcstatic seqABIReadFloat4 ***********************************************
@@ -529,7 +585,7 @@ static AjBool seqABIReadFloat4(AjPFile fp,float* f4)
     unsigned char buf[sizeof(ajlong)];
 
     if (ajFileRead((void *)buf,4,1,fp) != 1)
-         return ajFalse;
+	return ajFalse;
     *f4 = (ajlong)
         (((ajulong)buf[3]) +
          ((ajulong)buf[2]<<8) +
@@ -538,6 +594,8 @@ static AjBool seqABIReadFloat4(AjPFile fp,float* f4)
 
     return ajTrue;
 }
+
+
 
 
 /* @funcstatic seqABIReadInt2 *************************************************
@@ -552,16 +610,19 @@ static AjBool seqABIReadFloat4(AjPFile fp,float* f4)
 
 static AjBool seqABIReadInt2(AjPFile fp, ajshort *i2)
 {
-     unsigned char buf[sizeof(ajshort)];
+    unsigned char buf[sizeof(ajshort)];
 
     if (ajFileRead((void *)buf,2,1,fp) != 1)
-         return ajFalse;
+	return ajFalse;
     *i2 = (ajshort)
         (((ajushort)buf[1]) +
          ((ajushort)buf[0]<<8));
 
     return ajTrue;
 }
+
+
+
 
 /* @funcstatic seqABIGetFlag **************************************************
 **
@@ -581,17 +642,19 @@ static AjBool seqABIReadInt2(AjPFile fp, ajshort *i2)
 ******************************************************************************/
 
 static AjBool seqABIGetFlag(AjPFile fp, ajlong flagLabel,
-         ajlong flagInstance, ajlong word, ajlong* val)
+			    ajlong flagInstance, ajlong word, ajlong* val)
 {
-    ajint     flagNum=-1;
+    ajint     flagNum = -1;
     ajint     i;
-    ajlong Label, Instance;
+    ajlong Label;
+    ajlong Instance;
     ajlong indexO;
-    const ajint INDEX_ENTRY_LENGTH= 28;
+    ajint INDEX_ENTRY_LENGTH;
 
+    INDEX_ENTRY_LENGTH= 28;
 
     if(ajFileSeek(fp,26,SEEK_SET) ||
-      (!seqABIReadInt4(fp, &indexO))) ajFatal("Error - in finding flag");
+       (!seqABIReadInt4(fp, &indexO))) ajFatal("Error - in finding flag");
 
     do
     {
@@ -617,6 +680,8 @@ static AjBool seqABIGetFlag(AjPFile fp, ajlong flagLabel,
 }
 
 
+
+
 /* @funcstatic seqABIGetFlagF *************************************************
 **
 ** Routine to read through an ABI trace file until it reaches a flag
@@ -635,17 +700,19 @@ static AjBool seqABIGetFlag(AjPFile fp, ajlong flagLabel,
 ******************************************************************************/
 
 static AjBool seqABIGetFlagF(AjPFile fp, ajlong flagLabel,
-         ajlong flagInstance, ajlong word,float* val)
+			     ajlong flagInstance, ajlong word,float* val)
 {
-    ajint     flagNum=-1;
+    ajint     flagNum = -1;
     ajint     i;
-    ajlong Label, Instance;
+    ajlong Label;
+    ajlong Instance;
     ajlong indexO;
-    const ajint INDEX_ENTRY_LENGTH= 28;
+    ajint INDEX_ENTRY_LENGTH;
 
+    INDEX_ENTRY_LENGTH= 28;
 
     if(ajFileSeek(fp,26,SEEK_SET) ||
-      (!seqABIReadInt4(fp, &indexO))) ajFatal("Error - in finding flag");
+       (!seqABIReadInt4(fp, &indexO))) ajFatal("Error - in finding flag");
 
     do
     {
@@ -661,13 +728,14 @@ static AjBool seqABIGetFlagF(AjPFile fp, ajlong flagLabel,
     } while (!(Label == (ajlong)flagLabel &&
                Instance == (ajlong)flagInstance));
 
-    for (i=2; i<=word; i++) {
+    for (i=2; i<=word; i++)
         if (!seqABIReadFloat4(fp, val))
 	    return ajFalse;
-    }
 
     return ajTrue;
 }
+
+
 
 
 /* @funcstatic seqABIGetFlagW *************************************************
@@ -687,18 +755,19 @@ static AjBool seqABIGetFlagF(AjPFile fp, ajlong flagLabel,
 ******************************************************************************/
 
 static AjBool seqABIGetFlagW(AjPFile fp, ajlong flagLabel,
-         ajlong word, ajshort* val)
+			     ajlong word, ajshort* val)
 {
-    ajint     flagNum=-1;
+    ajint     flagNum = -1;
     ajint     i;
     ajlong Label;
     ajlong jval;
     ajlong indexO;
-    const ajint   INDEX_ENTRY_LENGTH= 28;
+    ajint  INDEX_ENTRY_LENGTH;
 
+    INDEX_ENTRY_LENGTH= 28;
 
     if(ajFileSeek(fp,26,SEEK_SET) ||
-      (!seqABIReadInt4(fp, &indexO))) ajFatal("Error - in finding flag");
+       (!seqABIReadInt4(fp, &indexO))) ajFatal("Error - in finding flag");
 
     do
     {
@@ -707,17 +776,21 @@ static AjBool seqABIGetFlagW(AjPFile fp, ajlong flagLabel,
             return ajFalse;
         if (!seqABIReadInt4(fp, &Label))
             return ajFalse;
-        }
-        while (Label != (ajlong)flagLabel);
+    }
+    while (Label != (ajlong)flagLabel);
 
 
     for (i=2; i<word; i++)
-        if (!seqABIReadInt4(fp, &jval)) return ajFalse;
+        if (!seqABIReadInt4(fp, &jval))
+	    return ajFalse;
 
-    if (!seqABIReadInt2(fp, val)) return ajFalse;
+    if (!seqABIReadInt2(fp, val))
+	return ajFalse;
 
     return ajTrue;
 }
+
+
 
 
 /* @funcstatic seqABIBaseIdx **************************************************
@@ -731,8 +804,10 @@ static AjBool seqABIGetFlagW(AjPFile fp, ajlong flagLabel,
 
 static ajshort seqABIBaseIdx(char B)
 {
-   return ((B)=='C'?0:(B)=='A'?1:(B)=='G'?2:3);
+    return ((B)=='C'?0:(B)=='A'?1:(B)=='G'?2:3);
 }
+
+
 
 
 /* @func ajSeqABISampleName ***************************************************
@@ -748,32 +823,19 @@ static ajshort seqABIBaseIdx(char B)
 AjBool ajSeqABISampleName(AjPFile fp, AjPStr *sample)
 {
     ajlong mchn;
-    const ajlong SMPLtag = ((ajlong) ((((('S'<<8)+'M')<<8)+'P')<<8)+'L');
+    ajlong SMPLtag;
     unsigned char l;
 
+    SMPLtag = ((ajlong) ((((('S'<<8)+'M')<<8)+'P')<<8)+'L');
 
     if((seqABIGetFlag(fp,SMPLtag,1,5,&mchn)) &&
-       (ajFileSeek(fp,mchn,SEEK_SET) >= 0)){
-       ajFileRead(&l,sizeof(char),1,fp);
-       *sample = ajStrNewL(l+1);
-       ajFileRead((void*)ajStrStr(*sample),l,1,fp);
-       *(ajStrStr(*sample)+l)='\0';
+       (ajFileSeek(fp,mchn,SEEK_SET) >= 0))
+    {
+	ajFileRead(&l,sizeof(char),1,fp);
+	*sample = ajStrNewL(l+1);
+	ajFileRead((void*)ajStrStr(*sample),l,1,fp);
+	*(ajStrStr(*sample)+l)='\0';
     }
 
     return ajTrue;
-}
-
-
-/* @func seqAbiUnused *********************************************************
-**
-** Unused functions for clean compile
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-void seqAbiUnused(void)
-{
-
-    return;
 }

@@ -15,7 +15,7 @@ extern "C"
 
 
 
-/* @data AjPDomConts ***********************************************************
+/* @data AjPDomConts **********************************************************
 **
 ** Ajax DomConts object.
 **
@@ -26,10 +26,15 @@ extern "C"
 ** @alias AjSDomConts
 ** @alias AjODomConts
 **
+** @attr het_name [AjPStr] 3-character code of heterogen 
+** @attr scop_name [AjPStr] 7-character scop id domain name
+** @attr no_keyres [ajint] number of key binding residues
+** @attr aa_code [AjPStr*] Array for 3-character amino acid codes
+** @attr res_pos [AjPInt] Array of ints for residue positions in domain file
+** @attr res_pos2 [AjPStr*] Array of residue positions in complete protein 
+**			    coordinate file - exist as strings
 ** @@
 ******************************************************************************/
-
-
 
 typedef struct AjSDomConts
 {
@@ -37,13 +42,13 @@ typedef struct AjSDomConts
   AjPStr scop_name;      /* 7-character scop id domain name */  
   ajint  no_keyres;      /* number of key binding residues */
   AjPStr *aa_code;       /* Array for 3-character amino acid codes */ 
-  AjPInt res_pos;        /* Array of ints for residue positions in domain file */
+  AjPInt res_pos;      /* Array of ints for residue positions in domain file */
   AjPStr *res_pos2;      /* Array of residue positions in complete protein 
 			    coordinate file - exist as strings */
 }AjODomConts, *AjPDomConts;
 
 
-/* @data AjPDbaseEnt ***********************************************************
+/* @data AjPDbaseEnt **********************************************************
 **
 ** Ajax DbaseEnt object.
 **
@@ -54,8 +59,15 @@ typedef struct AjSDomConts
 ** @alias AjSDbaseEnt
 ** @alias AjODbaseEnt
 **
+** @attr abv [AjPStr] 3-letter abbreviation of heterogen
+** @attr ful [AjPStr] Full name
+** @attr no_dom [ajint] number of domains
+** @attr cont_data [AjPDomConts] array of domain contact data
+**                               (derived from tmp)
+** @attr tmp [AjPList]  Temp. list of domain contact data
 ** @@
 ******************************************************************************/
+
 typedef struct AjSDbaseEnt
 {
   AjPStr      abv;         /* 3-letter abbreviation of heterogen */
@@ -77,8 +89,11 @@ typedef struct AjSDbaseEnt
 ** @alias AjSDbase
 ** @alias AjODbase  
 **
+** @attr n [ajint] Number of entries
+** @attr entries [AjPDbaseEnt *] Array of entries
 ** @@
 ******************************************************************************/
+
 typedef struct AjSDbase
 {
   ajint         n;        /* Number of entries */
@@ -88,38 +103,38 @@ typedef struct AjSDbase
 
 
 
-/*@data AjPCath **********************************************************
+/* @data AjPCath **************************************************************
 **
 ** Ajax cath object
 **
 ** Holds cath database data
 **
+** @alias AjSCath
+** @alias AjOCath
+**
 ** The variables have the following meaning:
 **
-**  AjPStr DomainID;       Domain identifer code        
-**  AjPStr Pdb;            Corresponding pdb identifer code
-**  AjPStr Class;          CATH class name as an AjPStr
-**  AjPStr Architecture;   CATH architecture name as an AjPStr
-**  AjPStr Topology;       CATH topology name as an AjPStr
-**  AjPStr Superfamily;    CATH homologous superfamily name as an AjPStr
-**  ajint  Length;         No. of residues in domain
-**  char   Chain;          Chain identifier
-**  ajint  NSegment;       No. of chain segments domain is comprised of
-**  AjPStr *Start;         PDB residue number of first residue in segment 
-**  AjPStr *End;           PDB residue number of last residue in segment
-**  ajint Class_Id;        CATH class no. as an ajint
-**  ajint Arch_Id;         CATH architecture no.as an ajint
-**  ajint Topology_Id;     CATH topology no. as an ajint
-**  ajint Superfamily_Id;  CATH superfamily no. as an ajint
-**  ajint Family_Id;       CATH family no. as an ajint 
-**  ajint NIFamily_Id;     CATH near identical family no. as an ajint 
-**  ajint IFamily_Id;      CATH identical family no. as an ajint 
-**
-**  @alias AjSCath
-**  @alias AjOCath
+** @attr DomainID  [AjPStr]      Domain identifer code        
+** @attr Pdb        [AjPStr]     Corresponding pdb identifer code
+** @attr Class;     [AjPStr]      CATH class name as an AjPStr
+** @attr Architecture [AjPStr]    CATH architecture name as an AjPStr
+** @attr Topology    [AjPStr]   CATH topology name as an AjPStr
+** @attr Superfamily [AjPStr]    CATH homologous superfamily name as an AjPStr
+** @attr Length  [ajint]       No. of residues in domain
+** @attr Chain  [char]        Chain identifier
+** @attr NSegment [ajint]      No. of chain segments domain is comprised of
+** @attr Start  [AjPStr*]      PDB residue number of first residue in segment 
+** @attr End   [AjPStr*]        PDB residue number of last residue in segment
+** @attr Class_Id  [ajint]      CATH class no. as an ajint
+** @attr Arch_Id  [ajint]       CATH architecture no.as an ajint
+** @attr Topology_Id [ajint]    CATH topology no. as an ajint
+** @attr Superfamily_Id [ajint] CATH superfamily no. as an ajint
+** @attr Family_Id  [ajint]     CATH family no. as an ajint 
+** @attr NIFamily_Id  [ajint]  CATH near identical family no. as an ajint 
+** @attr IFamily_Id  [ajint]   CATH identical family no. as an ajint 
 **
 **  @@
-**************************************************************************/
+******************************************************************************/
 
 typedef struct AjSCath
 {
@@ -147,12 +162,6 @@ typedef struct AjSCath
 } AjOCath, *AjPCath;
 
 
-
-
-
-
-
-
 /* @data AjPPdbtosp *******************************************************
 **
 ** Ajax Pdbtosp object.
@@ -166,6 +175,7 @@ typedef struct AjSCath
 **
 ** @@
 ******************************************************************************/
+
 typedef struct AjSPdbtosp
 {   	
     AjPStr     Pdb;    /* PDB code*/
@@ -784,7 +794,7 @@ typedef struct AjSSigcell
 {
     float  val;            /* Value for this cell */
     ajint  prev;           /* Index in path matrix of prev. highest value */
-    AjBool try;            /* == ajTrue if this cell has been visited */
+    AjBool visited;        /* == ajTrue if this cell has been visited */
 } AjOSigcell, *AjPSigcell;
 
 
@@ -922,7 +932,14 @@ typedef struct AjSHet
 } AjOHet, *AjPHet;
 
 
-
+/* @data AjPCoord *******************************************************
+**
+** Undocumented
+**
+** @alias AjOCoord
+** @alias AjSCoord
+**
+******************************************************************************/
 
 typedef struct AjSCoord
 {
@@ -938,6 +955,15 @@ typedef struct AjSCoord
     ajint    y;            /* Frequency of scores */
 } AjOCoord, *AjPCoord;
 
+/* @data AjPDatapoint *******************************************************
+**
+** Undocumented
+**
+** @alias AjODatapoint
+** @alias AjSDatapoint
+**
+******************************************************************************/
+
 
 
 typedef struct AjSDatapoint
@@ -948,6 +974,15 @@ typedef struct AjSDatapoint
     ajint     y;                        /* Frequency of scores */
 } AjODatapoint, *AjPDatapoint;
 
+
+/* @data AjPDiscord *******************************************************
+**
+** Undocumented
+**
+** @alias AjODiscord
+** @alias AjSDiscord
+**
+******************************************************************************/
 
 typedef struct AjSDiscord
 {
@@ -1012,7 +1047,7 @@ AjBool ajXyzDiscordToCoords(AjPDiscord dis_cord, AjPList *out);
 void ajXyzCoordDel(AjPCoord *pthis);
 AjPCoord ajXyzCoordNew(void);
 
-AjBool ajXyzSunidToScopInfo (ajint sunid, AjPStr *family, AjPStr *superfamily, AjPStr *fold, AjPStr *class, AjPList list);
+AjBool ajXyzSunidToScopInfo (ajint sunid, AjPStr *family, AjPStr *superfamily, AjPStr *fold, AjPStr *klass, AjPList list);
 
 
 AjPPdbtosp ajXyzPdbtospNew(ajint n);
@@ -1164,10 +1199,10 @@ ajint         ajXyzCompId(const void *hit1, const void *hit2);
 AjPHitlist    ajXyzHitlistNew(ajint n);
 void          ajXyzHitlistDel(AjPHitlist *pthis);
 AjBool        ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys);
-AjBool        ajXyzHitlistReadNode(AjPFile scopf, AjPList *list, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class);
-AjBool        ajXyzHitlistReadFam(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class, AjPList* list);
-AjBool        ajXyzHitlistReadSfam(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class,AjPList* list);
-AjBool        ajXyzHitlistReadFold(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class,AjPList* list);
+AjBool        ajXyzHitlistReadNode(AjPFile scopf, AjPList *list, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr klass);
+AjBool        ajXyzHitlistReadFam(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr klass, AjPList* list);
+AjBool        ajXyzHitlistReadSfam(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr klass,AjPList* list);
+AjBool        ajXyzHitlistReadFold(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr klass,AjPList* list);
 AjBool        ajXyzHitlistWrite(AjPFile outf, AjPHitlist thys);
 AjBool ajXyzHitlistWriteSubset(AjPFile outf, AjPHitlist thys, AjPInt ok);
 

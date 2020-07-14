@@ -15,16 +15,23 @@ extern "C"
 ******************************************************************************/
 
 typedef struct AjSTime {
-  struct tm *time;
+  struct tm time;
   char *format;
-} AjOTime, *AjPTime, *AjPDate;
+} AjOTime, AjODate;
 
+#define AjPTime AjOTime*
+#define AjPDate AjODate*
 
+AjBool  ajTimeLocal(const time_t timer, AjPTime thys);
 AjPTime ajTimeToday (void);
-AjPTime ajTimeTodayF (char* timefmt);
-void ajTimeTrace (AjPTime thys);
+AjPTime ajTimeTodayF (const char* timefmt);
+const AjPTime ajTimeTodayRef (void);
+const AjPTime ajTimeTodayRefF (const char* timefmt);
+void    ajTimeTrace (const AjPTime thys);
+AjPTime ajTimeSet( const char *timefmt, ajint mday, ajint mon, ajint year) ;
+AjPTime ajTimeNew(void);
+void    ajTimeDel(AjPTime *thys);
 
-AjPTime ajTimeSet( char *timefmt, ajint mday, ajint mon, ajint year) ;
 
 #endif
 

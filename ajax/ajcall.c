@@ -15,8 +15,13 @@
 ** are changed.
 */
 
+static AjPTable calls = NULL;
+
 static ajint callCmpStr(const void *x, const void *y);
 static unsigned callStrHash(const void *key, unsigned hashsize);
+
+
+
 
 /* @funcstatic callCmpStr *****************************************************
 **
@@ -28,9 +33,13 @@ static unsigned callStrHash(const void *key, unsigned hashsize);
 ** @@
 ******************************************************************************/
 
-static ajint callCmpStr(const void *x, const void *y) {
-  return strcmp((char *)x, (char *)y);
+static ajint callCmpStr(const void *x, const void *y)
+{
+    return strcmp((char *)x, (char *)y);
 }
+
+
+
 
 /* @funcstatic callStrHash ****************************************************
 **
@@ -44,17 +53,23 @@ static ajint callCmpStr(const void *x, const void *y) {
 
 static unsigned callStrHash(const void *key, unsigned hashsize)
 {
-  unsigned hashval;
-  char *s = (char *) key;
-  ajint j = strlen(s);
+    unsigned hashval;
+    char *s;
+    ajint j;
 
-  ajint i;
-  for(i=0, hashval = 0; i < j; i++, s++)
-    hashval = *s + 31 *hashval;
-  return hashval % hashsize;
+    ajint i;
+
+    s = (char *) key;
+    j = strlen(s);
+
+    for(i=0, hashval = 0; i < j; i++, s++)
+	hashval = *s + 31 *hashval;
+
+    return hashval % hashsize;
 }
 
-static AjPTable calls=NULL;
+
+
 
 /* @func callRegister *********************************************************
 **
@@ -68,17 +83,21 @@ static AjPTable calls=NULL;
 
 void callRegister(char *name, CallFunc func)
 {
-  void *rec;
+    void *rec;
 
-  if(!calls)
-    calls = ajTableNew(0, callCmpStr,callStrHash);
+    if(!calls)
+	calls = ajTableNew(0, callCmpStr,callStrHash);
 
-  rec = ajTableGet(calls, name);    /* does it exist already */
+    rec = ajTableGet(calls, name);	/* does it exist already */
 
-  if(!rec){
-    (void) ajTablePut(calls, name, (void *) func);
-  }
+    if(!rec)
+	ajTablePut(calls, name, (void *) func);
+
+    return;
 }
+
+
+
 
 /* @func call *****************************************************************
 **
@@ -92,27 +111,28 @@ void callRegister(char *name, CallFunc func)
 ******************************************************************************/
 void* call(char *name, ...)
 {
-  va_list args;
-  CallFunc rec;
-  void *retval = NULL;
+    va_list args;
+    CallFunc rec;
+    void *retval = NULL;
 
-  if(!calls){
-    ajMessCrash("Graphics calls not Registered. "
-		"Use ajGraphInit in main function first",name);
+    if(!calls)
+    {
+	ajMessCrash("Graphics calls not Registered. "
+		    "Use ajGraphInit in main function first",name);
+	return retval;
+    }
+
+    rec = (CallFunc) ajTableGet(calls, name);
+
+    if(rec)
+    {
+	va_start(args, name);
+	retval = (*(rec))(name, args);
+	va_end(args);
+    }
+    else
+	ajMessCrash("Graphics call %s not found. "
+		    "Use ajGraphInit in main function first",name);
+
     return retval;
-  }
-
-  rec = (CallFunc) ajTableGet(calls, name);
-
-  if(rec) {
-    va_start(args, name);
-    retval = (*(rec))(name, args);
-    va_end(args);
-  }
-  else
-    ajMessCrash("Graphics call %s not found. "
-		"Use ajGraphInit in main function first",name);
-
-  return retval;
 }
-

@@ -24,7 +24,7 @@ typedef void (*Fmt_T) (ajint code, VALIST ap,
 		       int put(int c, void *cl), void *cl,
 		       ajuint flags[256], ajint width, ajint precision);
 
-typedef void (*Fmt_S) (char *fmt, char **pos, VALIST ap, int width,
+typedef void (*Fmt_S) (const char *fmt, char **pos, VALIST ap, int width,
 		       AjBool convert, AjBool *ok);
 
 void   ajFmtFmt (int put(int c, void *cl), void *cl,
@@ -39,16 +39,17 @@ void   ajFmtPrintFp (FILE *stream,
 		     const char *fmt, ...);
 void   ajFmtVPrintFp (FILE *stream,
 		      const char *fmt, va_list ap);
-void   ajFmtPrintF (AjPFile file,
+void   ajFmtPrintF (const AjPFile file,
 		    const char *fmt, ...);
-void   ajFmtVPrintF (AjPFile file,
+void   ajFmtVPrintF (const AjPFile file,
 		     const char *fmt, va_list ap);
 ajint  ajFmtPrintCL (char *buf, ajint size,
 		     const char *fmt, ...);
 ajint  ajFmtVPrintCL (char *buf, ajint size,
 		      const char *fmt, va_list ap);
-void   ajFmtPrintSplit(AjPFile outf, AjPStr str, char *prefix, ajint len,
-		       char *delim);
+void   ajFmtPrintSplit(const AjPFile outf, const AjPStr str,
+		       const char *prefix, ajint len,
+		       const char *delim);
 ajint  ajFmtVFmtS(char *buf, ajint size,
 		  const char *fmt, va_list ap);
 char*  ajFmtString (const char *fmt, ...);
@@ -69,8 +70,8 @@ ajint  ajFmtVfmtCL (char* buf, ajint size, const char* fmt,
 ajint  ajFmtVfmtStrCL (char** buf, ajint pos, ajint *size,
 		       const char* fmt, va_list ap);
 
-ajint  ajFmtScanS (AjPStr thys, const char* fmt, ...);
-
+ajint  ajFmtScanS (const AjPStr thys, const char* fmt, ...);
+ajint  ajFmtScanC (const char* thys, const char* fmt, ...);
 
 #endif
 

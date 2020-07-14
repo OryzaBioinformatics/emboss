@@ -1,16 +1,42 @@
-/*** general routines ***/
+/******************************************************************************
+** @source AJAX maths functions
+**
+** @author Copyright (C) 1998 Alan Bleasby
+** @version 1.0
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Library General Public
+** License as published by the Free Software Foundation; either
+** version 2 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Library General Public License for more details.
+**
+** You should have received a copy of the GNU Library General Public
+** License along with this library; if not, write to the
+** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+** Boston, MA  02111-1307, USA.
+******************************************************************************/
 
 #include "ajmath.h"
 #include <math.h>
 #include <time.h>
 #include <float.h>
 #include <stdlib.h>
+#include <sys/time.h>
+
 
 
 #define AjRandomXmod 1000009711.0
 #define AjRandomYmod 33554432.0
 #define AjRandomTiny 1.0e-17
 #define AJCRC64LEN 256
+
+
+
 
 static AjBool aj_rand_i = 0;
 static ajint    aj_rand_index;
@@ -19,6 +45,8 @@ static double aj_rand_other;
 
 
 static void spcrc64calctab(unsigned long long *crctab);
+
+
 
 
 /* @func ajRound **************************************************************
@@ -30,10 +58,12 @@ static void spcrc64calctab(unsigned long long *crctab);
 ** @return [ajint] Result.
 ******************************************************************************/
 
-ajint ajRound (ajint i, ajint round) {
-
-  return round * ((ajint)(i+round-1)/round);
+ajint ajRound(ajint i, ajint round)
+{
+    return round * ((ajint)(i+round-1)/round);
 }
+
+
 
 
 /* @func ajRoundF *************************************************************
@@ -45,35 +75,46 @@ ajint ajRound (ajint i, ajint round) {
 ** @return [float] Result.
 ******************************************************************************/
 
-float ajRoundF (float a, ajint nbits) {
+float ajRoundF(float a, ajint nbits)
+{
+    double w;
+    double x;
+    double y;
+    double z;
+    double b;
+    double c;
+    
+    ajint i;
+    ajint bitsused;
 
-  double w, x, y, z, b, c;
-  ajint i;
-  ajint bitsused;
+    /* save 16 bits for cumulative error */
+    bitsused = FLT_MANT_DIG - nbits;
+    /* usually leave 8 bits */
+    if(bitsused < 8)
+	bitsused = 8;
 
-  bitsused = FLT_MANT_DIG - nbits; /* save 16 bits for cumulative error */
-                                /* usually leave 8 bits */
-  if (bitsused < 8) bitsused = 8;
+    /* a is between 0.5 and 1.0 */
+    x = frexp(a, &i);
+    /* i is the power of two */
 
-  x = frexp (a, &i);            /* a is between 0.5 and 1.0 */
-                                /* i is the power of two */
+    /* multiply by 2**n, convert to an integer, divide again */
+    /* so we only keep n (or whatever) bits */
 
-  /* multiply by 2**n, convert to an integer, divide again */
-  /* so we only keep n (or whatever) bits */
+    y = ldexp(x, bitsused);		/* multiply by 2**n */
+    z = modf(y, &w);		        /* change to an integer + remainder */
+    if(z > 0.5) w += 1.0;		/* round up ?*/
+    if(z < -0.5) w -= 1.0;		/* round down? */
 
-  y = ldexp(x, bitsused);       /* multiply by 2**n */
-  z = modf(y, &w);              /* change to an integer + remainder */
-  if (z > 0.5) w += 1.0;        /* round up ?*/
-  if (z < -0.5) w -= 1.0;       /* round down? */
+    b = ldexp(w, -bitsused);		/* divide by 2**n */
+    c = ldexp(b, i);	                /* divide by the orig. power of two */
 
-  b = ldexp (w, -bitsused);     /* divide by 2**n */
-  c = ldexp(b, i);              /* divide by the original power of two */
+    /*  ajDebug("\najRoundF(%.10e) c: %.10e bitsused: %d\n", a, c, bitsused);
+	ajDebug("       x: %f i: %d y: %f w: %.1f\n", x, i, y, w);*/
 
-  /*  ajDebug ("\najRoundF (%.10e) c: %.10e bitsused: %d\n", a, c, bitsused);
-      ajDebug ("       x: %f i: %d y: %f w: %.1f\n", x, i, y, w);*/
-
-  return (float) c;
+    return (float) c;
 }
+
+
 
 
 /* @func ajRecToPol  **********************************************************
@@ -90,6 +131,8 @@ void ajRecToPol(float x, float y, float *radius, float *angle)
 {
     *radius = (float) sqrt((double)(x*x+y*y));
     *angle  = (float) ajRadToDeg((float)atan2((double)y,(double)x));
+
+    return;
 }
 
 
@@ -105,10 +148,13 @@ void ajRecToPol(float x, float y, float *radius, float *angle)
 ** @param [w] y [float*] Y co-ordinate
 ** @return [void]
 ******************************************************************************/
+
 void ajPolToRec(float radius, float angle, float *x, float *y)
 {
     *x = radius*(float)cos((double)ajDegToRad(angle));
     *y = radius*(float)sin((double)ajDegToRad(angle));
+
+    return;
 }
 
 
@@ -121,10 +167,12 @@ void ajPolToRec(float radius, float angle, float *x, float *y)
 ** @param [r] degrees [float] Degrees
 ** @return [float] Radians
 ******************************************************************************/
+
 float ajDegToRad(float degrees)
 {
     return degrees*(float)(AJM_PI/180.0);
 }
+
 
 
 
@@ -135,10 +183,12 @@ float ajDegToRad(float degrees)
 ** @param [r] radians [float] Radians
 ** @return [float] Degrees
 ******************************************************************************/
+
 float ajRadToDeg(float radians)
 {
     return radians*(float)(180.0/AJM_PI);
 }
+
 
 
 
@@ -151,6 +201,7 @@ float ajRadToDeg(float radians)
 ** @param [r] score [float] score
 ** @return [double] probability
 ******************************************************************************/
+
 double ajGaussProb(float mean, float sd, float score)
 {
     return pow(AJM_E,(double)(-0.5*((score-mean)/sd)*((score-mean)/sd)))
@@ -168,12 +219,14 @@ double ajGaussProb(float mean, float sd, float score)
 ** @param [r] n [ajint] number of values
 ** @return [float] geometric mean
 ******************************************************************************/
+
 float ajGeoMean(float *s, ajint n)
 {
     float x;
-    ajint   i;
+    ajint i;
 
     for(i=0,x=1.0;i<n;++i) x*=s[i];
+
     return (float)pow((double)x,(double)(1.0/(float)n));
 }
 
@@ -188,6 +241,7 @@ float ajGeoMean(float *s, ajint n)
 ** @param [r] b [ajint] value2
 ** @return [ajint] value1 modulo value2
 ******************************************************************************/
+
 ajint ajPosMod(ajint a, ajint b)
 {
     ajint t;
@@ -195,8 +249,11 @@ ajint ajPosMod(ajint a, ajint b)
     if(b<=0)
 	ajFatal("ajPosMod given non-positive divisor");
     t=a%b;
+
     return (t<0) ? t+b : t;
 }
+
+
 
 
 /* @func ajRandomSeed *********************************************************
@@ -219,22 +276,29 @@ ajint ajPosMod(ajint a, ajint b)
 
 void ajRandomSeed(void)
 {
-    ajint ix, iy, iz, i;
-    double x=0.0;
+    ajint ix;
+    ajint iy;
+    ajint iz;
+    ajint i;
+    
+    double x = 0.0;
     ajint seed;
-
+    struct timeval tv;
+    
     /*
      *  seed should be set to an integer between 0 and 9999 inclusive; a value
      *  of 0 will initialise the generator only if it has not already been
      *  done.
      */
 
-    if (!aj_rand_i)
+    if(!aj_rand_i)
         aj_rand_i = 1;
     else
         return;
 
-    seed = (time(0) % 9999)+1;
+    gettimeofday(&tv,NULL);
+
+    seed = (tv.tv_usec % 9999)+1;
 
     /*
      *  aj_rand_index must be initialised to an integer between 1 and 101
@@ -247,9 +311,9 @@ void ajRandomSeed(void)
     ix = (seed >= 0 ? seed : -seed) % 10000 + 1;
     iy = 2*ix+1;
     iz = 3*ix+1;
-    for (i = -11; i < 101; ++i)
+    for(i = -11; i < 101; ++i)
     {
-        if (i >= 0) aj_rand_poly[i] = floor(AjRandomXmod*x);
+        if(i >= 0) aj_rand_poly[i] = floor(AjRandomXmod*x);
         ix = (171*ix) % 30269;
         iy = (172*iy) % 30307;
         iz = (170*iz) % 30323;
@@ -259,7 +323,11 @@ void ajRandomSeed(void)
 
     aj_rand_other = floor(AjRandomYmod*x)/AjRandomYmod;
     aj_rand_index = 0;
+
+    return;
 }
+
+
 
 
 /* @func ajRandomNumber *******************************************************
@@ -273,6 +341,9 @@ ajint ajRandomNumber(void)
 {
     return (ajint) (floor(ajRandomNumberD()*32768.0));
 }
+
+
+
 
 /* @func ajRandomNumberD ******************************************************
 **
@@ -307,7 +378,8 @@ double ajRandomNumberD(void)
      *  at least 33 bits of accuracy, and uses a power of two base.
      */
 
-    if (!aj_rand_i) ajRandomSeed();
+    if(!aj_rand_i)
+	ajRandomSeed();
 
     /*
      *  See [Knuth] for why this implements the algorithm described in the
@@ -316,31 +388,31 @@ double ajRandomNumberD(void)
      *  but slow multiply and divide; many, many other options are possible.
      */
 
-    if ((n = aj_rand_index-64) < 0)
+    if((n = aj_rand_index-64) < 0)
 	n += 101;
     x = aj_rand_poly[aj_rand_index]+aj_rand_poly[aj_rand_index];
     x = xmod4-aj_rand_poly[n]-aj_rand_poly[n]-x-x-aj_rand_poly[aj_rand_index];
 
-    if (x <= 0.0)
+    if(x <= 0.0)
     {
-        if (x < -AjRandomXmod)
+        if(x < -AjRandomXmod)
 	    x += xmod2;
-        if (x < 0.0)
+        if(x < 0.0)
 	    x += AjRandomXmod;
     }
     else
     {
-        if (x >= xmod2)
+        if(x >= xmod2)
 	{
             x = x-xmod2;
-            if (x >= AjRandomXmod)
+            if(x >= AjRandomXmod)
 		x -= AjRandomXmod;
         }
-        if (x >= AjRandomXmod)
+        if(x >= AjRandomXmod)
 	    x -= AjRandomXmod;
     }
     aj_rand_poly[aj_rand_index] = x;
-    if (++aj_rand_index >= 101)
+    if(++aj_rand_index >= 101)
 	aj_rand_index = 0;
 
     /*
@@ -353,14 +425,15 @@ double ajRandomNumberD(void)
         y = 37.0*aj_rand_other+offset;
         aj_rand_other = y-floor(y);
     }
-    while (!aj_rand_other);
+    while(!aj_rand_other);
 
-    if ((x = x/AjRandomXmod+aj_rand_other) >= 1.0)
+    if((x = x/AjRandomXmod+aj_rand_other) >= 1.0)
 	x -= 1.0;
 
 
     return x+AjRandomTiny;
 }
+
 
 
 
@@ -394,6 +467,7 @@ static void spcrc64calctab(unsigned long long *crctab)
 
 
 
+
 /* @func ajSp64Crc *********************************************************
 **
 ** Calculate 64-bit crc
@@ -410,7 +484,7 @@ unsigned long long ajSp64Crc(AjPStr thys)
     unsigned long long crc;
     ajint i;
     ajint len;
-    char *p=NULL;
+    char *p = NULL;
     
 
     if(!initialised)

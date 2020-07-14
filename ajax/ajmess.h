@@ -31,16 +31,18 @@ typedef struct AjSError
     AjBool error;
     AjBool fatal;
     AjBool die;
-} AjOError, *AjPError;
+} AjOError;
+
+#define AjPError AjOError*
 
 extern AjOError AjErrorLevel;
 
 #define SUBDIR_DELIMITER_STR "\\"
 
 typedef void (*AjMessVoidRoutine)(void) ;
-typedef void (*AjMessOutRoutine)(char*) ;
+typedef void (*AjMessOutRoutine)(const char*) ;
 
-void ajMessDie (char *format, ...);
+void ajMessDie (const char *format, ...);
 
 AjMessVoidRoutine ajMessBeepReg (AjMessVoidRoutine func) ;
 AjMessOutRoutine  ajMessOutReg (AjMessOutRoutine func) ;
@@ -49,10 +51,10 @@ AjMessOutRoutine  ajMessErrorReg (AjMessOutRoutine func) ;
 AjMessOutRoutine  ajMessExitReg (AjMessOutRoutine func) ;
 AjMessOutRoutine  ajMessCrashReg (AjMessOutRoutine func) ;
 
-void ajMessSetErr(char *filename, ajint line_num);
-void ajMessCrashFL (char *format, ...);
-void ajMessVCrashFL (char *format, va_list args);
-void ajMessCrashCodeFL (char *code);
+void ajMessSetErr(const char *filename, ajint line_num);
+void ajMessCrashFL (const char *format, ...);
+void ajMessVCrashFL (const char *format, va_list args);
+void ajMessCrashCodeFL (const char *code);
 
 /* External Interface.                                                       */
 /* Note: ajMesscrash is a macro and that it makes use of the ',' operator    */
@@ -64,32 +66,32 @@ void ajMessCrashCodeFL (char *code);
 /* funcblah(uMessSetErrorOrigin(__FILE__, __LINE__), uMessCrash("hello")) ;  */
 /*                                                                           */
 
-void ajMessErrorInit(char *progname) ; /* Record the applications name for
-                                                      use in error messages. */
+void ajMessErrorInit(const char *progname) ; /* Record the application's
+					     name for use in error messages. */
 
 void ajMessBeep (void) ; /* make a beep */
 
-AjBool ajMessErrorSetFile(char *errfile);   /* set file to read
+AjBool ajMessErrorSetFile(const char *errfile);   /* set file to read
 					       codes/messages from */
 void ajMessCodesDelete(void);               /* Delete the code/message pairs */
 
-void ajMessOut (char *format, ...) ;  /* simple message, no newline */
-void ajMessOutCode(char *name);       /* as above but uses codes to
+void ajMessOut (const char *format, ...) ;  /* simple message, no newline */
+void ajMessOutCode(const char *name);       /* as above but uses codes to
 					 get message */
-void ajMessOutLine (char *format, ...) ;  /* simple message with newline */
-void ajMessDump (char *format, ...) ; /* write to log file */
-void ajMessError (char *format, ...) ; /* error message and write to
+void ajMessOutLine (const char *format, ...) ;  /* simple msg with newline */
+void ajMessDump (const char *format, ...) ; /* write to log file */
+void ajMessError (const char *format, ...) ; /* error message and write to
 					  log file */
-void ajMessVError (char *format, va_list args) ; /* error message and
+void ajMessVError (const char *format, va_list args) ; /* error message and
 						    write to log
 						    file */
-void ajMessErrorCode(char *name);      /* as above but uses code to
+void ajMessErrorCode(const char *name);      /* as above but uses code to
 					  get message */
 void ajMessExit (void);
-void ajMessExitmsg(char *format, ...) ;  /* error message, write to log
+void ajMessExitmsg(const char *format, ...) ;  /* error message, write to log
 					 file & exit */
-void ajMessWarning (char *format, ...); /* warning message */
-void ajMessSetErr (char *filename, ajint line_num);
+void ajMessWarning (const char *format, ...); /* warning message */
+void ajMessSetErr (const char *filename, ajint line_num);
 
 #define ajMessCrash   ajMessSetErr(__FILE__, __LINE__), ajMessCrashFL
 #define ajMessCrashCode ajMessSetErr(__FILE__, __LINE__), ajMessCrashCodeFL
@@ -105,8 +107,8 @@ void ajMessSetErr (char *filename, ajint line_num);
 #define ajDie ajMessDie
 #define ajVDie ajMessDie
 
-AjBool ajMessQuery (char *text,...) ;   /* ask yes/no question */
-AjBool ajMessPrompt (char *prompt, char *dfault, char *fmt) ;
+AjBool ajMessQuery (const char *text,...) ;   /* ask yes/no question */
+AjBool ajMessPrompt (const char *prompt, const char *dfault, const char *fmt) ;
         /* ask for data satisfying format get results via freecard() */
 
 char* ajMessSysErrorText (void) ;
@@ -131,9 +133,9 @@ char*     ajMessCaughtMessage (void) ;
      the error message that would have been printed.
   */
 
-void        ajDebug (char *fmt, ...);
+void        ajDebug (const char *fmt, ...);
 FILE*       ajDebugFile (void);
-ajint         ajUserGet (AjPStr *pthis, char *fmt, ...);
+ajint         ajUserGet (AjPStr *pthis, const char *fmt, ...);
 
 #endif /* defined(DEF_REGULAR_H) */
 

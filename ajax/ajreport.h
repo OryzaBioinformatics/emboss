@@ -46,33 +46,40 @@ typedef struct AjSReport {
   AjBool Multi;			/* if true, assume >1 sequence */
   ajint Mintags;		/* Minimum number of tags to report */
   ajint Count;			/* Number of sequences reported so far */
-} AjOReport, *AjPReport;
+} AjOReport;
+
+#define AjPReport AjOReport*
 
 void         ajReportClose (AjPReport pthys);
 void         ajReportDel (AjPReport* pthys);
-AjBool       ajReportOpen (AjPReport thys, AjPStr name);
-void         ajReportFileAdd (AjPReport thys, AjPFile file, AjPStr type);
-AjBool       ajReportFindFormat (AjPStr format, ajint* iformat);
+AjBool       ajReportOpen (AjPReport thys, const AjPStr name);
+void         ajReportFileAdd (AjPReport thys,
+			      const AjPFile file, const AjPStr type);
+AjBool       ajReportFindFormat (const AjPStr format, ajint* iformat);
 AjBool       ajReportFormatDefault (AjPStr* pformat);
-ajint        ajReportLists (AjPReport thys, AjPStr** types, AjPStr** names,
+ajint        ajReportLists (const AjPReport thys,
+			    AjPStr** types, AjPStr** names,
 			    AjPStr** prints, ajint** tagsizes);
 AjPReport    ajReportNew (void);
-void         ajReportPrintFormat (AjPFile outf, AjBool full);
-AjPStr       ajReportSeqName (AjPReport thys, AjPSeq seq);
-void         ajReportSetHeader (AjPReport thys, AjPStr header);
+void         ajReportPrintFormat (const AjPFile outf, AjBool full);
+AjPStr       ajReportSeqName (const AjPReport thys, AjPSeq seq);
+void         ajReportSetHeader (AjPReport thys, const AjPStr header);
 void         ajReportSetHeaderC (AjPReport thys, const char* header);
-AjBool       ajReportSetTags (AjPReport thys, AjPStr taglist, ajint mintags);
-void         ajReportSetTail (AjPReport thys, AjPStr tail);
+AjBool       ajReportSetTags (AjPReport thys,
+			      const AjPStr taglist, ajint mintags);
+void         ajReportSetTail (AjPReport thys, const AjPStr tail);
 void         ajReportSetTailC (AjPReport thys, const char* tail);
-void         ajReportSetType (AjPReport thys, AjPFeattable ftable, AjPSeq seq);
-void         ajReportWriteTail (AjPReport thys, AjPFeattable ftable,
-				AjPSeq seq);
-void         ajReportTrace (AjPReport thys);
+void         ajReportSetType (AjPReport thys,
+			      const AjPFeattable ftable, const AjPSeq seq);
+void         ajReportTrace (const AjPReport thys);
 AjBool       ajReportValid (AjPReport thys);
-void         ajReportWrite (AjPReport thys, AjPFeattable ftable, AjPSeq seq);
+void         ajReportWrite (AjPReport thys,
+			    AjPFeattable ftable,  AjPSeq seq);
 void         ajReportWriteClose (AjPReport thys);
-void         ajReportWriteHeader (AjPReport thys, AjPFeattable ftable,
-				  AjPSeq seq);
+void         ajReportWriteHeader (AjPReport thys,
+				  const AjPFeattable ftable, AjPSeq seq);
+void         ajReportWriteTail (AjPReport thys,
+				const AjPFeattable ftable, AjPSeq seq);
 
 #endif
 

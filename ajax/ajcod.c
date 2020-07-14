@@ -22,9 +22,6 @@
 ** Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
 #include <math.h>
 #include "ajax.h"
 #include <stdio.h>
@@ -38,9 +35,6 @@
 static double ajCodRandom(ajint NA, ajint NC, ajint NG, ajint NT, ajint len,
 			  char *p);
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
 
 #define AJCODSIZE 66
 #define AJCODSTART 64
@@ -48,15 +42,8 @@ static double ajCodRandom(ajint NA, ajint NC, ajint NG, ajint NT, ajint len,
 #define AJCODEND  65
 #define AJCODAMINOS 28
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
 
 
-
-/* ==================================================================== */
-/* ========================= constructors ============================= */
-/* ==================================================================== */
 
 /* @section Codon Constructors ************************************************
 **
@@ -67,6 +54,9 @@ static double ajCodRandom(ajint NA, ajint NC, ajint NG, ajint NT, ajint len,
 **
 ******************************************************************************/
 
+
+
+
 /* @func ajCodNew *************************************************************
 **
 ** Default constructor for empty AJAX codon objects.
@@ -75,7 +65,7 @@ static double ajCodRandom(ajint NA, ajint NC, ajint NG, ajint NT, ajint len,
 ** @@
 ******************************************************************************/
 
-AjPCod ajCodNew (void)
+AjPCod ajCodNew(void)
 {
     AjPCod thys;
 
@@ -93,6 +83,7 @@ AjPCod ajCodNew (void)
 
 
 
+
 /* @func ajCodDup *************************************************************
 **
 ** Duplicate a codon object
@@ -103,14 +94,14 @@ AjPCod ajCodNew (void)
 ** @@
 ******************************************************************************/
 
-AjPCod ajCodDup (AjPCod thys)
+AjPCod ajCodDup(AjPCod thys)
 {
     AjPCod dup;
-    ajint    i;
+    ajint  i;
 
     dup = ajCodNew();
 
-    (void) ajStrAssC(&dup->name,ajStrStr(thys->name));
+    ajStrAssC(&dup->name,ajStrStr(thys->name));
 
     for(i=0;i<AJCODSIZE;++i)
     {
@@ -128,6 +119,7 @@ AjPCod ajCodDup (AjPCod thys)
 
 
 
+
 /* @func ajCodDel *************************************************************
 **
 ** Default destructor for AJAX codon objects.
@@ -138,7 +130,7 @@ AjPCod ajCodDup (AjPCod thys)
 ** @@
 ******************************************************************************/
 
-void ajCodDel (AjPCod *thys)
+void ajCodDel(AjPCod *thys)
 {
     AJFREE((*thys)->fraction);
     AJFREE((*thys)->tcount);
@@ -151,7 +143,6 @@ void ajCodDel (AjPCod *thys)
 
     return;
 }
-
 
 
 
@@ -170,9 +161,9 @@ void ajCodDel (AjPCod *thys)
 void ajCodBacktranslate(AjPStr *b, AjPStr a, AjPCod thys)
 {
     char *p;
-    ajint  idx;
+    ajint idx;
 
-    p=ajStrStr(a);
+    p = ajStrStr(a);
     while(*p)
     {
 	if(*p=='-')
@@ -183,7 +174,7 @@ void ajCodBacktranslate(AjPStr *b, AjPStr a, AjPCod thys)
 
 	if(toupper((int)*p)==(int)'X')
 	{
-	    (void) ajStrAppC(b,"NNN");
+	    ajStrAppC(b,"NNN");
 	    ++p;
 	    continue;
 	}
@@ -193,14 +184,14 @@ void ajCodBacktranslate(AjPStr *b, AjPStr a, AjPCod thys)
 	if(toupper((int)*p)==(int)'Z')
 	  *p = 'E';
 
-	idx=thys->back[ajAZToInt(*p)];
+	idx = thys->back[ajAZToInt(*p)];
 	if(thys->aa[idx]==27)
 	{
-	    (void) ajStrAppC(b,"End");
+	    ajStrAppC(b,"End");
 	    ++p;
 	    continue;
 	}
-	(void) ajStrAppC(b,ajCodTriplet(idx));
+	ajStrAppC(b,ajCodTriplet(idx));
 	++p;
     }
 
@@ -232,6 +223,8 @@ ajint ajCodBase(ajint c)
 
     return 0;
 }
+
+
 
 
 /* @func ajCodCalcGribskov ****************************************************
@@ -266,9 +259,9 @@ void ajCodCalcGribskov(AjPCod *nrm, AjPStr s)
     len = ajStrLen(s);
 
     for(i=0;i<AJCODSTART;++i)
-	frct[i]=(*nrm)->fraction[i];
+	frct[i] = (*nrm)->fraction[i];
 
-    NA=NC=NG=NT=0;
+    NA = NC = NG = NT = 0;
     ajCodComp(&NA,&NC,&NG,&NT,ajStrStr(s));
 
     /* Get expected frequencies */
@@ -276,7 +269,6 @@ void ajCodCalcGribskov(AjPCod *nrm, AjPStr s)
     {
 	p = ajCodTriplet(i);
 	(*nrm)->tcount[i] = ajCodRandom(NA,NC,NG,NT,len,p);
-
     }
 
 
@@ -287,7 +279,7 @@ void ajCodCalcGribskov(AjPCod *nrm, AjPStr s)
 	aa = (*nrm)->aa[i];
 	for(j=0;j<AJCODSTART;++j)
 	    if((*nrm)->aa[j]==aa) x+=(*nrm)->tcount[j];
-	fam[i]=x;
+	fam[i] = x;
     }
 
 
@@ -305,6 +297,8 @@ void ajCodCalcGribskov(AjPCod *nrm, AjPStr s)
 }
 
 
+
+
 /* @func ajCodCalcNc **********************************************************
 **
 ** Calculate effective number of codons
@@ -318,8 +312,8 @@ void ajCodCalcGribskov(AjPCod *nrm, AjPStr s)
 
 double ajCodCalcNc(AjPCod* thys)
 {
-    ajint *df=NULL;
-    ajint *n=NULL;
+    ajint *df = NULL;
+    ajint *n  = NULL;
     ajint i;
     ajint j;
     ajint v;
@@ -327,19 +321,20 @@ double ajCodCalcNc(AjPCod* thys)
     ajint max;
     ajint ndx;
 
-    ajint    *nt=NULL;
-    double *Fbar=NULL;
-    double *F=NULL;
+    ajint    *nt = NULL;
+    double *Fbar = NULL;
+    double *F    = NULL;
     double sum;
-    double num=0.0;
+    double num = 0.0;
 
-    AJCNEW0 (df, AJCODAMINOS);
-    AJCNEW0 (n, AJCODAMINOS);
+    AJCNEW0(df, AJCODAMINOS);
+    AJCNEW0(n, AJCODAMINOS);
 
     for(i=0;i<AJCODSTART;++i)
     {
 	v = (*thys)->aa[i];
-	if(v==27) continue;
+	if(v==27)
+	    continue;
 
 	++df[v];
 	n[(*thys)->aa[i]] += (*thys)->num[i];
@@ -349,15 +344,15 @@ double ajCodCalcNc(AjPCod* thys)
     for(i=0,max=INT_MIN;i<AJCODAMINOS;++i)
 	max = (max > df[i]) ? max : df[i];
 
-    AJCNEW0 (Fbar, max);
-    AJCNEW0 (nt, max);
-    AJCNEW0 (F, AJCODAMINOS);
+    AJCNEW0(Fbar, max);
+    AJCNEW0(nt, max);
+    AJCNEW0(F, AJCODAMINOS);
 
     for(i=0;i<AJCODAMINOS-2;++i)
-      {
+    {
 	if(df[i])
 	    ++nt[df[i]-1];
-      }
+    }
 
     for(i=0;i<AJCODAMINOS-2;++i)
       for(j=0;j<AJCODSTART;++j)
@@ -374,7 +369,7 @@ double ajCodCalcNc(AjPCod* thys)
     {
 	if(n[i]-1 <1  || (num=((double)n[i]*F[i]-1.0))<0.05)
 	{
-	    F[i]=0.0;
+	    F[i] = 0.0;
 	    if(df[i])
 		--nt[df[i]-1];
 	    continue;
@@ -415,17 +410,19 @@ double ajCodCalcNc(AjPCod* thys)
     }
 
 
-    AJFREE (F);
-    AJFREE (nt);
-    AJFREE (Fbar);
-    AJFREE (n);
-    AJFREE (df);
+    AJFREE(F);
+    AJFREE(nt);
+    AJFREE(Fbar);
+    AJFREE(n);
+    AJFREE(df);
 
     if(sum>61.0)
 	return 61.0;
 
     return sum;
 }
+
+
 
 
 /* @func ajCodCalculateUsage **************************************************
@@ -450,22 +447,20 @@ void ajCodCalculateUsage(AjPCod *thys, ajint c)
     for(i=0;i<AJCODSTART;++i)
 	if(!c)
 	    (*thys)->tcount[i]=0.0;
-    else
-	(*thys)->tcount[i] = ((double)(*thys)->num[i] / (double)c) * 1000.0;
+	else
+	    (*thys)->tcount[i] = ((double)(*thys)->num[i] / (double)c) * 1000.0;
 
     /* Get number of codons per amino acid */
-    AJCNEW0 (aasum, AJCODAMINOS);
+    AJCNEW0(aasum, AJCODAMINOS);
     for(i=0;i<AJCODSTART;++i)
-    {
 	if((*thys)->aa[i]==27)
 	    aasum[27] += (*thys)->num[i];
 	else
 	    aasum[(*thys)->aa[i]] += (*thys)->num[i];
-    }
+
 
     /* Calculate fraction */
     for(i=0;i<AJCODSTART;++i)
-    {
 	if((*thys)->aa[i]==27)
 	{
 	    if(!aasum[27])
@@ -482,12 +477,13 @@ void ajCodCalculateUsage(AjPCod *thys, ajint c)
 		(*thys)->fraction[i] = (double)(*thys)->num[i] /
 		    (double)aasum[(*thys)->aa[i]];
 	}
-    }
 
     AJFREE(aasum);
 
     return;
 }
+
+
 
 
 /* @func ajCodClear ***********************************************************
@@ -503,17 +499,20 @@ void ajCodClear(AjPCod *thys)
 {
     ajint i;
 
-    (void) ajStrAssC(&((*thys)->name),"");
+    ajStrAssC(&((*thys)->name),"");
     for(i=0;i<AJCODSIZE;++i)
     {
 	(*thys)->fraction[i] = (*thys)->tcount[i] = 0.0;
-	(*thys)->num[i]=0;
+	(*thys)->num[i] = 0;
     }
+
     for(i=0;i<AJCODAMINOS;++i)
-	(*thys)->back[i]=0;
+	(*thys)->back[i] = 0;
 
     return;
 }
+
+
 
 
 /* @func ajCodCountTriplets ***************************************************
@@ -535,8 +534,8 @@ void ajCodCountTriplets(AjPCod *thys, AjPStr s, ajint *c)
     ajint  i;
     ajint  idx;
 
-    p=ajStrStr(s);
-    len=ajStrLen(s);
+    p = ajStrStr(s);
+    len = ajStrLen(s);
 
     for(i=0;i<len;i+=3,p+=3,++(*c))
 	if((idx=ajCodIndexC(p))!=-1)
@@ -544,6 +543,7 @@ void ajCodCountTriplets(AjPCod *thys, AjPStr s, ajint *c)
 
     return;
 }
+
 
 
 
@@ -563,6 +563,8 @@ ajint ajCodIndex(AjPStr s)
 }
 
 
+
+
 /* @func ajCodIndexC **********************************************************
 **
 ** Return a codon index given a three character codon
@@ -572,6 +574,7 @@ ajint ajCodIndex(AjPStr s)
 ** @return [ajint] codon index AAA=0 TTT=3f
 ** @@
 ******************************************************************************/
+
 ajint ajCodIndexC(char *codon)
 {
     char *p;
@@ -579,8 +582,8 @@ ajint ajCodIndexC(char *codon)
     ajint c;
 
 
-    p=codon;
-    sum=0;
+    p   = codon;
+    sum = 0;
 
     if(!(c=*(p++)))
 	return -1;
@@ -596,6 +599,8 @@ ajint ajCodIndexC(char *codon)
 }
 
 
+
+
 /* @func ajCodRead ************************************************************
 **
 ** Return a codon index given a three character codon
@@ -608,7 +613,7 @@ ajint ajCodIndexC(char *codon)
 ******************************************************************************/
 AjBool ajCodRead(AjPStr fn, AjPCod *thys)
 {
-    AjPFile inf=NULL;
+    AjPFile inf = NULL;
     AjPStr  fname;
     AjPStr  line;
     AjPStr  t;
@@ -619,13 +624,13 @@ AjBool ajCodRead(AjPStr fn, AjPCod *thys)
     double  tcount;
     double  fraction;
 
-    fname=ajStrNewC(ajStrStr(fn));
+    fname = ajStrNewC(ajStrStr(fn));
 
     ajFileDataNew(fname,&inf);
     if(!inf)
     {
-	(void) ajStrAssC(&fname,"CODONS/");
-	(void) ajStrAppC(&fname,ajStrStr(fn));
+	ajStrAssC(&fname,"CODONS/");
+	ajStrAppC(&fname,ajStrStr(fn));
 	ajFileDataNew(fname,&inf);
 	if(!inf)
 	{
@@ -635,27 +640,27 @@ AjBool ajCodRead(AjPStr fn, AjPCod *thys)
     }
     ajStrDel(&fname);
 
-    line=ajStrNew();
-    t=ajStrNew();
+    line = ajStrNew();
+    t    = ajStrNew();
 
     while(ajFileGets(inf,&line))
     {
 	p=ajStrStr(line);
 	if(*p=='#' || *p=='!' || *p=='\n')
 	    continue;
-	p=ajSysStrtok(p," \t\r\n");
-	(void) ajStrAssC(&t,p);
-	p=ajSysStrtok(NULL," \t\r\n");
-	c=ajAZToInt((ajint)*p);
+	p = ajSysStrtok(p," \t\r\n");
+	ajStrAssC(&t,p);
+	p = ajSysStrtok(NULL," \t\r\n");
+	c = ajAZToInt((ajint)*p);
 	if(c>25)
 	    c=27;
-	p=ajSysStrtok(NULL," \t\r\n");
+	p = ajSysStrtok(NULL," \t\r\n");
 	if(sscanf(p,"%lf",&fraction)!=1)
 	    ajFatal("No fraction");
-	p=ajSysStrtok(NULL," \t\r\n");
+	p = ajSysStrtok(NULL," \t\r\n");
 	if(sscanf(p,"%lf",&tcount)!=1)
 	    ajFatal("No tcount");
-	p=ajSysStrtok(NULL," \t\r\n");
+	p = ajSysStrtok(NULL," \t\r\n");
 	if(sscanf(p,"%d",&num)!=1)
 	    ajFatal("No num");
 
@@ -666,13 +671,13 @@ AjBool ajCodRead(AjPStr fn, AjPCod *thys)
 	    return ajFalse;
 	}
 
-	(*thys)->aa[idx]=c;
-	(*thys)->num[idx]=num;
-	(*thys)->tcount[idx]=tcount;
-	(*thys)->fraction[idx]=fraction;
+	(*thys)->aa[idx]       = c;
+	(*thys)->num[idx]      = num;
+	(*thys)->tcount[idx]   = tcount;
+	(*thys)->fraction[idx] =fraction;
     }
 
-    (void) ajStrAssC(&((*thys)->name),ajStrStr(fn));
+    ajStrAssC(&((*thys)->name),ajStrStr(fn));
 
     ajStrDel(&t);
     ajStrDel(&line);
@@ -682,16 +687,19 @@ AjBool ajCodRead(AjPStr fn, AjPCod *thys)
 }
 
 
+
+
 /* @func ajCodSetBacktranslate ************************************************
 **
 ** Fill the codon usage object "back" element with the most commonly
 ** used triplet index for the amino acids
 **
-** @param [rw] thys [AjPCod *] codon usage structure
+** @param [u] thys [AjPCod *] codon usage structure
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
+
 void ajCodSetBacktranslate(AjPCod *thys)
 {
     ajint i;
@@ -710,16 +718,17 @@ void ajCodSetBacktranslate(AjPCod *thys)
 	aa = (*thys)->aa[i];
 
 	if((*thys)->back[aa]<0)
-	    (*thys)->back[aa]=i;
+	    (*thys)->back[aa] = i;
 
-	f=(*thys)->fraction[i];
-	f2=(*thys)->fraction[(*thys)->back[aa]];
+	f = (*thys)->fraction[i];
+	f2 = (*thys)->fraction[(*thys)->back[aa]];
 	if(f>f2)
-	    (*thys)->back[aa]=i;
+	    (*thys)->back[aa] = i;
     }
 
     return;
 }
+
 
 
 
@@ -732,10 +741,11 @@ void ajCodSetBacktranslate(AjPCod *thys)
 ** @return [char*] Triplet
 ** @@
 ******************************************************************************/
+
 char* ajCodTriplet(ajint idx)
 {
-    static char ret[4]="AAA";
-    char *conv="ACGT";
+    static char ret[4] = "AAA";
+    char *conv = "ACGT";
 
     char *p;
 
@@ -747,6 +757,8 @@ char* ajCodTriplet(ajint idx)
 
     return ret;
 }
+
+
 
 
 /* @func ajCodWrite ***********************************************************
@@ -800,21 +812,23 @@ void ajCodWrite(AjPFile outf, AjPCod thys)
 void ajCodComp(ajint *NA, ajint *NC, ajint *NG, ajint *NT, char *str)
 {
     char *p;
-    ajint  c;
+    ajint c;
 
-    p=str;
+    p = str;
 
-    while((c=*p))
+    while((c = *p))
     {
 	if(c=='A') ++(*NA);
-	else if (c=='C') ++(*NC);
-	else if (c=='G') ++(*NG);
-	else if (c=='T') ++(*NT);
+	else if(c=='C') ++(*NC);
+	else if(c=='G') ++(*NG);
+	else if(c=='T') ++(*NT);
 	++p;
     }
 
     return;
 }
+
+
 
 
 /* @funcstatic ajCodRandom ****************************************************
@@ -831,6 +845,7 @@ void ajCodComp(ajint *NA, ajint *NC, ajint *NG, ajint *NT, char *str)
 ** @return [double] triplet frequency
 ** @@
 ******************************************************************************/
+
 static double ajCodRandom(ajint NA, ajint NC, ajint NG, ajint NT,
 			  ajint len, char *p)
 {
@@ -840,21 +855,27 @@ static double ajCodRandom(ajint NA, ajint NC, ajint NG, ajint NT,
     ajint c;
 
 
-    prod=1;
-    tot=1.0;
+    prod = 1;
+    tot  = 1.0;
 
     for(i=0;i<3;++i)
     {
-	c=p[i];
-	if(c=='A') prod=(double)NA;
-	if(c=='C') prod=(double)NC;
-	if(c=='G') prod=(double)NG;
-	if(c=='T') prod=(double)NT;
+	c = p[i];
+	if(c=='A')
+	    prod = (double)NA;
+	if(c=='C')
+	    prod = (double)NC;
+	if(c=='G')
+	    prod = (double)NG;
+	if(c=='T')
+	    prod = (double)NT;
 	tot *= prod/(double)len;
     }
 
     return tot;
 }
+
+
 
 
 /* @func ajCodCalcCai *********************************************************
@@ -870,7 +891,7 @@ static double ajCodRandom(ajint NA, ajint NC, ajint NG, ajint NT,
 
 double ajCodCalcCai(AjPCod *thys)
 {
-    AjPCod cod = *thys;
+    AjPCod cod;
     double cai;
     double max;
     double sum;
@@ -879,6 +900,8 @@ double ajCodCalcCai(AjPCod *thys)
     double total;
     ajint  i;
     ajint  k;
+
+    cod = *thys;
 
     total = (double)0.;
     for(i=0;i<AJCODAMINOS-2;++i)
@@ -919,6 +942,7 @@ double ajCodCalcCai(AjPCod *thys)
 
 
 
+
 /* @func ajCodCaiW ************************************************************
 **
 ** Calculate codon adaptive index W values
@@ -944,7 +968,7 @@ double* ajCodCaiW(AjPCod thys)
     for(i=0;i<AJCODSTART;++i)
     {
 	thisaa = thys->aa[i];
-	aamax =(double)INT_MIN;
+	aamax = (double)INT_MIN;
 
 	for(j=0;j<AJCODSTART;++j)
 	    if(thys->aa[j]==thisaa)
@@ -955,6 +979,8 @@ double* ajCodCaiW(AjPCod thys)
 
     return wk;
 }
+
+
 
 
 /* @func ajCodCai *************************************************************
@@ -980,8 +1006,6 @@ double ajCodCai(AjPCod thys, AjPStr str)
     double total;
 
     wk = ajCodCaiW(thys);
-
-
 
     len = ajStrLen(str);
     p   = ajStrStr(str);
