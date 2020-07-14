@@ -264,14 +264,14 @@ Output alignment [hba_human.water]: <b></b>
 <tr>
 <td>-gapopen</td>
 <td>The gap open penalty is the score taken away when a gap is created. The best value depends on the choice of comparison matrix. The default value assumes you are using the EBLOSUM62 matrix for protein sequences, and the EDNAFULL matrix for nucleotide sequences.</td>
-<td>Number from 1.000 to 100.000</td>
+<td>Number from 0.000 to 100.000</td>
 <td>10.0 for any sequence</td>
 </tr>
 
 <tr>
 <td>-gapextend</td>
 <td>The gap extension penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring.</td>
-<td>Number from 0.100 to 10.000</td>
+<td>Number from 0.000 to 10.000</td>
 <td>0.5 for any sequence</td>
 </tr>
 
@@ -595,7 +595,7 @@ for further information on alignment formats.
 <pre>
 ########################################
 # Program: water
-# Rundate: Thu Jul 15 2004 12:00:00
+# Rundate: Fri Jul 15 2005 12:00:00
 # Align_format: srspair
 # Report_file: hba_human.water
 ########################################
@@ -785,8 +785,8 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="matcher.html">matcher</a></td><td>Finds the best local alignments between two sequences</td></tr>
-<tr><td><a href="seqmatchall.html">seqmatchall</a></td><td>Does an all-against-all comparison of a set of sequences</td></tr>
-<tr><td><a href="supermatcher.html">supermatcher</a></td><td>Finds a match of a large sequence against one or more sequences</td></tr>
+<tr><td><a href="seqmatchall.html">seqmatchall</a></td><td>All-against-all comparison of a set of sequences</td></tr>
+<tr><td><a href="supermatcher.html">supermatcher</a></td><td>Match large sequences against one or more other sequences</td></tr>
 <tr><td><a href="wordmatch.html">wordmatch</a></td><td>Finds all exact matches of a given size between 2 sequences</td></tr>
 </table>
 
@@ -816,10 +816,9 @@ between two sequences
 </H2>
 
 
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
 

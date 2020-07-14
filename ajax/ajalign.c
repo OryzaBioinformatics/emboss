@@ -104,6 +104,7 @@ typedef struct AlignSData
 ** @alias AlignOFormat
 **
 ** @attr Name [char*] format name
+** @attr Desc [char*] Format description
 ** @attr Nuc [AjBool] ajTrue if format can work with nucleotide sequences
 ** @attr Prot [AjBool] ajTrue if format can work with protein sequences
 ** @attr Minseq [ajint] Minimum number of sequences, 2 for pairwise
@@ -115,6 +116,7 @@ typedef struct AlignSData
 typedef struct AlignSFormat
 {
     char *Name;
+    char *Desc;
     AjBool Nuc;
     AjBool Prot;
     ajint Minseq;
@@ -179,28 +181,46 @@ static void       alignWriteSimple(AjPAlign thys);
 ******************************************************************************/
 
 static AlignOFormat alignFormat[] = {
-  /* name       dna      protein min max function */
+  /* name       description */
+  /*   dna      protein min max function */
   /* standard sequence formats */
-  {"unknown",   AJFALSE, AJFALSE, 0, 0, alignWriteSimple},
-  {"fasta",     AJTRUE,  AJTRUE,  0, 0, alignWriteFasta},
-  {"msf",       AJTRUE,  AJTRUE,  0, 0, alignWriteMsf},
+  {"unknown",   "Unknown format",
+       AJFALSE, AJFALSE, 0, 0, alignWriteSimple},
+  {"fasta",     "Fasta format sequence",
+       AJTRUE,  AJTRUE,  0, 0, alignWriteFasta},
+  {"msf",       "MSF format sequence",
+       AJTRUE,  AJTRUE,  0, 0, alignWriteMsf},
   /* trace  for debug */
-  {"trace",     AJTRUE,  AJTRUE,  0, 0, alignWriteTrace},
+  {"trace",     "Debugging trace of full internal data content",
+       AJTRUE,  AJTRUE,  0, 0, alignWriteTrace},
   /* alignment formats */
-  {"markx0",    AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX0},
-  {"markx1",    AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX1},
-  {"markx2",    AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX2},
-  {"markx3",    AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX3},
-  {"markx10",   AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX10},
-  {"match",     AJTRUE,  AJTRUE,  2, 2, alignWriteMatch},
-  {"multiple",  AJTRUE,  AJTRUE,  0, 0, alignWriteSimple},
-  {"pair",      AJTRUE,  AJTRUE,  2, 2, alignWriteSimple},
-  {"simple",    AJTRUE,  AJTRUE,  0, 0, alignWriteSimple},
-  {"score",     AJTRUE,  AJTRUE,  0, 0, alignWriteScore},
-  {"srs",       AJTRUE,  AJTRUE,  0, 0, alignWriteSrs},
-  {"srspair",   AJTRUE,  AJTRUE,  2, 2, alignWriteSrsPair},
-  {"tcoffee",   AJTRUE,  AJTRUE,  0, 0, alignWriteTCoffee},
-  {NULL, 0, 0, 0, 0, NULL}
+  {"markx0",    "Pearson MARKX0 format",
+       AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX0},
+  {"markx1",    "Pearson MARKX1 format",
+       AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX1},
+  {"markx2",    "Pearson MARKX2 format",
+       AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX2},
+  {"markx3",    "Pearson MARKX3 format",
+       AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX3},
+  {"markx10",   "Pearson MARKX10 format",
+       AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX10},
+  {"match",     "Start and end of matches between pairs of sequences",
+       AJTRUE,  AJTRUE,  2, 2, alignWriteMatch},
+  {"multiple",  "Simple multple alignment",
+       AJTRUE,  AJTRUE,  0, 0, alignWriteSimple},
+  {"pair",      "Simple pairwise alignment",
+       AJTRUE,  AJTRUE,  2, 2, alignWriteSimple},
+  {"simple",    "Simple multple alignment",
+       AJTRUE,  AJTRUE,  0, 0, alignWriteSimple},
+  {"score",     "Score values for pairs of sequences",
+       AJTRUE,  AJTRUE,  2, 2, alignWriteScore},
+  {"srs",       "Simple multiple sequence format for SRS",
+       AJTRUE,  AJTRUE,  0, 0, alignWriteSrs},
+  {"srspair",   "Simple pairwise sequence format for SRS",
+       AJTRUE,  AJTRUE,  2, 2, alignWriteSrsPair},
+  {"tcoffee",   "TCOFFEE program format",
+       AJTRUE,  AJTRUE,  0, 0, alignWriteTCoffee},
+  {NULL, NULL, 0, 0, 0, 0, NULL}
 };
 
 
@@ -4320,16 +4340,23 @@ void ajAlignPrintFormat(AjPFile outf, AjBool full)
 
     ajFmtPrintF(outf, "\n");
     ajFmtPrintF(outf, "# alignment output formats\n");
-    ajFmtPrintF(outf, "# Name         Minseq Maxseq Nuc Pro\n");
+    ajFmtPrintF(outf, "# Name    Format name (or alias)\n");
+    ajFmtPrintF(outf, "# Desc    Format description\n");
+    ajFmtPrintF(outf, "# Minseq  Minimum number of sequences\n");
+    ajFmtPrintF(outf, "# Maxseq  Minimum number of sequences\n");
+    ajFmtPrintF(outf, "# Nuc     Valid for nucleotide sequences\n");
+    ajFmtPrintF(outf, "# Pro     Valid for protein sequences\n");
+    ajFmtPrintF(outf, "# Name         Minseq Maxseq Nuc Pro Description\n");
     ajFmtPrintF(outf, "\n");
     ajFmtPrintF(outf, "AFormat {\n");
     for(i=0; alignFormat[i].Name; i++)
-	ajFmtPrintF(outf, "  %-12s %6d %6d %3B %3B\n",
+	ajFmtPrintF(outf, "  %-12s %6d %6d %3B %3B '%s'\n",
 		    alignFormat[i].Name,
 		    alignFormat[i].Minseq,
 		    alignFormat[i].Maxseq,
 		    alignFormat[i].Nuc,
-		    alignFormat[i].Prot);
+		    alignFormat[i].Prot,
+		    alignFormat[i].Desc);
 
     ajFmtPrintF(outf, "}\n\n");
 
