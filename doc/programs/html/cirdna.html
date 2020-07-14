@@ -80,18 +80,18 @@ the desired parameters.
 
 % <b>cirdna -graph cps </b>
 Draws circular maps of DNA constructs
-input file containing mapping data [inputfile]: <b>../../data/data.cirp</b>
-do you want a ruler [Y]: <b></b>
-      1 : Open
-      2 : Filled
-      3 : Outline
-type of blocks [Filled]: <b></b>
+Input file containing mapping data [inputfile]: <b>../../data/data.cirp</b>
+Draw a ruler [Y]: <b></b>
+      Open : Open blocks
+    Filled : Filled blocks
+   Outline : Black border
+Type of blocks [Filled]: <b></b>
       1 : In
       2 : Out
-ticks inside or outside the circle (enter In or Out) [Out]: <b></b>
+Ticks inside or outside the circle [Out]: <b></b>
       1 : In
       2 : Out
-text inside or outside the blocks (enter In or Out) [In]: <b></b>
+Text inside or outside the blocks [In]: <b></b>
 
 Created cirdna.ps
 
@@ -132,47 +132,45 @@ IT IS DONE FOR YOU.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
+  [-infile]            infile     Input file containing mapping data
+   -[no]ruler          boolean    Draw a ruler
+   -blocktype          menu       Type of blocks
+   -posticks           selection  Ticks inside or outside the circle
+   -posblocks          selection  Text inside or outside the blocks
    -graphout           graph      Graph type
-  [-infile]            infile     input file containing mapping data
-   -[no]ruler          boolean    do you want a ruler
-   -blocktype          selection  type of blocks: Open, Filled, or Outline.
-                                  Option 'Outline' draws filled blocks
-                                  surrounded by a black border
-   -posticks           selection  ticks inside or outside the circle (enter In
-                                  or Out)
-   -posblocks          selection  text inside or outside the blocks (enter In
-                                  or Out)
 
    Additional (Optional) qualifiers:
-   -originangle        float      position of the molecule's origin on the
-                                  circle (enter a number in the range 0 - 360)
-   -[no]intersymbol    boolean    do you want horizontal junctions between
-                                  blocks
-   -intercolour        integer    colour of junctions between blocks (enter a
+   -maxgroups          integer    Maximum number of groups
+   -maxlabels          integer    Maximum number of labels
+   -originangle        float      Position in degrees of the molecule's origin
+                                  on the circle
+   -[no]intersymbol    boolean    Horizontal junctions between blocks
+   -intercolour        integer    Colour of junctions between blocks (enter a
                                   colour number)
-   -interticks         boolean    do you want horizontal junctions between
-                                  ticks
-   -gapsize            integer    interval between ticks in the ruler (enter
-                                  an integer)
-   -ticklines          boolean    do you want vertical lines at the ruler's
-                                  ticks
-   -textheight         float      height of text. Enter a number <1 or >1 to
-                                  decrease or increase the size, respectively
-   -textlength         float      length of text. Enter a number <1 or >1 to
-                                  decrease or increase the size, respectively
-   -tickheight         float      height of ticks. Enter a number <1 or >1 to
-                                  decrease or increase the size, respectively
-   -blockheight        float      height of blocks. Enter a number <1 or >1 to
-                                  decrease or increase the size, respectively
-   -rangeheight        float      height of range ends. Enter a number <1 or
-                                  >1 to decrease or increase the size,
+   -interticks         boolean    Horizontal junctions between ticks
+   -gapsize            integer    Interval between ticks in the ruler
+   -ticklines          boolean    Vertical lines at the ruler's ticks
+   -textheight         float      Height of text. Enter a number <1.0 or >1.0
+                                  to decrease or increase the size,
                                   respectively
-   -gapgroup           float      space between groups. Enter a number <1 or
-                                  >1 to decrease or increase the size,
+   -textlength         float      Length of text. Enter a number <1.0 or >1.0
+                                  to decrease or increase the size,
                                   respectively
-   -postext            float      space between text and ticks, blocks, and
-                                  ranges. Enter a number <1 or >1 to decrease
-                                  or increase the size, respectively
+   -tickheight         float      Height of ticks. Enter a number <1.0 or >1.0
+                                  to decrease or increase the size,
+                                  respectively
+   -blockheight        float      Height of blocks. Enter a number <1.0 or
+                                  >1.0 to decrease or increase the size,
+                                  respectively
+   -rangeheight        float      Height of range ends. Enter a number <1.0 or
+                                  >1.0 to decrease or increase the size,
+                                  respectively
+   -gapgroup           float      Space between groups. Enter a number <1.0 or
+                                  >1.0 to decrease or increase the size,
+                                  respectively
+   -postext            float      Space between text and ticks, blocks, and
+                                  ranges. Enter a number <1.0 or >1.0 to
+                                  decrease or increase the size, respectively
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -214,45 +212,45 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-graphout</td>
-<td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
-<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
-</tr>
-
-<tr>
 <td>[-infile]<br>(Parameter 1)</td>
-<td>input file containing mapping data</td>
+<td>Input file containing mapping data</td>
 <td>Input file</td>
 <td>inputfile</td>
 </tr>
 
 <tr>
 <td>-[no]ruler</td>
-<td>do you want a ruler</td>
+<td>Draw a ruler</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-blocktype</td>
-<td>type of blocks: Open, Filled, or Outline. Option 'Outline' draws filled blocks surrounded by a black border</td>
-<td>Choose from selection list of values</td>
+<td>Type of blocks</td>
+<td><table><tr><td>Open</td> <td><i>(Open blocks)</i></td></tr><tr><td>Filled</td> <td><i>(Filled blocks)</i></td></tr><tr><td>Outline</td> <td><i>(Black border)</i></td></tr></table></td>
 <td>Filled</td>
 </tr>
 
 <tr>
 <td>-posticks</td>
-<td>ticks inside or outside the circle (enter In or Out)</td>
+<td>Ticks inside or outside the circle</td>
 <td>Choose from selection list of values</td>
 <td>Out</td>
 </tr>
 
 <tr>
 <td>-posblocks</td>
-<td>text inside or outside the blocks (enter In or Out)</td>
+<td>Text inside or outside the blocks</td>
 <td>Choose from selection list of values</td>
 <td>In</td>
+</tr>
+
+<tr>
+<td>-graphout</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -262,94 +260,108 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-maxgroups</td>
+<td>Maximum number of groups</td>
+<td>Integer 1 or more</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>-maxlabels</td>
+<td>Maximum number of labels</td>
+<td>Integer 1 or more</td>
+<td>10000</td>
+</tr>
+
+<tr>
 <td>-originangle</td>
-<td>position of the molecule's origin on the circle (enter a number in the range 0 - 360)</td>
+<td>Position in degrees of the molecule's origin on the circle</td>
 <td>Number from 0.000 to 360.000</td>
 <td>90</td>
 </tr>
 
 <tr>
 <td>-[no]intersymbol</td>
-<td>do you want horizontal junctions between blocks</td>
+<td>Horizontal junctions between blocks</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-intercolour</td>
-<td>colour of junctions between blocks (enter a colour number)</td>
+<td>Colour of junctions between blocks (enter a colour number)</td>
 <td>Integer from 0 to 15</td>
 <td>1</td>
 </tr>
 
 <tr>
 <td>-interticks</td>
-<td>do you want horizontal junctions between ticks</td>
+<td>Horizontal junctions between ticks</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-gapsize</td>
-<td>interval between ticks in the ruler (enter an integer)</td>
+<td>Interval between ticks in the ruler</td>
 <td>Integer 0 or more</td>
 <td>500</td>
 </tr>
 
 <tr>
 <td>-ticklines</td>
-<td>do you want vertical lines at the ruler's ticks</td>
+<td>Vertical lines at the ruler's ticks</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-textheight</td>
-<td>height of text. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
-<td>Any numeric value</td>
-<td>1</td>
+<td>Height of text. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
 </tr>
 
 <tr>
 <td>-textlength</td>
-<td>length of text. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
-<td>Any numeric value</td>
-<td>1</td>
+<td>Length of text. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
 </tr>
 
 <tr>
 <td>-tickheight</td>
-<td>height of ticks. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
-<td>Any numeric value</td>
-<td>1</td>
+<td>Height of ticks. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
 </tr>
 
 <tr>
 <td>-blockheight</td>
-<td>height of blocks. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
-<td>Any numeric value</td>
-<td>1</td>
+<td>Height of blocks. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
 </tr>
 
 <tr>
 <td>-rangeheight</td>
-<td>height of range ends. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
-<td>Any numeric value</td>
-<td>1</td>
+<td>Height of range ends. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
 </tr>
 
 <tr>
 <td>-gapgroup</td>
-<td>space between groups. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
-<td>Any numeric value</td>
-<td>1</td>
+<td>Space between groups. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
 </tr>
 
 <tr>
 <td>-postext</td>
-<td>space between text and ticks, blocks, and ranges. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
-<td>Any numeric value</td>
-<td>1</td>
+<td>Space between text and ticks, blocks, and ranges. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1.0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

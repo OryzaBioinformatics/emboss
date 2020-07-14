@@ -3,38 +3,64 @@ application: lindna [
   groups: "Display"
 ]
 
-graph: graphout  [
-  standard: "Y"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
 infile: infile  [
   parameter: "Y"
   default: "inputfile"
-  information: "input file containing mapping data"
+  information: "Input file containing mapping data"
   knowntype: "lindna mapping commands"
+]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+integer: maxgroups  [
+  additional: "Y"
+  default: "20"
+  minimum: "1"
+  information: "Maximum number of groups"
+]
+
+integer: maxlabels  [
+  additional: "Y"
+  default: "10000"
+  minimum: "1"
+  information: "Maximum number of labels"
+]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
 boolean: ruler  [
   standard: "Y"
   default: "Y"
-  information: "do you want a ruler"
+  information: "Draw a ruler"
 ]
 
-selection: blocktype  [
+list: blocktype  [
   standard: "Y"
   default: "Filled"
-  values: "Open;Filled;Outline"
-  information: "type of blocks (enter Open, Filled, or
-                Outline)"
-  help: "type of blocks: Open, Filled, or Outline. Option 'Outline'
-         draws filled blocks surrounded by a black border"
+  values: "Open:Open blocks;Filled:Filled blocks;Outline:Black border"
+  information: "Type of blocks"
 ]
 
 selection: intersymbol  [
   additional: "Y"
   default: "Straight"
   values: "Straight;Up;Down;No"
-  information: "type of junctions between blocks"
+  information: "Type of junctions between blocks"
 ]
 
 integer: intercolour  [
@@ -42,101 +68,106 @@ integer: intercolour  [
   default: "1"
   minimum: "0"
   maximum: "15"
-  information: "colour of junctions between blocks (enter a
+  information: "Colour of junctions between blocks (enter a
                 colour number)"
 ]
 
 boolean: interticks  [
   additional: "Y"
   default: "N"
-  information: "do you want horizontal junctions between ticks"
+  information: "Horizontal junctions between ticks"
 ]
 
 integer: gapsize  [
   additional: "Y"
   default: "500"
   minimum: "0"
-  information: "interval between ticks in the ruler (enter an
-                integer)"
+  information: "Interval between ticks in the ruler"
 ]
 
 boolean: ticklines  [
   additional: "Y"
   default: "N"
-  information: "do you want vertical lines at the ruler's
+  information: "Vertical lines at the ruler's
                 ticks"
 ]
 
 float: textheight  [
   additional: "Y"
-  default: "1"
-  information: "height of text (enter a number to multiply the
-                default height)"
-  help: "height of text. Enter a number <1 or >1 to decrease or
+  default: "1.0"
+  minimum: "0.0"
+  information: "Height of text multiplier"
+  help: "Height of text. Enter a number <1.0 or >1.0 to decrease or
          increase the size, respectively"
 ]
 
 float: textlength  [
   additional: "Y"
-  default: "1"
-  information: "length of text (enter a number to multiply the
-                default length)"
-  help: "length of text. Enter a number <1 or >1 to decrease or
+  default: "1.0"
+  minimum: "0.0"
+  information: "Length of text multiplier"
+  help: "Length of text. Enter a number <1.0 or >1.0 to decrease or
          increase the size, respectively"
 ]
 
 float: margin  [
   additional: "Y"
-  default: "1"
-  minimum: "0"
-  information: "width of left margin (enter a number to
-                multiply the default width)"
-  help: "width of left margin. This is the region left to the groups
-         where the names of the groups are displayed. Enter a number <1 or >1
-         to decrease or increase the size, respectively"
+  default: "1.0"
+  minimum: "0.0"
+  information: "Width of left margin multiplier"
+  help: "Width of left margin. This is the region left to the groups
+         where the names of the groups are displayed. Enter a number
+         <1.0 or >1.0 to decrease or increase the size, respectively"
 ]
 
 float: tickheight  [
   additional: "Y"
-  default: "1"
-  information: "height of ticks (enter a number to multiply the
-                default height)"
-  help: "height of ticks. Enter a number <1 or >1 to decrease or
+  default: "1.0"
+  minimum: "0.0"
+  information: "Height of ticks multiplier"
+  help: "Height of ticks. Enter a number <1.0 or >1.0 to decrease or
          increase the size, respectively"
 ]
 
 float: blockheight  [
   additional: "Y"
   default: "1"
-  information: "height of blocks (enter a number to multiply
-                the default height)"
-  help: "height of blocks. Enter a number <1 or >1 to decrease or
+  minimum: "0.0"
+  information: "Height of blocks multilpier"
+  help: "Height of blocks. Enter a number <1.0 or >1.0 to decrease or
          increase the size, respectively"
 ]
 
 float: rangeheight  [
   additional: "Y"
-  default: "1"
-  information: "height of range ends (enter a number to
-                multiply the default height)"
-  help: "height of range ends. Enter a number <1 or >1 to decrease or
+  default: "1.0"
+  minimum: "0.0"
+  information: "Height of range ends multiplier"
+  help: "Height of range ends. Enter a number <1.0 or >1.0 to decrease or
          increase the size, respectively"
 ]
 
 float: gapgroup  [
   additional: "Y"
-  default: "1"
-  information: "space between groups (enter a number to
-                multiply the default space)"
-  help: "space between groups. Enter a number <1 or >1 to decrease or
+  default: "1.0"
+  minimum: "0.0"
+  information: "Space between groups mutliplier"
+  help: "Space between groups. Enter a number <1.0 or >1.0 to decrease or
          increase the size, respectively"
 ]
 
 float: postext  [
   additional: "Y"
-  default: "1"
-  information: "space between text and ticks, blocks, and
-                ranges (enter a number to multiply the default space)"
-  help: "space between text and ticks, blocks, and ranges. Enter a
-         number <1 or >1 to decrease or increase the size, respectively"
+  default: "1.0"
+  minimum: "0.0"
+  information: "Space between text and ticks, blocks, and
+                ranges multiplier"
+  help: "Space between text and ticks, blocks, and ranges. Enter a
+         number <1.0 or >1.0 to decrease or increase the size, respectively"
 ]
+
+  graph: graphout  [
+    standard: "Y"
+  ]
+
+endsection: output
