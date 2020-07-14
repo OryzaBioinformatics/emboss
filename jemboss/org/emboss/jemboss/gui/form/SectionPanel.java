@@ -846,12 +846,19 @@ public class SectionPanel
       int field = dep[i].getDependentField();
       int param = dep[i].getDependentParam();
 
-      AcdVarResolve avr = new AcdVarResolve(exp,textVal,varName,parseAcd,
+      try
+      {
+        AcdVarResolve avr = new AcdVarResolve(exp,textVal,varName,parseAcd,
                             numofFields,textf,textInt,textFloat,fieldOption,
                             checkBox);
+        exp = avr.getResult();
+      }
+      catch(NullPointerException npe)
+      {
+        continue;
+      }
 
 //    System.out.println(exp + "EXP ==> " + avr.getResult() + " " + textVal);
-      exp = avr.getResult();
 
       AcdFunResolve afr = new AcdFunResolve(exp);
       String result = afr.getResult();
@@ -965,17 +972,20 @@ public class SectionPanel
       if(type.startsWith("def") && (!att.startsWith("bool"))) 
       {
         String l = getMinMaxDefault(null,null,result,field);
-        ((JLabel)lab[field].getComponent(1)).setText(" " + l);
+        if(lab[field] != null)
+          ((JLabel)lab[field].getComponent(1)).setText(" " + l);
       }
       else if(type.startsWith("min"))
       {
         String l = getMinMaxDefault(result,null,null,field);
-        ((JLabel)lab[field].getComponent(1)).setText(" " + l);
+        if(lab[field] != null)
+          ((JLabel)lab[field].getComponent(1)).setText(" " + l);
       }
       else if(type.startsWith("max"))
       {
-        String l = getMinMaxDefault(null,result,null,field);
-        ((JLabel)lab[field].getComponent(1)).setText(" " + l);
+        String l = getMinMaxDefault(null,result,null,field);  
+        if(lab[field] != null)
+          ((JLabel)lab[field].getComponent(1)).setText(" " + l);
       }
 
     }
@@ -998,14 +1008,17 @@ public class SectionPanel
   private void setShadingAndVisibility(Component c, 
                         boolean useThis, int field)
   {
-    if(isShadedGUI)
+    if( c != null)
     {
-      c.setEnabled(useThis);
-    }
-    else
-    {
-      c.setVisible(useThis);
-      lab[field].setVisible(useThis);
+      if(isShadedGUI)
+      {
+        c.setEnabled(useThis);
+      }
+      else
+      {
+        c.setVisible(useThis);
+        lab[field].setVisible(useThis);
+      }
     }
   }
 
