@@ -32,25 +32,26 @@ Usage
 Remove restriction sites but maintain the same translation
 Input sequence: tembl:hsfau
 Comma separated enzyme list [all]: EcoRII
-Output file [hsfau.recoder]: 
+Output report [hsfau.recoder]: 
    
    Go to the input files for this example
    Go to the output files for this example
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-seq]               sequence   Nucleic acid sequence
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Sequence USA
    -enzymes            string     Comma separated enzyme list
-  [-outf]              outfile    Results file name
+  [-outfile]           report     Output report file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -sshow              boolean    Display untranslated sequence
    -tshow              boolean    Display translated sequence
 
    Associated qualifiers:
-  "-seq" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -60,24 +61,28 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outf" related qualifiers
-   -odirectory2         string     Output directory
+
+   "-outfile" associated qualifiers
+   -rformat2            string     Report format
+   -rname2              string     Base file name
+   -rextension2         string     File name extension
+   -rdirectory2         string     Output directory
+   -raccshow2           boolean    Show accession number in the report
+   -rdesshow2           boolean    Show description in the report
+   -rscoreshow2         boolean    Show the score in the report
+   -rusashow2           boolean    Show the full USA in the report
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -88,15 +93,15 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-seq]
-   (Parameter 1) Nucleic acid sequence Readable sequence Required
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
    -enzymes Comma separated enzyme list Any string is accepted all
-   [-outf]
-   (Parameter 2) Results file name Output file <sequence>.recoder
-   Optional qualifiers Allowed values Default
+   [-outfile]
+   (Parameter 2) Output report file name Report output file
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -sshow Display untranslated sequence Boolean value Yes/No No
    -tshow Display translated sequence Boolean value Yes/No No
    
@@ -204,63 +209,69 @@ Output file format
   
   File: hsfau.recoder
   
-Results for HSFAU:
+########################################
+# Program: recoder
+# Rundate: Thu Nov 27 15:23:38 2003
+# Report_format: table
+# Report_file: hsfau.recoder
+########################################
 
-KEY:
-        Enzyme          Enzyme name
-        RS-Pattern      Restriction enzyme recognition site pattern
-        Match-Posn      Position of the first base of RS pattern in sequence
-        AA              Amino acid. Original sequence(.)After mutation
-        Base-Posn       Position of base to be mutated in sequence
-        Mutation        The base mutation to perform
+#=======================================
+#
+# Sequence: HSFAU     from: 1   to: 518
+# HitCount: 34
+#
+# KEY:
+# Dir: Direction (Rev for reverse complement)
+# EnzymeName: Enzyme name
+# RS-Pattern: Restriction enzyme recognition site pattern
+# Base-Posn: Position of base to be mutated
+# AAs: Amino acid. Original sequence(.)After mutation
+# Mutation: The base mutation to perform
+#
+# Creating silent mutations
+#
+#=======================================
 
-Creating silent mutations
+  Start     End Dir    EnzymeName RS-Pattern Base-Posn    AAs Mutation
+     77      81 .      EcoRII     CCWGG             78    P.P     C->G
+     77      81 .      EcoRII     CCWGG             78    P.P     C->A
+     77      81 .      EcoRII     CCWGG             78    P.P     C->T
+     77      81 .      EcoRII     CCWGG             79    R.R     A->C
+     77      81 .      EcoRII     CCWGG             81    R.R     G->A
+    107     111 .      EcoRII     CCWGG            108    A.A     C->G
+    107     111 .      EcoRII     CCWGG            108    A.A     C->A
+    107     111 .      EcoRII     CCWGG            108    A.A     C->T
+    107     111 .      EcoRII     CCWGG            109    R.R     A->C
+    107     111 .      EcoRII     CCWGG            111    R.R     G->A
+    182     186 .      EcoRII     CCWGG            183    S.S     C->T
+    182     186 .      EcoRII     CCWGG            183    S.S     C->A
+    182     186 .      EcoRII     CCWGG            183    S.S     C->G
+    197     201 .      EcoRII     CCWGG            198    P.P     C->G
+    197     201 .      EcoRII     CCWGG            198    P.P     C->A
+    197     201 .      EcoRII     CCWGG            198    P.P     C->T
+    248     252 .      EcoRII     CCWGG            249    P.P     C->G
+    248     252 .      EcoRII     CCWGG            249    P.P     C->A
+    248     252 .      EcoRII     CCWGG            249    P.P     C->T
+    293     297 .      EcoRII     CCWGG            294    P.P     C->G
+    293     297 .      EcoRII     CCWGG            294    P.P     C->A
+    293     297 .      EcoRII     CCWGG            294    P.P     C->T
+     81      77 Rev    EcoRII     CCWGG             79    P.P     T->G
+     81      77 Rev    EcoRII     CCWGG             79    P.P     T->C
+    111     107 Rev    EcoRII     CCWGG            109    P.P     T->G
+    111     107 Rev    EcoRII     CCWGG            109    P.P     T->C
+    186     182 Rev    EcoRII     CCWGG            184    P.P     A->G
+    186     182 Rev    EcoRII     CCWGG            184    P.P     A->C
+    201     197 Rev    EcoRII     CCWGG            199    P.P     A->G
+    201     197 Rev    EcoRII     CCWGG            199    P.P     A->C
+    252     248 Rev    EcoRII     CCWGG            250    P.P     A->G
+    252     248 Rev    EcoRII     CCWGG            250    P.P     A->C
+    297     293 Rev    EcoRII     CCWGG            295    P.P     A->C
+    297     293 Rev    EcoRII     CCWGG            295    P.P     A->G
 
-Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
-EcoRII      CCWGG          77        P.P    78       C->G
-EcoRII      CCWGG          77        P.P    78       C->A
-EcoRII      CCWGG          77        P.P    78       C->T
-EcoRII      CCWGG          77        R.R    79       A->C
-EcoRII      CCWGG          77        R.R    81       G->A
-EcoRII      CCWGG          107       A.A    108      C->G
-EcoRII      CCWGG          107       A.A    108      C->A
-EcoRII      CCWGG          107       A.A    108      C->T
-EcoRII      CCWGG          107       R.R    109      A->C
-EcoRII      CCWGG          107       R.R    111      G->A
-EcoRII      CCWGG          182       S.S    183      C->T
-EcoRII      CCWGG          182       S.S    183      C->A
-EcoRII      CCWGG          182       S.S    183      C->G
-EcoRII      CCWGG          197       P.P    198      C->G
-EcoRII      CCWGG          197       P.P    198      C->A
-EcoRII      CCWGG          197       P.P    198      C->T
-EcoRII      CCWGG          248       P.P    249      C->G
-EcoRII      CCWGG          248       P.P    249      C->A
-EcoRII      CCWGG          248       P.P    249      C->T
-EcoRII      CCWGG          293       P.P    294      C->G
-EcoRII      CCWGG          293       P.P    294      C->A
-EcoRII      CCWGG          293       P.P    294      C->T
-
-
-
-Results for reverse of HSFAU:
-
-Creating silent mutations
-
-Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
-EcoRII      CCWGG          77        P.P    79       T->G
-EcoRII      CCWGG          77        P.P    79       T->C
-EcoRII      CCWGG          107       P.P    109      T->G
-EcoRII      CCWGG          107       P.P    109      T->C
-EcoRII      CCWGG          182       P.P    184      A->G
-EcoRII      CCWGG          182       P.P    184      A->C
-EcoRII      CCWGG          197       P.P    199      A->G
-EcoRII      CCWGG          197       P.P    199      A->C
-EcoRII      CCWGG          248       P.P    250      A->G
-EcoRII      CCWGG          248       P.P    250      A->C
-EcoRII      CCWGG          293       P.P    295      A->C
-EcoRII      CCWGG          293       P.P    295      A->G
+#---------------------------------------
+#---------------------------------------
    
-
 Data files
 
    None.

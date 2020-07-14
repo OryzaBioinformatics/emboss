@@ -9,9 +9,8 @@ section: input [
   type: "page"
 ]
 
-  sequence: seq  [
+  sequence: sequence  [
     parameter: "Y"
-    information: "Nucleic acid sequence"
     type: "DNA"
   ]
 
@@ -23,7 +22,7 @@ section: required [
 ]
 
   string: enzymes  [
-    required: "Y"
+    standard: "Y"
     default: "all"
     information: "Comma separated enzyme list"
   ]
@@ -45,9 +44,12 @@ section: output [
     information: "Display translated sequence"
   ]
 
-  outfile: outf  [
+  report: outfile  [
     parameter: "Y"
-    information: "Results file name"
+    rformat: "table"
+    taglist: "str:Dir str:enzyme=EnzymeName str:rspattern=RS-Pattern
+              int:baseposn=Base-Posn rstr:aa=AAs rstr:mutation=Mutation"
+    rscoreshow: "N"
   ]
 
 endsection: output

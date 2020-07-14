@@ -98,7 +98,7 @@ The output for 'recoder' is similar to the format used by 'silent'.
 Remove restriction sites but maintain the same translation
 Input sequence: <b>tembl:hsfau</b>
 Comma separated enzyme list [all]: <b>EcoRII</b>
-Output file [hsfau.recoder]: <b></b>
+Output report [hsfau.recoder]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -113,18 +113,19 @@ Output file [hsfau.recoder]: <b></b>
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
-  [-seq]               sequence   Nucleic acid sequence
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Sequence USA
    -enzymes            string     Comma separated enzyme list
-  [-outf]              outfile    Results file name
+  [-outfile]           report     Output report file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -sshow              boolean    Display untranslated sequence
    -tshow              boolean    Display translated sequence
 
    Associated qualifiers:
-  "-seq" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -134,24 +135,28 @@ Output file [hsfau.recoder]: <b></b>
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outf" related qualifiers
-   -odirectory2         string     Output directory
+
+   "-outfile" associated qualifiers
+   -rformat2            string     Report format
+   -rname2              string     Base file name
+   -rextension2         string     File name extension
+   -rdirectory2         string     Output directory
+   -raccshow2           boolean    Show accession number in the report
+   -rdesshow2           boolean    Show description in the report
+   -rscoreshow2         boolean    Show the score in the report
+   -rusashow2           boolean    Show the full USA in the report
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -167,14 +172,14 @@ Output file [hsfau.recoder]: <b></b>
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td>[-seq]<br>(Parameter 1)</td>
-<td>Nucleic acid sequence</td>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -187,14 +192,14 @@ Output file [hsfau.recoder]: <b></b>
 </tr>
 
 <tr>
-<td>[-outf]<br>(Parameter 2)</td>
-<td>Results file name</td>
-<td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.recoder</td>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -204,7 +209,7 @@ Output file [hsfau.recoder]: <b></b>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -361,63 +366,68 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 <p><h3>File: hsfau.recoder</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Results for HSFAU:
+########################################
+# Program: recoder
+# Rundate: Thu Nov 27 15:23:38 2003
+# Report_format: table
+# Report_file: hsfau.recoder
+########################################
 
-KEY:
-	Enzyme		Enzyme name
-	RS-Pattern	Restriction enzyme recognition site pattern
-	Match-Posn	Position of the first base of RS pattern in sequence
-	AA		Amino acid. Original sequence(.)After mutation
-	Base-Posn	Position of base to be mutated in sequence
-	Mutation	The base mutation to perform
+#=======================================
+#
+# Sequence: HSFAU     from: 1   to: 518
+# HitCount: 34
+#
+# KEY:
+# Dir: Direction (Rev for reverse complement)
+# EnzymeName: Enzyme name
+# RS-Pattern: Restriction enzyme recognition site pattern
+# Base-Posn: Position of base to be mutated
+# AAs: Amino acid. Original sequence(.)After mutation
+# Mutation: The base mutation to perform
+# 
+# Creating silent mutations
+#
+#=======================================
 
-Creating silent mutations
+  Start     End Dir    EnzymeName RS-Pattern Base-Posn    AAs Mutation
+     77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;G
+     77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;A
+     77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;T
+     77      81 .      EcoRII     CCWGG             79    R.R     A-&gt;C
+     77      81 .      EcoRII     CCWGG             81    R.R     G-&gt;A
+    107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;G
+    107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;A
+    107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;T
+    107     111 .      EcoRII     CCWGG            109    R.R     A-&gt;C
+    107     111 .      EcoRII     CCWGG            111    R.R     G-&gt;A
+    182     186 .      EcoRII     CCWGG            183    S.S     C-&gt;T
+    182     186 .      EcoRII     CCWGG            183    S.S     C-&gt;A
+    182     186 .      EcoRII     CCWGG            183    S.S     C-&gt;G
+    197     201 .      EcoRII     CCWGG            198    P.P     C-&gt;G
+    197     201 .      EcoRII     CCWGG            198    P.P     C-&gt;A
+    197     201 .      EcoRII     CCWGG            198    P.P     C-&gt;T
+    248     252 .      EcoRII     CCWGG            249    P.P     C-&gt;G
+    248     252 .      EcoRII     CCWGG            249    P.P     C-&gt;A
+    248     252 .      EcoRII     CCWGG            249    P.P     C-&gt;T
+    293     297 .      EcoRII     CCWGG            294    P.P     C-&gt;G
+    293     297 .      EcoRII     CCWGG            294    P.P     C-&gt;A
+    293     297 .      EcoRII     CCWGG            294    P.P     C-&gt;T
+     81      77 Rev    EcoRII     CCWGG             79    P.P     T-&gt;G
+     81      77 Rev    EcoRII     CCWGG             79    P.P     T-&gt;C
+    111     107 Rev    EcoRII     CCWGG            109    P.P     T-&gt;G
+    111     107 Rev    EcoRII     CCWGG            109    P.P     T-&gt;C
+    186     182 Rev    EcoRII     CCWGG            184    P.P     A-&gt;G
+    186     182 Rev    EcoRII     CCWGG            184    P.P     A-&gt;C
+    201     197 Rev    EcoRII     CCWGG            199    P.P     A-&gt;G
+    201     197 Rev    EcoRII     CCWGG            199    P.P     A-&gt;C
+    252     248 Rev    EcoRII     CCWGG            250    P.P     A-&gt;G
+    252     248 Rev    EcoRII     CCWGG            250    P.P     A-&gt;C
+    297     293 Rev    EcoRII     CCWGG            295    P.P     A-&gt;C
+    297     293 Rev    EcoRII     CCWGG            295    P.P     A-&gt;G
 
-Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
-EcoRII      CCWGG          77        P.P    78       C-&gt;G  
-EcoRII      CCWGG          77        P.P    78       C-&gt;A  
-EcoRII      CCWGG          77        P.P    78       C-&gt;T  
-EcoRII      CCWGG          77        R.R    79       A-&gt;C  
-EcoRII      CCWGG          77        R.R    81       G-&gt;A  
-EcoRII      CCWGG          107       A.A    108      C-&gt;G  
-EcoRII      CCWGG          107       A.A    108      C-&gt;A  
-EcoRII      CCWGG          107       A.A    108      C-&gt;T  
-EcoRII      CCWGG          107       R.R    109      A-&gt;C  
-EcoRII      CCWGG          107       R.R    111      G-&gt;A  
-EcoRII      CCWGG          182       S.S    183      C-&gt;T  
-EcoRII      CCWGG          182       S.S    183      C-&gt;A  
-EcoRII      CCWGG          182       S.S    183      C-&gt;G  
-EcoRII      CCWGG          197       P.P    198      C-&gt;G  
-EcoRII      CCWGG          197       P.P    198      C-&gt;A  
-EcoRII      CCWGG          197       P.P    198      C-&gt;T  
-EcoRII      CCWGG          248       P.P    249      C-&gt;G  
-EcoRII      CCWGG          248       P.P    249      C-&gt;A  
-EcoRII      CCWGG          248       P.P    249      C-&gt;T  
-EcoRII      CCWGG          293       P.P    294      C-&gt;G  
-EcoRII      CCWGG          293       P.P    294      C-&gt;A  
-EcoRII      CCWGG          293       P.P    294      C-&gt;T  
-
-
-
-Results for reverse of HSFAU:
-
-Creating silent mutations
-
-Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
-EcoRII      CCWGG          77        P.P    79       T-&gt;G  
-EcoRII      CCWGG          77        P.P    79       T-&gt;C  
-EcoRII      CCWGG          107       P.P    109      T-&gt;G  
-EcoRII      CCWGG          107       P.P    109      T-&gt;C  
-EcoRII      CCWGG          182       P.P    184      A-&gt;G  
-EcoRII      CCWGG          182       P.P    184      A-&gt;C  
-EcoRII      CCWGG          197       P.P    199      A-&gt;G  
-EcoRII      CCWGG          197       P.P    199      A-&gt;C  
-EcoRII      CCWGG          248       P.P    250      A-&gt;G  
-EcoRII      CCWGG          248       P.P    250      A-&gt;C  
-EcoRII      CCWGG          293       P.P    295      A-&gt;C  
-EcoRII      CCWGG          293       P.P    295      A-&gt;G  
-
-
+#---------------------------------------
+#---------------------------------------
 </pre>
 </td></tr></table><p>
 
