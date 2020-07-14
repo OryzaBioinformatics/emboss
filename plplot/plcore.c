@@ -1175,6 +1175,7 @@ c_plend1(void)
     free_mem(plsc->geometry);
     free_mem(plsc->dev);
     free_mem(plsc->BaseName);
+    free_mem(plsc->Ext);
 
 /* Free malloc'ed stream if not in initial stream, else clear it out */
 
