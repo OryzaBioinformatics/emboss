@@ -2,7 +2,8 @@
 **
 ** Inverted repeats by dynamic programming
 **
-** @author: Copyright (C) J Thierry-Mieg and R Durbin, 1993
+** @author Copyright (C) J Thierry-Mieg and R Durbin, 1993
+** @modified July 4 2006 Jon Ison (ACD seqout added)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -55,8 +56,6 @@
 ** maxsave has been made a command line parameter
 */
 
-#define TEST
-
 static ajint match;
 static ajint mismatch;
 static ajint threshold;
@@ -75,8 +74,10 @@ static AjPInt2d matrix=NULL;
 
 
 
-
-static void einverted_report(ajint max, ajint imax);
+/* JISON new listseq, liststart, listend, pos parameters */
+static void einverted_report(ajint max, ajint imax, const AjPSeq seq, 
+			     AjPList *list, AjPInt *liststart, 
+			     AjPInt *listend, ajint *pos);
 
 
 
@@ -107,203 +108,268 @@ int main(int argc, char **argv)
     AjPInt localMax = NULL;
     AjPInt back = NULL;
 
+    AjPSeqall seqall = NULL;
     AjPSeq sequence = NULL;
     AjPStr nseq = NULL;
 
+    /* JISON new variables */
+    AjPList listseq = NULL;
+    AjPInt  liststart = NULL;
+    AjPInt  listend = NULL;
+    ajint   pos = 0;
+    ajint   temppos = 0;
+    
+    AjPSeqout seqout = NULL;
+    AjPStr    tempstr = NULL;
+    AjPSeq    tempseq = NULL;
+    AjPStr    tempname = 0;
+    tempseq = ajSeqNew();
+    
 
     embInit("einverted", argc, argv);
 
     outfile   = ajAcdGetOutfile("outfile");
-    sequence  = ajAcdGetSeq("sequence");
+    seqall  = ajAcdGetSeqall("sequence");
     threshold = ajAcdGetInt("threshold");
     match     = ajAcdGetInt("match");
     mismatch  = ajAcdGetInt("mismatch");
     gap       = ajAcdGetInt("gap");
     maxsave   = ajAcdGetInt("maxrepeat");
+    seqout    = ajAcdGetSeqout("outseq");
+    
 
-    length = ajSeqLen(sequence);
     cvt    = ajSeqCvtNew("ACGT");
-    ajSeqNum(sequence, cvt, &nseq);
-    sq = ajStrStr(nseq);
 
-    ajDebug("sequence length: %d\n", length);
-
-    /*
-    ** build revmatch etc. to be a,t,g,c matched to reverse sequence
-    ** ending in MAXSAVE ROGUE values
-    */
-    for(i = 5; i--;)
+    while(ajSeqallNext(seqall, &sequence))
     {
-	AJCNEW(revmatch[i],(length+maxsave));
-	ip = revmatch[i];
-
-	for(j = length; j--; )
-	    *ip++ = mismatch;
-
-	for(j = maxsave; j--;)
-	    *ip++ = rogue;
-    }
-
-    cp = ajStrStr(nseq);
-    for(j = length; j--;)		/* reverse order important here */
-	switch(*cp++)
-	{
-	case 0:
-	    revmatch[3][j] = match;
-	    break; /* A */
-	case 1:
-	    revmatch[2][j] = match;
-	    break; /* C */
-	case 2:
-	    revmatch[1][j] = match;
-	    break; /* G */
-	case 3:
-	    revmatch[0][j] = match;
-	    break; /* T */
-	}
-
-    back     = ajIntNew();
-    localMax = ajIntNew();
-    matrix   = ajInt2dNew();
-
-    for(i=0; i<maxsave; i++)
-    {
-	ajIntPut(&back,i,0);
-	ajIntPut(&localMax,i,0);
-
-	for(j=0; j<maxsave; j++)
-	    ajInt2dPut(&matrix,i,j,0);
-    }
-
-
-    for(i = 0; i < length+maxsave; ++i) /* +MAXSAVE to report at end */
-    {
-	irel = i % maxsave;
-
-	ajDebug("i: %d irel: %d back[irel] %d\n", i, irel,
-		ajIntGet(back,irel));
-
-        if(ajIntGet(back,irel))	/* something to report */
-	{
-	    imax = 0;
-	    for(j = ajIntGet(back,irel); j > i-maxsave; --j)
-		if(ajIntGet(localMax,j%maxsave) > imax)
-		{
-		    jmax = j;
-		    imax = ajIntGet(localMax,j%maxsave);
-		}
-	    einverted_report(imax, jmax);
-	    lastReported = jmax;
-
-	    for(j = jmax; j >= i-maxsave; --j)
-	    {
-		ajIntPut(&localMax,j%maxsave,0);
-		ajIntPut(&back,j%maxsave,0);
-	    }
-	}
-
-	if(i >= length)		/* report only */
-	    continue;
-
-	if(i == 0)
-	    t0 = (matrix->Ptr[maxsave-1]->Ptr) - 1; /* NB offset by 1 */
-	else
-	    t0 = (matrix->Ptr[(i-1)%maxsave]->Ptr) - 1; /* NB offset by 1 */
-
-	t1 = (matrix->Ptr[irel]->Ptr);
-	memcpy(t1, &revmatch[(ajint)sq[i]][length-i],
-	       (maxsave-1)*sizeof(ajint));
-	t1[maxsave-2] = t1[maxsave-1] = rogue;
-
+	/* JISON */
+	listseq   = ajListstrNew();
+	liststart = ajIntNew();
+	listend   = ajIntNew();
+	
+	length = ajSeqGetLen(sequence);
+	ajSeqNum(sequence, cvt, &nseq);
+	sq = ajStrGetPtr(nseq);
+	
+	ajDebug("sequence length: %d\n", length);
+	
 	/*
-	** Gene Myers' version of dynamic progamming:
-	** a is current *t0, d is diagonal sum, c is working *t1 value
-	*/
-
-#ifdef TEST
-	ajDebug("\n%2d %c: ", i, base[(ajint)sq[i]]);
-
-	for(j = length-i; --j;)
-	    ajDebug("      ");
-	ajDebug(" ");
-
-	if(*t1 > 0)
-	    ajDebug("*");
-	else
-	    ajDebug(" ");
-	ajDebug("%2d  ", *t1);
-#endif
-
-	max    = threshold-1;
-	jmax   = 0;
-	t1Base = t1;
-
-#ifdef MYERS
-	c = *t1;
-	a = -rogue;
-	while(1)			/* inner loop */
+	 ** build revmatch etc. to be a,t,g,c matched to reverse sequence
+	 ** ending in MAXSAVE ROGUE values
+	 */
+	for(i = 5; i--;)
 	{
-	    d = *++t1;
-	    if(a > 0)
-		d += a;
-	    a = *++t0;
-	    if(a > c)
-		c = a;
-	    c -= gap;
-	    if(d > c)
-		c = d;
-#ifdef TEST
-	    if(c == d)
+	    AJCNEW(revmatch[i],(length+maxsave));
+	    ip = revmatch[i];
+
+	    for(j = length; j--; )
+		*ip++ = mismatch;
+
+	    for(j = maxsave; j--;)
+		*ip++ = rogue;
+	}
+	
+	cp = ajStrGetPtr(nseq);
+	for(j = length; j--;)		/* reverse order important here */
+	    switch(*cp++)
 	    {
-		if(d == *t1)
-		    ajDebug(".");
-		else
-		    ajDebug("\\");
+	    case 0:
+		revmatch[3][j] = match;
+		break;			/* A */
+	    case 1:
+		revmatch[2][j] = match;
+		break;			/* C */
+	    case 2:
+		revmatch[1][j] = match;
+		break;			/* G */
+	    case 3:
+		revmatch[0][j] = match;
+		break;			/* T */
 	    }
-	    else if(c + gap == a)
-		ajDebug("|");
+	
+	back     = ajIntNewL(maxsave);
+	localMax = ajIntNewL(maxsave);
+	matrix   = ajInt2dNewLL(maxsave, maxsave);
+
+	for(i=0; i<maxsave; i++)
+	{
+	    ajIntPut(&back,i,0);
+	    ajIntPut(&localMax,i,0);
+
+	    for(j=0; j<maxsave; j++)
+		ajInt2dPut(&matrix,i,j,0);
+	}
+	
+	
+	for(i = 0; i < length+maxsave; ++i) /* +MAXSAVE to report at end */
+	{
+	    irel = i % maxsave;
+
+	    /*ajDebug("i: %d irel: %d back[irel] %d\n", i, irel,
+	      ajIntGet(back,irel));*/
+
+	    if(ajIntGet(back,irel))	/* something to report */
+	    {
+		imax = 0;
+		for(j = ajIntGet(back,irel); j > i-maxsave; --j)
+		    if(ajIntGet(localMax,j%maxsave) > imax)
+		    {
+			jmax = j;
+			imax = ajIntGet(localMax,j%maxsave);
+		    }
+		/* JISON added &listseq, &liststart, &listend args */
+		einverted_report(imax, jmax, sequence, &listseq,
+				 &liststart, &listend, &pos);
+		lastReported = jmax;
+
+		for(j = jmax; j >= i-maxsave; --j)
+		{
+		    ajIntPut(&localMax,j%maxsave,0);
+		    ajIntPut(&back,j%maxsave,0);
+		}
+	    }
+
+	    if(i >= length)		/* report only */
+		continue;
+
+	    if(i == 0)
+		t0 = (matrix->Ptr[maxsave-1]->Ptr) - 1;	/* NB offset by 1 */
 	    else
-		ajDebug("-");
+		t0 = (matrix->Ptr[(i-1)%maxsave]->Ptr) - 1; /* NB offset by 1 */
+
+	    t1 = (matrix->Ptr[irel]->Ptr);
+	    memcpy(t1, &revmatch[(ajint)sq[i]][length-i],
+		   (maxsave-1)*sizeof(ajint));
+	    t1[maxsave-2] = t1[maxsave-1] = rogue;
+
+	    /*
+	     ** Gene Myers' version of dynamic progamming:
+	     ** a is current *t0, d is diagonal sum, c is working *t1 value
+	     */
+
+#ifdef TEST
+	    ajDebug("\n%2d %c: ", i, base[(ajint)sq[i]]);
+
+	    for(j = length-i; --j;)
+		ajDebug("      ");
+	    ajDebug(" ");
 
 	    if(*t1 > 0)
 		ajDebug("*");
 	    else
 		ajDebug(" ");
-	    ajDebug("%2d  ", c);
+	    ajDebug("%2d  ", *t1);
 #endif
-	    *t1 = c;
 
-	    if(c > max)
+	    max    = threshold-1;
+	    jmax   = 0;
+	    t1Base = t1;
+
+#ifdef MYERS
+	    c = *t1;
+	    a = -rogue;
+	    while(1)			/* inner loop */
 	    {
-		if(c >= rogue)
-		    goto done;
-		max = c;
-		jmax = t1 - t1Base;
+		d = *++t1;
+		if(a > 0)
+		    d += a;
+		a = *++t0;
+		if(a > c)
+		    c = a;
+		c -= gap;
+		if(d > c)
+		    c = d;
+#ifdef TEST
+		if(c == d)
+		{
+		    if(d == *t1)
+			ajDebug(".");
+		    else
+			ajDebug("\\");
+		}
+		else if(c + gap == a)
+		    ajDebug("|");
+		else
+		    ajDebug("-");
+
+		if(*t1 > 0)
+		    ajDebug("*");
+		else
+		    ajDebug(" ");
+		ajDebug("%2d  ", c);
+#endif
+		*t1 = c;
+
+		if(c > max)
+		{
+		    if(c >= rogue)
+			goto done;
+		    max = c;
+		    jmax = t1 - t1Base;
+		}
 	    }
-	}
 #endif
 
-    done:
-	if(jmax)			/* max was broken */
-	{
-	    ajIntPut(&localMax,irel,max);
-	    j = (i-jmax-1) % maxsave;
+	done:
+	    if(jmax)			/* max was broken */
+	    {
+		ajIntPut(&localMax,irel,max);
+		j = (i-jmax-1) % maxsave;
 
-	    if(i-jmax-1 > lastReported &&
-		(!ajIntGet(back,j) ||
-		 ajIntGet(localMax,ajIntGet(back,j)%maxsave) < max))
-		ajIntPut(&back,j,i);
+		if(i-jmax-1 > lastReported &&
+		   (!ajIntGet(back,j) ||
+		    ajIntGet(localMax,ajIntGet(back,j)%maxsave) < max))
+		    ajIntPut(&back,j,i);
+	    }
+	    else
+		ajIntPut(&localMax,irel,0);
 	}
-	else
-	    ajIntPut(&localMax,irel,0);
+
+	/* JISON new block */
+	temppos=0;
+	while(ajListstrPop(listseq, &tempstr))
+	{
+	    ajFmtPrintS(&tempname, "%S_%d_%d",
+			ajSeqGetNameS(sequence),
+			ajIntGet(liststart, temppos),
+			ajIntGet(listend, temppos));
+	    ajSeqAssignNameS(tempseq, tempname);
+	    ajSeqAssignSeqS(tempseq, tempstr);
+	    if(seqout)
+		ajSeqWrite(seqout, tempseq);
+	    ajStrDel(&tempstr);
+	    temppos++;
+	}	    
+	ajListstrDel(&listseq);
+	ajIntDel(&liststart);
+	ajIntDel(&listend);
+	
+	ajIntDel(&localMax);
+	ajIntDel(&back);
+	ajInt2dDel(&matrix);
+	
+	for(i=0;i<5;i++)
+	    AJFREE(revmatch[i]);
+	
     }
+    /* JISON new block */
+    if(seqout)
+	ajSeqWriteClose(seqout);
 
-    ajIntDel(&localMax);
-    ajIntDel(&back);
-    ajInt2dDel(&matrix);
+    ajSeqDel(&tempseq);
+    ajSeqoutDel(&seqout);
 
-    ajExit();
-
+    
+    ajSeqallDel(&seqall);
+    ajSeqDel(&sequence);
+    ajFileClose(&outfile);
+    ajSeqCvtDel(&cvt);
+    
+    ajStrDel(&nseq);
+    ajStrDel(&tempname);
+    
+    embExit();
+    
     return 0;
 }
 
@@ -316,11 +382,20 @@ int main(int argc, char **argv)
 **
 ** @param [r] max [ajint] Undocumented
 ** @param [r] imax [ajint] Undocumented
+** @param [r] seq [const AjPSeq] Sequence
+** @param [u] listseq [AjPList *] List (for sequence regions)
+** @param [u] liststart [AjPInt *] List (for start of regions)
+** @param [u] listend [AjPInt *] List (for end of regions)
+** @param [u] pos [ajint*] Position
 ** @@
 ******************************************************************************/
 
-static void einverted_report(ajint max, ajint imax)
+static void einverted_report(ajint max, ajint imax, const AjPSeq seq, 
+			     AjPList *listseq, AjPInt *liststart,
+			     AjPInt *listend, ajint *pos)
 {
+    /* JISON new listseq, liststart, listend, pos parameters*/
+
     ajint *t1;
     ajint *ip;
     ajint *jp;
@@ -332,7 +407,10 @@ static void einverted_report(ajint max, ajint imax)
     ajint nmis = 0;
     ajint ngap = 0;
     ajint saveMax = max;
-
+    /* JISON new variables */
+    AjPStr regionA=NULL;
+    AjPStr regionB=NULL;
+    
 
     AJCNEW(align1,2*maxsave);
     AJCNEW(align2,2*maxsave);
@@ -347,7 +425,7 @@ static void einverted_report(ajint max, ajint imax)
 
     i  = imax;
     ip = align1; jp = align2;
-    while(max > 0 && j >= 0)		/* original missed blunt joins */
+    while(max > 0 && j >= 1)		/* original missed blunt joins */
     {
 	*ip++ = i;
 	*jp++ = i-j;			/* seqpt + 1 */
@@ -386,17 +464,34 @@ static void einverted_report(ajint max, ajint imax)
 #endif
 
     /* report reconstruction */
-    ajFmtPrintF(outfile, "\nScore %d: %d/%d (%3d%%) matches, %d gaps\n",
-		 saveMax, nmatch, (nmatch+nmis),
-		 (100*nmatch)/(nmatch+nmis), ngap);
+    ajFmtPrintF(outfile, "\n%S: Score %d: %d/%d (%3d%%) matches, %d gaps\n",
+		ajSeqGetNameS(seq),
+		saveMax, nmatch, (nmatch+nmis),
+		(100*nmatch)/(nmatch+nmis), ngap);
+
+
+    /* JISON new block */
+    regionA = ajStrNew();
+    regionB = ajStrNew();
+    ajIntPut(liststart, *pos, *align2);
+    
 
     ajFmtPrintF(outfile, "%8d ", *align2); /* NB *jp is 1+coord */
     for(jp = align2; *jp; ++jp)
 	if(*jp == *(jp+1))
 	    ajFmtPrintF(outfile, "-");
 	else
+	{
 	    ajFmtPrintF(outfile, "%c", base[(ajint)sq[*jp-1]]);
+	    ajStrAppendK(&regionA, base[(ajint)sq[*jp-1]]); /* JISON */
+	}
+    
     ajFmtPrintF(outfile, " %-8d\n", *(jp-1));
+
+    /* JISON new block */
+    ajIntPut(listend, *pos, *(jp-1)); 
+    (*pos)++;  
+    
 
     ajFmtPrintF(outfile, "         ");
     for(ip = align1, jp = align2; *ip; ++ip, ++jp)
@@ -408,16 +503,32 @@ static void einverted_report(ajint max, ajint imax)
 	    ajFmtPrintF(outfile, " ");
     ajFmtPrintF(outfile, "\n");
 
+    ajIntPut(listend, *pos, *align1 + 1); /* JISON */
+
     ajFmtPrintF(outfile, "%8d ", *align1 + 1);
     for(ip = align1; *ip; ++ip)
 	if(*ip == *(ip+1))
 	    ajFmtPrintF(outfile, "-");
 	else
+	{
 	    ajFmtPrintF(outfile, "%c", base[(ajint)sq[*ip]]);
+	    ajStrAppendK(&regionB, base[(ajint)sq[*ip]]);  /* JISON */
+	}
+    /* JISON new block */
+    ajStrReverse(&regionB);
+    ajListstrPushApp(*listseq, regionA);
+    ajListstrPushApp(*listseq, regionB);
+    
     ajFmtPrintF(outfile, " %-8d\n", *(ip-1)+1);
+
+    /* JISON new block */
+    ajIntPut(liststart, *pos, *(ip-1)+1);  
+    (*pos)++;
+    
 
     AJFREE(align1);
     AJFREE(align2);
+
 
     return;
 }
