@@ -6,6 +6,9 @@ extern "C"
 #ifndef embdbi_h
 #define embdbi_h
 
+
+
+
 /* @data EmbPField ************************************************************
 **
 ** NUCLEUS internal structure for database indexing applications
@@ -24,6 +27,9 @@ typedef struct EmbSField {
 } EmbOField;
 #define EmbPField EmbOField*
 
+
+
+
 /* @data EmbPEntry ************************************************************
 **
 ** NUCLEUS internal structure for database indexing applications
@@ -34,6 +40,7 @@ typedef struct EmbSField {
 ** @attr filenum [ajint] record in division file
 ** @attr rpos [ajint] entry offset in data file
 ** @attr spos [ajint] entry offset in sequence file
+** @attr nfields [ajint] number of fields
 ** @attr nfield [ajint*] number of tokens for each field
 ** @attr field [char***] array of tokens for each field
 ** @@
@@ -44,16 +51,26 @@ typedef struct EmbSEntry {
   ajint filenum;
   ajint rpos;
   ajint spos;
+  ajint nfields;
   ajint* nfield;
   char*** field;
 } EmbOEntry;
 #define EmbPEntry EmbOEntry*
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 ajint     embDbiCmpId (const void* a, const void* b);
 ajint     embDbiCmpFieldId (const void* a, const void* b);
 ajint     embDbiCmpFieldField (const void* a, const void* b);
 void      embDbiDateSet (const AjPStr datestr, char date[4]);
+void      embDbiEntryDel(EmbPEntry* Pentry);
 EmbPEntry embDbiEntryNew (ajint nfields);
+void      embDbiExit(void);
 EmbPField embDbiFieldNew (void);
 AjPFile   embDbiFileIn (const AjPStr dbname, const char* extension);
 AjPFile   embDbiFileIndex (const AjPStr indexdir, const AjPStr field,
@@ -71,6 +88,25 @@ void      embDbiHeader (AjPFile file, ajint filesize,
 			const AjPStr dbname, const AjPStr release,
 			const char date[4]);
 void      embDbiHeaderSize (AjPFile file, ajint filesize, ajint recordcnt);
+void      embDbiLogCmdline(AjPFile logfile);
+void      embDbiLogFields(AjPFile logfile, AjPStr const * fields,
+			  ajint nfields);
+void      embDbiLogFile(AjPFile logfile, const AjPStr curfilename,
+			ajint idCountFile, AjPStr const * fields,
+			const ajint* countField,
+			ajint nfields);
+void      embDbiLogFinal(AjPFile logfile, ajint maxlen,
+			 const ajint* maxFieldLen,
+			 AjPStr const * fields, const ajint* fieldTot,
+			 ajint nfields, ajint nfiles,
+			 ajint idDone, ajint idCount);
+void      embDbiLogHeader(AjPFile logfile, const AjPStr dbname,
+			  const AjPStr release, const AjPStr datestr,
+			  const AjPStr indexdir,
+			  ajint maxindex);
+void      embDbiLogSource(AjPFile logfile, const AjPStr directory,
+			  const AjPStr filename, const AjPStr exclude,
+			  AjPStr const * inputFiles, ajint nfiles);
 void      embDbiMaxlen (AjPStr* token, ajint* maxlen);
 void      embDbiMemEntry (AjPList idlist,
 			  AjPList* fieldList, ajint nfields,
@@ -120,6 +156,10 @@ void      embDbiWriteEntryRecord (AjPFile file, ajint maxidlen,
 void      embDbiWriteHit (AjPFile file, ajint idnum);
 void      embDbiWriteTrg (AjPFile file, ajint maxfieldlen,
 			  ajint idnum, ajint idcnt, const AjPStr hitstr);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 
