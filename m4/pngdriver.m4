@@ -56,6 +56,20 @@ then
 #
         LDFLAGS="${LDFLAGS} -L${ALT_HOME}/lib"
         CPPFLAGS="$CPPFLAGS -I$ALT_HOME/include"
+
+	  ICCHECK=0
+	  if test "`uname`" = "SunOS"; then
+	        AC_CHECK_LIB(iconv, libiconv_close, ICCHECK=1, ICCHECK=0, -L${ALT_HOME}/lib -liconv)
+	if test $ICCHECK = "1" ; then
+	        LDFLAGS="${LDFLAGS} -L${ALT_HOME}/lib -liconv"
+	fi
+	    LDFLAGS="$LDFLAGS -R$ALT_HOME/lib"
+          fi
+
+
+
+
+
 #
 # Check for zlib in ALT_HOME
 #
@@ -69,6 +83,9 @@ then
 	  AC_CHECK_LIB(png, png_destroy_read_struct, CHECK=1, CHECK=0 , -L${ALT_HOME}/lib -lz)
 	fi
 	
+
+
+
 #
 # Check for gd
 #
@@ -84,6 +101,10 @@ then
 	if test $CHECK = "1" ; then
 	  LIBS="$LIBS -lgd -lpng -lz -lm"
 
+	  if test $ICCHECK = "1" ; then
+		  LIBS="$LIBS -liconv"
+	  fi
+        
 	  if test "`uname`" = "SunOS"; then
 	    LDFLAGS="$LDFLAGS -R$ALT_HOME/lib"
           fi
