@@ -5,6 +5,8 @@
 # Note
 
 # From the Swiss-Prot users manual
+# http://www.expasy.org/sprot/userman.html#FT_keys
+# Last checked 26 May 2006
 
 # Many features are plain text with a final qualifier in brackets We
 # can represent these with /note plus a /comment for the part in
@@ -15,9 +17,9 @@
 # so we can parser the details for each feature, But what to do about
 # new GFF versions of the same features with possibly bad formatting?
 
-# SITE - Any other interesting site on the sequence.
+# REGION - Extent of a region of interest in the sequence
 
-site
+region
 	/note
 	/comment
 
@@ -67,10 +69,33 @@ chain
 	/note
 	/comment
 
+# COILED - Extent of a coiled-coil region
+
+coiled
+	/note
+	/comment
+
+# COMPBIAS - Extent of a compositionally biased region
+
+compbias
+	/note
+	/comment
+
 # CONFLICT - Different papers report differing sequences.
 # note usually begins MISSING or SEQ -> NEW (description optional)
 
 conflict
+	/note
+	/comment
+
+# CROSSLNK - Posttranslationally formed amino acid bonds.
+# The 'FROM' and 'TO' endpoints designate the two residues, which are
+# linked by an intrachain bond, and the description field indicates
+# the nature of the cross-link. If the 'FROM' and 'TO' endpoints are
+# identical, the amino acid bond is an interchain one. The name of the
+# linked peptide is indicated in the description field.
+ 
+crosslnk
 	/note
 	/comment
 
@@ -165,6 +190,12 @@ mod_res
 	/note
 	/comment
 
+# MOTIF - Short (up to 20 amino acids) sequence motif of biological interest
+
+motif
+	/note
+	/comment
+
 # MUTAGEN - Site which has been experimentally altered.
 # mutagen note usually SEQ ->NEW: description
 
@@ -229,6 +260,12 @@ similar
 	/note
 	/comment
 
+# SITE - Any other interesting site on the sequence.
+
+site
+	/note
+	/comment
+
 # STRAND -  DSSP secondary structure
 
 strand
@@ -248,6 +285,16 @@ thioeth
 # by the thiolester bond.
 
 thiolest
+	/note
+	/comment
+
+# TOPO_DOM - Topological domain
+# New added 26-May-06
+
+# Annotated with cellular component where domain is normally located
+# e.g. "Cytoplasmic" or "Mitochondrial matrix (potential)"
+
+topo_dom
 	/note
 	/comment
 
@@ -279,17 +326,17 @@ unsure
 	/comment
 
 # VARIANT - Authors report that sequence variants exist.
-# note usually begins MISSING or SEQ -> NEW (description optional)
+# replaced by VAR_SEQ, except for RNA editing recorded in the note
 
 variant
 	/note
 	/comment
 	/ftid
 
-# Description  of  sequence variants  produced  by  alternative
+# VAR_SEQ - Description of sequence variants produced by alternative
 # splicing.
 
-varsplic
+var_seq
 	/note
 	/comment
 

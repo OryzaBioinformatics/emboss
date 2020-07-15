@@ -1,10 +1,11 @@
 
 # From the Swiss-Prot users manual
+# http://www.expasy.org/sprot/userman.html#FT_keys
+# Last checked 2 Jun 2006
 
 # Many features are plain text with a final qualifier in brackets We
 # can represent these with /note plus a /comment for the part in
 # brackets. 
-
 
 # We could also implement specific qualifiers for each special format
 # so we can parser the details for each feature, But what to do about
@@ -14,9 +15,50 @@
 # The first type is used as the default if no match is found
 #############################################################
 
-# SITE - Any other interesting site on the sequence.
 
-SITE
+# The introduction of these new feature keys allows to establish a clear
+# sorting order for feature tables. The following order is used:
+#
+# 1. Molecule processing
+#      * INIT_MET, SIGNAL, PROPEP, TRANSIT, CHAIN, PEPTIDE
+# 2. Regions
+#      * TOPO_DOM, TRANSMEM
+#      * DOMAIN, REPEAT
+#      * CA_BIND, ZN_FING, DNA_BIND, NP_BIND
+#      * REGION
+#      * COILED
+#      * MOTIF
+#      * COMPBIAS
+# 3. Sites
+#      * ACT_SITE
+#      * METAL
+#      * BINDING
+#      * SITE
+# 4. Amino acid modifications (pre and PTM)
+#      * SE_CYS
+#      * MOD_RES
+#      * LIPID
+#      * CARBOHYD
+#      * DISULFID
+#      * CROSSLNK
+# 5. Natural variations
+#      * VARSPLIC
+#      * VARIANT
+# 6. Experimental info
+#      * MUTAGEN
+#      * UNSURE
+#      * CONFLICT
+#      * NON_CONS
+#      * NON_TER
+# 7. Secondary structure
+#       * HELIX, TURN, STRAND
+#
+# Keys of equal priority (listed on one line above) are ordered
+# according to sequence positions.
+
+# REGION - Extent of a region of interest in the sequence
+
+REGION
 	/note
 	/comment
 
@@ -28,6 +70,7 @@ ACT_SITE
 
 # BINDING  -  Binding  site  for any chemical group  (co-enzyme,  prosthetic
 # group, etc.).
+# The chemical nature of the group is given in the description field
 
 BINDING
 	/note
@@ -62,7 +105,33 @@ CARBOHYD
 
 # CHAIN - Extent of a polypeptide chain in the mature protein.
 
+# In Swiss-Prot, it is present:
+# For proteins that are not processed
+# (those for which the mature protein sequence corresponds to the
+# translated cDNA sequence) the CHAIN covers the whole protein
+# sequence
+# For processed proteins, it describes the mature part of the protein
+# once preprotein parts such as propeptides and signal sequences have
+# been removed
+#
+# For TrEMBL, it is present only in those entries where the submitters
+# to the nucleotide sequence databases have provided this information
+# for processed proteins.
+
 CHAIN
+	/note
+	/comment
+
+
+# COILED - Extent of a coiled-coil region
+
+COILED
+	/note
+	/comment
+
+# COMPBIAS - Extent of a compositionally biased region
+
+COMPBIAS
 	/note
 	/comment
 
@@ -73,22 +142,40 @@ CONFLICT
 	/note
 	/comment
 
+# CROSSLNK - Posttranslationally formed amino acid bonds.
+# The 'FROM' and 'TO' endpoints designate the two residues, which are
+# linked by an intrachain bond, and the description field indicates
+# the nature of the cross-link. If the 'FROM' and 'TO' endpoints are
+# identical, the amino acid bond is an interchain one. The name of the
+# linked peptide is indicated in the description field.
+ 
+CROSSLNK
+	/note
+	/comment
+
 # DISULFID - Disulfide bond.
-# The  'FROM' and 'TO' endpoints represent the two residues which are linked
-# by  an  intra-chain disulfide bond. If the 'FROM' and 'TO'  endpoints  are
-# identical,  the  disulfide bond is an interchain one and  the  description
-# field  indicates  the nature of the cross-link.
+# The 'FROM' and 'TO' endpoints represent the two residues which are
+# linked by an intra-chain disulfide bond. If the 'FROM' and 'TO'
+# endpoints are identical, the disulfide bond is an interchain one and
+# the description field indicates the nature of the cross-link.
+
 DISULFID
 	/note
 	/comment
 
 # DNA_BIND - Extent of a DNA-binding region.
+# The nature of the DNA-binding region is given in the description field. 
 
 DNA_BIND
 	/note
 	/comment
 
-# DOMAIN - Extent of a domain of interest on the sequence.
+# DOMAIN - Extent of a domain, which is defined as a specific
+# combination of secondary structures organized into a characteristic
+# three-dimensional structure or fold.
+#
+# The domain type is given in the description field. If there exist
+#   several copies of a domain, the domains are numbered.
 
 DOMAIN
 	/note
@@ -101,9 +188,16 @@ HELIX
 	/comment
 
 # INIT_MET - Initiator methionine.
-# This feature key is mostly associated with a zero value in the 'FROM'  and
-# 'TO' fields to indicate that the initiator methionine has been cleaved off
-# and is not shown in the sequence:
+
+# This feature key is usually associated with a zero value in the 'FROM'
+# and 'TO' fields to indicate that the initiator methionine has been
+# cleaved off and is not shown in the sequence. Usually there is no
+# annotation in such cases.
+
+# It is not used when the initiator methionine is not cleaved off except
+# in the event of internal alternative initiation sites. Example:
+# annotation "For isoform Cytoplasmic."
+
 
 INIT_MET
 	/note
@@ -130,12 +224,29 @@ INIT_MET
 #GPI-ANCHOR         Glycosyl-phosphatidylinositol (GPI) group linked to the
 #                   alpha-carboxyl group of the C-terminal residue of the
 #                   mature form of a protein [5,6]
+#
+#DIACYLGLYCERIDE    Glyceryl group bearing two ester-linked fatty acids
+#                   attached through a thioether bond to the
+#                   N-terminal cysteine of the mature form of a
+#                   prokaryotic lipoprotein
+#
+#ARCHAEOL           Archaeol (2,3-di-O-phytanyl-sn-glycerol) lipid
+#                   group attached through an thioether bond to the
+#                   N-terminal cysteine of the mature form of a
+#                   archaeal lipoprotein     
+#
+#N-OCTANOATE        n-octanoate group linked through an ester bond to
+#                   a serine residue
+#
+#CHOLESTEROL        Cholesterol group attached through an ester bond
+#                   to the C-terminal glycine of the mature form of a protein
 
 LIPID
 	/note
 	/comment
 
 # METAL - Binding site for a metal ion.
+# The description field indicates the nature of the metal
 
 METAL
 	/note
@@ -163,8 +274,14 @@ MOD_RES
 	/note
 	/comment
 
+# MOTIF - Short (up to 20 amino acids) sequence motif of biological interest
+
+MOTIF
+	/note
+	/comment
+
 # MUTAGEN - Site which has been experimentally altered.
-# mutagen note usually SEQ ->NEW: description
+# mutagen note usually SEQ ->NEW: description or "Missing: functional change"
 
 MUTAGEN
 	/note
@@ -186,6 +303,9 @@ NON_TER
 	/comment
 
 # NP_BIND - Extent of a nucleotide phosphate binding region.
+
+# The nature of the nucleotide phosphate is indicated in the
+# description field.
 
 NP_BIND
 	/note
@@ -210,6 +330,7 @@ REPEAT
 	/comment
 
 # SE_CYS - Selenocysteine
+# This key describes the occurrence of a selenocysteine in the sequence record
 
 SE_CYS
 	/note
@@ -224,6 +345,17 @@ SIGNAL
 # SIMILAR - Extent of a similarity with another protein sequence.
 
 SIMILAR
+	/note
+	/comment
+
+
+# SITE - Any interesting single amino-acid site on the sequence, that
+# is not defined by another feature key. It can also apply to an amino
+# acid bond which is represented by the positions of the two flanking
+# amino acids.
+
+
+SITE
 	/note
 	/comment
 
@@ -249,8 +381,19 @@ THIOLEST
 	/note
 	/comment
 
-# TRANSIT  -  Extent  of  a  transit peptide (mitochondrial,  chloroplastic,
-# cyanelle or for a microbody).
+# TRANSIT  -  Extent  of  a  transit peptide (mitochondrial, chloroplastic,
+# thylakoid, cyanelle or for a microbody).
+
+
+# TOPO_DOM - Topological domain
+# New added 26-May-06
+
+# Annotated with cellular component where domain is normally located
+# e.g. "Cytoplasmic" or "Mitochondrial matrix (potential)"
+
+TOPO_DOM
+	/note
+	/comment
 
 TRANSIT
 	/note
@@ -277,14 +420,21 @@ UNSURE
 	/comment
 
 # VARIANT - Authors report that sequence variants exist.
-# note usually begins MISSING or SEQ -> NEW (description optional)
+# replaced by VAR_SEQ, except for RNA editing recorded in the note
 
 VARIANT
 	/note
 	/comment
 	/ftid
 
-# Description  of  sequence variants  produced  by  alternative
+# VAR_SEQ - Description  of  sequence variants  produced  by  alternative
+# splicing, alternative promoter usage, ribosomal frameshifting
+
+VAR_SEQ
+	/note
+	/comment
+
+# VARSPLIC - Description  of  sequence variants  produced  by  alternative
 # splicing.
 
 VARSPLIC
@@ -292,6 +442,7 @@ VARSPLIC
 	/comment
 
 # ZN_FING - Extent of a zinc finger region.
+# The zinc finger 'category' is indicated in the description field.
 
 ZN_FING
 	/note
