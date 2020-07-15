@@ -251,10 +251,11 @@ ssl_print_notes()
      echo "   security.provider.2=com.sun.net.ssl.internal.ssl.Provider"
    fi
  else
-   echo "1) EDIT the java.security file "
-   echo "   adding/changing the provider line (usually provider 2 or 3):"
-   echo "   security.provider.2=com.sun.net.ssl.internal.ssl.Provider"
-
+   if [ "$MACOSX" != "y" ]; then
+     echo "1) EDIT the java.security file "
+     echo "   adding/changing the provider line (usually provider 2 or 3):"
+     echo "   security.provider.2=com.sun.net.ssl.internal.ssl.Provider"
+   fi
  fi
 
  echo "$NUM) COPY & PASTE THE FOLLOWING INTO "
@@ -1358,7 +1359,9 @@ if [ "$AUTH_TYPE" = "3" ]; then
   elif [ -f "/lib/libpam.so" ]; then
     echo "setenv LD_PRELOAD /lib/libpam.so" >> tomstart
   elif [ -f "/usr/lib/libpam.so" ]; then
-    echo "setenv LD_PRELOAD /usr/lib/libpam.so" >> tomstart  
+    echo "setenv LD_PRELOAD /usr/lib/libpam.so" >> tomstart
+  elif [ -f "/usr/lib/libpam.dylib" ]; then
+    echo "setenv LD_PRELOAD /usr/lib/libpam.dylib" >> tomstart
   else
     echo
     echo "WARNING: don't know what to set LD_PRELOAD to"

@@ -115,10 +115,10 @@ public class TestPrivateServer
       JembossRun thisrun = new JembossRun(embossCommand,"",
                                     filesToMove,mysettings);
       Hashtable h = thisrun.hash();
-      Enumeration enum = h.keys();
-      while (enum.hasMoreElements())
+      Enumeration enums = h.keys();
+      while (enums.hasMoreElements())
       {
-        String thiskey = (String)enum.nextElement().toString();
+        String thiskey = (String)enums.nextElement().toString();
         Object res = h.get(thiskey);
         if(res instanceof String)
           System.out.println((String)res);

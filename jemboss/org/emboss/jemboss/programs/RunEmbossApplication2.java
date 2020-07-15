@@ -333,14 +333,17 @@ public class RunEmbossApplication2
   */
   public void waitFor()
   {
-    try
-    {
-      p.waitFor();
-    }
-    catch(InterruptedException ie)
-    {
-      ie.printStackTrace();
-    }
+	try
+	{
+	  int exitVal = p.waitFor();
+	  
+	  if(exitVal != 0)
+	    System.out.println("Exit value:: "+exitVal);
+	}
+	catch(InterruptedException ie)
+	{
+	  ie.printStackTrace();
+	}
   }
   /**
   *

@@ -24,12 +24,10 @@ package org.emboss.jemboss.gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
-import javax.swing.tree.*;
 
 import org.emboss.jemboss.programs.*;
 import org.emboss.jemboss.soap.*;

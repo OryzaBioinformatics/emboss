@@ -391,8 +391,8 @@ public class BuildJembossForm implements ActionListener
         Jemboss.resultsManager.updateMode("interactive");
 //  }
 
-    String type[] = {"PNG","Jemboss Graphics"};
-    graphics = new JComboBox(type);
+
+    graphics = new JComboBox( new String[]{ "PNG","Jemboss Graphics"} );
 
     for(int j=0;j<nsection;j++)
     {
@@ -463,10 +463,8 @@ public class BuildJembossForm implements ActionListener
       f.setCursor(cbusy);
       if(!withSoap)
       {
-        Hashtable filesToMove = new Hashtable();
-        String embossCommand = getCommand(filesToMove);
-
-//      String embossCommand = getCommand();
+        final Hashtable filesToMove = new Hashtable();
+        final String embossCommand = getCommand(filesToMove);
 
         if(!embossCommand.equals("NOT OK"))
         {
@@ -478,10 +476,10 @@ public class BuildJembossForm implements ActionListener
           }
           else
           {
-            JembossServer js = new JembossServer(mysettings.getResultsHome());
-            Vector result = js.run_prog(embossCommand, mysettings.getCurrentMode(), 
-                                        filesToMove);
-            new ShowResultSet(convert(result,false),filesToMove,mysettings);
+            final JembossServer js = new JembossServer(mysettings.getResultsHome());
+            final Vector result = js.run_prog(embossCommand, 
+			    		mysettings.getCurrentMode(), filesToMove);
+		    new ShowResultSet(convert(result,false),filesToMove,mysettings);
           }
         }
       }
@@ -730,6 +728,21 @@ public class BuildJembossForm implements ActionListener
     return null;
   }
 
+  /**
+  *
+  * Add in quote chars (for windows) to the space chars
+  * @param l	string to insert escape characters to
+  *
+  */
+  private String addQuote(String l)
+  {
+    int n = l.indexOf(" ");
+
+    if (n > -1) 
+      l = "\""+l+"\"";
+    
+    return l;
+  }
 
   private String checkParameters(ParseAcd parseAcd, int numofFields, 
                                  Hashtable filesToMove)
@@ -941,7 +954,8 @@ public class BuildJembossForm implements ActionListener
             while((n = fn.indexOf(" ")) > -1)
               fn = new String(fn.substring(0,n) + fn.substring(n+1));
           }
-
+          fn = addQuote(fn);
+          
           if(withSoap)
             options = filesForSoap(fn,options,val,filesToMove);
           else
@@ -1019,6 +1033,7 @@ public class BuildJembossForm implements ActionListener
               out.println(cp);
               out.close();
               fn = tf.getCanonicalPath();
+              fn = addQuote(fn);
             }
             catch (IOException ioe) 
             {

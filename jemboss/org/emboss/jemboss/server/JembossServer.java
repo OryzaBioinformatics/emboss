@@ -590,19 +590,27 @@ public class JembossServer
 
     if(options.toLowerCase().indexOf("interactive") > -1)
     { 
-      String stdout = "";
-      try
-      {
-        rea.getProcess().waitFor();
-        stdout = rea.getProcessStdout();
-      }
-      catch(InterruptedException iexp){}    
-      if(!stdout.equals(""))
-      {
-        result.add("stdout");
-        result.add(stdout);
-      }
-      createFinishedFile(project);
+    	String stdout = "";
+        String stderr = "";
+        try
+        {
+          rea.getProcess().waitFor();
+          stdout = rea.getProcessStdout();
+          stderr = rea.getProcessStderr();
+        }
+        catch(InterruptedException iexp){}    
+        if(!stdout.equals(""))
+        {
+          result.add("stdout");
+          result.add(stdout);
+        }
+        
+        if(!stderr.equals(""))
+        {
+          result.add("stderr");
+          result.add(stderr);  
+        }
+        createFinishedFile(project);
     }
     else      //batch or background
     {
