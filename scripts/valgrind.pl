@@ -53,21 +53,21 @@ sub runtest ($) {
 	open (TEST, "valgrind/$name.valgrind") ||
 	    die "Failed to open valgrind/$name.valgrind";
 	while (<TEST>) {
-	    if (/definitely lost: +(\d+) bytes in (\d+) blocks/) {
+	    if (/definitely lost: +([\d,]+) bytes in ([\d,]+) blocks/) {
 		$defbytes=$1;
-		#$defblock=$2;
+		$defblocks=$2;
 	    }
-	    if (/possibly lost: +(\d+) bytes in (\d+) blocks/) {
+	    if (/possibly lost: +([\d,]+) bytes in ([\d,]+) blocks/) {
 		$posbytes=$1;
-		#$posblock=$2;
+		$posblocks=$2;
 	    }
-	    if (/still reachable: +(\d+) bytes in (\d+) blocks/) {
+	    if (/still reachable: +([\d,]+) bytes in ([\d,]+) blocks/) {
 		$rembytes=$1;
-		#$remblock=$2;
+		$remblocks=$2;
 	    }
-	    if (/ERROR SUMMARY: +(\d+) errors from (\d+) contexts/) {
+	    if (/ERROR SUMMARY: +([\d,]+) errors from ([\d,]+) contexts/) {
 		$errcount=$1;
-		#$remblock=$2;
+		$errcontexts=$2;
 	    }
 	}
 	if ($status) {
@@ -75,13 +75,13 @@ sub runtest ($) {
 	}
 	else {
 	    if ($errcount){
-		print STDERR "Valgrind test $name errors $errcount\n";
+		print STDERR "Valgrind test $name errors $errcount [$errcontexts]\n";
 	    }
 	    elsif ($defbytes){
-		print STDERR "Valgrind test $name leak $defbytes (possibly $posbytes) bytes, still reachable $rembytes bytes\n";
+		print STDERR "Valgrind test $name leak $defbytes [$defblocks] (possibly $posbytes [$posblocks]) bytes, still reachable $rembytes bytes [$remblocks]\n";
 	    }
-	    elsif (defined($rembytes)) {
-		print STDERR "Valgrind test $name OK (still reachable $rembytes bytes)\n";
+	    elsif ($rembytes) {
+		print STDERR "Valgrind test $name OK (still reachable $rembytes bytes [$remblocks])\n";
 	    }
 	    else {
 		print STDERR "Valgrind test $name OK (all clean)\n";
@@ -119,12 +119,12 @@ while (<MEMTEST>) {
 }
 close MEMTEST;
 
-$valgopts = "--leak-check=yes --show-reachable=yes --num-callers=15 --verbose --logfile-fd=9 --error-limit=no --leak-resolution=high";
+$valgopts = "--leak-check=yes --show-reachable=yes --num-callers=15 --verbose --log-fd=9 --error-limit=no --leak-resolution=high";
 ## --leak-check=yes       Test for memory leaks at end
 ## --show-reachable=yes   Show allocated memory still reachable
 ## --num-callers=15       Backtrace 15 functions - use more if needed
 ## --verbose              
-## --logfile-fd=9         Write to file 9 for redirect (default 2 is stderr)
+## --log-fd=9         Write to file 9 for redirect (default 2 is stderr)
 ## --error-limit=no       Don't stop after 300 errors
 ## --leak-resolution=high Report alternate backtraces
 
