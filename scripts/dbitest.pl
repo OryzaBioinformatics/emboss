@@ -62,7 +62,7 @@ if (!defined($indexfiles{$shortname})) {
 
 $filename = $indexfiles{$shortname};
 
-open INFILE, "$filename" || die "Cannot open $filename";
+open (INFILE, "$filename") || die "Cannot open $filename";
 
 $maxrecord = header (INFILE);
 
