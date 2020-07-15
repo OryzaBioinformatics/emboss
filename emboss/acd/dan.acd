@@ -177,6 +177,7 @@ section: output [
   xygraph: graph [
     standard: "$(plot)"
     multiple: "1"
+    gdesc: "DNA melting plot"
   ]
 
   report: outfile [
