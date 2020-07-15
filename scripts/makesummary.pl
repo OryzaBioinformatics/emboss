@@ -224,28 +224,3 @@ else {print "<a href=\"edata-bad.txt\">detail</a>\n"}
 
 print "\n";
 
-print "ECAT documentation\n";
-print "==================\n";
-
-open (EC, "$ENV{HOME}/data/efunc/embossdoccatreport.log") || die "Cannot open embossdoccatreport.log";
-
-$totmod = $totbad = $totdes = $totund = 0;
-while (<EC>) {
-    if (/^Bad/) {next}
-    if (/^ *(\d+) +(\d+) +(\d+) \S+/) {
-	$totmod++;
-	$totbad += $1;
-	$totdes += $2;
-	$totund += $3;
-    }
-}
-close EC;
-$tot = $totbad + $totdes + $totund;
-
-if ($tot) {
-    print "Total: $tot Bad: $totbad Desc: $totdes Undefined: $totund\n";
-    print "in $totmod files\n";
-    print "<a href=\"category-bad.txt\">detail</a>\n";
-}
-else { print "OK\n"}
-

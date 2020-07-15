@@ -26,8 +26,16 @@
 		"fmove-qa1" => "cp ../../data/fmove.in ./stdin",
 		"fretree-qa1" => "cp ../../data/fretree.in ./stdin",
 		"mse-qa1" => "cp ../../qa/mse-ex/stdin ./stdin",
+		"emast-qa1" => "cp ../../data/memenew/crp0.s .",
 		"" => ""
 		);
+
+%skiptests = (
+    "ohmmcalibrate-qa2" => "ohmmcalibrate takes too long on large input",
+    "ohmmcalibrate-qa3" => "ohmmcalibrate takes too long on large input",
+    "" => ""
+    );
+
 
 sub runtest ($) {
     my ($name) = @_;
@@ -36,10 +44,14 @@ sub runtest ($) {
     my $posbytes = 0;
     my $rembytes = 0;
     my $errcount = 0;
-    my $timeout = 1800;
+    my $timeout = 900;
     my $timealarm = 0;
     my $testkeep = $dokeep;
     my $infile = "";
+    if(defined($skiptests{$name})) {
+	print "Skipping $name ($skiptests{$name})\n";
+	return 0;
+    }
     if (defined($tests{$name})) {
 	if (defined($testcheck{$name})) {
 #	    $myvalgpath = "../../emboss/";
@@ -51,6 +63,8 @@ sub runtest ($) {
 	    print "Running valgrind $valgopts $myvalgpath$tests{$name}\n";
 
 	eval {
+	    ($startuser, $startsys, $startuserc, $startsysc) = times();
+	    $starttime = time();
 	    $sysstat = system( "rm -rf $name");
 	    $status = $sysstat >> 8;
 	    if ($status) {
@@ -69,6 +83,8 @@ sub runtest ($) {
 	    $sysstat = system ("EMBOSSRC=../.. ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;valgrind $valgopts $myvalgpath$tests{$name} $infile 9> ../valgrind/$name.valgrind" );
 	    alarm(0);
 	    $status = $sysstat >> 8;
+	    ($enduser, $endsys, $enduserc, $endsysc) =times();
+	    $endtime = time();
 	};
 
 	if ($@) {			# error from eval block
@@ -84,6 +100,13 @@ sub runtest ($) {
 	if ($timealarm) {
 	    print STDERR "Valgrind test $name timed out\n";
 	    return -1;
+	}
+	else {
+	    printf STDERR
+		"Valgrind time $name total: %d user: %d sys: %d CPU user: %d sys: %d\n",
+		$endtime-$starttime,
+		$enduser-$startuser, $endsys-$startsys,
+		$enduserc-$startuserc, $endsysc-$startsysc;
 	}
 
 	open (TEST, "valgrind/$name.valgrind") ||
@@ -160,6 +183,7 @@ foreach $test (@ARGV) {
     if ($test =~ /^-(.*)/) {
 	$arg=$1;
 	if ($arg =~ /testfile=(\S+)/) {$testfile=$1}
+	if ($arg =~ /qa/) {$testfile="qatestcmd.dat"}
 #    elsif ($arg =~ /logfile=(\S+)/) {$logfile=">$1"} # append to logfile
 	elsif ($arg eq "list") {
 	    $dolist = 1;
@@ -199,7 +223,7 @@ if($doall || $dolist) {
     }
 }
 
-$valgopts = "--leak-check=yes --show-reachable=yes --num-callers=15 --verbose --log-fd=9 --error-limit=no --leak-resolution=high";
+$valgopts = "--suppressions=../../valgrind.supp --leak-check=yes --show-reachable=yes --num-callers=15 --verbose --log-fd=9 --error-limit=no --leak-resolution=high";
 ## --leak-check=yes       Test for memory leaks at end
 ## --show-reachable=yes   Show allocated memory still reachable
 ## --num-callers=15       Backtrace 15 functions - use more if needed

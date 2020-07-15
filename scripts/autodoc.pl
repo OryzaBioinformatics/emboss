@@ -1062,7 +1062,7 @@ $progs{$thisprogram}
 		    $app = $1;
 		    if (defined($embassyprogs{$app})) {
 			$apppack = $embassyprogs{$app};
-			s/\"([^\/.]+)\.html/\"..\/embassy\/$apppack\/$app.html/;
+			s/\"([^\/.]+)\.html/\"..\/..\/embassy\/$apppack\/$app.html/;
 		    }
 		}
 		$text .= $_;
@@ -1082,7 +1082,7 @@ $progs{$thisprogram}
 		    if (defined($embassyprogs{$app})) {
 			$apppack = $embassyprogs{$app};
 			if ($apppack ne $embassyprogs{$thisprogram}) {
-			    s/\"([^\/.]+)\.html/\"..\/$apppack\/$app.html/;
+			    s/\"([^\/.]+)\.html/\"..\/..\/$apppack\/$app.html/;
 			}
 		    }
 		    else {

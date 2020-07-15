@@ -15,6 +15,10 @@ sub srsdref {
     return "<a href=\"http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz?-e+[EDATA-ID:$_[0]]\">$_[0]</a>";
 }
 
+sub srsdrefa {
+    return "<a href=\"http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz?-e+[EDATA-ALIAS:$_[0]]\">$_[0]</a>";
+}
+
 if ($ARGV[0]) {$infile = $ARGV[0];}
 if ($ARGV[1]) {$lib = $ARGV[1];}
 
@@ -572,7 +576,7 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	    print SRS "TX\n";
 
 	    ###if (!$prest) {print "bad alias spec '$fname', no description\n"}
-	    print $OFILE "<tr><td>".srsdref($fname)."</td><td>$prest</td></tr>\n";
+	    print $OFILE "<tr><td>".srsdrefa($fname)."</td><td>$prest</td></tr>\n";
 	}
 
 	elsif ($token eq "iterator")  {

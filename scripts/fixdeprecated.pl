@@ -3,6 +3,7 @@
 use English;
 
 $basefile = $ARGV[0];
+$basefile =~ s/[.]c$//;
 
 open (DEP, "$ENV{HOME}/cvsemboss/deprecated.txt") || die "Cannot open deprecated.txt";
 open (SRC, "$basefile.c") || die "Cannot open $basefile.c";

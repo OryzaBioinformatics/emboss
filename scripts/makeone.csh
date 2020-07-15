@@ -31,5 +31,6 @@ cd ../emboss
 echo "make $app"
 make $app |& egrep '^[^ =\[]*:'
 echo "install $app"
-/bin/sh ../libtool --mode=install /usr/bin/install -c $app /homes/pmr/local/bin/$app
+echo "/bin/sh ../libtool --mode=install /usr/bin/install -c $app $embossinst/$app"
+/bin/sh ../libtool --mode=install /usr/bin/install  -c $app $embossinst/bin/$app
 cp acd/$app.acd $embossinst/share/EMBOSS/acd/

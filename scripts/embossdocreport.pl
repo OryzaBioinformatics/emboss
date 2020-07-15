@@ -8,6 +8,7 @@ $totcount = 0;
 $totfile = 0;
 $filelib = "unknown";
 $filename = "unknown";
+$funcline = "Function 'undefined'\n";
 
 open (LOG, ">embossdocreport.log") || die "Cannot open embossdocreport.log";
 
@@ -49,7 +50,7 @@ while (<>) {
 	$newfunc = 1;
     }
 
-    if (/^set pubout \'([^\']+)\' lib \'([^\']+)\'/) {
+    elsif (/^set pubout \'([^\']+)\' lib \'([^\']+)\'/) {
 	$newfileline = $_;
 	$newfilename = $1;
 	$newfilelib = $2;
@@ -62,7 +63,28 @@ while (<>) {
 	}
     }
 
-    if (/^[.][.] File \/\S+\/([^\/]+)\/([^\/.]+)[.]([^\/.]+)$/) {
+    elsif (/^bad or missing docheader for (\S+)/) {
+	$funcname = $1;
+	$newfunc = 1;
+    }
+
+    elsif (/^bad docheader for (\S+) precedes (\S+)/) {
+	$funcname = $2;
+	$newfunc = 1;
+    }
+
+    elsif (/^bad/) {
+	if (!$errcount) {
+	    if (!$errfile) {
+		print LOG "=============================\n";
+		print LOG $newfileline;
+	    }
+	    print LOG "  ".$funcline;
+	}
+	$errcount++;
+	print LOG "    ".$_;
+    }
+    elsif (/^[.][.] File \/\S+\/([^\/]+)\/([^\/.]+)[.]([^\/.]+)$/) {
 	$newfileline = $_;
 	$newfilename = $2;
 	$newfilelib = $1;
@@ -107,31 +129,11 @@ while (<>) {
     }
 
 
-    if (/^bad or missing docheader for (\S+)/) {
-	$funcname = $1;
-	$newfunc = 1;
-    }
-
-    if (/^bad docheader for (\S+) precedes (\S+)/) {
-	$funcname = $2;
-	$newfunc = 1;
-    }
-
-    if (/^bad/) {
-	if (!$errcount) {
-	    if (!$errfile) {
-		print LOG "=============================\n";
-		print LOG $newfileline;
-	    }
-	    print LOG "  ".$funcline;
-	}
-	$errcount++;
-	print LOG "    ".$_;
-    }
 }
 
 if ($errcount) {
     $totcount += $errcount;
+    $errtotcount += $errcount;
     $errfunc++;
     if (!$errfile) {
 	$totfile++;
@@ -139,7 +141,11 @@ if ($errcount) {
     $errfile++;
 }
 
-if ($errfile) {$badfiles{$filelib."_".$filename}=$errfile}
+if ($errfile) {
+    $badfiles{$filelib."_".$filename}=$errfile;
+    $badtotfiles{$filelib."_".$filename}=$errtotcount;
+    $totfile++;
+}
 
 foreach $x (sort (keys (%badfiles))) {
     printf "%4d %4d %s\n", $badtotfiles{$x}, $badfiles{$x}, $x;

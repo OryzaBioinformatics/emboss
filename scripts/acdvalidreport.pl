@@ -90,6 +90,8 @@ print "\n$applcnt EMBOSS and $embassycnt EMBASSY applications\n";
 
 foreach $x(sort(keys(%apps))) {
     print "\n$apps{$x}";
-}foreach $x(sort(keys(%embassy))) {
+}
+
+foreach $x(sort(keys(%embassy))) {
     print "\n$embassy{$x}";
 }
