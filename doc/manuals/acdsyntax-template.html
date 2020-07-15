@@ -407,18 +407,6 @@ with text comments. For example:</p>
  67      10348   interesting region
 </pre>
 
-<!-- #acdtype-regexp -->
-<h5>Regexp</h5>
-
-<p>Any regular expression value. The length can be
-controlled by ACD attributes. The case can be set to upper or lower case only.
-The regular expression must be supported by the EMBOSS regular expression
-library.</p>
-
-<p>EMBOSS uses the "Perl-Compatible Regular Expression Library"
-(PCRE), so any regular expression that is valid in Perl 5.0 should be
-valid here.</p>
-
 <!-- #acdtype-string -->
 <h5>String</h5>
 
@@ -448,7 +436,6 @@ from the command line the value will be the default value. The name can also be
 prefixed by 'no' to force the value to be N (False). This is needed if the
 default value is Y (True). The data value is Y for yes and N for
 no.</p>
-
 
 
 <a name="sect2312">&nbsp;</a>
@@ -591,6 +578,18 @@ penalties will need to set them separately for each matrix.</p>
 algorithms. An integer matrix file can of course be used equally well
 as a floating point matrix.</p>
 
+<!-- #acdtype-pattern -->
+<h5>Pattern</h5>
+
+<p>Pattern definitions files allow multiple search patterns to be
+described, each with a name.</p>
+
+<p>Pattern files are used for PROSITE syntax sequence patterns. The
+same syntax is used for "regexp" input. Pattern files also allow
+mismatch values to be defined for each pattern, and a "-pmismatch"
+qualifier sets the mismatch default for all patterns in the
+file. Mismatches are not appropriate for regular expression matches.</p>
+
 <!-- #acdtype-properties -->
 <h5>Properties</h5>
 
@@ -601,6 +600,21 @@ applications to define weights, ancestral states and factors
 provide detailed type checking, and can automatically detect and
 validate the various alternative formats that phylip supports without
 the need for complex extra command line options.</p>
+
+<!-- #acdtype-regexp -->
+<h5>Regexp</h5>
+
+<p>Any regular expression value, or (new in release 4.0.0) a file
+containing regular expressions and names.</p>
+
+<p>The length can be vallidated and controlled
+by ACD attributes. The case can be set to upper or lower case only.
+The regular expression must be supported by the EMBOSS regular
+expression library.</p>
+
+<p>EMBOSS uses the "Perl-Compatible Regular Expression Library"
+(PCRE), so any regular expression that is valid in Perl 5.0 should be
+valid here.</p>
 
 <!-- #acdtype-scop -->
 <h5>Scop</h5>
@@ -747,7 +761,7 @@ file section to be defined.</p>
 <h5>Outdir</h5>
 
 <p>Output directory for multiple output files to be written.
-Specifying an <b>outditr</b> allows other properties to be defined,
+Specifying an <b>outdir</b> allows other properties to be defined,
 including the default file extension with the "extension" attribute.</p>
 
 <!-- #acdtype-outdiscrete -->
@@ -839,6 +853,10 @@ table, so the available formats include the most common feature formats.</p>
 single sequence. Can also write features if the "features" ACD
 attribute is set.</p>
 
+<p>The default file extension is the sequence format, but can be
+specifically set with the "osextension" attribute, for example where
+appliations produce two or more sequence outputs.</p>
+
 <!-- #acdtype-seqoutall -->
 <h5>Seqoutall</h5>
 
@@ -846,12 +864,20 @@ attribute is set.</p>
 single file. Can also write features if the "features" ACD attribute
 is set.</p>
 
+<p>The default file extension is the sequence format, but can be
+specifically set with the "osextension" attribute, for example where
+appliations produce two or more sequence outputs.</p>
+
 <!-- #acdtype-seqoutset -->
 <h5>Seqoutset</h5>
 
 <p>A set of single sequences stored in memory
 together, usually a multiple sequence alignment. Can also write features if the
 "features" ACD attribute is set.</p>
+
+<p>The default file extension is the sequence format, but can be
+specifically set with the "osextension" attribute, for example where
+appliations produce two or more sequence outputs.</p>
 
 <a name="sect2315">&nbsp;</a>
 <!-- #acdtype-section-graph -->
@@ -1344,6 +1370,14 @@ included in a GUI form. Some parameters are available on the command line, but
 are not generally useful to users, or can cause confusion when presented in a
 GUI form with all other options.</p>
 
+<p><i>outputmodifier:</i></p>
+
+<p>Indicates that this qualifier modifies the output in ways that can
+break parsers, for example by changing text output into HTML. Authors
+of wrappers can use this to test for qualifiers that can be hardcoded
+to fix the output syntax and content. Please let the EMBOSS team know
+if any other qualifiers are candidates for marking as output modifiers.
+
 <p><i>code:</i></p>
 
 <p>A code word (no spaces) which is searched for
@@ -1593,6 +1627,12 @@ qualifier. If set to "N" by default, then the default action may be
 the opposite of what the information or help text implies. If the
 value is calculated, the user may need some extra guidance.</p>
 
+<p>The <i>outputmodifier:</i> attribute is set where this parameter
+changes the content or syntax of the output. This is provided for the
+developers of other interfaces and parsers of EMBOSS output so that
+they can fix the value, or provide parsers for each alternative.
+
+
 <!-- #acdattr-float -->
 <h5>Float</h5>
 
@@ -1668,6 +1708,12 @@ qualifier. If set to "N" by default, then the default action may be
 the opposite of what the information or help text implies. If the
 value is calculated, the user may need some extra guidance.</p>
 
+<p>The <i>outputmodifier:</i> attribute is set where this parameter
+changes the content or syntax of the output. This is provided for the
+developers of other interfaces and parsers of EMBOSS output so that
+they can fix the value, or provide parsers for each alternative.
+
+
 <a name="sect24122">&nbsp;</a>
 <!-- #acdattr-section-input -->
 <h5>2.4.1.2.2 Input</h5>
@@ -1688,6 +1734,11 @@ usage table provided in the EMBOSS distribution.</p>
 <p>Individual codon inputs can set their own default names with the
 <i>name:</i> attribute which in the current version has the same
 effect as setting the <i>default:</i> attribute.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a data file. The application must be able to accept a
+null value for this qualifier.</p>
 
 <!-- #acdattr-cpdb -->
 <h5>Cpdb</h5>
@@ -1889,6 +1940,23 @@ scoring matrix is used as a DNA or Protein matrix.</p>
 scoring matrix is used as a DNA or Protein matrix.</p>
 
 
+<!-- #acdattr-pattern -->
+<h5>Pattern</h5>
+
+<p>Patterns are processed by an internal set of library functions
+designed to handle PROSITE-style pattern definitions.</p>
+
+<p>The <i>minlength:</i> attribute defines the minimum length the
+string must be, the <i>maxlength:</i> attribute defines the maximum
+length the regular expression string can be.</p>
+
+<p>The <i>upper:</i> and <i>lower:</i>attributes convert an input
+regular expression to upper or lower case before compiling.</p>
+
+<p>The <i>type:</i> attribute describes the pattern as applying to
+nucleotide or protein sequence. Nucleotide patterns are compared in
+both directions.</p>
+
 <!-- #acdattr-properties -->
 <h5>Properties</h5>
 
@@ -1932,6 +2000,10 @@ length the regular expression string can be.</p>
 
 <p>The <i>upper:</i> and <i>lower:</i>attributes convert an input
 regular expression to upper or lower case before compiling.</p>
+
+<p>The <i>type:</i> attribute describes the pattern as applying to
+nucleotide or protein sequence. Nucleotide patterns are compared in
+both directions.</p>
 
 <!-- #acdattr-scop -->
 <h5>Scop</h5>
@@ -2687,6 +2759,11 @@ will be generated instead. In combination with the <i>nullok:</i> and
 <i>missing:</i> attributes, this allows qualifiers to be null by
 default, and turned on from the command line.</p>
 
+<p>The <i>osextension:</i> attribute sets the default file
+extension. This is usually the sequence format, but can be
+specifically set with this attribute, for example where
+appliations produce two or more sequence outputs.</p>
+
 <!-- #acdattr-seqoutall -->
 <h5>Seqoutall</h5>
 
@@ -2724,6 +2801,11 @@ default, and turned on from the command line.</p>
 multiple sequence files. For example, the EMBOSS program "seqretsplit"
 splits an input sequence input multiple files using this attribute.</p>
 
+<p>The <i>osextension:</i> attribute sets the default file
+extension. This is usually the sequence format, but can be
+specifically set with this attribute, for example where
+appliations produce two or more sequence outputs.</p>
+
 <!-- #acdattr-seqoutset -->
 <h5>Seqoutset</h5>
 
@@ -2756,6 +2838,11 @@ will be generated instead. In combination with the <i>nullok:</i> and
 <i>missing:</i> attributes, this allows qualifiers to be null by
 default, and turned on from the command line.</p>
 
+<p>The <i>osextension:</i> attribute sets the default file
+extension. This is usually the sequence format, but can be
+specifically set with this attribute, for example where
+appliations produce two or more sequence outputs.</p>
+
 <a name="sect24125">&nbsp;</a>
 <!-- #acdattr-section-graph -->
 <h5>2.4.1.2.5 Graphics</h5>
@@ -2784,7 +2871,8 @@ output. It can be used to direct output to a named file rather than
 default to the first sequence name in the input.</p>
 
 <p>The command line qualifiers can be defined as ACD attributes. The
-most used are <i>gtitle:</i>, <i>gxtitle:</i> and <i>gytitle:</i>. 
+most used are <i>gdesc:</i>, <i>gtitle:</i>, <i>gxtitle:</i> and
+<i>gytitle:</i>. 
 
 <!-- #acdattr-xygraph -->
 <h5>Xygraph</h5>
@@ -2801,7 +2889,8 @@ required. If an empty string is specified on the command line, the
 standard default value will be generated instead.</p>
 
 <p>The command line qualifiers can be defined as ACD attributes. The
-most used are <i>gtitle:</i>, <i>gxtitle:</i> and <i>gytitle:</i>. 
+most used are <i>gdesc:</i>, <i>gtitle:</i>, <i>gxtitle:</i> and
+<i>gytitle:</i>. 
 
 <p>The <i>multiple:</i> attribute specifies the number of multiple XY
 graphs in a single output. The default value is 1, but is sometimes
@@ -2926,7 +3015,7 @@ moment.</p>
 <i>sequence.seq</i> the first (and only) parameter and <i>-debug
 </i>instructs the program to turn debugging on. In the second example
 <b>seqret</b> is run with the same parameter, but the <i>-debug</i>
-qualifier is no prefixed with ' <i>no</i>', instructing the program to
+qualifier is now prefixed with ' <i>no</i>', instructing the program to
 turn debugging off (this could be useful if debugging was turned on by
 default in the resource files or in an environment variable).</p>
 
