@@ -32,15 +32,15 @@
 ** @alias PatSTypes
 ** @alias PatOTypes
 **
-** @attr Name [char*] Type name
-** @attr Desc [char*] Type description
+** @attr Name [const char*] Type name
+** @attr Desc [const char*] Type description
 ** @@
 ******************************************************************************/
 
 typedef struct PatSRegTypes
 {
-    char *Name;
-    char *Desc;
+    const char *Name;
+    const char *Desc;
 } PatORegTypes;
 
 #define PatPRegTypes PatORegTypes*
@@ -53,6 +53,64 @@ static PatORegTypes patRegTypes[] = {
   {NULL, NULL}
 };
 
+/* @datastatic PatPRegInformat ************************************************
+**
+** Regular expression pattern file formats
+**
+** @alias PatSRegInformat
+** @alias PatORegInformat
+**
+** @attr Name [const char*] Format name
+** @attr Desc [const char*] Format description
+** @@
+******************************************************************************/
+
+typedef struct PatSRegInformat
+{
+    const char *Name;
+    const char *Desc;
+} PatORegInformat;
+
+#define PatPRegInformat PatORegInformat*
+
+static PatORegInformat patRegInformat[] = {
+    /* "Name",        "Description" */
+    {"unknown",    "Unknown"}, 
+    {"simple",     "Single sequence per line"},
+    {"fasta",      "Fasta sequence style with header"},
+    {NULL, NULL}
+};
+
+/* @datastatic PatPSeqInformat ************************************************
+**
+** Sequence pattern file formats
+**
+** @alias PatSSeqInformat
+** @alias PatOSeqInformat
+**
+** @attr Name [const char*] Format name
+** @attr Desc [const char*] Format description
+** @@
+******************************************************************************/
+
+typedef struct PatSSeqInformat
+{
+    const char *Name;
+    const char *Desc;
+} PatOSeqInformat;
+
+#define PatPSeqInformat PatOSeqInformat*
+
+static PatOSeqInformat patSeqInformat[] = {
+/* "Name",        "Description" */
+  {"fasta",      "Fasta sequence style with header"},
+  {"simple",     "Single sequence per line"},
+  {NULL, NULL}
+};
+
+static ajuint patternRegexFormat(const AjPStr fmt);
+static ajuint patternSeqFormat(const AjPStr fmt);
+
 /* @func ajPatternSeqNewList **************************************************
 **
 ** Constructor for a sequence pattern object. Sets all but compiled object.
@@ -61,13 +119,13 @@ static PatORegTypes patRegTypes[] = {
 ** @param [u] plist [AjPPatlistSeq] Pattern list
 ** @param [r] name [const AjPStr] Name of the pattern
 ** @param [r] pat [const AjPStr] Pattern as string
-** @param [r] mismatch [ajint] mismatch value
+** @param [r] mismatch [ajuint] mismatch value
 ** @return [AjPPatternSeq] New pattern object
 ** @@
 ******************************************************************************/
 AjPPatternSeq ajPatternSeqNewList (AjPPatlistSeq plist,
 				   const AjPStr name, const AjPStr pat,
-				   ajint mismatch)
+				   ajuint mismatch)
 {
     AjPPatternSeq pthis;
 
@@ -170,10 +228,7 @@ void ajPatternSeqDel (AjPPatternSeq* pthys)
     ajStrDel(&thys->Name);
     ajStrDel(&thys->Pattern);
 
-    if (&thys->Compiled)
-	ajDebug ("Pattern still has compiled pattern in causing memory leak. ",
-		 "Use embRemoveCompiledPatterns to remove it.\n");
-
+    ajPatCompDel((AjPPatComp*) &thys->Compiled);
     AJFREE (*pthys);
 
     return;
@@ -276,10 +331,10 @@ AjBool ajPatternSeqGetProtein (const AjPPatternSeq thys)
 ** Returns the type of the pattern.
 **
 ** @param [r] thys [const AjPPatternRegex] Pattern
-** @return [ajint] Type of the pattern.
+** @return [ajuint] Type of the pattern.
 ** @@
 ******************************************************************************/
-ajint ajPatternRegexGetType (const AjPPatternRegex thys)
+ajuint ajPatternRegexGetType (const AjPPatternRegex thys)
 {
     return thys->Type;
 }
@@ -289,10 +344,10 @@ ajint ajPatternRegexGetType (const AjPPatternRegex thys)
 ** Returns the mismatch of the pattern.
 **
 ** @param [r] thys [const AjPPatternSeq] Pattern
-** @return [ajint] Mismatch value of the pattern.
+** @return [ajuint] Mismatch value of the pattern.
 ** @@
 ******************************************************************************/
-ajint ajPatternSeqGetMismatch (const AjPPatternSeq thys)
+ajuint ajPatternSeqGetMismatch (const AjPPatternSeq thys)
 {
     return thys->Mismatch;
 }
@@ -389,11 +444,11 @@ AjPPatlistRegex ajPatlistRegexNew (void)
 **
 ** Constructor for a pattern list object with a specified type
 **
-** @param [r] type [ajint] type value
+** @param [r] type [ajuint] type value
 ** @return [AjPPatlistRegex] New pattern list object
 ** @@
 ******************************************************************************/
-AjPPatlistRegex ajPatlistRegexNewType (ajint type)
+AjPPatlistRegex ajPatlistRegexNewType (ajuint type)
 {
     AjPPatlistRegex pthis;
 
@@ -516,77 +571,121 @@ void ajPatlistSeqDel (AjPPatlistSeq* pthys)
 **
 ** @param [r] patspec [const AjPStr] Pattern specification
 ** @param [r] patname [const AjPStr] Default pattern name prefix
+** @param [r] fmt [const AjPStr] Pattern file format
 ** @param [r] protein [AjBool] ajTrue for protein patterns
-** @param [r] mismatches [ajint] default number of mismatches
+** @param [r] mismatches [ajuint] default number of mismatches
 ** @return [AjPPatlistSeq] Pattern list
 ** @@
 ******************************************************************************/
 AjPPatlistSeq ajPatlistSeqRead (const AjPStr patspec,
 				const AjPStr patname,
-				AjBool protein, ajint mismatches)
+				const AjPStr fmt,
+				AjBool protein, ajuint mismatches)
 {
     AjPPatlistSeq patlist = NULL;
-    AjPPatternSeq pattern;
     AjPStr line = NULL;
     AjPStr name = NULL;
-    AjPFile infile = NULL;
-    AjPRegexp misreg = NULL;
+    AjPFileBuff infile = NULL;
+    AjPRegexp mismreg = NULL;
     AjPStr patstr = NULL;
     AjPStr pat = NULL;
-    ajint mismatch = 0;
+    ajuint mismatch = 0;
+    ajint ifmt = 0;
+    ajuint npat = 0;
+    AjPStr namestr = NULL;
+
+    ajStrAssignS(&namestr, patname);
+    ajStrAssignEmptyC(&namestr, "pattern");
 
     ajStrAssignS(&patstr, patspec);
 
     patlist = ajPatlistSeqNewType(protein);
 
+    ifmt = patternSeqFormat(fmt);
+
     ajDebug("ajPatlistSeqRead patspec: '%S' patname: '%S' "
 	    "protein: %B mismatches: %d\n",
 	    patspec, patname, protein, mismatches);
-    if(ajStrGetCharFirst(patstr) == '@') {
+    if(ajStrGetCharFirst(patstr) == '@')
+    {
 	ajStrCutStart(&patstr, 1);
-	infile = ajFileNewIn(patstr);
+	infile = ajFileBuffNewIn(patstr);
+	if(!infile)
+	{
+	    ajErr("Unable to open pattern file '%S'", patstr);
+	    return NULL;
+	}
 	line = ajStrNew();
 	name = ajStrNew();
 
-	while (ajFileGetsTrim(infile,&line))
+	if(!ifmt)
 	{
-	    AjPRegexp misreg = ajRegCompC("<mismatch=(\\d+)>");
-	    if (ajStrGetCharFirst(line) == '>')
-	    {
-		if (ajStrGetLen(name))
-		{
-		    pattern = ajPatternSeqNewList(patlist,name,pat,
-						  mismatch);
-		    ajStrSetClear(&name);
-		    ajStrSetClear(&pat);
-		    mismatch=mismatches;
-		}
-		ajStrCutStart(&line,1);
-		if (ajRegExec(misreg,line))
-		{
-		    ajRegSubI(misreg,1,&name);
-		    ajStrToInt(name,&mismatch);
-		    ajStrTruncateLen(&line,ajRegOffset(misreg));
-		    ajStrTrimWhiteEnd(&line);
-		}
-		ajStrAssignS (&name,line);
-		ajStrAssignEmptyS(&name, patname);
-	    }
+	    ajFileBuffGetTrim(infile,&line);
+	    if(ajStrPrefixC(line, ">"))
+		ifmt = 2;
 	    else
-		ajStrAppendS (&pat,line);
+		ifmt = 1;
+	    ajFileBuffReset(infile);
 	}
-	pattern = ajPatternSeqNewList(patlist,name,pat,mismatch);
-	ajFileClose(&infile);
-	ajRegFree(&misreg);
+	
+	switch(ifmt)
+	{
+	case 1:
+	    while (ajFileBuffGetTrim(infile,&line))
+	    {
+		npat++;
+		ajStrAppendS (&pat,line);
+		ajFmtPrintS(&name, "%S%u", namestr, npat);
+		ajPatternSeqNewList(patlist,name,pat,mismatches);
+		ajStrSetClear(&pat);
+	    }
+	    break;
+	default:
+	    mismreg = ajRegCompC("<mismatch=(\\d+)>");
+	    while (ajFileBuffGetTrim(infile,&line))
+	    {
+		if (ajStrGetCharFirst(line) == '>')
+		{
+		    if (ajStrGetLen(name))
+		    {
+			ajPatternSeqNewList(patlist,name,pat,
+					    mismatch);
+			ajStrSetClear(&name);
+			ajStrSetClear(&pat);
+			mismatch=mismatches;
+		    }
+		    ajStrCutStart(&line,1);
+		    if (ajRegExec(mismreg,line))
+		    {
+			ajRegSubI(mismreg,1,&name);
+			ajStrToUint(name,&mismatch);
+			ajStrTruncateLen(&line,ajRegOffset(mismreg));
+			ajStrTrimWhiteEnd(&line);
+		    }
+		    ajStrAssignS (&name,line);
+		    ajStrAssignEmptyS(&name, patname);
+		}
+		else
+		    ajStrAppendS (&pat,line);
+	    }
+	    ajStrAssignEmptyS(&name, patname);
+	    ajPatternSeqNewList(patlist,name,pat,mismatch);
+	    ajRegFree(&mismreg);
+	    break;
+	}
+	ajFileBuffDel(&infile);
     }
     else
     {
-	pattern = ajPatternSeqNewList(patlist,patname,patstr,mismatches);
+	npat++;
+	ajFmtPrintS(&name, "%S%u", namestr, npat);
+	ajPatternSeqNewList(patlist,name,patstr,mismatches);
     }
 
     ajStrDel(&name);
     ajStrDel(&line);
     ajStrDel(&pat);
+    ajStrDel(&namestr);
     ajStrDel(&patstr);
 
     return patlist;
@@ -598,7 +697,8 @@ AjPPatlistSeq ajPatlistSeqRead (const AjPStr patspec,
 **
 ** @param [r] patspec [const AjPStr] Name of the file with patterns
 ** @param [r] patname [const AjPStr] Default pattern name prefix
-** @param [r] type [ajint] Type of the patterns
+** @param [r] fmt [const AjPStr] Pattern file format
+** @param [r] type [ajuint] Type of the patterns
 ** @param [r] upper [AjBool] Convert to upper case
 ** @param [r] lower [AjBool] Convert to lower case
 ** @return [AjPPatlistRegex] Pattern list
@@ -606,58 +706,112 @@ AjPPatlistSeq ajPatlistSeqRead (const AjPStr patspec,
 ******************************************************************************/
 AjPPatlistRegex ajPatlistRegexRead (const AjPStr patspec,
 				    const AjPStr patname,
-				    ajint type, AjBool upper, AjBool lower)
+				    const AjPStr fmt,
+				    ajuint type, AjBool upper, AjBool lower)
 {
     AjPPatlistRegex patlist = NULL;
-    AjPPatternRegex pattern;
     AjPStr line = NULL;
     AjPStr pat  = NULL;
     AjPStr name = NULL;
-    AjPFile infile = NULL;
+    AjPFileBuff infile = NULL;
+    AjPStr patstr = NULL;
+    ajuint ifmt;
+    ajuint npat = 0;
+    AjPStr namestr = NULL;
+
+    ajStrAssignS(&namestr, patname);
+    ajStrAssignEmptyC(&namestr, "regex");
+
+    ajStrAssignS(&patstr, patspec);
 
     patlist = ajPatlistRegexNewType(type);
 
+    ifmt = patternRegexFormat(fmt);
+
     if(ajStrGetCharFirst(patspec) ==  '@')
     {
-	infile = ajFileNewIn(patspec);
+	ajStrCutStart(&patstr, 1);
+	infile = ajFileBuffNewIn(patstr);
+	if(!infile) {
+	    ajErr("Unable to open regular expression file '%S'", patstr);
+	    return NULL;
+	}
 	line = ajStrNew();
 	pat  = ajStrNew();
 	name = ajStrNew();
 
-	while (ajFileGetsTrim(infile,&line))
+	if(!ifmt)
 	{
-	    if (ajStrFindC(line,">")>-1)
-	    {
-		if (ajStrGetLen(name))
-		{
-		    if(lower)
-			ajStrFmtLower(&pat);
-		    if(upper)
-			ajStrFmtUpper(&pat);
-		    pattern = ajPatternRegexNewList(patlist,name,pat);
-		    ajStrSetClear(&name);
-		    ajStrSetClear(&pat);
-		}
-		ajStrCutStart(&line,1);
-		ajStrAssignS (&name,line);
-	    }
+	    ajFileBuffGetTrim(infile,&line);
+	    if(ajStrPrefixC(line, ">"))
+		ifmt = 2;
 	    else
-		ajStrAppendS (&pat,line);
+		ifmt = 1;
+	    ajFileBuffReset(infile);
 	}
-	pattern = ajPatternRegexNewList(patlist,name,pat);
+	
+	switch(ifmt)
+	{
+	case 1:
+	    while (ajFileBuffGetTrim(infile,&line))
+	    {
+		npat++;
+		ajStrAppendS (&pat,line);
+		if(lower)
+		    ajStrFmtLower(&pat);
+		if(upper)
+		    ajStrFmtUpper(&pat);
+		ajFmtPrintS(&name, "%S%u", namestr, npat);
+		ajPatternRegexNewList(patlist,name,pat);
+		ajStrSetClear(&pat);
+	    }
+	    break;
+	default:
+	    while (ajFileBuffGetTrim(infile,&line))
+	    {
+		if (ajStrFindC(line,">")>-1)
+		{
+		    npat++;
+		    if (ajStrGetLen(name))
+		    {
+			if(lower)
+			    ajStrFmtLower(&pat);
+			if(upper)
+			    ajStrFmtUpper(&pat);
+			ajPatternRegexNewList(patlist,name,pat);
+			ajStrSetClear(&name);
+			ajStrSetClear(&pat);
+		    }
+		    ajStrCutStart(&line,1);
+		    ajStrAssignS (&name,line);
+		    if(!ajStrGetLen(name))
+			ajFmtPrintS(&name, "%S%u", namestr, npat);
+		}
+		else
+		    ajStrAppendS (&pat,line);
+	    }
+	    ajStrAssignEmptyS(&name, patname);
+	    ajPatternRegexNewList(patlist,name,pat);
+	    ajStrSetClear(&pat);
+	    break;
+	}
+	ajFileBuffDel(&infile);
     }
     else
     {
+	npat++;
 	ajStrAssignS(&pat, patspec);
 	if(lower)
 	    ajStrFmtLower(&pat);
 	if(upper)
 	    ajStrFmtUpper(&pat);
-	pattern = ajPatternRegexNewList(patlist,patname,pat);
+	ajFmtPrintS(&name, "%S%u", namestr, npat);
+	ajPatternRegexNewList(patlist,name,pat);
     }
 
-    ajFileClose(&infile);
     ajStrDel(&name);
+    ajStrDel(&namestr);
+    ajStrDel(&patstr);
     ajStrDel(&line);
     ajStrDel(&pat);
 
@@ -669,10 +823,10 @@ AjPPatlistRegex ajPatlistRegexRead (const AjPStr patspec,
 ** Gets number of patterns from list.
 **
 ** @param [r] thys [const AjPPatlistSeq] Pattern list object
-** @return [ajint] Number of patterns
+** @return [ajuint] Number of patterns
 ** @@
 ******************************************************************************/
-ajint ajPatlistSeqGetSize (const AjPPatlistSeq thys)
+ajuint ajPatlistSeqGetSize (const AjPPatlistSeq thys)
 {
     return ajListLength(thys->Patlist);
 }
@@ -682,10 +836,10 @@ ajint ajPatlistSeqGetSize (const AjPPatlistSeq thys)
 ** Gets number of patterns from list.
 **
 ** @param [r] thys [const AjPPatlistRegex] Pattern list object
-** @return [ajint] Number of patterns
+** @return [ajuint] Number of patterns
 ** @@
 ******************************************************************************/
-ajint ajPatlistRegexGetSize (const AjPPatlistRegex thys)
+ajuint ajPatlistRegexGetSize (const AjPPatlistRegex thys)
 {
     return ajListLength(thys->Patlist);
 }
@@ -858,14 +1012,14 @@ void ajPatlistAddRegex (AjPPatlistRegex thys, AjPPatternRegex pat)
     return;
 }
 
-/* @func ajPPatCompNew *******************************************************
+/* @func ajPatCompNew *******************************************************
 **
 ** Create prosite pattern structure.
 **
 ** @return [AjPPatComp] pattern structure
 ** @@
 ******************************************************************************/
-AjPPatComp ajPPatCompNew ()
+AjPPatComp ajPatCompNew (void)
 {
     AjPPatComp pthis;
 
@@ -877,7 +1031,7 @@ AjPPatComp ajPPatCompNew ()
     return pthis;
 }
 
-/* @func ajPPatCompDel *******************************************************
+/* @func ajPatCompDel *******************************************************
 **
 ** Delete prosite pattern structure.
 **
@@ -886,17 +1040,22 @@ AjPPatComp ajPPatCompNew ()
 ** @return [void]
 ** @@
 ******************************************************************************/
-void ajPPatCompDel (AjPPatComp *pthys)
+void ajPatCompDel (AjPPatComp *pthys)
 {
-    int i;
+    ajuint i;
 
-    AjPPatComp pthis = *pthys;
-    ajStrDel(&pthis->pattern);
-    ajStrDel(&pthis->regex);
+    AjPPatComp thys = *pthys;
+    ajStrDel(&thys->pattern);
+    ajStrDel(&thys->regex);
 
-    if(pthis->type==6)
-	for(i=0;i<pthis->m;++i)
-	    AJFREE(pthis->skipm[i]);
+    if(thys->buf)
+      AJFREE(thys->buf);
+    if(thys->sotable)
+      AJFREE(thys->sotable);
+
+    if(thys->type==6)
+	for(i=0;i<thys->m;++i)
+	    AJFREE(thys->skipm[i]);
 
     AJFREE(*pthys);
 
@@ -904,21 +1063,78 @@ void ajPPatCompDel (AjPPatComp *pthys)
 }
 
 
-/* @func ajPatternRegexType ***************************************************
+/* @funcstatic patternRegexFormat *********************************************
 **
-** Returns type assocaited with a named type of regular expression
+** Returns format associated with a named format of regular expression
 **
-** @param [r] type [const AjPStr] Regular expression type
-** @return [ajint] Type number, defaults to 0 (string)
+** @param [r] fmt [const AjPStr] Regular expression format
+** @return [ajuint] Format number, defaults to 0 (string)
 ******************************************************************************/
 
-ajint ajPatternRegexType(const AjPStr type)
+static ajuint patternRegexFormat(const AjPStr fmt)
 {
-    ajint i = 0;
+    ajuint i = 0;
+
+    if(!ajStrGetLen(fmt))
+       return 0;
+
+    while (patRegInformat[i].Name) {
+	if(ajStrMatchCaseC(fmt, patRegInformat[i].Name))
+	    return i;
+	i++;
+    }
+    ajErr("Unrecognized regular expression file format '%S'",fmt);
+
+    return 0;
+}
+
+
+
+
+/* @funcstatic patternSeqFormat ***********************************************
+**
+** Returns format associated with a named format of sequence pattern
+**
+** @param [r] fmt [const AjPStr] Regular expression format
+** @return [ajuint] Format number, defaults to 0 
+******************************************************************************/
+
+static ajuint patternSeqFormat(const AjPStr fmt)
+{
+    ajuint i = 0;
+
+    if(!ajStrGetLen(fmt))
+       return 0;
+
+    while (patSeqInformat[i].Name) {
+	if(ajStrMatchCaseC(fmt, patSeqInformat[i].Name))
+	    return i;
+	i++;
+    }
+    ajErr("Unrecognized pattern file format '%S'",fmt);
+
+    return 0;
+}
+
+
+
+
+/* @func ajPatternRegexType ***************************************************
+**
+** Returns type associated with a named type of regular expression
+**
+** @param [r] type [const AjPStr] Regular expression type
+** @return [ajuint] Type number, defaults to 0 (string)
+******************************************************************************/
+
+ajuint ajPatternRegexType(const AjPStr type)
+{
+    ajuint i = 0;
 
     while (patRegTypes[i].Name) {
 	if(ajStrMatchCaseC(type, patRegTypes[i].Name))
 	    return i;
+	i++;
     }
     return 0;
 }
@@ -932,10 +1148,10 @@ ajint ajPatternRegexType(const AjPStr type)
 **
 ** @param [u] plist [AjPPatlistRegex] Pattern list object
 ** @param [w] pdoc [AjPStr*] Formatted string
-** @return [ajint] Number of patterns
+** @return [ajuint] Number of patterns
 ** @@
 ******************************************************************************/
-ajint ajPatlistRegexDoc (AjPPatlistRegex plist, AjPStr* pdoc)
+ajuint ajPatlistRegexDoc (AjPPatlistRegex plist, AjPStr* pdoc)
 {
     AjPPatternRegex pat = NULL;
 
@@ -957,11 +1173,11 @@ ajint ajPatlistRegexDoc (AjPPatlistRegex plist, AjPStr* pdoc)
 ** Documents patterns to a formatted string
 **
 ** @param [u] plist [AjPPatlistSeq] Pattern list object
-** @param [w] pdoc [AjPStr*] kFormatted string
-** @return [ajint] Number of patterns
+** @param [w] pdoc [AjPStr*] Formatted string
+** @return [ajuint] Number of patterns
 ** @@
 ******************************************************************************/
-ajint ajPatlistSeqDoc (AjPPatlistSeq plist, AjPStr* pdoc)
+ajuint ajPatlistSeqDoc (AjPPatlistSeq plist, AjPStr* pdoc)
 {
     AjPPatternSeq pat = NULL;
 

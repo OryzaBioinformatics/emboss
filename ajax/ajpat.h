@@ -19,36 +19,38 @@ extern "C"
 **
 ** AJAX data structure for nodes in Baeza-Yates & Perleberg algorithm
 **
-** @attr offset [ajint] Offset
 ** @attr next [struct AjSPatBYPNode*] Pointer to next node
+** @attr offset [ajint] Offset
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSPatBYPNode
 {
-    ajint offset;
     struct AjSPatBYPNode *next;
+    ajint offset;
+    char  Padding[4];
 } AjOPatBYPNode;
 #define AjPPatBYPNode AjOPatBYPNode*
 
 /* @data AjPPatComp **********************************************************
 **
-** NUCLEUS data structure that holds all needed datas for compiling and
+** AJAX data structure that holds all needed data for compiling and
 ** searching. Not including mismatch number.
 **
 ** @alias AjSPatComp
 ** @alias AjOPatComp
 **
 ** @attr pattern [AjPStr] Prosite pattern string
-** @attr type [ajint] Prosite pattern compile type
-** @attr plen [ajint] Prosite pattern length
-** @attr buf [ajint*] Buffer for BMH search
+** @attr type [ajuint] Prosite pattern compile type
+** @attr plen [ajuint] Prosite pattern length
+** @attr buf [ajint*] Buffer for BMH search (can be -1)
 ** @attr off [AjOPatBYPNode[AJALPHA]] Offset buffer for B-Y/P search
 ** @attr sotable [ajuint*] Buffer for SHIFT-OR
 ** @attr solimit [ajuint] Limit for BMH search
-** @attr m [ajint] Real length of pattern (from embPatGetType)
+** @attr m [ajuint] Real length of pattern (from embPatGetType)
 ** @attr regex [AjPStr] PCRE regexp string
-** @attr skipm [ajint**] Skip buffer for Tarhio-Ukkonen
+** @attr skipm [ajuint**] Skip buffer for Tarhio-Ukkonen
 ** @attr amino [AjBool] Must match left begin
 ** @attr carboxyl [AjBool] Must match right
 **
@@ -58,15 +60,15 @@ typedef struct AjSPatBYPNode
 typedef struct AjSPatComp
 {
     AjPStr pattern;
-    ajint type;
-    ajint plen;
+    ajuint type;
+    ajuint plen;
     ajint* buf;
     AjOPatBYPNode off[AJALPHA];
     ajuint* sotable;
     ajuint solimit;
-    ajint m;
+    ajuint m;
     AjPStr regex;
-    ajint** skipm;
+    ajuint** skipm;
     AjBool amino;
     AjBool carboxyl;
 } AjOPatComp;
@@ -86,7 +88,7 @@ typedef struct AjSPatComp
 ** @attr Pattern [AjPStr] Pattern in string format.
 ** @attr Compiled [void*] Compiled version of the pattern.
 ** @attr Protein [AjBool] True if protein pattern
-** @attr Mismatch [ajint] Mismatch value.
+** @attr Mismatch [ajuint] Mismatch value.
 **
 ** @new ajPatternSeqNew Default constructor
 ** @delete ajPatternSeqDel Default destructor
@@ -103,7 +105,7 @@ typedef struct AjSPatternSeq {
   AjPStr Pattern;
   void* Compiled;
   AjBool Protein;
-  ajint Mismatch;
+  ajuint Mismatch;
 } AjOPatternSeq;
 
 #define AjPPatternSeq AjOPatternSeq*
@@ -121,7 +123,8 @@ typedef struct AjSPatternSeq {
 ** @attr Name [AjPStr] Name.
 ** @attr Pattern [AjPStr] Pattern in string format.
 ** @attr Compiled [AjPRegexp] Compiled version of the pattern.
-** @attr Type [ajint] Type.
+** @attr Type [ajuint] Type.
+** @attr Padding [char[4]] Padding to alignment boundary
 **
 ** @new ajPatternRegexNew Default constructor
 ** @delete ajPatternRegexDel Default destructor
@@ -136,7 +139,8 @@ typedef struct AjSPatternRegex {
   AjPStr    Name;
   AjPStr    Pattern;
   AjPRegexp Compiled;
-  ajint     Type;
+  ajuint    Type;
+  char      Padding[4];
 } AjOPatternRegex;
 
 #define AjPPatternRegex AjOPatternRegex*
@@ -160,6 +164,7 @@ typedef struct AjSPatternRegex {
 ** @attr Patlist [AjPList] List for patterns.
 ** @attr Iter [AjIList] List iterator.
 ** @attr Protein [AjBool] True if protein
+** @attr Padding [char[4]] Padding to alignment boundary
 **
 ** @new ajPatlistNew Default constructor.
 ** @delete ajPatlistDel Default destructor.
@@ -176,6 +181,7 @@ typedef struct AjSPatlistSeq {
   AjPList Patlist;
   AjIList Iter;
   AjBool Protein;
+  char   Padding[4];
 } AjOPatlistSeq;
 
 #define AjPPatlistSeq AjOPatlistSeq*
@@ -191,7 +197,8 @@ typedef struct AjSPatlistSeq {
 **
 ** @attr Patlist [AjPList] List for patterns.
 ** @attr Iter [AjIList] List iterator.
-** @attr Type [ajint] Type of expression
+** @attr Type [ajuint] Type of expression
+** @attr Padding [char[4]] Padding to alignment boundary
 **
 ** @new ajPatlistNew Default constructor.
 ** @delete ajPatlistDel Default destructor.
@@ -207,7 +214,8 @@ typedef struct AjSPatlistSeq {
 typedef struct AjSPatlistRegex {
   AjPList Patlist;
   AjIList Iter;
-  ajint Type;
+  ajuint Type;
+  char Padding[4];
 } AjOPatlistRegex;
 
 #define AjPPatlistRegex AjOPatlistRegex*
@@ -217,13 +225,13 @@ typedef struct AjSPatlistRegex {
 */
 
 AjPPatternSeq ajPatternSeqNewList (AjPPatlistSeq plist, const AjPStr name,
-				   const AjPStr pat, ajint mismatch);
+				   const AjPStr pat, ajuint mismatch);
 void ajPatternSeqDel (AjPPatternSeq* pthys);
 const AjPStr ajPatternSeqGetName (const AjPPatternSeq thys);
 const AjPStr ajPatternSeqGetPattern (const AjPPatternSeq thys);
 AjPPatComp ajPatternSeqGetCompiled (const AjPPatternSeq thys);
 AjBool ajPatternSeqGetProtein (const AjPPatternSeq thys);
-ajint ajPatternSeqGetMismatch (const AjPPatternSeq thys);
+ajuint ajPatternSeqGetMismatch (const AjPPatternSeq thys);
 void ajPatternSeqSetCompiled (AjPPatternSeq thys, void* pat);
 void ajPatternSeqDebug (const AjPPatternSeq pat);
 
@@ -234,23 +242,25 @@ void ajPatternRegexDel (AjPPatternRegex* pthys);
 const AjPStr ajPatternRegexGetName (const AjPPatternRegex thys);
 const AjPStr ajPatternRegexGetPattern (const AjPPatternRegex thys);
 AjPRegexp ajPatternRegexGetCompiled (const AjPPatternRegex thys);
-ajint ajPatternRegexGetType (const AjPPatternRegex thys);
+ajuint ajPatternRegexGetType (const AjPPatternRegex thys);
 void ajPatternRegexSetCompiled (AjPPatternRegex thys, AjPRegexp pat);
 void ajPatternRegexDebug (const AjPPatternRegex pat);
 
 /* Patlist handling functions */
 AjPPatlistSeq ajPatlistSeqNewType (AjBool Protein);
-AjPPatlistRegex ajPatlistRegexNewType (ajint type);
+AjPPatlistRegex ajPatlistRegexNewType (ajuint type);
 AjPPatlistRegex ajPatlistRegexNew (void);
 AjPPatlistSeq ajPatlistSeqNew (void);
 void ajPatlistSeqDel (AjPPatlistSeq* pthys);
 void ajPatlistRegexDel (AjPPatlistRegex* pthys);
 AjPPatlistRegex ajPatlistRegexRead(const AjPStr patspec,
 				   const AjPStr patname,
-				   ajint type, AjBool upper, AjBool lower);
+				   const AjPStr fmt,
+				   ajuint type, AjBool upper, AjBool lower);
 AjPPatlistSeq ajPatlistSeqRead(const AjPStr patspec,
 			       const AjPStr patname,
-			       AjBool protein, ajint mismatches);
+			       const AjPStr fmt,
+			       AjBool protein, ajuint mismatches);
 AjBool ajPatlistRegexGetNext (AjPPatlistRegex thys,
 			      AjPPatternRegex* pattern);
 AjBool ajPatlistSeqGetNext (AjPPatlistSeq thys,
@@ -261,14 +271,14 @@ void ajPatlistSeqRemoveCurrent (AjPPatlistSeq thys);
 void ajPatlistRegexRemoveCurrent (AjPPatlistRegex thys);
 void ajPatlistAddRegex (AjPPatlistRegex thys, AjPPatternRegex pat);
 void ajPatlistAddSeq (AjPPatlistSeq thys, AjPPatternSeq pat);
-ajint ajPatlistSeqGetSize(const AjPPatlistSeq plist);
-ajint ajPatlistRegexGetSize(const AjPPatlistRegex plist);
-ajint ajPatlistRegexDoc(AjPPatlistRegex thys, AjPStr* pdoc);
-ajint ajPatlistSeqDoc(AjPPatlistSeq thys, AjPStr* pdoc);
+ajuint ajPatlistSeqGetSize(const AjPPatlistSeq plist);
+ajuint ajPatlistRegexGetSize(const AjPPatlistRegex plist);
+ajuint ajPatlistRegexDoc(AjPPatlistRegex thys, AjPStr* pdoc);
+ajuint ajPatlistSeqDoc(AjPPatlistSeq thys, AjPStr* pdoc);
 
-AjPPatComp	ajPPatCompNew (void);
-void		ajPPatCompDel (AjPPatComp* pthys);
-ajint ajPatternRegexType(const AjPStr type);
+AjPPatComp	ajPatCompNew (void);
+void		ajPatCompDel (AjPPatComp* pthys);
+ajuint ajPatternRegexType(const AjPStr type);
 
 /*
 ** End of prototype definitions
