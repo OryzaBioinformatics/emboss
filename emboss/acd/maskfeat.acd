@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "any"
     features: "Y"
@@ -21,7 +21,7 @@ section: additional [
   type: "page"
 ]
 
-  string: type  [
+  string: type [
     additional: "Y"
     default: "repeat*"
     information: "Type of feature to mask"
@@ -39,7 +39,7 @@ section: additional [
     knowntype: "feature key list"
   ]
 
-  toggle: tolower  [
+  toggle: tolower [
     additional: "Y"
     default: "N"
     information: "Change masked region to lower-case"
@@ -51,7 +51,7 @@ section: additional [
            lower-case by using the '-supper' flag."
   ]
 
-  string: maskchar  [
+  string: maskchar [
     additional: "@(!$(tolower))"
     default: "@($(acdprotein)?X:N)"
     information: "Character to mask with"
@@ -72,7 +72,7 @@ section: output [
   type: "page"
 ]
 
-  seqout: outseq  [
+  seqout: outseq [
     parameter: "Y"
   ]
 

@@ -1,7 +1,7 @@
 application: distmat [
   documentation: "Creates a distance matrix from multiple
                   alignments"
-  groups: "Phylogeny:Distance matrix"
+  groups: "Phylogeny:Molecular sequence"
 ]
 
 section: input [
@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqset: sequence  [
+  seqset: sequence [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
@@ -23,7 +23,7 @@ section: required [
   type: "page"
 ]
 
-  list: nucmethod  [
+  list: nucmethod [
     standard: "@(!$(acdprotein))"
     default: "0"
     minimum: "1"
@@ -38,7 +38,7 @@ section: required [
     help: "Multiple substitution correction methods for nucleotides."
   ]
 
-  list: protmethod  [
+  list: protmethod [
     standard: "$(acdprotein)"
     default: "0"
     minimum: "1"
@@ -58,25 +58,25 @@ section: additional [
   type: "page"
 ]
 
-  boolean: ambiguous  [
+  boolean: ambiguous [
     additional: "@(@(@(!$(acdprotein)) & @($(nucmethod)==1)) |
-               @($(acdprotein) & @($(protmethod)!=2)))"
+                 @($(acdprotein) & @($(protmethod)!=2)))"
     default: "N"
     information: "Use the ambiguous codes in the calculation."
     help: "Option to use the ambiguous codes in the calculation of the
            Jukes-Cantor method or if the sequences are proteins."
   ]
 
-  float: gapweight  [
+  float: gapweight [
     additional: "@(@(@($(nucmethod)<2) & @(!$(acdprotein))) |
-               @($(acdprotein) & @($(protmethod)!=2)))"
+                 @($(acdprotein) & @($(protmethod)!=2)))"
     information: "Weight given to gaps"
     default: "0."
     help: "Option to weight gaps in the uncorrected (nucleotide) and
            Jukes-Cantor distance methods."
   ]
 
-  integer: position  [
+  integer: position [
     additional: "@(@(!$(acdprotein)) & @($(nucmethod)!=4))"
     default: "123"
     information: "Base position to analyse"
@@ -85,16 +85,17 @@ section: additional [
            bases."
   ]
 
-  boolean: calculatea  [
+  boolean: calculatea [
     additional: "@(@(!$(acdprotein)) & @($(nucmethod)==5))"
     default: "N"
-    information: "Calculate the nucleotide Jin-Nei parameter 'a'"
+    information: "Calculate the nucleotide Jin-Nei parameter
+                  'a'"
     help: "This will force the calculation of parameter 'a' in the
            Jin-Nei Gamma distance calculation, otherwise the default is 1.0
            (see -parametera option)."
   ]
 
-  float: parametera  [
+  float: parametera [
     additional: "@(@(!$(calculatea)) & @($(nucmethod)==5))"
     default: "1.0"
     information: "Nucleotide Jin-Nei parameter 'a'"
@@ -109,10 +110,11 @@ section: output [
   information: "Output section"
   type: "page"
 ]
-  outfile: outfile  [
+
+  outfile: outfile [
     parameter: "Y"
     knowntype: "distance matrix"
+    information: "Phylip distance matrix output file"
   ]
 
 endsection: output
-

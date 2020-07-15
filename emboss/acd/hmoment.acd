@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: seqall  [
+  seqall: seqall [
     parameter: "Y"
     type: "pureprotein"
   ]
@@ -20,19 +20,19 @@ section: additional [
   type: "page"
 ]
 
-  integer: window  [
+  integer: window [
     additional: "Y"
     default: "10"
     information: "Window"
   ]
 
-  integer: aangle  [
+  integer: aangle [
     additional: "Y"
     default: "100"
     information: "Alpha helix angle (degrees)"
   ]
 
-  integer: bangle  [
+  integer: bangle [
     additional: "Y"
     default: "160"
     information: "Beta sheet angle (degrees)"
@@ -45,7 +45,7 @@ section: advanced [
   type: "page"
 ]
 
-  float: baseline  [
+  float: baseline [
     default: "0.35"
     information: "Graph marker line"
   ]
@@ -57,21 +57,21 @@ section: output [
   type: "page"
 ]
 
-  toggle: plot  [
+  toggle: plot [
     default: "N"
     information: "Produce graphic"
   ]
 
-  boolean: double  [
+  boolean: double [
     default: "N"
     information: "Plot two graphs"
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "$(plot)"
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     standard: "@(!$(plot))"
     knowntype: "hmoment output"
     nullok: "$(plot)"

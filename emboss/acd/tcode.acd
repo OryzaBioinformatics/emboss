@@ -9,12 +9,12 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "dna"
   ]
 
-  datafile: datafile  [
+  datafile: datafile [
     information: "Testcode data file"
     default: "Etcode.dat"
     help: "The default data file is Etcode.dat and contains coding
@@ -30,7 +30,7 @@ section: required [
   type: "page"
 ]
 
-  integer: window  [
+  integer: window [
     standard: "Y"
     default: "200"
     minimum: "200"
@@ -49,7 +49,7 @@ section: advanced [
   type: "page"
 ]
 
-  integer: step  [
+  integer: step [
     information: "Stepping increment for the window"
     default: "3"
     minimum: "1"
@@ -67,7 +67,7 @@ section: output [
   type: "page"
 ]
 
-  toggle: plot  [
+  toggle: plot [
     information: "Graphical display"
     default: "N"
     help: "On selection a graph of the sequence (X axis) plotted
@@ -76,7 +76,7 @@ section: output [
            non-coding."
   ]
 
-  report: outfile  [
+  report: outfile [
     standard: "@(!$(plot))"
     rformat: "table"
     multiple: "Y"
@@ -85,7 +85,7 @@ section: output [
     nullok: "$(plot)"
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "$(plot)"
   ]
 

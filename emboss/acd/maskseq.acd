@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "any"
   ]
@@ -20,7 +20,7 @@ section: required [
   type: "page"
 ]
 
-  range: regions  [
+  range: regions [
     standard: "Y"
     default: ""
     information: "Regions to mask (eg: 4-57,78-94)"
@@ -42,7 +42,7 @@ section: additional [
   type: "page"
 ]
 
-  toggle: tolower  [
+  toggle: tolower [
     additional: "Y"
     default: "N"
     information: "Change masked region to lower-case"
@@ -54,7 +54,7 @@ section: additional [
            lower-case by using the '-supper' flag."
   ]
 
-  string: maskchar  [
+  string: maskchar [
     additional: "@(!$(tolower))"
     default: "@($(acdprotein)?X:N)"
     information: "Character to mask with"
@@ -76,7 +76,7 @@ section: output [
   type: "page"
 ]
 
-  seqout: outseq  [
+  seqout: outseq [
     parameter: "Y"
   ]
 

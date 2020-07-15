@@ -8,13 +8,14 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "protein"
   ]
 
-  datafile: aadata  [
-    information: "Amino acid data file"
+  datafile: aadata [
+    information: "Amino acids properties and molecular weight
+                  data file"
     help: "Molecular weight data for amino acids"
     default: "Eamino.dat"
     knowntype: "amino acid properties"
@@ -27,7 +28,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: termini  [
+  boolean: termini [
     default: "Y"
     information: "Include charge at N and C terminus"
   ]
@@ -39,9 +40,10 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "pepstats output"
+    information: "Pepstats program output file"
   ]
 
 endsection: output

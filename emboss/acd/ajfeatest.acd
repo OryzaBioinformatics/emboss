@@ -9,11 +9,11 @@ section: input [
   type: "page"
 ]
 
-sequence: sequence  [
-  parameter: "Y"
-  type: "any"
-  features: "Y"
-]
+  sequence: sequence [
+    parameter: "Y"
+    type: "any"
+    features: "Y"
+  ]
 
 endsection: input
 
@@ -22,8 +22,8 @@ section: output [
   type: "page"
 ]
 
-seqout: outseq  [
-  parameter: "Y"
-]
+  seqout: outseq [
+    parameter: "Y"
+  ]
 
 endsection: output

@@ -8,11 +8,11 @@ section: input [
   type: "page"
 ]
 
-  infile: infile  [
+  infile: infile [
     parameter: "Y"
     default: ""
-    information: "ABI trace file"
     knowntype: "abi trace"
+    information: "ABI sequencing trace file"
   ]
 
 endsection: input
@@ -22,24 +22,24 @@ section: output [
   type: "page"
 ]
 
-  seqout: outseq  [
+  seqout: outseq [
     parameter: "Y"
     type: "dna"
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "Y"
     gxtitle: "Residue Position"
   ]
 
-  integer: startbase  [
+  integer: startbase [
     additional: "Y"
     default: "0"
     minimum: "0"
     information: "First base to report or display"
   ]
 
-  integer: endbase  [
+  integer: endbase [
     additional: "Y"
     default: "0"
     information: "Last base to report or display"
@@ -48,30 +48,30 @@ section: output [
            of bases."
   ]
 
-  boolean: separate  [
+  boolean: separate [
     default: "N"
     information: "Separate the trace graphs for the 4 bases"
   ]
 
-  boolean: yticks  [
+  boolean: yticks [
     additional: "Y"
     default: "N"
     information: "Display y-axis ticks"
   ]
 
-  boolean: sequence  [
+  boolean: sequence [
     additional: "Y"
     default: "Y"
     information: "Display the sequence on the graph"
   ]
 
-  integer: window  [
+  integer: window [
     additional: "Y"
     default: "40"
     information: "Sequence display window size"
   ]
 
-  string: bases  [
+  string: bases [
     additional: "Y"
     default: "GATC"
     information: "Base graphs to be displayed"

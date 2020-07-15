@@ -1,6 +1,6 @@
 application: dotpath [
-  documentation: "Non-overlapping wordmatch
-                  dotplot of two sequences"
+  documentation: "Non-overlapping wordmatch dotplot of two
+                  sequences"
   groups: "Alignment:Dot plots"
   gui: "yes"
   batch: "yes"
@@ -29,7 +29,7 @@ section: required [
   type: "page"
 ]
 
-  integer: wordsize  [
+  integer: wordsize [
     standard: "Y"
     default: "4"
     minimum: "2"
@@ -43,7 +43,7 @@ section: output [
   type: "page"
 ]
 
-  boolean: overlaps  [
+  boolean: overlaps [
     additional: "Y"
     default: "N"
     information: "Display the overlapping matches"
@@ -51,13 +51,13 @@ section: output [
            minimal set of non-overlapping matches"
   ]
 
-  boolean: boxit  [
+  boolean: boxit [
     default: "Y"
     additional: "Y"
     information: "Draw a box around dotplot"
   ]
 
-  graph: graph  [
+  graph: graph [
     standard: "Y"
     gxtitle: "$(bsequence.name)"
     gytitle: "$(asequence.name)"

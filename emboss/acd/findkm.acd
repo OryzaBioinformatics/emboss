@@ -8,9 +8,10 @@ section: input [
   type: "page"
 ]
 
-  infile: infile  [
+  infile: infile [
     parameter: "Y"
-    information: "Enter name of file containing data"
+    information: "Enzyme kinetics data (application-specific)
+                  file"
     knowntype: "enzyme data"
   ]
 
@@ -21,7 +22,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: plot  [
+  boolean: plot [
     default: "Y"
     information: "S/V vs S"
   ]
@@ -33,12 +34,12 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "findkm output"
   ]
 
-  xygraph: graphlb  [
+  xygraph: graphlb [
     standard: "Y"
     multiple: "2"
   ]

@@ -8,11 +8,11 @@ section: input [
   type: "page"
 ]
 
-  boolean: feature  [
+  boolean: feature [
     information: "Use feature information"
   ]
 
-  list: type  [
+  list: type [
     default: "any"
     delimiter: ";"
     values: "any:any valid sequence; dna:DNA sequence; rna:RNA
@@ -30,7 +30,7 @@ section: input [
     information: "Sequence type"
   ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     features: "$(feature)"
     type: "$(type)"
@@ -43,7 +43,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: firstonly  [
+  boolean: firstonly [
     information: "Read one sequence and stop"
   ]
 
@@ -54,7 +54,7 @@ section: output [
   type: "page"
 ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
     features: "$(feature)"
   ]

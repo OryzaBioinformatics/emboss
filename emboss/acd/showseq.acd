@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     features: "Y"
     type: "gapany"
@@ -22,7 +22,7 @@ section: required [
   type: "page"
 ]
 
-  list: format  [
+  list: format [
     standard: "Y"
     default: "2"
     minimum: "1"
@@ -37,7 +37,7 @@ section: required [
     information: "Display format"
   ]
 
-  list: things  [
+  list: things [
     standard: "@($(format)==0)"
     default: "B,N,T,S,A,F"
     minimum: "1"
@@ -67,7 +67,7 @@ section: additional [
   type: "page"
 ]
 
-  range: translate  [
+  range: translate [
     additional: "Y"
     default: ""
     information: "Regions to translate (eg: 4-57,78-94)"
@@ -84,7 +84,7 @@ section: additional [
                translated."
   ]
 
-  range: uppercase  [
+  range: uppercase [
     additional: "Y"
     default: ""
     information: "Regions to put in uppercase (eg: 4-57,78-94)"
@@ -101,7 +101,7 @@ section: additional [
                left alone."
   ]
 
-  range: highlight  [
+  range: highlight [
     additional: "Y"
     default: ""
     information: "Regions to colour in HTML (eg: 4-57 red 78-94
@@ -118,7 +118,7 @@ section: additional [
            as '@filename'."
   ]
 
-  range: annotation  [
+  range: annotation [
     additional: "Y"
     default: ""
     information: "Regions to mark (eg: 4-57 promoter region
@@ -139,32 +139,32 @@ section: additional [
                added."
   ]
 
-    string: enzymes  [
-      additional: "Y"
-      default: "all"
-      information: "Comma separated restriction enzyme list"
-      help: "The name 'all' reads in all enzyme names from the REBASE
-             database. You can specify enzymes by giving their names with
-             commas between then, such as: 'HincII,hinfI,ppiI,hindiii'. \
-             The case of the names is not important. You can specify a file
-             of enzyme names to read in by giving the name of the file
-             holding the enzyme names with a '@' character in front of it,
-             for example, '@enz.list'. \
-             Blank lines and lines starting with a hash character or '!' are
-             ignored and all other lines are concatenated together with a
-             comma character ',' and then treated as the list of enzymes to
-             search for. \
-             An example of a file of enzyme names is: \
-             ! my enzymes \
-             HincII, ppiII \
-             ! other enzymes \
-             hindiii \
-             HinfI \
-             PpiI"
-      knowntype: "enzyme list"
-    ]
+  string: enzymes [
+    additional: "Y"
+    default: "all"
+    information: "Comma separated restriction enzyme list"
+    help: "The name 'all' reads in all enzyme names from the REBASE
+           database. You can specify enzymes by giving their names with
+           commas between then, such as: 'HincII,hinfI,ppiI,hindiii'. \
+           The case of the names is not important. You can specify a file of
+           enzyme names to read in by giving the name of the file holding the
+           enzyme names with a '@' character in front of it, for example,
+           '@enz.list'. \
+           Blank lines and lines starting with a hash character or '!' are
+           ignored and all other lines are concatenated together with a comma
+           character ',' and then treated as the list of enzymes to search
+           for. \
+           An example of a file of enzyme names is: \
+           ! my enzymes \
+           HincII, ppiII \
+           ! other enzymes \
+           hindiii \
+           HinfI \
+           PpiI"
+    knowntype: "enzyme list"
+  ]
 
-  list: table  [
+  list: table [
     additional: "Y"
     default: "0"
     minimum: "1"
@@ -185,12 +185,12 @@ section: additional [
     information: "Genetic code to use"
   ]
 
- section: featuresection [
+  section: featuresection [
     information: "Feature display options"
     type: "frame"
   ]
 
-    string: matchsource  [
+    string: matchsource [
       additional: "Y"
       default: "*"
       information: "Source of feature to display"
@@ -207,7 +207,7 @@ section: additional [
       knowntype: "feature source list"
     ]
 
-    string: matchtype  [
+    string: matchtype [
       additional: "Y"
       default: "*"
       information: "Type of feature to display"
@@ -225,7 +225,7 @@ section: additional [
       knowntype: "feature key list"
     ]
 
-    integer: matchsense  [
+    integer: matchsense [
       additional: "Y"
       default: "0"
       information: "Sense of feature to display"
@@ -236,7 +236,7 @@ section: additional [
              show. 0 - any sense, 1 - forward sense, -1 - reverse sense"
     ]
 
-    float: minscore  [
+    float: minscore [
       additional: "Y"
       default: "0.0"
       information: "Minimum score of feature to display"
@@ -244,7 +244,7 @@ section: additional [
              then any score is permitted"
     ]
 
-    float: maxscore  [
+    float: maxscore [
       additional: "Y"
       default: "0.0"
       information: "Maximum score of feature to display"
@@ -252,7 +252,7 @@ section: additional [
              any score is permitted"
     ]
 
-     string: matchtag  [
+    string: matchtag [
       additional: "Y"
       default: "*"
       information: "Tag of feature to display"
@@ -274,7 +274,7 @@ section: additional [
       knowntype: "feature tag list"
     ]
 
-    string: matchvalue  [
+    string: matchvalue [
       additional: "Y"
       default: "*"
       information: "Value of feature tags to display"
@@ -297,7 +297,7 @@ section: additional [
       knowntype: "feature tagvalue list"
     ]
 
-    boolean: stricttags  [
+    boolean: stricttags [
       additional: "Y"
       default: "N"
       information: "Only display the matching tags"
@@ -322,7 +322,7 @@ section: advanced [
     type: "frame"
   ]
 
-    boolean: flatreformat  [
+    boolean: flatreformat [
       default: "N"
       information: "Display RE sites in flat format"
       help: "This changes the output format to one where the
@@ -331,7 +331,7 @@ section: advanced [
              sense, or a '<' in the reverse sense strand."
     ]
 
-    integer: mincuts  [
+    integer: mincuts [
       minimum: "1"
       maximum: "1000"
       default: "1"
@@ -341,7 +341,7 @@ section: advanced [
              than this will be ignored."
     ]
 
-    integer: maxcuts  [
+    integer: maxcuts [
       minimum: "$(mincuts)"
       maximum: "2000000000"
       default: "2000000000"
@@ -351,7 +351,7 @@ section: advanced [
              than this will be ignored."
     ]
 
-    integer: sitelen  [
+    integer: sitelen [
       minimum: "2"
       maximum: "20"
       default: "4"
@@ -361,7 +361,7 @@ section: advanced [
              be ignored."
     ]
 
-    boolean: single  [
+    boolean: single [
       default: "N"
       information: "Force single RE site only cuts"
       help: "If this is set then this forces the values of the mincuts
@@ -369,14 +369,14 @@ section: advanced [
              have set them to will be ignored."
     ]
 
-    boolean: blunt  [
+    boolean: blunt [
       default: "Y"
       information: "Allow blunt end RE cutters"
       help: "This allows those enzymes which cut at the same position
              on the forward and reverse strands to be considered."
     ]
 
-    boolean: sticky  [
+    boolean: sticky [
       default: "Y"
       information: "Allow sticky end RE cutters"
       help: "This allows those enzymes which cut at different
@@ -384,14 +384,14 @@ section: advanced [
              overhang, to be considered."
     ]
 
-    boolean: ambiguity  [
+    boolean: ambiguity [
       default: "Y"
       information: "Allow ambiguous RE matches"
       help: "This allows those enzymes which have one or more 'N'
              ambiguity codes in their pattern to be considered"
     ]
 
-    boolean: plasmid  [
+    boolean: plasmid [
       default: "N"
       information: "Allow circular DNA"
       help: "If this is set then this allows searches for restriction
@@ -399,7 +399,7 @@ section: advanced [
              the sequence to be considered."
     ]
 
-    boolean: commercial  [
+    boolean: commercial [
       default: "Y"
       information: "Only use restriction enzymes with
                     suppliers"
@@ -414,7 +414,7 @@ section: advanced [
              supplier."
     ]
 
-    boolean: limit  [
+    boolean: limit [
       default: "Y"
       information: "Limits RE hits to one isoschizomer"
       help: "This limits the reporting of enzymes to just one enzyme
@@ -431,7 +431,7 @@ section: advanced [
 
   endsection: remapsection
 
-  integer: orfminsize  [
+  integer: orfminsize [
     default: "0"
     minimum: "0"
     information: "Minimum size of ORFs"
@@ -440,55 +440,55 @@ section: advanced [
            masked by changing the amino acids to '-' characters."
   ]
 
-  boolean: threeletter  [
+  boolean: threeletter [
     default: "N"
     information: "Display protein sequences in three-letter
                   code"
   ]
 
-  boolean: number  [
+  boolean: number [
     default: "N"
     information: "Number the sequences"
   ]
 
-  integer: width  [
+  integer: width [
     default: "60"
     minimum: "1"
     information: "Width of sequence to display"
   ]
 
-  integer: length  [
+  integer: length [
     default: "0"
     minimum: "0"
     information: "Line length of page (0 for indefinite)"
   ]
 
-  integer: margin  [
+  integer: margin [
     default: "10"
     minimum: "0"
     information: "Margin around sequence for numbering"
   ]
 
-  boolean: name  [
+  boolean: name [
     default: "Y"
     information: "Show sequence ID"
     help: "Set this to be false if you do not wish to display the ID
            name of the sequence"
   ]
 
-  boolean: description  [
+  boolean: description [
     default: "Y"
     information: "Show description"
     help: "Set this to be false if you do not wish to display the
            description of the sequence"
   ]
 
-  integer: offset  [
+  integer: offset [
     default: "1"
     information: "Offset to start numbering the sequence from"
   ]
 
-  boolean: html  [
+  boolean: html [
     default: "N"
     information: "Use HTML formatting"
   ]
@@ -500,7 +500,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "showseq output"
   ]

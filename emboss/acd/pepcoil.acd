@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
   ]
@@ -20,7 +20,7 @@ section: required [
   type: "page"
 ]
 
-  integer: window  [
+  integer: window [
     standard: "Y"
     minimum: "7"
     maximum: "28"
@@ -35,23 +35,23 @@ section: output [
   type: "page"
 ]
 
-  boolean: coil  [
+  boolean: coil [
     default: "Y"
     information: "Report coiled coil regions"
   ]
 
-  boolean: frame  [
+  boolean: frame [
     default: "$(coil)"
     information: "Show coil frameshifts"
     expected: "Yes if -coil is true"
   ]
 
-  boolean: other  [
+  boolean: other [
     default: "Y"
     information: "Report non coiled coil regions"
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "pepcoil output"
   ]

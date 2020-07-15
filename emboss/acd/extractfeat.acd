@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "any"
     features: "Y"
@@ -21,7 +21,7 @@ section: additional [
   type: "page"
 ]
 
-  integer: before  [
+  integer: before [
     additional: "Y"
     default: "0"
     information: "Amount of sequence before feature to extract"
@@ -38,7 +38,7 @@ section: additional [
            extraction."
   ]
 
-  integer: after  [
+  integer: after [
     additional: "Y"
     default: "0"
     information: "Amount of sequence after feature to extract"
@@ -54,7 +54,7 @@ section: additional [
            sequence ends before the required end of the extraction."
   ]
 
-  string: source  [
+  string: source [
     additional: "Y"
     default: "*"
     information: "Source of feature to display"
@@ -71,7 +71,7 @@ section: additional [
     knowntype: "feature source list"
   ]
 
-  string: type  [
+  string: type [
     additional: "Y"
     default: "*"
     information: "Type of feature to extract"
@@ -88,7 +88,7 @@ section: additional [
     knowntype: "feature key list"
   ]
 
-  integer: sense  [
+  integer: sense [
     additional: "Y"
     default: "0"
     information: "Sense of feature to extract"
@@ -99,7 +99,7 @@ section: additional [
            - any sense, 1 - forward sense, -1 - reverse sense"
   ]
 
-  float: minscore  [
+  float: minscore [
     additional: "Y"
     default: "0.0"
     information: "Minimum score of feature to extract"
@@ -107,7 +107,7 @@ section: additional [
            any score is permitted"
   ]
 
-  float: maxscore  [
+  float: maxscore [
     additional: "Y"
     default: "0.0"
     information: "Maximum score of feature to extract"
@@ -115,7 +115,7 @@ section: additional [
            any score is permitted"
   ]
 
-  string: tag  [
+  string: tag [
     additional: "Y"
     default: "*"
     information: "Tag of feature to extract"
@@ -137,7 +137,7 @@ section: additional [
     knowntype: "feature tag list"
   ]
 
-  string: value  [
+  string: value [
     additional: "Y"
     default: "*"
     information: "Value of feature tags to extract"
@@ -166,7 +166,7 @@ section: output [
   type: "page"
 ]
 
-  boolean: join  [
+  boolean: join [
     additional: "Y"
     default: "N"
     information: "Output introns etc. as one sequence"
@@ -179,7 +179,7 @@ section: output [
            feature and after the last feature are added."
   ]
 
-  boolean: featinname  [
+  boolean: featinname [
     additional: "Y"
     default: "N"
     information: "Append type of feature to output sequence
@@ -193,7 +193,7 @@ section: output [
            of the output sequence."
   ]
 
-  string: describe  [
+  string: describe [
     additional: "Y"
     default: ""
     information: "Feature tag names to add to the description"
@@ -203,9 +203,9 @@ section: output [
            text, together with their values (if any). For example, if this is
            set to be 'gene', then if any output feature has the tag (for
            example) '/gene=BRCA1' associated with it, then the text
-           '(gene=BRCA1)' will be added to the Description line. Tags are
-           the types of extra values that a feature may have. For example in
-           the EMBL feature table, a 'CDS' type of feature may have the tags
+           '(gene=BRCA1)' will be added to the Description line. Tags are the
+           types of extra values that a feature may have. For example in the
+           EMBL feature table, a 'CDS' type of feature may have the tags
            '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence',
            '/exception', '/function', '/gene', '/label', '/map', '/note',
            '/number', '/partial', '/product', '/protein_id', '/pseudo',
@@ -221,7 +221,7 @@ section: output [
     knowntype: "feature tag list"
   ]
 
-  seqout: outseq  [
+  seqout: outseq [
     parameter: "Y"
   ]
 

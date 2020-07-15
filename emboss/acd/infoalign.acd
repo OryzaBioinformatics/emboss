@@ -9,14 +9,14 @@ section: input [
   type: "page"
 ]
 
-  seqset: sequence  [
+  seqset: sequence [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
     help: "The sequence alignment to be displayed."
   ]
 
-  matrix: matrix  [
+  matrix: matrix [
     additional: "Y"
     information: "Similarity scoring Matrix file"
     protein: "$(acdprotein)"
@@ -26,7 +26,7 @@ section: input [
            found in the 'data' directory of the EMBOSS installation."
   ]
 
-  string: refseq  [
+  string: refseq [
     additional: "Y"
     default: "0"
     information: "The number or the name of the reference
@@ -47,7 +47,7 @@ section: advanced [
   type: "page"
 ]
 
-  float: plurality  [
+  float: plurality [
     default: "50.0"
     minimum: "0.0"
     maximum: "100.0"
@@ -57,7 +57,7 @@ section: advanced [
            of the total weight of all the sequences in the alignment."
   ]
 
-  float: identity  [
+  float: identity [
     default: "0.0"
     minimum: "0.0"
     maximum: "100.0"
@@ -76,7 +76,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     extension: "infoalign"
     knowntype: "infoalign output"
@@ -84,13 +84,13 @@ section: output [
            write the sequence details into that file."
   ]
 
-  boolean: html  [
+  boolean: html [
     additional: "Y"
     default: "N"
     information: "Format output as an HTML table"
   ]
 
-  boolean: only  [
+  boolean: only [
     default: "N"
     information: "Display the specified columns"
     help: "This is a way of shortening the command line if you only
@@ -101,70 +101,69 @@ section: output [
            '-only -seqlength'"
   ]
 
-  boolean: heading  [
+  boolean: heading [
     default: "@(!$(only))"
     information: "Display column headings"
   ]
 
-  boolean: usa  [
+  boolean: usa [
     default: "@(!$(only))"
     information: "Display the USA of the sequence"
   ]
 
-  boolean: name  [
+  boolean: name [
     default: "@(!$(only))"
     information: "Display 'name' column"
   ]
 
-  boolean: seqlength  [
+  boolean: seqlength [
     default: "@(!$(only))"
     information: "Display 'seqlength' column"
   ]
 
-  boolean: alignlength  [
+  boolean: alignlength [
     default: "@(!$(only))"
     information: "Display 'alignlength' column"
   ]
 
-  boolean: gaps  [
+  boolean: gaps [
     default: "@(!$(only))"
     information: "Display number of gaps"
   ]
 
-  boolean: gapcount  [
+  boolean: gapcount [
     default: "@(!$(only))"
     information: "Display number of gap positions"
   ]
 
-  boolean: idcount  [
+  boolean: idcount [
     default: "@(!$(only))"
     information: "Display number of identical positions"
   ]
 
-  boolean: simcount  [
+  boolean: simcount [
     default: "@(!$(only))"
     information: "Display number of similar positions"
   ]
 
-  boolean: diffcount  [
+  boolean: diffcount [
     default: "@(!$(only))"
     information: "Display number of different positions"
   ]
 
-  boolean: change  [
+  boolean: change [
     default: "@(!$(only))"
     information: "Display % number of changed positions"
   ]
 
-  boolean: weight  [
+  boolean: weight [
     default: "@(!$(only))"
     information: "Display 'weight' column"
   ]
 
-  boolean: description  [
+  boolean: description [
     default: "@(!$(only))"
     information: "Display 'description' column"
   ]
-
 
 endsection: output

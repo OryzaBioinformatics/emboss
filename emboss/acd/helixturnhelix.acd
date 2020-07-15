@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
   ]
@@ -20,7 +20,7 @@ section: additional [
   type: "page"
 ]
 
-  float: mean  [
+  float: mean [
     additional: "Y"
     minimum: "1."
     maximum: "10000."
@@ -28,7 +28,7 @@ section: additional [
     information: "Mean value"
   ]
 
-  float: sd  [
+  float: sd [
     additional: "Y"
     minimum: "1."
     maximum: "10000."
@@ -36,7 +36,7 @@ section: additional [
     information: "Standard Deviation value"
   ]
 
-  float: minsd  [
+  float: minsd [
     additional: "Y"
     minimum: "0."
     maximum: "100."
@@ -44,7 +44,7 @@ section: additional [
     information: "Minimum SD"
   ]
 
-  boolean: eightyseven  [
+  boolean: eightyseven [
     additional: "Y"
     information: "Use the old (1987) weight data"
   ]
@@ -56,7 +56,7 @@ section: output [
   type: "page"
 ]
 
-  report: outfile  [
+  report: outfile [
     parameter: "Y"
     rformat: "motif"
     rextension: "hth"

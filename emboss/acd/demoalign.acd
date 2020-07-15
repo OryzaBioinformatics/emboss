@@ -9,14 +9,14 @@ section: input [
   type: "page"
 ]
 
-  seqset: sequence  [
+  seqset: sequence [
     parameter: "Y"
     features: "Y"
     type: "gapany"
     aligned: "Y"
   ]
 
-  matrixf: floatmatrix  [
+  matrixf: floatmatrix [
     additional: "Y"
     information: "Matrix file"
     protein: "$(acdprotein)"
@@ -26,7 +26,7 @@ section: input [
            found in the 'data' directory of the EMBOSS installation."
   ]
 
-  matrix: intmatrix  [
+  matrix: intmatrix [
     additional: "Y"
     information: "Matrix file"
     protein: "$(acdprotein)"
@@ -43,7 +43,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: dofloat  [
+  boolean: dofloat [
     information: "Use floating point matrix"
   ]
 
@@ -54,7 +54,7 @@ section: output [
   type: "page"
 ]
 
-  align: outfile  [
+  align: outfile [
     parameter: "Y"
     aformat: "SRS"
   ]

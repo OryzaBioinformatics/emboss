@@ -8,15 +8,15 @@ section: input [
   type: "page"
 ]
 
-  sequence: asequence  [
+  sequence: asequence [
     parameter: "Y"
-    type: "any"
+    type: "gapany"
   ]
 
-  sequence: bsequence  [
+  sequence: bsequence [
     parameter: "Y"
     information: "Sequence to insert"
-    type: "@($(acdprotein) ? stopprotein : nucleotide)"
+    type: "@($(acdprotein) ? gapstopprotein : gapnucleotide)"
   ]
 
 endsection: input
@@ -26,7 +26,7 @@ section: required [
   type: "page"
 ]
 
-  integer: pos  [
+  integer: pos [
     standard: "Y"
     default: "$(asequence.end)"
     maximum: "$(asequence.end)"
@@ -43,7 +43,7 @@ section: output [
   type: "page"
 ]
 
-  seqout: outseq  [
+  seqout: outseq [
     parameter: "Y"
   ]
 

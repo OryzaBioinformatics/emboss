@@ -10,7 +10,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "dna"
     help: "The sequence from which to choose primers. The sequence
@@ -24,7 +24,7 @@ section: additional [
   type: "page"
 ]
 
-  range: target  [
+  range: target [
     additional: "Y"
     default: ""
     information: "Target region(s)"
@@ -40,7 +40,7 @@ section: additional [
            50 and 51."
   ]
 
-  integer: minsize  [
+  integer: minsize [
     additional: "Y"
     default: "18"
     minimum: "1"
@@ -49,7 +49,7 @@ section: additional [
            0 and less than or equal to MAX-SIZE."
   ]
 
-  integer: maxsize  [
+  integer: maxsize [
     additional: "Y"
     default: "27"
     minimum: "$(MinSize)"
@@ -61,7 +61,7 @@ section: additional [
            is valid."
   ]
 
-  float: maxdifftm  [
+  float: maxdifftm [
     additional: "Y"
     default: "100.0"
     information: "Maximum difference in Tm of primers"
@@ -76,7 +76,7 @@ section: output [
   type: "page"
 ]
 
-  boolean: explainflag  [
+  boolean: explainflag [
     additional: "Y"
     default: "N"
     information: "Explain flag"
@@ -86,7 +86,7 @@ section: output [
            statistics on the number discarded for various reasons."
   ]
 
-  integer: numreturn  [
+  integer: numreturn [
     additional: "Y"
     default: "5"
     minimum: "0"
@@ -98,9 +98,10 @@ section: output [
            value will increase running time."
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "primer3 output"
+    information: "Whitehead primer3_core program output file"
   ]
 
 endsection: output

@@ -11,7 +11,7 @@ section: input [
   type: "page"
 ]
 
-  string: entry  [
+  string: entry [
     parameter: "Y"
     information: "ID or Accession number"
     knowntype: "sequence id input"
@@ -24,17 +24,17 @@ section: output [
   type: "page"
 ]
 
-  toggle: get  [
+  toggle: get [
     default: "N"
     information: "Retrieve sequences"
   ]
 
-  boolean: showall  [
+  boolean: showall [
     default: "N"
     information: "Show failed attempts"
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     standard: "@(!$(get))"
     nullok: "$(get)"
     knowntype: "whichdb output"

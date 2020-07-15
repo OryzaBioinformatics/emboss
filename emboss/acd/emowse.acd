@@ -9,27 +9,27 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "protein"
   ]
 
-  infile: infile  [
+  infile: infile [
     parameter: "Y"
-    information: "Name of molecular weight data file"
+    information: "Peptide molecular weight values file"
     knowntype: "peptide molweights"
   ]
 
-  datafile: aadata  [
-    information: "Amino acid data file"
-    help: "Molecular weight data for amino acids"
+  datafile: aadata [
+    information: "Amino acids properties and molecular weight
+                  data file"
     default: "Eamino.dat"
     knowntype: "amino acid properties"
   ]
 
-  datafile: frequencies  [
+  datafile: frequencies [
     default: "Efreqs.dat"
-    information: "Frequencies file"
+    information: "Amino acid frequencies data file"
     knowntype: "amino acid frequencies"
   ]
 
@@ -40,7 +40,7 @@ section: required [
   type: "page"
 ]
 
-  integer: weight  [
+  integer: weight [
     standard: "Y"
     default: "0"
     information: "Whole sequence molwt"
@@ -53,7 +53,7 @@ section: advanced [
   type: "page"
 ]
 
-  list: enzyme  [
+  list: enzyme [
     default: "1"
     minimum: "1"
     maximum: "1"
@@ -65,21 +65,21 @@ section: advanced [
     information: "Enzyme or reagent"
   ]
 
-  integer: pcrange  [
+  integer: pcrange [
     default: "25"
     minimum: "0"
     maximum: "75"
     information: "Allowed whole sequence weight variability"
   ]
 
-  float: tolerance  [
+  float: tolerance [
     default: "0.1"
     minimum: "0.1"
     maximum: "1.0"
     information: "Tolerance"
   ]
 
-  float: partials  [
+  float: partials [
     default: "0.4"
     minimum: "0.1"
     maximum: "1.0"
@@ -93,7 +93,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "emowse output"
   ]

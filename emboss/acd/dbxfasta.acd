@@ -1,6 +1,7 @@
 application: dbxfasta [
   groups: "Utils:Database indexing"
-  documentation: "Database b+tree indexing for fasta file databases"
+  documentation: "Database b+tree indexing for fasta file
+                  databases"
   gui: "yes"
   batch: "yes"
   cpu: "medium"
@@ -11,7 +12,7 @@ section: input [
   type: "page"
 ]
 
-  string: dbname  [
+  string: dbname [
     parameter: "Y"
     maxlength: "19"
     minlength: "2"
@@ -20,8 +21,7 @@ section: input [
     pattern: "[A-z][A-z0-9_]+"
   ]
 
-
-  string: dbresource  [
+  string: dbresource [
     parameter: "Y"
     maxlength: "19"
     minlength: "2"
@@ -30,7 +30,7 @@ section: input [
     pattern: "[A-z][A-z0-9_]+"
   ]
 
-  list: idformat  [
+  list: idformat [
     standard: "y"
     information: "ID line format"
     values: "simple+ >ID; idacc+ >ID ACC; gcgid+ >db:ID; gcgidacc+
@@ -42,14 +42,14 @@ section: input [
     codedelimiter: "+"
   ]
 
-  directory: directory  [
+  directory: directory [
     standard: "Y"
     default: "."
     information: "Database directory"
     knowntype: "emboss database directory"
   ]
 
-  string: filenames  [
+  string: filenames [
     standard: "Y"
     default: "*.dat"
     information: "Wildcard database filename"
@@ -63,7 +63,7 @@ section: required [
   type: "page"
 ]
 
-  string: release  [
+  string: release [
     standard: "Y"
     default: "0.0"
     maxlength: "9"
@@ -71,7 +71,7 @@ section: required [
     knowntype: "emboss database release"
   ]
 
-  string: date  [
+  string: date [
     standard: "Y"
     default: "00/00/00"
     valid: "Date string dd/mm/yy"
@@ -87,7 +87,7 @@ section: advanced [
   type: "page"
 ]
 
-  list: fields  [
+  list: fields [
     information: "Index fields"
     values: "id:ID;acc:Accession number;sv:Sequence Version and
              GI;des:Description;"
@@ -96,7 +96,7 @@ section: advanced [
     default: "id,acc"
   ]
 
-  string: exclude  [
+  string: exclude [
     information: "Wildcard filename(s) to exclude"
     knowntype: "filename wildcard"
   ]
@@ -108,10 +108,10 @@ section: output [
   type: "page"
 ]
 
-  outdir: indexoutdir  [
+  outdir: indexoutdir [
     default: "."
-    information: "Index directory"
-    knowntype: "output directory"
+    information: "Index file output directory"
+    knowntype: "emboss database index"
   ]
 
 endsection: output

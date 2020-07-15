@@ -1,5 +1,6 @@
 application: remap [
-  documentation: "Display sequence with restriction sites, translation etc."
+  documentation: "Display sequence with restriction sites,
+                  translation etc."
   groups: "Display, Nucleic:Restriction, Nucleic:Translation"
 ]
 
@@ -8,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "DNA"
   ]
@@ -20,7 +21,7 @@ section: required [
   type: "page"
 ]
 
-  string: enzymes  [
+  string: enzymes [
     standard: "Y"
     default: "all"
     information: "Comma separated enzyme list"
@@ -45,7 +46,7 @@ section: required [
     knowntype: "enzyme list"
   ]
 
-  integer: sitelen  [
+  integer: sitelen [
     standard: "Y"
     minimum: "2"
     maximum: "20"
@@ -63,7 +64,7 @@ section: additional [
   type: "page"
 ]
 
-  integer: mincuts  [
+  integer: mincuts [
     additional: "Y"
     minimum: "1"
     maximum: "1000"
@@ -74,7 +75,7 @@ section: additional [
            than this will be ignored."
   ]
 
-  integer: maxcuts  [
+  integer: maxcuts [
     additional: "Y"
     minimum: "$(mincuts)"
     maximum: "2000000000"
@@ -85,7 +86,7 @@ section: additional [
            than this will be ignored."
   ]
 
-  boolean: single  [
+  boolean: single [
     additional: "Y"
     default: "N"
     information: "Force single site only cuts"
@@ -94,7 +95,7 @@ section: additional [
            set them to will be ignored."
   ]
 
-  boolean: blunt  [
+  boolean: blunt [
     additional: "Y"
     default: "Y"
     information: "Allow blunt end cutters"
@@ -102,7 +103,7 @@ section: additional [
            the forward and reverse strands to be considered."
   ]
 
-  boolean: sticky  [
+  boolean: sticky [
     additional: "Y"
     default: "Y"
     information: "Allow sticky end cutters"
@@ -111,7 +112,7 @@ section: additional [
            considered."
   ]
 
-  boolean: ambiguity  [
+  boolean: ambiguity [
     additional: "Y"
     default: "Y"
     information: "Allow ambiguous matches"
@@ -119,7 +120,7 @@ section: additional [
            ambiguity codes in their pattern to be considered"
   ]
 
-  boolean: plasmid  [
+  boolean: plasmid [
     additional: "Y"
     default: "N"
     information: "Allow circular DNA"
@@ -128,7 +129,7 @@ section: additional [
            sequence to be considered."
   ]
 
-  boolean: commercial  [
+  boolean: commercial [
     additional: "Y"
     default: "Y"
     information: "Only enzymes with suppliers"
@@ -142,7 +143,7 @@ section: additional [
            reported whether or not they have a commercial supplier."
   ]
 
-  list: table  [
+  list: table [
     additional: "Y"
     default: "0"
     minimum: "1"
@@ -163,22 +164,22 @@ section: additional [
     information: "Genetic code to use"
   ]
 
-  list: frame  [
+  list: frame [
     additional: "Y"
     default: "6"
     minimum: "1"
     maximum: "6"
     header: "Translation frames"
     values: "1:1, 2:2, 3:3, F:Forward three frames, -1:-1, -2:-2,
-                 -3:-3, R:Reverse three frames, 6:All six frames"
+             -3:-3, R:Reverse three frames, 6:All six frames"
     delimiter: ","
     codedelimiter: ":"
     information: "Frame(s) to translate"
     help: "This allows you to specify the frames that are translated.
-           If you are not displaying cut sites on the reverse sense, then
-           the reverse sense translations will not be displayed even if
-           you have requested frames 4, 5 or 6.
-           By default, all six frames will be displayed."
+           If you are not displaying cut sites on the reverse sense, then the
+           reverse sense translations will not be displayed even if you have
+           requested frames 4, 5 or 6. By default, all six frames will be
+           displayed."
   ]
 
 endsection: additional
@@ -188,12 +189,12 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "remap output"
   ]
 
-  boolean: cutlist  [
+  boolean: cutlist [
     additional: "Y"
     default: "Y"
     information: "List the enzymes that cut"
@@ -203,7 +204,7 @@ section: output [
            cut."
   ]
 
-  boolean: flatreformat  [
+  boolean: flatreformat [
     additional: "Y"
     default: "N"
     information: "Display RE sites in flat format"
@@ -213,7 +214,7 @@ section: output [
            the reverse sense strand."
   ]
 
-  boolean: limit  [
+  boolean: limit [
     additional: "Y"
     default: "Y"
     information: "Limits reports to one isoschizomer"
@@ -228,14 +229,14 @@ section: output [
            explicit set of enzymes rather than searching 'all' of them."
   ]
 
-  boolean: translation  [
+  boolean: translation [
     default: "Y"
     information: "Display translation"
     help: "This displays the 6-frame translations of the sequence in
            the output."
   ]
 
-  boolean: reverse  [
+  boolean: reverse [
     default: "Y"
     information: "Display cut sites and translation of reverse
                   sense"
@@ -243,7 +244,7 @@ section: output [
            sense."
   ]
 
-  integer: orfminsize  [
+  integer: orfminsize [
     default: "0"
     minimum: "0"
     information: "Minimum size of ORFs"
@@ -254,7 +255,7 @@ section: output [
                translation is shown."
   ]
 
-  range: uppercase  [
+  range: uppercase [
     default: ""
     information: "Regions to put in uppercase (eg: 4-57,78-94)"
     help: "Regions to put in uppercase. \
@@ -270,7 +271,7 @@ section: output [
                left alone."
   ]
 
-  range: highlight  [
+  range: highlight [
     default: ""
     information: "Regions to colour in HTML (eg: 4-57 red 78-94
                   green)"
@@ -286,55 +287,55 @@ section: output [
            '@filename'."
   ]
 
-  boolean: threeletter  [
+  boolean: threeletter [
     default: "N"
     information: "Display protein sequences in three-letter
                   code"
   ]
 
-  boolean: number  [
+  boolean: number [
     default: "N"
     information: "Number the sequences"
   ]
 
-  integer: width  [
+  integer: width [
     default: "60"
     minimum: "1"
     information: "Width of sequence to display"
   ]
 
-  integer: length  [
+  integer: length [
     default: "0"
     minimum: "0"
     information: "Line length of page (0 for indefinite)"
   ]
 
-  integer: margin  [
+  integer: margin [
     default: "10"
     minimum: "0"
     information: "Margin around sequence for numbering"
   ]
 
-  boolean: name  [
+  boolean: name [
     default: "Y"
     information: "Display sequence ID"
     help: "Set this to be false if you do not wish to display the ID
            name of the sequence"
   ]
 
-  boolean: description  [
+  boolean: description [
     default: "Y"
     information: "Display description"
     help: "Set this to be false if you do not wish to display the
            description of the sequence"
   ]
 
-  integer: offset  [
+  integer: offset [
     default: "1"
     information: "Offset to start numbering the sequence from"
   ]
 
-  boolean: html  [
+  boolean: html [
     default: "N"
     information: "Use HTML formatting"
   ]

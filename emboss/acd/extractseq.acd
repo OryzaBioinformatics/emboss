@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "any"
   ]
@@ -20,7 +20,7 @@ section: required [
   type: "page"
 ]
 
-  range: regions  [
+  range: regions [
     standard: "Y"
     default: "$(sequence.begin)-$(sequence.end)"
     information: "Regions to extract (eg: 4-57,78-94)"
@@ -42,7 +42,7 @@ section: additional [
   type: "page"
 ]
 
-  boolean: separate  [
+  boolean: separate [
     additional: "Y"
     default: "N"
     information: "Write regions to separate sequences"
@@ -60,7 +60,7 @@ section: output [
   type: "page"
 ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
   ]
 

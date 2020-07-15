@@ -11,19 +11,19 @@ section: input [
   type: "page"
 ]
 
-  infile: infile  [
+  infile: infile [
     parameter: "Y"
-    information: "Full pathname of WITHREFM file"
-    knowntype: "rebase withrefm file"
+    information: "REBASE database withrefm file"
+    knowntype: "rebase withrefm"
   ]
 
-  infile: protofile  [
+  infile: protofile [
     parameter: "Y"
-    information: "Full pathname of PROTO file"
-    knowntype: "rebase proto file"
+    information: "REBASE database proto file"
+    knowntype: "rebase proto"
   ]
 
-  boolean: equivalences  [
+  boolean: equivalences [
     additional: "Y"
     default: "Y"
     information: "Create prototype equivalence file"

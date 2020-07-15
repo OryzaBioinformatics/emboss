@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  string: enzyme  [
+  string: enzyme [
     parameter: "Y"
     information: "Restriction enzyme name"
     default: "BamHI"
@@ -27,23 +27,23 @@ section: output [
   type: "page"
 ]
 
-  boolean: isoschizomers  [
+  boolean: isoschizomers [
     default: "Y"
     information: "Show isoschizomers"
     help: "Show other enzymes with this specificity. (Isoschizomers)"
   ]
 
-  boolean: references  [
+  boolean: references [
     default: "Y"
     information: "Show references"
   ]
 
-  boolean: suppliers  [
+  boolean: suppliers [
     default: "Y"
     information: "Show suppliers"
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "redata output"
   ]

@@ -8,10 +8,10 @@ section: input [
   type: "page"
 ]
 
-  infile: infile  [
+  infile: infile [
     parameter: "Y"
     knowntype: "ascii text"
-    information: "Input file"
+    information: "ASCII text file"
   ]
 
 endsection: input
@@ -21,11 +21,15 @@ section: advanced [
   type: "page"
 ]
 
-list: system [
-  information: "Target operating system for end-of-line format"
-  values: "unix:Unix/Linux systems;pc:Windows/DOS;mac:Apple Macintosh"
-  default: "unix"
-]
+  list: system [
+    information: "Target operating system for end-of-line
+                  format"
+    values: "unix:Unix/Linux systems;pc:Windows/DOS;mac:Apple
+             Macintosh"
+    default: "unix"
+    minimum: "1"
+    maximum: "1"
+  ]
 
 endsection: advanced
 
@@ -34,9 +38,10 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "ascii text"
+    information: "ASCII text output file"
   ]
 
 endsection: output

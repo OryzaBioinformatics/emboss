@@ -1,6 +1,6 @@
 application: plotcon [
-  documentation: "Plot quality of conservation of a
-                  sequence alignment"
+  documentation: "Plot quality of conservation of a sequence
+                  alignment"
   groups: "Alignment:Multiple"
 ]
 
@@ -9,14 +9,14 @@ section: input [
   type: "page"
 ]
 
-  seqset: sequences  [
+  seqset: sequences [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
     help: "File containing a sequence alignment"
   ]
 
-  matrix: scorefile  [
+  matrix: scorefile [
     additional: "Y"
     information: "Comparison matrix file"
     protein: "$(acdprotein)"
@@ -33,7 +33,7 @@ section: required [
   type: "page"
 ]
 
-  integer: winsize  [
+  integer: winsize [
     standard: "Y"
     information: "Window size"
     help: "Number of columns to average alignment quality over. The
@@ -48,7 +48,7 @@ section: output [
   type: "page"
 ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "Y"
     gxtitle: "Relative Residue Position"
   ]

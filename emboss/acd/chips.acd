@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: seqall  [
+  seqall: seqall [
     parameter: "Y"
     type: "DNA"
   ]
@@ -20,7 +20,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: sum  [
+  boolean: sum [
     default: "Y"
     information: "Sum codons over all sequences"
   ]
@@ -32,7 +32,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "chips output"
   ]

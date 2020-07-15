@@ -8,12 +8,12 @@ section: input [
   type: "page"
 ]
 
-  seqall: seqall  [
+  seqall: seqall [
     parameter: "Y"
     type: "DNA"
   ]
 
-  codon: cfile  [
+  codon: cfile [
     standard: "Y"
     default: "Eyeast_cai.cut"
   ]
@@ -25,7 +25,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "cai output"
   ]

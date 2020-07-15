@@ -8,16 +8,16 @@ section: input [
   type: "page"
 ]
 
-seqall: sequence  [
-  parameter: "Y"
-  type: "any"
-]
+  seqall: sequence [
+    parameter: "Y"
+    type: "any"
+  ]
 
-seqset: bsequence  [
-  parameter: "Y"
-  type: "any"
-  aligned: "N"
-]
+  seqset: bsequence [
+    parameter: "Y"
+    type: "any"
+    aligned: "N"
+  ]
 
 endsection: input
 
@@ -26,14 +26,8 @@ section: output [
   type: "page"
 ]
 
-  outdir: outdir [
-    information: "Temporary directory"
-    default: "/tmp"
-    knowntype: "temporary file"
-  ]
-
   outfile: outfile [
-  standard: "Y"
+    standard: "Y"
     nullok: "Y"
     nulldefault: "Y"
     missing: "Y"
@@ -42,7 +36,7 @@ section: output [
   ]
 
   seqout: outseq [
-  standard: "Y"
+    standard: "Y"
     nullok: "Y"
     nulldefault: "Y"
     missing: "Y"
@@ -50,12 +44,17 @@ section: output [
   ]
 
   featout: outfeat [
-  standard: "Y"
+    standard: "Y"
     nullok: "Y"
     nulldefault: "Y"
     missing: "Y"
     type: "any"
   ]
 
-endsection: output
+  outdir: outdir [
+    information: "Temporary working file output directory"
+    default: "/tmp"
+    knowntype: "temporary"
+  ]
 
+endsection: output

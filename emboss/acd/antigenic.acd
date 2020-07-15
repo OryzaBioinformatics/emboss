@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
   ]
@@ -20,7 +20,7 @@ section: required [
   type: "page"
 ]
 
-  integer: minlen  [
+  integer: minlen [
     standard: "Y"
     minimum: "1"
     maximum: "50"
@@ -35,7 +35,7 @@ section: output [
   type: "page"
 ]
 
-  report: outfile  [
+  report: outfile [
     parameter: "Y"
     rformat: "motif"
     multiple: "Y"

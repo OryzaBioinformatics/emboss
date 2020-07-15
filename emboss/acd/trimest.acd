@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "dna"
   ]
@@ -20,7 +20,7 @@ section: additional [
   type: "page"
 ]
 
-  integer: minlength  [
+  integer: minlength [
     additional: "Y"
     default: "4"
     minimum: "1"
@@ -31,7 +31,7 @@ section: additional [
            the mismatch for the mismatch to be considered part of the tail."
   ]
 
-  integer: mismatches  [
+  integer: mismatches [
     additional: "Y"
     default: "1"
     minimum: "0"
@@ -48,7 +48,7 @@ section: additional [
            preceeding the last 'G', so it is part of the tail."
   ]
 
-  boolean: reverse  [
+  boolean: reverse [
     additional: "Y"
     default: "Y"
     information: "Write the reverse complement when poly-T is
@@ -60,17 +60,17 @@ section: additional [
            will not be changed."
   ]
 
-
-  toggle: tolower  [
+  toggle: tolower [
     additional: "Y"
     default: "N"
     information: "Change poly-A tail to lower-case"
-    help: "The poly-A region can be 'masked' by converting the sequence
-           characters to lower-case. Some non-EMBOSS programs e.g. fasta can
-           interpret this as a masked region. The sequence is unchanged apart
-           from the case change. You might like to ensure that the whole
-           sequence is in upper-case before masking the specified regions to
-           lower-case by using the '-supper' sequence qualifier."
+    help: "The poly-A region can be 'masked' by converting the
+           sequence characters to lower-case. Some non-EMBOSS programs e.g.
+           fasta can interpret this as a masked region. The sequence is
+           unchanged apart from the case change. You might like to ensure
+           that the whole sequence is in upper-case before masking the
+           specified regions to lower-case by using the '-supper' sequence
+           qualifier."
   ]
 
 endsection: additional
@@ -80,7 +80,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: fiveprime  [
+  boolean: fiveprime [
     default: "Y"
     information: "Remove poly-T tails at the 5' end of the
                   sequence."
@@ -97,7 +97,7 @@ section: output [
   type: "page"
 ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
   ]
 

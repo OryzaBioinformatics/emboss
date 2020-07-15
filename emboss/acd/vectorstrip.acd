@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "dna"
   ]
@@ -19,18 +19,18 @@ section: input [
     type: "frame"
   ]
 
-    toggle: vectorfile  [
+    toggle: vectorfile [
       parameter: "Y"
       default: "Y"
       information: "Are your vector sequences in a file?"
     ]
 
-    infile: vectorsfile  [
+    infile: vectorsfile [
       standard: "$(vectorfile)"
       nullok: "Y"
       default: ""
-      information: "Name of vectorfile"
-      knowntype: "vector file"
+      information: "Cloning vector definition file (optional)"
+      knowntype: "vector"
     ]
 
   endsection: vectorfilesection
@@ -42,25 +42,26 @@ section: required [
   type: "page"
 ]
 
-  integer: mismatch  [
+  integer: mismatch [
     standard: "Y"
     default: "10"
     information: "Max allowed % mismatch"
   ]
 
-  boolean: besthits  [
+  boolean: besthits [
     standard: "Y"
     default: "Y"
-    information: "Show only the best hits (minimise mismatches)?"
+    information: "Show only the best hits (minimise
+                  mismatches)?"
   ]
 
-  string: linkera  [
+  string: linkera [
     standard: "@(!$(vectorfile))"
     information: "The 5' sequence"
     knowntype: "nucleotide sequence"
   ]
 
-  string: linkerb  [
+  string: linkerb [
     standard: "@(!$(vectorfile))"
     information: "The 3' sequence"
     knowntype: "nucleotide sequence"
@@ -73,12 +74,12 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "vectorstrip output"
   ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
   ]
 

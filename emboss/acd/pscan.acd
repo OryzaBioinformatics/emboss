@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "Protein"
   ]
@@ -20,7 +20,7 @@ section: required [
   type: "page"
 ]
 
-  integer: emin  [
+  integer: emin [
     standard: "Y"
     minimum: "1"
     maximum: "20"
@@ -28,7 +28,7 @@ section: required [
     information: "Minimum number of elements per fingerprint"
   ]
 
-  integer: emax  [
+  integer: emax [
     standard: "Y"
     minimum: "$(emin)"
     maximum: "20"
@@ -43,7 +43,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "pscan output"
   ]

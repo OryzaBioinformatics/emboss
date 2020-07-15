@@ -9,17 +9,17 @@ section: input [
   type: "page"
 ]
 
-  boolean: feature  [
+  boolean: feature [
     information: "Use feature information"
   ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     features: "$(feature)"
     type: "gapany"
   ]
 
-  integer: skip  [
+  integer: skip [
     standard: "Y"
     default: "0"
     information: "Number of sequences to skip at start"
@@ -32,7 +32,7 @@ section: output [
   type: "page"
 ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
     features: "$(feature)"
   ]

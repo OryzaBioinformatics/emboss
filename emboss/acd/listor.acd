@@ -9,13 +9,13 @@ section: input [
   type: "page"
 ]
 
-  seqset: firstsequences  [
+  seqset: firstsequences [
     parameter: "Y"
     type: "gapany"
     aligned: "N"
   ]
 
-  seqset: secondsequences  [
+  seqset: secondsequences [
     parameter: "Y"
     type: "gapany"
     aligned: "N"
@@ -28,7 +28,7 @@ section: additional [
   type: "page"
 ]
 
-  list: operator  [
+  list: operator [
     additional: "Y"
     default: "OR"
     minimum: "1"
@@ -58,12 +58,13 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     extension: "list"
     knowntype: "USA list"
     help: "The list of sequence names will be written to this list
            file"
+    information: "List of USAs output file"
   ]
 
 endsection: output

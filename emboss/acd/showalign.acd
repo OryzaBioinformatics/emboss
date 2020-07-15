@@ -8,14 +8,14 @@ section: input [
   type: "page"
 ]
 
-  seqset: sequence  [
+  seqset: sequence [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
     help: "The sequence alignment to be displayed."
   ]
 
-  matrix: matrix  [
+  matrix: matrix [
     additional: "Y"
     information: "Similarity scoring Matrix file"
     protein: "$(acdprotein)"
@@ -32,7 +32,7 @@ section: additional [
   type: "page"
 ]
 
-  string: refseq  [
+  string: refseq [
     additional: "Y"
     default: "0"
     information: "The number or the name of the reference
@@ -47,7 +47,7 @@ section: additional [
     knowntype: "sequence id input"
   ]
 
-  boolean: bottom  [
+  boolean: bottom [
     additional: "Y"
     default: "Y"
     information: "Display the reference sequence at the bottom"
@@ -55,7 +55,7 @@ section: additional [
            the bottom of the alignment as well as at the top."
   ]
 
-  list: show  [
+  list: show [
     additional: "Y"
     default: "N"
     minimum: "1"
@@ -70,7 +70,7 @@ section: additional [
     information: "What to show"
   ]
 
-  list: order  [
+  list: order [
     additional: "Y"
     default: "I"
     minimum: "1"
@@ -83,7 +83,7 @@ section: additional [
     information: "Output order of the sequences"
   ]
 
-  boolean: similarcase  [
+  boolean: similarcase [
     additional: "Y"
     default: "Y"
     information: "Show similar residues in lower-case"
@@ -96,7 +96,7 @@ section: additional [
            made on the basis of their similarity to the reference sequence."
   ]
 
-  boolean: consensus  [
+  boolean: consensus [
     additional: "Y"
     default: "Y"
     information: "Display the consensus line"
@@ -110,7 +110,7 @@ section: advanced [
   type: "page"
 ]
 
-  range: uppercase  [
+  range: uppercase [
     default: ""
     information: "Regions to put in uppercase (eg: 4-57,78-94)"
     help: "Regions to put in uppercase. \
@@ -126,7 +126,7 @@ section: advanced [
                left alone."
   ]
 
-  boolean: number  [
+  boolean: number [
     default: "Y"
     information: "Number the sequences"
     help: "If this option is true then a line giving the positions in
@@ -134,20 +134,20 @@ section: advanced [
            alignment."
   ]
 
-  boolean: ruler  [
+  boolean: ruler [
     default: "Y"
     information: "Display ruler"
     help: "If this option is true then a ruler line marking every 5th
            and 10th character in the alignment is displayed."
   ]
 
-  integer: width  [
+  integer: width [
     default: "60"
     minimum: "1"
     information: "Width of sequence to display"
   ]
 
-  integer: margin  [
+  integer: margin [
     default: "-1"
     minimum: "-1"
     information: "Length of margin for sequence names"
@@ -161,12 +161,12 @@ section: advanced [
            will automatically be selected."
   ]
 
-  boolean: html  [
+  boolean: html [
     default: "N"
     information: "Use HTML formatting"
   ]
 
-  range: highlight  [
+  range: highlight [
     default: ""
     information: "Regions to colour in HTML (eg: 4-57 red 78-94
                   green)"
@@ -182,7 +182,7 @@ section: advanced [
            as '@filename'."
   ]
 
-  float: plurality  [
+  float: plurality [
     default: "50.0"
     minimum: "0.0"
     maximum: "100.0"
@@ -192,17 +192,17 @@ section: advanced [
            of the total weight of all the sequences in the alignment."
   ]
 
-  float: setcase  [
+  float: setcase [
     default: "@( $(sequence.totweight) / 2)"
     information: "Threshold above which the consensus is given
                   in uppercase"
     help: "Sets the threshold for the scores of the positive matches
            above which the consensus is in upper-case and below which the
-           consensus is in lower-case. By default this is set to be half
-           of the (weight-adjusted) number of sequences in the alignment."
+           consensus is in lower-case. By default this is set to be half of
+           the (weight-adjusted) number of sequences in the alignment."
   ]
 
-  float: identity  [
+  float: identity [
     default: "0.0"
     minimum: "0.0"
     maximum: "100.0"
@@ -214,6 +214,14 @@ section: advanced [
            consensus."
   ]
 
+  boolean: gaps [
+    default: "Y"
+    information: "Use gap characters in consensus"
+    help: "If this option is true then gap characters can appear in
+           the consensus. The alternative is 'N' for nucleotide, or 'X' for
+           protein"
+  ]
+
 endsection: advanced
 
 section: output [
@@ -221,7 +229,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "showalign output"
   ]

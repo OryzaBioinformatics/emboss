@@ -9,15 +9,15 @@ section: input [
   type: "page"
 ]
 
-  seqall: seqall  [
+  seqall: seqall [
     parameter: "Y"
     type: "dna"
   ]
 
-  infile: infile  [
+  infile: infile [
     parameter: "Y"
-    information: "Primer file"
-    knowntype: "primer pairs file"
+    information: "Primer pairs file"
+    knowntype: "primer pairs"
   ]
 
 endsection: input
@@ -27,7 +27,7 @@ section: required [
   type: "page"
 ]
 
-  integer: mismatchpercent  [
+  integer: mismatchpercent [
     parameter: "Y"
     default: "0"
     information: "Allowed percent mismatch"
@@ -40,9 +40,10 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "primer3 output"
+    information: "Whitehead primer3_core program output file"
   ]
 
 endsection: output

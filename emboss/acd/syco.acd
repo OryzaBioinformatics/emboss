@@ -9,12 +9,12 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "DNA"
   ]
 
-  codon: cfile  [
+  codon: cfile [
     help: "Codon usage file"
   ]
 
@@ -25,17 +25,17 @@ section: advanced [
   type: "page"
 ]
 
-  integer: window  [
+  integer: window [
     default: "30"
     information: "Averaging window"
   ]
 
-  boolean: uncommon  [
+  boolean: uncommon [
     default: "N"
     information: "Show common codon usage"
   ]
 
-  float: minimum  [
+  float: minimum [
     default: ".15"
     minimum: "0.0"
     maximum: ".99"
@@ -49,17 +49,17 @@ section: output [
   type: "page"
 ]
 
-  toggle: plot  [
+  toggle: plot [
     information: "Produce plot"
     default: "Y"
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "$(plot)"
     multiple: "3"
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     standard: "@(!$(plot))"
     knowntype: "syco output"
     nullok: "$(plot)"

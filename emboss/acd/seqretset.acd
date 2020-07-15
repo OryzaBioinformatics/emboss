@@ -9,11 +9,11 @@ section: input [
   type: "page"
 ]
 
-  boolean: feature  [
+  boolean: feature [
     information: "Use feature information"
   ]
 
-  seqset: sequence  [
+  seqset: sequence [
     parameter: "Y"
     features: "$(feature)"
     type: "gapany"
@@ -27,7 +27,7 @@ section: output [
   type: "page"
 ]
 
-  seqoutset: outseq  [
+  seqoutset: outseq [
     parameter: "Y"
     features: "$(feature)"
   ]

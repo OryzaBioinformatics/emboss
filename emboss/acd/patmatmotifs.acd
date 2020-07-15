@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "Protein"
   ]
@@ -21,14 +21,14 @@ section: additional [
   type: "page"
 ]
 
-  boolean: full  [
+  boolean: full [
     additional: "Y"
     default: "N"
     information: "Provide full documentation for matching
                   patterns"
   ]
 
-  boolean: prune  [
+  boolean: prune [
     additional: "Y"
     default: "Y"
     information: "Ignore simple patterns"
@@ -45,7 +45,7 @@ section: output [
   type: "page"
 ]
 
-  report: outfile  [
+  report: outfile [
     parameter: "Y"
     rformat: "dbmotif"
     taglist: "str:motif=Motif"

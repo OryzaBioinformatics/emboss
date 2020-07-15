@@ -1,6 +1,6 @@
 application: seqmatchall [
-  documentation: "All-against-all comparison of a set
-                  of sequences"
+  documentation: "All-against-all comparison of a set of
+                  sequences"
   groups: "Alignment:Local"
 ]
 
@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqset: sequence  [
+  seqset: sequence [
     parameter: "Y"
     type: "any"
     aligned: "N"
@@ -22,7 +22,7 @@ section: required [
   type: "page"
 ]
 
-  integer: wordsize  [
+  integer: wordsize [
     standard: "Y"
     default: "4"
     minimum: "2"
@@ -36,7 +36,7 @@ section: output [
   type: "page"
 ]
 
-  align: outfile  [
+  align: outfile [
     parameter: "Y"
     aformat: "match"
     minseqs: "2"

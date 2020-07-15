@@ -8,7 +8,7 @@ section: required [
   type: "page"
 ]
 
-  integer: points  [
+  integer: points [
     standard: "y"
     default: "90"
     minimum: "2"
@@ -23,13 +23,13 @@ section: output [
   type: "page"
 ]
 
-  boolean: overlap  [
+  boolean: overlap [
     standard: "y"
     default: "y"
     information: "Overlap the graphs"
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "y"
     multiple: "3"
   ]

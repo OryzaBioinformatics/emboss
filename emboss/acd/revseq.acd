@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "gapdna"
   ]
@@ -20,14 +20,14 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: reverse  [
+  boolean: reverse [
     default: "Y"
     information: "Reverse sequence"
     help: "Set this to be false if you do not wish to reverse the
            output sequence"
   ]
 
-  boolean: complement  [
+  boolean: complement [
     default: "Y"
     information: "Complement sequence"
     help: "Set this to be false if you do not wish to complement the
@@ -41,7 +41,7 @@ section: output [
   type: "page"
 ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
     extension: "rev"
   ]

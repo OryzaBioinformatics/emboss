@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "dna"
   ]
@@ -20,13 +20,13 @@ section: required [
   type: "page"
 ]
 
-  integer: maxrepeat  [
+  integer: maxrepeat [
     standard: "Y"
     default: "600"
     information: "Maximum repeat size"
   ]
 
-  integer: threshold  [
+  integer: threshold [
     standard: "Y"
     default: "20"
     information: "Threshold score"
@@ -39,7 +39,7 @@ section: output [
   type: "page"
 ]
 
-  report: outfile  [
+  report: outfile [
     parameter: "Y"
     rformat: "table"
     taglist: "int:rpt_size=Size int:rpt_count=Count"
@@ -47,10 +47,12 @@ section: output [
     precision: "0"
   ]
 
-  outfile: origfile  [
+  outfile: origfile [
     extension: "oldqtan"
     nullok: "Y"
     knowntype: "quicktandem output"
+    information: "Sanger Centre program quicktandem output file
+                  (optional)"
   ]
 
 endsection: output

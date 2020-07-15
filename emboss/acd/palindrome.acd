@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "nucleotide"
   ]
@@ -21,7 +21,7 @@ section: required [
   type: "page"
 ]
 
-  integer: minpallen  [
+  integer: minpallen [
     standard: "Y"
     default: "10"
     minimum: "1"
@@ -29,7 +29,7 @@ section: required [
     information: "Enter minimum length of palindrome"
   ]
 
-  integer: maxpallen  [
+  integer: maxpallen [
     standard: "Y"
     default: "100"
     minimum: "$(minpalLen)"
@@ -37,7 +37,7 @@ section: required [
     information: "Enter maximum length of palindrome"
   ]
 
-  integer: gaplimit  [
+  integer: gaplimit [
     standard: "Y"
     default: "100"
     minimum: "0"
@@ -45,7 +45,7 @@ section: required [
     information: "Enter maximum gap between repeated regions"
   ]
 
-  integer: nummismatches  [
+  integer: nummismatches [
     standard: "Y"
     default: "0"
     minimum: "0"
@@ -60,13 +60,13 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     extension: "pal"
     knowntype: "palindrome output"
   ]
 
-  boolean: overlap  [
+  boolean: overlap [
     standard: "Y"
     information: "Report overlapping matches"
     default: "Y"

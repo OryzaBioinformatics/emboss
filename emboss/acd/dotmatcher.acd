@@ -9,17 +9,17 @@ section: input [
   type: "page"
 ]
 
-  sequence: asequence  [
+  sequence: asequence [
     parameter: "y"
     type: "any"
   ]
 
-  sequence: bsequence  [
+  sequence: bsequence [
     parameter: "y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
 
-  matrix: matrixfile  [
+  matrix: matrixfile [
     additional: "Y"
     information: "Matrix file"
     protein: "$(acdprotein)"
@@ -36,14 +36,14 @@ section: additional [
   type: "page"
 ]
 
-  integer: windowsize  [
+  integer: windowsize [
     additional: "Y"
     information: "Window size over which to test threshhold"
     default: "10"
     minimum: "3"
   ]
 
-  integer: threshold  [
+  integer: threshold [
     additional: "Y"
     information: "Threshold"
     default: "23"
@@ -57,20 +57,20 @@ section: output [
   type: "page"
 ]
 
-  toggle: stretch  [
+  toggle: stretch [
     default: "N"
     information: "Stretch plot"
     help: "Display a non-proportional graph"
   ]
 
-  graph: graph  [
+  graph: graph [
     standard: "@(!$(stretch))"
     gtitle: "Dotmatcher: $(asequence.name) vs $(bsequence.name)"
     gxtitle: "$(asequence.name)"
     gytitle: "$(bsequence.name)"
   ]
 
-  xygraph: xygraph  [
+  xygraph: xygraph [
     standard: "$(stretch)"
     gtitle: "Dotmatcher: $(asequence.name) vs $(bsequence.name)"
     gxtitle: "$(asequence.name)"

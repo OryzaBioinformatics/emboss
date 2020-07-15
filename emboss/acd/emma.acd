@@ -13,37 +13,38 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "gapany"
   ]
 
-    toggle: onlydend  [
-      additional: "Y"
-      default: "N"
-      information: "Only produce dendrogram file"
-    ]
+  toggle: onlydend [
+    additional: "Y"
+    default: "N"
+    information: "Only produce dendrogram file"
+  ]
 
-    toggle: dend  [
-      additional: "@(!$(onlydend))"
-      default: "N"
-      information: "Do alignment using an old dendrogram"
-    ]
+  toggle: dend [
+    additional: "@(!$(onlydend))"
+    default: "N"
+    information: "Do alignment using an old dendrogram"
+  ]
 
-    infile: dendfile  [
-      additional: "$(dend)"
-      default: ""
-      nullok: "@(!$(dend))"
-      information: "Name of old dendrogram file"
-      knowntype: "dendrogram"
-    ]
+  infile: dendfile [
+    additional: "$(dend)"
+    default: ""
+    nullok: "@(!$(dend))"
+    knowntype: "dendrogram"
+    information: "Dendrogram (tree file) from clustalw file
+                  (optional)"
+  ]
 
   section: protalignsection [
     information: "Protein align options"
     type: "frame"
   ]
 
-    list: pwmatrix  [
+    list: pwmatrix [
       additional: "@($(acdprotein) & $(slow))"
       default: "b"
       minimum: "1"
@@ -82,7 +83,7 @@ section: input [
              matrix is not very useful."
     ]
 
-    list: pwdnamatrix  [
+    list: pwdnamatrix [
       additional: "@(!$(acdprotein) & $(slow))"
       default: "i"
       minimum: "1"
@@ -99,11 +100,11 @@ section: input [
 
     variable: usermatrix "@($(pwmatrix) == o)"
 
-    infile: pairwisedata  [
+    infile: pairwisedatafile [
       additional: "$(usermatrix)"
       default: ""
       nullok: "@(!$(usermatrix))"
-      information: "Filename of user pairwise matrix"
+      information: "Comparison matrix file (optional)"
       knowntype: "comparison matrix"
     ]
 
@@ -114,7 +115,7 @@ section: input [
     type: "frame"
   ]
 
-    list: matrix  [
+    list: matrix [
       additional: "$(acdprotein)"
       default: "b"
       minimum: "1"
@@ -159,7 +160,7 @@ section: input [
 
     variable: usermamatrix "@($(matrix) == o)"
 
-    list: dnamatrix  [
+    list: dnamatrix [
       additional: "@(!$(acdprotein))"
       default: "i"
       minimum: "1"
@@ -170,17 +171,17 @@ section: input [
       codedelimiter: ":"
       information: "Select matrix"
       button: "Y"
-      help: "This gives a menu where you are offered amenu where a
-             single matrix (not a series) can be selected."
+      help: "This gives a menu where a single matrix (not a series)
+             can be selected."
     ]
 
     variable: umamatrix "@($(dnamatrix) == own)"
 
-    infile: mamatrix  [
+    infile: mamatrixfile [
       additional: "@($(usermamatrix)?True:$(umamatrix))"
       default: ""
       nullok: "@($(usermamatrix)?@(!$(umamatrix)):True)"
-      information: "Filename of user multiple alignment matrix"
+      information: "Comparison matrix file (optional)'"
       knowntype: "comparison matrix"
     ]
 
@@ -201,7 +202,7 @@ section: additional [
     toggle: slow [
       additional: "Y"
       default: "Y"
-      information: "Do you want to carry out slow or fast pairwise
+      information: "Do you want to carry out slow pairwise
                     alignment"
       help: "A distance is calculated between every pair of sequences
              and these are used to construct the dendrogram which guides the
@@ -214,7 +215,7 @@ section: additional [
              sequences."
     ]
 
-    float: pwgapopen  [
+    float: pwgapopen [
       additional: "$(slow)"
       default: "10.0"
       minimum: "0.0"
@@ -224,7 +225,7 @@ section: additional [
              alignments."
     ]
 
-    float: pwgapextend  [
+    float: pwgapextend [
       additional: "$(slow)"
       default: "0.1"
       minimum: "0.0"
@@ -241,7 +242,7 @@ section: additional [
     type: "frame"
   ]
 
-    integer: ktup  [
+    integer: ktup [
       additional: "@(!$(slow))"
       default: "@($(acdprotein)?1:2)"
       minimum: "0"
@@ -256,7 +257,7 @@ section: additional [
              residues) you may need to increase the default."
     ]
 
-    integer: gapw  [
+    integer: gapw [
       additional: "@(!$(slow))"
       default: "@($(acdprotein)?3:5)"
       minimum: "0"
@@ -269,7 +270,7 @@ section: additional [
              extreme values."
     ]
 
-    integer: topdiags  [
+    integer: topdiags [
       additional: "@(!$(slow))"
       default: "@($(acdprotein)?5:4)"
       minimum: "0"
@@ -284,7 +285,7 @@ section: additional [
              sensitivity."
     ]
 
-    integer: window  [
+    integer: window [
       additional: "@(!$(slow))"
       default: "@($(acdprotein)?5:4)"
       minimum: "0"
@@ -297,7 +298,7 @@ section: additional [
              sensitivity."
     ]
 
-    boolean: nopercent  [
+    boolean: nopercent [
       additional: "@(!$(slow))"
       default: "N"
       information: "Fast pairwise alignment: similarity scores:
@@ -311,7 +312,7 @@ section: additional [
     type: "frame"
   ]
 
-    float: gapopen  [
+    float: gapopen [
       additional: "Y"
       default: "10.0"
       minimum: "0.0"
@@ -322,7 +323,7 @@ section: additional [
              frequent."
     ]
 
-    float: gapextend  [
+    float: gapextend [
       additional: "Y"
       default: "5.0"
       minimum: "0.0"
@@ -333,7 +334,7 @@ section: additional [
              are not penalised."
     ]
 
-    boolean: endgaps  [
+    boolean: endgaps [
       additional: "Y"
       default: "Y"
       information: "Use end gap separation penalty"
@@ -345,31 +346,31 @@ section: additional [
              meaningful."
     ]
 
-    integer: gapdist  [
+    integer: gapdist [
       additional: "Y"
       default: "8"
       minimum: "0"
       information: "Gap separation distance"
       valid: "Positive integer"
-      help: "Gap separation distance: tries to decrease the chances
-             of gaps being too close to each other. Gaps that are less than
+      help: "Gap separation distance: tries to decrease the chances of
+             gaps being too close to each other. Gaps that are less than
              this distance apart are penalised more than other gaps. This
              does not prevent close gaps; it makes them less frequent,
              promoting a block-like appearance of the alignment."
     ]
 
-    boolean: norgap  [
+    boolean: norgap [
       additional: "$(acdprotein)"
       default: "N"
       information: "No residue specific gaps"
-      help: "Residue specific penalties:  amino acid specific gap
+      help: "Residue specific penalties: amino acid specific gap
              penalties that reduce or increase the gap opening penalties at
              each position in the alignment or sequence. As an example,
              positions that are rich in glycine are more likely to have an
              adjacent gap than positions that are rich in valine."
     ]
 
-    string: hgapres  [
+    string: hgapres [
       additional: "$(acdprotein)"
       default: "GPSNDQEKR"
       information: "List of hydrophilic residues"
@@ -379,20 +380,20 @@ section: additional [
       knowntype: "protein codes"
     ]
 
-    boolean: nohgap  [
+    boolean: nohgap [
       additional: "$(acdprotein)"
       default: "N"
       information: "No hydrophilic gaps"
-      help: "Hydrophilic gap penalties: used to increase the
-             chances of a gap within a run (5 or more residues) of
-             hydrophilic amino acids; these are likely to be loop or random
-             coil regions where gaps are more common. The residues that are
-             'considered' to be hydrophilic are set by '-hgapres'."
+      help: "Hydrophilic gap penalties: used to increase the chances
+             of a gap within a run (5 or more residues) of hydrophilic amino
+             acids; these are likely to be loop or random coil regions where
+             gaps are more common. The residues that are 'considered' to be
+             hydrophilic are set by '-hgapres'."
     ]
 
   endsection: gapoptions
 
-  integer: maxdiv  [
+  integer: maxdiv [
     additional: "Y"
     default: "30"
     minimum: "0"
@@ -415,15 +416,16 @@ section: output [
   type: "page"
 ]
 
-  seqoutset: outseq  [
+  seqoutset: outseq [
     parameter: "Y"
     extension: "aln"
   ]
 
-  outfile: dendoutfile  [
+  outfile: dendoutfile [
     parameter: "Y"
     extension: "dnd"
-    information: "Dendogram output filename"
+    information: "Dendrogram (tree file) from clustalw output
+                  file"
     knowntype: "dendrogram"
   ]
 

@@ -8,12 +8,12 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "any"
   ]
 
-  string: expression  [
+  string: expression [
     parameter: "Y"
     default: ""
     minlength: "2"
@@ -28,10 +28,10 @@ section: output [
   type: "page"
 ]
 
- outfile: outfile  [
-   parameter: "Y"
-   default: "stdout"
-   knowntype: "patmattest output"
- ]
+  outfile: outfile [
+    parameter: "Y"
+    default: "stdout"
+    knowntype: "patmattest output"
+  ]
 
 endsection: output

@@ -1,6 +1,6 @@
 application: compseq [
-  documentation: "Count composition of dimer/trimer/etc
-                  words in a sequence"
+  documentation: "Count composition of dimer/trimer/etc words
+                  in a sequence"
   groups: "Nucleic:Composition, Protein:Composition"
 ]
 
@@ -9,16 +9,15 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "any"
   ]
 
-  infile: infile  [
+  infile: infile [
     additional: "Y"
     nullok: "Y"
-    information: "Optional 'compseq' file to use for expected word
-                  frequencies"
+    information: "Program compseq output file (optional)"
     help: "This is a file previously produced by 'compseq' that can be
            used to set the expected frequencies of words in this analysis. \
            The word size in the current run must be the same as the one in
@@ -36,8 +35,8 @@ section: required [
   type: "page"
 ]
 
-  integer: word  [
-    parameter: "Y"
+  integer: word [
+    standard: "Y"
     minimum: "1"
     default: "2"
     maximum: "20"
@@ -54,7 +53,7 @@ section: additional [
   type: "page"
 ]
 
-  integer: frame  [
+  integer: frame [
     additional: "Y"
     default: "0"
     minimum: "0"
@@ -71,7 +70,7 @@ section: additional [
            only count the words in frame 2 and so on."
   ]
 
-  boolean: ignorebz  [
+  boolean: ignorebz [
     additional: "$(acdprotein)"
     default: "Y"
     information: "Ignore the amino acids B and Z and just count
@@ -83,7 +82,7 @@ section: additional [
            words."
   ]
 
-  boolean: reverse  [
+  boolean: reverse [
     additional: "@(!$(acdprotein))"
     default: "N"
     information: "Count words in the forward and reverse sense"
@@ -92,25 +91,22 @@ section: additional [
   ]
 
   boolean: calcfreq [
-#    additional: "@($(infile)==NULL)"
     additional: "Y"
     default: "N"
     information: "Calculate expected frequency from sequence"
     help: "If this is set true then the expected frequencies of words
-           are calculated from the observed frequency of single
-           bases or residues in the sequences. \
-           If you are reporting a word size of 1 (single
-           bases or residues) then there is no point in using this
-           option because the calculated expected frequency will be
-           equal to the observed frequency.  \
-           Calculating the expected frequencies like this will give
-           an approximation of the expected frequencies
-           that you might get by using an input file of frequencies
-           produced by a previous run of this program.
-           If an input file of expected word frequencies has been specified
-           then the values from that file will be used instead of this
-           calculation of expected frequency from the sequence, even if
-           'calcfreq' is set to be true."
+           are calculated from the observed frequency of single bases or
+           residues in the sequences. \
+           If you are reporting a word size of 1 (single bases or residues)
+           then there is no point in using this option because the calculated
+           expected frequency will be equal to the observed frequency. \
+           Calculating the expected frequencies like this will give an
+           approximation of the expected frequencies that you might get by
+           using an input file of frequencies produced by a previous run of
+           this program. If an input file of expected word frequencies has
+           been specified then the values from that file will be used instead
+           of this calculation of expected frequency from the sequence, even
+           if 'calcfreq' is set to be true."
   ]
 
 endsection: additional
@@ -120,14 +116,15 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     extension: "composition"
     help: "This is the results file."
+    information: "Program compseq output file"
     knowntype: "compseq output"
   ]
 
-  boolean: zerocount  [
+  boolean: zerocount [
     additional: "Y"
     default: "Y"
     information: "Display the words that have a frequency of

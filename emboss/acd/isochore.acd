@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "dna"
   ]
@@ -20,7 +20,7 @@ section: additional [
   type: "page"
 ]
 
-  integer: window  [
+  integer: window [
     additional: "Y"
     default: "1000"
     minimum: "1"
@@ -28,7 +28,7 @@ section: additional [
     information: "Window size"
   ]
 
-  integer: shift  [
+  integer: shift [
     additional: "Y"
     default: "100"
     minimum: "1"
@@ -43,13 +43,13 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     extension: "iso"
     knowntype: "isochore output"
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "Y"
   ]
 

@@ -8,12 +8,12 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "gapprotein"
   ]
 
-  codon: cfile  [
+  codon: cfile [
     additional: "Y"
     default: "Ehuman.cut"
   ]
@@ -25,7 +25,7 @@ section: output [
   type: "page"
 ]
 
-  seqout: outfile  [
+  seqout: outfile [
     parameter: "Y"
     type: "gapnucleotide"
   ]

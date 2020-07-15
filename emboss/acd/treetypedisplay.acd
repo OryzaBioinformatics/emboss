@@ -8,7 +8,7 @@ section: output [
   type: "page"
 ]
 
-  graph: graph  [
+  graph: graph [
     standard: "Y"
   ]
 

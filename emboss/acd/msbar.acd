@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "any"
   ]
@@ -40,7 +40,7 @@ section: required [
   type: "page"
 ]
 
-  integer: count  [
+  integer: count [
     standard: "Y"
     default: "1"
     minimum: "0"
@@ -48,7 +48,7 @@ section: required [
                   operations"
   ]
 
-  list: point  [
+  list: point [
     standard: "Y"
     default: "0"
     minimum: "1"
@@ -61,7 +61,7 @@ section: required [
     information: "Types of point mutations to perform"
   ]
 
-  list: block  [
+  list: block [
     standard: "Y"
     default: "0"
     minimum: "1"
@@ -74,7 +74,7 @@ section: required [
     information: "Types of block mutations to perform"
   ]
 
-  list: codon  [
+  list: codon [
     standard: "@(!$(acdprotein))"
     default: "0"
     minimum: "1"
@@ -96,7 +96,7 @@ section: additional [
   type: "page"
 ]
 
-  boolean: inframe  [
+  boolean: inframe [
     additional: "@(!$(acdprotein))"
     default: "N"
     information: "Do 'codon' and 'block' operations in frame"
@@ -109,13 +109,13 @@ section: advanced [
   type: "page"
 ]
 
-  integer: minimum  [
+  integer: minimum [
     default: "1"
     minimum: "0"
     information: "Minimum size for a block mutation"
   ]
 
-  integer: maximum  [
+  integer: maximum [
     default: "10"
     minimum: "$(minimum)"
     information: "Maximum size for a block mutation"
@@ -128,7 +128,7 @@ section: output [
   type: "page"
 ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
   ]
 

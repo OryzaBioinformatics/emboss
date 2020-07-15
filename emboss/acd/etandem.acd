@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "dna"
   ]
@@ -21,7 +21,7 @@ section: required [
   type: "page"
 ]
 
-  integer: minrepeat  [
+  integer: minrepeat [
     standard: "Y"
     default: "10"
     minimum: "2"
@@ -29,7 +29,7 @@ section: required [
     valid: "Integer, 2 or higher"
   ]
 
-  integer: maxrepeat  [
+  integer: maxrepeat [
     standard: "Y"
     default: "$(minrepeat)"
     minimum: "$(minrepeat)"
@@ -45,16 +45,16 @@ section: advanced [
   type: "page"
 ]
 
-  integer: threshold  [
+  integer: threshold [
     default: "20"
     information: "Threshold score"
   ]
 
-  boolean: mismatch  [
+  boolean: mismatch [
     information: "Allow N as a mismatch"
   ]
 
-  boolean: uniform  [
+  boolean: uniform [
     information: "Allow uniform consensus"
   ]
 
@@ -65,7 +65,7 @@ section: output [
   type: "page"
 ]
 
-  report: outfile  [
+  report: outfile [
     parameter: "Y"
     rformat: "table"
     taglist: "int:rpt_size=Size int:rpt_count=Count
@@ -74,10 +74,12 @@ section: output [
     precision: "0"
   ]
 
-  outfile: origfile  [
+  outfile: origfile [
     extension: "oldtan"
     nullok: "Y"
     knowntype: "tandem output"
+    information: "Sanger Centre program tandem output file
+                  (optional)"
   ]
 
 endsection: output

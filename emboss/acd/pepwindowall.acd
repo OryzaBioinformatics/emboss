@@ -9,16 +9,16 @@ section: input [
   type: "page"
 ]
 
-  seqset: sequences  [
+  seqset: sequences [
     parameter: "Y"
     help: "File containing a sequence alignment"
     type: "gapprotein"
     aligned: "Y"
   ]
 
-  datafile: datafile  [
+  datafile: datafile [
     additional: "Y"
-    information: "Aaindex database file"
+    information: "AAINDEX entry data file"
     directory: "AAINDEX"
     default: "Enakai.dat"
     knowntype: "aaindex data"
@@ -31,7 +31,7 @@ section: additional [
   type: "page"
 ]
 
-  integer: length  [
+  integer: length [
     additional: "Y"
     information: "Window size"
     default: "7"
@@ -46,7 +46,7 @@ section: output [
   type: "page"
 ]
 
-  xygraph: graph  [
+  xygraph: graph [
     parameter: "Y"
     multiple: "$(sequences.count)"
     gytitle: "Hydropathy"

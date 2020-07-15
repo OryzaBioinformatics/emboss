@@ -8,14 +8,15 @@ section: input [
   type: "page"
 ]
 
-  seqall: seqall  [
+  seqall: seqall [
     parameter: "Y"
     type: "protein"
   ]
 
-  datafile: aadata  [
+  datafile: aadata [
     default: "Eamino.dat"
-    information: "Amino acid property data file name"
+    information: "Amino acids properties and molecular weight
+                  data file"
     knowntype: "amino acid properties"
   ]
 
@@ -26,7 +27,7 @@ section: additional [
   type: "page"
 ]
 
-  integer: window  [
+  integer: window [
     additional: "Y"
     minimum: "1"
     default: "5"
@@ -40,16 +41,16 @@ section: output [
   type: "page"
 ]
 
-  toggle: plot  [
+  toggle: plot [
     default: "N"
     information: "Produce graphic"
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "$(plot)"
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     standard: "@(!$(plot))"
     knowntype: "charge output"
     nullok: "$(plot)"

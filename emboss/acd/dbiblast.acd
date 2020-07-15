@@ -11,7 +11,7 @@ section: input [
   type: "page"
 ]
 
-  string: dbname  [
+  string: dbname [
     parameter: "Y"
     maxlength: "19"
     minlength: "2"
@@ -20,14 +20,14 @@ section: input [
     pattern: "[A-z][A-z0-9_]+"
   ]
 
-  directory: directory  [
+  directory: directory [
     standard: "Y"
     default: "."
     information: "Database directory"
     knowntype: "emboss database directory"
   ]
 
-  string: filenames  [
+  string: filenames [
     standard: "Y"
     information: "Wildcard database filename"
     default: "$(dbname)"
@@ -42,7 +42,7 @@ section: required [
   type: "page"
 ]
 
-  string: release  [
+  string: release [
     standard: "Y"
     default: "0.0"
     maxlength: "9"
@@ -50,16 +50,16 @@ section: required [
     knowntype: "emboss database release"
   ]
 
-  string: date  [
+  string: date [
     standard: "Y"
     default: "00/00/00"
     valid: "Date string dd/mm/yy"
     information: "Index date"
-    pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
+    pattern: "^[0-9][0-9]/[0-9][0-9]/[0-9][0-9]$"
     knowntype: "date"
   ]
 
-  list: seqtype  [
+  list: seqtype [
     standard: "Y"
     information: "Sequence type"
     values: "N:nucleic;P:protein;?:unknown"
@@ -68,7 +68,7 @@ section: required [
     default: "unknown"
   ]
 
-  list: blastversion  [
+  list: blastversion [
     standard: "Y"
     information: "Blast index version"
     values: "1:wublast and setdb/pressdb;2:formatdb;0:unknown"
@@ -84,21 +84,21 @@ section: advanced [
   type: "page"
 ]
 
-  list: fields  [
+  list: fields [
     information: "Index fields"
-    values: "acnum:Accession number;seqvn:Sequence Version and
-             GI;des:Description"
+    values: "acc:acnum accession number index;sv:seqvn sequence
+             version and gi number index;des:des description index"
     minimum: "0"
     maximum: "3"
-    default: "acnum"
+    default: "acc"
   ]
 
-  string: exclude  [
+  string: exclude [
     information: "Wildcard filename(s) to exclude"
     knowntype: "filename wildcard"
   ]
 
-  string: sortoptions  [
+  string: sortoptions [
     default: "-T . -k 1,1"
     information: "Sort option(s)"
     help: "Sort options, typically '-T .' to use current directory for
@@ -106,23 +106,23 @@ section: advanced [
     knowntype: "sort utility options"
   ]
 
-  integer: maxindex  [
+  integer: maxindex [
     default: "0"
     minimum: "0"
     information: "Maximum index length"
   ]
 
-  boolean: systemsort  [
+  boolean: systemsort [
     default: "Y"
     information: "Use system sort utility"
   ]
 
-  boolean: cleanup  [
+  boolean: cleanup [
     default: "Y"
     information: "Clean up temporary files"
   ]
 
-  boolean: sourcefile  [
+  boolean: sourcefile [
     information: "Use FASTA source file"
   ]
 
@@ -133,10 +133,16 @@ section: output [
   type: "page"
 ]
 
-  outdir: indexoutdir  [
+  outfile: outfile [
+    standard: "Y"
+    knowntype: "log"
+    information: "General log output file"
+  ]
+
+  outdir: indexoutdir [
     default: "."
-    information: "Index directory"
-    knowntype: "output directory"
+    information: "Index file output directory"
+    knowntype: "emboss database index"
   ]
 
 endsection: output

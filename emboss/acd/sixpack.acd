@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "DNA"
   ]
@@ -21,7 +21,7 @@ section: additional [
   type: "page"
 ]
 
-  list: table  [
+  list: table [
     additional: "Y"
     default: "0"
     minimum: "1"
@@ -43,7 +43,7 @@ section: additional [
     help: "Genetics code used for the translation"
   ]
 
-  boolean: firstorf  [
+  boolean: firstorf [
     additional: "Y"
     default: "Y"
     information: "ORF at the beginning of the sequence"
@@ -51,7 +51,7 @@ section: additional [
            if it's inferior to the minimal ORF size."
   ]
 
-  boolean: lastorf  [
+  boolean: lastorf [
     additional: "Y"
     default: "Y"
     information: "ORF at the end of the sequence"
@@ -59,7 +59,7 @@ section: additional [
            not finishing with a STOP, or inferior to the minimal ORF size."
   ]
 
-  boolean: mstart  [
+  boolean: mstart [
     additional: "Y"
     default: "N"
     information: "ORF start with an M"
@@ -73,25 +73,25 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "sixpack output"
   ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     standard: "Y"
     type: "stopprotein"
     help: "ORF sequence output"
   ]
 
-  boolean: reverse  [
+  boolean: reverse [
     default: "Y"
     information: "Display translation of reverse sense"
     help: "Display also the translation of the DNA sequence in the 3
            reverse frames"
   ]
 
-  integer: orfminsize  [
+  integer: orfminsize [
     default: "1"
     minimum: "1"
     information: "Minimum size of ORFs"
@@ -99,7 +99,7 @@ section: output [
            the translations."
   ]
 
-  range: uppercase  [
+  range: uppercase [
     default: ""
     information: "Regions to put in uppercase (eg: 4-57,78-94)"
     help: "Regions to put in uppercase. \
@@ -115,7 +115,7 @@ section: output [
                left alone."
   ]
 
-  range: highlight  [
+  range: highlight [
     default: ""
     information: "Regions to colour in HTML (eg: 4-57 red 78-94
                   green)"
@@ -131,54 +131,54 @@ section: output [
            '@filename'."
   ]
 
-  boolean: number  [
+  boolean: number [
     default: "Y"
     information: "Number the sequences"
     help: "Number the sequence at the beginning and the end of each
            line."
   ]
 
-  integer: width  [
+  integer: width [
     default: "60"
     minimum: "1"
     information: "Width of sequence to display"
     help: "Number of nucleotides displayed on each line"
   ]
 
-  integer: length  [
+  integer: length [
     default: "0"
     minimum: "0"
     information: "Line length of page (0 for indefinite)"
   ]
 
-  integer: margin  [
+  integer: margin [
     default: "10"
     minimum: "0"
     information: "Margin around sequence for numbering."
   ]
 
-  boolean: name  [
+  boolean: name [
     default: "Y"
     information: "Display sequence ID"
     help: "Set this to be false if you do not wish to display the ID
            name of the sequence."
   ]
 
-  boolean: description  [
+  boolean: description [
     default: "Y"
     information: "Display description"
     help: "Set this to be false if you do not wish to display the
            description of the sequence."
   ]
 
-  integer: offset  [
+  integer: offset [
     default: "1"
     information: "Offset to start numbering the sequence from"
     help: "Number from which you want the DNA sequence to be
            numbered."
   ]
 
-  boolean: html  [
+  boolean: html [
     default: "N"
     information: "Use HTML formatting"
   ]

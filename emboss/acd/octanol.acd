@@ -8,16 +8,16 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "pureprotein"
   ]
 
-  datafile: datafile  [
+  datafile: datafile [
     additional: "Y"
     default: "Ewhite-wimley.dat"
     information: "White-Wimley data file"
-    knowntype: "octanol datafile"
+    knowntype: "white wimley datafile"
   ]
 
 endsection: input
@@ -27,7 +27,7 @@ section: additional [
   type: "page"
 ]
 
-  integer: width  [
+  integer: width [
     additional: "Y"
     information: "Window size"
     default: "19"
@@ -42,7 +42,7 @@ section: output [
   type: "page"
 ]
 
-  xygraph: graph  [
+  xygraph: graph [
     parameter: "Y"
     multiple: "3"
     gxtitle: "$(sequence.name)"
@@ -50,19 +50,19 @@ section: output [
     gtitle: "White-Wimley Plot"
   ]
 
-  boolean: octanolplot  [
+  boolean: octanolplot [
     additional: "Y"
     default: "N"
     information: "Display the octanol plot"
   ]
 
-  boolean: interfaceplot  [
+  boolean: interfaceplot [
     additional: "Y"
     default: "N"
     information: "Display the interface plot"
   ]
 
-  boolean: differenceplot  [
+  boolean: differenceplot [
     additional: "Y"
     default: "Y"
     information: "Display the difference plot"

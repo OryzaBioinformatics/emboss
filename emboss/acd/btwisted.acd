@@ -9,20 +9,20 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "PureDNA"
   ]
 
-  datafile: angledata  [
+  datafile: angledata [
     default: "Eangles.dat"
-    information: "File containing base pair twist angles"
+    information: "DNA base pair twist angle data file"
     knowntype: "base pair twist angles"
   ]
 
-  datafile: energydata  [
+  datafile: energydata [
     default: "Eenergy.dat"
-    information: "File containing base pair stacking energies"
+    information: "DNA base pair stacking energies data file"
     knowntype: "base pair stacking energies"
   ]
 
@@ -33,7 +33,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "btwisted output"
   ]

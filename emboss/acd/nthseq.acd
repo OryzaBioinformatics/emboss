@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "gapany"
   ]
@@ -21,7 +21,7 @@ section: required [
   type: "page"
 ]
 
-  integer: number  [
+  integer: number [
     standard: "Y"
     minimum: "1"
     default: "1"
@@ -35,7 +35,7 @@ section: output [
   type: "page"
 ]
 
-  seqout: outseq  [
+  seqout: outseq [
     parameter: "Y"
   ]
 

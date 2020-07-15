@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "Protein"
   ]
@@ -20,7 +20,7 @@ section: required [
   type: "page"
 ]
 
-  string: motif  [
+  string: motif [
     parameter: "Y"
     minlength: "2"
     information: "Protein motif to search for"
@@ -41,7 +41,7 @@ section: output [
   type: "page"
 ]
 
-  report: outfile  [
+  report: outfile [
     parameter: "Y"
     rformat: "dbmotif"
     precision: "0"

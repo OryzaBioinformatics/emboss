@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "DNA"
   ]
@@ -20,7 +20,7 @@ section: required [
   type: "page"
 ]
 
-  integer: window  [
+  integer: window [
     standard: "Y"
     minimum: "1"
     maximum: "$(sequence.end)"
@@ -32,7 +32,7 @@ section: required [
            calculated at each postition that the window is moved to."
   ]
 
-  integer: minlen  [
+  integer: minlen [
     standard: "Y"
     minimum: "1"
     maximum: "$(sequence.end)"
@@ -42,7 +42,7 @@ section: required [
            before it is reported."
   ]
 
-  float: minoe  [
+  float: minoe [
     standard: "Y"
     minimum: "0."
     maximum: "10."
@@ -53,7 +53,7 @@ section: required [
            CpG island is reported."
   ]
 
-  float: minpc  [
+  float: minpc [
     standard: "Y"
     minimum: "0."
     maximum: "100."
@@ -70,7 +70,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     help: "This sets the name of the file holding the report of the
            input sequence name, CpG island parameters and the output details
@@ -78,33 +78,33 @@ section: output [
     knowntype: "cpgplot output"
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     parameter: "Y"
     multiple: "3"
   ]
 
-  boolean: obsexp  [
+  boolean: obsexp [
     default: "Y"
     information: "Show observed/expected threshold line"
     help: "If this is set to true then the graph of the observed to
            expected ratio of C plus G to CpG within a window is displayed."
   ]
 
-  boolean: cg  [
+  boolean: cg [
     default: "Y"
     information: "Show CpG rich regions"
     help: "If this is set to true then the graph of the regions which
            have been determined to be CpG islands is displayed."
   ]
 
-  boolean: pc  [
+  boolean: pc [
     default: "Y"
     information: "Show percentage line"
     help: "If this is set to true then the graph of the percentage C
            plus G within a window is displayed."
   ]
 
-  featout: outfeat  [
+  featout: outfeat [
     parameter: "Y"
     help: "File for output features"
     type: "nucleotide"

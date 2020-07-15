@@ -9,17 +9,17 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "protein"
     help: "Protein sequence USA to be analysed."
   ]
 
-  datafile: aadata  [
+  datafile: aadata [
     additional: "Y"
     default: "Eamino.dat"
-    help: "File of amino acid properties and molecular masses."
-    information: "Amino acid data file"
+    information: "Amino acids properties and molecular weight
+                  data file"
     knowntype: "amino acid properties"
   ]
 
@@ -30,7 +30,7 @@ section: required [
   type: "page"
 ]
 
-  integer: window  [
+  integer: window [
     standard: "Y"
     default: "10"
     help: "Minimal distance between positively charged amino acids."
@@ -39,7 +39,7 @@ section: required [
     minimum: "2"
   ]
 
-  selection: order  [
+  selection: order [
     standard: "Y"
     button: "Y"
     casesensitive: "N"
@@ -56,13 +56,12 @@ section: required [
 
 endsection: required
 
-
 section: additional [
   information: "Additional section"
   type: "page"
 ]
 
-  float: threshold  [
+  float: threshold [
     additional: "Y"
     default: "+5.0"
     help: "Threshold value to discriminate weak from potential PEST
@@ -84,25 +83,25 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: potential  [
+  boolean: potential [
     default: "Y"
     help: "Decide whether potential PEST motifs should be printed."
     information: "Display potential PEST motifs"
   ]
 
-  boolean: poor  [
+  boolean: poor [
     default: "Y"
     help: "Decide whether poor PEST motifs should be printed."
     information: "Display poor PEST motifs"
   ]
 
-  boolean: invalid  [
+  boolean: invalid [
     default: "N"
     help: "Decide whether invalid PEST motifs should be printed."
     information: "Display invalid PEST motifs"
   ]
 
-  boolean: map  [
+  boolean: map [
     default: "Y"
     help: "Decide whether PEST motifs should be mapped to sequence."
     information: "Display PEST motifs map"
@@ -115,13 +114,13 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     help: "Name of file to which results will be written."
     knowntype: "epestfind output"
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "Y"
     multiple: "1"
   ]

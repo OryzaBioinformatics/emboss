@@ -1,6 +1,6 @@
 application: restover [
-  documentation: "Find restriction enzymes producing
-                  specific overhang"
+  documentation: "Find restriction enzymes producing specific
+                  overhang"
   groups: "Nucleic:Restriction"
 ]
 
@@ -9,15 +9,15 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "DNA"
   ]
 
-  datafile: datafile  [
+  datafile: datafile [
     default: ""
-    information: "Alternative RE data file"
-    nullok: Y
+    information: "Restriction enzyme data file (optional)"
+    nullok: "Y"
     knowntype: "restriction enzyme data"
   ]
 
@@ -28,7 +28,7 @@ section: required [
   type: "page"
 ]
 
-  string: seqcomp  [
+  string: seqcomp [
     parameter: "Y"
     information: "Overlap sequence"
     knowntype: "nucleotide sequence"
@@ -41,52 +41,52 @@ section: advanced [
   type: "page"
 ]
 
-  integer: min  [
+  integer: min [
     minimum: "1"
     maximum: "1000"
     default: "1"
     information: "Minimum cuts per RE"
   ]
 
-  integer: max  [
+  integer: max [
     minimum: "$(min)"
     maximum: "2000000000"
     default: "2000000000"
     information: "Maximum cuts per RE"
   ]
 
-  boolean: single  [
+  boolean: single [
     default: "N"
     information: "Force single site only cuts"
   ]
 
-  boolean: threeprime  [
+  boolean: threeprime [
     default: "N"
-    information: "Use 3' overhang e.g. BamHI has CTAG as
-                  a 5' overhang, and ApaI has CCGG as 3' overhang."
+    information: "Use 3' overhang e.g. BamHI has CTAG as a 5'
+                  overhang, and ApaI has CCGG as 3' overhang."
   ]
 
-  boolean: blunt  [
+  boolean: blunt [
     default: "Y"
     information: "Allow blunt end cutters"
   ]
 
-  boolean: sticky  [
+  boolean: sticky [
     default: "Y"
     information: "Allow sticky end cutters"
   ]
 
-  boolean: ambiguity  [
+  boolean: ambiguity [
     default: "Y"
     information: "Allow ambiguous matches"
   ]
 
-  boolean: plasmid  [
+  boolean: plasmid [
     default: "N"
     information: "Allow circular DNA"
   ]
 
-  boolean: commercial  [
+  boolean: commercial [
     default: "Y"
     information: "Only enzymes with suppliers"
   ]
@@ -98,32 +98,32 @@ section: output [
   type: "page"
 ]
 
-  boolean: html  [
+  boolean: html [
     default: "N"
     information: "Create HTML output"
   ]
 
-  boolean: limit  [
+  boolean: limit [
     default: "Y"
     information: "Limits reports to one isoschizomer"
   ]
 
-  boolean: alphabetic  [
+  boolean: alphabetic [
     default: "N"
     information: "Sort output alphabetically"
   ]
 
-  boolean: fragments  [
+  boolean: fragments [
     default: "N"
     information: "Show fragment lengths"
   ]
 
-  boolean: name  [
+  boolean: name [
     default: "N"
     information: "Show sequence name"
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "restover output"
   ]

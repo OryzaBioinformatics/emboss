@@ -9,11 +9,11 @@ section: input [
   type: "page"
 ]
 
-  boolean: feature  [
+  boolean: feature [
     information: "Use feature information"
   ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "gapany"
     features: "$(feature)"
@@ -26,7 +26,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: firstonly  [
+  boolean: firstonly [
     information: "Read one sequence and stop"
   ]
 
@@ -37,7 +37,7 @@ section: output [
   type: "page"
 ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
     ossingle: "Y"
     features: "$(feature)"

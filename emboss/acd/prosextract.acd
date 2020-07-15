@@ -1,6 +1,6 @@
 application: prosextract [
-  documentation: "Build the PROSITE motif database for
-                  use by patmatmotifs"
+  documentation: "Build the PROSITE motif database for use by
+                  patmatmotifs"
   groups: "Utils:Database creation"
   gui: "yes"
   batch: "yes"
@@ -12,9 +12,9 @@ section: input [
   type: "page"
 ]
 
-  directory: prositedir  [
+  directory: prositedir [
     parameter: "Y"
-    information: "Name of prosite directory"
+    information: "PROSITE database directory"
     knowntype: "prosite database"
   ]
 

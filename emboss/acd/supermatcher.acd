@@ -1,6 +1,6 @@
 application: supermatcher [
-  documentation: "Match large sequences against
-                  one or more other sequences"
+  documentation: "Match large sequences against one or more
+                  other sequences"
   groups: "Alignment:Local"
   gui: "yes"
   batch: "yes"
@@ -12,18 +12,18 @@ section: input [
   type: "page"
 ]
 
-  seqall: asequence  [
+  seqall: asequence [
     parameter: "Y"
     type: "any"
   ]
 
-  seqset: bsequence  [
+  seqset: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
     aligned: "N"
   ]
 
-  matrixf: datafile  [
+  matrixf: datafile [
     additional: "Y"
     information: "Matrix file"
     protein: "$(acdprotein)"
@@ -40,7 +40,7 @@ section: required [
   type: "page"
 ]
 
-  float: gapopen  [
+  float: gapopen [
     standard: "Y"
     information: "Gap opening penalty"
     minimum: "0.0"
@@ -49,7 +49,7 @@ section: required [
     expected: "10.0 for any sequence type"
   ]
 
-  float: gapextend  [
+  float: gapextend [
     standard: "Y"
     information: "Gap extension penalty"
     minimum: "0.0"
@@ -65,14 +65,14 @@ section: additional [
   type: "page"
 ]
 
-  integer: width  [
+  integer: width [
     additional: "Y"
     default: "16"
     minimum: "1"
     information: "Alignment width"
   ]
 
-  integer: wordlen  [
+  integer: wordlen [
     additional: "Y"
     default: "6"
     minimum: "3"
@@ -86,18 +86,19 @@ section: output [
   type: "page"
 ]
 
-  align: outfile  [
+  align: outfile [
     parameter: "Y"
     aformat: "simple"
     minseqs: "2"
     maxseqs: "2"
   ]
 
-  outfile: errorfile  [
+  outfile: errorfile [
     additional: "Y"
     default: "supermatcher.error"
     help: "Error file to be written to"
-    knowntype: "supermatcher error file"
+    knowntype: "supermatcher error"
+    information: "Program supermatcher errors output file"
   ]
 
 endsection: output

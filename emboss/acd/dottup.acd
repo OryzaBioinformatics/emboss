@@ -26,7 +26,7 @@ section: required [
   type: "page"
 ]
 
-  integer: wordsize  [
+  integer: wordsize [
     standard: "Y"
     default: "10"
     minimum: "2"
@@ -40,23 +40,23 @@ section: output [
   type: "page"
 ]
 
-  toggle: stretch  [
+  toggle: stretch [
     default: "N"
     information: "Stretch axes"
     help: "Use non-proportional axes"
   ]
 
-  graph: graph  [
+  graph: graph [
     standard: "@(!$(stretch))"
     gxtitle: "$(bsequence.name)"
     gytitle: "$(asequence.name)"
   ]
 
-  xygraph: xygraph  [
+  xygraph: xygraph [
     standard: "$(stretch)"
   ]
 
-  boolean: boxit  [
+  boolean: boxit [
     default: "Y"
     additional: "@(!$(stretch))"
     information: "Draw a box around dotplot"

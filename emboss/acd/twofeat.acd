@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "any"
     features: "Y"
@@ -20,7 +20,7 @@ section: input [
     type: "frame"
   ]
 
-    string: asource  [
+    string: asource [
       additional: "Y"
       default: "*"
       information: "Source of first feature"
@@ -37,7 +37,7 @@ section: input [
       knowntype: "feature source list"
     ]
 
-    string: atype  [
+    string: atype [
       standard: "Y"
       default: "*"
       information: "Type of first feature"
@@ -54,7 +54,7 @@ section: input [
       knowntype: "feature key list"
     ]
 
-    list: asense  [
+    list: asense [
       additional: "Y"
       default: "0"
       minimum: "1"
@@ -68,7 +68,7 @@ section: input [
              to match the required sense."
     ]
 
-    float: aminscore  [
+    float: aminscore [
       additional: "Y"
       default: "0.0"
       information: "Minimum score of first feature"
@@ -76,7 +76,7 @@ section: input [
              then any score is allowed."
     ]
 
-    float: amaxscore  [
+    float: amaxscore [
       additional: "Y"
       default: "0.0"
       information: "Maximum score of first feature"
@@ -84,7 +84,7 @@ section: input [
              any score is permitted."
     ]
 
-    string: atag  [
+    string: atag [
       additional: "Y"
       default: "*"
       information: "Tag of first feature"
@@ -106,7 +106,7 @@ section: input [
       knowntype: "feature tag list"
     ]
 
-    string: avalue  [
+    string: avalue [
       additional: "Y"
       default: "*"
       information: "Value of first feature's tags"
@@ -136,7 +136,7 @@ section: input [
     type: "frame"
   ]
 
-    string: bsource  [
+    string: bsource [
       additional: "Y"
       default: "*"
       information: "Source of second feature"
@@ -153,7 +153,7 @@ section: input [
       knowntype: "feature source list"
     ]
 
-    string: btype  [
+    string: btype [
       standard: "Y"
       default: "*"
       information: "Type of second feature"
@@ -170,7 +170,7 @@ section: input [
       knowntype: "feature key list"
     ]
 
-    list: bsense  [
+    list: bsense [
       additional: "Y"
       default: "0"
       minimum: "1"
@@ -184,7 +184,7 @@ section: input [
              to match the required sense."
     ]
 
-    float: bminscore  [
+    float: bminscore [
       additional: "Y"
       default: "0.0"
       information: "Minimum score of second feature"
@@ -192,7 +192,7 @@ section: input [
              then any score is allowed."
     ]
 
-    float: bmaxscore  [
+    float: bmaxscore [
       additional: "Y"
       default: "0.0"
       information: "Maximum score of second feature"
@@ -200,7 +200,7 @@ section: input [
              any score is permitted."
     ]
 
-    string: btag  [
+    string: btag [
       additional: "Y"
       default: "*"
       information: "Tag of second feature"
@@ -222,7 +222,7 @@ section: input [
       knowntype: "feature tag list"
     ]
 
-    string: bvalue  [
+    string: bvalue [
       additional: "Y"
       default: "*"
       information: "Value of second feature's tags"
@@ -252,7 +252,7 @@ section: input [
     type: "frame"
   ]
 
-    list: overlap  [
+    list: overlap [
       additional: "Y"
       default: "A"
       minimum: "1"
@@ -271,7 +271,7 @@ section: input [
              within another feature."
     ]
 
-    integer: minrange  [
+    integer: minrange [
       standard: "Y"
       default: "0"
       information: "The minimum distance between the features"
@@ -279,7 +279,7 @@ section: input [
              max range is specified"
     ]
 
-    integer: maxrange  [
+    integer: maxrange [
       standard: "Y"
       default: "0"
       information: "The maximum distance between the features"
@@ -287,7 +287,7 @@ section: input [
              or max range is specified"
     ]
 
-    list: rangetype  [
+    list: rangetype [
       additional: "Y"
       default: "N"
       minimum: "1"
@@ -303,7 +303,7 @@ section: input [
              measured"
     ]
 
-    list: sense  [
+    list: sense [
       additional: "Y"
       default: "A"
       minimum: "1"
@@ -318,7 +318,7 @@ section: input [
              looking at protein sequence features."
     ]
 
-    list: order  [
+    list: order [
       additional: "Y"
       default: "A"
       minimum: "1"
@@ -344,7 +344,7 @@ section: output [
   type: "page"
 ]
 
-  toggle: twoout  [
+  toggle: twoout [
     additional: "Y"
     default: "N"
     information: "Do you want the two features written out
@@ -355,7 +355,7 @@ section: output [
            found."
   ]
 
-  string: typeout  [
+  string: typeout [
     additional: "@(!$(twoout))"
     default: "misc_feature"
     information: "Name of the output new feature"
@@ -371,7 +371,7 @@ section: output [
     knowntype: "feature key"
   ]
 
-  report: outfile  [
+  report: outfile [
     parameter: "Y"
     taglist: "int:starta int:enda int:startb int:endb"
     rformat: "table"

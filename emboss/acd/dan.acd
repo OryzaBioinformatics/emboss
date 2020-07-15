@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "DNA"
   ]
@@ -20,7 +20,7 @@ section: required [
   type: "page"
 ]
 
-  integer: windowsize  [
+  integer: windowsize [
     standard: "Y"
     minimum: "1"
     maximum: "100"
@@ -34,7 +34,7 @@ section: required [
            new position."
   ]
 
-  integer: shiftincrement  [
+  integer: shiftincrement [
     standard: "Y"
     minimum: "1"
     maximum: "$(windowSize)"
@@ -45,7 +45,7 @@ section: required [
            along the sequence."
   ]
 
-  float: dnaconc  [
+  float: dnaconc [
     standard: "Y"
     minimum: "1."
     maximum: "100000."
@@ -53,7 +53,7 @@ section: required [
     information: "Enter DNA concentration (nM)"
   ]
 
-  float: saltconc  [
+  float: saltconc [
     standard: "Y"
     minimum: "1."
     maximum: "1000."
@@ -73,14 +73,14 @@ section: additional [
     type: "frame"
   ]
 
-    toggle: product  [
+    toggle: product [
       additional: "Y"
       information: "Prompt for product values"
       help: "This prompts for percent formamide, percent of mismatches
              allowed and product length."
     ]
 
-    float: formamide  [
+    float: formamide [
       additional: "$(product)"
       minimum: "0."
       maximum: "100."
@@ -90,7 +90,7 @@ section: additional [
              calculations (it is ignored unless -product is used)."
     ]
 
-    float: mismatch  [
+    float: mismatch [
       additional: "$(product)"
       minimum: "0."
       maximum: "100."
@@ -100,7 +100,7 @@ section: additional [
              calculations (it is ignored unless -product is used)."
     ]
 
-    integer: prodlen  [
+    integer: prodlen [
       additional: "$(product)"
       minimum: "$(windowSize)"
       default: "$(windowSize)"
@@ -117,14 +117,14 @@ section: additional [
     type: "frame"
   ]
 
-    toggle: thermo  [
+    toggle: thermo [
       additional: "Y"
       information: "Thermodynamic calculations"
       help: "Output the DeltaG, DeltaH and DeltaS values of the
              sequence windows to the output data file."
     ]
 
-    float: temperature  [
+    float: temperature [
       additional: "$(thermo)"
       minimum: "0."
       maximum: "100."
@@ -144,7 +144,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: rna  [
+  boolean: rna [
     information: "Use RNA data values"
     help: "This specifies that the sequence is an RNA sequence and not
            a DNA sequence."
@@ -157,14 +157,14 @@ section: output [
   type: "page"
 ]
 
-  toggle: plot  [
+  toggle: plot [
     information: "Produce a plot"
     help: "If this is not specified then the file of output data is
            produced, else a plot of the melting point along the sequence is
            produced."
   ]
 
-  float: mintemp  [
+  float: mintemp [
     standard: "$(plot)"
     minimum: "0."
     maximum: "150."
@@ -174,12 +174,12 @@ section: output [
            the plot."
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "$(plot)"
     multiple: "1"
   ]
 
-  report: outfile  [
+  report: outfile [
     standard: "@(!$(plot))"
     help: "If a plot is not being produced then data on the melting
            point etc. in each window along the sequence is output to the

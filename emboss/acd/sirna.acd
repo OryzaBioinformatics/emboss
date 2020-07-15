@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "DNA"
     features: "Y"
@@ -19,7 +19,7 @@ section: input [
     type: "frame"
   ]
 
-    boolean: poliii  [
+    boolean: poliii [
       additional: "Y"
       default: "N"
       information: "Select probes for Pol III expression
@@ -30,7 +30,7 @@ section: input [
              been suggested by Tuschl et al."
     ]
 
-    boolean: aa  [
+    boolean: aa [
       additional: "Y"
       default: "N"
       information: "Select only regions that start with AA"
@@ -41,7 +41,7 @@ section: input [
              reported."
     ]
 
-    boolean: tt  [
+    boolean: tt [
       additional: "Y"
       default: "N"
       information: "Select only regions that end with TT"
@@ -52,7 +52,7 @@ section: input [
              reported."
     ]
 
-    boolean: polybase  [
+    boolean: polybase [
       additional: "Y"
       default: "Y"
       information: "Allow regions with 4 repeats of a base"
@@ -71,7 +71,7 @@ section: output [
   type: "page"
 ]
 
-  report: outfile  [
+  report: outfile [
     parameter: "Y"
     help: "The output is a table of the forward and reverse parts of
            the 21 base siRNA duplex. Both the forward and reverse sequences
@@ -88,7 +88,7 @@ section: output [
               string:reverse=Antisense_siRNA"
   ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
     help: "This is a file of the sequences of the 23 base regions that
            the siRNAs are selected from. You may use it to do searches of
@@ -96,7 +96,7 @@ section: output [
            to the gene you wish to use it on."
   ]
 
-  boolean: context  [
+  boolean: context [
     additional: "Y"
     default: "N"
     information: "Show the two bases before the output 21 base

@@ -8,16 +8,16 @@ section: input [
   type: "page"
 ]
 
-  infile: infile  [
+  infile: infile [
     parameter: "Y"
-    information: "Molecular weight file input"
-    knowntype: "molwt list"
+    information: "Molecular weights file"
+    knowntype: "molwt"
   ]
 
-  datafile: datafile  [
+  datafile: datafile [
     default: "Emwfilter.dat"
-    information: "Data file of noisy molecular weights"
-    knowntype: "standard molwt list"
+    information: "Molecular weight standards data file"
+    knowntype: "standard molwt"
   ]
 
 endsection: input
@@ -27,7 +27,7 @@ section: required [
   type: "page"
 ]
 
-  float: tolerance  [
+  float: tolerance [
     standard: "Y"
     information: "Ppm tolerance"
     default: "50.0"
@@ -40,7 +40,7 @@ section: additional [
   type: "page"
 ]
 
-  boolean: showdel  [
+  boolean: showdel [
     additional: "Y"
     information: "Output deleted mwts"
     default: "N"
@@ -53,10 +53,11 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     extension: "mwfilter"
-    knowntype: "molwt list"
+    knowntype: "molwt"
+    information: "Molecular weights output file"
   ]
 
 endsection: output

@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "gapany"
   ]
@@ -21,7 +21,7 @@ section: required [
   type: "page"
 ]
 
-  string: exclude  [
+  string: exclude [
     parameter: "Y"
     information: "Sequence names to exclude"
     help: "Enter a list of sequence names or accession numbers to
@@ -47,11 +47,11 @@ section: output [
   type: "page"
 ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
   ]
 
-  seqoutall: junkoutseq  [
+  seqoutall: junkoutseq [
     additional: "Y"
     default: "/dev/null"
     information: "File of excluded sequences"

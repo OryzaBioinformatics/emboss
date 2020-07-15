@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: seqall  [
+  seqall: seqall [
     parameter: "Y"
     type: "any"
   ]
@@ -20,7 +20,7 @@ section: required [
   type: "page"
 ]
 
-  string: letters  [
+  string: letters [
     standard: "Y"
     default: "gc"
     information: "Residue letters"
@@ -34,13 +34,13 @@ section: additional [
   type: "page"
 ]
 
-  integer: step  [
+  integer: step [
     additional: "Y"
     default: "1"
     information: "Stepping value"
   ]
 
-  integer: window  [
+  integer: window [
     additional: "Y"
     default: "30"
     information: "Averaging window"
@@ -53,16 +53,16 @@ section: output [
   type: "page"
 ]
 
-  toggle: plot  [
+  toggle: plot [
     default: "N"
     information: "Produce graphic"
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "$(plot)"
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     standard: "@(!$(plot))"
     knowntype: "freak output"
     nullok: "$(plot)"

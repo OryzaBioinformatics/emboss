@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "dna"
   ]
@@ -26,20 +26,20 @@ section: required [
     type: "frame"
   ]
 
-    toggle: targetrange  [
+    toggle: targetrange [
       parameter: "Y"
       default: "N"
       information: "Specify a Target Range?"
     ]
 
-    integer: targetstart  [
+    integer: targetstart [
       standard: "$(targetrange)"
       default: "$(sequence.begin)"
       information: "Target start position."
       expected: "Start of sequence"
     ]
 
-    integer: targetend  [
+    integer: targetend [
       standard: "$(targetrange)"
       default: "$(sequence.length)"
       information: "Target end position."
@@ -48,13 +48,13 @@ section: required [
 
   endsection: targetsection
 
-  float: minprimertm  [
+  float: minprimertm [
     standard: "Y"
     default: "53"
     information: "Minimum Primer Tm (deg Celsius)"
   ]
 
-  float: maxprimertm  [
+  float: maxprimertm [
     standard: "Y"
     default: "58"
     information: "Maximum Primer Tm (deg Celsius)"
@@ -72,19 +72,19 @@ section: additional [
     type: "frame"
   ]
 
-    integer: minprodlen  [
+    integer: minprodlen [
       additional: "@(!$(targetrange))"
       default: "100"
       information: "Minimum product length"
     ]
 
-    integer: maxprodlen  [
+    integer: maxprodlen [
       additional: "@(!$(targetrange))"
       default: "300"
       information: "Maximum product length"
     ]
 
-    float: minprodgccont  [
+    float: minprodgccont [
       additional: "@(!$(targetrange))"
       minimum: ".30"
       maximum: ".70"
@@ -92,7 +92,7 @@ section: additional [
       information: "Minimum product GC fraction"
     ]
 
-    float: maxprodgccont  [
+    float: maxprodgccont [
       additional: "@(!$(targetrange))"
       minimum: ".30"
       maximum: ".70"
@@ -114,19 +114,19 @@ section: additional [
       help: "Specify primer properties"
     ]
 
-    integer: minprimerlen  [
+    integer: minprimerlen [
       additional: "$(primer)"
       default: "18"
       information: "Minimum primer length"
     ]
 
-    integer: maxprimerlen  [
+    integer: maxprimerlen [
       additional: "$(primer)"
       default: "22"
       information: "Maximum primer length"
     ]
 
-    float: minpmgccont  [
+    float: minpmgccont [
       additional: "$(primer)"
       minimum: ".30"
       maximum: ".70"
@@ -134,7 +134,7 @@ section: additional [
       information: "Minimum primer GC fraction"
     ]
 
-    float: maxpmgccont  [
+    float: maxpmgccont [
       additional: "$(primer)"
       minimum: ".30"
       maximum: ".70"
@@ -151,26 +151,26 @@ section: advanced [
   type: "page"
 ]
 
-  integer: overlap  [
+  integer: overlap [
     default: "50"
     information: "Minimum overlap of sequences"
   ]
 
-  float: saltconc  [
+  float: saltconc [
     minimum: "1"
     maximum: "100"
     default: "50"
     information: "Salt concentration (mM)"
   ]
 
-  float: dnaconc  [
+  float: dnaconc [
     minimum: "1"
     maximum: "100"
     default: "50"
     information: "DNA concentration (mM)"
   ]
 
-  boolean: list  [
+  boolean: list [
     default: "N"
     information: "Force list-style output"
   ]
@@ -182,7 +182,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "prima output"
   ]

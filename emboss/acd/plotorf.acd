@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "dna"
   ]
@@ -20,13 +20,13 @@ section: advanced [
   type: "page"
 ]
 
-  string: start  [
+  string: start [
     default: "ATG"
     information: "Start codons"
     knowntype: "codon list"
   ]
 
-  string: stop  [
+  string: stop [
     default: "TAA,TAG,TGA"
     information: "Stop codons"
     knowntype: "codon list"
@@ -39,7 +39,7 @@ section: output [
   type: "page"
 ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "Y"
     multiple: "6"
   ]

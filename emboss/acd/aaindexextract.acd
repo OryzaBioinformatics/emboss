@@ -11,9 +11,9 @@ section: input [
   type: "page"
 ]
 
-  infile: infile  [
+  infile: infile [
+    information: "AAINDEX database file"
     parameter: "Y"
-    information: "Full pathname of file aaindex1"
     knowntype: "aaindex database"
   ]
 

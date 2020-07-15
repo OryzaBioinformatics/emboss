@@ -9,12 +9,12 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "DNA"
   ]
 
-  list: menu  [
+  list: menu [
     standard: "Y"
     default: "V"
     minimum: "1"
@@ -27,9 +27,9 @@ section: input [
     button: "Y"
   ]
 
-  datafile: custom  [
+  datafile: custom [
     standard: "@($(menu)==C)"
-    information: "Name of data file"
+    information: "Transfac database data file (optional)"
     nullok: "@($(menu)!=C)"
     knowntype: "transfac data"
     default: ""
@@ -42,7 +42,7 @@ section: required [
   type: "page"
 ]
 
-  integer: mismatch  [
+  integer: mismatch [
     standard: "Y"
     default: "0"
     minimum: "0"
@@ -56,13 +56,14 @@ section: additional [
   type: "page"
 ]
 
-  integer: minlength  [
+  integer: minlength [
     additional: "Y"
     default: "1"
     minimum: "1"
-    information: "Display matches equal to or above this length"
+    information: "Display matches equal to or above this
+                  length"
   ]
- 
+
 endsection: additional
 
 section: output [
@@ -70,7 +71,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "tfscan output"
   ]

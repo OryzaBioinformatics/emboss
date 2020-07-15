@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "any"
   ]
@@ -21,7 +21,7 @@ section: advanced [
   type: "page"
 ]
 
-  integer: shuffle  [
+  integer: shuffle [
     default: "1"
     information: "Number of shuffles"
   ]
@@ -33,7 +33,7 @@ section: output [
   type: "page"
 ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
   ]
 

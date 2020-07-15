@@ -9,12 +9,12 @@ section: input [
   type: "page"
 ]
 
-  seqall: asequence  [
+  seqall: asequence [
     parameter: "Y"
     type: "nucleotide"
   ]
 
-  seqset: bsequence  [
+  seqset: bsequence [
     parameter: "Y"
     type: "gapprotein"
     aligned: "Y"
@@ -27,7 +27,7 @@ section: additional [
   type: "page"
 ]
 
-  list: table  [
+  list: table [
     additional: "Y"
     default: "0"
     minimum: "1"
@@ -55,7 +55,7 @@ section: output [
   type: "page"
 ]
 
-  seqoutset: outseq  [
+  seqoutset: outseq [
     parameter: "Y"
     type: "gapnucleotide"
   ]

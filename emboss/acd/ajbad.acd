@@ -8,26 +8,26 @@ section: input [
   type: "page"
 ]
 
-string: typea  [
-  standard: "y"
-  information: "Sequence type"
-  valid: "valid value test"
-  knowntype: "sequence type"
-]
+  string: typea [
+    standard: "y"
+    information: "Sequence type"
+    valid: "valid value test"
+    knowntype: "sequence type"
+  ]
 
-sequence: sequence  [
-  parameter: "y"
-  type: "$(typea)"
-]
+  sequence: sequence [
+    parameter: "y"
+    type: "$(typea)"
+  ]
 
-sequence: bsequence  [
-  parameter: "y"
-  type: "$(seqa.type)"
-]
+  sequence: bsequence [
+    parameter: "y"
+    type: "$(seqa.type)"
+  ]
 
-codon: cod  [
-  name: "eco"
-]
+  codon: cod [
+    name: "eco"
+  ]
 
 endsection: input
 
@@ -36,22 +36,22 @@ section: required [
   type: "page"
 ]
 
-string: typeb  [
-  standard: "y"
-  default: "$(seqa.type)"
-  expected: "expected value"
-  information: "Second type"
-  knowntype: "sequence type"
-]
+  string: typeb [
+    standard: "y"
+    default: "$(seqa.type)"
+    expected: "expected value"
+    information: "Second type"
+    knowntype: "sequence type"
+  ]
 
-string: date  [
-  standard: "Y"
-  default: "00/00/00"
-  maxlength: "8"
-  information: "Index date"
-  pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
-  knowntype: "date"
-]
+  string: date [
+    standard: "Y"
+    default: "00/00/00"
+    maxlength: "8"
+    information: "Index date"
+    pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
+    knowntype: "date"
+  ]
 
 endsection: required
 
@@ -60,23 +60,23 @@ section: advanced [
   type: "page"
 ]
 
-integer: a  [
-  minimum: "0"
-  information: "First number"
-]
+  integer: a [
+    minimum: "0"
+    information: "First number"
+  ]
 
-integer: b  [
-  default: "15"
-  information: "Second number"
-]
+  integer: b [
+    default: "15"
+    information: "Second number"
+  ]
 
-float: c  [
-  minimum: "-5"
-  maximum: "6.6666"
-  precision: "2"
-  default: "1.6"
-  information: "Third number"
-]
+  float: c [
+    minimum: "-5"
+    maximum: "6.6666"
+    precision: "2"
+    default: "1.6"
+    information: "Third number"
+  ]
 
 endsection: advanced
 
@@ -85,10 +85,9 @@ section: output [
   type: "page"
 ]
 
-outfile: outfile  [
-  parameter: "y"
-  knowntype: "ajbad output"
-]
-
+  outfile: outfile [
+    parameter: "y"
+    knowntype: "ajbad output"
+  ]
 
 endsection: output

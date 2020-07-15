@@ -9,17 +9,17 @@ section: input [
   type: "page"
 ]
 
-  sequence: asequence  [
+  sequence: asequence [
     parameter: "Y"
     type: "any"
   ]
 
-  sequence: bsequence  [
+  sequence: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
 
-  matrix: datafile  [
+  matrix: datafile [
     additional: "Y"
     information: "Matrix file"
     protein: "$(acdprotein)"
@@ -36,7 +36,7 @@ section: additional [
   type: "page"
 ]
 
-  integer: gapopen  [
+  integer: gapopen [
     additional: "Y"
     information: "Gap penalty"
     default: "@($(acdprotein)? 12 : 16)"
@@ -45,7 +45,7 @@ section: additional [
     expected: "12 for protein, 16 for nucleic"
   ]
 
-  integer: gapextend  [
+  integer: gapextend [
     additional: "Y"
     information: "Gap length penalty"
     default: "@($(acdprotein)? 2 : 4)"
@@ -61,7 +61,7 @@ section: output [
   type: "page"
 ]
 
-  align: outfile  [
+  align: outfile [
     parameter: "Y"
     aformat: "markx0"
     minseqs: "2"

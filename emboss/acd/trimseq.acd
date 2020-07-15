@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "gapany"
   ]
@@ -21,7 +21,7 @@ section: additional [
   type: "page"
 ]
 
-  integer: window  [
+  integer: window [
     additional: "Y"
     default: "1"
     information: "Window size"
@@ -33,7 +33,7 @@ section: additional [
            ambiguity than the threshold percentage."
   ]
 
-  float: percent  [
+  float: percent [
     additional: "Y"
     default: "100.0"
     information: "Percent threshold of ambiguity in window"
@@ -41,17 +41,18 @@ section: additional [
            window required in order to trim a sequence."
   ]
 
-  boolean: strict  [
+  boolean: strict [
     additional: "Y"
     default: "N"
-    information: "Trim off all ambiguity codes, not just N or X"
+    information: "Trim off all ambiguity codes, not just N or
+                  X"
     help: "In nucleic sequences, trim off not only N's and X's, but
            also the nucleotide IUPAC ambiguity codes M, R, W, S, Y, K, V, H,
            D and B. In protein sequences, trim off not only X's but also B
            and Z."
   ]
 
-  boolean: star  [
+  boolean: star [
     additional: "Y"
     default: "N"
     information: "Trim off asterisks"
@@ -66,12 +67,12 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: left  [
+  boolean: left [
     default: "Y"
     information: "Trim at the start"
   ]
 
-  boolean: right  [
+  boolean: right [
     default: "Y"
     information: "Trim at the end"
   ]
@@ -83,7 +84,7 @@ section: output [
   type: "page"
 ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
   ]
 

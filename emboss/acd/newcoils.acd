@@ -8,13 +8,13 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
   ]
 
-  datafile: datafile  [
-    information: "Weight and matrix file"
+  datafile: datafile [
+    information: "Program newcoils data file"
     default: "Enewcoils.mat"
     knowntype: "newcoils datafile"
   ]
@@ -26,7 +26,7 @@ section: required [
   type: "page"
 ]
 
-  integer: window  [
+  integer: window [
     standard: "Y"
     minimum: "1"
     maximum: "$(sequence.end)"
@@ -34,21 +34,21 @@ section: required [
     information: "Window size"
   ]
 
-  integer: weighted  [
+  integer: weighted [
     standard: "Y"
     minimum: "0"
     default: "0"
     information: "Weighted value"
   ]
 
-  integer: verb  [
+  integer: verb [
     standard: "Y"
     minimum: "0"
     default: "0"
     information: "Verb - matrix file"
   ]
 
-  integer: mode  [
+  integer: mode [
     standard: "Y"
     minimum: "0"
     maximum: "2"
@@ -56,7 +56,7 @@ section: required [
     information: "Display Mode"
   ]
 
-  integer: minseg  [
+  integer: minseg [
     standard: "Y"
     minimum: "0"
     maximum: "10"
@@ -64,7 +64,7 @@ section: required [
     information: "Minimum number of seqments"
   ]
 
-  float: minp  [
+  float: minp [
     standard: "Y"
     minimum: "0."
     maximum: "100."
@@ -74,9 +74,12 @@ section: required [
 
 endsection: required
 
-section: output [ information: "Output section" type: page ]
+section: output [
+  information: "Output section"
+  type: "page"
+]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "newcoils output"
   ]

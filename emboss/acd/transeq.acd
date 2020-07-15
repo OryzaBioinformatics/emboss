@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "nucleotide"
   ]
@@ -20,7 +20,7 @@ section: additional [
   type: "page"
 ]
 
-  list: frame  [
+  list: frame [
     additional: "Y"
     default: "1"
     minimum: "1"
@@ -33,7 +33,7 @@ section: additional [
     information: "Frame(s) to translate"
   ]
 
-  list: table  [
+  list: table [
     additional: "Y"
     default: "0"
     minimum: "1"
@@ -55,7 +55,7 @@ section: additional [
     knowntype: "genetic code"
   ]
 
-  range: regions  [
+  range: regions [
     additional: "Y"
     default: ""
     information: "Regions to translate (eg: 4-57,78-94)"
@@ -73,7 +73,7 @@ section: additional [
     expected: "Whole sequence"
   ]
 
-  boolean: trim  [
+  boolean: trim [
     additional: "Y"
     default: "N"
     information: "Trim trailing X's and *'s"
@@ -82,7 +82,7 @@ section: additional [
            continues until the next character is not a 'X' or a '*'"
   ]
 
-  boolean: clean  [
+  boolean: clean [
     additional: "Y"
     default: "N"
     information: "Change all *'s to X's"
@@ -99,9 +99,10 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: alternative  [
+  boolean: alternative [
     default: "N"
-    information: "Define frame '-1' as starting in the last codon"
+    information: "Define frame '-1' as starting in the last
+                  codon"
     help: "The default definition of frame '-1' is the
            reverse-complement of the set of codons used in frame 1. (Frame -2
            is the set of codons used by frame 2, similarly frames -3 and 3).
@@ -118,7 +119,7 @@ section: output [
   type: "page"
 ]
 
-  seqoutall: outseq  [
+  seqoutall: outseq [
     parameter: "Y"
     extension: "pep"
     type: "stopprotein"

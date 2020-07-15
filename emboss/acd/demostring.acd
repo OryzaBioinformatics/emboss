@@ -8,10 +8,10 @@ section: input [
   type: "page"
 ]
 
-string: instring  [
-  standard: "Y"
-  information: "Value for instr"
-  knowntype: "string"
-]
+  string: instring [
+    standard: "Y"
+    information: "Value for instr"
+    knowntype: "string"
+  ]
 
 endsection: input

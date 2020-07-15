@@ -1,5 +1,6 @@
 application: psiphi [
-  documentation: "Phi and psi torsion angles from protein coordinates"
+  documentation: "Phi and psi torsion angles from protein
+                  coordinates"
   groups: "protein:3D structure"
 ]
 
@@ -10,7 +11,7 @@ section: input [
 
   infile: infile [
     parameter: "Y"
-    information: "Clean coordinate file"
+    information: "Clean protein structure coordinates file"
     knowntype: "protein clean coordinates"
   ]
 
@@ -22,27 +23,29 @@ section: required [
 ]
 
   integer: chainnumber [
-  standard: "Y"
-  information: "Number of the chain for which torsion angles should be calculated"
-  default: 1
-  minimum: 1
-]
+    standard: "Y"
+    information: "Number of the chain for which torsion angles
+                  should be calculated"
+    default: "1"
+    minimum: "1"
+  ]
 
   integer: startresiduenumber [
-  standard: "Y"
-  information: "First residue in chain for which torsion angles should be calculated"
-  default: 1
-  minimum: 1
-]
-  integer: finishresiduenumber [
-  standard: "Y"
-  information: "Last residue in chain for which torsion angles should be calculated (1 = last residue)"
-  default: 1
+    standard: "Y"
+    information: "First residue in chain for which torsion
+                  angles should be calculated"
+    default: "1"
+    minimum: "1"
+  ]
 
-]
+  integer: finishresiduenumber [
+    standard: "Y"
+    information: "Last residue in chain for which torsion
+                  angles should be calculated (1 = last residue)"
+    default: "1"
+  ]
 
 endsection: required
-
 
 section: advanced [
   information: "Advanced section"

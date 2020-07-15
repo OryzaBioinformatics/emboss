@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
   ]
@@ -20,7 +20,7 @@ section: required [
   type: "page"
 ]
 
-  float: minweight  [
+  float: minweight [
     standard: "Y"
     minimum: "0."
     maximum: "100."
@@ -37,7 +37,7 @@ section: additional [
   type: "page"
 ]
 
-  boolean: prokaryote  [
+  boolean: prokaryote [
     additional: "Y"
     help: "Specifies the sequence is prokaryotic and changes the
            default scoring data file name"
@@ -51,7 +51,7 @@ section: output [
   type: "page"
 ]
 
-  report: outfile  [
+  report: outfile [
     parameter: "Y"
     rextension: "sig"
     rformat: "motif"

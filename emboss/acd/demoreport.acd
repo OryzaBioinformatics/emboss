@@ -9,11 +9,11 @@ section: input [
   type: "page"
 ]
 
-sequence: sequence  [
-  parameter: "Y"
-  features: "Y"
-  type: "any"
-]
+  sequence: sequence [
+    parameter: "Y"
+    features: "Y"
+    type: "any"
+  ]
 
 endsection: input
 
@@ -22,9 +22,10 @@ section: output [
   type: "page"
 ]
 
-report: outfile  [
-  parameter: "Y"
-  taglist: "int:demo=demo_tag float:test int:pos=Maximum_position"
-]
+  report: outfile [
+    parameter: "Y"
+    taglist: "int:demo=demo_tag float:test
+              int:pos=Maximum_position"
+  ]
 
 endsection: output

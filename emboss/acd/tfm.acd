@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  string: program  [
+  string: program [
     parameter: "Y"
     default: ""
     information: "Program to search for"
@@ -25,13 +25,14 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     additional: "Y"
     default: "stdout"
     knowntype: "text documentation"
+    information: "Program documentation text output file"
   ]
 
-  boolean: html  [
+  boolean: html [
     additional: "Y"
     default: "N"
     information: "Format the output for HTML"
@@ -39,7 +40,7 @@ section: output [
            document."
   ]
 
-  boolean: more  [
+  boolean: more [
     additional: "Y"
     default: "@(!$(html))"
     information: "Display a screenful at a time"

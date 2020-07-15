@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "gapany"
   ]
@@ -21,14 +21,14 @@ section: additional [
   type: "page"
 ]
 
-  string: name  [
+  string: name [
     additional: "Y"
     default: ""
     information: "Name of the sequence"
     knowntype: "sequence id output"
   ]
 
-  string: description  [
+  string: description [
     additional: "Y"
     default: ""
     information: "Description of the sequence"
@@ -42,7 +42,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: append  [
+  boolean: append [
     default: "N"
     information: "Append to the existing description"
     help: "This allows you to append the name or description you have
@@ -57,7 +57,7 @@ section: output [
   type: "page"
 ]
 
-  seqout: outseq  [
+  seqout: outseq [
     parameter: "Y"
   ]
 

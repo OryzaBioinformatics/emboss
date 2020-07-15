@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     sask: "Y"
     type: "gapany"
@@ -22,15 +22,16 @@ section: output [
   type: "page"
 ]
 
-  boolean: newfile  [
+  boolean: newfile [
     default: "N"
     information: "Overwrite existing output file"
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     append: "@(!$(newfile))"
     knowntype: "USA list"
+    information: "List of USAs output file"
   ]
 
 endsection: output

@@ -16,12 +16,12 @@ section: input [
     type: "any"
   ]
 
-  seqall: bsequence  [
+  seqall: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
 
-  matrixf: datafile  [
+  matrixf: datafile [
     additional: "Y"
     information: "Matrix file"
     protein: "$(acdprotein)"
@@ -38,7 +38,7 @@ section: required [
   type: "page"
 ]
 
-  float: gapopen  [
+  float: gapopen [
     standard: "Y"
     information: "Gap opening penalty"
     minimum: "0.0"
@@ -52,7 +52,7 @@ section: required [
            nucleotide sequences."
   ]
 
-  float: gapextend  [
+  float: gapextend [
     standard: "Y"
     information: "Gap extension penalty"
     minimum: "0.0"
@@ -77,13 +77,13 @@ section: output [
   type: "page"
 ]
 
-  boolean: brief  [
+  boolean: brief [
     default: "Y"
     information: "Brief identity and similarity"
     help: "Brief identity and similarity"
   ]
 
-  align: outfile  [
+  align: outfile [
     parameter: "Y"
     aformat: "srspair"
     minseqs: "2"

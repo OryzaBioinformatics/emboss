@@ -9,12 +9,12 @@ section: input [
   type: "page"
 ]
 
-  sequence: asequence  [
+  sequence: asequence [
     parameter: "Y"
     type: "any"
   ]
 
-  sequence: bsequence  [
+  sequence: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
   ]
@@ -26,7 +26,7 @@ section: required [
   type: "page"
 ]
 
-  integer: wordsize  [
+  integer: wordsize [
     standard: "Y"
     default: "4"
     minimum: "2"
@@ -40,7 +40,7 @@ section: output [
   type: "page"
 ]
 
-  align: outfile  [
+  align: outfile [
     parameter: "Y"
     aformat: "match"
     minseqs: "2"
@@ -53,7 +53,7 @@ section: output [
     offormat: "gff"
   ]
 
-  featout: boutfeat  [
+  featout: boutfeat [
     parameter: "Y"
     ofname: "$(bsequence.name)"
     offormat: "gff"

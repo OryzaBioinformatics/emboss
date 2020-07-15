@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "gapany"
   ]
@@ -21,7 +21,7 @@ section: required [
   type: "page"
 ]
 
-  integer: from  [
+  integer: from [
     standard: "Y"
     default: "$(sequence.begin)"
     minimum: "$(sequence.begin)"
@@ -32,7 +32,7 @@ section: required [
     expected: "Start of sequence (0)"
   ]
 
-  integer: to  [
+  integer: to [
     standard: "Y"
     default: "$(sequence.end)"
     maximum: "$(sequence.end)"
@@ -50,7 +50,7 @@ section: output [
   type: "page"
 ]
 
-  seqout: outseq  [
+  seqout: outseq [
     parameter: "Y"
   ]
 

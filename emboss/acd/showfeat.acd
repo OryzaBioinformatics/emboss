@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "any"
     features: "Y"
@@ -21,7 +21,7 @@ section: additional [
   type: "page"
 ]
 
-  string: matchsource  [
+  string: matchsource [
     additional: "Y"
     default: "*"
     information: "Source of feature to display"
@@ -38,7 +38,7 @@ section: additional [
     knowntype: "feature source list"
   ]
 
-  string: matchtype  [
+  string: matchtype [
     additional: "Y"
     default: "*"
     information: "Type of feature to display"
@@ -55,7 +55,7 @@ section: additional [
     knowntype: "feature key list"
   ]
 
-  string: matchtag  [
+  string: matchtag [
     additional: "Y"
     default: "*"
     information: "Tag of feature to display"
@@ -77,7 +77,7 @@ section: additional [
     knowntype: "feature tag list"
   ]
 
-  string: matchvalue  [
+  string: matchvalue [
     additional: "Y"
     default: "*"
     information: "Value of feature tags to display"
@@ -99,7 +99,7 @@ section: additional [
     knowntype: "feature tagvalue list"
   ]
 
-  list: sort  [
+  list: sort [
     additional: "Y"
     default: "start"
     minimum: "1"
@@ -116,7 +116,7 @@ section: additional [
                   order"
   ]
 
-  range: annotation  [
+  range: annotation [
     additional: "Y"
     default: ""
     information: "Regions to mark (eg: 4-57 promoter region
@@ -135,7 +135,7 @@ section: additional [
            as '@filename'."
     expected: "If this is left blank, then no annotation is
                added."
-  ]    
+  ]
 
 endsection: additional
 
@@ -144,33 +144,33 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: html  [
+  boolean: html [
     default: "N"
     information: "Use HTML formatting"
   ]
 
-  boolean: id  [
+  boolean: id [
     default: "Y"
     information: "Show sequence ID"
     help: "Set this to be false if you do not wish to display the ID
            name of the sequence."
   ]
 
-  boolean: description  [
+  boolean: description [
     default: "Y"
     information: "Show description"
     help: "Set this to be false if you do not wish to display the
            description of the sequence."
   ]
 
-  boolean: scale  [
+  boolean: scale [
     default: "Y"
     information: "Show scale line"
     help: "Set this to be false if you do not wish to display the
            scale line."
   ]
 
-  integer: width  [
+  integer: width [
     default: "60"
     minimum: "0"
     information: "Width of graphics lines"
@@ -183,7 +183,7 @@ section: advanced [
            scale line will not be displayed."
   ]
 
-  boolean: collapse  [
+  boolean: collapse [
     default: "N"
     information: "Display features with the same type on one
                   line"
@@ -198,21 +198,21 @@ section: advanced [
            and end."
   ]
 
-  boolean: forward  [
+  boolean: forward [
     default: "Y"
     information: "Display forward sense features"
     help: "Set this to be false if you do not wish to display forward
            sense features."
   ]
 
-  boolean: reverse  [
+  boolean: reverse [
     default: "Y"
     information: "Display reverse sense features"
     help: "Set this to be false if you do not wish to display reverse
            sense features."
   ]
 
-  boolean: unknown  [
+  boolean: unknown [
     default: "Y"
     information: "Display unknown sense features"
     help: "Set this to be false if you do not wish to display unknown
@@ -221,7 +221,7 @@ section: advanced [
            CG-rich regions))."
   ]
 
-  boolean: strand  [
+  boolean: strand [
     default: "N"
     information: "Display strand of features"
     help: "Set this if you wish to display the strand of the features.
@@ -229,7 +229,7 @@ section: advanced [
            forward is indicated by '+' and reverse is '-'."
   ]
 
-  boolean: source  [
+  boolean: source [
     default: "N"
     information: "Display source of features"
     help: "Set this if you wish to display the source of the features.
@@ -239,7 +239,7 @@ section: advanced [
            EMBL) that the feature came from."
   ]
 
-  boolean: position  [
+  boolean: position [
     default: "N"
     information: "Display position of features"
     help: "Set this if you wish to display the start and end position
@@ -248,21 +248,21 @@ section: advanced [
            comma, for example: '189-189,225-225'."
   ]
 
-  boolean: type  [
+  boolean: type [
     default: "Y"
     information: "Display type of features"
     help: "Set this to be false if you do not wish to display the type
            of the features."
   ]
 
-  boolean: tags  [
+  boolean: tags [
     default: "N"
     information: "Display tags of features"
     help: "Set this to be false if you do not wish to display the tags
            and values of the features."
   ]
 
-  boolean: values  [
+  boolean: values [
     default: "Y"
     information: "Display tag values of features"
     help: "Set this to be false if you do not wish to display the tag
@@ -272,7 +272,7 @@ section: advanced [
            is never displayed as it is often extremely long."
   ]
 
-  boolean: stricttags  [
+  boolean: stricttags [
     default: "N"
     information: "Only display the matching tags"
     help: "By default if any tag/value pair in a feature matches the
@@ -289,7 +289,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     extension: "showfeat"
     knowntype: "showfeat output"

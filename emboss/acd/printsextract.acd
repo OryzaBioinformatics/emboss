@@ -11,9 +11,9 @@ section: input [
   type: "page"
 ]
 
-  infile: infile  [
+  infile: infile [
     parameter: "Y"
-    information: "Full pathname of prints.dat"
+    information: "PRINTS database file"
     knowntype: "prints database"
   ]
 

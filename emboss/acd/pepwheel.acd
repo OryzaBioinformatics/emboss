@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "Protein"
   ]
@@ -20,12 +20,12 @@ section: output [
   type: "page"
 ]
 
-  boolean: wheel  [
+  boolean: wheel [
     default: "Y"
     information: "Plot the wheel"
   ]
 
-  integer: steps  [
+  integer: steps [
     additional: "Y"
     minimum: "2"
     maximum: "100"
@@ -35,7 +35,7 @@ section: output [
            divided by the 'turns' value."
   ]
 
-  integer: turns  [
+  integer: turns [
     additional: "Y"
     minimum: "1"
     maximum: "100"
@@ -45,7 +45,7 @@ section: output [
            value divided by this value."
   ]
 
-  graph: graph  [
+  graph: graph [
     standard: "Y"
     gxtitle: "$(sequence.name)"
   ]
@@ -55,7 +55,7 @@ section: output [
     type: "frame"
   ]
 
-    toggle: amphipathic  [
+    toggle: amphipathic [
       information: "Prompt for amphipathic residue marking"
       help: "If this is true then the residues ACFGILMVWY are marked
              as squares and all other residues are unmarked. This overrides
@@ -63,7 +63,7 @@ section: output [
              qualifiers '-squares', '-diamonds' and '-octags'."
     ]
 
-    string: squares  [
+    string: squares [
       additional: "@(!$(amphipathic))"
       default: "ILVM"
       information: "Mark as squares"
@@ -72,7 +72,7 @@ section: output [
       knowntype: "protein codes"
     ]
 
-    string: diamonds  [
+    string: diamonds [
       additional: "@(!$(amphipathic))"
       default: "DENQST"
       information: "Mark as diamonds"
@@ -80,7 +80,7 @@ section: output [
       knowntype: "protein codes"
     ]
 
-    string: octags  [
+    string: octags [
       additional: "@(!$(amphipathic))"
       default: "HKR"
       information: "Mark as octagons"

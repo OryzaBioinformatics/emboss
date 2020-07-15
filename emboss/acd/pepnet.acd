@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: sequence  [
+  sequence: sequence [
     parameter: "Y"
     type: "Protein"
   ]
@@ -20,7 +20,7 @@ section: output [
   type: "page"
 ]
 
-  toggle: amphipathic  [
+  toggle: amphipathic [
     information: "Prompt for amphipathic residue marking"
     help: "If this is true then the residues ACFGILMVWY are marked as
            squares and all other residues are unmarked. This overrides any
@@ -28,7 +28,7 @@ section: output [
            '-squares', '-diamonds' and '-octags'."
   ]
 
-  string: squares  [
+  string: squares [
     additional: "@(!$(amphipathic))"
     default: "ILVM"
     information: "Mark as squares"
@@ -37,7 +37,7 @@ section: output [
     knowntype: "protein codes"
   ]
 
-  string: diamonds  [
+  string: diamonds [
     additional: "@(!$(amphipathic))"
     default: "DENQST"
     information: "Mark as diamonds"
@@ -45,7 +45,7 @@ section: output [
     knowntype: "protein codes"
   ]
 
-  string: octags  [
+  string: octags [
     additional: "@(!$(amphipathic))"
     default: "HKR"
     information: "Mark as octagons"
@@ -54,7 +54,7 @@ section: output [
     knowntype: "protein codes"
   ]
 
-  graph: graph  [
+  graph: graph [
     standard: "Y"
   ]
 

@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     entry: "Y"
     type: "any"
@@ -22,7 +22,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: firstonly  [
+  boolean: firstonly [
     information: "Read one sequence and stop"
   ]
 
@@ -33,9 +33,11 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "entry full text"
+    information: "Full text of a sequence database entry output
+                  file"
   ]
 
 endsection: output

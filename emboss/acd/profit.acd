@@ -9,13 +9,13 @@ section: input [
   type: "page"
 ]
 
-  infile: infile  [
+  infile: infile [
     parameter: "Y"
-    information: "Profile or matrix file"
+    information: "Profile or weight matrix file"
     knowntype: "profile or matrix"
   ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "any"
   ]
@@ -27,7 +27,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "profit output"
   ]

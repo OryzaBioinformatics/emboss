@@ -8,11 +8,11 @@ section: input [
   type: "page"
 ]
 
-infile: infile  [
-  parameter: "Y"
-  information: "Gff file to be read in"
-  help: "File containing normal tab delimited gff's"
-  knowntype: "gff"
-]
+  infile: infile [
+    parameter: "Y"
+    information: "GFF format features file"
+    help: "File containing normal tab delimited gff's"
+    knowntype: "gff"
+  ]
 
 endsection: input

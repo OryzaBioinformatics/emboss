@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqset: sequences  [
+  seqset: sequences [
     parameter: "Y"
     type: "any"
     help: "File containing a sequence alignment"
@@ -23,7 +23,7 @@ section: required [
   type: "page"
 ]
 
-  integer: wordsize  [
+  integer: wordsize [
     standard: "Y"
     default: "6"
     minimum: "2"
@@ -37,7 +37,7 @@ section: output [
   type: "page"
 ]
 
-  integer: gap  [
+  integer: gap [
     default: "10"
     minimum: "0"
     information: "Gap (in residues) between dotplots"
@@ -46,25 +46,25 @@ section: output [
            residues, as displayed in the output."
   ]
 
-  boolean: boxit  [
+  boolean: boxit [
     default: "Y"
     additional: "Y"
     information: "Draw a box around each dotplot"
   ]
 
-  toggle: dumpfeat  [
+  toggle: dumpfeat [
     default: "N"
     additional: "Y"
     information: "Dump all matches as feature files"
   ]
 
-  featout: outfeat  [
+  featout: outfeat [
     standard: "$(dumpfeat)"
     nullok: "@(!$(dumpfeat))"
     nulldefault: "@(!$(dumpfeat))"
   ]
 
-  graph: graph  [
+  graph: graph [
     standard: "Y"
     gtitle: "Polydot:"
   ]

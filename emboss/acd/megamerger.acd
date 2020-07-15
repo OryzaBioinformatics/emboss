@@ -12,7 +12,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: asequence  [
+  sequence: asequence [
     parameter: "Y"
     type: "DNA"
   ]
@@ -29,7 +29,7 @@ section: required [
   type: "page"
 ]
 
-  integer: wordsize  [
+  integer: wordsize [
     standard: "Y"
     default: "20"
     minimum: "2"
@@ -43,7 +43,7 @@ section: additional [
   type: "page"
 ]
 
-  boolean: prefer  [
+  boolean: prefer [
     additional: "Y"
     default: "N"
     information: "Use the first sequence when there is a
@@ -53,8 +53,8 @@ section: additional [
            sequence over this mismatch region. The default action is to
            create the merged sequence using the sequence where the mismatch
            is closest to that sequence's centre. If this option is used, then
-           the first sequence (seqa) will always be used in preference to the
-           other sequence when there is a mismatch."
+           the first sequence (seqa) will always be used in preference to
+           the other sequence when there is a mismatch."
   ]
 
 endsection: additional
@@ -64,12 +64,12 @@ section: output [
   type: "page"
 ]
 
-  seqout: outseq  [
+  seqout: outseq [
     parameter: "Y"
     extension: "merged"
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     extension: "megamerger"
     knowntype: "megamerger output"

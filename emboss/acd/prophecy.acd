@@ -9,13 +9,13 @@ section: input [
   type: "page"
 ]
 
-  seqset: sequence  [
+  seqset: sequence [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
   ]
 
-  list: type  [
+  list: type [
     standard: "Y"
     default: "F"
     minimum: "1"
@@ -28,11 +28,10 @@ section: input [
     button: "Y"
   ]
 
-  matrixf: datafile  [
+  matrixf: datafile [
     standard: "@($(type) != F)"
     information: "Scoring matrix"
-    default: "@($(type) = G: Epprofile H: EBLOSUM62 F:
-              EBLOSUM62)"
+    default: "@($(type) = G: Epprofile H: EBLOSUM62 F: EBLOSUM62)"
     protein: "$(acdprotein)"
     expected: "'Epprofile' for Gribskov type, or EBLOSUM62"
   ]
@@ -44,7 +43,7 @@ section: required [
   type: "page"
 ]
 
-  string: name  [
+  string: name [
     standard: "Y"
     default: "mymatrix"
     information: "Enter a name for the profile"
@@ -56,7 +55,7 @@ section: required [
     type: "frame"
   ]
 
-    integer: threshold  [
+    integer: threshold [
       standard: "@($(type) == F)"
       default: "75"
       minimum: "1"
@@ -71,13 +70,13 @@ section: required [
     type: "frame"
   ]
 
-    float: open  [
+    float: open [
       standard: "@($(type) != F)"
       information: "Gap opening penalty"
       default: "3.0"
     ]
 
-    float: extension  [
+    float: extension [
       standard: "@($(type) != F)"
       information: "Gap extension penalty"
       default: "0.3"
@@ -92,7 +91,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "prophecy output"
   ]

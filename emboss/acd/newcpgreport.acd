@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "DNA"
   ]
@@ -20,7 +20,7 @@ section: required [
   type: "page"
 ]
 
-  integer: window  [
+  integer: window [
     standard: "Y"
     minimum: "1"
     maximum: "$(sequence.end)"
@@ -28,7 +28,7 @@ section: required [
     information: "Window size"
   ]
 
-  integer: shift  [
+  integer: shift [
     standard: "Y"
     minimum: "1"
     maximum: "$(window)"
@@ -36,7 +36,7 @@ section: required [
     information: "Shift increment"
   ]
 
-  integer: minlen  [
+  integer: minlen [
     standard: "Y"
     minimum: "1"
     maximum: "$(sequence.end)"
@@ -44,7 +44,7 @@ section: required [
     information: "Minimum Length"
   ]
 
-  float: minoe  [
+  float: minoe [
     standard: "Y"
     minimum: "0."
     maximum: "10."
@@ -52,7 +52,7 @@ section: required [
     information: "Minimum observed/expected"
   ]
 
-  float: minpc  [
+  float: minpc [
     standard: "Y"
     minimum: "0."
     maximum: "100."
@@ -67,7 +67,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "newcpgreport output"
   ]

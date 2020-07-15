@@ -1,6 +1,7 @@
 application: dbxflat [
   groups: "Utils:Database indexing"
-  documentation: "Database b+tree indexing for flat file databases"
+  documentation: "Database b+tree indexing for flat file
+                  databases"
   gui: "yes"
   batch: "yes"
   cpu: "medium"
@@ -11,7 +12,7 @@ section: input [
   type: "page"
 ]
 
-  string: dbname  [
+  string: dbname [
     parameter: "Y"
     maxlength: "19"
     minlength: "2"
@@ -20,8 +21,7 @@ section: input [
     pattern: "[A-z][A-z0-9_]+"
   ]
 
-
-  string: dbresource  [
+  string: dbresource [
     parameter: "Y"
     maxlength: "19"
     minlength: "2"
@@ -30,7 +30,7 @@ section: input [
     pattern: "[A-z][A-z0-9_]+"
   ]
 
-  list: idformat  [
+  list: idformat [
     standard: "y"
     information: "Entry format"
     values: "EMBL:EMBL; SWISS:Swiss-Prot, SpTrEMBL, TrEMBLnew;
@@ -40,14 +40,14 @@ section: input [
     default: "SWISS"
   ]
 
-  string: filenames  [
+  string: filenames [
     standard: "Y"
     default: "*.dat"
     information: "Wildcard database filename"
     knowntype: "emboss database wildcard filename"
   ]
 
-  directory: directory  [
+  directory: directory [
     standard: "Y"
     default: "."
     information: "Database directory"
@@ -61,7 +61,7 @@ section: required [
   type: "page"
 ]
 
-  list: fields  [
+  list: fields [
     standard: "Y"
     information: "Index fields"
     values: "id:ID;acc:Accession number;sv:Sequence Version and
@@ -78,14 +78,14 @@ section: advanced [
   type: "page"
 ]
 
-  string: release  [
+  string: release [
     default: "0.0"
     maxlength: "9"
     information: "Release number"
     knowntype: "emboss database release"
   ]
 
-  string: date  [
+  string: date [
     default: "00/00/00"
     valid: "Date string dd/mm/yy"
     information: "Index date"
@@ -93,7 +93,7 @@ section: advanced [
     knowntype: "date"
   ]
 
-  string: exclude  [
+  string: exclude [
     information: "Wildcard filename(s) to exclude"
     knowntype: "filename wildcard"
   ]
@@ -105,10 +105,10 @@ section: output [
   type: "page"
 ]
 
-  outdir: indexoutdir  [
+  outdir: indexoutdir [
     default: "."
-    information: "Index directory"
-    knowntype: "output directory"
+    information: "Index file output directory"
+    knowntype: "emboss database index"
   ]
 
 endsection: output
