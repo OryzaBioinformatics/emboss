@@ -36,6 +36,7 @@
    -[no]heading        boolean    [Y] Display column headings
    -usa                boolean    [@(!$(only))] Display the USA of the
                                   sequence
+   -database           boolean    [@(!$(only))] Display 'database' column
    -name               boolean    [@(!$(only))] Display 'name' column
    -accession          boolean    [@(!$(only))] Display 'accession' column
    -gi                 boolean    [N] Display 'GI' column

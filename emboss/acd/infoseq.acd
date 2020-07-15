@@ -84,6 +84,11 @@ section: output [
     information: "Display the USA of the sequence"
   ]
 
+  boolean: database [
+    default: "@(!$(only))"
+    information: "Display 'database' column"
+  ]
+
   boolean: name [
     default: "@(!$(only))"
     information: "Display 'name' column"

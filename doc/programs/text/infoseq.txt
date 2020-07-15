@@ -28,13 +28,14 @@ Usage
    Display information on a sequence:
 
 
-% infoseq tembl:paamir 
+% infoseq tembl:x13776 
 Displays some simple information about sequences
 
-USA                      Name           Accession      Type Length %GC    Descr
-iption
-tembl-id:PAAMIR          PAAMIR         X13776         N    2167   66.54  Pseud
-omonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+USA                      Database  Name           Accession      Type Length %G
+C    Description
+tembl-id:X13776          tembl          X13776         X13776         N    2167
+   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+ation
 
    Go to the input files for this example
 
@@ -43,30 +44,30 @@ omonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
    Don't display the USA of a sequence:
 
 
-% infoseq tembl:paamir -nousa 
+% infoseq tembl:x13776 -nousa 
 Displays some simple information about sequences
 
-Name           Accession      Type Length %GC    Description
-PAAMIR         X13776         N    2167   66.54  Pseudomonas aeruginosa amiC an
-d amiR gene for aliphatic amidase regulation
+Database  Name           Accession      Type Length %GC    Description
+tembl          X13776         X13776         N    2167   66.54  Pseudomonas aer
+uginosa amiC and amiR gene for aliphatic amidase regulation
 
    Example 3
 
    Display only the name and length of a sequence:
 
 
-% infoseq tembl:paamir -only -name -length 
+% infoseq tembl:x13776 -only -name -length 
 Displays some simple information about sequences
 
 Name           Length
-PAAMIR         2167
+X13776         2167
 
    Example 4
 
    Display only the description of a sequence:
 
 
-% infoseq tembl:paamir -only -desc 
+% infoseq tembl:x13776 -only -desc 
 Displays some simple information about sequences
 
 Description
@@ -77,7 +78,7 @@ Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
    Display the type of a sequence:
 
 
-% infoseq tembl:paamir -only -type 
+% infoseq tembl:x13776 -only -type 
 Displays some simple information about sequences
 
 Type
@@ -88,14 +89,14 @@ N
    Display information formatted with HTML:
 
 
-% infoseq tembl:paamir -html 
+% infoseq tembl:x13776 -html 
 Displays some simple information about sequences
 
 
- USA Name Accession Type Length %GC Description
+ USA Database Name Accession Type Length %GC Description
 
- tembl-id:PAAMIR PAAMIR X13776 N 2167 66.54 Pseudomonas aeruginosa amiC and ami
-R gene for aliphatic amidase regulation
+ tembl-id:X13776 tembl X13776 X13776 N 2167 66.54 Pseudomonas aeruginosa amiC a
+nd amiR gene for aliphatic amidase regulation
 
 
 
@@ -139,6 +140,7 @@ Command line arguments
    -[no]heading        boolean    [Y] Display column headings
    -usa                boolean    [@(!$(only))] Display the USA of the
                                   sequence
+   -database           boolean    [@(!$(only))] Display 'database' column
    -name               boolean    [@(!$(only))] Display 'name' column
    -accession          boolean    [@(!$(only))] Display 'accession' column
    -gi                 boolean    [N] Display 'GI' column
@@ -191,27 +193,25 @@ Input file format
 
   Input files for usage example
 
-   'tembl:paamir' is a sequence entry in the example nucleic acid
+   'tembl:x13776' is a sequence entry in the example nucleic acid
    database 'tembl'
 
-  Database entry: tembl:paamir
+  Database entry: tembl:x13776
 
-ID   PAAMIR     standard; DNA; PRO; 2167 BP.
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
 XX
-SV   X13776.1
-XX
 DT   19-APR-1989 (Rel. 19, Created)
-DT   17-FEB-1997 (Rel. 50, Last updated, Version 22)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
 XX
 DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 XX
 KW   aliphatic amidase regulator; amiC gene; amiR gene.
 XX
 OS   Pseudomonas aeruginosa
-OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae; Pseudomonas
-.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
 XX
 RN   [1]
 RP   1167-2167
@@ -223,21 +223,22 @@ RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
 XX
 RN   [2]
 RP   1167-2167
-RX   MEDLINE; 89211409.
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
 RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomona
 s
 RT   aeruginosa";
-RL   FEBS Lett. 246:39-43(1989).
+RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
-RX   MEDLINE; 91317707.
+RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
 RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
 RT   product.";
-RL   J. Bacteriol. 173:4914-4921(1991).
+RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
 RP   1-2167
@@ -247,16 +248,16 @@ RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
 .
 XX
-DR   SWISS-PROT; P10932; AMIR_PSEAE.
-DR   SWISS-PROT; P27017; AMIC_PSEAE.
-DR   SWISS-PROT; Q51417; AMIS_PSEAE.
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
 
 
   [Part of this file has been deleted for brevity]
 
-FT                   phenotype"
 FT                   /replace=""
-FT                   /gene="amiC"
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
 FT   misc_feature    1
 FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653

@@ -77,6 +77,13 @@ to get only the length output, you can specify
 </tr>
 
 <tr>
+<td>-database</td>
+<td>Display 'database' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
 <td>-name</td>
 <td>Display 'name' column</td>
 <td>Boolean value Yes/No</td>
