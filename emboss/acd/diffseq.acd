@@ -12,13 +12,13 @@ section: input [
   type: "page"
 ]
 
-  sequence: asequence  [
+  sequence: asequence [
     parameter: "Y"
     type: "any"
     features: "Y"
   ]
 
-  sequence: bsequence  [
+  sequence: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
     features: "Y"
@@ -31,7 +31,7 @@ section: required [
   type: "page"
 ]
 
-  integer: wordsize  [
+  integer: wordsize [
     standard: "Y"
     default: "10"
     minimum: "2"
@@ -52,21 +52,22 @@ section: additional [
   information: "Additional section"
   type: "page"
 ]
-    
-  boolean: globaldifferences  [
+
+  boolean: globaldifferences [
     additional: "Y"
     default: "N"
-    information: "Force reporting of differences at the start and end"
-    help: "Normally this program will find regions of identity 
-           that are the length of the specified word-size or greater and
-           will then report the regions of difference between these
-           matching regions. This works well and is what most people
-           want if they are working with long overlapping nucleic
-           acid sequences. You are usually not interested in the 
-           non-overlapping ends of these sequences. If you have protein
-           sequences or short RNA sequences however, you will be interested
-           in differences at the very ends . It this option is set to be true
-           then the differences at the ends will also be reported."
+    information: "Force reporting of differences at the start
+                  and end"
+    help: "Normally this program will find regions of identity that
+           are the length of the specified word-size or greater and will then
+           report the regions of difference between these matching regions.
+           This works well and is what most people want if they are working
+           with long overlapping nucleic acid sequences. You are usually not
+           interested in the non-overlapping ends of these sequences. If you
+           have protein sequences or short RNA sequences however, you will be
+           interested in differences at the very ends . It this option is
+           set to be true then the differences at the ends will also be
+           reported."
   ]
 
 endsection: additional
@@ -76,14 +77,14 @@ section: output [
   type: "page"
 ]
 
-  report: outfile  [
+  report: outfile [
     parameter: "Y"
     rformat: "diffseq"
     taglist: "int:start int:end int:length str:name str:sequence
               str:first_feature str:second_feature"
   ]
 
-  featout: aoutfeat  [
+  featout: aoutfeat [
     parameter: "Y"
     default: "$(asequence.name).diffgff"
     help: "File for output of first sequence's features"

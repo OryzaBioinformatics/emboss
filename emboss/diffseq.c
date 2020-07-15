@@ -2,7 +2,7 @@
 **
 ** Find differences (SNPs) between nearly identical sequences
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -170,12 +170,12 @@ int main(int argc, char **argv)
     embWordLength(wordlen);
     if(embWordGetTable(&seq1MatchTable, seq1))
 	/* get table of words */
-	matchlist = embWordBuildMatchTable(&seq1MatchTable, seq2, ajTrue);
+	matchlist = embWordBuildMatchTable(seq1MatchTable, seq2, ajTrue);
 
 
     /* get the minimal set of overlapping matches */
     if(matchlist)
-	embWordMatchMin(matchlist, ajSeqLen(seq1), ajSeqLen(seq2));
+	embWordMatchMin(matchlist, ajSeqGetLen(seq1), ajSeqGetLen(seq2));
 
 
     if(matchlist)
@@ -217,10 +217,21 @@ int main(int argc, char **argv)
     ajReportClose(report);
 
     /* tidy up */
-    ajFeattableDel(&TabRpt);
+    ajSeqDel(&seq1);
+    ajSeqDel(&seq2);
+    embWordFreeTable(&seq1MatchTable);
     ajReportDel(&report);
+    ajListFree(&matchlist);
+    ajListFree(&difflist);
+    ajFeattableDel(&Tab1);
+    ajFeattableDel(&Tab2);
+    ajFeattableDel(&TabRpt);
+    ajFeattabOutDel(&seq1out);
+    ajFeattabOutDel(&seq2out);
+    ajStrDel(&tmpstr);
 
-    ajExit();
+
+    embExit();
     return 0;
 }
 
@@ -265,8 +276,8 @@ static void diffseq_Diff(const AjPList difflist,
     AjPStr tmpstr = NULL;
     static AjPStr tmpseq = NULL;
 
-    AjPFeattable feat1;
-    AjPFeattable feat2;
+    AjPFeattable feat1 = NULL;
+    AjPFeattable feat2 = NULL;
     
     AjPFeature gf = NULL;
     
@@ -276,11 +287,11 @@ static void diffseq_Diff(const AjPList difflist,
     tmp    = ajStrNew();
 
 
-    s1 = ajSeqStr(seq1);
-    s2 = ajSeqStr(seq2);
+    s1 = ajSeqGetSeqS(seq1);
+    s2 = ajSeqGetSeqS(seq2);
     
-    feat1 = ajSeqCopyFeat(seq1);
-    feat2 = ajSeqCopyFeat(seq2);
+    feat1 = ajSeqGetFeatCopy(seq1);
+    feat2 = ajSeqGetFeatCopy(seq2);
 
     /* 
     ** Fix the Frame field in the CDS features of the feature table for
@@ -291,7 +302,7 @@ static void diffseq_Diff(const AjPList difflist,
     /* create report header */
     ajFmtPrintS(&tmpstr, "Compare: %S     from: %d   to: %d\n\n",
 		ajReportSeqName(report, seq2),
-		ajSeqBegin(seq2), ajSeqEnd(seq2));    
+		ajSeqGetBegin(seq2), ajSeqGetEnd(seq2));    
     if (over1start != -1)   
     { 
         ajFmtPrintAppS(&tmpstr, "%S overlap starts at %d\n",
@@ -317,13 +328,13 @@ static void diffseq_Diff(const AjPList difflist,
         if(diff->Len1 > 0)
 	{
 	    gf = ajFeatNewII(ftab, diff->Start1, diff->End1);
-	    ajStrAssSub(&tmp, s1, diff->Start1-1, diff->End1-1);
-            base1 = * ajStrStr(tmp);
+	    ajStrAssignSubS(&tmp, s1, diff->Start1-1, diff->End1-1);
+            base1 = * ajStrGetPtr(tmp);
 	}
         else
         {
             gf = ajFeatNewII(ftab, diff->End1, diff->End1-1);
-            ajStrAssC(&tmp, "");
+            ajStrAssignC(&tmp, "");
         }
         diffseq_Features("first_feature", gf,
                             feat1, diff->Start1, diff->End1);
@@ -343,10 +354,10 @@ static void diffseq_Diff(const AjPList difflist,
             ajFeatTagAdd(gf, NULL, tmp);
             ajFmtPrintS(&tmp, "*end %d", diff->End2);
             ajFeatTagAdd(gf, NULL, tmp);
-            ajStrAssSub(&tmpseq, s2, diff->Start2-1, diff->End2-1);
+            ajStrAssignSubS(&tmpseq, s2, diff->Start2-1, diff->End2-1);
             ajFmtPrintS(&tmp, "*sequence %S", tmpseq);
             ajFeatTagAdd(gf, NULL, tmp);
-            base2 = * ajStrStr(tmpseq);
+            base2 = * ajStrGetPtr(tmpseq);
         }
         else
         {
@@ -398,6 +409,7 @@ static void diffseq_Diff(const AjPList difflist,
     ajFeattableDel(&feat2);
     
     ajStrDel(&tmpstr);
+    ajStrDel(&tmpseq);
     
     return;
 }
@@ -448,10 +460,10 @@ static void diffseq_WordMatchListConvDiffToFeat(const AjPList list,
     replacestr = ajStrNew();
     notestr    = ajStrNew();
 
-    ajStrAssC(&source,"diffseq");
-    ajStrAssC(&type,"conflict");
-    ajStrAssC(&note,"note");
-    ajStrAssC(&replace,"replace");
+    ajStrAssignC(&source,"diffseq");
+    ajStrAssignC(&type,"conflict");
+    ajStrAssignC(&note,"note");
+    ajStrAssignC(&replace,"replace");
     score = 1.0;
 
     iter = ajListIterRead(list);
@@ -465,26 +477,26 @@ static void diffseq_WordMatchListConvDiffToFeat(const AjPList list,
                                 diff->Start1, diff->End1,
                                 score, strand, frame) ;
             if(diff->Len1 == 1 && diff->Len2 == 1)
-                ajFmtPrintS(&notestr, "SNP in %S", ajSeqGetName(seq2));
+                ajFmtPrintS(&notestr, "SNP in %S", ajSeqGetNameS(seq2));
             else if(diff->Len2 == 0)
                 ajFmtPrintS(&notestr, "Insertion of %d bases in %S",
-                            diff->Len1, ajSeqGetName(seq1));
+                            diff->Len1, ajSeqGetNameS(seq1));
             else
-                ajFmtPrintS(&notestr, "%S", ajSeqGetName(seq2));
+                ajFmtPrintS(&notestr, "%S", ajSeqGetNameS(seq2));
 
             ajFeatTagSet(feature, note, notestr);
 
             if(diff->Len2 > 0)
-                ajStrAssSub(&replacestr, ajSeqStr(seq2), diff->Start2-1,
+                ajStrAssignSubS(&replacestr, ajSeqGetSeqS(seq2), diff->Start2-1,
                             diff->End2-1);
             else
-                ajStrAssC(&replacestr, "");
+                ajStrAssignC(&replacestr, "");
 
             if(ajFeattableIsProt(*tab1))
             {
-                if(ajStrLen(replacestr))
+                if(ajStrGetLen(replacestr))
                 {
-                    ajStrAssSub(&sourcestr, ajSeqStr(seq1), diff->Start1-1,
+                    ajStrAssignSubS(&sourcestr, ajSeqGetSeqS(seq1), diff->Start1-1,
                                 diff->End1-1);
                     ajFmtPrintS(&conflictstr, "%S -> %S",
                                 sourcestr, replacestr);
@@ -505,26 +517,26 @@ static void diffseq_WordMatchListConvDiffToFeat(const AjPList list,
                                 score, strand, frame) ;
 
             if(diff->Len2 == 1 && diff->Len1 == 1)
-                ajFmtPrintS(&notestr, "SNP in %S", ajSeqGetName(seq1));
+                ajFmtPrintS(&notestr, "SNP in %S", ajSeqGetNameS(seq1));
             else if(diff->Len1 == 0)
                 ajFmtPrintS(&notestr, "Insertion of %d bases in %S",
-                            diff->Len2, ajSeqGetName(seq2));
+                            diff->Len2, ajSeqGetNameS(seq2));
             else
-                ajFmtPrintS(&notestr, "%S", ajSeqGetName(seq1));
+                ajFmtPrintS(&notestr, "%S", ajSeqGetNameS(seq1));
 
             ajFeatTagSet(feature, note, notestr);
 
             if(diff->Len1 > 0)
-                ajStrAssSub(&replacestr, ajSeqStr(seq1), diff->Start1-1,
+                ajStrAssignSubS(&replacestr, ajSeqGetSeqS(seq1), diff->Start1-1,
                             diff->End1-1);
             else
-                ajStrAssC(&replacestr, "");
+                ajStrAssignC(&replacestr, "");
 
             if(ajFeattableIsProt(*tab2))
             {
-                if(ajStrLen(replacestr))
+                if(ajStrGetLen(replacestr))
                 {
-                    ajStrAssSub(&sourcestr, ajSeqStr(seq2), diff->Start2-1,
+                    ajStrAssignSubS(&sourcestr, ajSeqGetSeqS(seq2), diff->Start2-1,
                                 diff->End2-1);
                     ajFmtPrintS(&conflictstr, "%S -> %S",
                                 sourcestr, replacestr);
@@ -632,18 +644,18 @@ static void diffseq_Features(const char* typefeat, AjPFeature rf,
 ******************************************************************************/
 
 static void diffseq_AddTags(AjPStr* strval,
-                               const AjPFeature feat, AjBool values)
+			    const AjPFeature feat, AjBool values)
 {
     AjIList titer;                        /* iterator for taglist */
-    static AjPStr tagnam = NULL;
-    static AjPStr tagval = NULL;
+    AjPStr tagnam = NULL;
+    AjPStr tagval = NULL;
 
     /* iterate through the tags and test for match to patterns */
 
     titer = ajFeatTagIter(feat);
     while(ajFeatTagval(titer, &tagnam, &tagval))
         /* don't display the translation tag - it is far too long :-) */
-        if(ajStrCmpC(tagnam, "translation"))
+        if(!ajStrMatchC(tagnam, "translation"))
         {
             if(values == ajTrue)
                 ajFmtPrintAppS(strval, " %S='%S'", tagnam, tagval);
@@ -652,6 +664,8 @@ static void diffseq_AddTags(AjPStr* strval,
         }
 
     ajListIterFree(&titer);
+    ajStrDel(&tagnam);
+    ajStrDel(&tagval);
 
     return;
 }
@@ -698,8 +712,8 @@ static void diffseq_DiffList(const AjPList matchlist, AjPList difflist,
     const char *seqc1;
     const char *seqc2;
     
-    seqc1 = ajSeqChar(seq1);
-    seqc2 = ajSeqChar(seq2);
+    seqc1 = ajSeqGetSeqC(seq1);
+    seqc2 = ajSeqGetSeqC(seq2);
 
     *over1start = -1;                        /* flag for no matches found */
 
@@ -780,14 +794,14 @@ static void diffseq_DiffList(const AjPList matchlist, AjPList difflist,
 
     /* add difference at the end, if required */
     if(global &&                        /* we want the global differences */
-      (misstart1 <= ajSeqLen(seq1) ||        /* no match at the end */
-       misstart2 <= ajSeqLen(seq2)))
+      (misstart1 <= ajSeqGetLen(seq1) ||        /* no match at the end */
+       misstart2 <= ajSeqGetLen(seq2)))
     {
         diff = diffseq_PosPDiffNew();
         diff->Start1 = misstart1;
         diff->Start2 = misstart2;
-        diff->End1 = ajSeqLen(seq1);
-        diff->End2 = ajSeqLen(seq2);
+        diff->End1 = ajSeqGetLen(seq1);
+        diff->End2 = ajSeqGetLen(seq2);
         diff->Len1 = diff->End1 - diff->Start1 + 1;
         diff->Len2 = diff->End2 - diff->Start2 + 1;
 
@@ -797,7 +811,7 @@ static void diffseq_DiffList(const AjPList matchlist, AjPList difflist,
         ** In other words, we reduce the end of the mismatch if there
         ** are any matching bases there.
         */
-        for (i=ajSeqLen(seq1), j=ajSeqLen(seq2); 
+        for (i=ajSeqGetLen(seq1), j=ajSeqGetLen(seq2); 
              diff->Len1 && diff->Len2 &&
              tolower((ajint)seqc1[i-1]) == tolower((ajint)seqc2[j-1]);
 	     i--, j--)
@@ -886,8 +900,8 @@ static void diffseq_FeatSetCDSFrame(AjPFeattable ftab)
     ajint prevend = 0;
     AjBool prevparent;                /* flag true if prev CDS was a parent */
     AjBool unsure;                /* true if we are unsure of the phase */
-    static AjPStr tagnam = NULL;/* name and value of tags of the feature */
-    static AjPStr tagval = NULL;
+    AjPStr tagnam = NULL;/* name and value of tags of the feature */
+    AjPStr tagval = NULL;
 
 #define FEATFLAG_START_BEFORE_SEQ 0x0001 /* <start */
 #define FEATFLAG_END_AFTER_SEQ    0x0002 /* >end */
@@ -1046,6 +1060,9 @@ static void diffseq_FeatSetCDSFrame(AjPFeattable ftab)
     }
 
     ajListIterFree(&iter);
+    ajListIterFree(&titer);
+    ajStrDel(&tagnam);
+    ajStrDel(&tagval);
 
     return;
 }
