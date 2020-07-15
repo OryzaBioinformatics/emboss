@@ -23,7 +23,8 @@
 #include "emboss.h"
 
 
-static void tfm_FindAppDocRoot(AjPStr* docroot, AjBool html);
+static void tfm_FindAppDocRoot(const AjPStr program, AjPStr* docroot,
+			       AjBool html);
 static AjBool tfm_FindAppDoc(const AjPStr program, const AjPStr docroot,
 			     AjBool html, AjPStr* path);
 static void tfm_FixImages(AjPStr *line, const AjPStr path);
@@ -67,7 +68,7 @@ int main(int argc, char **argv)
     docroot = ajStrNew();
     
 
-    tfm_FindAppDocRoot(&docroot, html);
+    tfm_FindAppDocRoot(program, &docroot, html);
     
     /* is a search string specified - should be tested in tfm.acd file */
     if(!ajStrGetLen(program))
@@ -128,18 +129,21 @@ int main(int argc, char **argv)
 **
 ** return the path to the program doc directory
 **
+** @param [r] program [const AjPStr] program name
 ** @param [w] docroot [AjPStr*] root dir for documentation files
 ** @param [r] html [AjBool] whether html required
 ** @@
 ******************************************************************************/
 
-static void tfm_FindAppDocRoot(AjPStr* docroot, AjBool html)
+static void tfm_FindAppDocRoot(const AjPStr program,
+			       AjPStr* docroot, AjBool html)
 {
 
     AjPStr docrootinst = NULL;
     AjPStr roottmp = NULL;
     AjPStr tmpstr = NULL;
-    
+    AjPStr embassy = NULL;
+
     AjBool is_windows = ajFalse;
 #ifdef WIN32
     is_windows = ajTrue;
@@ -152,6 +156,9 @@ static void tfm_FindAppDocRoot(AjPStr* docroot, AjBool html)
     ajDebug("given  docroot '%S'\n", *docroot);
     ajNamGetValueC("docroot", &roottmp);
     ajDebug("defined docroot '%S'\n", roottmp);
+
+    if(html)
+      embGrpGetEmbassy(program, &embassy);
 
     /* look at EMBOSS doc files */
 
@@ -181,8 +188,16 @@ static void tfm_FindAppDocRoot(AjPStr* docroot, AjBool html)
 	ajFileDirFix(&docrootinst);
 
 	if(html)
-	    ajFmtPrintS(docroot,"%Sprograms%shtml%s",docrootinst,SLASH_STRING,
+	{
+	  if(ajStrGetLen(embassy))
+	    ajFmtPrintS(docroot,"%Shtml%sembassy%s%S%s",
+			docrootinst,SLASH_STRING,SLASH_STRING,
+			embassy, SLASH_STRING);
+	  else
+	    ajFmtPrintS(docroot,"%Shtml%semboss%sapps%s",
+			docrootinst,SLASH_STRING,SLASH_STRING,
 			SLASH_STRING);
+	}
 	else
 	    ajFmtPrintS(docroot,"%Sprograms%stext%s",docrootinst,SLASH_STRING,
 			SLASH_STRING);
@@ -199,15 +214,31 @@ static void tfm_FindAppDocRoot(AjPStr* docroot, AjBool html)
 	ajNamRootBase(docroot);
 	ajFileDirFix(docroot);
 
-	if(ajFileDir(docroot))
-	    ajStrAppendC(docroot, "doc/programs/");
-	if(html)
+	if(ajStrGetLen(embassy))
 	{
-	    ajStrAppendC(docroot, "html/");
+	  if(ajFileDir(docroot))
+	    ajFmtPrintS(docroot, "embassy/%S/emboss_doc/", embassy);
+	  if(html)
+	    {
+	      ajStrAppendC(docroot, "html/");
+	    }
+	  else
+	    {
+	      ajStrAppendC(docroot, "text/");
+	    }
 	}
 	else
 	{
-	    ajStrAppendC(docroot, "text/");
+	  if(ajFileDir(docroot))
+	    ajStrAppendC(docroot, "doc/programs/");
+	  if(html)
+	    {
+	      ajStrAppendC(docroot, "html/");
+	    }
+	  else
+	    {
+	      ajStrAppendC(docroot, "text/");
+	    }
 	}
     }
 
@@ -256,11 +287,11 @@ static AjBool tfm_FindAppDoc(const AjPStr program, const AjPStr docroot,
 	ajStrAppendC(path, ".txt");
     }
 
-
-
     /* does the file exist and is it readable? */
     if(ajFileStat(*path, AJ_FILE_R))
 	ret = ajTrue;
+
+    ajDebug("tfm_FindAppDoc '%S' %B\n", *path, ret);
 
     ajStrDel(&target);
 
@@ -314,7 +345,7 @@ static void tfm_FixImages(AjPStr *line, const AjPStr path)
 
     ajStrAppendS(&newpath,path);
 
-    ajStrAssignSubC(&pre,q,0,p-q+4);
+    ajStrAssignSubC(&pre,q,0,(ajint)(p-q)+4);
     p += 5;
     while(*p && *p!='"')
     {

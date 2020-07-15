@@ -38,6 +38,7 @@ section: output [
     information: "Format the output for HTML"
     help: "This will format the output for displaying as a WWW
            document."
+    outputmodifier: "Y"
   ]
 
   boolean: more [
@@ -48,6 +49,7 @@ section: output [
            text page-by-page, waiting for you to read one screen-full before
            going on to the next page. When you have finished reading a page,
            press the SPACE bar to proceed to the next page."
+    outputmodifier: "Y"
   ]
 
 endsection: output
