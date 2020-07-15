@@ -33,7 +33,9 @@ extern "C"
 ** @modify ajFileGetsTrim Reads a record from a file and removes
 **                     newline characters
 ** @cast ajFileName Returns the filename as char*
+** @cast ajFileNameS Returns the filename as an AjPStr
 ** @cast ajFileFp Returns the equivalent C file pointer
+** @cast ajFileGetApp Returns the App element.
 ** @other AjPFileBuff Buffered input file.
 **
 ** @attr fp [FILE*] C file pointer
@@ -41,6 +43,7 @@ extern "C"
 ** @attr Name [AjPStr] File name as used when opening
 ** @attr List [AjPList] List of file names (first is open)
 ** @attr End [AjBool] True if EOF has been reached
+** @attr App [AjBool] True if file was opened for append. 
 ** @attr Buff [AjPStr] Buffer for latest line read
 ** @attr Pid [pid_t] Process PID if any
 ** @@
@@ -52,8 +55,11 @@ typedef struct AjSFile {
   AjPStr Name;
   AjPList List;
   AjBool End;
+  AjBool App;
   AjPStr Buff;
+#ifndef WIN32
   pid_t Pid;
+#endif
 } AjOFile;
 
 #define AjPFile AjOFile*
@@ -116,10 +122,10 @@ typedef struct AjSFileBuffList {
 **
 ** @attr File [AjPFile] The input file - data to be buffered
 ** @attr Lines [AjPFileBuffList] All lines ... where the data really is
+** @attr Freelines [AjPFileBuffList] Free list of lines for reuse
 ** @attr Curr [AjPFileBuffList] Current line in Lines list
 ** @attr Prev [AjPFileBuffList] Previous line (points to Curr for delete)
 ** @attr Last [AjPFileBuffList] Last line for quick appending
-** @attr Free [AjPFileBuffList] Free list of lines for reuse
 ** @attr Freelast [AjPFileBuffList] Last free line for quick append
 ** @attr Nobuff [AjBool] if true, do not buffer the file
 ** @attr Pos [ajint] Position in list
@@ -132,10 +138,10 @@ typedef struct AjSFileBuffList {
 typedef struct AjSFileBuff {
   AjPFile File;
   AjPFileBuffList Lines;
+  AjPFileBuffList Freelines;
   AjPFileBuffList Curr;
   AjPFileBuffList Prev;
   AjPFileBuffList Last;
-  AjPFileBuffList Free;
   AjPFileBuffList Freelast;
   AjBool Nobuff;
   ajint Pos;
@@ -226,7 +232,11 @@ enum AjEOutfileType
     OUTFILE_SCOP,			/* SCOP data */
     OUTFILE_TREE			/* Phylogenetic tree data */
 };
-/* ============= prototypes =========================*/
+
+
+/*
+** Prototype definitions
+*/
 
 void        ajDirDel (AjPDir* pthis);
 void        ajDiroutDel (AjPDir* pthis);
@@ -310,6 +320,7 @@ void        ajFileExit (void);
 AjPList     ajFileFileList(const AjPStr files);
 FILE*       ajFileFp (const AjPFile thys);
 AjBool      ajFileGetwd (AjPStr* dir);
+AjBool      ajFileGetApp (const AjPFile thys);
 AjPStr      ajFileGetName (const AjPFile thys);
 AjBool      ajFileGets (AjPFile thys, AjPStr *pdest);
 AjBool      ajFileGetsL (AjPFile thys, AjPStr *pdest, ajlong* fpos);
@@ -318,6 +329,7 @@ AjBool      ajFileGetsTrimL (AjPFile thys, AjPStr *pdest, ajlong* fpos);
 AjBool      ajFileHasDir (const AjPStr name);
 ajlong      ajFileLength (const AjPStr fname);
 const char* ajFileName (const AjPFile thys);
+const AjPStr ajFileNameS (const AjPFile thys);
 AjBool      ajFileNameDir (AjPStr* filename, const AjPDir dir,
 			   const AjPStr name);
 AjBool      ajFileNameDirSet  (AjPStr* filename, const AjPStr dir);
@@ -386,10 +398,22 @@ AjPStr      ajOutfileFormat (const AjPOutfile thys);
 FILE*       ajOutfileFp (const AjPOutfile thys);
 AjPOutfile  ajOutfileNew(const AjPStr name);
 
+/*
+** End of prototype definitions
+*/
+
+
+
 /* ============= definitions =========================*/
+#ifndef WIN32
 #define AJ_FILE_R S_IRUSR
 #define AJ_FILE_W S_IWUSR
 #define AJ_FILE_X S_IXUSR
+#else
+#define AJ_FILE_R S_IREAD
+#define AJ_FILE_W S_IWRITE
+#define AJ_FILE_X S_IEXEC
+#endif
 
 #endif
 
