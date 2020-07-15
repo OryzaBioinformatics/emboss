@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "gapany"
   ]
@@ -20,19 +20,19 @@ section: required [
   type: "page"
 ]
 
-  string: target  [
+  string: target [
     standard: "Y"
     information: "Sequence section to match"
     default: "N"
     knowntype: "sequence"
   ]
 
-  toggle: delete  [
+  toggle: delete [
     information: "Delete the target sequence sections"
     default: "N"
   ]
 
-  string: replace  [
+  string: replace [
     standard: "@(!$(delete))"
     information: "Replacement sequence section"
     default: "A"
@@ -41,12 +41,27 @@ section: required [
 
 endsection: required
 
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: position [
+    additional: "Y"
+    information: "Sequence position to match"
+    default: "0"
+    minimum: "0"
+    maximum: "$(sequence.len)"
+  ]
+
+endsection: additional
+
 section: output [
   information: "Output section"
   type: "page"
 ]
 
-  seqout: outseq  [
+  seqout: outseq [
     parameter: "Y"
   ]
 
