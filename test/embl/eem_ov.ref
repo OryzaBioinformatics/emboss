@@ -1,6 +1,6 @@
->>>>XLRHODOP
+>>>>L07770
  
-ID   XLRHODOP   standard; RNA; VRT; 1684 BP.
+ID   L07770     standard; RNA; VRT; 1684 BP.
 XX
 AC   L07770;
 XX
@@ -62,9 +62,9 @@ FT   variation       1224
 FT                   /note="clone pX0P5 contained deletion from bp 1224-1534"
 XX
 SQ   Sequence 1684 BP; 426 A; 431 C; 339 G; 488 T; 0 other;
->>>>XL23808
+>>>>U23808
  
-ID   XL23808    standard; DNA; VRT; 4734 BP.
+ID   U23808     standard; DNA; VRT; 4734 BP.
 XX
 AC   U23808;
 XX

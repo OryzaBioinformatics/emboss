@@ -1,6 +1,6 @@
->>>>HSCAD5
+>>>>X59796
  
-ID   HSCAD5     standard; RNA; HUM; 3170 BP.
+ID   X59796     standard; RNA; HUM; 3170 BP.
 XX
 AC   X59796;
 XX
@@ -70,9 +70,9 @@ FT                   HGGPGEMAAMIEVKKDEADHDGDGPPYDTLHIYGYEGSESIAESLSSLGTDSSDSDVDY
 FT                   DFLNDWGPRFKMLAELYGSDPREELLY"
 XX
 SQ   Sequence 3170 BP; 773 A; 962 C; 844 G; 588 T; 3 other;
->>>>HSD
+>>>>L22968
  
-ID   HSD        standard; DNA; HUM; 781 BP.
+ID   L22968     standard; DNA; HUM; 781 BP.
 XX
 AC   L22968;
 XX
@@ -107,9 +107,9 @@ FT                   /organism="Homo sapiens"
 FT                   /cell_type="lymphoblast"
 XX
 SQ   Sequence 781 BP; 207 A; 179 C; 213 G; 182 T; 0 other;
->>>>HSEGL1
+>>>>V00508
  
-ID   HSEGL1     standard; DNA; HUM; 3919 BP.
+ID   V00508     standard; DNA; HUM; 3919 BP.
 XX
 AC   V00508;
 XX
@@ -164,9 +164,9 @@ FT                   FGNLSSPSAILGNPKVKAHGKKVLTSFGDAIKNMDNLKPAFAKLSELHCDKLHVDPENF
 FT                   KLLGNVMVIILATHFGKEFTPEVQAAWQKLVSAVAIALAHKYH"
 XX
 SQ   Sequence 3919 BP; 1203 A; 703 C; 937 G; 1072 T; 4 other;
->>>>HSFAU
+>>>>X65923
  
-ID   HSFAU      standard; RNA; HUM; 518 BP.
+ID   X65923     standard; RNA; HUM; 518 BP.
 XX
 AC   X65923;
 XX
@@ -231,9 +231,9 @@ FT   polyA_signal    484. .489
 FT   polyA_site      509
 XX
 SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
->>>>HSFOS
+>>>>K00650
  
-ID   HSFOS      standard; DNA; HUM; 6210 BP.
+ID   K00650     standard; DNA; HUM; 6210 BP.
 XX
 AC   K00650; M16287;
 XX
@@ -353,9 +353,9 @@ FT                   /note="c-fos protein"
 FT                   /number=4
 XX
 SQ   Sequence 6210 BP; 1497 A; 1571 C; 1619 G; 1523 T; 0 other;
->>>>HSEF2
+>>>>X51466
  
-ID   HSEF2      standard; RNA; HUM; 3075 BP.
+ID   X51466     standard; RNA; HUM; 3075 BP.
 XX
 AC   X51466; M30456;
 XX
@@ -425,9 +425,9 @@ FT                   QVVGGIYGVLNRKRGHVFEESQVAGTPMFVVKAYLPVNESFGFTADLRSNTGGQAFPQC
 FT                   VFDHWQILPGDPFDNSSRPSQVVAETRKRKGLKEGIPALDNFLDKL"
 XX
 SQ   Sequence 3075 BP; 678 A; 906 C; 924 G; 567 T; 0 other;
->>>>HSHT
+>>>>X07523
  
-ID   HSHT       standard; RNA; HUM; 1658 BP.
+ID   X07523     standard; RNA; HUM; 1658 BP.
 XX
 AC   X07523; Y00716;
 XX
@@ -499,9 +499,9 @@ FT   misc_feature    1634. .1639
 FT                   /note="pot. polyA signal"
 XX
 SQ   Sequence 1658 BP; 513 A; 296 C; 383 G; 466 T; 0 other;
->>>>HSTS1
+>>>>D00596
  
-ID   HSTS1      standard; DNA; HUM; 18596 BP.
+ID   D00596     standard; DNA; HUM; 18596 BP.
 XX
 AC   D00596;
 XX
@@ -632,9 +632,9 @@ FT   repeat_unit     17262. .17553
 FT                   /note="Alu sequence"
 XX
 SQ   Sequence 18596 BP; 4521 A; 3991 C; 4479 G; 5605 T; 0 other;
->>>>HSNFG9
+>>>>Z69719
  
-ID   HSNFG9     standard; DNA; HUM; 33760 BP.
+ID   Z69719     standard; DNA; HUM; 33760 BP.
 XX
 AC   Z69719;
 XX
@@ -900,9 +900,9 @@ FT                   /number=6
 FT                   /gene="HERG"
 XX
 SQ   Sequence 532 BP; 87 A; 187 C; 146 G; 112 T; 0 other;
->>>>HSFERG1
+>>>>X03487
  
-ID   HSFERG1    standard; DNA; HUM; 512 BP.
+ID   X03487    standard; DNA; HUM; 512 BP.
 XX
 AC   X03487;
 XX
@@ -959,9 +959,9 @@ FT   intron          501. .>512
 FT                   /note="intron I"
 XX
 SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
->>>>HSFERG2
+>>>>X03488
  
-ID   HSFERG2    standard; DNA; HUM; 1132 BP.
+ID   X03488     standard; DNA; HUM; 1132 BP.
 XX
 AC   X03488;
 XX

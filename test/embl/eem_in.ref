@@ -1,6 +1,6 @@
->>>>CEZK637
+>>>>Z11115
  
-ID   CEZK637    standard; DNA; INV; 40699 BP.
+ID   Z11115     standard; DNA; INV; 40699 BP.
 XX
 AC   Z11115;
 XX
@@ -337,9 +337,9 @@ FT                   /translation="MDNEKLIREARRMEEVQQLKMQIPKPVDKKPRPPPSENNLKLISC
 FT                   EETCMDETLKNSSKPRMI"
 XX
 SQ   Sequence 40699 BP; 12909 A; 7116 C; 7279 G; 13395 T; 0 other;
->>>>PDRHOD
+>>>>X07797
  
-ID   PDRHOD     standard; RNA; INV; 1675 BP.
+ID   X07797     standard; RNA; INV; 1675 BP.
 XX
 AC   X07797;
 XX

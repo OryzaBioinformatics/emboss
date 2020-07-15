@@ -1,8 +1,6 @@
-ID   HS989235   standard; RNA; EST; 495 BP.
+ID   H45989; SV 1; linear; mRNA; EST; HUM; 495 BP.
 XX
 AC   H45989;
-XX
-SV   H45989.1
 XX
 DT   18-NOV-1995 (Rel. 45, Created)
 DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
@@ -14,7 +12,8 @@ KW   EST.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-495
@@ -25,7 +24,10 @@ RA   Wohldmann P., Wilson R.;
 RT   "The WashU-Merck EST Project";
 RL   Unpublished.
 XX
-DR   RZPD; IMAGp998F03326; IMAGp998F03326.
+DR   GDB; 3839990.
+DR   GDB; 4193257.
+DR   RZPD; IMAGp998F03326.
+DR   UNILIB; 555; 300.
 XX
 CC   On May 8, 1995 this sequence version replaced gi:800819.
 CC   Contact: Wilson RK
@@ -47,9 +49,13 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..495
-FT                   /db_xref="taxon:9606"
-FT                   /db_xref="ESTLIB:300"
-FT                   /db_xref="RZPD:IMAGp998F03326"
+FT                   /organism="Homo sapiens"
+FT                   /lab_host="DH10B (ampicillin resistant)"
+FT                   /mol_type="mRNA"
+FT                   /sex="Male"
+FT                   /dev_stage="55-year old"
+FT                   /clone_lib="Soares adult brain N2b5HB55Y"
+FT                   /clone="IMAGE:177794"
 FT                   /note="Organ: brain; Vector: pT7T3D (Pharmacia) with a
 FT                   modified polylinker; Site_1: Not I; Site_2: Eco RI; 1st
 FT                   strand cDNA was primed with a Not I - oligo(dT) primer [5'
@@ -67,12 +73,9 @@ FT                   tissues representing the following areas of the brain:
 FT                   frontal, parietal, temporal and occipital cortex from the
 FT                   left and right hemispheres, subcortical white matter, basal
 FT                   ganglia, thalamus, cerebellum, midbrain, pons and medulla."
-FT                   /sex="Male"
-FT                   /organism="Homo sapiens"
-FT                   /clone="IMAGE:177794"
-FT                   /clone_lib="Soares adult brain N2b5HB55Y"
-FT                   /dev_stage="55-year old"
-FT                   /lab_host="DH10B (ampicillin resistant)"
+FT                   /db_xref="taxon:9606"
+FT                   /db_xref="RZPD:IMAGp998F03326"
+FT                   /db_xref="UNILIB:555"
 XX
 SQ   Sequence 495 BP; 73 A; 135 C; 169 G; 104 T; 14 other;
      ccggnaagct cancttggac caccgactct cgantgnntc gccgcgggag ccggntggan        60

@@ -1,13 +1,11 @@
-ID   CEZK637    standard; DNA; INV; 40699 BP.
+ID   Z11115; SV 2; linear; genomic DNA; STD; INV; 40699 BP.
 XX
 AC   Z11115;
 XX
-SV   Z11115.1
-XX
 DT   04-MAY-1991 (Rel. 28, Created)
-DT   24-JAN-2002 (Rel. 70, Last updated, Version 55)
+DT   24-OCT-2006 (Rel. 89, Last updated, Version 82)
 XX
-DE   Caenorhabditis elegans cosmid ZK637
+DE   Caenorhabditis elegans Cosmid ZK637
 XX
 KW   HTG.
 XX
@@ -17,45 +15,69 @@ OC   Rhabditidae; Peloderinae; Caenorhabditis.
 XX
 RN   [1]
 RP   1-40699
+RX   DOI; 10.1126/science.282.5396.2012.
+RX   PUBMED; 9851916.
+RG   C. elegans Sequencing Consortium
+RA   ;
+RT   "Genome sequence of the nematode C. elegans: a platform for investigating
+RT   biology";
+RL   Science 282(5396):2012-2018(1998).
+XX
+RN   [2]
+RP   1-40699
 RA   Craxton M.;
 RT   ;
 RL   Submitted (04-MAY-1991) to the EMBL/GenBank/DDBJ databases.
 RL   Nematode Sequencing Project, Sanger Institute, Hinxton, Cambridge CB10 1SA,
 RL   England and Department of Genetics, Washington University, St. Louis, MO
-RL   63110, USA. E-mail: jes@sanger.ac.uk or rw@nematode.wustl.edu
+RL   63110, USA. E-mail: worm@sanger.ac.uk
 XX
-RN   [2]
-RC   The C.elegans Sequencing Consortium.;
-RA   none;
-RT   "Genome sequence of the nematode C.elegans: A platform for investigating
-RT   biology";
-RL   Science 282:2012-2018(1998).
-XX
-DR   SPTREMBL; Q23556; Q23556.
-DR   SWISS-PROT; P30627; GLBH_CAEEL.
-DR   SWISS-PROT; P30628; VPP1_CAEEL.
-DR   SWISS-PROT; P30629; YOU2_CAEEL.
-DR   SWISS-PROT; P30630; LIN9_CAEEL.
-DR   SWISS-PROT; P30631; YOUD_CAEEL.
-DR   SWISS-PROT; P30632; ARSA_CAEEL.
-DR   SWISS-PROT; P30634; YOUA_CAEEL.
-DR   SWISS-PROT; P30635; GSHR_CAEEL.
-DR   SWISS-PROT; P30636; YOU9_CAEEL.
-DR   SWISS-PROT; P30637; YOU4_CAEEL.
-DR   SWISS-PROT; P30638; YOU1_CAEEL.
-DR   SWISS-PROT; P30639; YOU3_CAEEL.
-DR   SWISS-PROT; P34658; YOUB_CAEEL.
+DR   EMBL-CON; BX284603.
+DR   EMBL-JOIN; Z11126.
+DR   EMBL-JOIN; Z22175.
+DR   UniProtKB/Swiss-Prot; P30638; YOU1_CAEEL.
+DR   UniProtKB/Swiss-Prot; P34658; YOUB_CAEEL.
+DR   WormBase; WBGene00000388; ZK637.11.
+DR   WormBase; WBGene00002998; ZK637.7a.
+DR   WormBase; WBGene00002998; ZK637.7b.
+DR   WormBase; WBGene00006768; ZK637.8a.
+DR   WormBase; WBGene00006768; ZK637.8b.
+DR   WormBase; WBGene00006768; ZK637.8c.
+DR   WormBase; WBGene00006768; ZK637.8d.
+DR   WormBase; WBGene00006768; ZK637.8e.
+DR   WormBase; WBGene00006768; ZK637.8f.
+DR   WormBase; WBGene00014021; ZK637.1.
+DR   WormBase; WBGene00014022; ZK637.2.
+DR   WormBase; WBGene00014023; ZK637.3.
+DR   WormBase; WBGene00014024; ZK637.4.
+DR   WormBase; WBGene00014025; ZK637.5.
+DR   WormBase; WBGene00014027; ZK637.9a.
+DR   WormBase; WBGene00014027; ZK637.9b.
+DR   WormBase; WBGene00014028; ZK637.10.
+DR   WormBase; WBGene00014029; ZK637.12.
+DR   WormBase; WBGene00014030; ZK637.13.
+DR   WormBase; WBGene00014031; ZK637.14.
+DR   WormBase; WBGene00014032; ZK637.15.
 XX
 CC   Coding sequences below are predicted from computer analysis, using
 CC   predictions from Genefinder (P. Green, U. Washington), and other
 CC   available information.
-XX
+CC   
 CC   Current sequence finishing criteria for the C. elegans genome
 CC   sequencing consortium are that all bases are either sequenced
 CC   unambiguously on both strands, or on a single strand with both a
 CC   dye primer and dye terminator reaction, from distinct subclones.
 CC   Exceptions are indicated by an explicit note.
-XX
+CC   
+CC   IMPORTANT:  This sequence is NOT necessarily the entire insert of
+CC   the specified clone.  It may be shorter because we only sequence
+CC   overlapping sections once, or longer because we arrange for a
+CC   small overlap between neighbouring submissions.
+CC   
+CC   For a graphical representation of this sequence and its analysis
+CC   see:- http://www.wormbase.org/perl/ace/elegans/seq/sequence?
+CC   name=ZK637;class=Sequence
+CC   
 CC   IMPORTANT: This sequence is not the entire insert of clone ZK637.
 CC   It may be shorter because we only sequence overlapping
 CC   sections once, or longer because we arrange for a small
@@ -64,219 +86,38 @@ CC   The start of this sequence (1..180) overlaps with the end of
 CC   sequence Z22175.
 CC   The end of this sequence (40696..40699) overlaps with the start of
 CC   sequence Z11126.
-XX
-CC   For a graphical representation of this sequence and its analysis
-CC   see:- http://wormbase.sanger.ac.uk/perl/ace/elegans/seq/sequence?
-CC   name=ZK637
-XX
-CC   IMPORTANT:  This sequence is NOT necessarily the entire insert of
-CC   the specified clone.  It may be shorter because we only sequence
-CC   overlapping sections once, or longer because we arrange for a
-CC   small overlap between neighbouring submissions.
+CC   
+CC   [040212 dl] Sequence correction: Substitution A-> @ 39218
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..40699
-FT                   /chromosome="III"
-FT                   /db_xref="taxon:6239"
 FT                   /organism="Caenorhabditis elegans"
+FT                   /chromosome="III"
+FT                   /strain="Bristol N2"
+FT                   /mol_type="genomic DNA"
 FT                   /clone="ZK637"
-FT   CDS             join(29817..30077,30126..30262,30309..30393,30743..31279,
-FT                   31330..31672,32242..32390)
-FT                   /db_xref="SWISS-PROT:P30635"
-FT                   /note="predicted using Genefinder"
-FT                   /note="similar to glutathione reductase, contains
-FT                   similarity to Pfam domain: PF00070 (Pyridine
-FT                   nucleotide-disulphide oxidoreductase), Score=295.7,
-FT                   E-value=4.6e-87, N=1"
-FT                   /note="cDNA EST yk156d3.5 comes from this gene"
-FT                   /note="cDNA EST yk156d3.3 comes from this gene"
-FT                   /gene="ZK637.10"
-FT                   /protein_id="CAA77459.1"
-FT                   /translation="MLLSTFKRHLPIRRLFSSNKFDLIVIGAGSGGLSCSKRAADLGAN
-FT                   VALIDAVEPTPHGHSWGIGGTCANVGCIPKKLMHQAAIVGKELKHADKYGWNGIDQEKI
-FT                   KHDWNVLSKNVNDRVKANNWIYRVQLNQKKINYFNAYAEFVDKDKIVITGTDKNKTKNF
-FT                   LSAPNVVISTGLRPKYPNIPGAELGITSDDLFTLASVPGKTLIVGGGYVALECAGFLSA
-FT                   FNQNVEVLVRSIPLKGFDRDCVHFVMEHLKTTGVKVKEHVEVERVEAVGSKKKVTFTGN
-FT                   GGVEEYDTVIWAAGRVPNLKSLNLDNAGVRTDKRSGKILADEFDRASCNGVYAVGDIVQ
-FT                   DRQELTPLAIQSGKLLADRLFSNSKQIVRFDGVATTVFTPLELSTVGLTEEEAIQKHGE
-FT                   DSIEVFHSHFTPFEYVVPQNKDSGFCYVKAVCTRDESQKILGLHFVGPNAAEVIQGYAV
-FT                   AFRVGISMSDLQNTIAIHPCSSEEFVKLHITKRSGQDPRTQGCCG"
-FT   CDS             join(complement(20104..20160),complement(19876..19994),
-FT                   complement(19694..19826),complement(19051..19647),
-FT                   complement(18848..19006),complement(17962..18372),
-FT                   complement(17779..17883),complement(17583..17732),
-FT                   complement(16630..16827))
-FT                   /db_xref="SWISS-PROT:P30630"
-FT                   /note="predicted using Genefinder"
-FT                   /note="cDNA EST yk34b2.3 comes from this gene"
-FT                   /note="cDNA EST yk24e1.3 comes from this gene"
-FT                   /note="cDNA EST yk12h1.3 comes from this gene"
-FT                   /note="cDNA EST yk24e1.5 comes from this gene"
-FT                   /note="cDNA EST yk12h1.5 comes from this gene"
-FT                   /note="cDNA EST yk34b2.5 comes from this gene"
-FT                   /note="cDNA EST yk353h6.3 comes from this gene"
-FT                   /note="cDNA EST yk353h6.5 comes from this gene"
-FT                   /note="cDNA EST yk270e5.3 comes from this gene"
-FT                   /note="cDNA EST yk270e5.5 comes from this gene"
-FT                   /note="cDNA EST yk224d7.3 comes from this gene"
-FT                   /note="cDNA EST yk224d7.5 comes from this gene"
-FT                   /note="cDNA EST yk212f5.3 comes from this gene"
-FT                   /note="cDNA EST yk212f5.5 comes from this gene"
-FT                   /note="cDNA EST yk220e8.3 comes from this gene"
-FT                   /note="cDNA EST yk220e8.5 comes from this gene"
-FT                   /note="cDNA EST yk207e10.5 comes from this gene"
-FT                   /note="cDNA EST yk296g5.5 comes from this gene"
-FT                   /note="cDNA EST yk350b7.5 comes from this gene"
-FT                   /note="cDNA EST yk430g11.5 comes from this gene"
-FT                   /note="cDNA EST yk561d3.3 comes from this gene"
-FT                   /note="cDNA EST EMBL:AF269694 comes from this gene"
-FT                   /gene="ZK637.7a"
-FT                   /protein_id="CAA77454.2"
-FT                   /translation="MSSAVRSPRKKAASDTSDPDRTSSPYSLRETSKVPSRYRNEELYL
-FT                   SPSRSIKRTGSPKKSPAKRLNGGRDSPSVNSLTRNSSLTMLAKAALDYESSSCALEYIP
-FT                   KEERRPPRRALALSPPPAPSNDLLAKDLEMIEMHQNLVAGLDDLDNPANMTNEAVEHRD
-FT                   TQSFFNMFSTDQERSAMMKQFKTYKNQTSEDVSTFMRANIKKLYNLLRYKKARQWVMCE
-FT                   FFYSAIDEQIFKEENEFATIIRESFPNLKNWNLTRIEWRSIRKLLGKPRRCSKVFFEEE
-FT                   RMYLEEKRMKIRSVYEGSYLNDPSIDLKDLPAKLPRPMVVGNRVFARIRNPYDGIYSGI
-FT                   IDAVIPKGFRIIFDKPDIPPTLVSDTEILLDGKLDLLSIAYFIEQANSKLPSGVRPFVA
-FT                   AVRDSSHPHLVRDVLVSRKIERSGGPLMGPNDERLNGKNAEMVGNFPLKFLVNLVKLTK
-FT                   LIDIKKGLIRQLNELNADAEIQNMTSDKYSKAFQEKYAKTIIDLEHVNQNIDINMNGIQ
-FT                   DHHMYFSSNDISTSNMKPEAVRQMCSQQAGRFVEHCNQGLNVENVHALTLIQSLTAVLL
-FT                   QVRTMGTQKISAVDLQSLGDAISEIRTAIHPRNVAFFQDYVEVHMKQFHTIMLESGALA
-FT                   GTVSNRK"
-FT   CDS             join(36246..36305,36470..36667,36886..36987,37038..37196)
-FT                   /db_xref="SPTREMBL:Q23556"
-FT                   /note="predicted using Genefinder"
-FT                   /gene="ZK637.15"
-FT                   /protein_id="CAA77457.1"
-FT                   /translation="MDNEKLIREARRMEDVQQLKMQIPKPVDKKPRPPPSENNLKLISC
-FT                   EETCMDETLKNSSKPRMIYNKQLGRAESIDFDVPSLSYESSTFKKSNNSSGGALVLDNH
-FT                   YLINNDDGTVKKLPMKVYVKQRLEDGSLDVQLVFFDENSQKVMDISMLVNGKKIRNVQF
-FT                   CGKDGKLVN"
-FT   CDS             join(complement(39128..39321),complement(38544..38829))
-FT                   /db_xref="SWISS-PROT:P30627"
-FT                   /note="predicted using Genefinder"
-FT                   /note="similar to globins, contains similarity to Pfam
-FT                   domain: PF00042 (Globin), Score=124.2, E-value=7.8e-35,
-FT                   N=1"
-FT                   /note="cDNA EST yk66b9.3 comes from this gene"
-FT                   /note="cDNA EST yk138h12.5 comes from this gene"
-FT                   /note="cDNA EST yk476d2.3 comes from this gene"
-FT                   /gene="ZK637.13"
-FT                   /protein_id="CAA77458.1"
-FT                   /translation="MSMNRQEISDLCVKSLEGRMVGTEAQNIENGNAFFRYFFTNFPDL
-FT                   RVYFKGAEKYTADDVKKSERFDKQGQRILLACHLLANVYTNEEVFKGYVRETINRHRIY
-FT                   KMDPALWMAFFTVFTGYLESVGCLNDQQKAAWMALGKEFNAESQTHLKNSNLPHV"
-FT   CDS             join(11124..11557,11606..11864,12073..12282,12411..12536)
-FT                   /db_xref="SWISS-PROT:P30632"
-FT                   /note="predicted using Genefinder"
-FT                   /note="ArsA homologue"
-FT                   /note="cDNA EST yk62f10.5 comes from this gene"
-FT                   /note="cDNA EST yk62f10.3 comes from this gene"
-FT                   /note="cDNA EST yk140f3.3 comes from this gene"
-FT                   /note="cDNA EST yk176c11.3 comes from this gene"
-FT                   /note="cDNA EST yk140f3.5 comes from this gene"
-FT                   /note="cDNA EST yk176c11.5 comes from this gene"
-FT                   /note="cDNA EST yk221f9.3 comes from this gene"
-FT                   /note="cDNA EST yk221f9.5 comes from this gene"
-FT                   /note="cDNA EST yk267c10.5 comes from this gene"
-FT                   /note="cDNA EST yk507e12.3 comes from this gene"
-FT                   /note="cDNA EST yk191h10.5 comes from this gene"
-FT                   /note="cDNA EST yk507e12.5 comes from this gene"
-FT                   /gene="ZK637.5"
-FT                   /protein_id="CAA77452.1"
-FT                   /translation="MSDQLEASIKNILEQKTLKWIFVGGKGGVGKTTCSCSLAAQLSKV
-FT                   RERVLLISTDPAHNISDAFSQKFTKTPTLVEGFKNLFAMEIDSNPNGEGVEMGNIEEML
-FT                   QNAAQNEGGSGGFSMGKDFLQSFAGGLPGIDEAMSFGEMIKLIDSLDFDVVVFDTAPTG
-FT                   HTLRLLQFPTLLEKVFTKILSLQGMFGPMMNQFGGMFGMGGGSMNEMIEKMTTTLESVK
-FT                   KMNAQFKDPNCTTFVCVCIAEFLSLYETERLIQELSKQGIDTHNIIVNQLLFPDTDANG
-FT                   TVSCRKCASRQAIQSKYLTDIDELYEDFHVVKLPLLEAEVRGGPAILQFSERMVDPEAN
-FT                   KN"
-FT   CDS             join(21664..21816,21898..22074,22182..22310,22560..22844,
-FT                   23347..23468,23629..23838,23893..25147,25269..25391,
-FT                   26117..26257,26370..26589,26754..26925,27145..27250)
-FT                   /db_xref="SWISS-PROT:P30628"
-FT                   /note="predicted using Genefinder"
-FT                   /note="TJ6/proton pump homologue, exon 4 is alternatively
-FT                   spliced, contains similarity to Pfam domain: PF01496
-FT                   (V-type ATPase 116kDa subunit family), Score=1668.9,
-FT                   E-value=0, N=1"
-FT                   /note="cDNA EST EMBL:M89454 comes from this gene"
-FT                   /note="cDNA EST yk42b11.3 comes from this gene"
-FT                   /note="cDNA EST yk11a12.5 comes from this gene"
-FT                   /note="cDNA EST yk39g5.3 comes from this gene"
-FT                   /note="cDNA EST yk39g5.5 comes from this gene"
-FT                   /note="cDNA EST yk11a12.3 comes from this gene"
-FT                   /note="cDNA EST yk15a11.5 comes from this gene"
-FT                   /note="cDNA EST yk20d9.5 comes from this gene"
-FT                   /note="cDNA EST yk15a11.3 comes from this gene"
-FT                   /note="cDNA EST yk5d7.5 comes from this gene"
-FT                   /note="cDNA EST yk5d7.3 comes from this gene"
-FT                   /note="cDNA EST yk119c7.5 comes from this gene"
-FT                   /note="cDNA EST yk119c7.3 comes from this gene"
-FT                   /note="cDNA EST yk244c11.3 comes from this gene"
-FT                   /note="cDNA EST yk244c11.5 comes from this gene"
-FT                   /gene="ZK637.8a"
-FT                   /protein_id="CAA77448.1"
-FT                   /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGELG
-FT                   LVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPLPR
-FT                   EMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEVDHDRWRILE
-FT                   GGSGRRGRSTEREETRPLIDIGDMDDDSAARMSAQAAMLRLGYVVLGKMDRPESATIAK
-FT                   RDLVYVVLFVSFSFCIPLVFFPDSFLHEDMIASSAESSGIGEVLSADEEELSGRFSDAM
-FT                   SPLKLQLRFVAGVIQRERLPAFERLLWRACRGNVFLRTSEIDDVLNDTVTGDPVNKCVF
-FT                   IIFFQGDHLKTKVKKICEGFRATLYPCPDTPQERREMSIGVMTRIEDLKTVLGQTQDHR
-FT                   HRVLVAASKNVRMWLTKVRKIKSIYHTLNLFNIDVTQKCLIAEVWCPIAELDRIKMALK
-FT                   RGTDESGSQVPSILNRMETNEAPPTYNKTNKFTKGFQNIVDAYGIATYREINPAPYTMI
-FT                   SFPFLFAVMFGDMGHGAIMLLAALFFILKEKQLEAARIKDEIFQTFFGGRYVIFLMGAF
-FT                   SIYTGFMYNDVFSKSINTFGSSWQNTIPESVIDYYLDDEKRSESQLILPPETAFDGNPY
-FT                   PIGVDPVWNLAEGNKLSFLNSMKMKMSVLFGIAQMTFGVLLSYQNFIYFKSDLDIKYMF
-FT                   IPQMIFLSSIFIYLCIQILSKWLFFGAVGGTVLGYKYPGSNCAPSLLIGLINMFMMKSR
-FT                   NAGFVDDSGETYPQCYLSTWYPGQSFFETIFVLVAIACVPVMLFGKPYFLWKEEKERRE
-FT                   GGHRQLATIEIILVVLALVQVPIMLFAKPYFLYRRDKQQSRYSTLTAESNQHQSVRADI
-FT                   NQDDAEVVHAPEQTPKPSGHGHGHGDGPLEMGDVMVYQAIHTIEFVLGCVSHTASYLRL
-FT                   WALSLAHAQLSDVLWTMVFRNAFVLDGYTGAIATYILFFIFGSLSVFILVLMEGLSAFL
-FT                   HALRLHWVEFQSKFYGGLGYEFAPFSFEKILAEEREAEENL"
-FT   CDS             join(complement(5021..5078),complement(4825..4974),
-FT                   complement(4451..4728))
-FT                   /db_xref="SWISS-PROT:P30631"
-FT                   /note="predicted using Genefinder"
-FT                   /note="similar to HSV11 IE110, contains similarity to Pfam
-FT                   domain: PF00097 (Zinc finger, C3HC4 type (RING finger)),
-FT                   Score=19.8, E-value=2.8e-05, N=2"
-FT                   /note="cDNA EST yk598g4.3 comes from this gene"
-FT                   /note="cDNA EST yk598g4.5 comes from this gene"
-FT                   /gene="ZK637.14"
-FT                   /protein_id="CAA77447.1"
-FT                   /translation="MSERDAIRAFSHMLETIFVRMRAEGTGSQTDAMQRWLDLYNVGSL
-FT                   PIDKKSYKALRLMDRETTDQQKEDATCAICLDNLQNNVDIPEDHVIKEELKIDPTTFGT
-FT                   TVIVMPCKHRFHYFCLTLWLEAQQTCPTCRQKVKTDKEVEEEERQRNLEELHDSMYG"
-FT   CDS             join(3794..3918,4033..4240)
-FT                   /db_xref="SWISS-PROT:P30629"
-FT                   /note="predicted using Genefinder"
-FT                   /note="cDNA EST yk217b5.3 comes from this gene"
-FT                   /note="cDNA EST yk217b5.5 comes from this gene"
-FT                   /note="cDNA EST yk340g12.3 comes from this gene"
-FT                   /note="cDNA EST yk340g12.5 comes from this gene"
-FT                   /note="cDNA EST yk428c5.5 comes from this gene"
-FT                   /note="cDNA EST yk428c5.3 comes from this gene"
-FT                   /gene="ZK637.2"
-FT                   /protein_id="CAA77449.1"
+FT                   /db_xref="taxon:6239"
+FT   CDS             join(3794..3918,4033..4234,5883..5987)
+FT                   /locus_tag="ZK637.2"
+FT                   /standard_name="ZK637.2"
+FT                   /product="Hypothetical protein ZK637.2"
+FT                   /note="contains similarity to Pfam domain PF05811 ()"
+FT                   /db_xref="InterPro:IPR008560"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30629"
+FT                   /protein_id="CAA77449.2"
 FT                   /translation="MSNSTMEATQMKVKLAVDEMIDDLDKTYLRDMQKSMFQCSARCCD
 FT                   NKKTTRDAVENCVESCNDGMKKAQGYLEKELGGLQDQLSRCAMTCYDKLVQQFGPDVNK
-FT                   YSESQV"
+FT                   YSESQKLSFNEKLDSCVSVCADDHIKLIPAIKKRFAKNT"
 FT   CDS             join(6271..6465,6523..6642,7346..7658,7714..7775,
 FT                   7824..8153,8767..9252,9311..9472,9779..9910)
-FT                   /db_xref="SWISS-PROT:P30639"
-FT                   /note="predicted using Genefinder"
-FT                   /note="cDNA EST yk281d4.5 comes from this gene"
-FT                   /note="cDNA EST yk288c12.5 comes from this gene"
-FT                   /note="cDNA EST yk406g11.5 comes from this gene"
-FT                   /note="cDNA EST yk281d4.3 comes from this gene"
-FT                   /note="cDNA EST yk288c12.3 comes from this gene"
-FT                   /note="cDNA EST yk406g11.3 comes from this gene"
-FT                   /note="cDNA EST yk435b9.3 comes from this gene"
-FT                   /gene="ZK637.3"
+FT                   /gene="tag-256"
+FT                   /locus_tag="ZK637.3"
+FT                   /standard_name="ZK637.3"
+FT                   /product="Hypothetical protein ZK637.3"
+FT                   /note="contains similarity to Pfam domain PF01839 (FG-GAP
+FT                   repeat)"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30639"
 FT                   /protein_id="CAA77450.1"
 FT                   /translation="MKKILPIIWLINLVSGSLSLEKKAPDLLGKVCAFGDFNADRNTDI
 FT                   LVFANGTLTINYQETKLLDVLEASKFTPGTSFAISKPSLNADFVECSVGDFNGDSRLDV
@@ -290,28 +131,142 @@ FT                   FSMTDGWGGSTQSVACQVPASSNRALYLPFLLYGLGRSPNFVDELNIAIPKYADRKEDW
 FT                   KHSLKQIVPNSRIIVLPPSDQYPHWTSRLYVTPSALIVQSLAVIALVCCMLLMVVVFLH
 FT                   YREKKEDRYERQQQSHRFHFDAM"
 FT   CDS             join(10248..10316,10369..10436,10486..10539,10595..10691)
-FT                   /db_xref="SWISS-PROT:P30637"
-FT                   /note="predicted using Genefinder"
-FT                   /gene="ZK637.4"
+FT                   /locus_tag="ZK637.4"
+FT                   /standard_name="ZK637.4"
+FT                   /product="Hypothetical protein ZK637.4"
+FT                   /note="contains similarity to Synechococcus sp Putative
+FT                   ATP-dependent Clp protease, Hsp 100, ATP-binding
+FT                   subunitsClpB.; TR:Q7U3T3"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30637"
 FT                   /protein_id="CAA77451.1"
 FT                   /translation="MKSNPKYFLMNDVERQSKYSPKYVPNNSLKERILEFLDYYIAPLK
 FT                   LYLLSYPMPDCLWDNRKLRLKASGVQVTPSSEPVHIDDRLIHISQKQPSE"
+FT   CDS             join(21664..21816,21898..22074,22182..22310,22560..22714,
+FT                   23629..23838,23893..25147,26117..26257,26370..26589,
+FT                   26754..26925,27145..27250)
+FT                   /gene="unc-32"
+FT                   /locus_tag="ZK637.8a"
+FT                   /standard_name="ZK637.8a"
+FT                   /product="Hypothetical protein ZK637.8a"
+FT                   /note="C. elegans UNC-32 protein; contains similarity to
+FT                   Pfam domain PF01496 (V-type ATPase 116kDa subunit family)"
+FT                   /db_xref="GOA:P30628"
+FT                   /db_xref="InterPro:IPR002490"
+FT                   /db_xref="InterPro:IPR009053"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30628"
+FT                   /protein_id="CAA77448.2"
+FT                   /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGELG
+FT                   LVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPLPR
+FT                   EMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEVDHDRWRILE
+FT                   GGSGRRGRSTEREETRPLIDIGDMDDDSAARMSAQAAMLRLGFVAGVIQRERLPAFERL
+FT                   LWRACRGNVFLRTSEIDDVLNDTVTGDPVNKCVFIIFFQGDHLKTKVKKICEGFRATLY
+FT                   PCPDTPQERREMSIGVMTRIEDLKTVLGQTQDHRHRVLVAASKNVRMWLTKVRKIKSIY
+FT                   HTLNLFNIDVTQKCLIAEVWCPIAELDRIKMALKRGTDESGSQVPSILNRMETNEAPPT
+FT                   YNKTNKFTKGFQNIVDAYGIATYREINPAPYTMISFPFLFAVMFGDMGHGAIMLLAALF
+FT                   FILKEKQLEAARIKDEIFQTFFGGRYVIFLMGAFSIYTGFMYNDVFSKSINTFGSSWQN
+FT                   TIPESVIDYYLDDEKRSESQLILPPETAFDGNPYPIGVDPVWNLAEGNKLSFLNSMKMK
+FT                   MSVLFGIAQMTFGVLLSYQNFIYFKSDLDIKYMFIPQMIFLSSIFIYLCIQILSKWLFF
+FT                   GAVGGTVLGYKYPGSNCAPSLLIGLINMFMMKSRNAGFVDDSGETYPQCYLSTWYPGQA
+FT                   TIEIILVVLALVQVPIMLFAKPYFLYRRDKQQSRYSTLTAESNQHQSVRADINQDDAEV
+FT                   VHAPEQTPKPSGHGHGHGDGPLEMGDVMVYQAIHTIEFVLGCVSHTASYLRLWALSLAH
+FT                   AQLSDVLWTMVFRNAFVLDGYTGAIATYILFFIFGSLSVFILVLMEGLSAFLHALRLHW
+FT                   VEFQSKFYGGLGYEFAPFSFEKILAEEREAEENL"
+FT   CDS             join(21664..21816,21898..22074,22182..22310,23003..23109,
+FT                   23629..23838,23893..25147,25269..25391,26370..26589,
+FT                   26754..26925,27145..27250)
+FT                   /gene="unc-32"
+FT                   /locus_tag="ZK637.8b"
+FT                   /standard_name="ZK637.8b"
+FT                   /product="Hypothetical protein ZK637.8b"
+FT                   /note="C. elegans UNC-32 protein; contains similarity to
+FT                   Pfam domain PF01496 (V-type ATPase 116kDa subunit family)"
+FT                   /db_xref="GOA:P30628"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30628"
+FT                   /protein_id="CAA77453.2"
+FT                   /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGELG
+FT                   LVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPLPR
+FT                   EMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEAGTGEMLPPA
+FT                   AVESEEGLELTQHAAAGGATMFANFGFVAGVIQRERLPAFERLLWRACRGNVFLRTSEI
+FT                   DDVLNDTVTGDPVNKCVFIIFFQGDHLKTKVKKICEGFRATLYPCPDTPQERREMSIGV
+FT                   MTRIEDLKTVLGQTQDHRHRVLVAASKNVRMWLTKVRKIKSIYHTLNLFNIDVTQKCLI
+FT                   AEVWCPIAELDRIKMALKRGTDESGSQVPSILNRMETNEAPPTYNKTNKFTKGFQNIVD
+FT                   AYGIATYREINPAPYTMISFPFLFAVMFGDMGHGAIMLLAALFFILKEKQLEAARIKDE
+FT                   IFQTFFGGRYVIFLMGAFSIYTGFMYNDVFSKSINTFGSSWQNTIPESVIDYYLDDEKR
+FT                   SESQLILPPETAFDGNPYPIGVDPVWNLAEGNKLSFLNSMKMKMSVLFGIAQMTFGVLL
+FT                   SYQNFIYFKSDLDIKYMFIPQMIFLSSIFIYLCIQILSKWLFFGAVGGTVLGYKYPGSN
+FT                   CAPSLLIGLINMFMMKSRNAGFVDDSGETYPQCYLSTWYPGQSFFETIFVLVAIACVPV
+FT                   MLFGKPYFLWKEEKERREGGHRQLSVRADINQDDAEVVHAPEQTPKPSGHGHGHGDGPL
+FT                   EMGDVMVYQAIHTIEFVLGCVSHTASYLRLWALSLAHAQLSDVLWTMVFRNAFVLDGYT
+FT                   GAIATYILFFIFGSLSVFILVLMEGLSAFLHALRLHWVEFQSKFYGGLGYEFAPFSFEK
+FT                   ILAEEREAEENL"
 FT   CDS             join(21664..21816,21898..22074,22182..22310,23347..23468,
-FT                   23629..23838,23893..25147,25269..25391,26117..26257,
-FT                   26370..26589,26754..26925,27145..27250)
-FT                   /db_xref="SWISS-PROT:P30628"
-FT                   /note="contains similarity to Pfam domain: PF01496 (V-type
-FT                   ATPase 116kDa subunit family), Score=1633.2, E-value=0,
-FT                   N=1"
-FT                   /note="cDNA EST EMBL:T00125 comes from this gene"
-FT                   /note="cDNA EST yk307a1.5 comes from this gene"
-FT                   /note="cDNA EST yk469d12.5 comes from this gene"
-FT                   /note="cDNA EST yk499g12.5 comes from this gene"
-FT                   /note="cDNA EST yk521e4.5 comes from this gene"
-FT                   /note="cDNA EST yk546h9.5 comes from this gene"
-FT                   /note="cDNA EST yk594f1.5 comes from this gene"
-FT                   /gene="ZK637.8b"
-FT                   /protein_id="CAA77453.1"
+FT                   23629..23838,23893..25147,26117..26257,26370..26589,
+FT                   26754..26925,27145..27250)
+FT                   /gene="unc-32"
+FT                   /locus_tag="ZK637.8c"
+FT                   /standard_name="ZK637.8c"
+FT                   /product="Hypothetical protein ZK637.8c"
+FT                   /note="contains similarity to Pfam domain PF01496 (V-type
+FT                   ATPase 116kDa subunit family)"
+FT                   /db_xref="GOA:P30628"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30628"
+FT                   /protein_id="CAD30450.1"
+FT                   /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGELG
+FT                   LVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPLPR
+FT                   EMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEHEDMIASSAE
+FT                   SSGIGEVLSADEEELSGRFSDAMSPLKLQLRFVAGVIQRERLPAFERLLWRACRGNVFL
+FT                   RTSEIDDVLNDTVTGDPVNKCVFIIFFQGDHLKTKVKKICEGFRATLYPCPDTPQERRE
+FT                   MSIGVMTRIEDLKTVLGQTQDHRHRVLVAASKNVRMWLTKVRKIKSIYHTLNLFNIDVT
+FT                   QKCLIAEVWCPIAELDRIKMALKRGTDESGSQVPSILNRMETNEAPPTYNKTNKFTKGF
+FT                   QNIVDAYGIATYREINPAPYTMISFPFLFAVMFGDMGHGAIMLLAALFFILKEKQLEAA
+FT                   RIKDEIFQTFFGGRYVIFLMGAFSIYTGFMYNDVFSKSINTFGSSWQNTIPESVIDYYL
+FT                   DDEKRSESQLILPPETAFDGNPYPIGVDPVWNLAEGNKLSFLNSMKMKMSVLFGIAQMT
+FT                   FGVLLSYQNFIYFKSDLDIKYMFIPQMIFLSSIFIYLCIQILSKWLFFGAVGGTVLGYK
+FT                   YPGSNCAPSLLIGLINMFMMKSRNAGFVDDSGETYPQCYLSTWYPGQATIEIILVVLAL
+FT                   VQVPIMLFAKPYFLYRRDKQQSRYSTLTAESNQHQSVRADINQDDAEVVHAPEQTPKPS
+FT                   GHGHGHGDGPLEMGDVMVYQAIHTIEFVLGCVSHTASYLRLWALSLAHAQLSDVLWTMV
+FT                   FRNAFVLDGYTGAIATYILFFIFGSLSVFILVLMEGLSAFLHALRLHWVEFQSKFYGGL
+FT                   GYEFAPFSFEKILAEEREAEENL"
+FT   CDS             join(21664..21816,21898..22074,22182..22310,22560..22714,
+FT                   23629..23838,23893..25147,25269..25391,26370..26589,
+FT                   26754..26925,27145..27250)
+FT                   /gene="unc-32"
+FT                   /locus_tag="ZK637.8d"
+FT                   /standard_name="ZK637.8d"
+FT                   /product="Hypothetical protein ZK637.8d"
+FT                   /note="contains similarity to Pfam domain PF01496 (V-type
+FT                   ATPase 116kDa subunit family)"
+FT                   /db_xref="GOA:P30628"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30628"
+FT                   /protein_id="CAD30451.1"
+FT                   /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGELG
+FT                   LVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPLPR
+FT                   EMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEVDHDRWRILE
+FT                   GGSGRRGRSTEREETRPLIDIGDMDDDSAARMSAQAAMLRLGFVAGVIQRERLPAFERL
+FT                   LWRACRGNVFLRTSEIDDVLNDTVTGDPVNKCVFIIFFQGDHLKTKVKKICEGFRATLY
+FT                   PCPDTPQERREMSIGVMTRIEDLKTVLGQTQDHRHRVLVAASKNVRMWLTKVRKIKSIY
+FT                   HTLNLFNIDVTQKCLIAEVWCPIAELDRIKMALKRGTDESGSQVPSILNRMETNEAPPT
+FT                   YNKTNKFTKGFQNIVDAYGIATYREINPAPYTMISFPFLFAVMFGDMGHGAIMLLAALF
+FT                   FILKEKQLEAARIKDEIFQTFFGGRYVIFLMGAFSIYTGFMYNDVFSKSINTFGSSWQN
+FT                   TIPESVIDYYLDDEKRSESQLILPPETAFDGNPYPIGVDPVWNLAEGNKLSFLNSMKMK
+FT                   MSVLFGIAQMTFGVLLSYQNFIYFKSDLDIKYMFIPQMIFLSSIFIYLCIQILSKWLFF
+FT                   GAVGGTVLGYKYPGSNCAPSLLIGLINMFMMKSRNAGFVDDSGETYPQCYLSTWYPGQS
+FT                   FFETIFVLVAIACVPVMLFGKPYFLWKEEKERREGGHRQLSVRADINQDDAEVVHAPEQ
+FT                   TPKPSGHGHGHGDGPLEMGDVMVYQAIHTIEFVLGCVSHTASYLRLWALSLAHAQLSDV
+FT                   LWTMVFRNAFVLDGYTGAIATYILFFIFGSLSVFILVLMEGLSAFLHALRLHWVEFQSK
+FT                   FYGGLGYEFAPFSFEKILAEEREAEENL"
+FT   CDS             join(21664..21816,21898..22074,22182..22310,23347..23468,
+FT                   23629..23838,23893..25147,25269..25391,26370..26589,
+FT                   26754..26925,27145..27250)
+FT                   /gene="unc-32"
+FT                   /locus_tag="ZK637.8e"
+FT                   /standard_name="ZK637.8e"
+FT                   /product="Hypothetical protein ZK637.8e"
+FT                   /note="contains similarity to Pfam domain PF01496 (V-type
+FT                   ATPase 116kDa subunit family)"
+FT                   /db_xref="GOA:P30628"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30628"
+FT                   /protein_id="CAD30452.1"
 FT                   /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGELG
 FT                   LVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPLPR
 FT                   EMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEHEDMIASSAE
@@ -324,45 +279,139 @@ FT                   RIKDEIFQTFFGGRYVIFLMGAFSIYTGFMYNDVFSKSINTFGSSWQNTIPESVIDYYL
 FT                   DDEKRSESQLILPPETAFDGNPYPIGVDPVWNLAEGNKLSFLNSMKMKMSVLFGIAQMT
 FT                   FGVLLSYQNFIYFKSDLDIKYMFIPQMIFLSSIFIYLCIQILSKWLFFGAVGGTVLGYK
 FT                   YPGSNCAPSLLIGLINMFMMKSRNAGFVDDSGETYPQCYLSTWYPGQSFFETIFVLVAI
-FT                   ACVPVMLFGKPYFLWKEEKERREGGHRQLATIEIILVVLALVQVPIMLFAKPYFLYRRD
-FT                   KQQSRYSTLTAESNQHQSVRADINQDDAEVVHAPEQTPKPSGHGHGHGDGPLEMGDVMV
-FT                   YQAIHTIEFVLGCVSHTASYLRLWALSLAHAQLSDVLWTMVFRNAFVLDGYTGAIATYI
-FT                   LFFIFGSLSVFILVLMEGLSAFLHALRLHWVEFQSKFYGGLGYEFAPFSFEKILAEERE
-FT                   AEENL"
-FT   CDS             join(28186..28352,28407..28487,28897..29083,29173..29253,
-FT                   29334..29405)
-FT                   /db_xref="SWISS-PROT:P30636"
-FT                   /note="predicted using Genefinder"
-FT                   /gene="ZK637.9"
-FT                   /protein_id="CAA77455.1"
-FT                   /translation="MSKKLKPFEILEDSCASVCIWLNGEPTAISNRAENLWNKAKYRVA
-FT                   TDGAVNEILKRKSFVEWPHIICGDFDSINKQIDTKNAKVVHLPDQDYTDLSKSVQWCLE
-FT                   QKTLTSWEFENIVVLGGLNGRFDHTMSTLSSLIRFVDSQTPGDSNLDVNLEMTTKMCGI
-FT                   IPIVQKETIKTLLLNLENLSARRMKLPRAKYF"
-FT   CDS             join(complement(33832..33932),complement(33415..33784),
-FT                   complement(32541..33020))
-FT                   /db_xref="SWISS-PROT:P30634"
-FT                   /note="predicted using Genefinder"
-FT                   /note="similar to CDC25/string, contains similarity to Pfam
-FT                   domain: PF00581 (Rhodanese-like domain), Score=112.6,
-FT                   E-value=2.5e-30, N=1"
-FT                   /note="cDNA EST yk631b11.3 comes from this gene"
-FT                   /note="cDNA EST yk631b11.5 comes from this gene"
-FT                   /gene="ZK637.11"
-FT                   /protein_id="CAA77456.1"
-FT                   /translation="MCVDVPCENCIVRNDGLRLKCSECAEGSSKLFPRQNRQHSSAISH
-FT                   ISNSSPPTRKRSIDGGYTSGTDSANTSEIVIKKRLTFSKKSHSTSEIETWNAHLQVDYH
-FT                   LETVTPSCSTVYQKITSETLIEIMQKLSQIEFMQKYILIDCRYDYEYNGGHIKGAQSLF
-FT                   NPETAADFFFNKDGSKKINRIPIFYCEYSQKRGPTMANNLREVDRKLNSNIYPRCDYEE
-FT                   IYLLEGGYKNFYAFTRGLEKEQRVQLCEPDNYVIMFDDRYKAELRKHQFHKKNVSKPMK
-FT                   KWSSTTSVISILTTSGTRISTLRQTCDPIHEHDAH"
+FT                   ACVPVMLFGKPYFLWKEEKERREGGHRQLSVRADINQDDAEVVHAPEQTPKPSGHGHGH
+FT                   GDGPLEMGDVMVYQAIHTIEFVLGCVSHTASYLRLWALSLAHAQLSDVLWTMVFRNAFV
+FT                   LDGYTGAIATYILFFIFGSLSVFILVLMEGLSAFLHALRLHWVEFQSKFYGGLGYEFAP
+FT                   FSFEKILAEEREAEENL"
+FT   CDS             join(21664..21816,21898..22074,22182..22310,23003..23109,
+FT                   23629..23838,23893..25147,26117..26257,26370..26589,
+FT                   26754..26925,27145..27250)
+FT                   /gene="unc-32"
+FT                   /locus_tag="ZK637.8f"
+FT                   /standard_name="ZK637.8f"
+FT                   /product="Hypothetical protein ZK637.8f"
+FT                   /note="contains similarity to Pfam domain PF01496 (V-type
+FT                   ATPase 116kDa subunit family)"
+FT                   /db_xref="GOA:P30628"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30628"
+FT                   /protein_id="CAD30453.1"
+FT                   /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGELG
+FT                   LVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPLPR
+FT                   EMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEAGTGEMLPPA
+FT                   AVESEEGLELTQHAAAGGATMFANFGFVAGVIQRERLPAFERLLWRACRGNVFLRTSEI
+FT                   DDVLNDTVTGDPVNKCVFIIFFQGDHLKTKVKKICEGFRATLYPCPDTPQERREMSIGV
+FT                   MTRIEDLKTVLGQTQDHRHRVLVAASKNVRMWLTKVRKIKSIYHTLNLFNIDVTQKCLI
+FT                   AEVWCPIAELDRIKMALKRGTDESGSQVPSILNRMETNEAPPTYNKTNKFTKGFQNIVD
+FT                   AYGIATYREINPAPYTMISFPFLFAVMFGDMGHGAIMLLAALFFILKEKQLEAARIKDE
+FT                   IFQTFFGGRYVIFLMGAFSIYTGFMYNDVFSKSINTFGSSWQNTIPESVIDYYLDDEKR
+FT                   SESQLILPPETAFDGNPYPIGVDPVWNLAEGNKLSFLNSMKMKMSVLFGIAQMTFGVLL
+FT                   SYQNFIYFKSDLDIKYMFIPQMIFLSSIFIYLCIQILSKWLFFGAVGGTVLGYKYPGSN
+FT                   CAPSLLIGLINMFMMKSRNAGFVDDSGETYPQCYLSTWYPGQATIEIILVVLALVQVPI
+FT                   MLFAKPYFLYRRDKQQSRYSTLTAESNQHQSVRADINQDDAEVVHAPEQTPKPSGHGHG
+FT                   HGDGPLEMGDVMVYQAIHTIEFVLGCVSHTASYLRLWALSLAHAQLSDVLWTMVFRNAF
+FT                   VLDGYTGAIATYILFFIFGSLSVFILVLMEGLSAFLHALRLHWVEFQSKFYGGLGYEFA
+FT                   PFSFEKILAEEREAEENL"
+FT   CDS             join(29817..30077,30126..30262,30309..30393,30743..31279,
+FT                   31330..31672,32242..32390)
+FT                   /gene="trxr-2"
+FT                   /locus_tag="ZK637.10"
+FT                   /standard_name="ZK637.10"
+FT                   /product="Hypothetical protein ZK637.10"
+FT                   /note="contains similarity to Pfam domains PF02852
+FT                   (Pyridine nucleotide-disulphide oxidoreductase,
+FT                   dimerisation domain), PF00070 (Pyridine
+FT                   nucleotide-disulphide oxidoreductases class-I)"
+FT                   /db_xref="GOA:P30635"
+FT                   /db_xref="InterPro:IPR000815"
+FT                   /db_xref="InterPro:IPR001100"
+FT                   /db_xref="InterPro:IPR001327"
+FT                   /db_xref="InterPro:IPR004099"
+FT                   /db_xref="InterPro:IPR006338"
+FT                   /db_xref="InterPro:IPR012999"
+FT                   /db_xref="InterPro:IPR013027"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30635"
+FT                   /protein_id="CAA77459.1"
+FT                   /translation="MLLSTFKRHLPIRRLFSSNKFDLIVIGAGSGGLSCSKRAADLGAN
+FT                   VALIDAVEPTPHGHSWGIGGTCANVGCIPKKLMHQAAIVGKELKHADKYGWNGIDQEKI
+FT                   KHDWNVLSKNVNDRVKANNWIYRVQLNQKKINYFNAYAEFVDKDKIVITGTDKNKTKNF
+FT                   LSAPNVVISTGLRPKYPNIPGAELGITSDDLFTLASVPGKTLIVGGGYVALECAGFLSA
+FT                   FNQNVEVLVRSIPLKGFDRDCVHFVMEHLKTTGVKVKEHVEVERVEAVGSKKKVTFTGN
+FT                   GGVEEYDTVIWAAGRVPNLKSLNLDNAGVRTDKRSGKILADEFDRASCNGVYAVGDIVQ
+FT                   DRQELTPLAIQSGKLLADRLFSNSKQIVRFDGVATTVFTPLELSTVGLTEEEAIQKHGE
+FT                   DSIEVFHSHFTPFEYVVPQNKDSGFCYVKAVCTRDESQKILGLHFVGPNAAEVIQGYAV
+FT                   AFRVGISMSDLQNTIAIHPCSSEEFVKLHITKRSGQDPRTQGCCG"
+FT   CDS             join(complement(5021..5078),complement(4825..4974),
+FT                   complement(4451..4728))
+FT                   /locus_tag="ZK637.14"
+FT                   /standard_name="ZK637.14"
+FT                   /product="Hypothetical protein ZK637.14"
+FT                   /note="contains similarity to Pfam domain PF00097 (Zinc
+FT                   finger, C3HC4 type (RING finger))"
+FT                   /db_xref="GOA:P30631"
+FT                   /db_xref="InterPro:IPR001841"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30631"
+FT                   /protein_id="CAA77447.1"
+FT                   /translation="MSERDAIRAFSHMLETIFVRMRAEGTGSQTDAMQRWLDLYNVGSL
+FT                   PIDKKSYKALRLMDRETTDQQKEDATCAICLDNLQNNVDIPEDHVIKEELKIDPTTFGT
+FT                   TVIVMPCKHRFHYFCLTLWLEAQQTCPTCRQKVKTDKEVEEEERQRNLEELHDSMYG"
+FT   CDS             join(11124..11557,11606..11864,12073..12282,12411..12536)
+FT                   /gene="tag-205"
+FT                   /locus_tag="ZK637.5"
+FT                   /standard_name="ZK637.5"
+FT                   /product="Hypothetical protein ZK637.5"
+FT                   /note="contains similarity to Pfam domain PF02374
+FT                   (Anion-transporting ATPase)"
+FT                   /db_xref="GOA:P30632"
+FT                   /db_xref="InterPro:IPR003348"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30632"
+FT                   /protein_id="CAA77452.1"
+FT                   /translation="MSDQLEASIKNILEQKTLKWIFVGGKGGVGKTTCSCSLAAQLSKV
+FT                   RERVLLISTDPAHNISDAFSQKFTKTPTLVEGFKNLFAMEIDSNPNGEGVEMGNIEEML
+FT                   QNAAQNEGGSGGFSMGKDFLQSFAGGLPGIDEAMSFGEMIKLIDSLDFDVVVFDTAPTG
+FT                   HTLRLLQFPTLLEKVFTKILSLQGMFGPMMNQFGGMFGMGGGSMNEMIEKMTTTLESVK
+FT                   KMNAQFKDPNCTTFVCVCIAEFLSLYETERLIQELSKQGIDTHNIIVNQLLFPDTDANG
+FT                   TVSCRKCASRQAIQSKYLTDIDELYEDFHVVKLPLLEAEVRGGPAILQFSERMVDPEAN
+FT                   KN"
+FT   CDS             join(complement(20104..20160),complement(19876..19994),
+FT                   complement(19694..19826),complement(19051..19647),
+FT                   complement(18848..19006),complement(17962..18372),
+FT                   complement(17779..17883),complement(17583..17732),
+FT                   complement(16630..16827))
+FT                   /gene="lin-9"
+FT                   /locus_tag="ZK637.7a"
+FT                   /standard_name="ZK637.7a"
+FT                   /product="Hypothetical protein ZK637.7a"
+FT                   /note="C. elegans LIN-9 protein; contains similarity to
+FT                   Pfam domain PF06584 ()"
+FT                   /db_xref="GOA:P30630"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30630"
+FT                   /protein_id="CAA77454.2"
+FT                   /translation="MSSAVRSPRKKAASDTSDPDRTSSPYSLRETSKVPSRYRNEELYL
+FT                   SPSRSIKRTGSPKKSPAKRLNGGRDSPSVNSLTRNSSLTMLAKAALDYESSSCALEYIP
+FT                   KEERRPPRRALALSPPPAPSNDLLAKDLEMIEMHQNLVAGLDDLDNPANMTNEAVEHRD
+FT                   TQSFFNMFSTDQERSAMMKQFKTYKNQTSEDVSTFMRANIKKLYNLLRYKKARQWVMCE
+FT                   FFYSAIDEQIFKEENEFATIIRESFPNLKNWNLTRIEWRSIRKLLGKPRRCSKVFFEEE
+FT                   RMYLEEKRMKIRSVYEGSYLNDPSIDLKDLPAKLPRPMVVGNRVFARIRNPYDGIYSGI
+FT                   IDAVIPKGFRIIFDKPDIPPTLVSDTEILLDGKLDLLSIAYFIEQANSKLPSGVRPFVA
+FT                   AVRDSSHPHLVRDVLVSRKIERSGGPLMGPNDERLNGKNAEMVGNFPLKFLVNLVKLTK
+FT                   LIDIKKGLIRQLNELNADAEIQNMTSDKYSKAFQEKYAKTIIDLEHVNQNIDINMNGIQ
+FT                   DHHMYFSSNDISTSNMKPEAVRQMCSQQAGRFVEHCNQGLNVENVHALTLIQSLTAVLL
+FT                   QVRTMGTQKISAVDLQSLGDAISEIRTAIHPRNVAFFQDYVEVHMKQFHTIMLESGALA
+FT                   GTVSNRK"
 FT   CDS             join(complement(20104..20160),complement(19876..19994),
 FT                   complement(19694..19826),complement(19051..19653),
 FT                   complement(18848..19006),complement(17962..18372),
 FT                   complement(17779..17883),complement(17583..17732),
 FT                   complement(16630..16827))
-FT                   /note="cDNA EST EMBL:AF269693 comes from this gene"
-FT                   /gene="ZK637.7b"
+FT                   /gene="lin-9"
+FT                   /locus_tag="ZK637.7b"
+FT                   /standard_name="ZK637.7b"
+FT                   /product="Hypothetical protein ZK637.7b"
+FT                   /note="C. elegans LIN-9 protein; contains similarity to
+FT                   Pfam domain PF06584 ()"
+FT                   /db_xref="GOA:P30630"
+FT                   /db_xref="InterPro:IPR010561"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30630"
 FT                   /protein_id="CAC42391.1"
 FT                   /translation="MSSAVRSPRKKAASDTSDPDRTSSPYSLRETSKVPSRYRNEELYL
 FT                   SPSRSIKRTGSPKKSPAKRLNGGRDSPSVNSLTRNSSLTMLAKAALDYESSSCALEYIF
@@ -376,36 +425,106 @@ FT                   TKLIDIKKGLIRQLNELNADAEIQNMTSDKYSKAFQEKYAKTIIDLEHVNQNIDINMNG
 FT                   IQDHHMYFSSNDISTSNMKPEAVRQMCSQQAGRFVEHCNQGLNVENVHALTLIQSLTAV
 FT                   LLQVRTMGTQKISAVDLQSLGDAISEIRTAIHPRNVAFFQDYVEVHMKQFHTIMLESGA
 FT                   LAGTVSNRK"
-FT   CDS             join(40427..40486,40571..40699,Z11126.1:5..73,
-FT                   Z11126.1:120..242,Z11126.1:288..389,Z11126.1:440..598)
-FT                   /db_xref="SWISS-PROT:P34658"
-FT                   /note="cDNA EST yk65f9.5 comes from this gene"
-FT                   /note="cDNA EST yk223b1.3 comes from this gene"
-FT                   /note="cDNA EST yk223b1.5 comes from this gene"
-FT                   /note="cDNA EST yk264a4.3 comes from this gene"
-FT                   /note="cDNA EST yk264a4.5 comes from this gene"
-FT                   /gene="ZK637.12"
-FT                   /protein_id="CAA77461.1"
-FT                   /translation="MDNEKLIREARRMEEVQQLKMQIPKPVDKKPRPPPSENNLKLISC
-FT                   EETCMDETLKNSSKPRMIYNKQLGRAESIDFDVPSLSYESSEKCAGETSPYTSASVSNS
-FT                   KKATSSSNFTKSETTTITELTTSTFKKSNNSSGGALVLDNHYLINNDDGTVKKLPMKVY
-FT                   VKQRLEDGSLDVQLVFFDENSQKVMDISMLVNGKKIRNVQFCGKDAKLVN"
+FT   CDS             join(complement(33832..33932),complement(33415..33784),
+FT                   complement(32541..33020))
+FT                   /gene="cdc-25.3"
+FT                   /locus_tag="ZK637.11"
+FT                   /standard_name="ZK637.11"
+FT                   /product="Hypothetical protein ZK637.11"
+FT                   /note="C. elegans CDC-25.3 protein; contains similarity to
+FT                   Pfam domain PF00581 (Rhodanese-like domain)"
+FT                   /db_xref="GOA:P30634"
+FT                   /db_xref="InterPro:IPR000751"
+FT                   /db_xref="InterPro:IPR001763"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30634"
+FT                   /protein_id="CAA77456.1"
+FT                   /translation="MCVDVPCENCIVRNDGLRLKCSECAEGSSKLFPRQNRQHSSAISH
+FT                   ISNSSPPTRKRSIDGGYTSGTDSANTSEIVIKKRLTFSKKSHSTSEIETWNAHLQVDYH
+FT                   LETVTPSCSTVYQKITSETLIEIMQKLSQIEFMQKYILIDCRYDYEYNGGHIKGAQSLF
+FT                   NPETAADFFFNKDGSKKINRIPIFYCEYSQKRGPTMANNLREVDRKLNSNIYPRCDYEE
+FT                   IYLLEGGYKNFYAFTRGLEKEQRVQLCEPDNYVIMFDDRYKAELRKHQFHKKNVSKPMK
+FT                   KWSSTTSVISILTTSGTRISTLRQTCDPIHEHDAH"
+FT   CDS             join(complement(39128..39321),complement(38544..38829))
+FT                   /locus_tag="ZK637.13"
+FT                   /standard_name="ZK637.13"
+FT                   /product="Hypothetical protein ZK637.13"
+FT                   /note="contains similarity to Pfam domain PF00042 (Globin)"
+FT                   /db_xref="GOA:P30627"
+FT                   /db_xref="InterPro:IPR000971"
+FT                   /db_xref="InterPro:IPR009050"
+FT                   /db_xref="InterPro:IPR012085"
+FT                   /db_xref="InterPro:IPR012292"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30627"
+FT                   /protein_id="CAA77458.2"
+FT                   /translation="MSMNRQEISDLCVKSLEGRMVGTEAQNIENGNAFYRYFFTNFPDL
+FT                   RVYFKGAEKYTADDVKKSERFDKQGQRILLACHLLANVYTNEEVFKGYVRETINRHRIY
+FT                   KMDPALWMAFFTVFTGYLESVGCLNDQQKAAWMALGKEFNAESQTHLKNSNLPHV"
+FT   CDS             join(28186..28352,28407..28487,28897..29083,29173..29284,
+FT                   29334..29473)
+FT                   /gene="tpk-1"
+FT                   /locus_tag="ZK637.9a"
+FT                   /standard_name="ZK637.9a"
+FT                   /product="Hypothetical protein ZK637.9a"
+FT                   /note="contains similarity to Pfam domain PF04263 (Thiamin
+FT                   pyrophosphokinase, catalytic domain)"
+FT                   /db_xref="GOA:P30636"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30636"
+FT                   /protein_id="CAA77455.3"
+FT                   /translation="MSKKLKPFEILEDSCASVCIWLNGEPTAISNRAENLWNKAKYRVA
+FT                   TDGAVNEILKRKSFVEWPHIICGDFDSINKQIDTKNAKVVHLPDQDYTDLSKSVQWCLE
+FT                   QKTLTSWEFENIVVLGGLNGRFDHTMSTLSSLIRFVDSQTPGDSNLDVNLEMTTKMCGI
+FT                   IPIVQKETIVSSIGLKYEMENLALEFGKLISTSNEVTTSQVFLKSSSSLIFSIELENWV
+FT                   YKLDSL"
+FT   CDS             join(28186..28352,28407..28487,28897..29128,29173..29284,
+FT                   29334..29473)
+FT                   /gene="tpk-1"
+FT                   /locus_tag="ZK637.9b"
+FT                   /standard_name="ZK637.9b"
+FT                   /product="Hypothetical protein ZK637.9b"
+FT                   /db_xref="GOA:P30636"
+FT                   /db_xref="InterPro:IPR006282"
+FT                   /db_xref="InterPro:IPR007371"
+FT                   /db_xref="InterPro:IPR007373"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30636"
+FT                   /protein_id="CAI46594.1"
+FT                   /translation="MSKKLKPFEILEDSCASVCIWLNGEPTAISNRAENLWNKAKYRVA
+FT                   TDGAVNEILKRKSFVEWPHIICGDFDSINKQIDTKNAKVVHLPDQDYTDLSKSVQWCLE
+FT                   QKTLTSWEFENIVVLGGLNGRFDHTMSTLSSLIRFVDSQTPVIVLDSRNLVLAVPTGDS
+FT                   NLDVNLEMTTKMCGIIPIVQKETIVSSIGLKYEMENLALEFGKLISTSNEVTTSQVFLK
+FT                   SSSSLIFSIELENWVYKLDSL"
+FT   CDS             join(36147..36305,36470..36667,36719..36841,36886..36987,
+FT                   37038..37196)
+FT                   /locus_tag="ZK637.15"
+FT                   /standard_name="ZK637.15"
+FT                   /product="Hypothetical protein ZK637.15"
+FT                   /note="contains similarity to Ureaplasma parvum
+FT                   Hypothetical membrane lipoprotein.; TR:Q9PQR8"
+FT                   /db_xref="UniProtKB/TrEMBL:Q23556"
+FT                   /protein_id="CAA77457.2"
+FT                   /translation="MECVNCDCTVKTMDNLDQAIRALLQRGKHVNRMMDNEKLIREARR
+FT                   MEDVQQLKMQIPKPVDKKPRPPPSENNLKLISCEETCMDETLKNSSKPRMIYNKQLGRA
+FT                   ESIDFDVPSLSYESSEKCAGETSPYTSASVSNSKKATSSSKFTKSEITTITELTTSTFK
+FT                   KSNNSSGGALVLDNHYLINNDDGTVKKLPMKVYVKQRLEDGSLDVQLVFFDENSQKVMD
+FT                   ISMLVNGKKIRNVQFCGKDGKLVN"
 FT   CDS             join(complement(1418..1509),complement(1188..1374),
 FT                   complement(787..870),complement(660..746),
 FT                   complement(486..610),complement(238..427),
 FT                   complement(Z22175.1:19292..19791),
-FT                   complement(Z22175.1:19027..19177),
-FT                   complement(Z22175.1:18703..18876))
-FT                   /db_xref="SWISS-PROT:P30638"
-FT                   /note="predicted using Genefinder"
-FT                   /note="contains similarity to Pfam domain: PF00083 (Sugar
-FT                   (and other) transporter), Score=321.5, E-value=3.1e-93,
-FT                   N=1; PF00939 (Sodium:sulfate symporter transmembrane
-FT                   region), Score=1.3, E-value=3.2, N=1"
-FT                   /note="cDNA EST yk311g8.3 comes from this gene"
-FT                   /note="cDNA EST yk311g8.5 comes from this gene"
-FT                   /gene="ZK637.1"
-FT                   /protein_id="CAA77460.1"
+FT                   complement(Z22175.1:19006..19177),
+FT                   complement(Z22175.1:18763..18876),
+FT                   complement(Z22175.1:18703..18714))
+FT                   /locus_tag="ZK637.1"
+FT                   /standard_name="ZK637.1"
+FT                   /product="Hypothetical protein ZK637.1"
+FT                   /note="contains similarity to Pfam domain PF00083 (Sugar
+FT                   (and other) transporters)"
+FT                   /db_xref="GOA:P30638"
+FT                   /db_xref="InterPro:IPR004749"
+FT                   /db_xref="InterPro:IPR005829"
+FT                   /db_xref="InterPro:IPR007114"
+FT                   /db_xref="InterPro:IPR011701"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P30638"
+FT                   /protein_id="CAA77460.2"
 FT                   /translation="MGDKAILTEVLEASNLTEAYVDLTAKQLIKEIRHVGDDFAVRYSN
 FT                   LDDRTELGEPTDQRSPDSEKTFTVDEAVEALGFGRFQLKLSILTGMAWMADAMEMMLLS
 FT                   LISPALACEWGISSVQQALVTTCVFSGMMLSSTFWGKICDRFGRRKGLTFSTLVACIMG
@@ -414,10 +533,27 @@ FT                   EALLAYFVMESFGWRALMFLSSLPLGIFAVASFWLPESARFDMASGHPERALETLQAAA
 FT                   RMNRVQLPTGRLVSSTKAGSESRGDIANLLSPDLRKTTILLWCIWAITAFSYYGMVLFT
 FT                   TVLFQSHDECHGGLFSNGTQMEVCQPLTRSDYFDLLSTTLAEFPGLIITVLIIEWFGRK
 FT                   KTMALEYAVFAIFTFLLYFCLDRFTVTVLIFVARAFISGAFQCAYVYTPEVYPTTLRAV
-FT                   GLGTCSAMARIGAIVASEKSLSLPIGIYGTAAILGLIASLSLPIETKGRQMMVRLTSEK
-FT                   SSIFSNFFQDSH"
+FT                   GLGTCSAMARIGAIVTPFIAQVASEKSLSLPIGIYGTAAILGLIASLSLPIETKGRQMM
+FT                   DSH"
+FT   CDS             join(40328..40486,40571..40699,Z11126.1:5..73,
+FT                   Z11126.1:120..242,Z11126.1:288..389,Z11126.1:440..598)
+FT                   /locus_tag="ZK637.12"
+FT                   /standard_name="ZK637.12"
+FT                   /product="Hypothetical protein ZK637.12"
+FT                   /note="contains similarity to Saccharomyces cerevisiae
+FT                   Helicase encoded by the Y' element of subtelomeric regions,
+FT                   highly expressed in the mutants lacking the telomerase
+FT                   component TLC1; potentially phosphorylated by Cdc28p;
+FT                   SGD:YDR545W"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P34658"
+FT                   /protein_id="CAA77461.2"
+FT                   /translation="MECVNCDCTVKTMDNLDQAIRALLQRGKHVNRMMDNEKLIREARR
+FT                   MEEVQQLKMQIPKPVDKKPRPPPSENNLKLISCEETCMDETLKNSSKPRMIYNKQLGRA
+FT                   ESIDFDVPSLSYESSEKCAGETSPYTSASVSNSKKATSSSNFTKSETTTITELTTSTFK
+FT                   KSNNSSGGALVLDNHYLINNDDGTVKKLPMKVYVKQRLEDGSLDVQLVFFDENSQKVMD
+FT                   ISMLVNGKKIRNVQFCGKDAKLVN"
 XX
-SQ   Sequence 40699 BP; 12909 A; 7116 C; 7279 G; 13395 T; 0 other;
+SQ   Sequence 40699 BP; 12908 A; 7116 C; 7279 G; 13396 T; 0 other;
      gatccagctt ttgttgaaga cactaatctt ccagttggca actgtactct attcattctc        60
      gctgctgctt gaagtgtttc tagagctcgt tcgggatgtc cagaagccat gtcaaaacga       120
      gcagattctg ggagccactg aaacattttt gaagtttact tgtatactat acttgcatac       180
@@ -1071,7 +1207,7 @@ SQ   Sequence 40699 BP; 12909 A; 7116 C; 7279 G; 13395 T; 0 other;
      caaaattgaa ctagttatta ccttcaaaag cgaagtagtg gggtgcatta ctattagagg     39060
      aaacacgtca aattttgcta actaaaatcg aaaccaatat caaaaagttt acagtgttaa     39120
      tactaacctc tcactcttct tcacatcatc tgcagtgtac ttctcggctc ccttgaaata     39180
-     gacacgaaga tccgggaagt tggtgaagaa ataacggaag aaggcgtttc cattctcaat     39240
+     gacacgaaga tccgggaagt tggtgaagaa ataacggtag aaggcgtttc cattctcaat     39240
      gttttgagcc tcagttccaa ccattcgtcc ttcaagggac ttcacacaga gatcactaat     39300
      ttcttgacgg ttcatcgaca tttttctctg aaaaatattt agttaaattg ggagtttgta     39360
      aaatcttata taaatcttta aaaaataaaa attaaaaaag aattagaaat aaccatagta     39420
@@ -1098,29 +1234,29 @@ SQ   Sequence 40699 BP; 12909 A; 7116 C; 7279 G; 13395 T; 0 other;
      aaataacctg aagctgattt cgtgcgagga aacatgcatg gatgagacac tgaaaaactc     40680
      gtcgaagcca cgtatgatc                                                  40699
 //
-ID   PDRHOD     standard; RNA; INV; 1675 BP.
+ID   X07797; SV 1; linear; mRNA; STD; INV; 1675 BP.
 XX
 AC   X07797;
 XX
-SV   X07797.1
-XX
 DT   01-AUG-1988 (Rel. 17, Created)
-DT   17-FEB-1997 (Rel. 50, Last updated, Version 4)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 5)
 XX
 DE   Octopus mRNA for rhodopsin
 XX
 KW   rhodopsin.
 XX
 OS   Octopus dofleini
-OC   Eukaryota; Metazoa; Mollusca; Cephalopoda; Coleoidea; Octopoda; Incirrata;
-OC   Octopodidae; Octopus.
+OC   Eukaryota; Metazoa; Mollusca; Cephalopoda; Coleoidea; Neocoleoidea;
+OC   Octopodiformes; Octopoda; Incirrata; Octopodidae; Octopus.
 XX
 RN   [1]
 RP   1-1675
+RX   DOI; 10.1016/0014-5793(88)80388-0.
+RX   PUBMED; 3366250.
 RA   Ovchinnikov Y.A., Abdulaev N.G., Zolotarev A.S., Artamonov I.D.,
 RA   Bespalov I.A., Dergachev A.E., Tsuda M.;
 RT   "Octopus rhodopsin - Amino acid sequence deduced from cDNA";
-RL   FEBS Lett. 232:69-72(1988).
+RL   FEBS Lett. 232(1):69-72(1988).
 XX
 RN   [2]
 RP   1-1675
@@ -1128,19 +1264,22 @@ RA   Abdulaev N.G.;
 RT   ;
 RL   Submitted (25-OCT-1988) to the EMBL/GenBank/DDBJ databases.
 XX
-DR   SWISS-PROT; P09241; OPSD_OCTDO.
-XX
 CC   Data kindly reviewed (25-OCT-1988) by Abdulaev N.G.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..1675
-FT                   /db_xref="taxon:6644"
 FT                   /organism="Octopus dofleini"
+FT                   /mol_type="mRNA"
 FT                   /clone="pORh462"
+FT                   /db_xref="taxon:6644"
 FT   CDS             75..1442
-FT                   /db_xref="SWISS-PROT:P09241"
 FT                   /product="rhodopsin"
+FT                   /db_xref="GOA:P09241"
+FT                   /db_xref="InterPro:IPR000276"
+FT                   /db_xref="InterPro:IPR001760"
+FT                   /db_xref="InterPro:IPR006031"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P09241"
 FT                   /protein_id="CAA30644.1"
 FT                   /translation="MVESTTLVNQTWWYNPTVDIHPHWAKFDPIPDAVYYSVGIFIGVV
 FT                   GIIGILGNGVVIYLFSKTKSLQTPANMFIINLAMSDLSFSAINGFPLKTISAFMKKWIF
@@ -1186,14 +1325,12 @@ SQ   Sequence 1675 BP; 479 A; 406 C; 330 G; 460 T; 0 other;
      tgctctttta tgaatttttt ttcttcaaat ttttatttta aatattgagg caaaatggtt      1620
      tgtcggaata gaataaaagt attttctatt tggttgttta ttttcgaaag agatg           1675
 //
-ID   AAHSP70B   standard; DNA; INV; 4712 BP.
+ID   M96661; SV 1; linear; genomic DNA; STD; INV; 4712 BP.
 XX
 AC   M96661;
 XX
-SV   M96661.1
-XX
 DT   09-SEP-1992 (Rel. 33, Created)
-DT   04-MAR-2000 (Rel. 63, Last updated, Version 3)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 7)
 XX
 DE   Anopheles albimanus heat shock protein 70 (hsp70) gene (clone p70b),
 DE   complete cds.
@@ -1202,31 +1339,30 @@ KW   heat shock protein 70.
 XX
 OS   Anopheles albimanus
 OC   Eukaryota; Metazoa; Arthropoda; Hexapoda; Insecta; Pterygota; Neoptera;
-OC   Endopterygota; Diptera; Nematocera; Culicoidea; Anopheles.
+OC   Endopterygota; Diptera; Nematocera; Culicoidea; Culicidae; Anophelinae;
+OC   Anopheles.
 XX
 RN   [1]
 RP   1-4712
-RX   MEDLINE; 97242549.
+RX   PUBMED; 9087548.
 RA   Benedict M.Q., Cockburn A.F., Seawright J.A.;
 RT   "The Hsp70 heat-shock gene family of the mosquito Anopheles albimanus";
 RL   Insect Mol. Biol. 2(2):93-102(1993).
 XX
-DR   GOA; P41827; P41827.
-DR   SWISS-PROT; P41827; HS74_ANOAL.
-XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..4712
-FT                   /db_xref="taxon:7167"
 FT                   /organism="Anopheles albimanus"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:7167"
 FT   CDS             complement(1..1506)
-FT                   /codon_start=1
-FT                   /db_xref="GOA:P41827"
-FT                   /db_xref="SWISS-PROT:P41827"
-FT                   /note="carboxy terminus truncated in clone isolated"
 FT                   /partial
+FT                   /codon_start=1
 FT                   /gene="hsp70"
 FT                   /product="heat shock protein 70, hsp70A2"
+FT                   /note="carboxy terminus truncated in clone isolated"
+FT                   /db_xref="GOA:P41827"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P41827"
 FT                   /protein_id="AAC41542.1"
 FT                   /translation="MPSAIGIDLGTTYSCVGVFQHGKVEIIANDQGNRTTPSYVAFSDT
 FT                   ERLIGDAAKNQVAMNPTNTVFDAKRLIGRKFDDPKIQADMKHWPFTVVNDGGKPKIRVE
@@ -1237,25 +1373,32 @@ FT                   EIDALMDGIDYYTKISRARFEELCSDLFRSTLQPVEKALSDAKMDKSSIHDIVLVGGST
 FT                   RIPKVQSLLQNFFAGKSLNLSINPDEAVAYGAAVQAAILSGDKDDKIQDVLLVDVAPLS
 FT                   LGIETAGGVMTKLIERNSRIPCKQTQIFSTYADNQPGVSIQVFEGERAMTKDNNLLGQF
 FT                   DLSGIPPAPRGVPQIEVTFDLDANGILNVAAKEKSTGKEKNITI"
-FT   5'UTR           complement(1507..(1687.1690))
+FT   5'UTR           complement(1507..>1687)
 FT                   /gene="hsp70"
+FT                   /note="Location changed from
+FT                   'complement(1507..(1687.1690))' to
+FT                   'complement(1507..>1687)'"
 FT   TATA_signal     complement(1712..1719)
-FT                   /note="tandem overlapping TATA boxes"
 FT                   /gene="hsp70"
+FT                   /note="tandem overlapping TATA boxes"
 FT   TATA_signal     2493..2500
+FT                   /gene="hsp70"
 FT                   /note="tandem overlapping TATA boxes"
+FT   5'UTR           <2525..2705
 FT                   /gene="hsp70"
-FT   5'UTR           (2522.2525)..2705
-FT                   /gene="hsp70"
+FT                   /note="Location changed from '(2522.2525)..2705' to
+FT                   '<2525..2705'"
 FT   CDS             2706..4628
 FT                   /codon_start=1
-FT                   /db_xref="GOA:P41827"
-FT                   /db_xref="SWISS-PROT:P41827"
+FT                   /gene="hsp70"
+FT                   /product="heat shock protein 70, hsp70A2"
 FT                   /note="single base deletion between nucleotides 3418 and
 FT                   3419 predicts premature termination in this clone.
 FT                   Insertion of 'N' restores reading frame and is silent"
-FT                   /gene="hsp70"
-FT                   /product="heat shock protein 70, hsp70A2"
+FT                   /db_xref="GOA:P41827"
+FT                   /db_xref="InterPro:IPR001023"
+FT                   /db_xref="InterPro:IPR013126"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P41827"
 FT                   /protein_id="AAC41543.1"
 FT                   /translation="MPSAIGIDLGTTYSCVGVFQHGKVEIIANDQGNRTTPSYVAFSDT
 FT                   ERLIGDAAKNQVAMNPTNTVFDAKRLIGRKFDDPKIQADMKHWPFTVVNDGGKPKIRVE

@@ -1,6 +1,6 @@
->>>>ECLAC
+>>>>J01636
  
-ID   ECLAC      standard; DNA; PRO; 7477 BP.
+ID   J01636      standard; DNA; PRO; 7477 BP.
 XX
 AC   J01636; J01637; K01483; K01793;
 XX
@@ -440,9 +440,9 @@ FT                   APNVTLSVTGHPVHHELRKNGEMYSFPITIGNNVWIGSHVVINPGVTIGDNSVIGAGSI
 FT                   VTKDIPPNVVAAGVPCRVIREINDRDKHYYFKDYKVESSV"
 XX
 SQ   Sequence 7477 BP; 1739 A; 1991 C; 2004 G; 1743 T; 0 other;
->>>>ECLACA
+>>>>X51872
  
-ID   ECLACA     standard; DNA; PRO; 1832 BP.
+ID   X51872     standard; DNA; PRO; 1832 BP.
 XX
 AC   X51872;
 XX
@@ -490,9 +490,9 @@ FT                   APNVTLSVTGHPVHHELRKNGEMYSFPITIGNNVWIGSHVVINPGVTIGDNSVIGAGSI
 FT                   VTKDIPPNVVAAGVPCRVIREINDRDKHYYFKDYKVESSV"
 XX
 SQ   Sequence 1832 BP; 519 A; 510 C; 450 G; 353 T; 0 other;
->>>>ECLACI
+>>>>V00294
  
-ID   ECLACI     standard; DNA; PRO; 1113 BP.
+ID   V00294     standard; DNA; PRO; 1113 BP.
 XX
 AC   V00294;
 XX
@@ -537,9 +537,9 @@ FT                   YIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPR
 FT                   ALADSLMQLARQVSRLESGQ"
 XX
 SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
->>>>ECLACY
+>>>>V00295
  
-ID   ECLACY     standard; DNA; PRO; 1500 BP.
+ID   V00295     standard; DNA; PRO; 1500 BP.
 XX
 AC   V00295;
 XX
@@ -598,9 +598,9 @@ FT                   /note="reading frame (lacA)"
 FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKR"
 XX
 SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
->>>>ECLACZ
+>>>>V00296
  
-ID   ECLACZ     standard; DNA; PRO; 3078 BP.
+ID   V00296     standard; DNA; PRO; 3078 BP.
 XX
 AC   V00296;
 XX
@@ -664,9 +664,9 @@ FT                   HMGIGGDDSWSPSVSAEFQLSAGRYHYQLVWCQK"
 FT   mat_peptide     1. .3069
 XX
 SQ   Sequence 3078 BP; 682 A; 841 C; 886 G; 669 T; 0 other;
->>>>PAAMIB
+>>>>X77160
  
-ID   PAAMIB     standard; DNA; PRO; 1212 BP.
+ID   X77160     standard; DNA; PRO; 1212 BP.
 XX
 AC   X77160;
 XX
@@ -727,9 +727,9 @@ FT                   ARLVELEVQRLNRRLEKHRCRLEATPEVLAKIARAGFDRQFGARALRRSVRHHLEVPLA
 FT                   EHLLDHHQPGDGNCTIYLASLEHERVRFVRR"
 XX
 SQ   Sequence 1212 BP; 193 A; 426 C; 403 G; 190 T; 0 other;
->>>>PAAMIE
+>>>>M27612
  
-ID   PAAMIE     standard; DNA; PRO; 1065 BP.
+ID   M27612     standard; DNA; PRO; 1065 BP.
 XX
 AC   M27612;
 XX
@@ -773,9 +773,9 @@ FT                   RGYSGLQASGDGDRGLAECPFEFYRTWVTDAEKARDNVERLTRSTTGVAQCPVGRLPYE
 FT                   GLEKEA"
 XX
 SQ   Sequence 1065 BP; 220 A; 337 C; 343 G; 165 T; 0 other;
->>>>PAAMIR
+>>>>X13776
  
-ID   PAAMIR     standard; DNA; PRO; 2167 BP.
+ID   X13776     standard; DNA; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
 XX
@@ -881,9 +881,9 @@ FT                   /citation=[3]
 FT                   /replace="g"
 XX
 SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
->>>>PAAMIS
+>>>>X77161
  
-ID   PAAMIS     standard; DNA; PRO; 1130 BP.
+ID   X77161     standard; DNA; PRO; 1130 BP.
 XX
 AC   X77161;
 XX
@@ -941,7 +941,7 @@ FT                   SFAGASGPFGLWNAVNWTVWALLWFCFFLLLGLSRGIQKPVAYLTLASAIFTAWLPGLL
 FT                   LLGQVLKA"
 XX
 SQ   Sequence 1130 BP; 167 A; 335 C; 377 G; 251 T; 0 other;
->>>>ECUW67_0
+>>>>U18997_0
  
 WP Sequence split into 4 fragments  LOCUS ECUW67 Accession U18997
 WP     Fragment Name      Begin     End
@@ -949,7 +949,7 @@ WP     ECUW67_0                1    110000
 WP     ECUW67_1           100001    210000
 WP     ECUW67_2           200001    310000
 WP     ECUW67_3           300001    372438
-ID   ECUW67     standard; DNA; PRO; 372438 BP.
+ID   U18997     standard; DNA; PRO; 372438 BP.
 XX
 AC   U18997;
 XX
@@ -6880,30 +6880,30 @@ FT   misc_structure  368667. .368798
 FT                   /note="predicted bend of 73.99 degrees"
 XX
 SQ   Sequence 372438 BP; 91499 A; 98715 C; 92106 G; 90089 T; 29 other;
->>>>ECUW67_1
+>>>>U18997_1
  
-Continuation (2 of 4) of ECUW67 from base 100001 (Escherichia coli K-12 chromosomal region from 67.4 to 76.0 minutes. )
-WP Sequence split into 4 fragments  LOCUS ECUW67 Accession U18997
+Continuation (2 of 4) of U18997 from base 100001 (Escherichia coli K-12 chromosomal region from 67.4 to 76.0 minutes. )
+WP Sequence split into 4 fragments  LOCUS U18997 Accession U18997
 WP     Fragment Name      Begin     End
-WP     ECUW67_0                1    110000
-WP     ECUW67_1           100001    210000
-WP     ECUW67_2           200001    310000
-WP     ECUW67_3           300001    372438
->>>>ECUW67_2
+WP     U18997_0                1    110000
+WP     U18997_1           100001    210000
+WP     U18997_2           200001    310000
+WP     U18997_3           300001    372438
+>>>>U18997_2
  
-Continuation (3 of 4) of ECUW67 from base 200001 (Escherichia coli K-12 chromosomal region from 67.4 to 76.0 minutes. )
-WP Sequence split into 4 fragments  LOCUS ECUW67 Accession U18997
+Continuation (3 of 4) of U18997 from base 200001 (Escherichia coli K-12 chromosomal region from 67.4 to 76.0 minutes. )
+WP Sequence split into 4 fragments  LOCUS U18997 Accession U18997
 WP     Fragment Name      Begin     End
-WP     ECUW67_0                1    110000
-WP     ECUW67_1           100001    210000
-WP     ECUW67_2           200001    310000
-WP     ECUW67_3           300001    372438
->>>>ECUW67_3
+WP     U18997_0                1    110000
+WP     U18997_1           100001    210000
+WP     U18997_2           200001    310000
+WP     U18997_3           300001    372438
+>>>>U18997_3
  
-Continuation (4 of 4) of ECUW67 from base 300001 (Escherichia coli K-12 chromosomal region from 67.4 to 76.0 minutes. )
-WP Sequence split into 4 fragments  LOCUS ECUW67 Accession U18997
+Continuation (4 of 4) of U18997 from base 300001 (Escherichia coli K-12 chromosomal region from 67.4 to 76.0 minutes. )
+WP Sequence split into 4 fragments  LOCUS U18997 Accession U18997
 WP     Fragment Name      Begin     End
-WP     ECUW67_0                1    110000
-WP     ECUW67_1           100001    210000
-WP     ECUW67_2           200001    310000
-WP     ECUW67_3           300001    372438
+WP     U18997_0                1    110000
+WP     U18997_1           100001    210000
+WP     U18997_2           200001    310000
+WP     U18997_3           300001    372438

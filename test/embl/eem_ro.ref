@@ -1,6 +1,6 @@
->>>>MMAM
+>>>>L48662
  
-ID   MMAM       standard; RNA; ROD; 366 BP.
+ID   L48662     standard; RNA; ROD; 366 BP.
 XX
 AC   L48662;
 XX
@@ -36,9 +36,9 @@ FT                   /cell_type="hybridoma"
 FT                   /tissue_type="spleen"
 XX
 SQ   Sequence 366 BP; 100 A; 90 C; 85 G; 89 T; 2 other;
->>>>RNOPS
+>>>>Z46957
  
-ID   RNOPS      standard; RNA; ROD; 1493 BP.
+ID   Z46957     standard; RNA; ROD; 1493 BP.
 XX
 AC   Z46957;
 XX
@@ -99,9 +99,9 @@ FT                   ETSQVAPA"
 FT   3'UTR           1128. .1493
 XX
 SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
->>>>RNU68037
+>>>>U68037
  
-ID   RNU68037   standard; RNA; ROD; 1218 BP.
+ID   U68037     standard; RNA; ROD; 1218 BP.
 XX
 AC   U68037;
 XX
