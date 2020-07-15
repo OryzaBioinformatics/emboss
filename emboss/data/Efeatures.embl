@@ -923,6 +923,7 @@ repeat_region SO:0000657
         /label
 	/locus_tag
         /map
+	/mobile_element
         /note
  	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead

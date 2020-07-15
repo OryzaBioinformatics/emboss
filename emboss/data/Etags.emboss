@@ -142,6 +142,7 @@ haplotype QTEXT
 
 inference QSPECIAL
 
+# replaced by mobile_element in Dec 2006
 insertion_seq QTEXT
 
 isolate QTEXT
@@ -174,6 +175,8 @@ macronuclear VOID
 
 # removed in FTv3.0 Jan 2001
 # mitochondrion VOID  
+
+mobile_element QSPECIAL
 
 mod_base TEXT
 # There is a controlled vocabulary in appendix 7.5.2 of
