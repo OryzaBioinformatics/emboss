@@ -1429,6 +1429,7 @@ nullok: N<br>
 
   <td>
   <p>
+distancecount (integer)<br>
 distancesize (integer)<br>
 replicates (boolean)<br>
 hasmissing (boolean)<br>
@@ -1511,6 +1512,7 @@ freverse: "N"<br>
   <td>
   <p>
 nullok: N<br>
+binary: N<br>
 
  </p>
  </td>
@@ -1579,6 +1581,7 @@ nullok: N<br>
   <td>
   <p>
 nullok: N<br>
+binary: N<br>
 
  </p>
  </td>
@@ -2288,6 +2291,7 @@ nullok: N<br>
 type: ""<br>
 nulldefault: N<br>
 nullok: N<br>
+binary: N<br>
 
  </p>
  </td>
@@ -2321,6 +2325,8 @@ fullpath: N<br>
 nulldefault: N<br>
 nullok: N<br>
 extension: ""<br>
+binary: N<br>
+temporary: N<br>
 
  </p>
  </td>
@@ -2415,6 +2421,7 @@ extension: ""<br>
 append: N<br>
 nulldefault: N<br>
 nullok: N<br>
+binary: N<br>
 
  </p>
  </td>
@@ -2447,6 +2454,7 @@ name: ""<br>
 extension: ""<br>
 nulldefault: N<br>
 nullok: N<br>
+binary: N<br>
 
  </p>
  </td>
@@ -4783,7 +4791,7 @@ they can fix the value, or provide parsers for each alternative.
   <p>characters: <i>string<i></p>
   </td>
   <td>
-  <p>Allowed discrete state characters (default is '01' for binary characters)<br>Default: "01"</p>
+  <p>Allowed discrete state characters (default is '' for all non-space characters<br>Default: "01"</p>
   </td>
  </tr>
 
@@ -4873,6 +4881,18 @@ they can fix the value, or provide parsers for each alternative.
 
  <tr>
   <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>binary: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>File contains binary data<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>frequencies</p>
   </td>
   <td>
@@ -4952,6 +4972,18 @@ they can fix the value, or provide parsers for each alternative.
   </td>
   <td>
   <p>Can accept a null filename as 'no file'<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>binary: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>File contains binary data<br>Default: N</p>
   </td>
  </tr>
 
@@ -5131,7 +5163,7 @@ they can fix the value, or provide parsers for each alternative.
   <p>characters: <i>string<i></p>
   </td>
   <td>
-  <p>Allowed property characters (default is '' for all characters)<br>Default: ""</p>
+  <p>Allowed property characters (default is '' for all non-space characters)<br>Default: ""</p>
   </td>
  </tr>
 
@@ -6632,6 +6664,18 @@ Select one [blosum] : PAM
 
  <tr>
   <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>binary: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>File contains binary data<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>outdir</p>
   </td>
   <td>
@@ -6675,6 +6719,30 @@ Select one [blosum] : PAM
   </td>
   <td>
   <p>Default file extension<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>binary: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Files contain binary data<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>temporary: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Scratch directory for temporary files deleted on completion<br>Default: N</p>
   </td>
  </tr>
 
@@ -6788,6 +6856,18 @@ Select one [blosum] : PAM
 
  <tr>
   <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>binary: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>File contains binary data<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
   <p>outfileall</p>
   </td>
   <td>
@@ -6831,6 +6911,18 @@ Select one [blosum] : PAM
   </td>
   <td>
   <p>Can accept a null filename as 'no file'<br>Default: N</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
+  </td>
+  <td>
+  <p>binary: <i>Y/N<i></p>
+  </td>
+  <td>
+  <p>Files contains binary data<br>Default: N</p>
   </td>
  </tr>
 
@@ -8018,6 +8110,18 @@ sequence, the length, the type of sequence (Protein, DNA, RNA etc).</p>
  <tr>
   <td>
   <p>distances</p>
+  </td>
+  <td>
+  <p>distancecount: <i>integer<i></p>
+  </td>
+  <td>
+  <p>Number of distance matrices<br>Default: </p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>&nbsp;</p>
   </td>
   <td>
   <p>distancesize: <i>integer<i></p>
@@ -12436,6 +12540,18 @@ a variable to be defined in this file.</p>
   </td>
   <td>
   <p>HTTP proxy server address in the form proxy.ebi.ac.uk:8080<br>Default: ""</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+  <p>EMBOSS_SEQWARN</p>
+  </td>
+  <td>
+  <p>boolean</p>
+  </td>
+  <td>
+  <p>Print warning messages when parsing standard sequence characters<br>Default: N</p>
   </td>
  </tr>
 
