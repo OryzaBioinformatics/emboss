@@ -67,7 +67,7 @@ AjBool embReadAminoDataDoubleC(const char *s, double **a, double fill)
 	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
-	p = ajSysStrtok(p," \t\r");
+	p = ajSysFuncStrtok(p," \t\r");
 
 	if(!p || *(p+1))
 	{
@@ -78,7 +78,7 @@ AjBool embReadAminoDataDoubleC(const char *s, double **a, double fill)
 	    return ajFalse;
 	}
 	idx = ajAZToInt(*p);
-	p = ajSysStrtok(NULL," \t\r");
+	p = ajSysFuncStrtok(NULL," \t\r");
 
 	if(!p)
 	{
@@ -147,7 +147,7 @@ AjBool embReadAminoDataFloatC(const char *s, float **a, float fill)
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
 
-	p = ajSysStrtok(p," \t\r");
+	p = ajSysFuncStrtok(p," \t\r");
 	if(!p || *(p+1))
 	{
 	    ajWarn("First token is not a single letter");
@@ -157,7 +157,7 @@ AjBool embReadAminoDataFloatC(const char *s, float **a, float fill)
 	    return ajFalse;
 	}
 	idx = ajAZToInt(*p);
-	p   = ajSysStrtok(NULL," \t\r");
+	p   = ajSysFuncStrtok(NULL," \t\r");
 
 	if(!p)
 	{
@@ -228,7 +228,7 @@ AjBool embReadAminoDataIntC(const char *s, ajint **a, ajint fill)
 	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
-	p = ajSysStrtok(p," \t\r");
+	p = ajSysFuncStrtok(p," \t\r");
 
 	if(!p || *(p+1))
 	{
@@ -239,7 +239,7 @@ AjBool embReadAminoDataIntC(const char *s, ajint **a, ajint fill)
 	    return ajFalse;
 	}
 	idx = ajAZToInt(*p);
-	p   = ajSysStrtok(NULL," \t\r");
+	p   = ajSysFuncStrtok(NULL," \t\r");
 
 	if(!p)
 	{

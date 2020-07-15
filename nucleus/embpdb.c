@@ -154,7 +154,7 @@ AjBool embPdbidToSp(const AjPStr pdb, AjPStr *spr, const AjPList list)
     }
     
 
-    dim = ajListToArray(list, (void ***) &(arr));
+    dim = ajListToarray(list, (void ***) &(arr));
     if(!dim)
     {
 	ajWarn("Empty list passed to embPdbidToSp");
@@ -205,7 +205,7 @@ AjBool embPdbidToAcc(const AjPStr pdb, AjPStr *acc, const AjPList list)
     }
     
 
-    dim = ajListToArray(list, (void ***) &(arr));
+    dim = ajListToarray(list, (void ***) &(arr));
     if(!dim)
     {
 	ajWarn("Empty list passed to embPdbidToAcc");
@@ -258,10 +258,10 @@ AjBool embPdbidToScop(const AjPPdb pdb, const AjPList list_allscop,
     AjPStr tmpDomId = NULL;
     ajint found     = 0;
 
-    iter=ajListIterRead(list_allscop);
+    iter=ajListIterNewread(list_allscop);
 
 
-    while((ptr=(AjPScop)ajListIterNext(iter)))
+    while((ptr=(AjPScop)ajListIterGet(iter)))
     {
 	ajStrAssignS(&tmpPdbId, ptr->Pdb);
 	ajStrFmtLower(&tmpPdbId);
@@ -270,12 +270,12 @@ AjBool embPdbidToScop(const AjPPdb pdb, const AjPList list_allscop,
 	{
 	    ajStrAssignS(&tmpDomId, ptr->Entry);
 	    ajStrFmtLower(&tmpDomId);
-	    ajListPushApp(*list_pdbscopids, tmpDomId);
+	    ajListPushAppend(*list_pdbscopids, tmpDomId);
 	    tmpDomId = NULL;
 	    found = 1;
 	}
     }
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
     ajStrDel(&tmpPdbId);
     ajStrDel(&tmpDomId);
   
@@ -476,11 +476,11 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
     
 
     /* Initialise the iterator */
-    iter=ajListIterRead(pdb->Chains[chn-1]->Residues);
+    iter=ajListIterNewread(pdb->Chains[chn-1]->Residues);
 
 
     /* Iterate through the list of residues */
-    while((residue = (AjPResidue)ajListIterNext(iter)))
+    while((residue = (AjPResidue)ajListIterGet(iter)))
     {
 	if(residue->Chn!=chn)
 	    continue;
@@ -498,14 +498,14 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
 	/* If we have found the residue */
 	if(ajStrMatchS(res, residue->Pdb))
 	{
-	    ajListIterFree(&iter);		
+	    ajListIterDel(&iter);		
 	    *idx = residue->Idx;
 	    return ajTrue;
 	}
     }
         
     ajWarn("Residue number not found in embPdbToIdx");
-    ajListIterFree(&iter);		
+    ajListIterDel(&iter);		
 
     return ajFalse;
 }
@@ -602,9 +602,9 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
       {
 	  prev_gpn=-100000;	   /* Reset prev_gpn for each chain */
 	  /* initialise iterator for pdb->Chains[i]->Atoms */
-	  iter=ajListIterRead(pdb->Chains[i]->Atoms);
+	  iter=ajListIterNewread(pdb->Chains[i]->Atoms);
 	  /* Iterate through list of Atom objects */
-	  while((hetat=(AjPAtom)ajListIterNext(iter)))
+	  while((hetat=(AjPAtom)ajListIterGet(iter)))
 	  {		
 	      /* check for type  */
 	      if(hetat->Type != 'H')
@@ -616,36 +616,36 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
 		  grp_count++;
 		  if(GrpAtmList)
 		  {
-		      n=(ajListToArray(GrpAtmList, (void ***) &AtmArray));
-		      ajListPushApp(*list_heterogens, AtmArray);
+		      n=(ajListToarray(GrpAtmList, (void ***) &AtmArray));
+		      ajListPushAppend(*list_heterogens, AtmArray);
 		      /* So that ajListToArray doesn't try and free the non-NULL pointer */
 		      AtmArray=NULL;
 		      ajIntPut(siz_heterogens, arr_count, n);
 		      (*nhet)++;
-		      ajListDel(&GrpAtmList);
+		      ajListFree(&GrpAtmList);
 		      GrpAtmList=NULL;
 		      arr_count++;
 		  }		    		    
 		  GrpAtmList=ajListNew();
 		  prev_gpn=hetat->Gpn;
 	      } /* End of new group loop */
-	      ajListPushApp(GrpAtmList, (AjPAtom) hetat);
+	      ajListPushAppend(GrpAtmList, (AjPAtom) hetat);
 	  } /* End of list iteration loop */
 
 	  /* Free list iterator */
-	  ajListIterFree(&iter);
+	  ajListIterDel(&iter);
 	    
       } /* End of chain for loop */
 
       if(GrpAtmList)
       {
-	  n=(ajListToArray(GrpAtmList, (void ***) &AtmArray));
-	  ajListPushApp(*list_heterogens, AtmArray);
+	  n=(ajListToarray(GrpAtmList, (void ***) &AtmArray));
+	  ajListPushAppend(*list_heterogens, AtmArray);
 	  /* So that ajListToArray doesn't try and free the non-NULL pointer */
 	  AtmArray=NULL; 
 	  ajIntPut(siz_heterogens, arr_count, n);
 	  (*nhet)++;
-	  ajListDel(&GrpAtmList);
+	  ajListFree(&GrpAtmList);
 	  GrpAtmList=NULL;
       }
 	
@@ -700,11 +700,11 @@ AjBool embPdbResidueIndexI(const AjPPdb pdb, ajint chn, AjPInt *idx)
     
 
     /* Initialise the iterator */
-    iter=ajListIterRead(pdb->Chains[chn-1]->Residues);
+    iter=ajListIterNewread(pdb->Chains[chn-1]->Residues);
 
 
     /* Iterate through the list of residues */
-    while((res=(AjPResidue)ajListIterNext(iter)))
+    while((res=(AjPResidue)ajListIterGet(iter)))
     {
 	if(res->Chn!=chn)
 	    continue;
@@ -735,11 +735,11 @@ AjBool embPdbResidueIndexI(const AjPPdb pdb, ajint chn, AjPInt *idx)
     if(resn==0)
     {
 	ajWarn("Chain not found in embPdbResidueIndexI");
-	ajListIterFree(&iter);		
+	ajListIterDel(&iter);		
 	return ajFalse;
     }
     	
-    ajListIterFree(&iter);		
+    ajListIterDel(&iter);		
 
     return ajTrue;
 }
@@ -822,11 +822,11 @@ AjBool embPdbResidueIndexICA(const AjPPdb pdb,
     
 
     /* Initialise the iterator */
-    iter=ajListIterRead(pdb->Chains[chn-1]->Atoms);
+    iter=ajListIterNewread(pdb->Chains[chn-1]->Atoms);
 
 
     /* Iterate through the list of atoms */
-    while((atm=(AjPAtom)ajListIterNext(iter)))
+    while((atm=(AjPAtom)ajListIterGet(iter)))
     {
 	if(atm->Chn!=chn)
 	    continue;
@@ -853,13 +853,13 @@ AjBool embPdbResidueIndexICA(const AjPPdb pdb,
     if(resn==0)
     {
 	ajWarn("Chain not found in embPdbResidueIndexICA");
-	ajListIterFree(&iter);		
+	ajListIterDel(&iter);		
 	return ajFalse;
     }
     	
     *nres=resn;
     
-    ajListIterFree(&iter);		
+    ajListIterDel(&iter);		
 
     return ajTrue;
 }

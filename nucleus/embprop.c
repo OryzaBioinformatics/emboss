@@ -373,7 +373,7 @@ void embPropCalcFragments(const char *s, ajint n,
 
 	AJNEW0(ival);
 	*ival = i;
-	ajListPushApp(t,(void *)ival);
+	ajListPushAppend(t,(void *)ival);
 	++defcnt;
     }
 

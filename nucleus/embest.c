@@ -298,13 +298,13 @@ AjPSeq embEstFindSpliceSites(const AjPSeq genome, ajint forward )
 	    /* last position in exon */
 	    if( tolower((ajint) s[pos]) == 'g' &&
 	       tolower((ajint) s[pos+1]) == 't' ) /* donor */
-		sitestr[pos-1] = ajSysItoC((ajuint) sitestr[pos-1] |
+		sitestr[pos-1] = ajSysCastItoc((ajuint) sitestr[pos-1] |
 					   (ajuint) DONOR);
 
 	    /* last position in intron */
 	    if( tolower((ajint) s[pos]) == 'a' &&
 	       tolower((ajint) s[pos+1]) == 'g' ) /* acceptor */
-		sitestr[pos+1]  = ajSysItoC((ajuint) sitestr[pos+1] |
+		sitestr[pos+1]  = ajSysCastItoc((ajuint) sitestr[pos+1] |
 					    (ajuint) ACCEPTOR);
 	}
 	ajSeqAssignNameC(sites, "forward"); /* so that other functions know */
@@ -317,13 +317,13 @@ AjPSeq embEstFindSpliceSites(const AjPSeq genome, ajint forward )
 	    /* last position in exon */
 	    if( tolower((ajint) s[pos]) == 'c' &&
 	       tolower((ajint) s[pos+1]) == 't' ) /* donor */
-		sitestr[pos-1] = ajSysItoC((ajuint) sitestr[pos-1] |
+		sitestr[pos-1] = ajSysCastItoc((ajuint) sitestr[pos-1] |
 					   (ajuint) DONOR);
 
 	    /* last position in intron */
 	    if( tolower((ajint) s[pos]) == 'a' &&
 	       tolower((ajint) s[pos+1]) == 'c' ) /* acceptor */
-		sitestr[pos+1] = ajSysItoC((ajuint) sitestr[pos+1] |
+		sitestr[pos+1] = ajSysCastItoc((ajuint) sitestr[pos+1] |
 					   (ajuint) ACCEPTOR);
 	}
 	ajSeqAssignNameC(sites,"reverse");	/* so that other functions know */
@@ -398,7 +398,7 @@ static const char* estShuffleSeq( char *s, ajint *seed )
     }
 
     for(n=0;n<len;n++)
-	s[n] = ajSysItoC(tmp[n].value);
+	s[n] = ajSysCastItoc(tmp[n].value);
 
     AJFREE(tmp);
 
@@ -647,7 +647,7 @@ void embEstPrintAlign(AjPFile ofile, const AjPSeq genome, const AjPSeq est,
 		    g++;
 		    gcoord[j] = gpos-1;
 		    ecoord[j] = epos-1;
-		    gbuf[j] = ajSysItoC(tolower((ajint) genomeseq[g]));
+		    gbuf[j] = ajSysCastItoc(tolower((ajint) genomeseq[g]));
 		    ebuf[j] = '.';
 		    if(way == FORWARD_SPLICED_INTRON)
 			sbuf[j] = '>';
@@ -674,7 +674,7 @@ void embEstPrintAlign(AjPFile ofile, const AjPSeq genome, const AjPSeq est,
 		    g++;
 		    gcoord[j] = gpos-1;
 		    ecoord[j] = epos-1;
-		    gbuf[j] = ajSysItoC(tolower((ajint) genomeseq[g]));
+		    gbuf[j] = ajSysCastItoc(tolower((ajint) genomeseq[g]));
 		    ebuf[j] = '.';
 		    if(way == FORWARD_SPLICED_INTRON)
 			sbuf[j] = '>';
@@ -991,7 +991,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 		{
 		    s1[epos] = diagonal;
 		    if(backtrack)
-			path[epos/4] =  ajSysItoUC((ajuint) path[epos/4] |
+			path[epos/4] =  ajSysCastItouc((ajuint) path[epos/4] |
 				      	   (ajuint) diagonal_path[epos%4]);
 		    else
 		    {
@@ -1022,7 +1022,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 		    s1[epos] = delete_est;
 		    if( backtrack )
 		    {			/* <mod> */
-			path[epos/4]  =  ajSysItoUC((ajuint) path[epos/4] |
+			path[epos/4]  =  ajSysCastItouc((ajuint) path[epos/4] |
 					    (ajuint) delete_est_path[epos%4]);
 		    }
 		    else
@@ -1040,7 +1040,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 		    s1[epos] = delete_genome;
 		    if( backtrack )
 		    {			/* <mod> */
-			path[epos/4] = ajSysItoUC((ajuint) path[epos/4] |
+			path[epos/4] = ajSysCastItouc((ajuint) path[epos/4] |
 					 (ajuint) delete_genome_path[epos%4]);
 		    }
 		    else
@@ -1177,7 +1177,7 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 
 	while(( needleman || total < max_score) && epos >= 0 && gpos >= 0 )
 	{
-	    direction = ajSysItoUC(((ajuint)ppath[gpos][epos/4] &
+	    direction = ajSysCastItouc(((ajuint)ppath[gpos][epos/4] &
 				    (ajuint)mask[epos%4] ) >> (2*(epos%4)));
 	    temp_path[pos++] = direction;
 	    if((ajuint) direction == INTRON ) /* intron */

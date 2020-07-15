@@ -1,4 +1,4 @@
-/* @source embshow.c
+/* @Source embshow.c
 **
 ** General routines for sequence display.
 ** Copyright (c) 2000 Gary Williams
@@ -47,7 +47,7 @@
 ** Create the routine to actually output a line's length of whatever is
 ** being displayed from position 'pos' of the sequence - the output is
 ** added to the end of a list of AjPStr.
-** Everything to be printed should be ajListPushApp'd on to the 'lines' list.
+** Everything to be printed should be ajListPushAppend'd on to the 'lines' list.
 ** These strings need not be complete lines - you can push many strings of
 ** partial lines if you prefer.
 ** End the lines to be output by pushing a string ending with a '\n'.
@@ -243,9 +243,9 @@ void embShowDel(EmbPShow* pthis)
     thys = *pthis;
 
     /* free the descriptors */
-    iter = ajListIterRead(thys->list);
+    iter = ajListIterNewread(thys->list);
 
-    while((infostruct = ajListIterNext(iter)) != NULL)
+    while((infostruct = ajListIterGet(iter)) != NULL)
     {
 
 	/* iterate through the descriptors filling out the lines */
@@ -298,11 +298,11 @@ void embShowDel(EmbPShow* pthis)
 	AJFREE(infostruct);
     }
 
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
 
-    /* we have already freed the descriptors, so use ajListDel here */
+    /* we have already freed the descriptors, so use ajListFree here */
     while(ajListPop(thys->list,(void **)&ptr));
-    ajListDel(&thys->list);
+    ajListFree(&thys->list);
 
     AJFREE(*pthis);
 
@@ -548,7 +548,7 @@ void embShowAddSeq(EmbPShow thys, AjBool number, AjBool threeletter,
     info->upperrange  = upperrange;  /* Range of sequence to uppercase */
     info->highlight   = colour;	     /* Range to colour in HTML */
 
-    ajListPushApp(thys->list, showInfoNew(info, SH_SEQ));
+    ajListPushAppend(thys->list, showInfoNew(info, SH_SEQ));
 
     return;
 }
@@ -573,7 +573,7 @@ void embShowAddBlank(EmbPShow thys)
 
     AJNEW0(info);
 
-    ajListPushApp(thys->list, showInfoNew(info, SH_BLANK));
+    ajListPushAppend(thys->list, showInfoNew(info, SH_BLANK));
 
     return;
 }
@@ -599,7 +599,7 @@ void embShowAddTicks(EmbPShow thys)
 
     AJNEW0(info);
 
-    ajListPushApp(thys->list, showInfoNew(info, SH_TICK));
+    ajListPushAppend(thys->list, showInfoNew(info, SH_TICK));
 
     return;
 }
@@ -624,7 +624,7 @@ void embShowAddTicknum(EmbPShow thys)
 
     AJNEW0(info);
 
-    ajListPushApp(thys->list, showInfoNew(info, SH_TICKNUM));
+    ajListPushAppend(thys->list, showInfoNew(info, SH_TICKNUM));
 
     return;
 }
@@ -652,7 +652,7 @@ void embShowAddComp(EmbPShow thys, AjBool number)
 
     info->number = number;
 
-    ajListPushApp(thys->list, showInfoNew(info, SH_COMP));
+    ajListPushAppend(thys->list, showInfoNew(info, SH_COMP));
 
     return;
 }
@@ -710,7 +710,7 @@ void embShowAddTran(EmbPShow thys, const AjPTrn trnTable, ajint frame,
     info->lastorf   = lastorf;
     info->showframe = showframe;
 
-    ajListPushApp(thys->list, showInfoNew(info, SH_TRAN));
+    ajListPushAppend(thys->list, showInfoNew(info, SH_TRAN));
 
     return;
 }
@@ -741,13 +741,13 @@ void embShowAddRE(EmbPShow thys, ajint sense, const AjPList restrictlist,
     
     info->sense = sense;		/* 1 or -1 = sense to translate */
     info->flat = flat;		        /* upright or flat display */
-    info->hits = ajListLength(restrictlist);
-    info->matches = ajListCopy(restrictlist);
+    info->hits = ajListGetLength(restrictlist);
+    info->matches = ajListNewListref(restrictlist);
     info->sitelist = NULL;	        /* show we have not yet created this
 					   list */
     info->plasmid = plasmid;
 
-    ajListPushApp(thys->list, showInfoNew(info, SH_RE));
+    ajListPushAppend(thys->list, showInfoNew(info, SH_RE));
     
     return;
 }
@@ -775,7 +775,7 @@ void embShowAddFT(EmbPShow thys, const AjPFeattable feat)
 
     info->feat = ajFeattableCopy(feat); /* store the feature table */
   
-    ajListPushApp(thys->list, showInfoNew(info, SH_FT));
+    ajListPushAppend(thys->list, showInfoNew(info, SH_FT));
 
     return;
 }
@@ -802,7 +802,7 @@ void embShowAddNote(EmbPShow thys, const AjPRange regions)
 
     info->regions = regions;		/* regions to note */
 
-    ajListPushApp(thys->list, showInfoNew(info, SH_NOTE));
+    ajListPushAppend(thys->list, showInfoNew(info, SH_NOTE));
 
     return;
 }
@@ -883,12 +883,12 @@ void embShowPrint(AjPFile out, const EmbPShow thys)
 
 	/* throw a formfeed if we would go over the length of the page */
 	count = 0;
-	liter = ajListIterRead(lines);
-	while((line = ajListIterNext(liter)) != NULL)
+	liter = ajListIterNewread(lines);
+	while((line = ajListIterGet(liter)) != NULL)
 	    if(ajStrGetLen(line))
 		if(ajStrGetPtr(line)[ajStrGetLen(line)-1] == '\n')
 		    count++;
-	ajListIterFree(&liter);
+	ajListIterDel(&liter);
 
 	/* thys->length is zero if we have an indefinite page length */
 	if(thys->length && (count+line_no > thys->length) &&
@@ -899,7 +899,7 @@ void embShowPrint(AjPFile out, const EmbPShow thys)
 	}
 
 	showPrintLines(out, lines);
-	ajListstrFree(&lines);
+	ajListstrFreeData(&lines);
     }
 
     return;
@@ -926,11 +926,11 @@ static void showPrintLines(AjPFile out, const AjPList lines)
     ajDebug("showPrintLines\n");
 
     /* iterate through the lines and print them */
-    liter = ajListIterRead(lines);
-    while((str = ajListIterNext(liter)) != NULL)
+    liter = ajListIterNewread(lines);
+    while((str = ajListIterGet(liter)) != NULL)
 	ajFmtPrintF(out, "%S", str);
 
-    ajListIterFree(&liter);
+    ajListIterDel(&liter);
 
     return;
 }
@@ -977,9 +977,9 @@ static void showFillLines(AjPList lines, const EmbPShow thys,
     ajDebug("showFillLines\n");
 
     /* iterate through the descriptors filling out the lines */
-    diter = ajListIterRead(thys->list);
+    diter = ajListIterNewread(thys->list);
 
-    while((infostruct = ajListIterNext(diter)) != NULL)
+    while((infostruct = ajListIterGet(diter)) != NULL)
     {
 	type = infostruct->type;
 	info = infostruct->info;
@@ -1027,7 +1027,7 @@ static void showFillLines(AjPList lines, const EmbPShow thys,
 			   "showFillLines: %d",type);
 	}
     }
-    ajListIterFree(&diter);
+    ajListIterDel(&diter);
 
     return;
 }
@@ -1055,7 +1055,7 @@ static void showMargin(const EmbPShow thys, AjPList lines)
     if(thys->margin)
     {
 	ajFmtPrintS(&marginfmt, "%%-%ds ", thys->margin-1);
-	ajListstrPushApp(lines, ajFmtStr(ajStrGetPtr(marginfmt), ""));
+	ajListstrPushAppend(lines, ajFmtStr(ajStrGetPtr(marginfmt), ""));
     }
     ajStrDel(&marginfmt);
 
@@ -1085,7 +1085,7 @@ static void showMarginNumber(const EmbPShow thys, AjPList lines, ajint number)
     if(thys->margin)
     {
 	ajFmtPrintS(&marginfmt, "%%%dd ", thys->margin-1);
-	ajListstrPushApp(lines, ajFmtStr(ajStrGetPtr(marginfmt), number));
+	ajListstrPushAppend(lines, ajFmtStr(ajStrGetPtr(marginfmt), number));
     }
     ajStrDel(&marginfmt);
 
@@ -1115,7 +1115,7 @@ static void showPad(AjPList lines, ajint number)
     if(number>0)
     {
 	ajFmtPrintS(&marginfmt, "%%-%ds", number);
-	ajListstrPushApp(lines, ajFmtStr(ajStrGetPtr(marginfmt), ""));
+	ajListstrPushAppend(lines, ajFmtStr(ajStrGetPtr(marginfmt), ""));
     }
     ajStrDel(&marginfmt);
 
@@ -1407,7 +1407,7 @@ static void showFillSeq(const EmbPShow thys,
 		ajStrAppendK(&line3, *(p3+2));
 	    }
 
-	ajListstrPushApp(lines, line1);
+	ajListstrPushAppend(lines, line1);
 	ajStrDel(&line);
 
     }
@@ -1424,7 +1424,7 @@ static void showFillSeq(const EmbPShow thys,
 	if(thys->html && ajRangeOverlaps(info->highlight, pos, width))
 	    embShowColourRange(&line, info->highlight, pos);
 
-	ajListstrPushApp(lines, line);
+	ajListstrPushAppend(lines, line);
     }
 
     /* optional number at right */
@@ -1437,29 +1437,29 @@ static void showFillSeq(const EmbPShow thys,
 	if(last >= ajSeqGetLen(thys->seq))
 	{
 	    showPad(lines, thys->width - ajSeqGetLen(thys->seq) + pos);
-	    ajListstrPushApp(lines,
+	    ajListstrPushAppend(lines,
 			     ajFmtStr(" %d",
 				      ajSeqGetLen(thys->seq)+thys->offset-1));
 	}
 	else
-	    ajListstrPushApp(lines,
+	    ajListstrPushAppend(lines,
 			     ajFmtStr(" %d",
 				      pos+width+thys->offset-1));
     }
 
     /* end the output line */
-    ajListstrPushApp(lines, ajFmtStr("\n"));
+    ajListstrPushAppend(lines, ajFmtStr("\n"));
 
 
     /* if three-letter code, add the other 3-letter output lines */
     if(!thys->nucleic && info->threeletter)
     {
 	showMargin(thys, lines);
-	ajListstrPushApp(lines, line2);
-	ajListstrPushApp(lines, ajFmtStr("\n"));
+	ajListstrPushAppend(lines, line2);
+	ajListstrPushAppend(lines, ajFmtStr("\n"));
 	showMargin(thys, lines);
-	ajListstrPushApp(lines, line3);
-	ajListstrPushApp(lines, ajFmtStr("\n"));
+	ajListstrPushAppend(lines, line3);
+	ajListstrPushAppend(lines, ajFmtStr("\n"));
     }
 
     return;
@@ -1498,7 +1498,7 @@ static void showFillBlank(const EmbPShow thys,
     line = ajStrNewRes(2);
 
     ajStrAssignC(&line, "\n");
-    ajListstrPushApp(lines, line);
+    ajListstrPushAppend(lines, line);
 
     return;
 }
@@ -1548,10 +1548,10 @@ static void showFillTicks(const EmbPShow thys,
 	    ajStrAppendC(&line, "-");
 
     showMargin(thys, lines);
-    ajListstrPushApp(lines, line);
+    ajListstrPushAppend(lines, line);
 
     /* end the output ticks line */
-    ajListstrPushApp(lines, ajFmtStr("\n"));
+    ajListstrPushAppend(lines, ajFmtStr("\n"));
 
     return;
 }
@@ -1599,10 +1599,10 @@ static void showFillTicknum(const EmbPShow thys,
     for(i=pos + offset + pad; i < pos+offset+width; i+=10)
 	ajFmtPrintAppS(&line, "%-10d", i);
 
-    ajListstrPushApp(lines, line);
+    ajListstrPushAppend(lines, line);
 
     /* end the output line */
-    ajListstrPushApp(lines, ajFmtStr("\n"));
+    ajListstrPushAppend(lines, ajFmtStr("\n"));
 
     return;
 }
@@ -1655,7 +1655,7 @@ static void showFillComp(const EmbPShow thys,
 
     /* get the complement */
     ajSeqstrComplement(&line);
-    ajListstrPushApp(lines, line);
+    ajListstrPushAppend(lines, line);
 
     /* optional number at right */
     if(info->number)
@@ -1667,17 +1667,17 @@ static void showFillComp(const EmbPShow thys,
 	if(last >= ajSeqGetLen(thys->seq))
 	{
 	    showPad(lines, thys->width - ajSeqGetLen(thys->seq) + pos);
-	    ajListstrPushApp(lines,
+	    ajListstrPushAppend(lines,
 			     ajFmtStr(" %d",
 				      ajSeqGetLen(thys->seq)+thys->offset-1));
 	}
 	else
-	    ajListstrPushApp(lines, ajFmtStr(" %d",
+	    ajListstrPushAppend(lines, ajFmtStr(" %d",
 					     pos+thys->width+thys->offset-1));
     }
 
     /* end the output line */
-    ajListstrPushApp(lines, ajFmtStr("\n"));
+    ajListstrPushAppend(lines, ajFmtStr("\n"));
 
     return;
 }
@@ -1932,22 +1932,22 @@ static void showFillTran(const EmbPShow thys,
 
 
     /* put the translation line on the output list */
-    ajListstrPushApp(lines, line);
+    ajListstrPushAppend(lines, line);
 
     /* optional number at right */
     if(info->number)
-	ajListstrPushApp(lines, ajFmtStr(" %d", info->tranpos));
+	ajListstrPushAppend(lines, ajFmtStr(" %d", info->tranpos));
 
     if(info->showframe)
     {
 	frame = info->frame;
 	if(frame < 0)
 	    frame = 3 - frame;
-	ajListstrPushApp(lines, ajFmtStr("%4s%d", "F", frame));
+	ajListstrPushAppend(lines, ajFmtStr("%4s%d", "F", frame));
     }
 
     /* end the output line */
-    ajListstrPushApp(lines, ajFmtStr("\n"));
+    ajListstrPushAppend(lines, ajFmtStr("\n"));
 
     return;
 }
@@ -2034,8 +2034,8 @@ static void showFillREupright(const EmbPShow thys,
     {
 	info->sitelist = ajListNew();
 
-	miter = ajListIterRead(info->matches);
-	while((m = ajListIterNext(miter)) != NULL)
+	miter = ajListIterNewread(info->matches);
+	while((m = ajListIterGet(miter)) != NULL)
 	{
 	    /* store the first cut site in this sense */
 	    if(info->sense == 1)	/* forward sense */
@@ -2048,7 +2048,7 @@ static void showFillREupright(const EmbPShow thys,
 	    AJNEW0(sitenode);
 	    sitenode->pos = cut;
 	    sitenode->name = m->cod;
-	    ajListPushApp(info->sitelist, sitenode);
+	    ajListPushAppend(info->sitelist, sitenode);
 
 	    /* now store the potential second cut site on this sense */
 	    if(info->sense == 1)	/* forward sense */
@@ -2062,19 +2062,19 @@ static void showFillREupright(const EmbPShow thys,
 		AJNEW0(sitenode);
 		sitenode->pos  = cut;
 		sitenode->name = m->cod;
-		ajListPushApp(info->sitelist, sitenode);
+		ajListPushAppend(info->sitelist, sitenode);
 	    }
 	}
 
-	ajListIterFree(&miter);
+	ajListIterDel(&miter);
 	ajListSort(info->sitelist, showFillREuprightSort);
     }
 
     ajStrAssignC(&tick, "|");		/* a useful string */
 
     /* iterate through the site list */
-    siter = ajListIterRead(info->sitelist);
-    while((s = ajListIterNext(siter)) != NULL)
+    siter = ajListIterNewread(info->sitelist);
+    while((s = ajListIterGet(siter)) != NULL)
     {
 	cut = s->pos;
 
@@ -2097,7 +2097,7 @@ static void showFillREupright(const EmbPShow thys,
 	    **  to pop off the bottom and then push the altered node back on
 	    **  the top of the list
 	    */
-	    for(ln = ajListstrLength(linelist); ln>0; ln--)
+	    for(ln = ajListstrGetLength(linelist); ln>0; ln--)
 	    {
 		ajListstrPop(linelist, &line);
 		/*
@@ -2123,7 +2123,7 @@ static void showFillREupright(const EmbPShow thys,
 			    showOverPrint(&line, cut, tick);
 		}
 
-		ajListstrPushApp(linelist, line);
+		ajListstrPushAppend(linelist, line);
 		/* end 'iteration' through lines */
 	    }
 
@@ -2133,11 +2133,11 @@ static void showFillREupright(const EmbPShow thys,
 	    {
 		newline=ajStrNew();
 		showOverPrint(&newline, cut, s->name);
-		ajListstrPushApp(linelist, newline);
+		ajListstrPushAppend(linelist, newline);
 	    }
 	}
     }
-    ajListIterFree(&siter);
+    ajListIterDel(&siter);
 
 
     /* convert base line ticks to forward or reverse slashes */
@@ -2157,8 +2157,8 @@ static void showFillREupright(const EmbPShow thys,
     if(info->sense == 1) ajListstrReverse(linelist);
 
     /* iterate through the lines and print them */
-    liter = ajListIterRead(linelist);
-    while((line = ajListIterNext(liter)) != NULL)
+    liter = ajListIterNewread(linelist);
+    while((line = ajListIterGet(liter)) != NULL)
     {
 	/* output to the lines list */
 	/* variable width margin at left */
@@ -2166,15 +2166,15 @@ static void showFillREupright(const EmbPShow thys,
 	showMargin(thys, lines);
 	/* put the translation line */
 	/* on the output list */
-	ajListstrPushApp(lines, line);
+	ajListstrPushAppend(lines, line);
 	/* end the output line */
-	ajListstrPushApp(lines, ajFmtStr("\n"));
+	ajListstrPushAppend(lines, ajFmtStr("\n"));
     }
-    ajListIterFree(&liter);
+    ajListIterDel(&liter);
 
     while(ajListstrPop(linelist,&sajb));
 
-    ajListstrDel(&linelist);
+    ajListstrFree(&linelist);
     ajStrDel(&tick);
 
     return;
@@ -2259,8 +2259,8 @@ static void showFillREflat(const EmbPShow thys,
     linelist = ajListstrNew();
 
     /* iterate through the list */
-    miter = ajListIterRead(info->matches);
-    while((m = ajListIterNext(miter)) != NULL)
+    miter = ajListIterNewread(info->matches);
+    while((m = ajListIterGet(miter)) != NULL)
     {
 	/* get the start and end positions */
 	cut1 = m->cut1;
@@ -2577,7 +2577,7 @@ static void showFillREflat(const EmbPShow thys,
 	    **  to pop off the bottom and then push the altered node back on
 	    **  the top of the list
 	    */
-	    for(ln = ajListstrLength(linelist); ln>0; ln--)
+	    for(ln = ajListstrGetLength(linelist); ln>0; ln--)
 	    {
 		ajListstrPop(linelist, &line); /* get the site line */
 		ajListstrPop(linelist, &line2); /* get the name line */
@@ -2596,8 +2596,8 @@ static void showFillREflat(const EmbPShow thys,
 		    }
 		}
 
-		ajListstrPushApp(linelist, line);
-		ajListstrPushApp(linelist, line2);
+		ajListstrPushAppend(linelist, line);
+		ajListstrPushAppend(linelist, line2);
 		/* end 'iteration' through lines */
 	    }
 
@@ -2618,15 +2618,15 @@ static void showFillREflat(const EmbPShow thys,
 
 		showOverPrint(&line, start-pos, sitestr);
 		showOverPrint(&line2, start-pos, namestr);
-		ajListstrPushApp(linelist, line);
-		ajListstrPushApp(linelist, line2);
+		ajListstrPushAppend(linelist, line);
+		ajListstrPushAppend(linelist, line2);
 	    }
 
 	    ajStrDel(&namestr);
 	    ajStrDel(&sitestr);
 	}
     }
-    ajListIterFree(&miter);
+    ajListIterDel(&miter);
 
 
     /*
@@ -2638,8 +2638,8 @@ static void showFillREflat(const EmbPShow thys,
 	ajListstrReverse(linelist);
 
     /* iterate through the lines and print them */
-    liter = ajListIterRead(linelist);
-    while((line = ajListIterNext(liter)) != NULL)
+    liter = ajListIterNewread(linelist);
+    while((line = ajListIterGet(liter)) != NULL)
     {
 	/*
 	**  convert claim characters in the line to spaces as these were
@@ -2655,14 +2655,14 @@ static void showFillREflat(const EmbPShow thys,
 	ajStrTrimEndC(&line, " ");
 
 	showMargin(thys, lines);
-	ajListstrPushApp(lines, line);
-	ajListstrPushApp(lines, ajFmtStr("\n"));
+	ajListstrPushAppend(lines, line);
+	ajListstrPushAppend(lines, ajFmtStr("\n"));
     }
-    ajListIterFree(&liter);
+    ajListIterDel(&liter);
 
 
     while(ajListstrPop(linelist,&sajb));
-    ajListstrDel(&linelist);
+    ajListstrFree(&linelist);
 
     return;
 }
@@ -2750,10 +2750,10 @@ static void showFillFT(const EmbPShow thys,
     /* iterate through the features */
     if(info->feat->Features)
     {
-	iter = ajListIterRead(info->feat->Features) ;
-	while(ajListIterMore(iter))
+	iter = ajListIterNewread(info->feat->Features) ;
+	while(!ajListIterDone(iter))
 	{
-	    gf = ajListIterNext(iter) ;
+	    gf = ajListIterGet(iter) ;
 
             /* ignore remote IDs */
             if(!ajFeatIsLocal(gf))
@@ -2855,7 +2855,7 @@ static void showFillFT(const EmbPShow thys,
 	    **  and ajListstrPushApp to pop off the bottom and then push
 	    **  the altered node back on the top of the list
 	    */
-	    for(ln = ajListstrLength(linelist); ln>0; ln--)
+	    for(ln = ajListstrGetLength(linelist); ln>0; ln--)
 	    {
 		/* get the linestr line */
 		ajListstrPop(linelist, &line);
@@ -2879,8 +2879,8 @@ static void showFillFT(const EmbPShow thys,
 		    }
 		}
 
-		ajListstrPushApp(linelist, line);
-		ajListstrPushApp(linelist, line2);
+		ajListstrPushAppend(linelist, line);
+		ajListstrPushAppend(linelist, line2);
 		/* end 'iteration' through lines */
 	    }
 
@@ -2899,19 +2899,19 @@ static void showFillFT(const EmbPShow thys,
 
 		showOverPrint(&line, start-pos, linestr);
 		showOverPrint(&line2, namestart-pos, namestr);
-		ajListstrPushApp(linelist, line);
-		ajListstrPushApp(linelist, line2);
+		ajListstrPushAppend(linelist, line);
+		ajListstrPushAppend(linelist, line2);
 	    }
 
 	    ajStrDel(&namestr);
 	    ajStrDel(&linestr);
 	}
-	ajListIterFree(&iter);
+	ajListIterDel(&iter);
     }
 
     /* iterate through the lines and print them */
-    liter = ajListIterRead(linelist);
-    while((line = ajListIterNext(liter)) != NULL)
+    liter = ajListIterNewread(linelist);
+    while((line = ajListIterGet(liter)) != NULL)
     {
 	/*
 	** convert claim characters in the line to spaces as these were
@@ -2932,16 +2932,16 @@ static void showFillFT(const EmbPShow thys,
 	** with optional number in it
 	** put the translation line on the output list
 	*/
-	ajListstrPushApp(lines, line);
+	ajListstrPushAppend(lines, line);
 
 	/* end output line */
-	ajListstrPushApp(lines, ajFmtStr("\n"));
+	ajListstrPushAppend(lines, ajFmtStr("\n"));
     }
-    ajListIterFree(&liter);
+    ajListIterDel(&liter);
 
 
     while(ajListstrPop(linelist,&sajb));
-    ajListstrDel(&linelist);
+    ajListstrFree(&linelist);
 
     return;
 }
@@ -3084,7 +3084,7 @@ static void showFillNote(const EmbPShow thys,
 	    **  and ajListstrPushApp to pop off the bottom and then push
 	    **  the altered node back on the top of the list
 	    */
-	    for(ln = ajListstrLength(linelist); ln>0; ln--)
+	    for(ln = ajListstrGetLength(linelist); ln>0; ln--)
 	    {
 		/* linestr line */
 		ajListstrPop(linelist, &line);
@@ -3109,8 +3109,8 @@ static void showFillNote(const EmbPShow thys,
 		    }
 		}
 
-		ajListstrPushApp(linelist, line);
-		ajListstrPushApp(linelist, line2);
+		ajListstrPushAppend(linelist, line);
+		ajListstrPushAppend(linelist, line2);
 		/* end 'iteration' through lines */
 	    }
 
@@ -3131,8 +3131,8 @@ static void showFillNote(const EmbPShow thys,
 		showOverPrint(&line, start-pos, linestr);
 
 		showOverPrint(&line2, namestart-pos, namestr);
-		ajListstrPushApp(linelist, line);
-		ajListstrPushApp(linelist, line2);
+		ajListstrPushAppend(linelist, line);
+		ajListstrPushAppend(linelist, line2);
 	    }
 
 	    ajStrDel(&namestr);
@@ -3141,8 +3141,8 @@ static void showFillNote(const EmbPShow thys,
     }
 
     /* iterate through the lines and print them */
-    liter = ajListIterRead(linelist);
-    while((line = ajListIterNext(liter)) != NULL)
+    liter = ajListIterNewread(linelist);
+    while((line = ajListIterGet(liter)) != NULL)
     {
 	/*  convert claim characters in the line to spaces as these were
 	**  used to stake a claim to the space
@@ -3162,16 +3162,16 @@ static void showFillNote(const EmbPShow thys,
 	** with optional number in it
 	** put the translation line on the output list
 	*/
-	ajListstrPushApp(lines, line);
+	ajListstrPushAppend(lines, line);
 
 	/* end output line */
-	ajListstrPushApp(lines, ajFmtStr("\n"));
+	ajListstrPushAppend(lines, ajFmtStr("\n"));
     }
-    ajListIterFree(&liter);
+    ajListIterDel(&liter);
 
 
     while(ajListstrPop(linelist,&sajb));
-    ajListstrDel(&linelist);
+    ajListstrFree(&linelist);
 
     return;
 }
@@ -3280,7 +3280,7 @@ static void showAddTags(AjPStr *tagsout, const AjPFeature feat, AjBool values)
 		ajFmtPrintAppS(tagsout, " %S", tagnam);
 	}
 
-    ajListIterFree(&titer);
+    ajListIterDel(&titer);
 
     ajStrDel(&tagval);
     ajStrDel(&tagnam);

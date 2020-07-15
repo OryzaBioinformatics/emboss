@@ -145,7 +145,7 @@ ajint embMolGetFrags(const AjPStr thys, ajint rno, AjPList *l)
     if(defcnt)
     {
 	ajListReverse(*l);
-	ajListToArray(*l,(void ***)&ptr);
+	ajListToarray(*l,(void ***)&ptr);
 	for(i=0;i<defcnt-1;++i)
 	{
 	    beg = ptr[i]->begin;
@@ -164,7 +164,7 @@ ajint embMolGetFrags(const AjPStr thys, ajint rno, AjPList *l)
     ajListSort(*l,embMolFragSort);
     ajIntDel(&defcut);
 
-    return ajListLength(*l);
+    return ajListGetLength(*l);
 }
 
 

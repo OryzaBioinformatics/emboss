@@ -420,7 +420,7 @@ AjPList embDbiFileList(const AjPStr dir, const AjPStr wildfile, AjBool trim)
 	}
 	s2 = ajStrNewC(q);
 
-	ll=ajListLength(l);
+	ll=ajListGetLength(l);
 
 	d=ajFalse;
 	for(i=0;i<ll;++i)
@@ -428,7 +428,7 @@ AjPList embDbiFileList(const AjPStr dir, const AjPStr wildfile, AjBool trim)
 	    ajListPop(l,(void *)&t);
 	    if(ajStrMatchS(t,s2))
 		d=ajTrue;
-	    ajListPushApp(l,(void *)t);
+	    ajListPushAppend(l,(void *)t);
 	}
 
 	if(!d)
@@ -445,16 +445,16 @@ AjPList embDbiFileList(const AjPStr dir, const AjPStr wildfile, AjBool trim)
 	if(ajFileLength(name) > (ajlong) INT_MAX)
 	  ajDie("File '%S' too large for DBI indexing", name);
 	ajDebug("accept '%S' (%Ld)\n", s2, ajFileLength(name));
-	ajListstrPushApp(retlist, name);
+	ajListstrPushAppend(retlist, name);
     }
 
-    if(!ajListLength(retlist))
+    if(!ajListGetLength(retlist))
 	ajFatal("No match for file specification %S",tmp);
 
     while(ajListPop(l,(void *)&t))
 	ajStrDel(&t);
 
-    ajListDel(&l);
+    ajListFree(&l);
 
     ajStrDel(&s);
     ajStrDel(&tmp);
@@ -533,7 +533,7 @@ AjPList embDbiFileListExc(const AjPStr dir, const AjPStr wildfile,
 	if(ajFileLength(name) > (ajlong) INT_MAX)
 	  ajDie("File '%S' too large for DBI indexing", name);
 	ajDebug("accept '%S' (%Ld)\n", dbiInFname, ajFileLength(name));
-	ajListstrPushApp(retlist, name);
+	ajListstrPushAppend(retlist, name);
     }
 
     closedir(dp);
@@ -623,14 +623,14 @@ void embDbiRmFile(const AjPStr dbname, const char* ext, ajuint nfiles,
 	for (i=1; i<= nfiles; i++)
 	{
 	    ajFmtPrintS (&filestr, "%S%03d.%s", dbname, i, ext);
-	    DeleteFile(ajStrStr(filestr));
+	    DeleteFile(ajStrGetPtr(filestr));
 	    ajDebug("Deleting file %S\n", filestr);
 	}
     }
     else
     {
 	ajFmtPrintS (&filestr, "%S.%s", dbname, ext);
-	DeleteFile(ajStrStr(filestr));
+	DeleteFile(ajStrGetPtr(filestr));
 	ajDebug("Deleting file %S\n", filestr);
     }
     
@@ -736,8 +736,8 @@ void embDbiSortFile(const AjPStr dbname, const char* ext1, const char* ext2,
     if (sortProgDir == NULL)
     {
 	AjPStr msg = ajStrNewC("EMBOSS_ROOT");
-	ajStrAppC(&msg, " environment variable not defined");
-	ajFatal(ajStrStr(msg));
+	ajStrAppendC(&msg, " environment variable not defined");
+	ajFatal(ajStrGetPtr(msg));
     }
 
     dir = ajStrNewC(sortProgDir);
@@ -866,7 +866,7 @@ void embDbiSysCmd(const AjPStr cmdstr)
     ajint status;
 
     ajDebug("forking '%S'", cmdstr);
-    ajSysArglist(cmdstr, &pgm, &arglist);
+    ajSysArglistBuild(cmdstr, &pgm, &arglist);
 
     pid = fork();
     if(pid==-1)
@@ -885,7 +885,7 @@ void embDbiSysCmd(const AjPStr cmdstr)
 		break;
     }
 
-    ajSysArgListFree(&arglist);
+    ajSysArglistFree(&arglist);
     ajCharDel(&pgm);
 
 #else
@@ -1362,14 +1362,14 @@ void embDbiMemEntry(AjPList idlist, AjPList* fieldList, ajuint nfields,
     EmbPField fieldData = NULL;
 
     entry->filenum = ifile+1;
-    ajListPushApp(idlist, entry);
+    ajListPushAppend(idlist, entry);
     for(ifield=0; ifield < nfields; ifield++)
 	for(i=0;i<entry->nfield[ifield]; i++)
 	{
 	    fieldData = embDbiFieldNew();
 	    fieldData->entry = entry->entry;
 	    fieldData->field = entry->field[ifield][i];
-	    ajListPushApp(fieldList[ifield], fieldData);
+	    ajListPushAppend(fieldList[ifield], fieldData);
 	}
 
     return;
@@ -1460,7 +1460,7 @@ ajuint embDbiMemWriteEntry(AjPFile entFile, ajuint maxidlen,
     EmbPEntry entry;
     ajuint idcnt = 0;
 
-    idCount = ajListToArray(idlist, ids);
+    idCount = ajListToarray(idlist, ids);
     qsort(*ids, idCount, sizeof(void*), embDbiCmpId);
     ajDebug("ids sorted\n");
 
@@ -1718,7 +1718,7 @@ ajuint embDbiMemWriteFields(const AjPStr dbname,const  AjPStr release,
     trgFile = embDbiFileIndex(indexdir, field, "trg");
     hitFile = embDbiFileIndex(indexdir, field, "hit");
 
-    fieldCount = ajListToArray(fieldList, &fieldItems);
+    fieldCount = ajListToarray(fieldList, &fieldItems);
 
     ajDebug("fieldItems: %d %x\n",
 	    fieldCount, fieldItems);
@@ -1905,7 +1905,7 @@ void embDbiLogHeader(AjPFile logfile, const AjPStr dbname,
     AjPStr dirname = NULL;
     AjPTime today = NULL;
 
-    today =  ajTimeTodayF("report");
+    today =  ajTimeNewTodayFmt("report");
     ajFmtPrintF(logfile, "########################################\n");
     ajFmtPrintF(logfile, "# Program: %S\n", ajAcdGetProgram());
     ajFmtPrintF(logfile, "# Rundate: %D\n", today);

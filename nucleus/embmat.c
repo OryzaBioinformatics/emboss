@@ -204,9 +204,9 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
 	    for(j=0;j<ret->len[m];++j)
 	    {
 		if(!j)
-		    p = ajSysStrtok(p," ");
+		    p = ajSysFuncStrtok(p," ");
 		else
-		    p = ajSysStrtok(NULL," ");
+		    p = ajSysFuncStrtok(NULL," ");
 		sscanf(p,"%d",&ret->matrix[m][i][j]);
 	    }
 	}
@@ -306,7 +306,7 @@ ajuint embMatProtScanInt(const AjPStr s, const AjPStr n, const EmbPMatPrints m,
     p = q = ajStrGetuniquePtr(&t);
     slen = ajStrGetLen(t);
     for(i=0;i<slen;++i,++p)
-	*p = ajSysItoC(ajAZToInt((ajint)*p));
+	*p = ajSysCastItoc(ajAZToInt((ajint)*p));
     p = q;
 
     *all = *ordered = ajTrue;

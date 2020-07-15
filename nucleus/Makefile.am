@@ -11,7 +11,7 @@ endif
 endif
 
 if ISCYGWIN
-AM_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import -L../plplot -L../ajax -lplplot -lajax
+AM_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import -L../plplot -L../ajax -leplplot -lajax
 endif
 
 
@@ -30,7 +30,7 @@ NUCLSRC =  embaln.c embcom.c embcons.c \
 
 libnucleus_la_SOURCES = $(NUCLSRC)
 
-libnucleus_la_LDFLAGS =  -version-info 4:1:0
+libnucleus_la_LDFLAGS =  -version-info 5:0:0
 
 include_HEADERS = emboss.h \
 		 embaln.h embcom.h embcons.h \

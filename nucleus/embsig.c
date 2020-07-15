@@ -479,7 +479,7 @@ static AjBool embHitlistReadFam(AjPFile scopf,
 	   ajStrMatchS(fold,hitlist->Fold) &&
 	   ajStrMatchS(class,hitlist->Class))
 	{ 
-	    ajListPushApp(*list,hitlist);
+	    ajListPushAppend(*list,hitlist);
 	    done=ajTrue;
 	    break;
 	}
@@ -541,7 +541,7 @@ static AjBool embHitlistReadSfam(AjPFile scopf,
 	   ajStrMatchS(fold,hitlist->Fold) &&
 	   ajStrMatchS(class,hitlist->Class))
 	{
-	    ajListPushApp(*list,hitlist);
+	    ajListPushAppend(*list,hitlist);
 	    done=ajTrue;
 	}
 	else
@@ -597,7 +597,7 @@ static AjBool embHitlistReadFold(AjPFile scopf,
 	if(ajStrMatchS(fam,hitlist->Fold) &&
 	   ajStrMatchS(class,hitlist->Class))
 	{
-	    ajListPushApp(*list,hitlist);
+	    ajListPushAppend(*list,hitlist);
 	    done=ajTrue;
 	}
 	else
@@ -662,7 +662,7 @@ static AjBool embHitlistReadFamFasta(AjPFile scopf,
 	   ajStrMatchS(fold,hitlist->Fold) &&
 	   ajStrMatchS(class,hitlist->Class))
 	{ 
-	    ajListPushApp(*list,hitlist);
+	    ajListPushAppend(*list,hitlist);
 	    done=ajTrue;
 	    break;
 	}
@@ -725,7 +725,7 @@ static AjBool embHitlistReadSfamFasta(AjPFile scopf, const AjPStr fam,
 	   ajStrMatchS(fold,hitlist->Fold) &&
 	   ajStrMatchS(class,hitlist->Class))
 	{
-	    ajListPushApp(*list,hitlist);
+	    ajListPushAppend(*list,hitlist);
 	    done=ajTrue;
 	}
 	else
@@ -781,7 +781,7 @@ static AjBool embHitlistReadFoldFasta(AjPFile scopf, const AjPStr fam,
 	if(ajStrMatchS(fam,hitlist->Fold) &&
 	   ajStrMatchS(class,hitlist->Class))
 	{
-	    ajListPushApp(*list,hitlist);
+	    ajListPushAppend(*list,hitlist);
 	    done=ajTrue;
 	}
 	else
@@ -1920,7 +1920,7 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 	    {
 		if(MAJSTRGETLEN(hit->Seq))
 		    ajStrRemoveWhite(&hit->Seq);
-		ajListPushApp(tmplist, hit);
+		ajListPushAppend(tmplist, hit);
 	    }
 	    
 	    /* Check line has correct no. of tokens and allocate Hit */
@@ -1978,11 +1978,11 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 		/* Delete the hit we've just read in ... which is of the wrong family */
 		embHitDel(&hit);
 		
-		hitlist->N = ajListToArray(tmplist, (void ***)&hitlist->hits);
+		hitlist->N = ajListToarray(tmplist, (void ***)&hitlist->hits);
 		ajStrDel(&line);
 		ajStrDel(&subline);
 		ajStrDel(&type);
-		ajListDel(&tmplist);
+		ajListFree(&tmplist);
 
 		if(doneseq)
 		    ajFileSeek(inf, fpos, 0);
@@ -2074,12 +2074,12 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
     if((!ok) && (parseok))
     {
 	ajStrRemoveWhite(&hit->Seq);
-	ajListPushApp(tmplist, hit);
-	hitlist->N = ajListToArray(tmplist, (void ***)&hitlist->hits);
+	ajListPushAppend(tmplist, hit);
+	hitlist->N = ajListToarray(tmplist, (void ***)&hitlist->hits);
 	ajStrDel(&subline);
 	ajStrDel(&line);
 	ajStrDel(&type);
-	ajListDel(&tmplist);
+	ajListFree(&tmplist);
 	return hitlist;
     }
 
@@ -2088,7 +2088,7 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
     ajStrDel(&line);
     ajStrDel(&subline);
     ajStrDel(&type);
-    ajListDel(&tmplist);
+    ajListFree(&tmplist);
     
     
     /* File read error */
@@ -2142,7 +2142,7 @@ AjPList embHitlistReadNode(AjPFile inf,
 	if(!sfam || !fold || !class)
 	{
 	    ajWarn("Bad arguments passed to embHitlistReadNode\n");
-		ajListDel(&(ret));
+		ajListFree(&(ret));
 	    return NULL;
 	}
 	else
@@ -2151,7 +2151,7 @@ AjPList embHitlistReadNode(AjPFile inf,
 		return ret;
 	    else
 	    {
-		    ajListDel(&(ret));
+		    ajListFree(&(ret));
 		return NULL;
 	    }
 	}
@@ -2165,7 +2165,7 @@ AjPList embHitlistReadNode(AjPFile inf,
 	if(!fold || !class)
 	{
 	    ajWarn("Bad arguments passed to embHitlistReadNode\n");
-		ajListDel(&(ret));
+		ajListFree(&(ret));
 	    return NULL;
 	}
 	else
@@ -2174,7 +2174,7 @@ AjPList embHitlistReadNode(AjPFile inf,
 		return ret;
 	    else
 	    {
-		    ajListDel(&(ret));
+		    ajListFree(&(ret));
 		return NULL;
 	    }
 	}	   
@@ -2188,7 +2188,7 @@ AjPList embHitlistReadNode(AjPFile inf,
 	if(!class)
 	{
 	    ajWarn("Bad arguments passed to embHitlistReadNode\n");
-		ajListDel(&(ret));
+		ajListFree(&(ret));
 	    return NULL;
 	}
 	else
@@ -2197,14 +2197,14 @@ AjPList embHitlistReadNode(AjPFile inf,
 		return ret;
 	    else
 	    {
-		    ajListDel(&(ret));
+		    ajListFree(&(ret));
 		return NULL;
 	    }
 	}
     } 
 
     ajWarn("Bad arguments passed to embHitlistReadNode\n");
-	ajListDel(&(ret));
+	ajListFree(&(ret));
 
     return ret;
 }
@@ -2256,7 +2256,7 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 	if(!sfam || !fold || !class)
 	{
 	    ajWarn("Bad arguments passed to embHitlistReadNodeFasta\n");
-		ajListDel(&(ret));
+		ajListFree(&(ret));
 	    return NULL;
 	}
 	else
@@ -2265,7 +2265,7 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 		return ret;
 	    else
 	    {
-		    ajListDel(&(ret));
+		    ajListFree(&(ret));
 		return NULL;
 	    }
 	}
@@ -2279,7 +2279,7 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 	if(!fold || !class)
 	{
 	    ajWarn("Bad arguments passed to embHitlistReadNodeFasta\n");
-		ajListDel(&(ret));
+		ajListFree(&(ret));
 	    return NULL;
 	}
 	else
@@ -2288,7 +2288,7 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 		return ret;
 	    else
 	    {
-		    ajListDel(&(ret));
+		    ajListFree(&(ret));
 		return NULL;
 	    }
 	}	   
@@ -2302,7 +2302,7 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 	if(!class)
 	{
 	    ajWarn("Bad arguments passed to embHitlistReadNodeFasta\n");
-		ajListDel(&(ret));
+		ajListFree(&(ret));
 	    return NULL;
 	}
 	else
@@ -2311,14 +2311,14 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 		return ret;
 	    else
 	    {
-		    ajListDel(&(ret));
+		    ajListFree(&(ret));
 		return NULL;
 	    }
 	}
     } 
 
     ajWarn("Bad arguments passed to embHitlistReadNodeFasta\n");
-	ajListDel(&(ret));
+	ajListFree(&(ret));
 
     return ret;
 }
@@ -2343,7 +2343,8 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 AjBool embHitlistWrite(AjPFile outf, const EmbPHitlist obj)
 {
     ajuint x = 0;  /* Counter */
-    
+    AjPSeqout outseq;
+
     if(!obj)
 	return ajFalse;
 
@@ -2428,7 +2429,9 @@ AjBool embHitlistWrite(AjPFile outf, const EmbPHitlist obj)
 	ajFmtPrintF(outf, "%-5s%u START; %u END;\n", "RA",
 		    obj->hits[x]->Start, obj->hits[x]->End);
 	ajFmtPrintF(outf, "XX\n");
-	ajSeqWriteXyz(outf, obj->hits[x]->Seq, "SQ");
+	outseq = ajSeqoutNewFile(outf);
+	ajSeqoutDumpSwisslike(outseq, obj->hits[x]->Seq, "SQ");
+	ajSeqoutDel(&outseq);
 	ajFmtPrintF(outf, "XX\n");
     }
     ajFmtPrintF(outf, "//\n");
@@ -2462,7 +2465,7 @@ AjBool embHitlistWriteSubset(AjPFile outf,
     ajuint x    = 0;  /* Counter */
     ajuint y    = 0;  /* Counter */
     ajuint nset = 0;  /* No. in set to be printed out */
-    
+    AjPSeqout outseq;
 
     if(!obj)
 	return ajFalse;
@@ -2550,7 +2553,9 @@ AjBool embHitlistWriteSubset(AjPFile outf,
 	    ajFmtPrintF(outf, "%-5s%u START; %u END;\n", "RA",
 			obj->hits[x]->Start, obj->hits[x]->End);
 	    ajFmtPrintF(outf, "XX\n");
-	    ajSeqWriteXyz(outf, obj->hits[x]->Seq, "SQ");
+	    outseq = ajSeqoutNewFile(outf);
+	    ajSeqoutDumpSwisslike(outseq, obj->hits[x]->Seq, "SQ");
+	    ajSeqoutDel(&outseq);
 	    ajFmtPrintF(outf, "XX\n");
 	}
     }
@@ -3503,7 +3508,7 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
 	}
     }
 
-    ret = embHitlistNew(ajListLength(list));
+    ret = embHitlistNew(ajListGetLength(list));
     ajStrAssignS(&ret->Class, class);
     ajStrAssignS(&ret->Architecture, arch);
     ajStrAssignS(&ret->Topology, top);
@@ -3518,10 +3523,10 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
     else if(ajStrMatchC(type, "LIGAND"))
       (ret)->Type = ajLIGAND;
     
-    ret->N=ajListToArray(list, (void ***)&(ret->hits));
+    ret->N=ajListToarray(list, (void ***)&(ret->hits));
     
 
-    ajListDel(&list);
+    ajListFree(&list);
     ajStrDel(&class);
     ajStrDel(&arch);
     ajStrDel(&top);
@@ -3767,13 +3772,13 @@ AjBool embHitlistClassify(EmbPHitlist hitlist, const AjPList targets,
 
 
     /* Create list & list iterator & other memory */
-    itert   = ajListIterRead(targets);
+    itert   = ajListIterNewread(targets);
     idxlist = ajListNew();
     tmpstr  = ajStrNew();
     
 
     /* Loop through list of targets filling list of Hitidx structures */
-    while((ptrt=(EmbPHitlist)ajListIterNext(itert)))
+    while((ptrt=(EmbPHitlist)ajListIterGet(itert)))
     {
 	/* Write Hitidx structure */
 	for(x=0;x<ptrt->N;x++)
@@ -3801,7 +3806,7 @@ AjBool embHitlistClassify(EmbPHitlist hitlist, const AjPList targets,
     /* Order the list of Hitidx structures by Id and transform 
        into an array */
     ajListSort(idxlist, embHitidxMatchId);
-    idxsiz = ajListToArray(idxlist, (void ***) &idxarr);
+    idxsiz = ajListToarray(idxlist, (void ***) &idxarr);
         
 
     /* Loop through list of hits */
@@ -4055,9 +4060,9 @@ AjBool embHitlistClassify(EmbPHitlist hitlist, const AjPList targets,
 
     while(ajListPop(idxlist, (void **) &ptri))
 	embHitidxDel(&ptri);	
-    ajListDel(&idxlist);
+    ajListFree(&idxlist);
     AJFREE(idxarr);
-    ajListIterFree(&itert);
+    ajListIterDel(&itert);
     ajStrDel(&tmpstr);
 
     return ajTrue;
@@ -4693,7 +4698,7 @@ AjBool embSignatureAlignSeqall(const EmbPSignature sig, AjPSeqall db,
 	 
 
 	    /* Pop the hit (lowest scoring) from the bottom of the list */
-	    ajListPopEnd(listhits, (void *) &ptr);
+	    ajListPopLast(listhits, (void *) &ptr);
 	    embHitDel(&ptr);
 	}
     }
@@ -4704,11 +4709,11 @@ AjBool embSignatureAlignSeqall(const EmbPSignature sig, AjPSeqall db,
 
 
     /* Convert list to array within Hitlist object */
-    nhits=ajListToArray(listhits, (void ***)  &(*hitlist)->hits);
+    nhits=ajListToarray(listhits, (void ***)  &(*hitlist)->hits);
     (*hitlist)->N = nhits;
     
 
-    ajListDel(&listhits);
+    ajListFree(&listhits);
     ajSeqDel(&seq);
 
     return ajTrue;

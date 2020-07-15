@@ -125,13 +125,13 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
     ** list, otherwise it will read from the current position.
     */
     if(!(*iter))
-	*iter=ajListIterRead(in);
+	*iter=ajListIterNewread(in);
 
 
-    if(!((scoptmp=(AjPScophit)ajListIterNext(*iter))))
+    if(!((scoptmp=(AjPScophit)ajListIterGet(*iter))))
     {
 /*	ajWarn("Empty list in embDmxScophitsToHitlist"); */
-	ajListIterFree(iter);	
+	ajListIterDel(iter);	
 	return ajFalse;
     }
 
@@ -178,38 +178,38 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
     tmp = NULL;
         
 
-    while((scoptmp=(AjPScophit)ajListIterNext(*iter)))
+    while((scoptmp=(AjPScophit)ajListIterGet(*iter)))
     {
 	/*
-	** The ajListIterBackNext(*iter); return the
+	** The ajListIterGetBack(*iter); return the
 	** iterator to the correct position for the 
 	** next read
 	*/
 	if(do_class)
 	    if(!ajStrMatchS(scoptmp->Class, class))
 	    {
-		ajListIterBackNext(*iter);
+		ajListIterGetBack(*iter);
 		break;
 	    }
 	
 	if(do_fold)
 	    if(!ajStrMatchS(scoptmp->Fold, fold))
 	    {
-		ajListIterBackNext(*iter);
+		ajListIterGetBack(*iter);
 		break;
 	    }
 	
 	if(do_sfam)
 	    if(!ajStrMatchS(scoptmp->Superfamily, sfam))
 	    {
-		ajListIterBackNext(*iter);
+		ajListIterGetBack(*iter);
 		break;
 	    }
 	
 	if(do_fam)
 	    if(!ajStrMatchS(scoptmp->Family, fam))
 	    {
-		ajListIterBackNext(*iter);
+		ajListIterGetBack(*iter);
 		break;
 	    }
 	
@@ -228,13 +228,13 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
     
 
     /* Copy temp. list to Hitlist */
-    (*out)->N = ajListToArray(list, (void ***) &((*out)->hits));
+    (*out)->N = ajListToarray(list, (void ***) &((*out)->hits));
 
     ajStrDel(&fam);
     ajStrDel(&sfam);
     ajStrDel(&fold);
     ajStrDel(&class);
-    ajListDel(&list);	    
+    ajListFree(&list);	    
 
     return ajTrue;
 }
@@ -348,13 +348,13 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
     ** list, otherwise it will read from the current position.
     */
     if(!(*iter))
-	*iter=ajListIterRead(in);
+	*iter=ajListIterNewread(in);
 
 
-    if(!((scoptmp=(AjPScophit)ajListIterNext(*iter))))
+    if(!((scoptmp=(AjPScophit)ajListIterGet(*iter))))
     {
 	ajWarn("Empty list in embDmxScophitsToHitlist");
-	ajListIterFree(iter);	
+	ajListIterDel(iter);	
 	return ajFalse;
     }
 
@@ -365,7 +365,7 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
     if((ajStrMatchC(scoptmp->Acc,"Not_available")) ||
        (MAJSTRGETLEN(scoptmp->Acc)==0))
     {
-	while((scoptmp=(AjPScophit)ajListIterNext(*iter)))
+	while((scoptmp=(AjPScophit)ajListIterGet(*iter)))
 	{
 	    if((ajStrMatchC(scoptmp->Acc,"Not_available") == ajFalse) &&
 	       (MAJSTRGETLEN(scoptmp->Acc)!=0))
@@ -375,7 +375,7 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
 	{
 	    ajWarn("List with no Scophits with Acc in "
 		   "embDmxScophitsAccToHitlist");
-	    ajListIterFree(iter);	
+	    ajListIterDel(iter);	
 	    return ajFalse;
 	}
     }
@@ -430,7 +430,7 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
     
         
 
-    while((scoptmp=(AjPScophit)ajListIterNext(*iter)))
+    while((scoptmp=(AjPScophit)ajListIterGet(*iter)))
     {
 	if(do_class)
 	    if(!ajStrMatchS(scoptmp->Class, class))
@@ -471,14 +471,14 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
         
 
     /* Copy temp. list to Hitlist */
-    (*out)->N = ajListToArray(list, (void ***) &((*out)->hits));
+    (*out)->N = ajListToarray(list, (void ***) &((*out)->hits));
 
     /* Tidy up and return */
     ajStrDel(&fam);
     ajStrDel(&sfam);
     ajStrDel(&fold);
     ajStrDel(&class);
-    ajListDel(&list);	    
+    ajListFree(&list);	    
 
     return ajTrue;
 }
@@ -520,7 +520,7 @@ AjBool embDmxHitsWrite(AjPFile outf, EmbPHitlist hits, ajint maxhits)
     
     
     /* Push hits onto tmplist */
-    ajListPushApp(tmplist, hits);
+    ajListPushAppend(tmplist, hits);
     embDmxHitlistToScophits(tmplist, outlist);
     ajListSort(outlist, ajDmxScophitCompPval);
     
@@ -548,8 +548,8 @@ AjBool embDmxHitsWrite(AjPFile outf, EmbPHitlist hits, ajint maxhits)
     ajFmtPrintF(outf,"XX\n");
     
 
-    iter=ajListIterRead(outlist);
-    while((hit=(AjPScophit) ajListIterNext(iter)))
+    iter=ajListIterNewread(outlist);
+    while((hit=(AjPScophit) ajListIterGet(iter)))
     {
 /*Fix for Typeobj 
 	if(cnt==maxhits)
@@ -583,9 +583,9 @@ AjBool embDmxHitsWrite(AjPFile outf, EmbPHitlist hits, ajint maxhits)
 	x++;
     }
     
-    ajListIterFree(&iter);
-    ajListDel(&outlist);
-    ajListDel(&tmplist);
+    ajListIterDel(&iter);
+    ajListFree(&outlist);
+    ajListFree(&tmplist);
     
     /*Print tail info*/
     ajFmtPrintF(outf, "XX\n//\n");   
@@ -712,7 +712,7 @@ AjBool embDmxScopalgToScop(const AjPScopalg align, AjPScop const *scop_arr,
 	    ajFmtPrint("Pushing %d (%S)\n", scop_arr[idx]->Sunid_Family, 
 		       scop_arr[idx]->Acc); */
 	    
-            ajListPushApp(*list,(void*)scop_arr[idx]);
+            ajListPushAppend(*list,(void*)scop_arr[idx]);
 	}
 	
     }
@@ -979,7 +979,7 @@ AjBool embDmxScophitMergeInsertOther(AjPList list, AjPScophit hit1,
     new = embDmxScophitMerge(hit1, hit2);
     ajDmxScophitTarget(&hit1);
     ajDmxScophitTarget(&hit2);
-    ajListPushApp(list, (void *) new);
+    ajListPushAppend(list, (void *) new);
     
     return ajTrue;
 }
@@ -1016,7 +1016,7 @@ AjBool embDmxScophitMergeInsertOtherTarget(AjPList list, AjPScophit hit1,
     ajDmxScophitTarget(&new);
     ajDmxScophitTarget(&hit1);
     ajDmxScophitTarget(&hit2);
-    ajListPushApp(list, (void *) new);
+    ajListPushAppend(list, (void *) new);
     
     return ajTrue;
 }
@@ -1056,7 +1056,7 @@ AjBool embDmxScophitMergeInsertOtherTargetBoth(AjPList list, AjPScophit hit1,
     ajDmxScophitTarget2(&new);
     ajDmxScophitTarget2(&hit1);
     ajDmxScophitTarget2(&hit2);
-    ajListPushApp(list, (void *) new);
+    ajListPushAppend(list, (void *) new);
     
     return ajTrue;
 }
@@ -1093,7 +1093,7 @@ AjBool embDmxScophitMergeInsertThis(const AjPList list, AjPScophit hit1,
     new = embDmxScophitMerge(hit1, hit2);
     ajDmxScophitTarget(&hit1);
     ajDmxScophitTarget(&hit2);
-    ajListInsert(iter, (void *) new);
+    ajListIterInsert(iter, (void *) new);
     
     return ajTrue;
 }
@@ -1133,7 +1133,7 @@ AjBool embDmxScophitMergeInsertThisTarget(const AjPList list,
     ajDmxScophitTarget(&new);
     ajDmxScophitTarget(&hit1);
     ajDmxScophitTarget(&hit2);
-    ajListInsert(iter, (void *) new);
+    ajListIterInsert(iter, (void *) new);
     
     return ajTrue;
 }
@@ -1177,7 +1177,7 @@ AjBool embDmxScophitMergeInsertThisTargetBoth(const AjPList list,
     ajDmxScophitTarget2(&new);
     ajDmxScophitTarget2(&hit1);
     ajDmxScophitTarget2(&hit2);
-    ajListInsert(iter, (void *) new);
+    ajListIterInsert(iter, (void *) new);
     
     return ajTrue;
 }
@@ -1266,7 +1266,7 @@ AjBool embDmxSeqNR(const AjPList input, AjPUint *keep, ajint *nset,
     cvt = ajMatrixfCvt(matrix);
 
     /* Convert the AjPList to an array of AjPseq */
-    if(!(nin=ajListToArray(input,(void ***)&inseqs)))
+    if(!(nin=ajListToarray(input,(void ***)&inseqs)))
     {
 	ajWarn("Zero sized list of sequences passed into SeqsetNR");
 	AJFREE(compass);
@@ -1552,7 +1552,7 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPUint *keep, ajint *nset,
 
 
     /* Convert the AjPList to an array of AjPseq */
-    if(!(nin=ajListToArray(input,(void ***)&inseqs)))
+    if(!(nin=ajListToarray(input,(void ***)&inseqs)))
     {
 	ajWarn("Zero sized list of sequences passed into SeqsetNR");
 	AJFREE(compass);
@@ -1817,7 +1817,7 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
     cvt = ajMatrixfCvt(matrix);
 
     /* Convert the AjPList to an array of AjPseq */
-    if(!(nin=ajListToArray(input,(void ***)&inseqs)))
+    if(!(nin=ajListToarray(input,(void ***)&inseqs)))
     {
 	ajWarn("Zero sized list of sequences passed into embDmxSeqCompall");
 	AJFREE(compass);
@@ -1992,7 +1992,7 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
 	    {
 		if(MAJSTRGETLEN(hit->Seq))
 		    ajStrRemoveWhite(&hit->Seq);
-		ajListPushApp(tmplist, hit);
+		ajListPushAppend(tmplist, hit);
 	    }
 	    
 	    /* Check line has correct no. of tokens and allocate Hit */
@@ -2101,7 +2101,7 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
     if((!ok) && (parseok))
     {
 	ajStrRemoveWhite(&hit->Seq);
-	ajListPushApp(tmplist, hit);
+	ajListPushAppend(tmplist, hit);
     }
 
 
@@ -2147,11 +2147,11 @@ AjBool embDmxHitlistToScophits(const AjPList in, AjPList out)
     }
 
     /* Create list iterator and new list */
-    iter = ajListIterRead(in);	
+    iter = ajListIterNewread(in);	
     
 
     /* Iterate through the list of Hitlist pointers */
-    while((hitlist=(EmbPHitlist)ajListIterNext(iter)))
+    while((hitlist=(EmbPHitlist)ajListIterGet(iter)))
     {
 	/* Loop for each hit in hitlist structure */
 	for(x=0; x<hitlist->N; ++x)
@@ -2188,12 +2188,12 @@ AjBool embDmxHitlistToScophits(const AjPList in, AjPList out)
 	    
            	     
 	    /* Push scophit onto list */
-	    ajListPushApp(out,scophit);
+	    ajListPushAppend(out,scophit);
 	}
     }	
     
 
-    ajListIterFree(&iter);	
+    ajListIterDel(&iter);	
 
     return ajTrue;
 }

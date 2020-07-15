@@ -139,23 +139,23 @@ void embIepPkRead(void)
 
 	if(ajStrPrefixCaseC(line,"Amino"))
 	{
-	    p = ajSysStrtok(p," \t\n\r");
-	    p = ajSysStrtok(NULL," \t\n\r");
+	    p = ajSysFuncStrtok(p," \t\n\r");
+	    p = ajSysFuncStrtok(NULL," \t\n\r");
 	    sscanf(p,"%lf",&amino);
 	    continue;
 	}
 
 	if(ajStrPrefixCaseC(line,"Carboxyl"))
 	{
-	    p = ajSysStrtok(p," \t\n\r");
-	    p = ajSysStrtok(NULL," \t\n\r");
+	    p = ajSysFuncStrtok(p," \t\n\r");
+	    p = ajSysFuncStrtok(NULL," \t\n\r");
 	    sscanf(p,"%lf",&carboxyl);
 	    continue;
 	}
 
-	p  = ajSysStrtok(p," \t\n\r");
-	ch = ajSysItoC(toupper((ajint)*p));
-	p  = ajSysStrtok(NULL," \t\n\r");
+	p  = ajSysFuncStrtok(p," \t\n\r");
+	ch = ajSysCastItoc(toupper((ajint)*p));
+	p  = ajSysFuncStrtok(NULL," \t\n\r");
 	sscanf(p,"%lf",&AjpK[ajAZToInt(ch)]);
     }
 
@@ -199,7 +199,7 @@ void embIepCompC(const char *s, ajint amino,
     p=s;
     while(*p)
     {
-	++c[ajAZToInt(ajSysItoC(toupper((ajint)*p)))];
+	++c[ajAZToInt(ajSysCastItoc(toupper((ajint)*p)))];
 	++p;
     }
 

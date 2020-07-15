@@ -1,6 +1,6 @@
 /* @source embdata.c
 **
-** General routines for alignment.
+** General routines for data files
 ** Copyright (c) 1999 Mark Faller
 **
 ** This program is free software; you can redistribute it and/or
@@ -41,7 +41,7 @@ static AjBool dataListNextLine(AjPFile pfile, const char *commentLine,
 
 /* @func embDataListDel *******************************************************
 **
-** Deletes the tables of data list. Calls ajTableFree for each table in the
+** Deletes the tables of data list. Calls ajTablestrFree for each table in the
 ** list, and then calls ajListFree to free the actual list.
 **
 ** @param [w] data [AjPList*] is the list of data tables to delete
@@ -55,13 +55,13 @@ void embDataListDel(AjPList* data)
    AjIList iter;
    AjPTable table;
 
-   iter = ajListIterRead(*data);
-   while(ajListIterMore(iter))
+   iter = ajListIterNewread(*data);
+   while(!ajListIterDone(iter))
    {
-      table = ajListIterNext(iter);
-      ajStrTableFree(&table);
+      table = ajListIterGet(iter);
+      ajTablestrFree(&table);
    }
-   ajListIterFree(&iter);
+   ajListIterDel(&iter);
    ajListFree(data);
 
    return;
@@ -72,7 +72,7 @@ void embDataListDel(AjPList* data)
 
 /* @funcstatic dataListNextLine ***********************************************
 **
-** private function to read in the next line of data from the file. It is
+** Private function to read in the next line of data from the file. It is
 ** called from embDataListRead.
 **
 ** @param [u] pfile [AjPFile] file pointer to the data file
@@ -163,10 +163,10 @@ void embDataListRead(AjPList data, AjPFile pfile)
 	    value = NULL;
 	    if(ajStrTokenNextParse(&tokens, &value))
 	    {
-		table = ajStrTableNewCase(350);
+		table = ajTablestrNewCaseLen(350);
 		copyKey = ajStrNewRef(key);
 		ajTablePut(table, copyKey, value);
-		ajListPushApp(data, table);
+		ajListPushAppend(data, table);
 	    }
 	    else break;
 	}
@@ -184,23 +184,23 @@ void embDataListRead(AjPList data, AjPFile pfile)
 	    /* check for end of data block*/
 	    if(! ajStrCmpC(key, endOfData))
 		break;
-	    iter = ajListIterRead(data);
-	    while(ajListIterMore(iter))
+	    iter = ajListIterNewread(data);
+	    while(!ajListIterDone(iter))
 	    {
-		ptable = ajListIterNext(iter);
+		ptable = ajListIterGet(iter);
 		copyKey = ajStrNewRef(key);
 		if(!ajStrTokenNextParse(&tokens, &tmp)) break;
 		value = ajStrNewRef(tmp);
 		ajTablePut(ptable, copyKey, value);
 	    }
-	    ajListIterFree(&iter);
+	    ajListIterDel(&iter);
 	}
     }
 
     ajStrDel(&tmp);
     ajStrDel(&line);
     ajStrTokenDel(&tokens);
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
     ajStrDel(&key);
 
     return;
@@ -238,15 +238,15 @@ void embDataListGetTables(const AjPList fullList, AjPList returnList,
    AjIList iter;
    AjPTable table;
 
-   iter = ajListIterRead(fullList);
-   while(ajListIterMore(iter))
+   iter = ajListIterNewread(fullList);
+   while(!ajListIterDone(iter))
    {
-      table = ajListIterNext(iter);
-      if(required & 1) ajListPushApp(returnList, table);
+      table = ajListIterGet(iter);
+      if(required & 1) ajListPushAppend(returnList, table);
       required >>= 1;
    }
 
-   ajListIterFree(&iter);
+   ajListIterDel(&iter);
 
    return;
 }
@@ -280,17 +280,17 @@ AjPTable embDataListGetTable(const AjPList fullList, ajuint required)
    AjIList iter;
    AjPTable returnTable = NULL;
 
-   iter = ajListIterRead(fullList);
-   while(ajListIterMore(iter))
+   iter = ajListIterNewread(fullList);
+   while(!ajListIterDone(iter))
    {
-      returnTable = ajListIterNext(iter);
+      returnTable = ajListIterGet(iter);
       if(required & 1)
 	  break;
       required >>= 1;
    }
 
 
-   ajListIterFree(&iter);
+   ajListIterDel(&iter);
 
    return returnTable;
 }
