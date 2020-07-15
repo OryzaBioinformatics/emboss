@@ -135,6 +135,8 @@ static ReportOFormat reportFormat[] =
    /* standard feature formats */
 /*    {"unknown",   "Unknown feature format",
 	 AJFALSE, 0, AJFALSE, AJTRUE,  AJFALSE, AJFALSE, reportWriteSimple},*/
+    {"simple",    "Simple report",
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteSimple},
     {"embl",      "EMBL feature format",
 	 AJFALSE, 0, AJFALSE, AJTRUE,  AJFALSE, AJFALSE, reportWriteEmbl},
     {"genbank",   "Genbank feature format",
@@ -171,8 +173,6 @@ static ReportOFormat reportFormat[] =
 	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteRegions},
     {"seqtable",  "Simple table with sequence on each line",
 	 AJFALSE, 0, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  reportWriteSeqTable},
-    {"simple",    "Simple report",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteSimple},
     {"srs",       "Simple report format for SRS",
 	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteSrs},
     {"table",     "Simple table",
@@ -437,10 +437,10 @@ static void reportWriteDbMotif(AjPReport thys,
     
     ntags = ajReportLists(thys, &tagtypes, &tagnames, &tagprints, &tagsizes);
     
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature = (AjPFeature)ajListIterNext(iterft);
+	feature = (AjPFeature)ajListIterGet(iterft);
 	istart  = feature->Start;
 	iend    = feature->End;
 	ilen    = iend - istart + 1;
@@ -486,7 +486,7 @@ static void reportWriteDbMotif(AjPReport thys,
     ajStrDel(&subseq);
     ajStrDel(&tagval);
     
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
     
     ajReportWriteTail(thys, ftable, seq);
 
@@ -568,10 +568,10 @@ static void reportWriteDiffseq(AjPReport thys,
     
     ajReportWriteHeader(thys, ftable, seq);
     
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature = (AjPFeature)ajListIterNext(iterft);
+	feature = (AjPFeature)ajListIterGet(iterft);
 	istart  = feature->Start;
 	iend    = feature->End;
 	ilen    = iend - istart + 1;
@@ -655,7 +655,7 @@ static void reportWriteDiffseq(AjPReport thys,
     ajStrDel(&tagval);
     ajStrDel(&jname);
     
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
 
     return;
 }
@@ -737,10 +737,10 @@ static void reportWriteDraw(AjPReport thys,
     ajFmtPrintF(outf, "\n"); 
     ajFmtPrintF(outf, "group\n");
     
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature = (AjPFeature)ajListIterNext(iterft);
+	feature = (AjPFeature)ajListIterGet(iterft);
 
 	ajFmtPrintF(outf, "label\n");
 	if (j5 >= 0)
@@ -781,7 +781,7 @@ static void reportWriteDraw(AjPReport thys,
     ajStrDel(&subseq);
     ajStrDel(&tagval);
     
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
 
     AJFREE(tagtypes);
     AJFREE(tagnames);
@@ -859,10 +859,10 @@ static void reportWriteExcel(AjPReport thys,
 	ajFmtPrintF(outf, "\t%S", tagprints[j]);
     ajFmtPrintF(outf, "\n");
     
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature = (AjPFeature)ajListIterNext(iterft);
+	feature = (AjPFeature)ajListIterGet(iterft);
 	istart  = feature->Start;
 	iend    = feature->End;
 	score   = feature->Score;
@@ -897,7 +897,7 @@ static void reportWriteExcel(AjPReport thys,
     ajStrDel(&tmpstr);
     ajStrDel(&tagval);
     
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
 
     AJFREE(tagtypes);
     AJFREE(tagnames);
@@ -960,10 +960,10 @@ static void reportWriteFeatTable(AjPReport thys,const  AjPFeattable ftable,
     
     ntags = ajReportLists(thys, &tagtypes, &tagnames, &tagprints, &tagsizes);
     
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature = (AjPFeature)ajListIterNext(iterft);
+	feature = (AjPFeature)ajListIterGet(iterft);
 	istart = feature->Start;
 	iend = feature->End;
 	ajStrAssignSubS(&subseq, ajSeqGetSeqS(seq), istart-1, iend-1);
@@ -996,7 +996,7 @@ static void reportWriteFeatTable(AjPReport thys,const  AjPFeattable ftable,
     ajStrDel(&subseq);
     ajStrDel(&tagval);
     
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
 
     AJFREE(tagtypes);
     AJFREE(tagnames);
@@ -1041,17 +1041,20 @@ static void reportWriteListFile(AjPReport thys,
     ajuint iend   = 0;
     AjPStr subseq = NULL;
     ajuint i = 0;
+    ajint ipos;
+    ajint jpos;
     AjPStr tmpstr = NULL;
+    AjPStr tmpname = NULL;
 
     outf = thys->File;
     thys->Showusa = ajTrue;		/* so we get a usable USA */
 
     ajReportWriteHeader(thys, ftable, seq);
 
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature = (AjPFeature)ajListIterNext(iterft);
+	feature = (AjPFeature)ajListIterGet(iterft);
 	istart = feature->Start;
 	iend = feature->End;
 	ajStrAssignSubS(&subseq, ajSeqGetSeqS(seq), istart-1, iend-1);
@@ -1063,7 +1066,13 @@ static void reportWriteListFile(AjPReport thys,
 	if(istart)
 	{
 	    if(feature->Strand == '-')
-		ajFmtPrintAppS(&tmpstr, "%d", ajSeqGetLen(seq) - istart + 1);
+	    {
+		if(ajSeqIsReversed(seq))
+		    ajFmtPrintAppS(&tmpstr, "%d", iend);
+		else
+		    ajFmtPrintAppS(&tmpstr, "%d",
+				   ajSeqGetLen(seq) - istart + 1);
+	    }
 	    else
 		ajFmtPrintAppS(&tmpstr, "%d", istart);
 	}
@@ -1072,7 +1081,12 @@ static void reportWriteListFile(AjPReport thys,
 	if(iend)
 	{
 	    if(feature->Strand == '-')
-		ajFmtPrintAppS(&tmpstr, "%d", ajSeqGetLen(seq) - iend + 1);
+	    {
+		if(ajSeqIsReversed(seq))
+		    ajFmtPrintAppS(&tmpstr, "%d", istart);
+		else
+		    ajFmtPrintAppS(&tmpstr, "%d", ajSeqGetLen(seq) - iend + 1);
+	    }
 	    else
 		ajFmtPrintAppS(&tmpstr, "%d", iend);
 	}
@@ -1081,21 +1095,29 @@ static void reportWriteListFile(AjPReport thys,
 	    ajFmtPrintAppS(&tmpstr, ":r");
 	ajFmtPrintAppS(&tmpstr, "]");
 
+	ajStrAssignS(&tmpname, ajSeqGetUsaS(seq));
+	if(ajStrGetCharLast(tmpname) == ']') {
+	    jpos = ajStrGetLen(tmpname);
+	    ipos = ajStrFindlastC(tmpname, "[");
+	    ajStrCutRange(&tmpname, ipos, jpos);
+	}
+
 	if(ajStrGetLen(tmpstr) > 3)
 	    ajFmtPrintF(outf, "%S%S\n",
-			ajReportSeqName(thys, seq), tmpstr);
+			tmpname, tmpstr);
 	else
 	    ajFmtPrintF(outf, "%S\n",
-			ajReportSeqName(thys, seq));
+			tmpname);
 
 	ajStrDelStatic(&tmpstr);
     }
 
     ajReportWriteTail(thys, ftable, seq);
 
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
     ajStrDel(&subseq);
     ajStrDel(&tmpstr);
+    ajStrDel(&tmpname);
 
     return;
 }
@@ -1170,10 +1192,10 @@ static void reportWriteMotif(AjPReport thys,
 	    break;
 	}
     
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature = (AjPFeature)ajListIterNext(iterft);
+	feature = (AjPFeature)ajListIterGet(iterft);
 	istart = feature->Start;
 	iend = feature->End;
 	score = feature->Score;
@@ -1237,7 +1259,7 @@ static void reportWriteMotif(AjPReport thys,
     ajStrDel(&tmpstr);
     ajStrDel(&tagval);
     
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
 
     AJFREE(tagtypes);
     AJFREE(tagnames);
@@ -1324,10 +1346,10 @@ static void reportWriteNameTable(AjPReport thys, const AjPFeattable ftable,
     }
     ajFmtPrintF(outf, "\n");
     
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature =(AjPFeature)ajListIterNext(iterft);
+	feature =(AjPFeature)ajListIterGet(iterft);
 	istart = feature->Start;
 	iend = feature->End;
 	score = feature->Score;
@@ -1360,7 +1382,7 @@ static void reportWriteNameTable(AjPReport thys, const AjPFeattable ftable,
     ajStrDel(&subseq);
     ajStrDel(&tagval);
     
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
 
     AJFREE(tagtypes);
     AJFREE(tagnames);
@@ -1424,10 +1446,10 @@ static void reportWriteRegions(AjPReport thys, const AjPFeattable ftable,
     
     ntags = ajReportLists(thys, &tagtypes, &tagnames, &tagprints, &tagsizes);
     
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature = (AjPFeature)ajListIterNext(iterft);
+	feature = (AjPFeature)ajListIterGet(iterft);
 	istart = feature->Start;
 	iend = feature->End;
 	score = feature->Score;
@@ -1461,7 +1483,7 @@ static void reportWriteRegions(AjPReport thys, const AjPFeattable ftable,
     ajStrDel(&tagstr);
     ajStrDel(&tagval);
     
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
 
     AJFREE(tagtypes);
     AJFREE(tagnames);
@@ -1543,10 +1565,10 @@ static void reportWriteSeqTable(AjPReport thys, const AjPFeattable ftable,
     }
     ajFmtPrintF(outf, " Sequence\n");
     
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature = (AjPFeature)ajListIterNext(iterft);
+	feature = (AjPFeature)ajListIterGet(iterft);
 	istart = feature->Start;
 	iend = feature->End;
 	if(feature->Strand == '-')
@@ -1586,7 +1608,7 @@ static void reportWriteSeqTable(AjPReport thys, const AjPFeattable ftable,
     ajStrDel(&subseq);
     ajStrDel(&tagval);
     
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
 
     AJFREE(tagtypes);
     AJFREE(tagnames);
@@ -1729,10 +1751,10 @@ static void reportWriteSrsFlags(AjPReport thys, const AjPFeattable ftable,
     
     ntags = ajReportLists(thys, &tagtypes, &tagnames, &tagprints, &tagsizes);
     
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature = (AjPFeature)ajListIterNext(iterft);
+	feature = (AjPFeature)ajListIterGet(iterft);
 	istart  = feature->Start;
 	iend    = feature->End;
 	ilen    = iend - istart + 1;
@@ -1780,7 +1802,7 @@ static void reportWriteSrsFlags(AjPReport thys, const AjPFeattable ftable,
     ajStrDel(&subseq);
     ajStrDel(&tagval);
     
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
 
     AJFREE(tagtypes);
     AJFREE(tagnames);
@@ -1867,10 +1889,10 @@ static void reportWriteTable(AjPReport thys,
     }
     ajFmtPrintF(outf, "\n");
     
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature = (AjPFeature)ajListIterNext(iterft);
+	feature = (AjPFeature)ajListIterGet(iterft);
 
 	istart = feature->Start;
 	iend = feature->End;
@@ -1904,7 +1926,7 @@ static void reportWriteTable(AjPReport thys,
     ajStrDel(&tagval);
     ajStrDel(&tmpstr);
 
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
 
     AJFREE(tagtypes);
     AJFREE(tagnames);
@@ -1998,10 +2020,10 @@ static void reportWriteTagseq(AjPReport thys,
     for(i=10; i < istop; i+=10)
 	ajFmtPrintAppS(&seqnumber, "    .%5d", i+10);
 
-    iterft = ajListIterRead(ftable->Features);
-    while(ajListIterMore(iterft))
+    iterft = ajListIterNewread(ftable->Features);
+    while(!ajListIterDone(iterft))
     {
-	feature = (AjPFeature)ajListIterNext(iterft);
+	feature = (AjPFeature)ajListIterGet(iterft);
 	istart = feature->Start;
 	iend = feature->End;
 	ilen = iend - istart + 1;
@@ -2046,7 +2068,7 @@ static void reportWriteTagseq(AjPReport thys,
     
     ajStrDel(&substr);
     ajStrDel(&seqnumber);
-    ajListIterFree(&iterft);
+    ajListIterDel(&iterft);
 
     AJFREE(tagtypes);
     AJFREE(tagnames);
@@ -2085,20 +2107,20 @@ void ajReportDel(AjPReport* pthys)
 
     while(ajListPop(thys->FileTypes,(void **)&str))
 	ajStrDel(&str);
-    ajListDel(&thys->FileTypes);
+    ajListFree(&thys->FileTypes);
     while(ajListPop(thys->FileNames,(void **)&str))
 	ajStrDel(&str);
-    ajListDel(&thys->FileNames);
+    ajListFree(&thys->FileNames);
 
     while(ajListPop(thys->Tagnames,(void **)&str))
 	ajStrDel(&str);
-    ajListDel(&thys->Tagnames);
+    ajListFree(&thys->Tagnames);
     while(ajListPop(thys->Tagprints,(void **)&str))
 	ajStrDel(&str);
-    ajListDel(&thys->Tagprints);
+    ajListFree(&thys->Tagprints);
     while(ajListPop(thys->Tagtypes,(void **)&str))
 	ajStrDel(&str);
-    ajListDel(&thys->Tagtypes);
+    ajListFree(&thys->Tagtypes);
 
     ajStrDel(&thys->Header);
     ajStrDel(&thys->SubHeader);
@@ -2254,16 +2276,16 @@ AjBool ajReportSetTags(AjPReport thys, const AjPStr taglist)
 	ajRegPost(reportTagExp, &tmpstr);
 	ajStrAssignS(&tmplist, tmpstr);
 
-	if(!ajListLength(thys->Tagtypes))
+	if(!ajListGetLength(thys->Tagtypes))
 	{
 	    thys->Tagtypes  = ajListNew();
 	    thys->Tagnames  = ajListNew();
 	    thys->Tagprints = ajListNew();
 	}
 
-	ajListPushApp(thys->Tagtypes,  tagtype);
-	ajListPushApp(thys->Tagnames,  tagname);
-	ajListPushApp(thys->Tagprints, tagprint);
+	ajListPushAppend(thys->Tagtypes,  tagtype);
+	ajListPushAppend(thys->Tagnames,  tagname);
+	ajListPushAppend(thys->Tagprints, tagprint);
     }
 
     if(ajStrGetLen(tmplist))
@@ -2305,11 +2327,11 @@ AjBool ajReportValid(AjPReport thys)
 	}
 
     /* so far, no format has mintags non-zero */
-    if( reportFormat[thys->Format].Mintags > ajListLength(thys->Tagnames))
+    if( reportFormat[thys->Format].Mintags > ajListGetLength(thys->Tagnames))
     {
 	ajErr("Report format '%S' needs %d tags, has only %d",
 	      reportFormat[thys->Format].Mintags,
-	      ajListLength(thys->Tagnames));
+	      ajListGetLength(thys->Tagnames));
 	return ajFalse;
     }
 
@@ -2489,12 +2511,12 @@ ajint ajReportLists(const AjPReport thys, AjPStr** types, AjPStr** names,
     static ajuint jmin = 6;
     ajint i;
 
-    if(!ajListLength(thys->Tagtypes))
+    if(!ajListGetLength(thys->Tagtypes))
 	return 0;
 
-    ntags = ajListToArray(thys->Tagnames, (void***) names);
-    ntags = ajListToArray(thys->Tagprints, (void***) prints);
-    ntags = ajListToArray(thys->Tagtypes,  (void***) types);
+    ntags = ajListToarray(thys->Tagnames, (void***) names);
+    ntags = ajListToarray(thys->Tagprints, (void***) prints);
+    ntags = ajListToarray(thys->Tagtypes,  (void***) types);
 
     if(ntags)
     {
@@ -2537,7 +2559,7 @@ void ajReportWriteHeader(AjPReport thys,
     
     outf = thys->File;
 
-    today =  ajTimeTodayF("report");
+    today =  ajTimeNewTodayFmt("report");
     
     /* Header for the top of the file (first call for report only) */
     
@@ -2569,21 +2591,21 @@ void ajReportWriteHeader(AjPReport thys,
 			thys->MaxHitSeq);
 	ajFmtPrintF(outf, "# Report_format: %S\n", thys->Formatstr);
 	ajFmtPrintF(outf, "# Report_file: %F\n", outf);
-	if(ajListLength(thys->FileNames))
+	if(ajListGetLength(thys->FileNames))
 	{
 	    i = 0;
-	    itername = ajListIterRead(thys->FileNames);
-	    itertype = ajListIterRead(thys->FileTypes);
+	    itername = ajListIterNewread(thys->FileNames);
+	    itertype = ajListIterNewread(thys->FileTypes);
 	    ajFmtPrintF(outf, "# Additional_files: %d\n",
-			ajListLength(thys->FileNames));
-	    while(ajListIterMore(itername) && ajListIterMore(itertype))
+			ajListGetLength(thys->FileNames));
+	    while(!ajListIterDone(itername) && !ajListIterDone(itertype))
 	    {
-		tmpname = (AjPStr)ajListIterNext(itername);
-		tmptype = (AjPStr)ajListIterNext(itertype);
+		tmpname = (AjPStr)ajListIterGet(itername);
+		tmptype = (AjPStr)ajListIterGet(itertype);
 		ajFmtPrintF(outf, "# %d: %S (%S)\n", ++i, tmpname, tmptype);
 	    }
-	    ajListIterFree(&itername);
-	    ajListIterFree(&itertype);
+	    ajListIterDel(&itername);
+	    ajListIterDel(&itertype);
 	}
 
 	if(!doSingle || thys->Multi)
@@ -3184,6 +3206,7 @@ const AjPStr ajReportSeqName(const AjPReport thys, const AjPSeq seq)
 
 
 
+
 /* @func ajReportFileAdd ******************************************************
 **
 ** Adds an extra file name and description to the report
@@ -3205,10 +3228,10 @@ void ajReportFileAdd(AjPReport thys, AjPFile file, const AjPStr type)
 	thys->FileNames = ajListstrNew();
 
     ajStrAssignS(&tmptype, type);
-    ajListstrPushApp(thys->FileTypes, tmptype);
+    ajListstrPushAppend(thys->FileTypes, tmptype);
 
     ajFmtPrintS(&tmpname, "%F", file);
-    ajListstrPushApp(thys->FileNames, tmpname);
+    ajListstrPushAppend(thys->FileNames, tmpname);
 
     return;
 }

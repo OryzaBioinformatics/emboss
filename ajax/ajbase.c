@@ -175,7 +175,7 @@ char ajAZToBinC(char c)
     if(!aj_base_I)
 	ajBaseInit();
 
-    return ajSysItoC(aj_base_table[toupper((ajint) c)]);
+    return ajSysCastItoc(aj_base_table[toupper((ajint) c)]);
 }
 
 
@@ -249,12 +249,12 @@ AjBool ajBaseInit(void)
 	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || *p=='\n')
 	    continue;
-	p = ajSysStrtok(p," \t\r");
+	p = ajSysFuncStrtok(p," \t\r");
 	ajStrAssignC(&code,p);
-	p=ajSysStrtok(NULL," \t\r");
+	p=ajSysFuncStrtok(NULL," \t\r");
 	if(sscanf(p,"%d",&n)!=1)
 	    ajFatal("Bad format IUB file");
-	p = ajSysStrtok(NULL," \t\r");
+	p = ajSysFuncStrtok(NULL," \t\r");
 	ajStrAssignC(&list,p);
 	qc = (ajint) ajStrGetCharFirst(code);
 	ajStrAssignS(&aj_base_iubS[toupper(qc)].code,code);

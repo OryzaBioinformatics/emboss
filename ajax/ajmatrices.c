@@ -650,7 +650,6 @@ const AjPStr ajMatrixfName(const AjPMatrixf thys)
 AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
 {
     AjPStr buffer = NULL;
-    AjPStr delim  = NULL;
     const AjPStr tok    = NULL;
 
     AjPStr firststring  = NULL;
@@ -685,14 +684,12 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
 
     firststring = ajStrNew();
     
-    delim = ajStrNewC(delimstr);
-    
     ajFileDataNew(filename,&file);
     
     if(!file)
     {
 	ajStrDel(&firststring);
-	ajListDel(&rlabel_list);
+	ajListFree(&rlabel_list);
 	return ajFalse;
     }
     
@@ -711,25 +708,26 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
 	    else
 	    {	
 		ajFmtScanC(ptr, "%S", &firststring);
-		ajListPushApp(rlabel_list, firststring);
+		ajListPushAppend(rlabel_list, firststring);
 		firststring = ajStrNew();	
 	    }
 	}
     }
     first = ajTrue;
     ajStrDel(&firststring);
-    rows = ajListToArray(rlabel_list, (void ***) &rlabel_arr);
+    rows = ajListToarray(rlabel_list, (void ***) &rlabel_arr);
     ajFileSeek(file, 0, 0);
 
 
     while(ajFileGets(file,&buffer))
     {
+	ajStrRemoveWhiteExcess(&buffer);
 	ptr = ajStrGetPtr(buffer);
-	if(*ptr != '#' && *ptr != '\n')
+	if(*ptr && *ptr != '#')
 	{				
 	    if(first)
 	    {
-		cols = ajStrParseCountC(buffer,ajStrGetPtr(delim));
+		cols = ajStrParseCountC(buffer,delimstr);
 		AJCNEW0(orderstring, cols);
 		for(i=0; i<cols; i++)   
 		    orderstring[i] = ajStrNew();
@@ -758,8 +756,7 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
 		 ** cols+1 is used below because 2nd and subsequent lines have 
 		 ** one more string in them (the residue label) 
 		 */
-		templine = ajArrIntLine(buffer,ajStrGetPtr(delim),2,
-					cols+1);
+		templine = ajArrIntLine(buffer,delimstr,2,cols+1);
 		
 		for(i=0; i<cols; i++)   
 		{
@@ -783,7 +780,6 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
 
     ajFileClose(&file);
     ajStrDel(&buffer);
-    ajStrDel(&delim);
 
     for(i=0; i<cols; i++)   
 	ajStrDel(&orderstring[i]);
@@ -797,7 +793,7 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
     for(i=0; i<rows; i++)   
 	ajStrDel(&rlabel_arr[i]);
     AJFREE(rlabel_arr);
-    ajListDel(&rlabel_list);
+    ajListFree(&rlabel_list);
 
     return ajTrue;
 }
@@ -819,7 +815,6 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
 {
     AjPStr *orderstring = NULL;
     AjPStr buffer       = NULL;
-    AjPStr delim        = NULL;
     AjPStr firststring  = NULL;
     AjPStr reststring   = NULL;
     const AjPStr tok    = NULL;
@@ -858,8 +853,6 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
     firststring = ajStrNew();
     reststring  = ajStrNew();
 
-    delim = ajStrNewC(delimstr);
-    
     ajFileDataNew(filename,&file);
     
     if(!file)
@@ -885,25 +878,26 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
 	    else
 	    {
 		ajFmtScanC(ptr, "%S", &firststring);
-		ajListPushApp(rlabel_list, firststring);
+		ajListPushAppend(rlabel_list, firststring);
 		firststring = ajStrNew();
 	    }
 	}
     }
     first = ajTrue;
     ajStrDel(&firststring);
-    rows = ajListToArray(rlabel_list, (void ***) &rlabel_arr);
+    rows = ajListToarray(rlabel_list, (void ***) &rlabel_arr);
     ajFileSeek(file, 0, 0);
 
 
     while(ajFileGets(file,&buffer))
     {
+	ajStrRemoveWhiteExcess(&buffer);
 	ptr = ajStrGetPtr(buffer);
-	if(*ptr != '#' && *ptr != '\n')
+	if(*ptr && *ptr != '#')
 	{				
 	    if(first)
 	    {
-		cols = ajStrParseCountC(buffer,ajStrGetPtr(delim));
+		cols = ajStrParseCountC(buffer,delimstr);
 		AJCNEW0(orderstring, cols);
 		for(i=0; i<cols; i++)   
 		    orderstring[i] = ajStrNew();
@@ -937,11 +931,10 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
 		**   
 		** Use cols,1,cols in below because although 2nd and 
 		** subsequent lines have one more string in them (the
-		** residue label in the 1st column) we've discard that
-		** from the string that's passsed
+		** residue label in the 1st column) we've discarded that
+		** from the string that's passed
 		*/
-		templine
-		    =ajArrFloatLine(reststring,ajStrGetPtr(delim),1,cols);
+		templine = ajArrFloatLine(reststring,delimstr,1,cols);
 		
 		for(i=0; i<cols; i++)  
 		{
@@ -965,8 +958,6 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
 
     ajFileClose(&file);
     ajStrDel(&buffer);
-    ajStrDel(&delim);
-
 
     for(i=0; i<cols; i++)   
 	ajStrDel(&orderstring[i]);
@@ -981,7 +972,7 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
    for(i=0; i<rows; i++)   
 	ajStrDel(&rlabel_arr[i]);
     AJFREE(rlabel_arr);
-    ajListDel(&rlabel_list);
+    ajListFree(&rlabel_list);
 
     return ajTrue;
 }

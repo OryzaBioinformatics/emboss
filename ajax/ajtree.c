@@ -115,6 +115,7 @@ static AjPTree treeNew(AjEnum type)
 
 
 
+
 /* @func ajTreestrCopy ********************************************************
 **
 ** Copy a string tree.
@@ -636,8 +637,6 @@ ajuint ajTreestrToArray(const AjPTree thys, AjPStr** array)
 
 
 
-
-
 /* @func ajTreeDummyFunction **************************************************
 **
 ** Dummy function to catch all unused functions defined in ajtree
@@ -654,7 +653,6 @@ void ajTreeDummyFunction(void)
 
 
 
-
 /* @func ajTreeAddData ********************************************************
 **
 ** Sets the data value in a terminal tree node.
@@ -666,12 +664,14 @@ void ajTreeDummyFunction(void)
 
 AjBool ajTreeAddData(AjPTree thys, void* data)
 {
-    if (thys->Down) {
+    if (thys->Down)
+    {
 	ajErr("tried to define data value for non-terminal tree node");
 	return ajFalse;
     }
 
-    if (thys->Data) {
+    if (thys->Data)
+    {
 	ajErr("tried to define data value for node with data");
 	return ajFalse;
     }
@@ -679,6 +679,9 @@ AjBool ajTreeAddData(AjPTree thys, void* data)
     thys->Data = data;
     return ajTrue;
 }
+
+
+
 
 /* @func ajTreestrAddData *****************************************************
 **
@@ -691,12 +694,14 @@ AjBool ajTreeAddData(AjPTree thys, void* data)
 
 AjBool ajTreestrAddData(AjPTree thys, AjPStr data)
 {
-    if (thys->Down) {
+    if (thys->Down)
+    {
 	ajErr("tried to define string data value for non-terminal tree node");
 	return ajFalse;
     }
 
-    if (thys->Data) {
+    if (thys->Data)
+    {
 	ajErr("tried to define string data value for tree node with data");
 	return ajFalse;
     }
@@ -704,6 +709,9 @@ AjBool ajTreestrAddData(AjPTree thys, AjPStr data)
     thys->Data = (void*) data;
     return ajTrue;
 }
+
+
+
 
 /* @func ajTreeAddNode ********************************************************
 **
@@ -733,6 +741,8 @@ AjPTree ajTreeAddNode(AjPTree thys)
 }
 
 
+
+
 /* @func ajTreeAddSubNode *****************************************************
 **
 ** Creates a new sibling node of the parent
@@ -754,6 +764,8 @@ AjPTree ajTreeAddSubNode(AjPTree thys)
 
     return ret;
 }
+
+
 
 
 /* @func ajTreeTrace *********************************************************
@@ -780,6 +792,9 @@ void ajTreeTrace(const AjPTree thys)
     return;
 }
 
+
+
+
 /* @func ajTreestrTrace *******************************************************
 **
 ** Prints a trace of a string tree to debug output
@@ -803,6 +818,9 @@ void ajTreestrTrace(const AjPTree thys)
 
     return;
 }
+
+
+
 
 /* @funcstatic treeTraceNode **************************************************
 **
@@ -850,7 +868,8 @@ static void treeTraceNode (const AjPTree thys, ajint num)
     }
 
     return;
- }
+}
+
 
 
 
@@ -912,7 +931,8 @@ static void treestrTraceNode (const AjPTree thys, ajint num)
     }
 
     return;
- }
+}
+
 
 
 
@@ -953,8 +973,11 @@ AjPTree ajTreeFollow(const AjPTree thys, const AjPTree parent)
 	return NULL;
 
     ret = ajTreeNext(thys);
+
     return ret;
 }
+
+
 
 
 /* @func ajTreeNext *****************************************************
@@ -973,6 +996,8 @@ AjPTree ajTreeNext(const AjPTree thys)
 }
 
 
+
+
 /* @func ajTreePrev *****************************************************
 **
 ** Returns the previous node at the same level
@@ -989,6 +1014,8 @@ AjPTree ajTreePrev(const AjPTree thys)
 }
 
 
+
+
 /* @func ajTreeDown *****************************************************
 **
 ** Returns the next node down 1 level
@@ -1003,6 +1030,8 @@ AjPTree ajTreeDown(const AjPTree thys)
 {
     return thys->Down;
 }
+
+
 
 
 /* @func ajTreeUp *****************************************************
@@ -1034,9 +1063,9 @@ AjPTree ajTreeUp(const AjPTree thys)
 void ajTreeExit(void)
 {
     ajDebug("Tree usage : %d opened, %d closed, %d maxsize %d nodes\n",
-	     treeNewCnt, treeDelCnt, treeMaxNum, treeNodeCnt);
+	    treeNewCnt, treeDelCnt, treeMaxNum, treeNodeCnt);
     ajDebug("Tree iterator usage : %d opened, %d closed, %d maxsize\n",
-	     treeIterNewCnt, treeIterDelCnt);
+	    treeIterNewCnt, treeIterDelCnt);
 
     return;
 }

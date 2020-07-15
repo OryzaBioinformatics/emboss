@@ -599,7 +599,7 @@ void ajRegTrace(const AjPRegexp exp)
     }
     ajDebug("\n");
 
-    ajStrDelStatic(&str);
+    ajStrDel(&str);
 
     return;
 }

@@ -80,7 +80,7 @@ static void   fileListRecurs(const AjPStr file, AjPList list, ajint *recurs);
 static DIR*   fileOpenDir(AjPStr *dir);
 
 #ifdef __CYGWIN__
-#define fopen(a,b) ajSysFopen(a,b)
+#define fopen(a,b) ajSysFuncFopen(a,b)
 #endif
 
 
@@ -447,7 +447,7 @@ AjPFile ajFileNewInPipe(const AjPStr name)
 
 	dup2(pipefds[1], 1);
 	close(pipefds[1]);
-	ajSysArglist(fileNameTmp, &pgm, &arglist);
+	ajSysArglistBuild(fileNameTmp, &pgm, &arglist);
 	ajDebug("execvp ('%S', NULL)\n", fileNameTmp);
 	execvp(pgm, arglist);
 	ajErr("execvp ('%S', NULL) failed: '%s'\n",
@@ -459,7 +459,7 @@ AjPFile ajFileNewInPipe(const AjPStr name)
 	    thys->Pid, pipefds[0], pipefds[1]);
 
     /* fp is what we read from the pipe */
-    thys->fp = ajSysFdopen(pipefds[0], "r");
+    thys->fp = ajSysFuncFdopen(pipefds[0], "r");
     close(pipefds[1]);
     ajStrDelStatic(&fileNameTmp);
 
@@ -1286,7 +1286,7 @@ static void fileClose(AjPFile thys)
 
     ajStrDel(&thys->Name);
     ajStrDel(&thys->Buff);
-    ajListstrFree(&thys->List);
+    ajListstrFreeData(&thys->List);
 
     return;
 }
@@ -1672,7 +1672,7 @@ ajuint ajFileReadUint(AjPFile thys, AjBool Bigendian)
     ajint ret2;
 
     if(!called)
-	bigend = ajUtilBigendian();
+	bigend = ajUtilGetBigendian();
 
     fread(&ret, 4, 1, thys->fp);
     if(Bigendian && bigend)
@@ -1682,7 +1682,7 @@ ajuint ajFileReadUint(AjPFile thys, AjBool Bigendian)
 
     /*ajDebug("Reversed: %u", ret);*/
     ret2 = (ajint) ret;
-    ajUtilRev4(&ret2);
+    ajByteRevLen4(&ret2);
     ret = (ajuint) ret2;
     /*ajDebug(" => %u\n", ret);*/
 
@@ -1926,7 +1926,7 @@ AjBool ajFileGetsL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
 #ifndef __ppc__
 	cp = fgets(&buff[ipos], isize, thys->fp);
 #else
-	cp = ajSysFgets(&buff[ipos], isize, thys->fp);
+	cp = ajSysFuncFgets(&buff[ipos], isize, thys->fp);
 #endif
 
         if(!cp && !ipos)
@@ -2410,6 +2410,8 @@ static DIR* fileOpenDir(AjPStr* dir)
     if(moved)
 	ajStrInsertS(dir, 0, fileCwd);
 
+    ajDebug("fileOpenDir opened '%S'\n", *dir);
+
     return opendir(ajStrGetPtr(*dir));
 }
 
@@ -2688,8 +2690,20 @@ AjBool ajFileStat(const AjPStr fname, ajint mode)
     return ajFalse;
 }
 
+/* @func ajFileNameValid ******************************************************
+**
+** Returns true if file exists and is readable by the user
+**
+** @param [r] fname [const AjPStr] Filename.
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
 
 
+AjBool ajFileNameValid (const AjPStr fname)
+{
+    return ajFileStat(fname, AJ_FILE_R);
+}
 
 /* @func ajFileLength *********************************************************
 **
@@ -3143,7 +3157,7 @@ AjPFileBuff ajFileBuffNewDW(const AjPStr dir, const AjPStr wildfile)
 	ajDebug("accept '%s'\n", de->d_name);
 	name = NULL;
 	ajFmtPrintS(&name, "%S%s", fileDirfixTmp, de->d_name);
-	ajListstrPushApp(list, name);
+	ajListstrPushAppend(list, name);
     }
     
     closedir(dp);
@@ -3240,7 +3254,7 @@ AjPFileBuff ajFileBuffNewDWE(const AjPStr dir, const AjPStr wildfile,
 	ajDebug("accept '%s'\n", de->d_name);
 	name = NULL;
 	ajFmtPrintS(&name, "%S%s", fileDirfixTmp, de->d_name);
-	ajListstrPushApp(list, name);
+	ajListstrPushAppend(list, name);
     }
     
     closedir(dp);
@@ -3391,7 +3405,7 @@ AjPFile ajFileNewDW(const AjPStr dir, const AjPStr wildfile)
 	ajDebug("accept '%s'\n", de->d_name);
 	name = NULL;
 	ajFmtPrintS(&name, "%S%s", fileDirfixTmp, de->d_name);
-	ajListstrPushApp(list, name);
+	ajListstrPushAppend(list, name);
     }
     
     closedir(dp);
@@ -3485,7 +3499,7 @@ AjPFile ajFileNewDWE(const AjPStr dir, const AjPStr wildfile,
 	ajDebug("accept '%s'\n", de->d_name);
 	name = NULL;
 	ajFmtPrintS(&name, "%S%s", fileDirfixTmp, de->d_name);
-	ajListstrPushApp(list, name);
+	ajListstrPushAppend(list, name);
     }
     
     closedir(dp);
@@ -4706,7 +4720,7 @@ AjBool ajFileBuffEmpty(const AjPFileBuff thys)
     ajDebug("ajFileBuffEmpty Size: %d Pos: %d End: %b Handle: %d "
 	     "Fp: %x List; %d\n",
 	     thys->Size, thys->Pos, thys->File->End, thys->File->Handle,
-	     thys->File->fp, ajListstrLength(thys->File->List));
+	     thys->File->fp, ajListstrGetLength(thys->File->List));
 
     if(thys->Pos < thys->Size)
 	return ajFalse;
@@ -4715,7 +4729,7 @@ AjBool ajFileBuffEmpty(const AjPFileBuff thys)
     if(!thys->File->fp || !thys->File->Handle)
 	return ajTrue;
 
-    if(thys->File->End && !ajListstrLength(thys->File->List))
+    if(thys->File->End && !ajListstrGetLength(thys->File->List))
         /* EOF and done */
 	return ajTrue;
 
@@ -4958,8 +4972,6 @@ FILE* ajFileBuffFp(const AjPFileBuff thys)
 **
 ** @param [r] thys [const AjPFileBuff] Buffered file.
 ** @return [AjPFile] File object.
-** @category cast [AjPFileBuff] Returns the equivalent AjPFile without
-**                              the buffer access.
 ** @@
 ******************************************************************************/
 
@@ -4983,12 +4995,10 @@ AjPFile ajFileBuffFile(const AjPFileBuff thys)
 **
 ** Intended for cases where the file data must be preprocessed before
 ** being seen by the sequence reading routines. The first case was
-** for stripping HTML tagsafter reading via HTTP.
+** for stripping HTML tags after reading via HTTP.
 **
 ** @param [u] thys [AjPFileBuff] Buffered file.
 ** @return [void]
-** @category input [AjPFileBuff] Reads all input lines from a file into
-**                                the buffer.
 ** @@
 ******************************************************************************/
 
@@ -5234,7 +5244,7 @@ ajint ajFileScan(const AjPStr path, const AjPStr filename, AjPList *result,
     if(dolist)
     {
 	t=ajStrNewS(path);
-	ajListPushApp(*list,(void *)t);
+	ajListPushAppend(*list,(void *)t);
     }
     
     if(show)
@@ -5304,17 +5314,17 @@ ajint ajFileScan(const AjPStr path, const AjPStr filename, AjPList *result,
 	    if(rlist)
 	    {
 		flag = ajFalse;
-		iter = ajListIterRead(rlist);
-		while(ajListIterMore(iter))
+		iter = ajListIterNewread(rlist);
+		while(!ajListIterDone(iter))
 		{
-		    t = ajListIterNext(iter);
+		    t = ajListIterGet(iter);
 		    if(!strcmp(ajStrGetPtr(t),dp->d_name))
 		    {
 			flag = ajTrue;
 			break;
 		    }
 		}
-		ajListIterFree(&iter);
+		ajListIterDel(&iter);
 		if(flag)
 		    continue;
 	    }
@@ -5322,7 +5332,7 @@ ajint ajFileScan(const AjPStr path, const AjPStr filename, AjPList *result,
 	    if(!ajFileStat(s,AJ_FILE_R) || !ajFileStat(s,AJ_FILE_X))
 		continue;
 	    t = ajStrNewC(ajStrGetPtr(s));
-	    ajListPushApp(dirs,(void *)t);
+	    ajListPushAppend(dirs,(void *)t);
 	}
 	else if(ajFileStat(s,AJ_FILE_R))
 	{
@@ -5330,13 +5340,13 @@ ajint ajFileScan(const AjPStr path, const AjPStr filename, AjPList *result,
 		if(ajCharMatchWildC(dp->d_name,ajStrGetPtr(filename)))
 		{
 		    t = ajStrNewS(s);
-		    ajListPushApp(*result,(void *)t);
+		    ajListPushAppend(*result,(void *)t);
 		}
 	    
 	    if(dolist)
 	    {
 		t = ajStrNewS(s);
-		ajListPushApp(*list,(void *)t);
+		ajListPushAppend(*list,(void *)t);
 	    }
 	    
 	    if(show)
@@ -5355,11 +5365,11 @@ ajint ajFileScan(const AjPStr path, const AjPStr filename, AjPList *result,
     
     ajStrDel(&s);
     ajStrDel(&tpath);
-    ajListDel(&dirs);
+    ajListFree(&dirs);
 
 
     if(result)
-	return ajListLength(*result);
+	return ajListGetLength(*result);
     
     return 0;
 }
@@ -5686,8 +5696,8 @@ ajint ajFileWriteInt2(AjPFile thys, short i)
     short j;
 
     j = i;
-    if(ajUtilBigendian())
-	ajUtilRev2(&j);
+    if(ajUtilGetBigendian())
+	ajByteRevLen2(&j);
 
     return fwrite(&j, 2, 1, ajFileFp(thys));
 }
@@ -5711,8 +5721,8 @@ ajint ajFileWriteInt4(AjPFile thys, ajint i)
 
     j = i;
 
-    if(ajUtilBigendian())
-	ajUtilRev4(&j);
+    if(ajUtilGetBigendian())
+	ajByteRevLen4(&j);
 
     return fwrite(&j, 4, 1, ajFileFp(thys));
 }
@@ -5736,8 +5746,8 @@ ajint ajFileWriteInt8(AjPFile thys, ajlong l)
 
     j = l;
 
-    if(ajUtilBigendian())
-	ajUtilRev8(&j);
+    if(ajUtilGetBigendian())
+	ajByteRevLen8(&j);
 
     return fwrite(&j, 8, 1, ajFileFp(thys));
 }
@@ -5910,7 +5920,7 @@ static void fileListRecurs(const AjPStr srcfile, AjPList list, ajint *recurs)
 	{
 	    if(ajStrPrefixC(ptr,CURRENT_DIR))
 		ajStrCutStart(&ptr,2);
-	    ajListPushApp(list,(void *)ptr);
+	    ajListPushAppend(list,(void *)ptr);
 	}
     }
     else if(c=='@')
@@ -5932,11 +5942,11 @@ static void fileListRecurs(const AjPStr srcfile, AjPList list, ajint *recurs)
     else
     {
 	ptr = ajStrNewC(ajStrGetPtr(file));
-	ajListPushApp(list,(void *)ptr);
+	ajListPushAppend(list,(void *)ptr);
     }
     
     
-    ajListDel(&dlist);
+    ajListFree(&dlist);
     ajStrDel(&dir);
     ajStrDel(&line);
     ajStrDel(&file);
@@ -5979,9 +5989,9 @@ AjPList ajFileFileList(const AjPStr files)
 
     AJFREE(fstr);
 
-    if(!ajListLength(list))
+    if(!ajListGetLength(list))
     {
-	ajListDel(&list);
+	ajListFree(&list);
 	return NULL;
     }
 

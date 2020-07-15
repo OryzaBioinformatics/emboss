@@ -143,6 +143,8 @@ typedef struct AlignSFormat
 static void       alignConsStats(AjPAlign thys, ajint iali, AjPStr *cons,
 				 ajint* retident, ajint* retsim, ajint* retgap,
 				 ajint* retlen);
+static AjBool     alignConsSet(const AjPAlign thys, ajint iali, ajint seqnum,
+			       AjPStr *cons);
 static AlignPData alignData(const AjPAlign thys, ajint iali);
 static void       alignDataDel(AlignPData* pthys, AjBool external);
 static void       alignDiff(AjPStr* pmark, const AjPStr seq, char idchar);
@@ -278,7 +280,7 @@ static void alignWriteTrace(AjPAlign thys)
     AjPStr tmpstr    = NULL;
     AjPFile outf = NULL;
 
-    nali = ajListToArray(thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
     ajFmtPrintF(thys->File, "Trace output\n");
     ajFmtPrintF(thys->File, "============\n");
 
@@ -470,7 +472,7 @@ static void alignWriteSeqformat(AjPAlign thys, ajint iali, const char* sqfmt)
 
     ajSeqoutOpen(seqout);
 
-    ajListToArray(thys->Data, (void***) &pdata);
+    ajListToarray(thys->Data, (void***) &pdata);
     data = pdata[0];
     ilen = data->LenAli;
 
@@ -514,7 +516,7 @@ static void alignWriteMarkX0(AjPAlign thys)
     ajint iali;
     ajint nali;
 
-    nali = ajListLength(thys->Data);
+    nali = ajListGetLength(thys->Data);
     for(iali=0; iali < nali; iali++)
 	alignWriteMark(thys, iali, 0);
 
@@ -543,7 +545,7 @@ static void alignWriteMarkX1(AjPAlign thys)
     ajint iali;
     ajint nali;
 
-    nali = ajListLength(thys->Data);
+    nali = ajListGetLength(thys->Data);
     for(iali=0; iali < nali; iali++)
 	alignWriteMark(thys, iali, 1);
 
@@ -571,7 +573,7 @@ static void alignWriteMarkX2(AjPAlign thys)
     ajint iali;
     ajint nali;
 
-    nali = ajListLength(thys->Data);
+    nali = ajListGetLength(thys->Data);
     for(iali=0; iali < nali; iali++)
 	alignWriteMark(thys, iali, 2);
 
@@ -599,7 +601,7 @@ static void alignWriteMarkX3(AjPAlign thys)
     ajint iali;
     ajint nali;
 
-    nali = ajListLength(thys->Data);
+    nali = ajListGetLength(thys->Data);
     for(iali=0; iali < nali; iali++)
 	alignWriteMark(thys, iali, 3);
 
@@ -623,7 +625,7 @@ static void alignWriteMarkX10(AjPAlign thys)
     ajint iali;
     ajint nali;
 
-    nali = ajListLength(thys->Data);
+    nali = ajListGetLength(thys->Data);
     for(iali=0; iali < nali; iali++)
 	alignWriteMark(thys, iali, 10);
 
@@ -723,7 +725,7 @@ static void alignWriteMark(AjPAlign thys, ajint iali, ajint markx)
     if(thys->Width)
 	iwidth = thys->Width;
     
-    nali = ajListToArray(thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
     
     AJCNEW0(ipos, nseq);
     AJCNEW0(incs, nseq);
@@ -753,8 +755,12 @@ static void alignWriteMark(AjPAlign thys, ajint iali, ajint markx)
     else if(markx == 2)
     {
 	seq = ajSeqGetSeqS(data->Seq[0]);
-	ajStrAssignS(&cons, ajSeqGetSeqS(data->Seq[1]));
+	alignConsSet(thys, iali, 1, &cons);
+	ajDebug("alignWriteMark(%d)\nseq0:%S\ncons:%S\nseq1:%S\n",
+		markx, seq, cons, ajSeqGetSeqS(data->Seq[1]));
 	alignDiff(&cons, seq, '.');
+	ajDebug("alignWriteMark(%d)\nseq0:%S\ncons:%S\nseq1:%S\n",
+		markx, seq, cons, ajSeqGetSeqS(data->Seq[1]));
     }
     else
     {
@@ -1048,7 +1054,7 @@ static void alignWriteMatch(AjPAlign thys)
     AlignPData data = NULL;
 
     outf = thys->File;
-    nali = ajListToArray(thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
 
     ajAlignWriteHeader(thys);
 
@@ -1148,7 +1154,7 @@ static void alignWriteSimple(AjPAlign thys)
     if(thys->Width)
 	iwidth = thys->Width;
     
-    nali = ajListToArray(thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
     
     AJCNEW0(ipos, nseq);
     AJCNEW0(incs, nseq);
@@ -1281,7 +1287,7 @@ static void alignWriteScore(AjPAlign thys)
 
 
     outf = thys->File;
-    nali = ajListToArray(thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
 
     for(iali=0; iali<nali; iali++)
     {
@@ -1413,7 +1419,7 @@ static void alignWriteSrsAny(AjPAlign thys, ajint imax, AjBool mark)
     if(imax == 2 && nseq == 2 && mark)
 	pair = ajTrue;
     
-    nali = ajListToArray(thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
     
     AJCNEW0(ipos, nseq);
     AJCNEW0(incs, nseq);
@@ -1560,7 +1566,7 @@ static void alignWriteTCoffee (AjPAlign thys)
     ajDebug("alignWriteTCoffee\n");
 
     nseq = thys->Nseqs;
-    nali = ajListToArray (thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
     thys->SeqOnly = ajTrue; /* suppress output of tail */
 
     /* print header */
@@ -1689,7 +1695,7 @@ AjBool ajAlignDefine(AjPAlign thys, AjPSeqset seqset)
     
     data->LenAli = ajSeqsetGetLen(seqset);
     
-    ajListPushApp(thys->Data, data);
+    ajListPushAppend(thys->Data, data);
     
     return ajTrue;
 }
@@ -1792,7 +1798,7 @@ AjBool ajAlignDefineSS(AjPAlign thys, AjPSeq seqa, AjPSeq seqb)
 
     data->LenAli = AJMIN(ajSeqGetLen(seqa), ajSeqGetLen(seqb));
 
-    ajListPushApp(thys->Data, data);
+    ajListPushAppend(thys->Data, data);
 
     /*ajAlignTraceT(thys, "ajAlignDefineSS result");*/
 
@@ -1871,7 +1877,7 @@ AjBool ajAlignDefineCC(AjPAlign thys, const char* seqa, const char* seqb,
     ajDebug("ajAlignDefineCC %s %d %s %d\n",
 	    namea, ajSeqGetLen(data->Seq[0]),
 	    nameb, ajSeqGetLen(data->Seq[1]));
-    ajListPushApp(thys->Data, data);
+    ajListPushAppend(thys->Data, data);
 
     ajStrDel(&tmpstr);
 
@@ -2030,7 +2036,7 @@ ajint ajAlignGetLen(const AjPAlign thys)
     if(!thys->Data)
 	return 0;
 
-    nali = ajListToArray(thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
     for(i=0; i<nali; i++)
     {
 	data = pdata[i];
@@ -2231,7 +2237,7 @@ void ajAlignWrite(AjPAlign thys)
 {
     ajDebug("ajAlignWrite\n");
 
-    /*ajAlignTraceT(thys, "ajAlignWrite start");*/
+    ajAlignTraceT(thys, "ajAlignWrite start");
 
     if(!thys->Format)
 	if(!ajAlignFindFormat(thys->Formatstr, &thys->Format))
@@ -2301,7 +2307,7 @@ void ajAlignWriteHeader(AjPAlign thys)
     {
 	ajFmtPrintF(outf, "########################################\n");
 	ajFmtPrintF(outf, "# Program: %S\n", ajAcdGetProgram());
-	ajFmtPrintF(outf, "# Rundate: %D\n", ajTimeTodayRefF("report"));
+	ajFmtPrintF(outf, "# Rundate: %D\n", ajTimeRefTodayFmt("report"));
 	ajFmtPrintF(outf, "# Commandline: %S\n", ajAcdGetProgram());
 	ajStrAssignS(&tmpstr, ajAcdGetCmdline());
 	if(ajStrGetLen(tmpstr))
@@ -2940,7 +2946,7 @@ void ajAlignSetScoreI(AjPAlign thys, ajint score)
     AjPStr tmpstr = NULL;
     AlignPData data = NULL;
 
-    ajListLast(thys->Data, (void**) &data);
+    ajListPeekLast(thys->Data, (void**) &data);
     ajFmtPrintS(&tmpstr, "%d", score);
     ajStrAssignS(&data->Score, tmpstr);
 
@@ -2970,7 +2976,7 @@ void ajAlignSetScoreL(AjPAlign thys, ajlong score)
     AjPStr tmpstr = NULL;
     AlignPData data = NULL;
 
-    ajListLast(thys->Data, (void**) &data);
+    ajListPeekLast(thys->Data, (void**) &data);
     ajFmtPrintS(&tmpstr, "%Ld", score);
     ajStrAssignS(&data->Score, tmpstr);
 
@@ -3002,7 +3008,7 @@ void ajAlignSetScoreR(AjPAlign thys, float score)
     ajint i;
     AlignPData data = NULL;
 
-    ajListLast(thys->Data, (void**) &data);
+    ajListPeekLast(thys->Data, (void**) &data);
     ajFmtPrintS(&tmpstr, "%.*f", precision, score);
     for(i=1; i<precision; i++)
     {
@@ -3042,7 +3048,7 @@ void ajAlignSetStats(AjPAlign thys, ajint iali, ajint len,
     AlignPData data = NULL;
     ajint nali;
     
-    nali = ajListToArray(thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
     if(iali < 0)
 	data = pdata[nali-1];
     else
@@ -3102,7 +3108,7 @@ void ajAlignSetSubStandard(AjPAlign thys, ajint iali)
     ajint nali;
     float pct;
 
-    nali = ajListToArray(thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
     if(iali < 0)
 	data = pdata[nali-1];
     else
@@ -3161,7 +3167,7 @@ static const AjPSeq* alignSeqs(const AjPAlign thys, ajint iali)
     AlignPData* pdata = NULL;
     AlignPData data = NULL;
 
-    ajListToArray(thys->Data, (void***) &pdata);
+    ajListToarray(thys->Data, (void***) &pdata);
     data = pdata[iali];
 
     AJFREE(pdata);
@@ -3187,7 +3193,7 @@ static const AjPSeq alignSeq(const AjPAlign thys, ajint iseq, ajint iali)
     AlignPData* pdata = NULL;
     AlignPData data = NULL;
 
-    ajListToArray(thys->Data, (void***) &pdata);
+    ajListToarray(thys->Data, (void***) &pdata);
     data = pdata[iali];
 
     AJFREE(pdata);
@@ -3425,7 +3431,7 @@ static AlignPData alignData(const AjPAlign thys, ajint iali)
     AlignPData* pdata = NULL;
     AlignPData data = NULL;
 
-    ajListToArray(thys->Data, (void***) &pdata);
+    ajListToarray(thys->Data, (void***) &pdata);
     data = pdata[iali];
 
     AJFREE(pdata);
@@ -3450,7 +3456,7 @@ static ajint alignLen(const AjPAlign thys, ajint iali)
     AlignPData* pdata = NULL;
     AlignPData data = NULL;
 
-    ajListToArray(thys->Data, (void***) &pdata);
+    ajListToarray(thys->Data, (void***) &pdata);
     data = pdata[iali];
 
     AJFREE(pdata);
@@ -3571,7 +3577,7 @@ AjBool ajAlignSetRange(AjPAlign thys,
 	return ajFalse;
     }
 
-    nali = ajListToArray(thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
 
     ajDebug("nali:%d set range %d\n", nali, nali-1);
 
@@ -3653,7 +3659,7 @@ AjBool ajAlignSetSubRange(AjPAlign thys,
 	return ajFalse;
     }
 
-    nali = ajListToArray(thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
 
     ajDebug("nali:%d set range %d\n", nali, nali-1);
 
@@ -4426,7 +4432,7 @@ static void alignTraceData(const AjPAlign thys)
     
     nseq = thys->Nseqs;
     
-    nali = ajListToArray(thys->Data, (void***) &pdata);
+    nali = ajListToarray(thys->Data, (void***) &pdata);
     ajDebug("Data list length: %d\n", nali);
     if(!nali)
 	return;
@@ -4884,6 +4890,67 @@ AjBool ajAlignConsStats(const AjPSeqset thys, AjPMatrix mymatrix, AjPStr *cons,
     ajStrDel(&debugstr1);
     ajStrDel(&debugstr2);
     ajMatrixDel(&imatrix);
+
+    return ajTrue;    
+}
+
+
+/* @funcstatic alignConsSet ***************************************************
+**
+** Sets consensus to be a copy of a numbered sequence
+**
+** @param [r] thys [const AjPAlign] Alignment object
+** @param [r] iali [ajint] alignment number
+** @param [r] numseq [ajint] Sequence number to use as the consensus
+** @param [w] cons [AjPStr*] the created consensus sequence
+** @return [AjBool] True on success
+******************************************************************************/
+
+static AjBool alignConsSet(const AjPAlign thys, ajint iali,
+			   ajint numseq, AjPStr *cons)
+{
+    ajint   nseqs;
+    ajint   mlen;
+    
+    ajint   kkpos;		/* alignment position loop variable */
+    
+    const char *seqcharptr;
+    char gapch;
+    AlignPData data = NULL;
+    const AjPSeq* seqs;
+    const AjPSeq seq;
+
+    data = alignData(thys, iali);
+    seqs = alignSeqs(thys, iali);
+
+    nseqs   = thys->Nseqs;
+    mlen    = data->LenAli;
+    
+    ajDebug("alignConsSet iali:%d numseq:%d nseqs:%d mlen:%d\n",
+	    iali, numseq, nseqs, mlen);
+        
+    gapch = '-';
+    
+    seq = seqs[numseq];
+    seqcharptr = ajSeqGetSeqC(seq);
+
+    ajStrAssignC(cons, "");
+
+    /* For each position in the alignment, calculate consensus character */
+    
+    for(kkpos=0; kkpos<data->SubOffset[0]; kkpos++)
+    {
+	ajStrAppendK(cons, gapch);
+    }
+
+    for(kkpos=0; kkpos< mlen; kkpos++)
+    {
+	ajStrAppendK(cons,seqcharptr[kkpos+data->SubOffset[numseq]]);	
+    }
+    
+    /* ajDebug("ret ident:%d sim:%d gap:%d len:%d\n",
+	    *retident, *retsim, *retgap, *retlen); */
+
 
     return ajTrue;    
 }

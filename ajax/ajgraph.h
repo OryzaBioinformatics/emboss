@@ -195,7 +195,6 @@ void          ajGraphTextLine (PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
 			       const char *text, PLFLT just);
 void          ajGraphTextStart (PLFLT xx1, PLFLT yy1, const char *text);
 void          ajGraphTrace (const AjPGraph thys);
-void          ajGraphTraceInt (FILE* outf);
 void          ajGraphTri (PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
 			  PLFLT x3, PLFLT y3);
 void          ajGraphTriFill (PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
@@ -249,6 +248,7 @@ void          ajGraphxySetMaxMin(AjPGraph thys,float xmin,float xmax,
 void          ajGraphSetOut (AjPGraph thys, const AjPStr txt);
 void          ajGraphSetOutC (AjPGraph thys, const char *txt);
 void          ajGraphxySetOverLap (AjPGraph thys, AjBool overlap);
+void          ajGraphSetPage(ajuint width, ajuint height);
 void          ajGraphSetSubTitleDo (AjPGraph thys, AjBool set);
 void          ajGraphSetTitleDo (AjPGraph thys, AjBool set);
 void          ajGraphxySetXBottom (AjPGraph thys, AjBool set);
@@ -307,7 +307,20 @@ void          ajGraphFillRectangleOnCurve(PLFLT xcentre, PLFLT ycentre,
 ** End of prototype definitions
 */
 
+
+/*
+**  These prototypes do not have any corresponding .c code so cannot
+**  go into the block above, otherwise the VC compilation will fail 
+*/
+void          ajGraphTraceInt (FILE* outf);
+
+/* End of prototypes without C code */
+
+
+
 #endif /* ajgraph_h */
+
+
 
 #ifdef __cplusplus
 }

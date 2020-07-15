@@ -122,17 +122,17 @@ void ajMeltInit(AjBool isdna, ajint savesize)
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
 
-	p = ajSysStrtok(p," \t\n\r");
+	p = ajSysFuncStrtok(p," \t\n\r");
 	ajStrAssignC(&pair1,p);
-	p = ajSysStrtok(NULL," \t\n\r");
+	p = ajSysFuncStrtok(NULL," \t\n\r");
 	ajStrAssignC(&pair2,p);
-	p = ajSysStrtok(NULL," \t\n\r");
+	p = ajSysFuncStrtok(NULL," \t\n\r");
 	if(sscanf(p,"%f",&enthalpy)!=1)
 	    ajFatal("No enthalpy found");
-	p = ajSysStrtok(NULL," \t\n\r");
+	p = ajSysFuncStrtok(NULL," \t\n\r");
 	if(sscanf(p,"%f",&entropy)!=1)
 	    ajFatal("No entropy found");
-	p = ajSysStrtok(NULL," \t\n\r");
+	p = ajSysFuncStrtok(NULL," \t\n\r");
 	if(sscanf(p,"%f",&energy)!=1)
 	    ajFatal("No energy found");
 

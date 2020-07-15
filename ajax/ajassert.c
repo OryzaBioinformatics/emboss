@@ -35,7 +35,7 @@
 **
 ** The assert() macro inserts diagnostics into programs.
 **
-** @param [r] e [ajint] test for asseretion.
+** @param [r] e [ajint] test for assertion.
 ** @return [void]
 ** @@
 ******************************************************************************/

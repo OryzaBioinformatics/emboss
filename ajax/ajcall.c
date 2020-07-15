@@ -87,9 +87,9 @@ void ajCallRegister(const char *name, CallFunc func)
 
  
     if(!callTable)
-	callTable = ajTableNew(0, callCmpStr,callStrHash);
+	callTable = ajTableNewFunctionLen(50, callCmpStr,callStrHash);
 
-    rec = ajTableGet(callTable, name);	/* does it exist already */
+    rec = ajTableFetch(callTable, name);	/* does it exist already */
 
     if(!rec)
     {
@@ -126,7 +126,7 @@ void* ajCall(const char *name, ...)
 	return retval;
     }
 
-    rec = (CallFunc) ajTableGet(callTable, name);
+    rec = (CallFunc) ajTableFetch(callTable, name);
 
     if(rec)
     {

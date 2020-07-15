@@ -30,21 +30,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifndef WIN32
 #include <strings.h>
 #include <unistd.h>
+#endif
+
 #include <sys/stat.h>
+#include <sys/types.h>
+
+#ifndef WIN32
 #include <sys/time.h>
 #include <sys/file.h>
 #include <sys/resource.h>
 #include <sys/param.h>
-#include <sys/types.h>
 #include <sys/wait.h>
-
+#include <sys/ioctl.h>
+#endif
 
 #include <errno.h>
 #include <fcntl.h>
 #include <ctype.h>
-#include <sys/ioctl.h>
+
 
 #ifdef HAVE_JAVA
 #include <jni.h>
@@ -84,12 +91,15 @@
 #include <sys/filio.h>
 #endif
 
+#ifndef WIN32
 #include <pwd.h>
+#endif
+
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE
 #endif
 
-#if !defined(__ppc__) && !defined(__FreeBSD__)
+#if !defined(__ppc__) && !defined(__APPLE__) && !defined(__FreeBSD__) && !defined(WIN32)
 #include <crypt.h>
 #endif
 
@@ -106,7 +116,7 @@
 #endif
 
 #ifdef PAM
-#if defined(__ppc__)
+#if defined(__ppc__) || defined(__APPLE__)
 #include <pam/pam_appl.h>
 #else
 #include <security/pam_appl.h>
@@ -332,9 +342,9 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetType
     ok = ajJavaGetSeqsetFromUsa(name,&seq);
     if(ok)
     {
-	len = ajSeqsetLen(seq);
+	len = ajSeqsetGetLen(seq);
 	nuc = ajSeqsetIsNuc(seq);
-	weight = ajSeqsetTotweight(seq);
+	weight = ajSeqsetGetTotweight(seq);
 
 	field = (*env)->GetStaticFieldID(env,jvc,"length","I");
 	(*env)->SetStaticIntField(env,jvc,field,len);
@@ -421,6 +431,8 @@ static AjBool ajJavaGetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq)
 
 
 
+
+#ifndef WIN32
 
 /* @func Ajax.userInfo ********************************************************
 **
@@ -1219,7 +1231,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
     AjPStr outstd = NULL;
     AjPStr errstd = NULL;
     int retval    = 0;
-    char *save;
+    const char *save;
 
     jvc = (*env)->GetObjectClass(env,obj);
 
@@ -1248,7 +1260,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
     (*env)->ReleaseStringUTFChars(env,commandline,sptr);
 
 
-    ajSysStrtokR(ajStrGetPtr(cl)," \t\n",&save,&prog);
+    ajSysFuncStrtokR(ajStrGetPtr(cl)," \t\n",&save,&prog);
 
 
     sptr = (char *) (*env)->GetStringUTFChars(env,environment,0);
@@ -1263,7 +1275,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
     argp = make_array(cl);
     envp = make_array(envi);
 
-    if(!ajSysWhichEnv(&prog,envp))
+    if(!ajSysFileWhichEnv(&prog,envp))
     {
 	java_tidy_command(&prog,&cl,&envi,&dir,&outstd,&errstd);
 	i = 0;
@@ -1510,7 +1522,7 @@ static char** make_array(const AjPStr str)
     int n;
     char **ptr   = NULL;
     AjPStr buf;
-    char   *save = NULL;
+    const char *save = NULL;
 
     buf = ajStrNew();
 
@@ -1522,11 +1534,11 @@ static char** make_array(const AjPStr str)
 
     n = 0;
 
-    if(!ajSysStrtokR(ajStrGetPtr(str)," \t\n",&save,&buf))
+    if(!ajSysFuncStrtokR(ajStrGetPtr(str)," \t\n",&save,&buf))
 	return ptr;
     ptr[n++] = ajCharNewS(buf);
 
-    while(ajSysStrtokR(NULL," \t\n",&save,&buf))
+    while(ajSysFuncStrtokR(NULL," \t\n",&save,&buf))
 	ptr[n++] = ajCharNewS(buf);
 
     ajStrDel(&buf);
@@ -2697,7 +2709,7 @@ static int java_jembossctl(ajint command,
 
     /* Set program name */
     ajStrAssignC(&prog,"jembossctl");
-    if(!ajSysWhichEnv(&prog,envp))
+    if(!ajSysFileWhichEnv(&prog,envp))
     {
 	ajStrAppendC(errstd,"Cannot locate jembossctl\n");
 	java_tidy_command2(&unused,&cl,&clemboss,&dir,&envi,&prog,buff);
@@ -5376,6 +5388,7 @@ static int java_block(int chan, unsigned long flag)
     return 0;
 }
 
+#endif /* WIN32 */
 
 #endif
 

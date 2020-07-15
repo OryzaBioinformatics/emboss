@@ -311,7 +311,7 @@ static void cvt_d(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 	m = hval;
 
     do
-	*--p = ajSysItoC((ajint)(m%10 + '0'));
+	*--p = ajSysCastItoc((ajint)(m%10 + '0'));
     while((m /= 10) > 0);
 
     if(hval < 0)
@@ -325,7 +325,7 @@ static void cvt_d(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 	m = val;
 
     do
-	*--p = ajSysItoC((ajint)(m%10 + '0'));
+	*--p = ajSysCastItoc((ajint)(m%10 + '0'));
     while((m /= 10) > 0);
 
     if(val < 0)
@@ -394,11 +394,11 @@ static void cvt_u(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 
 #if !defined(HAVE64)
     do
-	*--p = ajSysItoC(m%10 + '0');
+	*--p = ajSysCastItoc(m%10 + '0');
     while((m /= 10) > 0);
 #else
     do
-	*--p = ajSysItoC((int)(hm%(ajulong)10 + '0'));
+	*--p = ajSysCastItoc((int)(hm%(ajulong)10 + '0'));
     while((hm /= (ajulong)10) > 0);
 #endif
     ajFmtPutd(p, (buf + sizeof buf) - p, put, cl, flags,
@@ -463,11 +463,11 @@ static void cvt_o(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 
 #if !defined(HAVE64)
     do
-	*--p = ajSysItoC((m&0x7) + '0');
+	*--p = ajSysCastItoc((m&0x7) + '0');
     while((m>>= 3) != 0);
 #else
     do
-	*--p = ajSysItoC((int)((hm&0x7) + '0'));
+	*--p = ajSysCastItoc((int)((hm&0x7) + '0'));
     while((hm>>= 3) != 0);
 #endif
 
@@ -663,7 +663,7 @@ static void cvt_c(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 
     if(!minusflag)
 	pad(width - 1, ' ');
-    put(ajSysItoUC(va_arg(VA_V(ap), int)), cl);
+    put(ajSysCastItouc(va_arg(VA_V(ap), int)), cl);
     if(minusflag)
 	pad(width - 1, ' ');
 
@@ -719,9 +719,9 @@ static void cvt_f(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 
 	assert(precision <= 99);
 	if(precision > 9)
-	    fmt[i++] = ajSysItoC((precision/10)%10 + '0');
-	fmt[i++] = ajSysItoC(precision%10 + '0');
-	fmt[i++] = ajSysItoC(code);
+	    fmt[i++] = ajSysCastItoc((precision/10)%10 + '0');
+	fmt[i++] = ajSysCastItoc(precision%10 + '0');
+	fmt[i++] = ajSysCastItoc(code);
 	fmt[i]   = '\0';
 
 	sprintf(buf, fmt, va_arg(VA_V(ap), double));
@@ -883,6 +883,13 @@ static void cvt_uD(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
     timeobj   =  va_arg(VA_V(ap), AjPTime);
     mytime = &timeobj->time;
 
+    if(!timeobj)
+    {
+	ajFmtPuts("<null>", 6, put, cl, flags,
+		  width, precision);
+	return;
+    }
+
     if(timeobj->format)
 	strftime(buf,280, timeobj->format,mytime);
     else
@@ -894,6 +901,10 @@ static void cvt_uD(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 	strftime(buf,280, "%d/%m/", mytime);
 	strcat(buf,yr);
     }
+
+    if(timeobj->uppercase)
+	ajCharFmtUpper(buf);
+
     ajFmtPuts(&buf[0], strlen(buf), put, cl, flags,
 	      width, precision);
 
@@ -1068,7 +1079,7 @@ static ajint fmtInsert(int c, void* cl)
 	p->bp = p->buf + p->size;
 	p->size *= 2;
     }
-    *p->bp++ = ajSysItoC(c);
+    *p->bp++ = ajSysCastItoc(c);
 
     return c;
 }
@@ -1100,7 +1111,7 @@ static ajint fmtAppend(ajint c, void* cl)
 	p->bp = p->buf + p->size;
 	p->size *= 2;
     }
-    *p->bp++ = ajSysItoC(c);
+    *p->bp++ = ajSysCastItoc(c);
 
     return c;
 }
@@ -1851,7 +1862,8 @@ void ajFmtVfmt(int put(int c, void* cl), void* cl, const char* fmt,
 
 	    /* Calling funclist Fmt_T() */
 
-	    assert(cvt[(int)c]);	/* we need a defined routine */
+	    if(!cvt[(int)c])
+		ajDie("Bad format %%%c", c);
 	    (*cvt[(int)c])(c, VA_P(ap), put, cl, (ajuint *)flags, width,
 			   precision);
 	}
@@ -2327,7 +2339,8 @@ static ajint fmtVscan(const char *thys,const char *fmt,va_list ap)
 	ok = ajTrue;
 
 	/* Calling funclist Fmt_S() */
-	assert(scvt[(int)*q]);
+	if(!scvt[(int)*q])
+	    ajDie("Bad scan format %%%c", q);
 	(*scvt[(int)*q])(q,&p,VA_P(ap),width,convert,&ok);
 
 	if(!ok)

@@ -237,14 +237,14 @@ typedef struct AjSNumBucket
 #define BT_SETAJLONG(p,v) (memcpy((void*)p,(void*)&v,sizeof(ajlong)))
 #else
 #define BT_GETAJINT(p,v) memcpy((void*)v,(void*)p,sizeof(ajint)); \
-                         ajUtilRevInt(v)
+                         ajByteRevInt(v)
 #define BT_GETAJUINT(p,v) memcpy((void*)v,(void*)p,sizeof(ajuint)); \
-                         ajUtilRevUint(v)
+                         ajByteRevUint(v)
 #define BT_GETAJLONG(p,v) memcpy((void*)v,(void*)p,sizeof(ajlong)); \
-                          ajUtilRevLong(v)
-#define BT_SETAJINT(p,v)  ajUtilRevInt(&v); \
+                          ajByteRevLong(v)
+#define BT_SETAJINT(p,v)  ajByteRevInt(&v); \
                           memcpy((void*)p,(void*)&v,sizeof(ajint))
-#define BT_SETAJLONG(p,v) ajUtilRevLong(&v); \
+#define BT_SETAJLONG(p,v) ajByteRevLong(&v); \
                           memcpy((void*)p,(void*)&v,sizeof(ajlong))
 #endif
 
@@ -279,13 +279,13 @@ typedef struct AjSNumBucket
 #else
 #define GBT_BUCKNODETYPE(p,v) memcpy((void*)v,(void*)PBT_BUCKNODETYPE(p), \
 				      sizeof(ajint)); \
-                              ajUtilRevInt(v)
+                              ajByteRevInt(v)
 #define GBT_BUCKNENTRIES(p,v) memcpy((void*)v,(void*)PBT_BUCKNENTRIES(p), \
                                       sizeof(ajint)); \
-                              ajUtilRevInt(v)
+                              ajByteRevInt(v)
 #define GBT_BUCKOVERFLOW(p,v) memcpy((void*)v,(void*)PBT_BUCKOVERFLOW(p), \
 				      sizeof(ajlong)); \
-                              ajUtilRevLong(v)
+                              ajByteRevLong(v)
 #endif
 
 
@@ -301,13 +301,13 @@ typedef struct AjSNumBucket
 #define SBT_BUCKOVERFLOW(p,v) (memcpy((void*)PBT_BUCKOVERFLOW(p), \
 				      (const void*)&v,sizeof(ajlong)))
 #else
-#define SBT_BUCKNODETYPE(p,v) ajUtilRevInt(&v); \
+#define SBT_BUCKNODETYPE(p,v) ajByteRevInt(&v); \
                               memcpy((void*)PBT_BUCKNODETYPE(p), \
 				      (const void*)&v,sizeof(ajint))
-#define SBT_BUCKNENTRIES(p,v) ajUtilRevInt(&v); \
+#define SBT_BUCKNENTRIES(p,v) ajByteRevInt(&v); \
                               memcpy((void*)PBT_BUCKNENTRIES(p), \
 				     (const void*)&v,sizeof(ajint))
-#define SBT_BUCKOVERFLOW(p,v) ajUtilRevLong(&v); \
+#define SBT_BUCKOVERFLOW(p,v) ajByteRevLong(&v); \
                               memcpy((void*)PBT_BUCKOVERFLOW(p), \
 				     (const void*)&v,sizeof(ajlong))
 #endif
@@ -357,29 +357,29 @@ typedef struct AjSNumBucket
 #else
 #define GBT_NODETYPE(p,v) memcpy((void*)v,(void*)PBT_NODETYPE(p), \
 				 sizeof(ajint)); \
-                          ajUtilRevInt(v)
+                          ajByteRevInt(v)
 #define GBT_BLOCKNUMBER(p,v) memcpy((void*)v,(void*)PBT_BLOCKNUMBER(p), \
 				     sizeof(ajlong)); \
-                             ajUtilRevLong(v)
+                             ajByteRevLong(v)
 #define GBT_NKEYS(p,v) memcpy((void*)v,(void*)PBT_NKEYS(p), \
 			       sizeof(ajint)); \
-                       ajUtilRevInt(v)
+                       ajByteRevInt(v)
 #define GBT_TOTLEN(p,v) memcpy((void*)v,(void*)PBT_TOTLEN(p), \
 			       sizeof(ajint)); \
-                        ajUtilRevInt(v)
+                        ajByteRevInt(v)
 #define GBT_LEFT(p,v) memcpy((void*)v,(void*)PBT_LEFT(p), \
                              sizeof(ajlong)); \
-                      ajUtilRevLong(v)
+                      ajByteRevLong(v)
 
 #define GBT_RIGHT(p,v) memcpy((void*)v,(void*)PBT_RIGHT(p), \
 			      sizeof(ajlong)); \
-                       ajUtilRevLong(v)
+                       ajByteRevLong(v)
 #define GBT_PREV(p,v) memcpy((void*)v,(void*)PBT_PREV(p), \
 			      sizeof(ajlong)); \
-                      ajUtilRevLong(v)
+                      ajByteRevLong(v)
 #define GBT_OVERFLOW(p,v) memcpy((void*)v,(void*)PBT_OVERFLOW(p), \
 				  sizeof(ajlong)); \
-                          ajUtilRevLong(v)
+                          ajByteRevLong(v)
 #endif
 
 
@@ -405,28 +405,28 @@ typedef struct AjSNumBucket
 #define SBT_OVERFLOW(p,v) (memcpy((void*)PBT_OVERFLOW(p), \
 				  (const void*)&v,sizeof(ajlong)))
 #else
-#define SBT_NODETYPE(p,v) ajUtilRevInt(&v); \
+#define SBT_NODETYPE(p,v) ajByteRevInt(&v); \
                           memcpy((void*)PBT_NODETYPE(p),(const void*)&v, \
 				  sizeof(ajint))
-#define SBT_BLOCKNUMBER(p,v) ajUtilRevLong(&v); \
+#define SBT_BLOCKNUMBER(p,v) ajByteRevLong(&v); \
                              memcpy((void*)PBT_BLOCKNUMBER(p), \
 				     (const void*)&v,sizeof(ajlong))
-#define SBT_NKEYS(p,v) ajUtilRevInt(&v); \
+#define SBT_NKEYS(p,v) ajByteRevInt(&v); \
                        memcpy((void*)PBT_NKEYS(p),(const void*)&v, \
 			       sizeof(ajint))
-#define SBT_TOTLEN(p,v) ajUtilRevInt(&v); \
+#define SBT_TOTLEN(p,v) ajByteRevInt(&v); \
                         memcpy((void*)PBT_TOTLEN(p),(const void*)&v, \
 				sizeof(ajint))
-#define SBT_LEFT(p,v) ajUtilRevLong(&v); \
+#define SBT_LEFT(p,v) ajByteRevLong(&v); \
                       memcpy((void*)PBT_LEFT(p), \
 			      (const void*)&v,sizeof(ajlong))
-#define SBT_RIGHT(p,v) ajUtilRevLong(&v); \
+#define SBT_RIGHT(p,v) ajByteRevLong(&v); \
                        memcpy((void*)PBT_RIGHT(p), \
 			       (const void*)&v,sizeof(ajlong))
-#define SBT_PREV(p,v) ajUtilRevLong(&v); \
+#define SBT_PREV(p,v) ajByteRevLong(&v); \
                       memcpy((void*)PBT_PREV(p), \
 			      (const void*)&v,sizeof(ajlong))
-#define SBT_OVERFLOW(p,v) ajUtilRevLong(&v); \
+#define SBT_OVERFLOW(p,v) ajByteRevLong(&v); \
                           memcpy((void*)PBT_OVERFLOW(p), \
 				 (const void*)&v,sizeof(ajlong))
 #endif
@@ -731,6 +731,10 @@ void        ajBtreeFreePriArray(AjPBtcache cache);
 void        ajBtreeFreeSecArray(AjPBtcache cache);
 void 	    ajBtreeHybLeafList(AjPBtcache cache, ajlong rootblock,
 			       const AjPStr idname, AjPList list);
+
+void        ajBtreeDumpHybKeys(AjPBtcache cache, ajint dmin, ajint dmax,
+			       AjPFile outf);
+
 
 /*
 ** End of prototype definitions

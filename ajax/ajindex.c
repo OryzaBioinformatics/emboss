@@ -1763,7 +1763,7 @@ static AjBool btreeReorderBuckets(AjPBtcache cache, AjPBtpage leaf)
     
 
     btreeBucketDel(&cbucket);
-    ajListDel(&idlist);
+    ajListFree(&idlist);
 
     return ajTrue;
 }
@@ -3223,7 +3223,7 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     AJFREE(buckets);
 
 
-    totalkeys = ajListLength(idlist);
+    totalkeys = ajListGetLength(idlist);
 
     keypos = totalkeys / 2;
 
@@ -3386,7 +3386,7 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 
     cbucket->Nentries = maxnperbucket;
     btreeBucketDel(&cbucket);
-    ajListDel(&idlist);
+    ajListFree(&idlist);
 
 
 
@@ -3950,7 +3950,7 @@ static void btreeAdjustBuckets(AjPBtcache cache, AjPBtpage leaf)
     bucketlimit = bucketn - 1;
 
     totnids = 0;
-    nids = ajListLength(idlist);
+    nids = ajListGetLength(idlist);
 
 
     if(!totalkeys)
@@ -3962,7 +3962,7 @@ static void btreeAdjustBuckets(AjPBtcache cache, AjPBtpage leaf)
 	AJFREE(keys);
 	AJFREE(ptrs);
 	AJFREE(overflows);
-	ajListDel(&idlist);
+	ajListFree(&idlist);
 	leaf->dirty = BT_DIRTY;
 	return;
     }
@@ -4100,7 +4100,7 @@ static void btreeAdjustBuckets(AjPBtcache cache, AjPBtpage leaf)
     
 
     btreeBucketDel(&cbucket);
-    ajListDel(&idlist);
+    ajListFree(&idlist);
 
     return;
 }
@@ -5672,7 +5672,7 @@ void ajBtreeWildDel(AjPBtWild *thys)
     while(ajListPop(pthis->list,(void **)&id))
 	ajBtreeIdDel(&id);
 
-    ajListDel(&pthis->list);
+    ajListFree(&pthis->list);
 
     *thys = NULL;
     AJFREE(pthis);
@@ -5744,7 +5744,7 @@ void ajBtreeKeyWildDel(AjPBtKeyWild *thys)
     while(ajListPop(pthis->list,(void **)&pri))
 	ajBtreePriDel(&pri);
 
-    ajListDel(&pthis->list);
+    ajListFree(&pthis->list);
 
     *thys = NULL;
     AJFREE(pthis);
@@ -6025,7 +6025,7 @@ AjPBtId ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild)
 
 	page->dirty = BT_CLEAN;
 	
-	if(!ajListLength(list))
+	if(!ajListGetLength(list))
 	    return NULL;
 
 	while(ajListPop(list,(void **)&id))
@@ -6055,7 +6055,7 @@ AjPBtId ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild)
 	    
 	    page->dirty = BT_CLEAN;
 	    
-	    if(!ajListLength(list))
+	    if(!ajListGetLength(list))
 		return NULL;
 	    
 	    found = ajFalse;
@@ -6078,7 +6078,7 @@ AjPBtId ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild)
     }
 
 
-    if(!ajListLength(list))
+    if(!ajListGetLength(list))
     {
 	page = ajBtreeCacheRead(cache,wild->pageno); 
 	buf = page->buf;
@@ -6093,7 +6093,7 @@ AjPBtId ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild)
 
 	page->dirty = BT_CLEAN;
 	
-	if(!ajListLength(list))
+	if(!ajListGetLength(list))
 	    return NULL;
     }
     
@@ -6202,7 +6202,7 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
 	if(!right)
 	{
 	    ajStrDel(&prefix);
-	    ajListDel(&list);
+	    ajListFree(&list);
 	    return;
 	}
 	page = ajBtreeCacheRead(cache,right);
@@ -6213,10 +6213,10 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
 	    
 	page->dirty = BT_CLEAN;
 	    
-	if(!ajListLength(list))
+	if(!ajListGetLength(list))
 	{
 	    ajStrDel(&prefix);
-	    ajListDel(&list);
+	    ajListFree(&list);
 	    return;
 	}
 	
@@ -6238,7 +6238,7 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
     if(!found)
     {
 	ajStrDel(&prefix);
-	ajListDel(&list);
+	ajListFree(&list);
 	return;
     }
     
@@ -6253,7 +6253,7 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
 	else
 	    ajBtreeIdDel(&id);
 	
-	if(!ajListLength(list))
+	if(!ajListGetLength(list))
 	{
 	    page = ajBtreeCacheRead(cache,pripageno);
 	    buf = page->buf;
@@ -6272,7 +6272,7 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
 	    
 	    page->dirty = BT_CLEAN;
 	    
-	    if(!ajListLength(list))
+	    if(!ajListGetLength(list))
 	    {
 		finished = ajTrue;
 		continue;
@@ -6289,9 +6289,9 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
     
     while(ajListPop(list,(void **)&id))
 	ajBtreeIdDel(&id);
-    ajListDel(&list);
+    ajListFree(&list);
 
-    ajListUnique2(idlist,btreeDbnoCompare,btreeOffsetCompare,
+    ajListSortTwoUnique(idlist,btreeDbnoCompare,btreeOffsetCompare,
 		 btreeIdDelFromList);
 
     ajStrDel(&prefix);
@@ -6368,7 +6368,7 @@ static void btreeKeyFullSearch(AjPBtcache cache, const char *key,
 	while(ajListPop(list,(void **)&id))
 	{
 	    if(ajStrMatchWildC(id->id,key))
-		ajListPushApp(idlist,(void *)id);
+		ajListPushAppend(idlist,(void *)id);
 	    else
 		ajBtreeIdDel(&id);
 	}
@@ -6382,10 +6382,10 @@ static void btreeKeyFullSearch(AjPBtcache cache, const char *key,
     }
     
 
-    ajListUnique2(idlist,btreeDbnoCompare,btreeOffsetCompare,
+    ajListSortTwoUnique(idlist,btreeDbnoCompare,btreeOffsetCompare,
 		  btreeIdDelFromList);
 
-    ajListDel(&list);
+    ajListFree(&list);
     for(i=0;i<order;++i)
 	ajStrDel(&karray[i]);
     AJFREE(karray);
@@ -6569,11 +6569,11 @@ ajint ajBtreeReadEntries(const char *filename, const char *indexdir,
 	    seqname = ajStrNew();
 	    ajFmtScanS(line,"%S",&tseqname);
 	    ajFmtPrintS(&seqname,"%s/%S",directory,tseqname);
-	    ajListPushApp(list,(void *)seqname);
+	    ajListPushAppend(list,(void *)seqname);
 	}
 
-	ajListToArray(list,(void ***)&(*seqfiles));
-	entries = ajListLength(list);
+	ajListToarray(list,(void ***)&(*seqfiles));
+	entries = ajListGetLength(list);
     }
     else
     {
@@ -6584,18 +6584,18 @@ ajint ajBtreeReadEntries(const char *filename, const char *indexdir,
 	    ajFmtScanS(line,"%S%S",&tseqname,&trefname);
 	    ajFmtPrintS(&seqname,"%s/%S",directory,tseqname);
 	    ajFmtPrintS(&refname,"%s/%S",directory,trefname);
-	    ajListPushApp(list,(void *)seqname);
-	    ajListPushApp(reflist,(void *)refname);
+	    ajListPushAppend(list,(void *)seqname);
+	    ajListPushAppend(reflist,(void *)refname);
 	}
 
-	ajListToArray(list,(void ***)&(*seqfiles));
-	ajListToArray(reflist,(void ***)&(*reffiles));
-	entries = ajListLength(list);
+	ajListToarray(list,(void ***)&(*seqfiles));
+	ajListToarray(reflist,(void ***)&(*reffiles));
+	entries = ajListGetLength(list);
     }
     
     
-    ajListDel(&list);
-    ajListDel(&reflist);
+    ajListFree(&list);
+    ajListFree(&reflist);
     ajStrDel(&line);
     ajStrDel(&fn);
 
@@ -6760,7 +6760,7 @@ AjPList ajBtreeDupFromKey(AjPBtcache cache, const char *key)
 	    id = ajBtreeIdFromKey(cache,dupkey->Ptr);
 	    if(!id)
 		ajFatal("DupFromKey: Id not found\n");
-	    ajListPushApp(list,(void *)id);
+	    ajListPushAppend(list,(void *)id);
 	}
     }
 
@@ -7517,7 +7517,7 @@ static AjBool btreeReorderPriBuckets(AjPBtcache cache, AjPBtpage leaf)
     
 
     btreePriBucketDel(&cbucket);
-    ajListDel(&idlist);
+    ajListFree(&idlist);
 
     return ajTrue;
 }
@@ -8013,7 +8013,7 @@ static AjPBtpage btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage)
     AJFREE(buckets);
 
 
-    totalkeys = ajListLength(idlist);
+    totalkeys = ajListGetLength(idlist);
 
     keypos = totalkeys / 2;
 
@@ -8160,7 +8160,7 @@ static AjPBtpage btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage)
 
     cbucket->Nentries = maxnperbucket;
     btreePriBucketDel(&cbucket);
-    ajListDel(&idlist);
+    ajListFree(&idlist);
 
 
 
@@ -8705,7 +8705,7 @@ static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
     AJFREE(buckets);
 
 
-    totalkeys = ajListLength(idlist);
+    totalkeys = ajListGetLength(idlist);
 
     keypos = totalkeys / 2;
 
@@ -8849,7 +8849,7 @@ static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
 
     cbucket->Nentries = maxnperbucket;
     btreeSecBucketDel(&cbucket);
-    ajListDel(&idlist);
+    ajListFree(&idlist);
 
 
 
@@ -9623,7 +9623,7 @@ static AjBool btreeReorderSecBuckets(AjPBtcache cache, AjPBtpage leaf)
     
 
     btreeSecBucketDel(&cbucket);
-    ajListDel(&idlist);
+    ajListFree(&idlist);
 
     return ajTrue;
 }
@@ -11025,7 +11025,7 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
 
 	page->dirty = BT_CLEAN;
 	
-	if(!ajListLength(list))
+	if(!ajListGetLength(list))
 	    return NULL;
 
 	while(ajListPop(list,(void **)&pri))
@@ -11061,7 +11061,7 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
 	    
 	    page->dirty = BT_CLEAN;
 	    
-	    if(!ajListLength(list))
+	    if(!ajListGetLength(list))
 		return NULL;
 	    
 	    found = ajFalse;
@@ -11087,7 +11087,7 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
     }
 
 
-    if(ajListLength(wild->idlist))
+    if(ajListGetLength(wild->idlist))
     {
 	ajListPop(wild->idlist,(void **)&id);
 	btid = ajBtreeIdFromKey(idcache,id->Ptr);
@@ -11096,7 +11096,7 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
     }
     else if((btreeSecNextLeafList(cache,wild)))
     {
-	if(ajListLength(wild->idlist))
+	if(ajListGetLength(wild->idlist))
 	{
 	    ajListPop(wild->idlist,(void **)&id);
 	    btid = ajBtreeIdFromKey(idcache,id->Ptr);
@@ -11109,7 +11109,7 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
 
     /* Done for the current keyword so get the next one */
 
-    if(!ajListLength(list))
+    if(!ajListGetLength(list))
     {
 	page = ajBtreeCacheRead(cache,wild->pageno); 
 	buf = page->buf;
@@ -11124,7 +11124,7 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
 
 	page->dirty = BT_CLEAN;
 	
-	if(!ajListLength(list))
+	if(!ajListGetLength(list))
 	    return NULL;
     }
     
@@ -11147,7 +11147,7 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
     cache->secrootblock = pri->treeblock;
     btreeSecLeftLeaf(cache, wild);
     
-    if(ajListLength(wild->idlist))
+    if(ajListGetLength(wild->idlist))
     {
 	ajListPop(wild->idlist,(void **)&id);
 	btid = ajBtreeIdFromKey(idcache,id->Ptr);
@@ -11231,10 +11231,10 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
     pripagenosave = page->pageno;
     btreeReadPriLeaf(cache,page,prilist);
     page->dirty = BT_CLEAN;
-    if(!ajListLength(prilist))
+    if(!ajListGetLength(prilist))
     {
 	ajStrDel(&prefix);
-	ajListDel(&prilist);
+	ajListFree(&prilist);
 	return;
     }
 
@@ -11257,7 +11257,7 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 	if(!pageno)
 	{
 	    ajStrDel(&prefix);
-	    ajListDel(&prilist);
+	    ajListFree(&prilist);
 	    return;
 	}
 	page = ajBtreeCacheRead(cache,pageno);
@@ -11265,10 +11265,10 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 	pripagenosave = pageno;
 	btreeReadPriLeaf(cache,page,prilist);
 	page->dirty = BT_CLEAN;
-	if(!ajListLength(prilist))
+	if(!ajListGetLength(prilist))
 	{
 	    ajStrDel(&prefix);
-	    ajListDel(&prilist);
+	    ajListFree(&prilist);
 	    return;
 	}
 
@@ -11287,7 +11287,7 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
     if(!found)
     {
 	ajStrDel(&prefix);
-	ajListDel(&prilist);
+	ajListFree(&prilist);
 	return;
     }
 
@@ -11305,7 +11305,7 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 
 	ajBtreePriDel(&pri);
 
-	if(!ajListLength(prilist))
+	if(!ajListGetLength(prilist))
 	{
 	    page = ajBtreeCacheRead(cache,pripagenosave);
 
@@ -11322,7 +11322,7 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 	    page->dirty = BT_CLEAN;
 	    pripagenosave = right;	    
 
-	    if(!ajListLength(prilist))
+	    if(!ajListGetLength(prilist))
 	    {
 		finished = ajTrue;
 		continue;
@@ -11341,22 +11341,22 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 
     while(ajListPop(prilist,(void **)&pri))
 	ajBtreePriDel(&pri);
-    ajListDel(&prilist);
+    ajListFree(&prilist);
 
 
-    if(ajListLength(strlist))
+    if(ajListGetLength(strlist))
     {
-	ajListUnique(strlist,ajStrVcmp,btreeStrDel);
+	ajListSortUnique(strlist,ajStrVcmp,btreeStrDel);
 
 	while(ajListPop(strlist,(void **)&id))
 	{
 	    btid = ajBtreeIdFromKey(idcache,id->Ptr);
-	    ajListPushApp(btidlist,(void *)btid);
+	    ajListPushAppend(btidlist,(void *)btid);
 	    ajStrDel(&id);
 	}
     }
 
-    ajListDel(&strlist);
+    ajListFree(&strlist);
 
     ajStrDel(&prefix);
 
@@ -11456,22 +11456,22 @@ static void btreeKeywordFullSearch(AjPBtcache cache, const char *key,
 
 
 
-    if(ajListLength(strlist))
+    if(ajListGetLength(strlist))
     {
-	ajListUnique(strlist,ajStrVcmp,btreeStrDel);
+	ajListSortUnique(strlist,ajStrVcmp,btreeStrDel);
 
 	while(ajListPop(strlist,(void **)&id))
 	{
 	    btid = ajBtreeIdFromKey(idcache,id->Ptr);
-	    ajListPushApp(idlist,(void *)btid);
+	    ajListPushAppend(idlist,(void *)btid);
 	    ajStrDel(&id);
 	}
     }
 
 
-    ajListDel(&strlist);
+    ajListFree(&strlist);
 
-    ajListDel(&list);
+    ajListFree(&list);
     for(i=0;i<order;++i)
 	ajStrDel(&karray[i]);
     AJFREE(karray);
@@ -12967,7 +12967,7 @@ static AjBool btreeHybReorderBuckets(AjPBtcache cache, AjPBtpage leaf)
     btreeDeallocPriArray(cache,arrays);
     
     btreeBucketDel(&cbucket);
-    ajListDel(&idlist);
+    ajListFree(&idlist);
 
     return ajTrue;
 }
@@ -13139,7 +13139,7 @@ static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     AJFREE(buckets);
 
 
-    totalkeys = ajListLength(idlist);
+    totalkeys = ajListGetLength(idlist);
 
     keypos = totalkeys / 2;
 
@@ -13302,7 +13302,7 @@ static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 
     cbucket->Nentries = maxnperbucket;
     btreeBucketDel(&cbucket);
-    ajListDel(&idlist);
+    ajListFree(&idlist);
 
 
 
@@ -14833,7 +14833,7 @@ static AjBool btreeReorderNumBuckets(AjPBtcache cache, AjPBtpage leaf)
     
     btreeDeallocSecArray(cache,array);
 
-    ajListDel(&idlist);
+    ajListFree(&idlist);
 
     return ajTrue;
 }
@@ -16185,7 +16185,7 @@ static AjPBtpage btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     ajListSort(idlist,btreeNumIdCompare);
     AJFREE(buckets);
 
-    totalkeys = ajListLength(idlist);
+    totalkeys = ajListGetLength(idlist);
 
     keypos = totalkeys / 2;
 
@@ -16326,7 +16326,7 @@ static AjPBtpage btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 
     cbucket->Nentries = maxnperbucket;
     btreeNumBucketDel(&cbucket);
-    ajListDel(&idlist);
+    ajListFree(&idlist);
 
 
 
@@ -16564,3 +16564,94 @@ void ajBtreeHybLeafList(AjPBtcache cache, ajlong rootblock,
     return;
 }
 
+
+
+
+/* @func ajBtreeDumpHybKeys ********************************************
+**
+** Read the leaves of a primary hybrid tree (requested by EBI services)
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] dmin [ajint] minimum number of times the key should appear
+** @param [r] dmax [ajint] maximum number of times the key should appear
+** @param [u] outf [AjPFile] output file
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajBtreeDumpHybKeys(AjPBtcache cache, ajint dmin, ajint dmax, AjPFile outf)
+{
+    AjPStr *karray;
+    ajlong *parray;
+    AjPBtpage page;
+    unsigned char *buf;
+    ajint nodetype;
+    ajint i;
+    ajint j;
+    ajint dups;
+    
+    AjPBucket bucket;
+    ajint nkeys;
+    ajlong right;
+    AjPBtMem array = NULL;
+
+    array = btreeAllocPriArray(cache);
+    karray = array->karray;
+    parray = array->parray;
+
+    page = ajBtreeCacheRead(cache, 0);
+    buf = page->buf;
+
+    btreeGetKeys(cache,buf,&karray,&parray);
+    GBT_NODETYPE(buf,&nodetype);
+
+    while(nodetype != BT_LEAF && cache->level != 0)
+    {
+	page = ajBtreeCacheRead(cache,parray[0]);
+	buf = page->buf;
+	btreeGetKeys(cache,buf,&karray,&parray);
+	GBT_NODETYPE(buf,&nodetype);
+    }
+
+    do
+    {
+	GBT_NKEYS(buf,&nkeys);
+	for(i=0;i<nkeys+1;++i)
+	{
+	    bucket = btreeReadBucket(cache,parray[i]);
+	    for(j=0;j<bucket->Nentries;++j)
+	    {
+		dups = bucket->Ids[j]->dups;
+		if(!dups)
+		    dups = 1;
+		
+		if(dups < dmin)
+		    continue;
+		if(dups > dmax && dmax)
+		    continue;
+
+		ajFmtPrintF(outf,"%S %d\n",
+			    bucket->Ids[j]->id,
+			    dups);
+	    }
+	    btreeBucketDel(&bucket);
+	}
+
+	right = 0L;
+	if(cache->level)
+	{
+	    GBT_RIGHT(buf,&right);
+	    if(right)
+	    {
+		page = ajBtreeCacheRead(cache,right);
+		buf = page->buf;
+		btreeGetKeys(cache,buf,&karray,&parray);
+	    }
+	}
+    } while(right);
+
+    btreeDeallocPriArray(cache,array);
+
+    return;
+}

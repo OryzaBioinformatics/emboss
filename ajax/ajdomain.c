@@ -1105,7 +1105,7 @@ AjPList  ajCathReadAllNew(AjPFile inf)
     
 
     while((cath_object=ajCathReadCNew(inf, "*")))
-	ajListPushApp(ret, cath_object);
+	ajListPushAppend(ret, cath_object);
   
     return ret;
 }
@@ -1260,10 +1260,10 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	StrTokPtr = ajStrParseWhite(CathNameLine);		
 	ajStrAssignS(&(CathNamePtr)->Id, StrTokPtr);
 	StrTokPtr = ajStrParseWhite(NULL);		
-	ajStrTokenRest(&StrTokPtr, NULL);
+	ajStrTokenRestParse(NULL, &StrTokPtr);
 	ajStrAssignS(&(CathNamePtr)->Desc, StrTokPtr);
 	if(CathNamePtr->Desc->Ptr[0]==':')
-	    ajStrTrim(&(CathNamePtr)->Desc, 1);
+	    ajStrCutStart(&(CathNamePtr)->Desc, 1);
 	    */
 
 	/*
@@ -1271,7 +1271,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	ajStrAssignSubS(&(CathNamePtr)->Desc, CathNameLine, 28, -1); 
 	ajStrTrimWhite(&(CathNamePtr)->Desc);
 	if(CathNamePtr->Desc->Ptr[0]==':')
-	    ajStrTrim(&(CathNamePtr)->Desc, 1);
+	    ajStrCutStart(&(CathNamePtr)->Desc, 1);
 	    */
 	
 	/* Push pointer to CathName object onto list*/
@@ -1285,7 +1285,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
     /* Sort list using domainSortNameId function */    
     ajListSort(CathNameList, domainSortNameId); 
     /* make list into array and get array size - dimCathName */
-    dimCathName = ajListToArray(CathNameList, (void ***) &CathNameArray); 
+    dimCathName = ajListToarray(CathNameList, (void ***) &CathNameArray); 
     
     
     /* We now have a list that we can do a binary search over */
@@ -1404,7 +1404,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
     /* Sort list using domainSortDomainID function */
     ajListSort(CathDomList, domainSortDomainID); 
     /* make list into array and get array size - dimCathDom */
-    dimCathDom = ajListToArray(CathDomList, (void ***) &CathDomArray); 
+    dimCathDom = ajListToarray(CathDomList, (void ***) &CathDomArray); 
     
     
     /* Start of main application loop */
@@ -1664,7 +1664,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
         }    
 
 	/* Push the Cath object onto list */
-	ajListPushApp(ret, CathPtr);
+	ajListPushAppend(ret, CathPtr);
 
     } /* End of main application loop */
     
@@ -1673,13 +1673,13 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
        list of AjSCathName structures (ajListFree) */
     while(ajListPop(CathNameList, (void **) &CathNamePtr))
 	domainCathNameDel(&CathNamePtr);
-    ajListDel(&CathNameList);
+    ajListFree(&CathNameList);
     
     /* Free the memory for the list and nodes in 
        list of AjSCathDom structures (ajListFree)  */
     while(ajListPop(CathDomList, (void **) &CathDomPtr))
 	domainCathDomDel(&CathDomPtr);
-    ajListDel(&CathDomList);
+    ajListFree(&CathDomList);
     
 
     
@@ -1995,10 +1995,10 @@ AjPList  ajDomainReadAllNew(AjPFile inf)
     
     if(type == ajSCOP)
 	while((domain_object->Scop=ajScopReadCNew(inf, "*")))
-	    ajListPushApp(ret, domain_object);
+	    ajListPushAppend(ret, domain_object);
     else
 	while((domain_object->Cath=ajCathReadCNew(inf, "*")))
-	    ajListPushApp(ret, domain_object);
+	    ajListPushAppend(ret, domain_object);
 
     return ret;
 }
@@ -2036,7 +2036,7 @@ AjPList  ajScopReadAllNew(AjPFile inf)
     
 
     while((scop_object=ajScopReadCNew(inf, "*")))
-	ajListPushApp(ret, scop_object);
+	ajListPushAppend(ret, scop_object);
   
     return ret;
 }
@@ -2088,7 +2088,7 @@ AjPList   ajScopReadAllRawNew(AjPFile claf, AjPFile desf, AjBool omit)
     /* Read the dir.cla.scop.txt file */ 
     while((cla = domainScopclaReadC(claf, "*")))
     {
-	ajListPushApp(clalist, cla);
+	ajListPushAppend(clalist, cla);
 /*	ajFmtPrint(" %d ", cla->Domdat); */
     }
     
@@ -2104,7 +2104,7 @@ AjPList   ajScopReadAllRawNew(AjPFile claf, AjPFile desf, AjBool omit)
     
 
     ajListSort(deslist, domainScopdesCompSunid);
-    dim=ajListToArray(deslist, (void ***) &desarr);
+    dim=ajListToarray(deslist, (void ***) &desarr);
     
 
     while(ajListPop(clalist, (void **)&cla))
@@ -2164,7 +2164,7 @@ AjPList   ajScopReadAllRawNew(AjPFile claf, AjPFile desf, AjBool omit)
 	}
 	
 
-	ajListPushApp(ret, tmp);
+	ajListPushAppend(ret, tmp);
 	
 
 	domainScopclaDel(&cla);
@@ -2176,8 +2176,8 @@ AjPList   ajScopReadAllRawNew(AjPFile claf, AjPFile desf, AjBool omit)
     
     /* Tidy up */
     AJFREE(desarr);
-    ajListDel(&clalist);
-    ajListDel(&deslist);
+    ajListFree(&clalist);
+    ajListFree(&deslist);
 
     
     return ret;
@@ -3728,6 +3728,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
     AjPResidue  res         = NULL;
     AjPResidue  res2        = NULL;
 /*    AjPResidue *resarr      = NULL; */
+    AjPSeqout outseq;
 
 
 
@@ -3807,7 +3808,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	
 
 	/* Initialise the iterator */
-	iter=ajListIterRead(pdb->Chains[chn-1]->Residues);
+	iter=ajListIterNewread(pdb->Chains[chn-1]->Residues);
 
 
 	/*
@@ -3838,7 +3839,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	if(!found_start || !found_end)
 	{
 	    /* Iterate through the list of atoms */
-	    while((res=(AjPResidue)ajListIterNext(iter)))
+	    while((res=(AjPResidue)ajListIterGet(iter)))
 	    {
 		/* 
 		 ** Hard-coded to work on model 1
@@ -3934,7 +3935,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	    ajStrDel(&seq);
 	    ajStrDel(&tmpseq);
 	    ajStrDel(&tmpstr);
-	    ajListIterFree(&iter);	
+	    ajListIterDel(&iter);	
 	    ajWarn("Domain start not found in ajPdbWriteDomain");
 	    ajFmtPrintF(errf, "//\n%S\nERROR Domain start not found "
 			"in in ajPdbWriteDomain\n", scop->Entry);
@@ -3948,7 +3949,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	    ajStrDel(&seq);
 	    ajStrDel(&tmpseq);
 	    ajStrDel(&tmpstr);
-	    ajListIterFree(&iter);	
+	    ajListIterDel(&iter);	
 	    ajWarn("Domain end not found in ajPdbWriteDomain");
 	    ajFmtPrintF(errf, "//\n%S\nERROR Domain end not found "
 			"in ajPdbWriteDomain\n", scop->Entry);
@@ -3963,7 +3964,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 
 
 	/* Free the iterator */
-	ajListIterFree(&iter);	
+	ajListIterDel(&iter);	
     }
     /* End of main application loop */
     
@@ -4002,8 +4003,12 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 		ajStrGetLen(seq),
 		pdb->Chains[chn-1]->numHelices, 
 		pdb->Chains[chn-1]->numStrands);
-    ajFmtPrintF(outf, "XX\n");	
-    ajSeqWriteXyz(outf, seq, "SQ");
+    ajFmtPrintF(outf, "XX\n");
+
+    outseq = ajSeqoutNewFile(outf);
+    ajSeqoutDumpSwisslike(outseq, seq, "SQ");
+    ajSeqoutDel(&outseq);
+
     ajFmtPrintF(outf, "XX\n");	
 
 
@@ -4020,7 +4025,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	ajPdbChnidToNum(scop->Chain[z], pdb, &chn);
 	
 	/* Initialise the iterator */
-	iter = ajListIterRead(pdb->Chains[chn-1]->Residues);
+	iter = ajListIterNewread(pdb->Chains[chn-1]->Residues);
 
 
 	/* Increment res. counter from last chain if appropriate */
@@ -4043,7 +4048,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	
 
 	/* Iterate through the list of residues */
-	while((res=(AjPResidue)ajListIterNext(iter)))
+	while((res=(AjPResidue)ajListIterGet(iter)))
 	{
 	    /* Break if model no. !=1 */
 	    if(res->Mod!=1)
@@ -4166,7 +4171,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	    res2 = res;
 	}
 
-	ajListIterFree(&iter);			
+	ajListIterDel(&iter);			
     } 	
 
 
@@ -4183,11 +4188,11 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	
 /*	if(resarr)
 	    AJFREE(resarr);
-	ajListToArray(pdb->Chains[chn-1]->Residues, (void ***) &resarr);  */
+	ajListToarray(pdb->Chains[chn-1]->Residues, (void ***) &resarr);  */
 	
 
 	/* Initialise the iterator */
-	iter = ajListIterRead(pdb->Chains[chn-1]->Atoms);
+	iter = ajListIterNewread(pdb->Chains[chn-1]->Atoms);
 
 
 	/* Increment res. counter from last chain if appropriate */
@@ -4210,7 +4215,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	
 
 	/* Iterate through the list of atoms */
-	while((atm=(AjPAtom)ajListIterNext(iter)))
+	while((atm=(AjPAtom)ajListIterGet(iter)))
 	{
 	    /*
 	    ** Continue if a non-protein atom is found or break if
@@ -4324,7 +4329,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	    atm2 = atm;
 	}
 
-	ajListIterFree(&iter);			
+	ajListIterDel(&iter);			
     } 	
 
 
@@ -4369,7 +4374,7 @@ AjBool ajCathWrite(AjPFile outf, const AjPCath obj)
     
     ajint i;
     AjPStr tmp;
-
+    AjPSeqout outseq;
 
     /* Check args */
     if(!outf || !obj)
@@ -4408,16 +4413,10 @@ AjBool ajCathWrite(AjPFile outf, const AjPCath obj)
     if(ajStrGetLen(obj->SeqPdb))
     {
 	ajFmtPrintF(outf,"XX\n");
-	ajSeqWriteXyz(outf, obj->SeqPdb, "DS");		
+	outseq = ajSeqoutNewFile(outf);
+	ajSeqoutDumpSwisslike(outseq, obj->SeqPdb, "DS");
+	ajSeqoutDel(&outseq);
     }	
-
-
-
-
-
-
-
-
 
     ajFmtPrintF(outf,"NR   %d\n",obj->Length);
 
@@ -4441,7 +4440,9 @@ AjBool ajCathWrite(AjPFile outf, const AjPCath obj)
 	ajFmtPrintF(outf, "XX\n%-5s%d START; %d END;\n", "RA", obj->Startd,
 		    obj->Endd);
 	ajFmtPrintF(outf, "XX\n");	
-	ajSeqWriteXyz(outf, obj->SeqSpr, "SQ");
+	outseq = ajSeqoutNewFile(outf);
+	ajSeqoutDumpSwisslike(outseq, obj->SeqSpr, "SQ");
+	ajSeqoutDel(&outseq);
     }
     
 
@@ -4519,7 +4520,7 @@ AjBool ajDomainWrite(AjPFile outf, const AjPDomain obj)
 AjBool ajScopWrite(AjPFile outf, const AjPScop obj)
 {
     ajint i;
-
+    AjPSeqout outseq;
 
     if(!outf || !obj)
     {
@@ -4551,7 +4552,9 @@ AjBool ajScopWrite(AjPFile outf, const AjPScop obj)
     if(ajStrGetLen(obj->SeqPdb))
     {
 	ajFmtPrintF(outf,"XX\n");
-	ajSeqWriteXyz(outf, obj->SeqPdb, "DS");		
+	outseq = ajSeqoutNewFile(outf);
+	ajSeqoutDumpSwisslike(outseq, obj->SeqPdb, "DS");		
+	ajSeqoutDel(&outseq);
     }	
 
     if(ajStrGetLen(obj->Acc))
@@ -4565,7 +4568,9 @@ AjBool ajScopWrite(AjPFile outf, const AjPScop obj)
 	ajFmtPrintF(outf, "XX\n%-5s%d START; %d END;\n", "RA", obj->Startd,
 		    obj->Endd);
 	ajFmtPrintF(outf, "XX\n");	
-	ajSeqWriteXyz(outf, obj->SeqSpr, "SQ");
+	outseq = ajSeqoutNewFile(outf);
+	ajSeqoutDumpSwisslike(outseq, obj->SeqSpr, "SQ");
+	ajSeqoutDel(&outseq);
     }
     
     
@@ -4576,8 +4581,11 @@ AjBool ajScopWrite(AjPFile outf, const AjPScop obj)
 	ajFmtPrintF(outf,"XX\n");
     
     if(ajStrGetLen(obj->Sss))
-	ajSeqWriteXyz(outf, obj->Sss, "SS");
-
+    {
+	outseq = ajSeqoutNewFile(outf);
+	ajSeqoutDumpSwisslike(outseq, obj->Sss, "SS");
+	ajSeqoutDel(&outseq);
+    }
 
     ajFmtPrintF(outf,"XX\nNC   %d\n",obj->N);
 

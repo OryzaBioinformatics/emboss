@@ -182,13 +182,13 @@ AjPList       ajPdbtospReadAllRawNew(AjPFile inf)
 		tmp = ajPdbtospNew(0);
 		ajStrAssignS(&tmp->Pdb, pdb);
 		tmp->n = n;
-		ajListToArray(acclist, (void ***) &tmp->Acc);
-		ajListToArray(sprlist, (void ***) &tmp->Spr);
-		ajListPushApp(ret, (void *)tmp);
+		ajListToarray(acclist, (void ***) &tmp->Acc);
+		ajListToarray(sprlist, (void ***) &tmp->Spr);
+		ajListPushAppend(ret, (void *)tmp);
 		
 		
-		ajListstrDel(&acclist);
-		ajListstrDel(&sprlist);		
+		ajListstrFree(&acclist);
+		ajListstrFree(&sprlist);		
 		acclist = ajListstrNew();
 		sprlist = ajListstrNew();
 
@@ -220,8 +220,8 @@ AjPList       ajPdbtospReadAllRawNew(AjPFile inf)
 	else
        	    ajStrCutEnd(&acc,1);
 	
-	ajListstrPushApp(acclist, acc);
-	ajListstrPushApp(sprlist, spr);
+	ajListstrPushAppend(acclist, acc);
+	ajListstrPushAppend(sprlist, spr);
 	n++;
 
 	ajStrParseC(token, ",");
@@ -240,8 +240,8 @@ AjPList       ajPdbtospReadAllRawNew(AjPFile inf)
 		ajStrCutEnd(&acc,1);
 
 
-	    ajListstrPushApp(acclist, acc);
-	    ajListstrPushApp(sprlist, spr);
+	    ajListstrPushAppend(acclist, acc);
+	    ajListstrPushAppend(sprlist, spr);
 	    n++;
 	}
     }	
@@ -252,11 +252,11 @@ AjPList       ajPdbtospReadAllRawNew(AjPFile inf)
     tmp->n = n;
 
 
-    ajListToArray(acclist, (void ***) &tmp->Acc);
-    ajListToArray(sprlist, (void ***) &tmp->Spr);	  
-    ajListPushApp(ret, (void *)tmp);
-    ajListstrDel(&acclist);
-    ajListstrDel(&sprlist);		
+    ajListToarray(acclist, (void ***) &tmp->Acc);
+    ajListToarray(sprlist, (void ***) &tmp->Spr);	  
+    ajListPushAppend(ret, (void *)tmp);
+    ajListstrFree(&acclist);
+    ajListstrFree(&sprlist);		
 
 
 
@@ -264,8 +264,8 @@ AjPList       ajPdbtospReadAllRawNew(AjPFile inf)
     ajStrDel(&line);
     ajStrDel(&token);
     ajStrDel(&pdb);
-    ajListstrDel(&acclist);	
-    ajListstrDel(&sprlist);	
+    ajListstrFree(&acclist);	
+    ajListstrFree(&sprlist);	
 
 
     return ret;
@@ -494,7 +494,7 @@ AjPList ajCmapReadAllNew(AjPFile inf)
   ret = ajListNew();
 
   while((cmap = ajCmapReadNew(inf, CMAP_MODE_I, 0, 0)))
-    ajListPushApp(ret, cmap);
+    ajListPushAppend(ret, cmap);
 
   return ret;
 }
@@ -999,11 +999,11 @@ AjPHet  ajHetReadNew(AjPFile inf)
 	    ajListPush(list, (AjPHetent) entry);
     }
 
-    (hetdic)->n=ajListToArray(list, (void ***) &((hetdic)->entries));
+    (hetdic)->n=ajListToarray(list, (void ***) &((hetdic)->entries));
   
     ajStrDel(&line);
     ajStrDel(&temp);
-    ajListDel(&list);
+    ajListFree(&list);
 
     return hetdic;
 }
@@ -1088,7 +1088,7 @@ AjPHet ajHetReadRawNew(AjPFile inf)
 	while(ajListPop(list, (void **) &tmp))
 	    ajHetentDel(&tmp);
 	
-	ajListDel(&list);	    
+	ajListFree(&list);	    
 	ajStrDel(&line);
 
 	ajFatal("Fatal discrepancy in count of HET and FORMUL records\n"
@@ -1096,11 +1096,11 @@ AjPHet ajHetReadRawNew(AjPFile inf)
     }	
     
     ret = ajHetNew(0);
-    ret->n = ajListToArray(list, (void ***) &((ret)->entries));
+    ret->n = ajListToarray(list, (void ***) &((ret)->entries));
     
    
     ajStrDel(&line);
-    ajListDel(&list);
+    ajListFree(&list);
 
     return ret;
 }
@@ -1457,9 +1457,9 @@ AjPPdb ajPdbReadNew(AjPFile inf, ajint mode)
 	    {
 		/* Heterogen */
 		if(atom->Type == 'H')
-		    ajListPushApp((ret)->Groups,(void *)atom);
+		    ajListPushAppend((ret)->Groups,(void *)atom);
 		else if(atom->Type == 'W')
-		    ajListPushApp((ret)->Water,(void *)atom);
+		    ajListPushAppend((ret)->Water,(void *)atom);
 		else
 		    ajFatal("Unexpected parse error in "
 			    "ajPdbReadFirstModelNew. Email "
@@ -1467,7 +1467,7 @@ AjPPdb ajPdbReadNew(AjPFile inf, ajint mode)
 	    }
 	    else
 	      {
-		ajListPushApp((ret)->Chains[chn-1]->Atoms,(void *)atom);
+		ajListPushAppend((ret)->Chains[chn-1]->Atoms,(void *)atom);
 	      }
 	    continue;
 	}
@@ -1593,7 +1593,7 @@ AjPPdb ajPdbReadNew(AjPFile inf, ajint mode)
             ajStrTokenNextParse(&handle,&token);
             ajStrToFloat(token,&residue->pol_rel);
 
-	    ajListPushApp((ret)->Chains[chn-1]->Residues,(void *)residue);  
+	    ajListPushAppend((ret)->Chains[chn-1]->Residues,(void *)residue);  
 
 	    continue;
 	}
@@ -1962,18 +1962,18 @@ AjPPdb ajPdbReadoldNew(AjPFile inf)
 	    {
 		/* Heterogen */
 		if(atom->Type == 'H')
-		    ajListPushApp((ret)->Groups,(void *)atom);
+		    ajListPushAppend((ret)->Groups,(void *)atom);
 		else if(atom->Type == 'W')
-		    ajListPushApp((ret)->Water,(void *)atom);
+		    ajListPushAppend((ret)->Water,(void *)atom);
 		else
 		    ajFatal("Unexpected parse error in ajPdbRead. "
 			    "Email jison@hgmp.mrc.ac.uk");
 	    }
 	    else
-		ajListPushApp((ret)->Chains[chn-1]->Atoms,(void *)atom);
+		ajListPushAppend((ret)->Chains[chn-1]->Atoms,(void *)atom);
 
 	    
-	    ajListPushApp((ret)->Chains[chn-1]->Residues,(void *)res);
+	    ajListPushAppend((ret)->Chains[chn-1]->Residues,(void *)res);
 	}
     }
     /* End of main application loop */
@@ -2349,18 +2349,18 @@ AjPPdb ajPdbReadoldFirstModelNew(AjPFile inf)
 	    {
 		/* Heterogen */
 		if(atom->Type == 'H')
-		    ajListPushApp((ret)->Groups,(void *)atom);
+		    ajListPushAppend((ret)->Groups,(void *)atom);
 		else if(atom->Type == 'W')
-		    ajListPushApp((ret)->Water,(void *)atom);
+		    ajListPushAppend((ret)->Water,(void *)atom);
 		else
 		    ajFatal("Unexpected parse error in "
 			    "ajPdbReadFirstModelNew. Email "
 			    "jison@hgmp.mrc.ac.uk");
 	    }
 	    else
-		ajListPushApp((ret)->Chains[chn-1]->Atoms,(void *)atom);
+		ajListPushAppend((ret)->Chains[chn-1]->Atoms,(void *)atom);
 
-	    ajListPushApp((ret)->Chains[chn-1]->Residues,(void *)res);
+	    ajListPushAppend((ret)->Chains[chn-1]->Residues,(void *)res);
 	}
     }
     /* End of main application loop */
@@ -2853,8 +2853,8 @@ void ajChainDel(AjPChain *ptr)
 	ajResidueDel(&res);
 
     ajStrDel(&pthis->Seq);
-    ajListDel(&pthis->Atoms);
-    ajListDel(&pthis->Residues);
+    ajListFree(&pthis->Atoms);
+    ajListFree(&pthis->Residues);
 
     AJFREE(pthis);
     (*ptr) = NULL;
@@ -2901,11 +2901,11 @@ void ajPdbDel(AjPPdb *ptr)
     
     while(ajListPop(pthis->Water,(void **)&atm))
 	ajAtomDel(&atm);
-    ajListDel(&pthis->Water);
+    ajListFree(&pthis->Water);
 
     while(ajListPop(pthis->Groups,(void **)&atm))
 	ajAtomDel(&atm);
-    ajListDel(&pthis->Groups);
+    ajListFree(&pthis->Groups);
 
     for(i=0;i<nc;++i)
 	ajChainDel(&pthis->Chains[i]);
@@ -3305,21 +3305,21 @@ AjBool ajAtomListCopy(AjPList *to, const AjPList from)
        *to=ajListNew();
     
    /* Initialise the iterator */
-   iter=ajListIterRead(from);
+   iter=ajListIterNewread(from);
     
    /* Iterate through the list of Atom objects */
-   while((hit=(AjPAtom)ajListIterNext(iter)))
+   while((hit=(AjPAtom)ajListIterGet(iter)))
    {
        new=ajAtomNew();
 	
        ajAtomCopy(&new, hit);
 
        /* Push scophit onto list */
-       ajListPushApp(*to, new);
+       ajListPushAppend(*to, new);
    }
 
 
-   ajListIterFree(&iter);
+   ajListIterDel(&iter);
    return ajTrue; 
 }
 
@@ -3359,21 +3359,21 @@ AjBool ajResidueListCopy(AjPList *to, const AjPList from)
        *to=ajListNew();
     
    /* Initialise the iterator */
-   iter=ajListIterRead(from);
+   iter=ajListIterNewread(from);
     
    /* Iterate through the list of Atom objects */
-   while((hit=(AjPResidue)ajListIterNext(iter)))
+   while((hit=(AjPResidue)ajListIterGet(iter)))
    {
        new=ajResidueNew();
 	
        ajResidueCopy(&new, hit);
 
        /* Push scophit onto list */
-       ajListPushApp(*to, new);
+       ajListPushAppend(*to, new);
    }
 
 
-   ajListIterFree(&iter);
+   ajListIterDel(&iter);
    return ajTrue; 
 }
 
@@ -3426,8 +3426,8 @@ AjBool ajPdbCopy(AjPPdb *to, const AjPPdb from)
     for(x=0;x<from->Ngp;x++)
 	ajChararrPut(&((*to)->gpid), x, ajChararrGet(from->gpid, x));
        
-    ajListDel(&((*to)->Groups));
-    ajListDel(&((*to)->Water));
+    ajListFree(&((*to)->Groups));
+    ajListFree(&((*to)->Water));
 
 /*    (*to)->Groups = ajAtomListCopy(from->Groups);
     (*to)->Water  = ajAtomListCopy(from->Water); */
@@ -3441,7 +3441,7 @@ AjBool ajPdbCopy(AjPPdb *to, const AjPPdb from)
     /* Copy data in Chain objects */
     for(x=0;x<from->Nchn;x++)
     {
-	ajListDel(&((*to)->Chains[x]->Atoms));
+	ajListFree(&((*to)->Chains[x]->Atoms));
 	
 	(*to)->Chains[x]->Id         = from->Chains[x]->Id;
 	(*to)->Chains[x]->Nres       = from->Chains[x]->Nres;
@@ -5659,12 +5659,12 @@ ajint  ajPdbGetEStrideType(const AjPPdb obj, ajint chn, AjPStr *EStrideType)
     /* Set all positions to . */
     ajStrAppendCountK(EStrideType, '.', obj->Chains[idx]->Nres);   
 
-    iter=ajListIterRead(obj->Chains[idx]->Residues); 
-    while((tmp=(AjPResidue)ajListIterNext(iter)))
+    iter=ajListIterNewread(obj->Chains[idx]->Residues); 
+    while((tmp=(AjPResidue)ajListIterGet(iter)))
 	(*EStrideType)->Ptr[tmp->Idx-1] = tmp->eStrideType;
     
 
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
     return obj->Chains[idx]->Nres;
 }
 
@@ -5825,7 +5825,8 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
     AjIList iter    = NULL;
     AjPAtom tmp     = NULL;
     AjPResidue tmpr = NULL;
-    
+    AjPSeqout outseq;
+
     /* Write the header information */
 
     ajFmtPrintF(outf, "%-5s%S\n", "ID", obj->Pdb);
@@ -5888,7 +5889,9 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
 		    obj->Chains[x]->Nwat);
 		    */
 	ajFmtPrintF(outf, "XX\n");	
-	ajSeqWriteXyz(outf, obj->Chains[x]->Seq, "SQ");
+	outseq = ajSeqoutNewFile(outf);
+	ajSeqoutDumpSwisslike(outseq, obj->Chains[x]->Seq, "SQ");
+	ajSeqoutDel(&outseq);
     }
     ajFmtPrintF(outf, "XX\n");	
 
@@ -5901,10 +5904,10 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
     {
 	for(y=0;y<obj->Nchn;y++)
 	{
-	    iter=ajListIterRead(obj->Chains[y]->Residues);
-	    while(ajListIterMore(iter))
+	    iter=ajListIterNewread(obj->Chains[y]->Residues);
+	    while(!ajListIterDone(iter))
 	    {
-		tmpr=(AjPResidue)ajListIterNext(iter);
+		tmpr=(AjPResidue)ajListIterGet(iter);
 		if(tmpr->Mod>x)
 		    break;
 		else if(tmpr->Mod!=x)
@@ -5957,7 +5960,7 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
 				tmpr->pol_rel);
 		}
 	    }
-	    ajListIterFree(&iter);			
+	    ajListIterDel(&iter);			
 	} 	
     }
 
@@ -5968,10 +5971,10 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
 	for(y=0;y<obj->Nchn;y++)
 	{
 	    /* Print out chain-specific coordinates */
-	    iter=ajListIterRead(obj->Chains[y]->Atoms);
-	    while(ajListIterMore(iter))
+	    iter=ajListIterNewread(obj->Chains[y]->Atoms);
+	    while(!ajListIterDone(iter))
 	    {
-		tmp=(AjPAtom)ajListIterNext(iter);
+		tmp=(AjPAtom)ajListIterGet(iter);
 		if(tmp->Mod>x)
 		    break;
 		else if(tmp->Mod!=x)
@@ -6018,14 +6021,14 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
 		    }
 		}
 	    }
-	    ajListIterFree(&iter);			
+	    ajListIterDel(&iter);			
 	} 	
 
 	/* Print out group-specific coordinates for this model */
-	iter=ajListIterRead(obj->Groups);
-	while(ajListIterMore(iter))
+	iter=ajListIterNewread(obj->Groups);
+	while(!ajListIterDone(iter))
 	{
-	    tmp=(AjPAtom)ajListIterNext(iter);
+	    tmp=(AjPAtom)ajListIterGet(iter);
 	    if(tmp->Mod>x)
 		break;
 	    else if(tmp->Mod!=x)
@@ -6051,14 +6054,14 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
 			    tmp->B);
 	    }
 	}
-	ajListIterFree(&iter);			
+	ajListIterDel(&iter);			
 
 
 	/* Print out water-specific coordinates for this model */
-	iter=ajListIterRead(obj->Water);
-	while(ajListIterMore(iter))
+	iter=ajListIterNewread(obj->Water);
+	while(!ajListIterDone(iter))
 	{
-	    tmp=(AjPAtom)ajListIterNext(iter);
+	    tmp=(AjPAtom)ajListIterGet(iter);
 	    if(tmp->Mod>x)
 		break;
 	    else if(tmp->Mod!=x)
@@ -6084,7 +6087,7 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
 			    tmp->B);
 	    }
 	}
-	ajListIterFree(&iter);			
+	ajListIterDel(&iter);			
     }
 
     ajFmtPrintF(outf, "//\n");    
@@ -6130,7 +6133,7 @@ AjBool ajPdbWriteSegment(AjPFile outf, const AjPPdb pdb, const AjPStr segment,
     AjBool     found_start = ajFalse;
     AjBool     found_end   = ajFalse;    
 
-
+    AjPSeqout outseq;
    
     /* Check for unknown or zero-length chain */
     if(!ajPdbChnidToNum(chnid, pdb, &chn))
@@ -6201,7 +6204,9 @@ AjBool ajPdbWriteSegment(AjPFile outf, const AjPPdb pdb, const AjPStr segment,
 		id,
 		MAJSTRGETLEN(segment));
     ajFmtPrintF(outf, "XX\n");	
-    ajSeqWriteXyz(outf, segment, "SQ");
+    outseq = ajSeqoutNewFile(outf);
+    ajSeqoutDumpSwisslike(outseq, segment, "SQ");
+    ajSeqoutDel(&outseq);
     ajFmtPrintF(outf, "XX\n");	
     
     
@@ -6209,12 +6214,12 @@ AjBool ajPdbWriteSegment(AjPFile outf, const AjPPdb pdb, const AjPStr segment,
     ajPdbChnidToNum(chnid, pdb, &chn);
     
     /* Initialise the iterator */
-    iter = ajListIterRead(pdb->Chains[chn-1]->Atoms);
+    iter = ajListIterNewread(pdb->Chains[chn-1]->Atoms);
     
 
 
     /* Iterate through the list of residues */
-    while((res=(AjPResidue)ajListIterNext(iter)))
+    while((res=(AjPResidue)ajListIterGet(iter)))
     {
 	if(res->Mod!=1)
 	    break;
@@ -6287,12 +6292,12 @@ AjBool ajPdbWriteSegment(AjPFile outf, const AjPPdb pdb, const AjPStr segment,
 	/* res2 = res;   but it's never used */
     }
     
-    ajListIterFree(&iter);			
+    ajListIterDel(&iter);			
     
 
     
     /* Iterate through the list of atoms */
-    while((atm=(AjPAtom)ajListIterNext(iter)))
+    while((atm=(AjPAtom)ajListIterGet(iter)))
     {
 	if(atm->Mod!=1)
 	    break;
@@ -6340,7 +6345,7 @@ AjBool ajPdbWriteSegment(AjPFile outf, const AjPPdb pdb, const AjPStr segment,
 	/* atm2 = atm; but it's never used */
      }
     
-    ajListIterFree(&iter);			
+    ajListIterDel(&iter);			
     
     
     
@@ -6430,9 +6435,9 @@ AjBool   ajPdbtospWrite(AjPFile outf, const AjPList list)
 	return ajFalse;
     }
     
-    iter = ajListIterRead(list);
+    iter = ajListIterNewread(list);
     
-    while((tmp=(AjPPdbtosp)ajListIterNext(iter)))
+    while((tmp=(AjPPdbtosp)ajListIterGet(iter)))
     {
 	ajFmtPrintF(outf, "%-5s%S\nXX\n%-5s%d\nXX\n", 
 		    "EN", tmp->Pdb, "NE", tmp->n);	
@@ -6469,6 +6474,7 @@ AjBool   ajCmapWrite(AjPFile outf, const AjPCmap cmap)
     AjPStr Ligid=NULL;
     AjPStr res1=NULL;
     AjPStr res2=NULL;
+    AjPSeqout outseq;
 
     Id    = ajStrNew();
     Domid = ajStrNew();
@@ -6549,7 +6555,9 @@ AjBool   ajCmapWrite(AjPFile outf, const AjPCmap cmap)
     /* S1 */
     if(MAJSTRGETLEN(cmap->Seq1))
     {
-	ajSeqWriteXyz(outf, cmap->Seq1, "S1");
+	outseq = ajSeqoutNewFile(outf);
+	ajSeqoutDumpSwisslike(outseq, cmap->Seq1, "S1");
+	ajSeqoutDel(&outseq);
 	ajFmtPrintF(outf, "XX\n");	
     }
     
@@ -6559,7 +6567,9 @@ AjBool   ajCmapWrite(AjPFile outf, const AjPCmap cmap)
     {
 	if(MAJSTRGETLEN(cmap->Seq2))
 	{
-	    ajSeqWriteXyz(outf, cmap->Seq2, "S2");
+	    outseq = ajSeqoutNewFile(outf);
+	    ajSeqoutDumpSwisslike(outseq, cmap->Seq2, "S2");
+	    ajSeqoutDel(&outseq);
 	    ajFmtPrintF(outf, "XX\n");	
 	}
     }

@@ -9,9 +9,9 @@ endif
 if ISSHARED
 if ISAIXIA64
 if NEEDAJAX
-AM_CFLAGS = -Wl,-G -L../plplot/.libs -L.libs -lajax -lplplot -lm
+AM_CFLAGS = -Wl,-G -L../plplot/.libs -L.libs -lajax -leplplot -lm
 else
-AM_CFLAGS = -Wl,-G -L../plplot/.libs -L.libs -lplplot -lm
+AM_CFLAGS = -Wl,-G -L../plplot/.libs -L.libs -leplplot -lm
 endif
 else
 AM_CFLAGS =
@@ -19,7 +19,7 @@ endif
 endif
 
 if ISCYGWIN
-AM_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import -L../plplot -lplplot
+AM_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import -L../plplot -leplplot
 endif
 
 ## PCRE stuff (version 4.3)
@@ -65,10 +65,10 @@ pcre_internal.h pcreposix.h
 
 if ISCYGWIN
 libajax_la_SOURCES = $(AJAXSRC) $(AJAXGSRC)
-libajax_la_LDFLAGS = -version-info 4:1:0
+libajax_la_LDFLAGS = -version-info 5:0:0
 else
 libajax_la_SOURCES = $(AJAXSRC)
-libajax_la_LDFLAGS = -version-info 4:1:0
+libajax_la_LDFLAGS = -version-info 5:0:0
 libajaxg_la_SOURCES = $(AJAXGSRC)
-libajaxg_la_LDFLAGS = -version-info 4:1:0
+libajaxg_la_LDFLAGS = -version-info 5:0:0
 endif

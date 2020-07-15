@@ -245,7 +245,7 @@ AjPNexus ajNexusParse(AjPFileBuff buff)
 	    ajStrRemoveWhiteExcess(&rdline);
 	    if (ajStrGetLen(rdline))
 	    {
-		ajListstrPushApp(blocklist, rdline);
+		ajListstrPushAppend(blocklist, rdline);
 	    }
 	    rdline = NULL;
 	}
@@ -1594,13 +1594,13 @@ static ajint nexusGetArray(AjPStr src, AjPRegexp exp,
     while (ajRegExec(exp, tmpsrc))
     {
 	ajRegSubI(exp, 0, &tmpstr);
-	ajListstrPushApp(strlist, tmpstr);
+	ajListstrPushAppend(strlist, tmpstr);
 	tmpstr = NULL;
 	ajRegPost(exp, &tmpstr);
 	ajStrAssignS(&tmpsrc, tmpstr);
     }
-    i = ajListstrToArrayApp(strlist, dest);
-    ajListstrDel(&strlist);
+    i = ajListstrToarrayAppend(strlist, dest);
+    ajListstrFree(&strlist);
     ajStrDel(&tmpstr);
     ajStrDel(&tmpsrc);
 
@@ -2297,7 +2297,7 @@ static AjBool nexusSetSequences(AjPNexus thys)
 
     word = ajRegCompC("\\S+");
 
-    seqtab = ajStrTableNew(thys->Taxa->Ntax);
+    seqtab = ajTablestrNewLen(thys->Taxa->Ntax);
 
     if (thys->Taxa->TaxLabels)
     {
@@ -2342,7 +2342,7 @@ static AjBool nexusSetSequences(AjPNexus thys)
 		    havetaxa = ajTrue;
 	    }
 
-	    seqstr = ajTableGet(seqtab, taxlabel);
+	    seqstr = ajTableFetch(seqtab, taxlabel);
 	    if (!seqstr)
 	    {
 		ajErr("Unknown taxon '%S' in nexus data", taxlabel);
@@ -2373,7 +2373,7 @@ static AjBool nexusSetSequences(AjPNexus thys)
     AJCNEW0(thys->Characters->Sequences, (thys->Ntax+1));
     for (i=0; thys->Taxa->TaxLabels[i]; i++)
     {
-	thys->Characters->Sequences[i] = ajTableGet(seqtab,
+	thys->Characters->Sequences[i] = ajTableFetch(seqtab,
 						    thys->Taxa->TaxLabels[i]);
 	if (ajStrGetLen(thys->Characters->Sequences[i]) !=
 	    thys->Characters->Nchar)

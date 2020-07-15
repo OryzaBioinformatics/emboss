@@ -188,7 +188,7 @@ NamOAttr namDbAttrs[] =
 
     {"formatall", "", "database entry format for 'methodall' access"},
     {"formatentry", "", "database entry format for 'methodentry' access"},
-    {"formatquery", "", "database entry format for 'methodall' access"},
+    {"formatquery", "", "database query format for 'methodquery' access"},
 
     {"hasaccession", "Y", "database has an acc field as an alternate id"},
     {"httpversion", "", "HTTP version for GET requests (URL, SRSWWW)"},
@@ -710,7 +710,7 @@ AjBool ajNamDbDetails(const AjPStr name, AjPStr* type, AjBool* id,
     ajStrDelStatic(methods);
     ajStrDelStatic(defined);
     
-    fnew = ajTableGet(namDbMasterTable, ajStrGetPtr(name));
+    fnew = ajTableFetch(namDbMasterTable, ajStrGetPtr(name));
     if(fnew)
     {
 	/* ajDebug("  '%S' found\n", name); */
@@ -1002,7 +1002,7 @@ void ajNamListListDatabases(AjPList dbnames)
     {
 	fnew = (NamPEntry) valarray[i];
 	ajDebug("DB: %S\n", fnew->name);
-	ajListstrPushApp(dbnames, fnew->name);
+	ajListstrPushAppend(dbnames, fnew->name);
     }
     AJFREE(keyarray);
     AJFREE(valarray);
@@ -1035,7 +1035,7 @@ void ajNamListListResources(AjPList rsnames)
     {
 	fnew = (NamPEntry) valarray[i];
 	ajDebug("RES: %S\n", fnew->name);
-	ajListstrPushApp(rsnames, fnew->name);
+	ajListstrPushAppend(rsnames, fnew->name);
     }
     AJFREE(keyarray);
     AJFREE(valarray);
@@ -1157,14 +1157,14 @@ static void namListParse(AjPList listwords, AjPList listcount,
     
     namLine = 1;
     namUser("namListParse of %F '%S' words: %d lines: %d\n", 
-	    file, name, ajListLength(listwords), ajListLength(listcount));
+	    file, name, ajListGetLength(listwords), ajListGetLength(listcount));
     
     while(ajListstrPop(listwords, &curword))
     {
-	while(ajListLength(listcount) && (lineword < wordcount))
+	while(ajListGetLength(listcount) && (lineword < wordcount))
 	{
 	    namUser("ajListPop %d < %d list %d\n",
-		    lineword, wordcount, ajListLength(listcount));
+		    lineword, wordcount, ajListGetLength(listcount));
 	    ajListPop(listcount, (void**) &iword);
 	    lineword = *iword;
 	    linecount++;
@@ -1387,9 +1387,9 @@ static void namListParse(AjPList listwords, AjPList listcount,
 	else if(namParseType == TYPE_IFILE)
 	{
 	    if(!Ifiles)
-		Ifiles = ajStrTableNew(NAM_INCLUDE_ESTIMATE);
+		Ifiles = ajTablestrNewLen(NAM_INCLUDE_ESTIMATE);
 	    namParseType = 0;
-	    if(ajTableGet(Ifiles,curword)) /* test: includeagain.rc */
+	    if(ajTableFetch(Ifiles,curword)) /* test: includeagain.rc */
 		namError("%S already read .. skipping\n", curword);
 	    else
 	    {
@@ -1522,10 +1522,10 @@ static void namListParse(AjPList listwords, AjPList listcount,
 	namParseType = 0;
     }
     
-    if(ajListLength(listcount))	/* cleanup the wordcount list */
+    if(ajListGetLength(listcount))	/* cleanup the wordcount list */
     {
-	namUser("** remaining wordcount items: %d\n", ajListLength(listcount));
-	while(ajListLength(listcount))
+	namUser("** remaining wordcount items: %d\n", ajListGetLength(listcount));
+	while(ajListGetLength(listcount))
 	{
 	    ajListPop(listcount, (void**) &iword);
 	    AJFREE(iword);
@@ -1538,7 +1538,7 @@ static void namListParse(AjPList listwords, AjPList listcount,
     }
 
     ajStrDel(&saveshortname);
-    ajStrTableFree(&Ifiles);
+    ajTablestrFree(&Ifiles);
 
     return;
 }
@@ -1697,7 +1697,7 @@ AjBool ajNamGetValueC(const char* name, AjPStr* value)
 
     /* then test the table definitions - with the prefix */
     
-    fnew = ajTableGet(namVarMasterTable, ajStrGetPtr(namValNameTmp));
+    fnew = ajTableFetch(namVarMasterTable, ajStrGetPtr(namValNameTmp));
     if(fnew)
     {
 	ajStrAssignS(value, fnew->value);
@@ -1709,7 +1709,7 @@ AjBool ajNamGetValueC(const char* name, AjPStr* value)
 
 	/* then test the table definitions - as originally specified */
 
-	fnew = ajTableGet(namVarMasterTable, name);
+	fnew = ajTableFetch(namVarMasterTable, name);
 	if(fnew)
 	{
 	    ajStrAssignS(value, fnew->value);
@@ -1741,7 +1741,7 @@ AjBool ajNamDatabase(const AjPStr name)
 
     /* ajDebug("ajNamDatabase '%S'\n", name); */
 
-    fnew = ajTableGet(namDbMasterTable, ajStrGetPtr(name));
+    fnew = ajTableFetch(namDbMasterTable, ajStrGetPtr(name));
     if(fnew)
     {
 	/* ajDebug("  '%S' found\n", name); */
@@ -1793,8 +1793,8 @@ static AjBool namProcessFile(AjPFile file, const AjPStr shortname)
     {
 	
 	AJNEW0(k);
-	*k = ajListLength(listwords);
-	ajListPushApp(listcount, k);
+	*k = ajListGetLength(listwords);
+	ajListPushAppend(listcount, k);
 	
 	/* namUser("%S\n",rdline); */
 	len = ajStrGetLen(rdline);
@@ -1814,7 +1814,7 @@ static AjBool namProcessFile(AjPFile file, const AjPStr shortname)
 		    if(ajStrGetLen(word))
 		    {
 			wordptr = ajStrNewS(word);
-			ajListstrPushApp(listwords, wordptr);
+			ajListstrPushAppend(listwords, wordptr);
 			ajStrAssignC(&word, "");
 		    }
 		    i++;
@@ -1835,10 +1835,10 @@ static AjBool namProcessFile(AjPFile file, const AjPStr shortname)
 		else if(!quote && ajStrGetLen(word) && *ptr == ']')
 		{
 		    wordptr = ajStrNewS(word);
-		    ajListstrPushApp(listwords, wordptr);
+		    ajListstrPushAppend(listwords, wordptr);
 		    ajStrAssignC(&word, "");
 		    wordptr = ajStrNewC("]");
-		    ajListstrPushApp(listwords, wordptr);
+		    ajListstrPushAppend(listwords, wordptr);
 		    ajStrAssignC(&word, "");
 		}
 		else
@@ -1849,7 +1849,7 @@ static AjBool namProcessFile(AjPFile file, const AjPStr shortname)
 	    if(ajStrGetLen(word))
 	    {
 		wordptr = ajStrNewS(word);
-		ajListstrPushApp(listwords, wordptr);
+		ajListstrPushAppend(listwords, wordptr);
 		ajStrAssignC(&word, "");
 	    }
 	    
@@ -1858,8 +1858,8 @@ static AjBool namProcessFile(AjPFile file, const AjPStr shortname)
     ajStrDel(&rdline);
     
     AJNEW0(k);
-    *k = ajListLength(listwords);
-    ajListPushApp(listcount, k);
+    *k = ajListGetLength(listwords);
+    ajListPushAppend(listcount, k);
     
     namListParseOK = ajTrue;
     
@@ -1871,9 +1871,9 @@ static AjBool namProcessFile(AjPFile file, const AjPStr shortname)
 		namRootStr, iline);
     
     namUser("file read\n");
-    ajListstrFree(&listwords);		/* Delete the linked list structure */
+    ajListstrFreeData(&listwords); /* Delete the linked list structure */
     namUser("wordlist free\n");
-    ajListFree(&listcount);		/* Delete the linked list structure */
+    ajListFree(&listcount);	/* Delete the linked list structure */
     namUser("countlist free\n");
     
     namDebugVariables();
@@ -1924,7 +1924,7 @@ void ajNamInit(const char* prefix)
     ** Also note that EMBOSS_ROOT must be set for ajNamInit to
     ** work with Windows. This will be done by the Windows
     ** installer but developers must set it manually e,g,
-    **    set EMBOSS_ROOT C:\win32\emboss
+    **    set EMBOSS_ROOT C:\emboss\win32
     */
 #ifdef WIN32    
     WSADATA wsaData;
@@ -1941,9 +1941,9 @@ void ajNamInit(const char* prefix)
 
     /* create new tables to hold the values */
 
-    namVarMasterTable = ajStrTableNewCaseC(0);
-    namDbMasterTable = ajStrTableNewCaseC(0);
-    namResMasterTable = ajStrTableNewCaseC(0);
+    namVarMasterTable = ajTablecharNewCase();
+    namDbMasterTable = ajTablecharNewCase();
+    namResMasterTable = ajTablecharNewCase();
     
     /*
     ** for each type of file read it and save the values 
@@ -2304,7 +2304,7 @@ AjBool ajNamDbTest(const AjPStr dbname)
 {
     NamPEntry data;
 
-    data = ajTableGet(namDbMasterTable, ajStrGetPtr(dbname));
+    data = ajTableFetch(namDbMasterTable, ajStrGetPtr(dbname));
 
     if(!data)
 	return ajFalse;
@@ -2338,7 +2338,7 @@ AjBool ajNamDbGetUrl(const AjPStr dbname, AjPStr* url)
 	iurl = namDbAttrC("url");
 	calls = 1;
     }
-    data = ajTableGet(namDbMasterTable, ajStrGetPtr(dbname));
+    data = ajTableFetch(namDbMasterTable, ajStrGetPtr(dbname));
 
     if(!data)
 	ajFatal("%S is not a known database\n", dbname);
@@ -2380,7 +2380,7 @@ AjBool ajNamDbGetDbalias(const AjPStr dbname, AjPStr* dbalias)
 	idba = namDbAttrC("dbalias");
 	calls = 1;
     }
-    data = ajTableGet(namDbMasterTable, ajStrGetPtr(dbname));
+    data = ajTableFetch(namDbMasterTable, ajStrGetPtr(dbname));
 
     if(!data)
 	ajFatal("%S is not a known database\n", dbname);
@@ -2423,7 +2423,7 @@ AjBool ajNamDbData(AjPSeqQuery qry)
 
     const AjPStr* dbattr;
 
-    data = ajTableGet(namDbMasterTable, ajStrGetPtr(qry->DbName));
+    data = ajTableFetch(namDbMasterTable, ajStrGetPtr(qry->DbName));
 
     if(!data)
 	ajFatal("database %S unknown\n", qry->DbName);
@@ -2484,7 +2484,7 @@ AjBool ajNamDbQuery(AjPSeqQuery qry)
 
     const AjPStr* dbattr;
 
-    data = ajTableGet(namDbMasterTable, ajStrGetPtr(qry->DbName));
+    data = ajTableFetch(namDbMasterTable, ajStrGetPtr(qry->DbName));
 
     if(!data)
 	ajFatal("database %S unknown\n", qry->DbName);
@@ -3116,7 +3116,7 @@ AjBool ajNamRsAttrValue(const AjPStr name, const AjPStr attribute,
     NamPEntry fnew = NULL;
     AjPStr *rsattr = NULL;
 
-    fnew = ajTableGet(namResMasterTable, ajStrGetPtr(name));
+    fnew = ajTableFetch(namResMasterTable, ajStrGetPtr(name));
 
     rsattr = (AjPStr *) fnew->data;
     j = namRsAttr(attribute);
@@ -3151,7 +3151,7 @@ AjBool ajNamRsAttrValueC(const char *name, const char *attribute,
     NamPEntry fnew = NULL;
     const AjPStr* rsattr;
 
-    fnew = ajTableGet(namResMasterTable, name);
+    fnew = ajTableFetch(namResMasterTable, name);
     if(!fnew)
 	return ajFalse;
     
@@ -3185,7 +3185,7 @@ AjBool ajNamRsListValue(const AjPStr name, AjPStr *value)
     NamPEntry fnew = NULL;
     const AjPStr *rsattr = NULL;
 
-    fnew = ajTableGet(namResMasterTable, ajStrGetPtr(name));
+    fnew = ajTableFetch(namResMasterTable, ajStrGetPtr(name));
 
     rsattr = (const AjPStr *) fnew->data;
     j = namRsAttrC("type");

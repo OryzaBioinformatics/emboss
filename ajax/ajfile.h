@@ -374,6 +374,7 @@ ajint 	    ajFileScan (const AjPStr path, const AjPStr filename,
 ajint       ajFileSeek (AjPFile thys, ajlong offset, ajint wherefrom);
 AjBool      ajFileSetDir (AjPStr *pname, const AjPStr dir);
 AjBool      ajFileStat (const AjPStr filename, ajint mode);
+AjBool      ajFileNameValid (const AjPStr filename);
 AjBool      ajFileStderr (const AjPFile file);
 AjBool      ajFileStdin (const AjPFile file);
 AjBool      ajFileStdout (const AjPFile file);

@@ -265,7 +265,7 @@ AjPRange ajRangeGetLimits(const AjPStr str, ajuint imin, ajuint imax,
 	ajStrAssignS(&c3, s);
 
 	cp = ajStrGetPtr(c1);
-	p = ajSysStrtok(cp, nondigit);
+	p = ajSysFuncStrtok(cp, nondigit);
 
 	n = 0;
 
@@ -276,7 +276,7 @@ AjPRange ajRangeGetLimits(const AjPStr str, ajuint imin, ajuint imax,
 	     *  arrays to create
 	     */
 	    ++n;
-	    while((p=ajSysStrtok(NULL, nondigit)))
+	    while((p=ajSysFuncStrtok(NULL, nondigit)))
 		++n;
 
 	    if(n%2)
@@ -304,7 +304,7 @@ AjPRange ajRangeGetLimits(const AjPStr str, ajuint imin, ajuint imax,
 
 	    /* get the pairs of numbers and put them in the AjPRange object */
 	    cp = ajStrGetPtr(c2);
-	    p = ajSysStrtok(cp, nondigit);
+	    p = ajSysFuncStrtok(cp, nondigit);
 	    if(!sscanf(p,"%d",&f))
 	    {
 		ajWarn("Bad range value [%s]",p);
@@ -312,7 +312,7 @@ AjPRange ajRangeGetLimits(const AjPStr str, ajuint imin, ajuint imax,
 		return NULL;
 	    }
 
-	    p = ajSysStrtok(NULL, nondigit);
+	    p = ajSysFuncStrtok(NULL, nondigit);
 	    if(!sscanf(p,"%d",&t))
 	    {
 		ajWarn("Bad range value [%s]",p);
@@ -346,7 +346,7 @@ AjPRange ajRangeGetLimits(const AjPStr str, ajuint imin, ajuint imax,
 
 	    for(i=1;i<e;++i)
 	    {
-		p = ajSysStrtok(NULL, nondigit);
+		p = ajSysFuncStrtok(NULL, nondigit);
 		if(!sscanf(p,"%d",&f))
 		{
 		    ajWarn("Bad range value [%s]",p);
@@ -354,7 +354,7 @@ AjPRange ajRangeGetLimits(const AjPStr str, ajuint imin, ajuint imax,
 		    return NULL;
 		}
 
-		p = ajSysStrtok(NULL, nondigit);
+		p = ajSysFuncStrtok(NULL, nondigit);
 		if(!sscanf(p,"%d",&t))
 		{
 		    ajWarn("Bad range value [%s]",p);
@@ -377,7 +377,7 @@ AjPRange ajRangeGetLimits(const AjPStr str, ajuint imin, ajuint imax,
 	    if(!isdigit((ajint)*cp))
 	    {
 		doneone = ajTrue;
-		p = ajSysStrtok(cp, digit);
+		p = ajSysFuncStrtok(cp, digit);
 	    }
 
 	    for(i=0; i<e; ++i)
@@ -385,15 +385,15 @@ AjPRange ajRangeGetLimits(const AjPStr str, ajuint imin, ajuint imax,
 		/* ignore anything between the two numbers */
 		if(!doneone)
 		{
-		    p = ajSysStrtok(cp, digit);
+		    p = ajSysFuncStrtok(cp, digit);
 		    doneone = ajTrue;
 		}
 		else
-		    p = ajSysStrtok(NULL, digit);
+		    p = ajSysFuncStrtok(NULL, digit);
 
 		/* this must be the text after the pair of numbers */
 		/* get the string after the two numbers */
-		p = ajSysStrtok(NULL, digit);
+		p = ajSysFuncStrtok(NULL, digit);
 		if(p)
 		{
 		    ajStrAssignC(&(ret->text[i]), p);
@@ -546,12 +546,12 @@ AjPRange ajRangeFileLimits(const AjPStr name, ajuint imin, ajuint imax,
 	
 	one = ajStrNew();
 	ajStrTokenNextParse(&tokens, &one);
-	ajListstrPushApp(onelist, one);
+	ajListstrPushAppend(onelist, one);
 	
 	two = ajStrNew();
 	ajStrTokenNextParse(&tokens, &two);
 	if(ajStrGetLen(two))
-	    ajListstrPushApp(twolist, two);
+	    ajListstrPushAppend(twolist, two);
 	else
 	{
 	    ajWarn("Odd integer(s) in range specification:\n%S\n", line);
@@ -562,13 +562,13 @@ AjPRange ajRangeFileLimits(const AjPStr name, ajuint imin, ajuint imax,
 	text = ajStrNew();
 	ajStrTokenNextParseC(&tokens, notSpace, &text);
 	ajStrTrimWhite(&text);
-	ajListstrPushApp(textlist, text);
+	ajListstrPushAppend(textlist, text);
 	
 	ajStrTokenDel( &tokens);	
     }
     
     /* now we know how many pairs of numbers to store, create ajRange object */
-    n  = ajListstrLength(onelist);
+    n  = ajListstrGetLength(onelist);
     if(size)
     {
 	if(n != size)
@@ -642,9 +642,9 @@ AjPRange ajRangeFileLimits(const AjPStr name, ajuint imin, ajuint imax,
     }
 
 
-    ajListstrFree(&onelist);
-    ajListstrFree(&twolist);
-    ajListstrFree(&textlist);
+    ajListstrFreeData(&onelist);
+    ajListstrFreeData(&twolist);
+    ajListstrFreeData(&textlist);
 
     return ret;
 }
@@ -777,7 +777,7 @@ AjBool ajRangeChange(AjPRange thys, ajuint element, ajuint start, ajuint end)
 ** the resulting range is changed to 1-2
 **
 ** @param [u] thys [AjPRange] range object
-** @param [r] begin [ajuint] begin parameter obtained from ajSeqBegin(seq)
+** @param [r] begin [ajuint] begin parameter obtained from ajSeqGetBegin(seq)
 **
 ** @return [AjBool] true if region values modified
 ** @category modify [AjPRange] Sets the range values relative to the
@@ -851,13 +851,13 @@ AjBool ajRangeSeqExtractList(const AjPRange thys,
 		continue;
 	    str = ajStrNew();
 	    ajStrAppendSubS(&str, ajSeqGetSeqS(seq), st-1, en-1);
-	    ajListstrPushApp(outliststr, str);
+	    ajListstrPushAppend(outliststr, str);
 	}
     }
     else
     {
 	str = ajSeqGetSeqCopyS(seq);
-	ajListstrPushApp(outliststr, str);
+	ajListstrPushAppend(outliststr, str);
     }
 
     return result;
@@ -1140,7 +1140,7 @@ AjBool ajRangeStrExtractList(const AjPRange thys,
 	ajRangeValues(thys,i,&st,&en);
         str = ajStrNew();
 	ajStrAppendSubS(&str, instr, st-1, en-1);
-	ajListstrPushApp(outliststr, str);
+	ajListstrPushAppend(outliststr, str);
     }
 
     return result;

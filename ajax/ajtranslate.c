@@ -1652,7 +1652,7 @@ const AjPStr ajTrnName(ajint trnFileNameInt)
     {
 	if(!indexfname)
 	    indexfname = ajStrNewC("EGC.index");
-	trnCodes = ajStrTableNew(20);
+	trnCodes = ajTablestrNewLen(20);
 
 	ajFileDataNew(indexfname, &indexf);
 	if(!indexf)
@@ -1674,7 +1674,7 @@ const AjPStr ajTrnName(ajint trnFileNameInt)
     }
 
     ajFmtPrintS(&tmpstr, "%d", trnFileNameInt);
-    ret = (AjPStr) ajTableGet(trnCodes, tmpstr);
+    ret = (AjPStr) ajTableFetch(trnCodes, tmpstr);
 
     ajStrDel(&unknown);
     ajStrDel(&indexfname);
@@ -1836,7 +1836,7 @@ static AjBool trnComplete(AjPTrn thys)
 void ajTrnExit(void)
 {
     ajStrDel(&trnResidueStr);
-    ajStrTableFree(&trnCodes);
+    ajTablestrFree(&trnCodes);
 
     return;
 }

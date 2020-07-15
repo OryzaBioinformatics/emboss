@@ -17,8 +17,9 @@
 ** @attr xx2 [float] x end
 ** @attr yy1 [float] y start
 ** @attr yy2 [float] y end
-** @attr scale [float] scale for text (0.0 to use the default)
 ** @attr next [struct AjSGraphPlpObj*] link to next object in the list
+** @attr scale [float] scale for text (0.0 to use the default)
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -30,8 +31,9 @@ typedef struct AjSGraphPlpObj {
   float xx2;
   float yy1;
   float yy2;
-  float scale;
   struct AjSGraphPlpObj *next;
+  float scale;
+  char Padding[4];
 } AjOGraphPlpObj;
 #define AjPGraphPlpObj AjOGraphPlpObj*
 
@@ -111,7 +113,6 @@ typedef struct AjSGraphPlpData {
 ** @attr minmaxcalc [AjBool] Set true when (xy)start/end are set
 ** @attr windowset [AjBool] Set true when (xy) window coordinates are set
 ** @attr isdata [AjBool] True for a data type graph
-** @attr displaytype [ajint] Displaytype index to graphType
 ** @attr desc [AjPStr] Plot description, used to set default title
 ** @attr title [AjPStr] Plot title
 ** @attr subtitle [AjPStr] Plot subtitle
@@ -120,6 +121,8 @@ typedef struct AjSGraphPlpData {
 ** @attr outputfile [AjPStr] Output filename
 ** @attr graphs [AjPGraphPlpData*] XY Data to plot for Graph(s)
 ** @attr Obj [AjPGraphPlpObj] Objects to plot for single graph
+** @attr displaytype [ajint] Displaytype index to graphType
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -140,7 +143,6 @@ typedef struct AjSGraphPlp {
   AjBool minmaxcalc;
   AjBool windowset;
   AjBool isdata;
-  ajint displaytype;
   AjPStr desc;
   AjPStr title;
   AjPStr subtitle;
@@ -149,6 +151,8 @@ typedef struct AjSGraphPlp {
   AjPStr outputfile;
   AjPGraphPlpData *graphs;
   AjPGraphPlpObj Obj;
+  ajint displaytype;
+  char Padding[4];
 } AjOGraphPlp;
 #define AjPGraphPlp AjOGraphPlp*
 
