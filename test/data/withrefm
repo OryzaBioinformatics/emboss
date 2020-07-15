@@ -218,6 +218,15 @@ Nkenfou, C., Morgan, R.D., Unpublished observations.
 <7>C
 <8>Rina, M., Bouriotis, V., (1990) Nucleic Acids Res., vol. 18, pp. 1654.
 
+<1>BsiYI
+<2>AfiI,BflI,Bsc4I,Bsc107I,Bse23I,BseLI,BslI,BsmYI,Bst22I
+<3>CCNNNNN^NNGG
+<4>
+<5>Bacillus species
+<6>D. Clark
+<7>M
+<8>Mok, Y.K., Clark, D.R., Kam, K.M., Shaw, P.C., (1991) Nucleic Acids Res., vol. 19, pp. 2321-2323.
+
 <1>BssKI
 <2>ScrFI,Bme1390I,BsaCI,BsoI,Bsp53I,Bsp73I,Bsp548I,BstMZ611I,DsaV,Ecl18kI,Eco43I,Eco51II,Eco80I,Eco85I,Eco93I,Eco153I,Eco200I,Eco13kI,Eco21kI,Eco137kI,HpyNI,Kpn2kI,Msp67I,MspR9I,NlaX,SenPI,SsoII,StyD4I,Uba17I,Uba1391I
 <3>^CCNGG
@@ -226,6 +235,17 @@ Nkenfou, C., Morgan, R.D., Unpublished observations.
 <6>NEB 547
 <7>N
 <8>Kong, H., Unpublished observations.
+
+<1>BsrI
+<2>BscHI,Bse1I,BseNI,BsoHI,BsrSI,Bst11I,Tsp1I
+<3>ACTGG(1/-1)
+<4>?(4)
+<5>Bacillus stearothermophilus
+<6>NEB 447
+<7>N
+<8>Lunnen, K.D., Wilson, G.G., Unpublished observations.
+Polisson, C., Morgan, R.D., (1988) Nucleic Acids Res., vol. 16, pp. 5205.
+Stickel, S.K., Roberts, R.J., Unpublished observations.
 
 <1>Bsu6I
 <2>Ksp632I,Bco5I,Bco116I,BcoKI,BcoSI,BcrAI,BseZI,BsrEI,Bst158I,Eam1104I,EarI,Uba1192I,Uba1276I,VpaKutEI,VpaKutFI,VpaO5I
@@ -279,6 +299,17 @@ Sheflyan, G.Ya., Kubareva, E.A., Gromova, E.S., Shabarova, Z.A., (1993) Biokhimi
 Som, S., Friedman, S., (1993) EMBO J., vol. 12, pp. 4297-4303.
 Som, S., Friedman, S., (1994) J. Biol. Chem., vol. 269, pp. 25986-25991.
 Yoshimori, R.N., (1971) Ph.D. Thesis, University of California, San Francisco, USA, vol. 0, pp. 1-73.
+
+<1>HaeIII
+<2>AcaIV,Afl83II,Asp742I,AspTIII,AvrBI,Bal475I,Bal3006I,BanAI,Bce71I,Bco33I,BecAII,Bfi458I,BhaII,Bim19II,BliI,BluII,Bme46I,Bme74I,Bme361I,BmeU1594I,Bpa36I,BsaRI,BscQI,BseI,Bse9I,Bse126I,BseQI,BshI,BshAI,BshBI,BshCI,BshDI,BshEI,BshFI,BsiAI,BsiDI,BsiHI,BsnI,Bsp23I,Bsp44II,Bsp137I,Bsp211I,Bsp226I,Bsp881I,Bsp1261I,Bsp1593I,Bsp2013I,Bsp2362I,Bsp2500I,BspANI,BspBDG2I,BspBRI,BspBSE18I,BspBake1I,BspCHE15I,BspGHA1I,BspH106II,BspKI,BspLRI,BspRI,BssCI,BstCI,BstJI,Bsu1076I,Bsu1114I,BsuRI,BteI,ClmI,CltI,Csp2I,DsaII,EsaBC4I,FinSI,FnuDI,HhgI,Hpy178VII,HpyF10V,HpyF26II,HpyF29I,HpyF33II,HpyF42I,HpyF46V,HpyF49IV,HpyF53I,HpyF57I,HpyF63I,HpyF69II,HpyF72I,HpyF73III,MchAII,MfoAI,MniI,MnnII,MthTI,NgoAII,NgoCII,NgoNII,NgoPII,NgoSII,NgoTII,NlaI,NspLKI,OchI,PaiI,PalI,Pde133I,PflKI,PhoI,PlaI,Ple214I,PpuI,Pru2I,Psb9879I,Psp29I,SagI,SbvI,SfaI,SplIII,SuaI,SulI,Tsp132I,Tsp266I,Tsp273II,Tsp281I,Tsp560I,TspZNI,TteAI,TtnI,Uba9I,Uba54I,Uba61I,Uba1097I,Uba1140I,Uba1146I,Uba1147I,Uba1150I,Uba1152I,Uba1153I,Uba1155I,Uba1169I,Uba1174I,Uba1175I,Uba1176I,Uba1178I,Uba1179I,Uba1207I,Uba1208I,Uba1209I,Uba1210I,Uba1214I,Uba1223I,Uba1228I,Uba1230I,Uba1231I,Uba1235I,Uba1288I,Uba1292I,Uba1293I,Uba1319I,Uba1322I,Uba1336I,Uba1377I,Uba1388I,Uba1392I,Uba1395I,Uba1408I,Uba1418I,Uba1422I,Uba1429I,Uba1449I,Uba1450I,Uth549I,Uth555I,Uth557I,Van91III,VhaI,Vha1168I,VniI
+<3>GG^CC
+<4>3(5)
+<5>Haemophilus aegyptius
+<6>ATCC 11116
+<7>ABGHIJKMNOQRSUXY
+<8>Bron, S., Murray, K., (1975) Mol. Gen. Genet., vol. 143, pp. 25-33.
+Mann, M.B., Smith, H.O., (1977) Nucleic Acids Res., vol. 4, pp. 4211-4221.
+Middleton, J.H., Edgell, M.H., Hutchison, C.A. III, (1972) J. Virol., vol. 10, pp. 42-50.
 
 <1>HhaI
 <2>AspLEI,BcaI,BspLAI,BstHHI,CcoP95I,CfoI,Csp1470I,FnuDIII,Hin6I,Hin7I,HinGUI,HinP1I,HinS1I,HinS2I,Hpy99III,HpyF10I,HsoI,HspAI,MnnIV,NgoEII,SciNI
@@ -357,6 +388,21 @@ Smith, H.O., Wilcox, K.W., (1970) J. Mol. Biol., vol. 51, pp. 379-391.
 Roy, P.H., Smith, H.O., (1973) J. Mol. Biol., vol. 81, pp. 427-444.
 Roy, P.H., Smith, H.O., (1973) J. Mol. Biol., vol. 81, pp. 445-459.
 
+<1>HpaII
+<2>Asp748I,Bco27I,BsaZI,BshMI,BsiSI,Bsp5I,Bsp47I,Bsp48I,Bsp116I,Bsp1591II,Bst40I,Bsu1192I,BsuFI,CboI,CceI,FinII,HapII,Hin2I,Hin5I,HpyVIII,HpyF43I,MniII,MnoI,MspI,Msp199I,Pde137I,Pme35I,SecII,SfaGUI,Sth134I,Sth302II,Uba1128I,Uba1141I,Uba1267I,Uba1338I,Uba1355I,Uba1439I
+<3>C^CGG
+<4>2(5)
+<5>Haemophilus parainfluenzae
+<6>ATCC 49669
+<7>BFGIMNOQRSUVX
+<8>Butkus, V., Petrauskiene, L., Maneliene, Z., Klimasauskas, S., Laucys, V., Janulaitis, A., (1987) Nucleic Acids Res., vol. 15, pp. 7091-7102.
+Chatterjee, D.K., US Patent Office, 1993.
+Garfin, D.E., Goodman, H.M., (1974) Biochem. Biophys. Res. Commun., vol. 59, pp. 108-116.
+Kulakauskas, S., Barsomian, J.M., Lubys, A., Roberts, R.J., Wilson, G.G., (1994) Gene, vol. 142, pp. 9-15.
+Mann, M.B., Smith, H.O., (1977) Nucleic Acids Res., vol. 4, pp. 4211-4221.
+Sharp, P.A., Sugden, B., Sambrook, J., (1973) Biochemistry, vol. 12, pp. 3055-3063.
+Som, S., Friedman, S., (1994) J. Biol. Chem., vol. 269, pp. 25986-25991.
+
 <1>HpyCH4IV
 <2>MaeII,HpyF13III,HpyF35II,HpyF74II,TaiI,TscI,Tsp49I,TspIDSI,TspWAM8AI,TtmI
 <3>A^CGT
@@ -387,6 +433,25 @@ Xu, Q., Morgan, R., Blaser, M., Unpublished observations.
 <8>Kiss, A., Finta, C., Venetianer, P., (1991) Nucleic Acids Res., vol. 19, pp. 3460.
 Smith, D.I., Blattner, F.R., Davies, J., (1976) Nucleic Acids Res., vol. 3, pp. 343-353.
 Tomassini, J., Roychoudhury, R., Wu, R., Roberts, R.J., (1978) Nucleic Acids Res., vol. 5, pp. 4055-4064.
+
+<1>Ksp632I
+<2>Bco5I,Bco116I,BcoKI,BcoSI,BcrAI,BseZI,BsrEI,Bst6I,Bst158I,Bsu6I,Eam1104I,EarI,TdeII,Uba1192I,Uba1276I,VpaKutEI,VpaKutFI,VpaO5I
+<3>CTCTTC(1/4)
+<4>
+<5>Kluyvera species 632
+<6>DSM 4196
+<7>M
+<8>Bolton, B.J., Schmitz, G.G., Jarsch, M., Comer, M.J., Kessler, C., (1988) Gene, vol. 66, pp. 31-43.
+Tsukahara, S., Yamakawa, H., Takai, K., Takaku, H., (1994) Nucleosides & Nucleotides, vol. 13, pp. 1617-1626.
+
+<1>MaeII
+<2>HpyCH4IV,HpyF13III,HpyF35II,HpyF74II,TaiI,TscI,Tsp49I,TspIDSI,TspWAM8AI,TtmI
+<3>A^CGT
+<4>
+<5>Methanococcus aeolicus PL-15/H
+<6>K.O. Stetter
+<7>M
+<8>Schmid, K., Thomm, M., Laminet, A., Laue, F.G., Kessler, C., Stetter, K.O., Schmitt, R., (1984) Nucleic Acids Res., vol. 12, pp. 2619-2628.
 
 <1>NotI
 <2>CciNI,CspBI,MchAI

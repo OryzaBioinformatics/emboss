@@ -30,8 +30,7 @@ GIPREFIX
 GIGENBANK
 >gi|234567|sp|P01234|GISWISS_PRT gi and swissprot together
 GISWISSPR-T
->gnl|BL_ORD_ID|0 blast formatdb prefix for simple names
+>gnl|BL_ORD_ID|0 Blast formatdb prefix for simple names
 BLAST
-
-
-
+>gi|1234567|tpg|DAA00001.1| TPA: with no locus
+TPG
