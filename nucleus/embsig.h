@@ -190,6 +190,7 @@ typedef struct AJSSigdat
 **         the result.
 ** @@
 ****************************************************************************/
+
 typedef struct AjSSignature
 {
     ajint       Type;
@@ -398,6 +399,9 @@ typedef struct AjSHitlist
 
 
 
+/*
+** Prototype definitions
+*/
 
 
 /* ======================================================================= */
@@ -518,6 +522,10 @@ ajint         embHitlistMatchFold(const void *hit1,
 				  const void *hit2);
 
 
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

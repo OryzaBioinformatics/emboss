@@ -28,8 +28,9 @@
 #include <time.h>
 
 
-
+#ifndef WIN32
 #define fmodf(a,b) (float)fmod((double)a,(double)b)
+#endif
 
 static void comWriteTable(AjPFile fp, const char *name,
 		          const UJWin *RUj,const UJWin *MedUj,
@@ -70,14 +71,14 @@ static void comSortFreq(comtrace *set);
 static void comCalcComplexMed(const float *ComplexOfSeq, ajint NumOfWin,
 			      float *MedValue);
 static void comReadWin(const char *seq, ajint bwin, ajint ewin,char *win);
-static void comRead_j_mer(const char *win, ajint lwin, ajint jlen,STRING *str);
+static void comRead_j_mer(const char *win, ajint lwin, ajint jlen,AjPStr *str);
 static void comWinComplex2(const char *win, ajint lwin,float *ComplexOfWin,
 			   ajint jmin, ajint jmax);
 static void comWinComplex(const char *win,const char *winsim, ajint lwin,
 			  float *ComplexOfWin, ajint jmin, ajint jmax);
 static void comCalcUj2(ajint lwin, ajint jlen,const char *win,float *Ujvalue);
 static void comCalcUj(ajint lwin, ajint jlen,const char *win,float *Ujvalue);
-static ajint comCounter(const STRING* str, ajint k);
+static ajint comCounter(AjPStr const * str, ajint k);
 static void comAmbiguity(char *seq, ajint l);
 static void comReplace(const char *vet,char *ch);
 static void comCalcFreqACN(const char *seq, ajint lseq,float *Freq);
@@ -116,7 +117,7 @@ void embComComplexity(const char *seq,const char *name,
 		      float *MedValue)
 {
 
-    float  *ComplexOfSeq;
+    float  *ComplexOfSeq = NULL;
     float  Freq[4];
 
     ajint NumOfWin;
@@ -248,6 +249,12 @@ void embComComplexity(const char *seq,const char *name,
 	AJFREE(SetSeqSim);
 	AJFREE(SetUjSim);
     }
+
+
+    for(i=0;i<NumOfWin;i++)
+	AJFREE(RealUjValue[i].Ujwin);
+
+    AJFREE(RealUjValue);
 
     return;
 }
@@ -1032,12 +1039,12 @@ static void comReadWin(const char *seq, ajint bwin, ajint ewin,char *win)
 ** @param [r] win [const char *] Sequence for window
 ** @param [r] lwin [ajint] Window length
 ** @param [r] jlen [ajint] Word length
-** @param [w] str [STRING *] Words
+** @param [w] str [AjPStr*] Words
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void comRead_j_mer(const char *win, ajint lwin, ajint jlen,STRING *str)
+static void comRead_j_mer(const char *win, ajint lwin, ajint jlen,AjPStr *str)
 {
     ajint i;
     ajint r;
@@ -1057,7 +1064,7 @@ static void comRead_j_mer(const char *win, ajint lwin, ajint jlen,STRING *str)
 	    r ++;
 	}
 	temp[jlen] = '\0';
-	strcpy(str[i].WORD,temp);
+	ajStrAssignC(&str[i],temp);
 	t++;
 	r = 0;
     }
@@ -1167,17 +1174,18 @@ static void comCalcUj2(ajint lwin, ajint jlen,const char *win,float *Ujvalue)
 
     ajint unlikej_mer = 0;
     ajint k;
+    ajint i;
     float z = 0.0;
     float n = 0.0;
-    STRING *str;
+    AjPStr *str;
     ajint njmer;
 
     njmer = (lwin-jlen+1);
     AJCNEW(str, njmer);
 
     comRead_j_mer(win,lwin,jlen,str);
-    qsort(str,njmer,sizeof(STRING),(ajint (*)(const void *str_1,
-					      const void *str_2)) strcmp);
+    qsort(str,njmer,sizeof(AjPStr),(ajint (*)(const void *str_1,
+					      const void *str_2)) ajStrVcmp);
     unlikej_mer = comCounter(str,lwin-jlen+1);
 
     n=(float)pow((double)4,(double)jlen);
@@ -1189,6 +1197,9 @@ static void comCalcUj2(ajint lwin, ajint jlen,const char *win,float *Ujvalue)
 	z=((float)(unlikej_mer)/(float)(njmer));
 
     *Ujvalue = z;
+
+    for(i=0;i<njmer;i++)
+	ajStrDel(&str[i]);
 
     AJFREE(str);
 
@@ -1214,15 +1225,15 @@ static void comCalcUj(ajint lwin, ajint jlen,const char *win,float *Ujvalue)
 {
     ajint unlikej_mer = 0;
     float z = 0.0;
-    STRING *str;
+    AjPStr *str;
     ajint njmer;
 
     njmer = (lwin-jlen+1);
     AJCNEW(str, njmer);
 
     comRead_j_mer(win,lwin,jlen,str);
-    qsort(str,njmer,sizeof(STRING),(ajint (*)(const void *str_1,
-					      const void *str_2))strcmp);
+    qsort(str,njmer,sizeof(AjPStr),(ajint (*)(const void *str_1,
+					      const void *str_2))ajStrVcmp);
     unlikej_mer = comCounter(str,lwin-jlen+1);
 
     z=(float)(unlikej_mer);
@@ -1240,13 +1251,13 @@ static void comCalcUj(ajint lwin, ajint jlen,const char *win,float *Ujvalue)
 **
 ** Counter of matches for complexity
 **
-** @param [r] str [const STRING*] Words
+** @param [r] str [AjPStr const*] Words
 ** @param [r] k [ajint] Number of words
 ** @return [ajint] Counter returned
 ** @@
 ******************************************************************************/
 
-static ajint comCounter(const STRING* str, ajint k)
+static ajint comCounter(AjPStr const * str, ajint k)
 
 {
     ajint i;
@@ -1254,7 +1265,7 @@ static ajint comCounter(const STRING* str, ajint k)
 
 
     for(i=0;i<k-1;i++)
-	if((strcmp(str[i].WORD,str[i+1].WORD)) < 0)
+	if((ajStrCmpS(str[i],str[i+1])) < 0)
 	    count++;
 
     return count;
@@ -1356,7 +1367,7 @@ static void comReplace(const char *vet,char *ch)
     ajint x1;
     time_t   tm;
 
-    dim = strlen(vet);
+    dim = (ajint) strlen(vet);
     srand((unsigned) time(&tm));
     x  = rand();
     x1 = (x%dim);

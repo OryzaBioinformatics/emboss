@@ -55,10 +55,10 @@ static void matPushHitInt(const AjPStr n, const EmbPMatPrints m,
     EmbPMatMatch mat;
 
     AJNEW0 (mat);
-    mat->seqname = ajStrNewC(ajStrStr(n));
-    mat->cod     = ajStrNewC(ajStrStr((m)->cod));
-    mat->acc     = ajStrNewC(ajStrStr((m)->acc));
-    mat->tit     = ajStrNewC(ajStrStr((m)->tit));
+    mat->seqname = ajStrNewC(ajStrGetPtr(n));
+    mat->cod     = ajStrNewC(ajStrGetPtr((m)->cod));
+    mat->acc     = ajStrNewC(ajStrGetPtr((m)->acc));
+    mat->tit     = ajStrNewC(ajStrGetPtr((m)->tit));
     mat->pat     = ajStrNew();
     mat->n       = (m)->n;
     mat->len     = (m)->len[elem];
@@ -151,7 +151,7 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
 
     line = ajStrNewC("#");
 
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
     while(!*p || *p=='#' || *p=='!' || *p=='\n')
     {
 	if(!ajFileReadLine(fp,&line))
@@ -159,7 +159,7 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
 	    ajStrDel(&line);
 	    return NULL;
 	}
-	p = ajStrStr(line);
+	p = ajStrGetPtr(line);
     }
 
     ajDebug("embMatProtReadint starting\n");
@@ -168,16 +168,16 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
     AJNEW0 (ret);
 
     ret->cod = ajStrNew();
-    ajStrAssS(&ret->cod,line);
+    ajStrAssignS(&ret->cod,line);
 
     ajFileReadLine(fp,&line);
     ret->acc = ajStrNew();
-    ajStrAssS(&ret->acc,line);
+    ajStrAssignS(&ret->acc,line);
     ajFileReadLine(fp,&line);
     ajStrToInt(line,&ret->n);
     ajFileReadLine(fp,&line);
     ret->tit = ajStrNew();
-    ajStrAssS(&ret->tit,line);
+    ajStrAssignS(&ret->tit,line);
 
     ajDebug ("Lineb: %S\n", line);
     AJCNEW(ret->len, ret->n);
@@ -200,7 +200,7 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
 	    AJCNEW0(ret->matrix[m][i], ret->len[m]);
 	    ajFileReadLine(fp,&line);
 	    ajDebug ("Linec [%d][%d]: %S\n", m, i, line);
-	    p = ajStrStr(line);
+	    p = ajStrGetPtr(line);
 	    for(j=0;j<ret->len[m];++j)
 	    {
 		if(!j)
@@ -301,10 +301,10 @@ ajint embMatProtScanInt(const AjPStr s, const AjPStr n, const EmbPMatPrints m,
     ajint i;
     ajint j;
 
-    t = ajStrNewC(ajStrStr(s));
-    ajStrToUpper(&t);
-    p = q = ajStrStrMod(&t);
-    slen = ajStrLen(t);
+    t = ajStrNewC(ajStrGetPtr(s));
+    ajStrFmtUpper(&t);
+    p = q = ajStrGetuniquePtr(&t);
+    slen = ajStrGetLen(t);
     for(i=0;i<slen;++i,++p)
 	*p = ajSysItoC(ajAZToInt((ajint)*p));
     p = q;

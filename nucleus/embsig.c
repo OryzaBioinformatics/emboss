@@ -390,7 +390,7 @@ ajint embHitidxBinSearch(const AjPStr id, EmbPHitidx const *arr, ajint siz)
     {
         m=(l+h)>>1;
 
-        if((c=ajStrCmpCase(id, arr[m]->Id)) < 0) 
+        if((c=ajStrCmpCaseS(id, arr[m]->Id)) < 0) 
 	    h = m-1;
         else if(c>0) 
 	    l = m+1;
@@ -425,7 +425,7 @@ ajint embHitidxMatchId(const void *hit1, const void *hit2)
     p = (*(EmbPHitidx*)hit1);
     q = (*(EmbPHitidx*)hit2);
     
-    return ajStrCmpO(p->Id, q->Id);
+    return ajStrCmpS(p->Id, q->Id);
 
 }
 
@@ -475,10 +475,10 @@ AjBool embHitlistReadFam(AjPFile scopf,
 
     while((hitlist=embHitlistRead(scopf)))
     {
-	if(ajStrMatch(fam,hitlist->Family) &&
-	   ajStrMatch(sfam,hitlist->Superfamily) &&
-	   ajStrMatch(fold,hitlist->Fold) &&
-	   ajStrMatch(class,hitlist->Class))
+	if(ajStrMatchS(fam,hitlist->Family) &&
+	   ajStrMatchS(sfam,hitlist->Superfamily) &&
+	   ajStrMatchS(fold,hitlist->Fold) &&
+	   ajStrMatchS(class,hitlist->Class))
 	{ 
 	    ajListPushApp(*list,hitlist);
 	    done=ajTrue;
@@ -537,9 +537,9 @@ AjBool embHitlistReadSfam(AjPFile scopf,
     
     
     while((hitlist=embHitlistRead(scopf)))
-	if(ajStrMatch(fam,hitlist->Superfamily) &&
-	   ajStrMatch(fold,hitlist->Fold) &&
-	   ajStrMatch(class,hitlist->Class))
+	if(ajStrMatchS(fam,hitlist->Superfamily) &&
+	   ajStrMatchS(fold,hitlist->Fold) &&
+	   ajStrMatchS(class,hitlist->Class))
 	{
 	    ajListPushApp(*list,hitlist);
 	    done=ajTrue;
@@ -594,8 +594,8 @@ AjBool embHitlistReadFold(AjPFile scopf,
     }
     
     while((hitlist = embHitlistRead(scopf)))
-	if(ajStrMatch(fam,hitlist->Fold) &&
-	   ajStrMatch(class,hitlist->Class))
+	if(ajStrMatchS(fam,hitlist->Fold) &&
+	   ajStrMatchS(class,hitlist->Class))
 	{
 	    ajListPushApp(*list,hitlist);
 	    done=ajTrue;
@@ -656,10 +656,10 @@ AjBool embHitlistReadFamFasta(AjPFile scopf,
 
     while((hitlist=embHitlistReadFasta(scopf)))
     {
-	if(ajStrMatch(fam,hitlist->Family) &&
-	   ajStrMatch(sfam,hitlist->Superfamily) &&
-	   ajStrMatch(fold,hitlist->Fold) &&
-	   ajStrMatch(class,hitlist->Class))
+	if(ajStrMatchS(fam,hitlist->Family) &&
+	   ajStrMatchS(sfam,hitlist->Superfamily) &&
+	   ajStrMatchS(fold,hitlist->Fold) &&
+	   ajStrMatchS(class,hitlist->Class))
 	{ 
 	    ajListPushApp(*list,hitlist);
 	    done=ajTrue;
@@ -718,9 +718,9 @@ AjBool embHitlistReadSfamFasta(AjPFile scopf, const AjPStr fam, const AjPStr sfa
     
     
     while((hitlist=embHitlistReadFasta(scopf)))
-	if(ajStrMatch(fam,hitlist->Superfamily) &&
-	   ajStrMatch(fold,hitlist->Fold) &&
-	   ajStrMatch(class,hitlist->Class))
+	if(ajStrMatchS(fam,hitlist->Superfamily) &&
+	   ajStrMatchS(fold,hitlist->Fold) &&
+	   ajStrMatchS(class,hitlist->Class))
 	{
 	    ajListPushApp(*list,hitlist);
 	    done=ajTrue;
@@ -775,8 +775,8 @@ AjBool embHitlistReadFoldFasta(AjPFile scopf, const AjPStr fam, const AjPStr sfa
     }
     
     while((hitlist = embHitlistReadFasta(scopf)))
-	if(ajStrMatch(fam,hitlist->Fold) &&
-	   ajStrMatch(class,hitlist->Class))
+	if(ajStrMatchS(fam,hitlist->Fold) &&
+	   ajStrMatchS(class,hitlist->Class))
 	{
 	    ajListPushApp(*list,hitlist);
 	    done=ajTrue;
@@ -1147,7 +1147,7 @@ AjPHit embHitMerge(const AjPHit hit1, const AjPHit hit2)
 	return NULL;
     }
 
-    if(!ajStrMatch(hit1->Acc, hit2->Acc))
+    if(!ajStrMatchS(hit1->Acc, hit2->Acc))
     {
 	ajWarn("Merge attempted on 2 hits with different accession numbers");
 	return NULL;
@@ -1158,9 +1158,9 @@ AjPHit embHitMerge(const AjPHit hit1, const AjPHit hit2)
     temp = ajStrNew();
     
 
-    ajStrAssS(&(ret->Acc), hit1->Acc);
-    ajStrAssS(&(ret->Spr), hit1->Spr);
-    ajStrAssS(&(ret->Dom), hit1->Dom);
+    ajStrAssignS(&(ret->Acc), hit1->Acc);
+    ajStrAssignS(&(ret->Spr), hit1->Spr);
+    ajStrAssignS(&(ret->Dom), hit1->Dom);
         
 
 
@@ -1170,14 +1170,14 @@ AjPHit embHitMerge(const AjPHit hit1, const AjPHit hit2)
     */
     if(hit1->Start <= hit2->Start)
     {
-	ajStrAssS(&(ret->Seq), hit1->Seq);
+	ajStrAssignS(&(ret->Seq), hit1->Seq);
 	ret->Start = hit1->Start;
 	end   = hit1->End;
 	start = hit2->Start;
     }	
     else
     {
-	ajStrAssS(&(ret->Seq), hit2->Seq);
+	ajStrAssignS(&(ret->Seq), hit2->Seq);
     	ret->Start = hit2->Start;
 	end   = hit2->End;
 	start = hit1->Start;
@@ -1195,13 +1195,13 @@ AjPHit embHitMerge(const AjPHit hit1, const AjPHit hit2)
        if necessary */
     if(hit2->End > end)
     {
-	ajStrAssSub(&temp, hit2->Seq, end-start+1, -1);
-	ajStrApp(&(ret->Seq),temp);
+	ajStrAssignSubS(&temp, hit2->Seq, end-start+1, -1);
+	ajStrAppendS(&(ret->Seq),temp);
     }
     else if(hit1->End > end)
     {
-	ajStrAssSub(&temp, hit1->Seq, end-start+1, -1);
-	ajStrApp(&(ret->Seq),temp);
+	ajStrAssignSubS(&temp, hit1->Seq, end-start+1, -1);
+	ajStrAppendS(&(ret->Seq),temp);
     }
 
 
@@ -1215,16 +1215,16 @@ AjPHit embHitMerge(const AjPHit hit1, const AjPHit hit2)
     /*
     if(ajStrMatchC(hit1->Typeobj, "SEED") ||
        ajStrMatchC(hit1->Typeobj, "SEED"))
-	ajStrAssC(&(ret->Typeobj), "SEED");
+	ajStrAssignC(&(ret->Typeobj), "SEED");
     else if(ajStrMatchC(hit1->Typeobj, "HIT") ||
 	    ajStrMatchC(hit1->Typeobj, "HIT"))
-	ajStrAssC(&(ret->Typeobj), "HIT");
+	ajStrAssignC(&(ret->Typeobj), "HIT");
     else
-	ajStrAssC(&(ret->Typeobj), "OTHER");
+	ajStrAssignC(&(ret->Typeobj), "OTHER");
 	*/
 
-    if(ajStrMatch(hit1->Model, hit2->Model))
-	ajStrAssS(&ret->Model, hit1->Model);
+    if(ajStrMatchS(hit1->Model, hit2->Model))
+	ajStrAssignS(&ret->Model, hit1->Model);
     
 
     
@@ -1285,7 +1285,7 @@ ajint embHitlistMatchFold(const void *hit1, const void *hit2)
     p = (*(AjPHitlist*)hit1);
     q = (*(AjPHitlist*)hit2);
     
-    return ajStrCmpO(p->Fold, q->Fold);
+    return ajStrCmpS(p->Fold, q->Fold);
 }
 
 
@@ -1376,7 +1376,7 @@ ajint embMatchLigid(const void *hit1, const void *hit2)
     p = (*(AjPHit*)hit1);
     q = (*(AjPHit*)hit2);
     
-    return ajStrCmpO(p->Sig->Ligid, q->Sig->Ligid);
+    return ajStrCmpS(p->Sig->Ligid, q->Sig->Ligid);
 }
 
 
@@ -1454,14 +1454,14 @@ ajint embMatchSN(const void *hit1, const void *hit2)
 
 AjBool embHitsOverlap(const AjPHit hit1, const AjPHit hit2, ajint n)
 {
-    if((MAJSTRLEN(hit1->Seq) && (MAJSTRLEN(hit2->Seq))))
-	if((MAJSTRLEN(hit1->Seq)<n) || (MAJSTRLEN(hit2->Seq)<n))
+    if((MAJSTRGETLEN(hit1->Seq) && (MAJSTRGETLEN(hit2->Seq))))
+	if((MAJSTRGETLEN(hit1->Seq)<n) || (MAJSTRGETLEN(hit2->Seq)<n))
 	{
 	    ajWarn("Sequence length smaller than overlap limit in "
 		   "embHitsOverlap ... checking for string match instead");
 
-	    if((ajStrFind(hit1->Seq, hit2->Seq)!=-1) ||
-	       (ajStrFind(hit2->Seq, hit1->Seq)!=-1))
+	    if((ajStrFindS(hit1->Seq, hit2->Seq)!=-1) ||
+	       (ajStrFindS(hit2->Seq, hit1->Seq)!=-1))
 		return ajTrue;
 	    else
 		return ajFalse;
@@ -1507,7 +1507,7 @@ AjPHit embHitReadFasta(AjPFile inf)
     AjPHit    hit       = NULL;    /* Current hit */
     AjBool    donefirst = ajFalse; /* First '>' line has been read */
     ajint     ntok      = 0;       /* No. tokens in a line */
-    AjPStr    token     = NULL;
+    const AjPStr token  = NULL;
     AjPStr    line      = NULL;    /* Line of text */
     AjPStr    subline   = NULL;
     AjBool    ok        = ajFalse; /* Line was not NULL */
@@ -1526,7 +1526,7 @@ AjPHit embHitReadFasta(AjPFile inf)
 	    /* Process the last hit */
 	    if(donefirst)
 	    {
-		ajStrCleanWhite(&hit->Seq);
+		ajStrRemoveWhiteExcess(&hit->Seq);
 		ajStrDel(&line);
 		ajStrDel(&subline);
 		return hit;
@@ -1535,8 +1535,8 @@ AjPHit embHitReadFasta(AjPFile inf)
 		hit = embHitNew(); */
 
 	    /* Check line has correct no. of tokens and allocate Hit */
-	    ajStrAssSub(&subline, line, 1, -1);
-	    if( (ntok=ajStrTokenCount(subline, "^")) != 17)
+	    ajStrAssignSubS(&subline, line, 1, -1);
+	    if( (ntok=ajStrParseCountC(subline, "^")) != 17)
 	    {
 		ajWarn("Wrong no. (%d) of tokens for a DHF file on line %S\n", ntok, line);
 		ajStrDel(&line);
@@ -1550,58 +1550,58 @@ AjPHit embHitReadFasta(AjPFile inf)
 	    }
 	    	    
 	    /* Acc */
-	    token = ajStrTokC(subline, "^");
-	    ajStrAssS(&hit->Acc, token);
-	    ajStrChomp(&hit->Acc); 
+	    token = ajStrParseC(subline, "^");
+	    ajStrAssignS(&hit->Acc, token);
+	    ajStrTrimWhite(&hit->Acc); 
 	    if(ajStrMatchC(hit->Acc, "."))
-		ajStrClear(&hit->Acc);
+		ajStrSetClear(&hit->Acc);
 
 	    /* Spr */
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Spr, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Spr, token);
 	    if(ajStrMatchC(hit->Spr, "."))
-		ajStrClear(&hit->Spr);
+		ajStrSetClear(&hit->Spr);
 
 	    /* Start */
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%d", &hit->Start);
 
 	    /* End */
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%d", &hit->End);
 	    
 	    /* Disregard domain type */
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 
 	    /* Dom */
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Dom, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Dom, token);
 	    if(ajStrMatchC(hit->Dom, "."))
-		ajStrClear(&hit->Dom);
+		ajStrSetClear(&hit->Dom);
 
 	    /* Disregard domain identifier - a change of domain identifier indicates 
 	       a new block of hits in a file with multiple hitlists, but we only 
 	       want a single hit so don't need this. */
-	    token = ajStrTokC(NULL, "^");
-	    token = ajStrTokC(NULL, "^");
-	    token = ajStrTokC(NULL, "^");
-	    token = ajStrTokC(NULL, "^");
-	    token = ajStrTokC(NULL, "^");
-	    token = ajStrTokC(NULL, "^");
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Model, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Model, token);
 	    if(ajStrMatchC(hit->Model, "."))
-		ajStrClear(&hit->Model);
+		ajStrSetClear(&hit->Model);
 
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%f", &hit->Score);
 	    
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%f", &hit->Pval);
 
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%f", &hit->Eval);
 
 	    donefirst = ajTrue;
@@ -1609,14 +1609,14 @@ AjPHit embHitReadFasta(AjPFile inf)
 	else
 	{
 	    if(hit)
-		ajStrApp(&hit->Seq, line);
+		ajStrAppendS(&hit->Seq, line);
 	}
     }
 
     /* EOF therefore process last hit */
     if(donefirst)
     {
-	ajStrCleanWhite(&hit->Seq);
+	ajStrRemoveWhiteExcess(&hit->Seq);
 	ajStrDel(&line);
 	ajStrDel(&subline);
 	return hit;
@@ -1697,51 +1697,51 @@ AjPHitlist embHitlistRead(AjPFile inf)
 	}
 	else if(ajStrPrefixC(line,"CL"))
 	{
-	    ajStrAssC(&class,ajStrStr(line)+3);
-	    ajStrClean(&class);
+	    ajStrAssignC(&class,ajStrGetPtr(line)+3);
+	    ajStrRemoveWhite(&class);
 	}
 	else if(ajStrPrefixC(line,"AR"))
 	{
-	    ajStrAssC(&arch,ajStrStr(line)+3);
-	    ajStrClean(&arch);
+	    ajStrAssignC(&arch,ajStrGetPtr(line)+3);
+	    ajStrRemoveWhite(&arch);
 	}
 	else if(ajStrPrefixC(line,"TP"))
 	{
-	    ajStrAssC(&top,ajStrStr(line)+3);
-	    ajStrClean(&top);
+	    ajStrAssignC(&top,ajStrGetPtr(line)+3);
+	    ajStrRemoveWhite(&top);
 	}
 	else if(ajStrPrefixC(line,"FO"))
 	{
-	    ajStrAssC(&fold,ajStrStr(line)+3);
+	    ajStrAssignC(&fold,ajStrGetPtr(line)+3);
 	    while((ok = ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&fold,ajStrStr(line)+3);
+		ajStrAppendC(&fold,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&fold);
+	    ajStrRemoveWhite(&fold);
 	}
 	else if(ajStrPrefixC(line,"SF"))
 	{
-	    ajStrAssC(&super,ajStrStr(line)+3);
+	    ajStrAssignC(&super,ajStrGetPtr(line)+3);
 	    while((ok = ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&super,ajStrStr(line)+3);
+		ajStrAppendC(&super,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&super);
+	    ajStrRemoveWhite(&super);
 	}
 	else if(ajStrPrefixC(line,"FA"))
 	{
-	    ajStrAssC(&family,ajStrStr(line)+3);
+	    ajStrAssignC(&family,ajStrGetPtr(line)+3);
 	    while((ok = ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&family,ajStrStr(line)+3);
+		ajStrAppendC(&family,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&family);
+	    ajStrRemoveWhite(&family);
 	}
 	else if(ajStrPrefixC(line,"NS"))
 	{
@@ -1751,12 +1751,12 @@ AjPHitlist embHitlistRead(AjPFile inf)
 	    /* Create hitlist structure */
 	    (ret)=embHitlistNew(nset);
 	    (ret)->N=nset;
-	    ajStrAssS(&(ret)->Class, class);
-	    ajStrAssS(&(ret)->Architecture, arch);
-	    ajStrAssS(&(ret)->Topology, top);
-	    ajStrAssS(&(ret)->Fold, fold);
-	    ajStrAssS(&(ret)->Superfamily, super);
-	    ajStrAssS(&(ret)->Family, family);
+	    ajStrAssignS(&(ret)->Class, class);
+	    ajStrAssignS(&(ret)->Architecture, arch);
+	    ajStrAssignS(&(ret)->Topology, top);
+	    ajStrAssignS(&(ret)->Fold, fold);
+	    ajStrAssignS(&(ret)->Superfamily, super);
+	    ajStrAssignS(&(ret)->Family, family);
 	    (ret)->Sunid_Family = Sunid_Family;
 	    if(ajStrMatchC(type, "SCOP"))
 		(ret)->Type = ajSCOP;
@@ -1787,28 +1787,28 @@ AjPHitlist embHitlistRead(AjPFile inf)
 	}
 	else if(ajStrPrefixC(line,"AC"))
 	{
-	    ajStrAssC(&(ret)->hits[n-1]->Acc,ajStrStr(line)+3);
-	    ajStrClean(&(ret)->hits[n-1]->Acc);
+	    ajStrAssignC(&(ret)->hits[n-1]->Acc,ajStrGetPtr(line)+3);
+	    ajStrRemoveWhite(&(ret)->hits[n-1]->Acc);
 	}
 	else if(ajStrPrefixC(line,"SP"))
 	{
-	    ajStrAssC(&(ret)->hits[n-1]->Spr,ajStrStr(line)+3);
-	    ajStrClean(&(ret)->hits[n-1]->Spr);
+	    ajStrAssignC(&(ret)->hits[n-1]->Spr,ajStrGetPtr(line)+3);
+	    ajStrRemoveWhite(&(ret)->hits[n-1]->Spr);
 	}
 	else if(ajStrPrefixC(line,"DO"))
 	{
-	    ajStrAssC(&(ret)->hits[n-1]->Dom,ajStrStr(line)+3);
-	    ajStrClean(&(ret)->hits[n-1]->Dom);
+	    ajStrAssignC(&(ret)->hits[n-1]->Dom,ajStrGetPtr(line)+3);
+	    ajStrRemoveWhite(&(ret)->hits[n-1]->Dom);
 	}
 /*	else if(ajStrPrefixC(line,"TY"))
 	{
-	    ajStrAssC(&(ret)->hits[n-1]->Typeobj,ajStrStr(line)+3);	
-	    ajStrClean(&(ret)->hits[n-1]->Typeobj);		
+	    ajStrAssignC(&(ret)->hits[n-1]->Typeobj,ajStrGetPtr(line)+3);	
+	    ajStrRemoveWhite(&(ret)->hits[n-1]->Typeobj);		
 	}  */
 	else if(ajStrPrefixC(line,"MO"))
 	{
-	    ajStrAssC(&(ret)->hits[n-1]->Model,ajStrStr(line)+3);	
-	    ajStrClean(&(ret)->hits[n-1]->Model);		
+	    ajStrAssignC(&(ret)->hits[n-1]->Model,ajStrGetPtr(line)+3);	
+	    ajStrRemoveWhite(&(ret)->hits[n-1]->Model);		
 	}
 	else if(ajStrPrefixC(line,"RA"))
 	    ajFmtScanS(line, "%*s %d %*s %d", &(ret)->hits[n-1]->Start,
@@ -1818,8 +1818,8 @@ AjPHitlist embHitlistRead(AjPFile inf)
 	else if(ajStrPrefixC(line,"SQ"))
 	{
 	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
-		ajStrAppC(&(ret)->hits[n-1]->Seq,ajStrStr(line));
-	    ajStrCleanWhite(&(ret)->hits[n-1]->Seq);
+		ajStrAppendC(&(ret)->hits[n-1]->Seq,ajStrGetPtr(line));
+	    ajStrRemoveWhiteExcess(&(ret)->hits[n-1]->Seq);
 	    continue;
 	}
 	
@@ -1864,7 +1864,7 @@ AjPHitlist embHitlistReadFasta(AjPFile inf)
     ajint     this_id    = 0;       /* Domain id of last hit.           */
     ajint     last_id    = 0;       /* Domain id of this hit.           */
     ajint     ntok       = 0;       /* No. tokens in a line.            */
-    AjPStr    token      = NULL;
+    const AjPStr token   = NULL;
     AjPStr    line       = NULL;    /* Line of text.                    */
     AjPStr    subline    = NULL;
     AjBool    ok         = ajFalse;
@@ -1894,14 +1894,14 @@ AjPHitlist embHitlistReadFasta(AjPFile inf)
 	    /* Process the last hit */
 	    if(donefirst)
 	    {
-		if(MAJSTRLEN(hit->Seq))
-		    ajStrCleanWhite(&hit->Seq);
+		if(MAJSTRGETLEN(hit->Seq))
+		    ajStrRemoveWhiteExcess(&hit->Seq);
 		ajListPushApp(tmplist, hit);
 	    }
 	    
 	    /* Check line has correct no. of tokens and allocate Hit */
-	    ajStrAssSub(&subline, line, 1, -1);
-	    if( (ntok=ajStrTokenCount(subline, "^")) != 17)
+	    ajStrAssignSubS(&subline, line, 1, -1);
+	    if( (ntok=ajStrParseCountC(subline, "^")) != 17)
 		ajFatal("Incorrect no. (%d) of tokens on line %S\n", ntok, line);
 	    else
 	    {
@@ -1910,39 +1910,39 @@ AjPHitlist embHitlistReadFasta(AjPFile inf)
 	    }
 	    
 	    /* Acc */
-	    token = ajStrTokC(subline, "^");
-	    ajStrAssS(&hit->Acc, token);
-	    ajStrChomp(&hit->Acc); 
+	    token = ajStrParseC(subline, "^");
+	    ajStrAssignS(&hit->Acc, token);
+	    ajStrTrimWhite(&hit->Acc); 
 	    if(ajStrMatchC(hit->Acc, "."))
-		ajStrClear(&hit->Acc);
+		ajStrSetClear(&hit->Acc);
 
 	    /* Spr */
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Spr, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Spr, token);
 	    if(ajStrMatchC(hit->Spr, "."))
-		ajStrClear(&hit->Spr);
+		ajStrSetClear(&hit->Spr);
 
 	    /* Start */
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%d", &hit->Start);
 
 	    /* End */
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%d", &hit->End);
 	    
 	    /* Type */
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&type, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&type, token);
 
 	    /* Dom */
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Dom, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Dom, token);
 	    if(ajStrMatchC(hit->Dom, "."))
-		ajStrClear(&hit->Dom);
+		ajStrSetClear(&hit->Dom);
 
 	    /* Read domain identifier - a change of domain identifier indicates 
 	       a new block of hits in a file with multiple hitlists. */
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%d", &this_id);
 
 
@@ -1980,58 +1980,58 @@ AjPHitlist embHitlistReadFasta(AjPFile inf)
 	    }	    
 	    if(donefirst)
 	    {
-		token = ajStrTokC(NULL, "^");
-		token = ajStrTokC(NULL, "^");
-		token = ajStrTokC(NULL, "^");
-		token = ajStrTokC(NULL, "^");
-		token = ajStrTokC(NULL, "^");
-		token = ajStrTokC(NULL, "^");
+		token = ajStrParseC(NULL, "^");
+		token = ajStrParseC(NULL, "^");
+		token = ajStrParseC(NULL, "^");
+		token = ajStrParseC(NULL, "^");
+		token = ajStrParseC(NULL, "^");
+		token = ajStrParseC(NULL, "^");
 	    }
 	    else 
 	    {
-		token = ajStrTokC(NULL, "^");
-		ajStrAssS(&hitlist->Class, token);
+		token = ajStrParseC(NULL, "^");
+		ajStrAssignS(&hitlist->Class, token);
 		if(ajStrMatchC(hitlist->Class, "."))
-		    ajStrClear(&hitlist->Class);	
+		    ajStrSetClear(&hitlist->Class);	
 
-		token = ajStrTokC(NULL, "^");
-		ajStrAssS(&hitlist->Architecture, token);
+		token = ajStrParseC(NULL, "^");
+		ajStrAssignS(&hitlist->Architecture, token);
 		if(ajStrMatchC(hitlist->Architecture, "."))
-		    ajStrClear(&hitlist->Architecture);
+		    ajStrSetClear(&hitlist->Architecture);
 
-		token = ajStrTokC(NULL, "^");
-		ajStrAssS(&hitlist->Topology, token);
+		token = ajStrParseC(NULL, "^");
+		ajStrAssignS(&hitlist->Topology, token);
 		if(ajStrMatchC(hitlist->Topology, "."))
-		    ajStrClear(&hitlist->Topology);
+		    ajStrSetClear(&hitlist->Topology);
 
-		token = ajStrTokC(NULL, "^");
-		ajStrAssS(&hitlist->Fold, token);
+		token = ajStrParseC(NULL, "^");
+		ajStrAssignS(&hitlist->Fold, token);
 		if(ajStrMatchC(hitlist->Fold, "."))
-		    ajStrClear(&hitlist->Fold);
+		    ajStrSetClear(&hitlist->Fold);
 
-		token = ajStrTokC(NULL, "^");
-		ajStrAssS(&hitlist->Superfamily, token);
+		token = ajStrParseC(NULL, "^");
+		ajStrAssignS(&hitlist->Superfamily, token);
 		if(ajStrMatchC(hitlist->Superfamily, "."))
-		    ajStrClear(&hitlist->Superfamily);
+		    ajStrSetClear(&hitlist->Superfamily);
 
-		token = ajStrTokC(NULL, "^");
-		ajStrAssS(&hitlist->Family, token);
+		token = ajStrParseC(NULL, "^");
+		ajStrAssignS(&hitlist->Family, token);
 		if(ajStrMatchC(hitlist->Family, "."))
-		    ajStrClear(&hitlist->Family);
+		    ajStrSetClear(&hitlist->Family);
 	    }
 
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Model, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Model, token);
 	    if(ajStrMatchC(hit->Model, "."))
-		ajStrClear(&hit->Model);
+		ajStrSetClear(&hit->Model);
 
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%f", &hit->Score);
 	    
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%f", &hit->Pval);
 
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%f", &hit->Eval);
 
 	    donefirst = ajTrue;
@@ -2039,7 +2039,7 @@ AjPHitlist embHitlistReadFasta(AjPFile inf)
 	}
 	else
 	{
-	    ajStrApp(&hit->Seq, line);
+	    ajStrAppendS(&hit->Seq, line);
 	    doneseq=ajTrue;
 	    fpos = ajFileTell(inf);
 	}
@@ -2048,7 +2048,7 @@ AjPHitlist embHitlistReadFasta(AjPFile inf)
     /* EOF therefore process last hit */
     if((!ok) && (parseok))
     {
-	ajStrCleanWhite(&hit->Seq);
+	ajStrRemoveWhiteExcess(&hit->Seq);
 	ajListPushApp(tmplist, hit);
 	hitlist->N = ajListToArray(tmplist, (void ***)&hitlist->hits);
 	ajStrDel(&subline);
@@ -2329,27 +2329,27 @@ AjBool embHitlistWrite(AjPFile outf, const AjPHitlist obj)
 	ajFmtPrintF(outf, "TY   CATH\nXX\n");
 
 
-    if(MAJSTRLEN(obj->Class))
+    if(MAJSTRGETLEN(obj->Class))
 	ajFmtPrintF(outf,"CL   %S\n",obj->Class);
 
-    if(MAJSTRLEN(obj->Architecture))
+    if(MAJSTRGETLEN(obj->Architecture))
 	ajFmtPrintF(outf,"AR   %S\n",obj->Architecture);
 
-    if(MAJSTRLEN(obj->Topology))
+    if(MAJSTRGETLEN(obj->Topology))
 	ajFmtPrintF(outf,"TP   %S\n",obj->Topology);
 
-    if(MAJSTRLEN(obj->Fold))
+    if(MAJSTRGETLEN(obj->Fold))
 	ajFmtPrintSplit(outf,obj->Fold,"XX\nFO   ",75," \t\n\r");
 
-    if(MAJSTRLEN(obj->Superfamily))
+    if(MAJSTRGETLEN(obj->Superfamily))
 	ajFmtPrintSplit(outf,obj->Superfamily,"XX\nSF   ",75," \t\n\r");
 
-    if(MAJSTRLEN(obj->Family))
+    if(MAJSTRGETLEN(obj->Family))
 	ajFmtPrintSplit(outf,obj->Family,"XX\nFA   ",75," \t\n\r");
     
-    if( (MAJSTRLEN(obj->Class))       || (MAJSTRLEN(obj->Architecture)) || 
-	(MAJSTRLEN(obj->Topology))    || (MAJSTRLEN(obj->Fold))         ||
-	(MAJSTRLEN(obj->Superfamily)) || (MAJSTRLEN(obj->Family)))
+    if( (MAJSTRGETLEN(obj->Class))       || (MAJSTRGETLEN(obj->Architecture)) || 
+	(MAJSTRGETLEN(obj->Topology))    || (MAJSTRGETLEN(obj->Fold))         ||
+	(MAJSTRGETLEN(obj->Superfamily)) || (MAJSTRGETLEN(obj->Family)))
 	ajFmtPrintF(outf,"XX\nSI   %d\n", obj->Sunid_Family);
 
     ajFmtPrintF(outf,"XX\nNS   %d\nXX\n",obj->N);
@@ -2357,13 +2357,13 @@ AjBool embHitlistWrite(AjPFile outf, const AjPHitlist obj)
     for(x=0;x<obj->N;x++)
     {
 	ajFmtPrintF(outf, "%-5s[%d]\nXX\n", "NN", x+1);
-	if(MAJSTRLEN(obj->hits[x]->Model))
+	if(MAJSTRGETLEN(obj->hits[x]->Model))
 	{
 	    ajFmtPrintF(outf, "%-5s%S\n", "MO", obj->hits[x]->Model);
 	    ajFmtPrintF(outf, "XX\n");
 	}
 	
-/*	if(MAJSTRLEN(obj->hits[x]->Typeobj))
+/*	if(MAJSTRGETLEN(obj->hits[x]->Typeobj))
 	    ajFmtPrintF(outf, "%-5s%S\n", "TY", obj->hits[x]->Typeobj);
 	ajFmtPrintF(outf, "XX\n"); */
 
@@ -2376,7 +2376,7 @@ AjBool embHitlistWrite(AjPFile outf, const AjPHitlist obj)
 	ajFmtPrintF(outf, "%-5s%.3e\n", "EV", obj->hits[x]->Eval);
 	ajFmtPrintF(outf, "XX\n");
 
-	if(MAJSTRLEN(obj->hits[x]->Group))
+	if(MAJSTRGETLEN(obj->hits[x]->Group))
 	{
 	    ajFmtPrintF(outf, "%-5s%S\n", "GP", obj->hits[x]->Group);
 	    ajFmtPrintF(outf, "XX\n");
@@ -2385,13 +2385,13 @@ AjBool embHitlistWrite(AjPFile outf, const AjPHitlist obj)
 	ajFmtPrintF(outf, "%-5s%S\n", "AC", obj->hits[x]->Acc);
 	ajFmtPrintF(outf, "XX\n");
 
-	if(MAJSTRLEN(obj->hits[x]->Spr))
+	if(MAJSTRGETLEN(obj->hits[x]->Spr))
 	{
 	    ajFmtPrintF(outf, "%-5s%S\n", "SP", obj->hits[x]->Spr);
 	    ajFmtPrintF(outf, "XX\n");
 	}
 	
-	if(MAJSTRLEN(obj->hits[x]->Dom))
+	if(MAJSTRGETLEN(obj->hits[x]->Dom))
 	{
 	    ajFmtPrintF(outf, "%-5s%S\n", "DO", obj->hits[x]->Dom);
 	    ajFmtPrintF(outf, "XX\n");
@@ -2445,25 +2445,25 @@ AjBool embHitlistWriteSubset(AjPFile outf,
     else if ((obj->Type == ajCATH))
 	ajFmtPrintF(outf, "TY   CATH\nXX\n");
 
-    if(MAJSTRLEN(obj->Class))
+    if(MAJSTRGETLEN(obj->Class))
 	ajFmtPrintF(outf,"CL   %S\n",obj->Class);
 
-    if(MAJSTRLEN(obj->Architecture))
+    if(MAJSTRGETLEN(obj->Architecture))
 	ajFmtPrintF(outf,"AR   %S\n",obj->Architecture);
 
-    if(MAJSTRLEN(obj->Topology))
+    if(MAJSTRGETLEN(obj->Topology))
 	ajFmtPrintF(outf,"TP   %S\n",obj->Topology);
 
-    if(MAJSTRLEN(obj->Fold))
+    if(MAJSTRGETLEN(obj->Fold))
 	ajFmtPrintSplit(outf,obj->Fold,"XX\nFO   ",75," \t\n\r");
 
-    if(MAJSTRLEN(obj->Superfamily))
+    if(MAJSTRGETLEN(obj->Superfamily))
 	ajFmtPrintSplit(outf,obj->Superfamily,"XX\nSF   ",75," \t\n\r");
 
-    if(MAJSTRLEN(obj->Family))
+    if(MAJSTRGETLEN(obj->Family))
 	ajFmtPrintSplit(outf,obj->Family,"XX\nFA   ",75," \t\n\r");
 
-    if(MAJSTRLEN(obj->Family))
+    if(MAJSTRGETLEN(obj->Family))
 	ajFmtPrintF(outf,"XX\nSI   %d\n", obj->Sunid_Family);
 
 
@@ -2480,13 +2480,13 @@ AjBool embHitlistWriteSubset(AjPFile outf,
 	    y++;
 
 	    ajFmtPrintF(outf, "%-5s[%d]\nXX\n", "NN", y);
-	    if(MAJSTRLEN(obj->hits[x]->Model))
+	    if(MAJSTRGETLEN(obj->hits[x]->Model))
 	    {
 		ajFmtPrintF(outf, "%-5s%S\n", "MO", obj->hits[x]->Model);
 		ajFmtPrintF(outf, "XX\n");
 	    }
 	    
-/*	    if(MAJSTRLEN(obj->hits[x]->Typeobj))
+/*	    if(MAJSTRGETLEN(obj->hits[x]->Typeobj))
 		ajFmtPrintF(outf, "%-5s%S\n", "TY", obj->hits[x]->Typeobj);
 	    ajFmtPrintF(outf, "XX\n"); */
 
@@ -2499,7 +2499,7 @@ AjBool embHitlistWriteSubset(AjPFile outf,
 	    ajFmtPrintF(outf, "%-5s%.3e\n", "EV", obj->hits[x]->Eval);
 	    ajFmtPrintF(outf, "XX\n");
 
-	    if(MAJSTRLEN(obj->hits[x]->Group))
+	    if(MAJSTRGETLEN(obj->hits[x]->Group))
 	    {
 		ajFmtPrintF(outf, "%-5s%S\n", "GP", obj->hits[x]->Group);
 		ajFmtPrintF(outf, "XX\n");
@@ -2507,13 +2507,13 @@ AjBool embHitlistWriteSubset(AjPFile outf,
 	    
 	    ajFmtPrintF(outf, "%-5s%S\n", "AC", obj->hits[x]->Acc);
 	    ajFmtPrintF(outf, "XX\n");
-	    if(MAJSTRLEN(obj->hits[x]->Spr))
+	    if(MAJSTRGETLEN(obj->hits[x]->Spr))
 	    {
 		ajFmtPrintF(outf, "%-5s%S\n", "SP", obj->hits[x]->Spr);
 		ajFmtPrintF(outf, "XX\n");
 	    }
 
-	    if(MAJSTRLEN(obj->hits[x]->Dom))
+	    if(MAJSTRGETLEN(obj->hits[x]->Dom))
 	    {
 		ajFmtPrintF(outf, "%-5s%S\n", "DO", obj->hits[x]->Dom);
 		ajFmtPrintF(outf, "XX\n");
@@ -2559,12 +2559,12 @@ AjBool embHitlistWriteFasta(AjPFile outf, const  AjPHitlist obj)
     {
 	ajFmtPrintF(outf, "> ");
 	
-	if(MAJSTRLEN(obj->hits[x]->Acc))
+	if(MAJSTRGETLEN(obj->hits[x]->Acc))
 	    ajFmtPrintF(outf, "%S^", obj->hits[x]->Acc);
 	else
 	    ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRLEN(obj->hits[x]->Spr))
+	if(MAJSTRGETLEN(obj->hits[x]->Spr))
 	    ajFmtPrintF(outf, "%S^", obj->hits[x]->Spr);
 	else
 	    ajFmtPrintF(outf, ".^");
@@ -2578,44 +2578,44 @@ AjBool embHitlistWriteFasta(AjPFile outf, const  AjPHitlist obj)
 	else
 	    ajFmtPrintF(outf, ".^");
 	
-	if(MAJSTRLEN(obj->hits[x]->Dom))
+	if(MAJSTRGETLEN(obj->hits[x]->Dom))
 	    ajFmtPrintF(outf, "%S^", obj->hits[x]->Dom);
 	else
 	    ajFmtPrintF(outf, ".^");
 
 	ajFmtPrintF(outf,"%d^", obj->Sunid_Family);
 
-	if(MAJSTRLEN(obj->Class))
+	if(MAJSTRGETLEN(obj->Class))
 	    ajFmtPrintF(outf,"%S^",obj->Class);
 	else
 	    ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRLEN(obj->Architecture))
+	if(MAJSTRGETLEN(obj->Architecture))
 	    ajFmtPrintF(outf,"%S^",obj->Architecture);
 	else
 	    ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRLEN(obj->Topology))
+	if(MAJSTRGETLEN(obj->Topology))
 	    ajFmtPrintF(outf,"%S^",obj->Topology);
 	else
 	    ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRLEN(obj->Fold))
+	if(MAJSTRGETLEN(obj->Fold))
 	    ajFmtPrintF(outf,"%S^",obj->Fold);
 	else
 	    ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRLEN(obj->Superfamily))
+	if(MAJSTRGETLEN(obj->Superfamily))
 	    ajFmtPrintF(outf,"%S^",obj->Superfamily);
 	else
 	    ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRLEN(obj->Family))
+	if(MAJSTRGETLEN(obj->Family))
 	    ajFmtPrintF(outf,"%S^",obj->Family);
 	else
 	    ajFmtPrintF(outf, ".^");
 
-	if(MAJSTRLEN(obj->hits[x]->Model))
+	if(MAJSTRGETLEN(obj->hits[x]->Model))
 	    ajFmtPrintF(outf, "%S^", obj->hits[x]->Model);
 	else
 	    ajFmtPrintF(outf, ".^");
@@ -2669,11 +2669,11 @@ AjBool embHitlistWriteSubsetFasta(AjPFile outf,
 	{
 	    ajFmtPrintF(outf, "> ");
 	
-	    if(MAJSTRLEN(obj->hits[x]->Acc))
+	    if(MAJSTRGETLEN(obj->hits[x]->Acc))
 		ajFmtPrintF(outf, "%S^", obj->hits[x]->Acc);
 	    else
 		ajFmtPrintF(outf, ".^");
-	    if(MAJSTRLEN(obj->hits[x]->Spr))
+	    if(MAJSTRGETLEN(obj->hits[x]->Spr))
 		ajFmtPrintF(outf, "%S^", obj->hits[x]->Spr);
 	    else
 		ajFmtPrintF(outf, ".^");
@@ -2686,37 +2686,37 @@ AjBool embHitlistWriteSubsetFasta(AjPFile outf,
 	    else
 		ajFmtPrintF(outf, ".^");
 
-	    if(MAJSTRLEN(obj->hits[x]->Dom))
+	    if(MAJSTRGETLEN(obj->hits[x]->Dom))
 		ajFmtPrintF(outf, "%S^", obj->hits[x]->Dom);
 	    else
 		ajFmtPrintF(outf, ".^");
 
 	    ajFmtPrintF(outf,"%d^", obj->Sunid_Family);
-	    if(MAJSTRLEN(obj->Class))
+	    if(MAJSTRGETLEN(obj->Class))
 		ajFmtPrintF(outf,"%S^",obj->Class);
 	    else
 		ajFmtPrintF(outf, ".^");
-	    if(MAJSTRLEN(obj->Architecture))
+	    if(MAJSTRGETLEN(obj->Architecture))
 		ajFmtPrintF(outf,"%S^",obj->Architecture);
 	    else
 		ajFmtPrintF(outf, ".^");
-	    if(MAJSTRLEN(obj->Topology))
+	    if(MAJSTRGETLEN(obj->Topology))
 		ajFmtPrintF(outf,"%S^",obj->Topology);
 	    else
 		ajFmtPrintF(outf, ".^");
-	    if(MAJSTRLEN(obj->Fold))
+	    if(MAJSTRGETLEN(obj->Fold))
 		ajFmtPrintF(outf,"%S^",obj->Fold);
 	    else
 		ajFmtPrintF(outf, ".^");
-	    if(MAJSTRLEN(obj->Superfamily))
+	    if(MAJSTRGETLEN(obj->Superfamily))
 		ajFmtPrintF(outf,"%S^",obj->Superfamily);
 	    else
 		ajFmtPrintF(outf, ".^");
-	    if(MAJSTRLEN(obj->Family))
+	    if(MAJSTRGETLEN(obj->Family))
 		ajFmtPrintF(outf,"%S^",obj->Family);
 	    else
 		ajFmtPrintF(outf, ".^");
-	    if(MAJSTRLEN(obj->Model))
+	    if(MAJSTRGETLEN(obj->Model))
 		ajFmtPrintF(outf, "%S^", obj->Model);
 	    else
 		ajFmtPrintF(outf, ".^");
@@ -2763,12 +2763,12 @@ AjBool        embHitlistWriteHitFasta(AjPFile outf,
     
     ajFmtPrintF(outf, "> ");
     
-    if(MAJSTRLEN(obj->hits[n]->Acc))
+    if(MAJSTRGETLEN(obj->hits[n]->Acc))
 	ajFmtPrintF(outf, "%S^", obj->hits[n]->Acc);
     else
 	ajFmtPrintF(outf, ".^");
     
-    if(MAJSTRLEN(obj->hits[n]->Spr))
+    if(MAJSTRGETLEN(obj->hits[n]->Spr))
 	ajFmtPrintF(outf, "%S^", obj->hits[n]->Spr);
     else
 	ajFmtPrintF(outf, ".^");
@@ -2782,44 +2782,44 @@ AjBool        embHitlistWriteHitFasta(AjPFile outf,
     else
 	ajFmtPrintF(outf, ".^");
     
-    if(MAJSTRLEN(obj->hits[n]->Dom))
+    if(MAJSTRGETLEN(obj->hits[n]->Dom))
 	ajFmtPrintF(outf, "%S^", obj->hits[n]->Dom);
     else
 	ajFmtPrintF(outf, ".^");
     
     ajFmtPrintF(outf,"%d^", obj->Sunid_Family);
     
-    if(MAJSTRLEN(obj->Class))
+    if(MAJSTRGETLEN(obj->Class))
 	ajFmtPrintF(outf,"%S^",obj->Class);
     else
 	ajFmtPrintF(outf, ".^");
     
-    if(MAJSTRLEN(obj->Architecture))
+    if(MAJSTRGETLEN(obj->Architecture))
 	ajFmtPrintF(outf,"%S^",obj->Architecture);
     else
 	ajFmtPrintF(outf, ".^");
     
-    if(MAJSTRLEN(obj->Topology))
+    if(MAJSTRGETLEN(obj->Topology))
 	ajFmtPrintF(outf,"%S^",obj->Topology);
     else
 	ajFmtPrintF(outf, ".^");
     
-    if(MAJSTRLEN(obj->Fold))
+    if(MAJSTRGETLEN(obj->Fold))
 	ajFmtPrintF(outf,"%S^",obj->Fold);
     else
 	ajFmtPrintF(outf, ".^");
     
-    if(MAJSTRLEN(obj->Superfamily))
+    if(MAJSTRGETLEN(obj->Superfamily))
 	ajFmtPrintF(outf,"%S^",obj->Superfamily);
     else
 	ajFmtPrintF(outf, ".^");
     
-    if(MAJSTRLEN(obj->Family))
+    if(MAJSTRGETLEN(obj->Family))
 	ajFmtPrintF(outf,"%S^",obj->Family);
     else
 	ajFmtPrintF(outf, ".^");    
 
-    if(MAJSTRLEN(obj->hits[n]->Model))
+    if(MAJSTRGETLEN(obj->hits[n]->Model))
 	ajFmtPrintF(outf, "%S^", obj->hits[n]->Model);
     else
 	ajFmtPrintF(outf, ".^");
@@ -2882,7 +2882,7 @@ AjPSignature embSignatureReadNew(AjPFile inf)
     ajint  v2   = 0;
     char   c1   = '\0';
     static AjPStr env  = NULL;
-    AjPStr   token             = NULL;   /* For parsing      */
+    const AjPStr token = NULL;   /* For parsing      */
     
     /* Signature of type ajLIGAND only */
     ajint     ns;
@@ -2926,26 +2926,26 @@ AjPSignature embSignatureReadNew(AjPFile inf)
       /* IS */
       	if(ajStrPrefixC(line,"IS"))
 	{
-	    token = ajStrTokC(line, ";");
+	    token = ajStrParseC(line, ";");
 	    ajFmtScanS(line, "%*s %*s %d", &sn);
 
-	    token = ajStrTokC(NULL, ";");
+	    token = ajStrParseC(NULL, ";");
 	    ajFmtScanS(token, "%*s %d", &ns);
 	  }
 
 	/* IP */
       	else if(ajStrPrefixC(line,"IP"))
 	  {
-	    token = ajStrTokC(line, ";");
+	    token = ajStrParseC(line, ";");
 	    ajFmtScanS(line, "%*s %*s %d", &pn);
 
-	    token = ajStrTokC(NULL, ";");
+	    token = ajStrParseC(NULL, ";");
 	    ajFmtScanS(token, "%*s %d", &np);
 
-	    token = ajStrTokC(NULL, ";");
+	    token = ajStrParseC(NULL, ";");
 	    ajFmtScanS(token, "%*s %d", &minpatch);
 
-	    token = ajStrTokC(NULL, ";");
+	    token = ajStrParseC(NULL, ";");
 	    ajFmtScanS(token, "%*s %d", &maxgap);
 	  }
 
@@ -2958,11 +2958,11 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 	/* ID */
       	else if(ajStrPrefixC(line,"ID"))
 	  {
-	    token = ajStrTokC(line, ";");
+	    token = ajStrParseC(line, ";");
 	    ajFmtScanS(line, "%*s %*s %S", &id);
-	    token = ajStrTokC(NULL, ";");
+	    token = ajStrParseC(NULL, ";");
 	    ajFmtScanS(token, "%*s %S", &domid);
-	    token = ajStrTokC(NULL, ";");
+	    token = ajStrParseC(NULL, ";");
 	    ajFmtScanS(token, "%*s %S", &ligid);
 	  }
 
@@ -2987,51 +2987,51 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 	}
 	else if(ajStrPrefixC(line,"CL"))
 	{
-	    ajStrAssC(&class,ajStrStr(line)+3);
-	    ajStrClean(&class);
+	    ajStrAssignC(&class,ajStrGetPtr(line)+3);
+	    ajStrRemoveWhite(&class);
 	}
 	else if(ajStrPrefixC(line,"AR"))
 	{
-	    ajStrAssC(&arch,ajStrStr(line)+3);
-	    ajStrClean(&arch);
+	    ajStrAssignC(&arch,ajStrGetPtr(line)+3);
+	    ajStrRemoveWhite(&arch);
 	}
 	else if(ajStrPrefixC(line,"TP"))
 	{
-	    ajStrAssC(&top,ajStrStr(line)+3);
-	    ajStrClean(&top);
+	    ajStrAssignC(&top,ajStrGetPtr(line)+3);
+	    ajStrRemoveWhite(&top);
 	}
 	else if(ajStrPrefixC(line,"FO"))
 	{
-	    ajStrAssC(&fold,ajStrStr(line)+3);
+	    ajStrAssignC(&fold,ajStrGetPtr(line)+3);
 	    while((ok = ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&fold,ajStrStr(line)+3);
+		ajStrAppendC(&fold,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&fold);
+	    ajStrRemoveWhite(&fold);
 	}
 	else if(ajStrPrefixC(line,"SF"))
 	{
-	    ajStrAssC(&super,ajStrStr(line)+3);
+	    ajStrAssignC(&super,ajStrGetPtr(line)+3);
 	    while((ok = ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&super,ajStrStr(line)+3);
+		ajStrAppendC(&super,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&super);
+	    ajStrRemoveWhite(&super);
 	}
 	else if(ajStrPrefixC(line,"FA"))
 	{
-	    ajStrAssC(&family,ajStrStr(line)+3);
+	    ajStrAssignC(&family,ajStrGetPtr(line)+3);
 	    while((ok = ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&family,ajStrStr(line)+3);
+		ajStrAppendC(&family,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&family);
+	    ajStrRemoveWhite(&family);
 	}
 	else if(ajStrPrefixC(line,"NP"))
 	{
@@ -3052,19 +3052,19 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 	    else if(ajStrMatchC(typesig, "3D"))
 		(ret)->Typesig = aj3D;
 
-	    ajStrAssS(&(ret)->Class, class);
-	    ajStrAssS(&(ret)->Architecture, arch);
-	    ajStrAssS(&(ret)->Topology, top);
-	    ajStrAssS(&(ret)->Fold, fold);
-	    ajStrAssS(&(ret)->Superfamily, super);
-	    ajStrAssS(&(ret)->Family, family);
+	    ajStrAssignS(&(ret)->Class, class);
+	    ajStrAssignS(&(ret)->Architecture, arch);
+	    ajStrAssignS(&(ret)->Topology, top);
+	    ajStrAssignS(&(ret)->Fold, fold);
+	    ajStrAssignS(&(ret)->Superfamily, super);
+	    ajStrAssignS(&(ret)->Family, family);
 	    (ret)->Sunid_Family = Sunid_Family;	
 
 	    /* ajLIGAND only */
-	    ajStrAssS(&(ret)->Id, id);
-	    ajStrAssS(&(ret)->Domid, domid);
-	    ajStrAssS(&(ret)->Ligid, ligid);
-	    ajStrAssS(&(ret)->Desc, desc);
+	    ajStrAssignS(&(ret)->Id, id);
+	    ajStrAssignS(&(ret)->Domid, domid);
+	    ajStrAssignS(&(ret)->Ligid, ligid);
+	    ajStrAssignS(&(ret)->Desc, desc);
 	    ret->ns = ns;
 	    ret->sn = sn;
 	    ret->np = np;
@@ -3112,7 +3112,7 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 		    else if(ret->Typesig == aj3D)
 		    {
 			ajFmtScanS(line, "%*s %S %*c %d", &env,&v2);
-			ajStrAssS(&(ret)->dat[n-1]->eids[i], env);
+			ajStrAssignS(&(ret)->dat[n-1]->eids[i], env);
 			ajIntPut(&(ret)->dat[n-1]->efrq,i,v2);
 		    }
 		    else
@@ -3194,46 +3194,46 @@ AjBool embSignatureWrite(AjPFile outf, const AjPSignature obj)
 	ajFmtPrintF(outf, "TS   1D\nXX\n");
     }
     
-    if(MAJSTRLEN(obj->Class))
+    if(MAJSTRGETLEN(obj->Class))
     {	ajFmtPrintF(outf,"CL   %S\n",obj->Class);
 	ajFmtPrintF(outf, "XX\n");
     }
-    if(MAJSTRLEN(obj->Architecture))
+    if(MAJSTRGETLEN(obj->Architecture))
     {	ajFmtPrintF(outf,"AR   %S\n",obj->Architecture);
 	ajFmtPrintF(outf, "XX\n");
     }
-    if(MAJSTRLEN(obj->Topology))
+    if(MAJSTRGETLEN(obj->Topology))
     {	ajFmtPrintF(outf,"TP   %S\n",obj->Topology);
 	ajFmtPrintF(outf, "XX\n");
     }
-    if(MAJSTRLEN(obj->Fold))
+    if(MAJSTRGETLEN(obj->Fold))
     {
 	ajFmtPrintSplit(outf,obj->Fold,"FO   ",75," \t\n\r");
 	ajFmtPrintF(outf, "XX\n");
     }
-    if(MAJSTRLEN(obj->Superfamily))
+    if(MAJSTRGETLEN(obj->Superfamily))
     {
 	ajFmtPrintSplit(outf,obj->Superfamily,"SF   ",75," \t\n\r");
 	ajFmtPrintF(outf, "XX\n");
     }
-    if(MAJSTRLEN(obj->Family))
+    if(MAJSTRGETLEN(obj->Family))
     {
 	ajFmtPrintSplit(outf,obj->Family,"FA   ",75," \t\n\r");
 	ajFmtPrintF(outf, "XX\n");
     }
 
     /*
-    if(MAJSTRLEN(obj->Class))
+    if(MAJSTRGETLEN(obj->Class))
 	ajFmtPrintF(outf,"CL   %S",obj->Class);
-    if(MAJSTRLEN(obj->Architecture))
+    if(MAJSTRGETLEN(obj->Architecture))
 	ajFmtPrintSplit(outf,obj->Architecture,"\nXX\nAR   ",75," \t\n\r");
-    if(MAJSTRLEN(obj->Topology))
+    if(MAJSTRGETLEN(obj->Topology))
 	ajFmtPrintSplit(outf,obj->Topology,"\nXX\nTP   ",75," \t\n\r");
-    if(MAJSTRLEN(obj->Fold))
+    if(MAJSTRGETLEN(obj->Fold))
 	ajFmtPrintSplit(outf,obj->Fold,"\nXX\nFO   ",75," \t\n\r");
-    if(MAJSTRLEN(obj->Superfamily))
+    if(MAJSTRGETLEN(obj->Superfamily))
 	ajFmtPrintSplit(outf,obj->Superfamily,"XX\nSF   ",75," \t\n\r");
-    if(MAJSTRLEN(obj->Family))
+    if(MAJSTRGETLEN(obj->Family))
 	ajFmtPrintSplit(outf,obj->Family,"XX\nFA   ",75," \t\n\r");
 	*/
 
@@ -3396,51 +3396,51 @@ AjPHitlist embSignatureHitsRead(AjPFile inf)
 	}
 	else if(ajStrPrefixC(line,"CL"))
 	{
-	    ajStrAssC(&class,ajStrStr(line)+3);
-	    ajStrClean(&class);
+	    ajStrAssignC(&class,ajStrGetPtr(line)+3);
+	    ajStrRemoveWhite(&class);
 	}
 	else if(ajStrPrefixC(line,"AR"))
 	{
-	    ajStrAssC(&arch,ajStrStr(line)+3);
-	    ajStrClean(&arch);
+	    ajStrAssignC(&arch,ajStrGetPtr(line)+3);
+	    ajStrRemoveWhite(&arch);
 	}
 	else if(ajStrPrefixC(line,"TP"))
 	{
-	    ajStrAssC(&top,ajStrStr(line)+3);
-	    ajStrClean(&top);
+	    ajStrAssignC(&top,ajStrGetPtr(line)+3);
+	    ajStrRemoveWhite(&top);
 	}
 	else if(ajStrPrefixC(line,"FO"))
 	{
-	    ajStrAssC(&fold,ajStrStr(line)+3);
+	    ajStrAssignC(&fold,ajStrGetPtr(line)+3);
 	    while((ok=ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&fold,ajStrStr(line)+3);
+		ajStrAppendC(&fold,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&fold);
+	    ajStrRemoveWhite(&fold);
 	}
 	else if(ajStrPrefixC(line,"SF"))
 	{
-	    ajStrAssC(&super,ajStrStr(line)+3);
+	    ajStrAssignC(&super,ajStrGetPtr(line)+3);
 	    while((ok = ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&super,ajStrStr(line)+3);
+		ajStrAppendC(&super,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&super);
+	    ajStrRemoveWhite(&super);
 	}
 	else if(ajStrPrefixC(line,"FA"))
 	{
-	    ajStrAssC(&family,ajStrStr(line)+3);
+	    ajStrAssignC(&family,ajStrGetPtr(line)+3);
 	    while((ok = ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&family,ajStrStr(line)+3);
+		ajStrAppendC(&family,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&family);
+	    ajStrRemoveWhite(&family);
 	}
 	else if(ajStrPrefixC(line,"HI"))
 	{
@@ -3472,12 +3472,12 @@ AjPHitlist embSignatureHitsRead(AjPFile inf)
     }
 
     ret = embHitlistNew(ajListLength(list));
-    ajStrAssS(&ret->Class, class);
-    ajStrAssS(&ret->Architecture, arch);
-    ajStrAssS(&ret->Topology, top);
-    ajStrAssS(&ret->Fold, fold);
-    ajStrAssS(&ret->Superfamily, super);
-    ajStrAssS(&ret->Family, family);
+    ajStrAssignS(&ret->Class, class);
+    ajStrAssignS(&ret->Architecture, arch);
+    ajStrAssignS(&ret->Topology, top);
+    ajStrAssignS(&ret->Fold, fold);
+    ajStrAssignS(&ret->Superfamily, super);
+    ajStrAssignS(&ret->Family, family);
     ret->Sunid_Family = Sunid_Family;
     if(ajStrMatchC(type, "SCOP"))
 	(ret)->Type = ajSCOP;
@@ -3547,17 +3547,17 @@ AjBool embSignatureHitsWrite(AjPFile outf, const AjPSignature sig,
 	ajFmtPrintF(outf, "TY   CATH\nXX\n");
     else if ((sig->Type == ajLIGAND))
 	ajFmtPrintF(outf, "TY   LIGAND\nXX\n");
-    if(MAJSTRLEN(sig->Class))
+    if(MAJSTRGETLEN(sig->Class))
 	ajFmtPrintF(outf,"CL   %S",sig->Class);
-    if(MAJSTRLEN(sig->Architecture))    
+    if(MAJSTRGETLEN(sig->Architecture))    
 	ajFmtPrintSplit(outf,sig->Architecture,"\nXX\nAR   ",75," \t\n\r");
-    if(MAJSTRLEN(sig->Topology)) 
+    if(MAJSTRGETLEN(sig->Topology)) 
 	ajFmtPrintSplit(outf,sig->Topology,"\nXX\nTP   ",75," \t\n\r");
-    if(MAJSTRLEN(sig->Fold)) 
+    if(MAJSTRGETLEN(sig->Fold)) 
 	ajFmtPrintSplit(outf,sig->Fold,"\nXX\nFO   ",75," \t\n\r");
-    if(MAJSTRLEN(sig->Superfamily))
+    if(MAJSTRGETLEN(sig->Superfamily))
 	ajFmtPrintSplit(outf,sig->Superfamily,"XX\nSF   ",75," \t\n\r");
-    if(MAJSTRLEN(sig->Family)) 
+    if(MAJSTRGETLEN(sig->Family)) 
 	ajFmtPrintSplit(outf,sig->Family,"XX\nFA   ",75," \t\n\r");
     ajFmtPrintF(outf,"XX\nSI   %d\n", sig->Sunid_Family);
     ajFmtPrintF(outf,"XX\n");
@@ -3577,7 +3577,7 @@ AjBool embSignatureHitsWrite(AjPFile outf, const AjPSignature sig,
 	
 
 
-	if(MAJSTRLEN(hitlist->hits[x]->Acc))
+	if(MAJSTRGETLEN(hitlist->hits[x]->Acc))
 	    ajFmtPrintF(outf, "HI  %-6d%-10S%-5d%-5d%-15S%-10S%-10S"
 			"%-7.1f%.3e %.3e\n", 
 			x+1, hitlist->hits[x]->Acc, 
@@ -3597,7 +3597,7 @@ AjBool embSignatureHitsWrite(AjPFile outf, const AjPSignature sig,
 			hitlist->hits[x]->Eval);
 
 	/* Without Typeobj 
-	if(MAJSTRLEN(hitlist->hits[x]->Acc))
+	if(MAJSTRGETLEN(hitlist->hits[x]->Acc))
 	    ajFmtPrintF(outf, "HI  %-6d%-10S%-5d%-5d%-15S"
 			"%-7.1f%.3e %.3e\n", 
 			x+1, hitlist->hits[x]->Acc, 
@@ -3747,12 +3747,12 @@ AjBool embHitlistClassify(const AjPHitlist *hits, const AjPList targets,
 	    ptri = embHitidxNew();
 	    ptri->hptr=ptrt->hits[x];
 	    ptri->lptr=ptrt;
-	    if(MAJSTRLEN(ptrt->hits[x]->Acc))
-		ajStrAssS(&ptri->Id, ptrt->hits[x]->Acc);
-	    else if(MAJSTRLEN(ptrt->hits[x]->Spr))
-		ajStrAssS(&ptri->Id, ptrt->hits[x]->Spr);
-	    else if(MAJSTRLEN(ptrt->hits[x]->Dom))
-		ajStrAssS(&ptri->Id, ptrt->hits[x]->Dom);
+	    if(MAJSTRGETLEN(ptrt->hits[x]->Acc))
+		ajStrAssignS(&ptri->Id, ptrt->hits[x]->Acc);
+	    else if(MAJSTRGETLEN(ptrt->hits[x]->Spr))
+		ajStrAssignS(&ptri->Id, ptrt->hits[x]->Spr);
+	    else if(MAJSTRGETLEN(ptrt->hits[x]->Dom))
+		ajStrAssignS(&ptri->Id, ptrt->hits[x]->Dom);
 	    else 
 		ajFatal("None of Acc, Spr or Dom are set in embHitlistClassify");
 	    
@@ -3770,11 +3770,11 @@ AjBool embHitlistClassify(const AjPHitlist *hits, const AjPList targets,
     /* Loop through list of hits */
     for(x=0; x<(*hits)->N; x++)
     {
-	if((MAJSTRLEN((*hits)->hits[x]->Acc)))
+	if((MAJSTRGETLEN((*hits)->hits[x]->Acc)))
 	    pos=embHitidxBinSearch((*hits)->hits[x]->Acc, idxarr, idxsiz);
-	else if((MAJSTRLEN((*hits)->hits[x]->Spr)))
+	else if((MAJSTRGETLEN((*hits)->hits[x]->Spr)))
 	    pos=embHitidxBinSearch((*hits)->hits[x]->Spr, idxarr, idxsiz);
-	else if((MAJSTRLEN((*hits)->hits[x]->Dom)))
+	else if((MAJSTRGETLEN((*hits)->hits[x]->Dom)))
 	    pos=embHitidxBinSearch((*hits)->hits[x]->Dom, idxarr, idxsiz);
 	else 
 	    ajFatal("None of Acc, Spr or Dom are set in embHitlistClassify");
@@ -3789,16 +3789,16 @@ AjBool embHitlistClassify(const AjPHitlist *hits, const AjPList targets,
 	    */
 	    tpos=pos; 
 
-	    if(MAJSTRLEN((*hits)->hits[x]->Acc))
-		ajStrAssS(&tmpstr, (*hits)->hits[x]->Acc);
-	    else if(MAJSTRLEN((*hits)->hits[x]->Spr))
-		ajStrAssS(&tmpstr, (*hits)->hits[x]->Spr);
-	    else if(MAJSTRLEN((*hits)->hits[x]->Dom))
-		ajStrAssS(&tmpstr, (*hits)->hits[x]->Dom);
+	    if(MAJSTRGETLEN((*hits)->hits[x]->Acc))
+		ajStrAssignS(&tmpstr, (*hits)->hits[x]->Acc);
+	    else if(MAJSTRGETLEN((*hits)->hits[x]->Spr))
+		ajStrAssignS(&tmpstr, (*hits)->hits[x]->Spr);
+	    else if(MAJSTRGETLEN((*hits)->hits[x]->Dom))
+		ajStrAssignS(&tmpstr, (*hits)->hits[x]->Dom);
 	    else 
 		ajFatal("None of Acc, Spr or Dom are set in embHitlistClassify");
 
-	    while(ajStrMatchCase(idxarr[tpos]->Id, tmpstr))
+	    while(ajStrMatchCaseS(idxarr[tpos]->Id, tmpstr))
 	    {
 		if(embHitsOverlap(idxarr[tpos]->hptr, 
 				    (*hits)->hits[x], thresh))
@@ -3808,39 +3808,39 @@ AjBool embHitlistClassify(const AjPHitlist *hits, const AjPList targets,
 		       (*hits)->Sunid_Family) */
 
 		    /* All SCOP nodes are identical */
-		    if((ajStrMatchCase((idxarr[tpos]->lptr)->Family, (*hits)->Family))            &&
-		       (ajStrMatchCase((idxarr[tpos]->lptr)->Superfamily, (*hits)->Superfamily))  &&
-		       (ajStrMatchCase((idxarr[tpos]->lptr)->Fold, (*hits)->Fold))                &&
-		       (ajStrMatchCase((idxarr[tpos]->lptr)->Class, (*hits)->Class)))
+		    if((ajStrMatchCaseS((idxarr[tpos]->lptr)->Family, (*hits)->Family))            &&
+		       (ajStrMatchCaseS((idxarr[tpos]->lptr)->Superfamily, (*hits)->Superfamily))  &&
+		       (ajStrMatchCaseS((idxarr[tpos]->lptr)->Fold, (*hits)->Fold))                &&
+		       (ajStrMatchCaseS((idxarr[tpos]->lptr)->Class, (*hits)->Class)))
 		    {
 
-/*			ajStrAssS(&(*hits)->hits[x]->Typeobj, 
+/*			ajStrAssignS(&(*hits)->hits[x]->Typeobj, 
 				  (idxarr[tpos]->hptr)->Typeobj); */
 
-			ajStrAssC(&(*hits)->hits[x]->Typeobj, 
+			ajStrAssignC(&(*hits)->hits[x]->Typeobj, 
 				  "TRUE");
-			ajStrAssC(&(*hits)->hits[x]->Typesbj, 
+			ajStrAssignC(&(*hits)->hits[x]->Typesbj, 
 				  "TRUE");
-			ajStrAssS(&(*hits)->hits[x]->Group, 
+			ajStrAssignS(&(*hits)->hits[x]->Group, 
 				  (idxarr[tpos]->hptr)->Group);
 		    }
-		    else if((ajStrMatchCase((idxarr[tpos]->lptr)->Fold, 
+		    else if((ajStrMatchCaseS((idxarr[tpos]->lptr)->Fold, 
 					    (*hits)->Fold)) &&
-			    (ajStrMatchCase((idxarr[tpos]->lptr)->Class, 
+			    (ajStrMatchCaseS((idxarr[tpos]->lptr)->Class, 
 					   (*hits)->Class)))
 			/* SCOP folds are identical */
 		    {
-			ajStrAssC(&(*hits)->hits[x]->Typeobj, "CROSS");
-			ajStrAssC(&(*hits)->hits[x]->Typesbj, "CROSS");
+			ajStrAssignC(&(*hits)->hits[x]->Typeobj, "CROSS");
+			ajStrAssignC(&(*hits)->hits[x]->Typesbj, "CROSS");
 
-			ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+			ajStrAssignC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
 		    }
 		    else
 			/* SCOP folds are different */
 		    {
-			ajStrAssC(&(*hits)->hits[x]->Typeobj, "FALSE");
-			ajStrAssC(&(*hits)->hits[x]->Typesbj, "FALSE");
-			ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+			ajStrAssignC(&(*hits)->hits[x]->Typeobj, "FALSE");
+			ajStrAssignC(&(*hits)->hits[x]->Typesbj, "FALSE");
+			ajStrAssignC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
 		    }
 		}
 		else
@@ -3854,9 +3854,9 @@ AjBool embHitlistClassify(const AjPHitlist *hits, const AjPList targets,
 		       (!ajStrMatchC((*hits)->hits[x]->Typesbj, "CROSS")) &&
 		       (!ajStrMatchC((*hits)->hits[x]->Typesbj, "FALSE")))
 		    {
-			ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
-			ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
-			ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+			ajStrAssignC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
+			ajStrAssignC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
+			ajStrAssignC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
 		    }
 		}
 		tpos--;	
@@ -3867,17 +3867,17 @@ AjBool embHitlistClassify(const AjPHitlist *hits, const AjPList targets,
 	    /* Search down the list */
 	    tpos = pos+1; 
 
-	    if(MAJSTRLEN((*hits)->hits[x]->Acc))
-		ajStrAssS(&tmpstr, (*hits)->hits[x]->Acc);
-	    else if(MAJSTRLEN((*hits)->hits[x]->Spr))
-		ajStrAssS(&tmpstr, (*hits)->hits[x]->Spr);
-	    else if(MAJSTRLEN((*hits)->hits[x]->Dom))
-		ajStrAssS(&tmpstr, (*hits)->hits[x]->Dom);
+	    if(MAJSTRGETLEN((*hits)->hits[x]->Acc))
+		ajStrAssignS(&tmpstr, (*hits)->hits[x]->Acc);
+	    else if(MAJSTRGETLEN((*hits)->hits[x]->Spr))
+		ajStrAssignS(&tmpstr, (*hits)->hits[x]->Spr);
+	    else if(MAJSTRGETLEN((*hits)->hits[x]->Dom))
+		ajStrAssignS(&tmpstr, (*hits)->hits[x]->Dom);
 	    else 
 		ajFatal("None of Acc, Spr or Dom are set in embHitlistClassify");
 
 	    if(tpos<idxsiz) 
-		while(ajStrMatchCase(idxarr[tpos]->Id, tmpstr))
+		while(ajStrMatchCaseS(idxarr[tpos]->Id, tmpstr))
 		{
 
 		    if(embHitsOverlap(idxarr[tpos]->hptr, 
@@ -3889,36 +3889,36 @@ AjBool embHitlistClassify(const AjPHitlist *hits, const AjPList targets,
 			   (*hits)->Sunid_Family)  */
 
 			    /* All SCOP nodes are identical */
-			if((ajStrMatchCase((idxarr[tpos]->lptr)->Family, (*hits)->Family))            &&
-			   (ajStrMatchCase((idxarr[tpos]->lptr)->Superfamily, (*hits)->Superfamily))  &&
-			   (ajStrMatchCase((idxarr[tpos]->lptr)->Fold, (*hits)->Fold))                &&
-			   (ajStrMatchCase((idxarr[tpos]->lptr)->Class, (*hits)->Class)))
+			if((ajStrMatchCaseS((idxarr[tpos]->lptr)->Family, (*hits)->Family))            &&
+			   (ajStrMatchCaseS((idxarr[tpos]->lptr)->Superfamily, (*hits)->Superfamily))  &&
+			   (ajStrMatchCaseS((idxarr[tpos]->lptr)->Fold, (*hits)->Fold))                &&
+			   (ajStrMatchCaseS((idxarr[tpos]->lptr)->Class, (*hits)->Class)))
 			{
-			    /*			    ajStrAssS(&(*hits)->hits[x]->Typeobj, 
+			    /*			    ajStrAssignS(&(*hits)->hits[x]->Typeobj, 
 						    (idxarr[tpos]->hptr)->Typeobj); */
 
-			    ajStrAssC(&(*hits)->hits[x]->Typeobj, "TRUE");
-			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "TRUE");
-			    ajStrAssS(&(*hits)->hits[x]->Group, 
+			    ajStrAssignC(&(*hits)->hits[x]->Typeobj, "TRUE");
+			    ajStrAssignC(&(*hits)->hits[x]->Typesbj, "TRUE");
+			    ajStrAssignS(&(*hits)->hits[x]->Group, 
 				      (idxarr[tpos]->hptr)->Group);
 			}
-			else if((ajStrMatchCase((idxarr[tpos]->lptr)->Fold, 
+			else if((ajStrMatchCaseS((idxarr[tpos]->lptr)->Fold, 
 					       (*hits)->Fold)) &&
-				(ajStrMatchCase((idxarr[tpos]->lptr)->Class, 
+				(ajStrMatchCaseS((idxarr[tpos]->lptr)->Class, 
 					   (*hits)->Class)))
 			    /* SCOP fold is identical */
 			{	
-			    ajStrAssC(&(*hits)->hits[x]->Typeobj, "CROSS");
-			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "CROSS");
-			    ajStrAssC(&(*hits)->hits[x]->Group,
+			    ajStrAssignC(&(*hits)->hits[x]->Typeobj, "CROSS");
+			    ajStrAssignC(&(*hits)->hits[x]->Typesbj, "CROSS");
+			    ajStrAssignC(&(*hits)->hits[x]->Group,
 				      "NOT_APPLICABLE");
 			}
 			else
 			    /* SCOP folds are different */
 			{
-			    ajStrAssC(&(*hits)->hits[x]->Typeobj, "FALSE");
-			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "FALSE");
-			    ajStrAssC(&(*hits)->hits[x]->Group,
+			    ajStrAssignC(&(*hits)->hits[x]->Typeobj, "FALSE");
+			    ajStrAssignC(&(*hits)->hits[x]->Typesbj, "FALSE");
+			    ajStrAssignC(&(*hits)->hits[x]->Group,
 				      "NOT_APPLICABLE");
 			}
 		    }
@@ -3933,9 +3933,9 @@ AjBool embHitlistClassify(const AjPHitlist *hits, const AjPList targets,
 		       (!ajStrMatchC((*hits)->hits[x]->Typesbj, "CROSS")) &&
 		       (!ajStrMatchC((*hits)->hits[x]->Typesbj, "FALSE")))
 			{
-			    ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
-			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
-			    ajStrAssC(&(*hits)->hits[x]->Group,
+			    ajStrAssignC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
+			    ajStrAssignC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
+			    ajStrAssignC(&(*hits)->hits[x]->Group,
 				      "NOT_APPLICABLE");
 			}
 		    }
@@ -3947,9 +3947,9 @@ AjBool embHitlistClassify(const AjPHitlist *hits, const AjPList targets,
 	else
 	{
 	    /* Id was NOT found so set classification to UNKNOWN */
-	    ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
-	    ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
-	    ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+	    ajStrAssignC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
+	    ajStrAssignC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
+	    ajStrAssignC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
 	}
     }
     
@@ -4239,7 +4239,7 @@ AjBool embSignatureAlignSeq(const AjPSignature S, const AjPSeq seq,
 
 
     /* INITIALISE VARIABLES */
-    nres   = ajStrLen(P);    /* No. columns in path matrix */
+    nres   = ajStrGetLen(P);    /* No. columns in path matrix */
     nresm1 = nres-1;         /* Index of last column in path matrix */
     dim = nres * S->npos;
 
@@ -4286,8 +4286,8 @@ AjBool embSignatureAlignSeq(const AjPSignature S, const AjPSeq seq,
 
 
     /* COPY SEQUENCE AND CONVERT TO UPPER CASE, OVERWRITE ALIGNMENT STRING */
-    strcpy(p, ajStrStr(P));
-    ajCharToUpper(p);
+    strcpy(p, ajStrGetPtr(P));
+    ajCharFmtUpper(p);
     for(cnt=0;cnt<nres;cnt++)
 	alg[cnt] = '-';
     alg[cnt] = '\0';
@@ -4488,15 +4488,15 @@ AjBool embSignatureAlignSeq(const AjPSignature S, const AjPSeq seq,
     if(!(*hit))
 	*hit = embHitNew();
     
-    ajStrAssC(&(*hit)->Model, "SPARSE");    
-    ajStrAssC(&(*hit)->Alg, alg);
-    ajStrAssS(&(*hit)->Seq, P);
+    ajStrAssignC(&(*hit)->Model, "SPARSE");    
+    ajStrAssignC(&(*hit)->Alg, alg);
+    ajStrAssignS(&(*hit)->Seq, P);
     (*hit)->Start=thisp;
     (*hit)->End=maxp;
-    ajStrAssS(&(*hit)->Acc, ajSeqGetAcc(seq));
-    if(!MAJSTRLEN((*hit)->Acc))
-	ajStrAssS(&(*hit)->Acc, ajSeqGetName(seq));
-    if(!MAJSTRLEN((*hit)->Acc))
+    ajStrAssignS(&(*hit)->Acc, ajSeqGetAccS(seq));
+    if(!MAJSTRGETLEN((*hit)->Acc))
+	ajStrAssignS(&(*hit)->Acc, ajSeqGetNameS(seq));
+    if(!MAJSTRGETLEN((*hit)->Acc))
 	ajWarn("Could not find an accession number or name for a sequence"
 	       " in embSignatureAlignSeq");
     (*hit)->Score=score;
@@ -4553,12 +4553,12 @@ AjBool embSignatureAlignSeqall(const AjPSignature sig, AjPSeqall db,
     /* Initialise Hitlist object with SCOP records from Signature */
     (*hitlist)->Type = sig->Type;
     (*hitlist)->Sunid_Family = sig->Sunid_Family;
-    ajStrAssS(&(*hitlist)->Class, sig->Class);
-    ajStrAssS(&(*hitlist)->Architecture, sig->Architecture);
-    ajStrAssS(&(*hitlist)->Topology, sig->Topology);
-    ajStrAssS(&(*hitlist)->Fold, sig->Fold);
-    ajStrAssS(&(*hitlist)->Superfamily, sig->Superfamily);
-    ajStrAssS(&(*hitlist)->Family, sig->Family);
+    ajStrAssignS(&(*hitlist)->Class, sig->Class);
+    ajStrAssignS(&(*hitlist)->Architecture, sig->Architecture);
+    ajStrAssignS(&(*hitlist)->Topology, sig->Topology);
+    ajStrAssignS(&(*hitlist)->Fold, sig->Fold);
+    ajStrAssignS(&(*hitlist)->Superfamily, sig->Superfamily);
+    ajStrAssignS(&(*hitlist)->Family, sig->Family);
 
         
     /* Search the database */

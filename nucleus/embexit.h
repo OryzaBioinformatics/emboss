@@ -6,7 +6,19 @@ extern "C"
 #ifndef embexit_h
 #define embexit_h
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 void embExit (void);
+void embExitBad (void);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

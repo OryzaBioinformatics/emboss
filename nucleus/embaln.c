@@ -190,7 +190,7 @@ void embAlignPathCalc(const char *a, const char *b,
     {
 	for(i=lena-1;i>-1;--i)
 	{
-	    ajStrDelReuse(&outstr);
+	    ajStrDelStatic(&outstr);
 	    for(j=0;j<lenb;++j)
 		ajFmtPrintAppS(&outstr, "%6.2f ",path[i*lenb+j]);
 	    ajDebug("%S\n", outstr);
@@ -201,7 +201,7 @@ void embAlignPathCalc(const char *a, const char *b,
     AJFREE(oval);
     AJFREE(cnt);
 
-    ajStrDelReuse(&outstr);
+    ajStrDelStatic(&outstr);
 
     return;
 }
@@ -268,7 +268,7 @@ void embAlignPathCalcSW(const char *a, const char *b, ajint lena, ajint lenb,
     for(i=0;i<lena;++i)
     {
 	result = sub[ajSeqCvtK(cvt,a[i])][ajSeqCvtK(cvt,b[0])];
-	path[i*lenb] = (result > 0.) ? result : 0.;
+	path[i*lenb] = (result > 0.) ? result : (float)0.;
 	compass[i*lenb] = 0;
     }
 
@@ -282,7 +282,7 @@ void embAlignPathCalcSW(const char *a, const char *b, ajint lena, ajint lenb,
     for(j=0;j<lenb;++j)
     {
 	result = sub[ajSeqCvtK(cvt,a[0])][ajSeqCvtK(cvt,b[j])];
-	path[j] = (result > 0.) ? result : 0.;
+	path[j] = (result > 0.) ? result : (float)0.;
 	compass[j] = 0;
     }
 
@@ -371,7 +371,7 @@ void embAlignPathCalcSW(const char *a, const char *b, ajint lena, ajint lenb,
     {
 	for(i=lena-1;i>-1;--i)
 	{
-	    ajStrDelReuse(&outstr);
+	    ajStrDelStatic(&outstr);
 	    for(j=0;j<lenb;++j)
 		ajFmtPrintAppS(&outstr, "%6.2f ",path[i*lenb+j]);
 	    ajDebug("%S\n", outstr);
@@ -382,7 +382,7 @@ void embAlignPathCalcSW(const char *a, const char *b, ajint lena, ajint lenb,
     AJFREE(oval);
     AJFREE(cnt);
 
-    ajStrDelReuse(&outstr);
+    ajStrDelStatic(&outstr);
 
     return;
 }
@@ -546,14 +546,14 @@ static void alignPathCalcOld(const char *a, const char *b,
     {
 	for(i=lena-1;i>-1;--i)
 	{
-	    ajStrDelReuse(&outstr);
+	    ajStrDelStatic(&outstr);
 	    for(j=0;j<lenb;++j)
 		ajFmtPrintAppS(&outstr,"%6.2f ",path[i*lenb+j]);
 	    ajDebug("%S\n", outstr);
 	}
     }
 
-    ajStrDelReuse (&outstr);
+    ajStrDelStatic(&outstr);
     return;
 }
 
@@ -612,7 +612,7 @@ float embAlignScoreNWMatrix(const float *path, const AjPSeq a, const AjPSeq b,
     ajDebug("embAlignScoreNWMatrix\n");
 
     errbounds = gapextend;
-    errbounds = 0.01;
+    errbounds = (float) 0.01;
 
     /* Get maximum path axis score and save position */
     pmax = (float) (-1*INT_MAX);
@@ -767,7 +767,7 @@ float embAlignScoreSWMatrix(const float *path, const ajint *compass,
     ajDebug("embAlignScoreSWMatrix\n");
 
     errbounds = gapextend;
-    errbounds = 0.01;
+    errbounds = (float) 0.01;
 
     /* Get maximum path score and save position */
     pmax = (float) (-1*INT_MAX);
@@ -956,7 +956,7 @@ void embAlignWalkSWMatrix(const float *path, const ajint *compass,
     ajDebug("embAlignWalkSWMatrix\n");
 
     errbounds = gapextend;
-    errbounds = 0.01;
+    errbounds = (float) 0.01;
 
     /* Get maximum path score and save position */
     pmax = (float) (-1*INT_MAX);
@@ -972,8 +972,8 @@ void embAlignWalkSWMatrix(const float *path, const ajint *compass,
     p = ajSeqChar(a);
     q = ajSeqChar(b);
 
-    ajStrAssK(m,p[ypos]);
-    ajStrAssK(n,q[xpos]);
+    ajStrAssignK(m,p[ypos]);
+    ajStrAssignK(n,q[xpos]);
 
     while(xpos && ypos)
     {
@@ -1122,10 +1122,10 @@ void embAlignWalkNWMatrix(const float *path, const AjPSeq a, const AjPSeq b,
 
     ajDebug("embAlignWalkNWMatrix\n");
 
-    ajDebug("seqlen a:%d b:%d\n", ajSeqLen(a), ajSeqLen(b));
+    ajDebug("seqlen a:%d b:%d\n", ajSeqGetLen(a), ajSeqGetLen(b));
 
     errbounds=gapextend;
-    errbounds=0.01;
+    errbounds = (float) 0.01;
 
     /* Get maximum path axis score and save position */
     pmax = (float) (-1*INT_MAX);
@@ -1311,57 +1311,57 @@ void embAlignPrintGlobal(AjPFile outf, const char *a, const char *b,
     {
 	for(i=0;i<start1;++i)
 	{
-	    ajStrAppK(&fa,a[i]);
-	    if(mark) ajStrAppC(&fm," ");
+	    ajStrAppendK(&fa,a[i]);
+	    if(mark) ajStrAppendC(&fm," ");
 	}
 	nc=start1-start2;
 	for(i=0;i<nc;++i)
-	    ajStrAppC(&fb," ");
+	    ajStrAppendC(&fb," ");
 	for(++nc;i<start1;++i)
-	    ajStrAppK(&fb,b[i-nc]);
+	    ajStrAppendK(&fb,b[i-nc]);
     }
     else if(start2>start1)
     {
 	for(i=0;i<start2;++i)
 	{
-	    ajStrAppK(&fb,b[i]);
-	    if(mark) ajStrAppC(&fm," ");
+	    ajStrAppendK(&fb,b[i]);
+	    if(mark) ajStrAppendC(&fm," ");
 	}
 	nc=start2-start1;
 	for(i=0;i<nc;++i)
-	    ajStrAppC(&fa," ");
+	    ajStrAppendC(&fa," ");
 	for(++nc;i<start2;++i)
-	    ajStrAppK(&fa,a[i-nc]);
+	    ajStrAppendK(&fa,a[i-nc]);
     }
 
-    len = ajStrLen(fa);
+    len = ajStrGetLen(fa);
 
     /* Now deal with the alignment overlap */
-    p = ajStrStr(m);
-    q = ajStrStr(n);
-    olen = strlen(p);
+    p = ajStrGetPtr(m);
+    q = ajStrGetPtr(n);
+    olen = (ajint) strlen(p);
     for(i=0;i<olen;++i)
     {
-	ajStrAppK(&fa,p[i]);
-	ajStrAppK(&fb,q[i]);
+	ajStrAppendK(&fa,p[i]);
+	ajStrAppendK(&fb,q[i]);
 	if(mark)
 	{
 	    if(p[i]=='.' || q[i]=='.')
 	    {
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
 		continue;
 	    }
 	    match = sub[ajSeqCvtK(cvt,p[i])][ajSeqCvtK(cvt,q[i])];
 	    if(p[i]==q[i])
 	    {
-		ajStrAppC(&fm,"|");
+		ajStrAppendC(&fm,"|");
 		continue;
 	    }
 
 	    if(match>0.0)
-		ajStrAppC(&fm,":");
+		ajStrAppendC(&fm,":");
 	    else
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
 	}
 
     }
@@ -1376,56 +1376,56 @@ void embAlignPrintGlobal(AjPFile outf, const char *a, const char *b,
     }
 
 
-    alen = strlen(&a[apos]);
-    blen = strlen(&b[bpos]);
+    alen = (ajint) strlen(&a[apos]);
+    blen = (ajint) strlen(&b[bpos]);
 
     if(alen>blen)
     {
-	ajStrAppC(&fa,&a[apos]);
+	ajStrAppendC(&fa,&a[apos]);
 	for(i=0;i<blen;++i)
 	{
-	    ajStrAppK(&fb,b[bpos+i]);
+	    ajStrAppendK(&fb,b[bpos+i]);
 	    if(mark)
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
 	}
 	nc=alen-blen;
 
 	for(i=0;i<nc;++i)
 	{
-	    ajStrAppC(&fb," ");
+	    ajStrAppendC(&fb," ");
 	    if(mark)
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
 	}
     }
     else if(blen>alen)
     {
-	ajStrAppC(&fb,&b[bpos]);
+	ajStrAppendC(&fb,&b[bpos]);
 	for(i=0;i<alen;++i)
 	{
-	    ajStrAppK(&fa,a[apos+i]);
+	    ajStrAppendK(&fa,a[apos+i]);
 	    if(mark)
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
 	}
 	nc=blen-alen;
 	for(i=0;i<nc;++i)
 	{
-	    ajStrAppC(&fa," ");
+	    ajStrAppendC(&fa," ");
 	    if(mark)
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
 	}
     }
     else
     {
-	ajStrAppC(&fa,&a[apos]);
-	ajStrAppC(&fb,&b[bpos]);
+	ajStrAppendC(&fa,&a[apos]);
+	ajStrAppendC(&fb,&b[bpos]);
 	if(mark)
 	    for(i=0;i<alen;++i)
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
     }
 
     /* Get start residues */
-    p = ajStrStr(fa);
-    q = ajStrStr(fb);
+    p = ajStrGetPtr(fa);
+    q = ajStrGetPtr(fb);
     for(i=0,acnt=start1,bcnt=start2;i<len;++i)
     {
 	if(p[i]!=' ')
@@ -1436,10 +1436,10 @@ void embAlignPrintGlobal(AjPFile outf, const char *a, const char *b,
     acnt += begina;
     bcnt += beginb;
 
-    len = ajStrLen(fa);
+    len = ajStrGetLen(fa);
     pos = 0;
     if(mark)
-	r = ajStrStr(fm);
+	r = ajStrGetPtr(fm);
 
 
     /* Add header stuff here */
@@ -1450,10 +1450,10 @@ void embAlignPrintGlobal(AjPFile outf, const char *a, const char *b,
     {
 	if(pos+45 < len)
 	{
-	    ajStrAssSubC(&ap,p,pos,pos+45-1);
-	    ajStrAssSubC(&bp,q,pos,pos+45-1);
+	    ajStrAssignSubC(&ap,p,pos,pos+45-1);
+	    ajStrAssignSubC(&bp,q,pos,pos+45-1);
 	    if(mark)
-		ajStrAssSubC(&mp,r,pos,pos+45-1);
+		ajStrAssignSubC(&mp,r,pos,pos+45-1);
 	    for(i=0,aend=acnt,bend=bcnt;i<45;++i)
 	    {
 		if(p[pos+i]!=' ' && p[pos+i]!='.')
@@ -1495,10 +1495,10 @@ void embAlignPrintGlobal(AjPFile outf, const char *a, const char *b,
 	    continue;
 	}
 
-	ajStrAssC(&ap,&p[pos]);
-	ajStrAssC(&bp,&q[pos]);
+	ajStrAssignC(&ap,&p[pos]);
+	ajStrAssignC(&bp,&q[pos]);
 	if(mark)
-	    ajStrAssC(&mp,&r[pos]);
+	    ajStrAssignC(&mp,&r[pos]);
 	for(i=0,aend=acnt,bend=bcnt;i<45 && p[pos+i];++i)
 	{
 	    if(p[pos+i]!=' ' && p[pos+i]!='.')
@@ -1612,9 +1612,9 @@ void embAlignPrintLocal(AjPFile outf, const char *a, const char *b,
 
 
     /* Now deal with the alignment overlap */
-    p    = ajStrStr(m);
-    q    = ajStrStr(n);
-    olen = strlen(p);
+    p    = ajStrGetPtr(m);
+    q    = ajStrGetPtr(n);
+    olen = (ajint) strlen(p);
     fa   = m;
     fb   = n;
 
@@ -1624,32 +1624,32 @@ void embAlignPrintLocal(AjPFile outf, const char *a, const char *b,
 	{
 	    if(p[i]=='.' || q[i]=='.')
 	    {
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
 		continue;
 	    }
 	    match = sub[ajSeqCvtK(cvt,p[i])][ajSeqCvtK(cvt,q[i])];
 	    if(p[i]==q[i])
 	    {
-		ajStrAppC(&fm,"|");
+		ajStrAppendC(&fm,"|");
 		continue;
 	    }
 
 	    if(match>0.0)
-		ajStrAppC(&fm,":");
+		ajStrAppendC(&fm,":");
 	    else
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
 	}
     }
 
     /* Get start residues */
-    p    = ajStrStr(fa);
-    q    = ajStrStr(fb);
+    p    = ajStrGetPtr(fa);
+    q    = ajStrGetPtr(fb);
     acnt = begina+start1;
     bcnt = beginb+start2;
 
-    len = ajStrLen(fa);
+    len = ajStrGetLen(fa);
     pos = 0;
-    if(mark) r=ajStrStr(fm);
+    if(mark) r=ajStrGetPtr(fm);
 
 
     /* Add header stuff here */
@@ -1660,10 +1660,10 @@ void embAlignPrintLocal(AjPFile outf, const char *a, const char *b,
     {
 	if(pos+45 < len)
 	{
-	    ajStrAssSubC(&ap,p,pos,pos+45-1);
-	    ajStrAssSubC(&bp,q,pos,pos+45-1);
+	    ajStrAssignSubC(&ap,p,pos,pos+45-1);
+	    ajStrAssignSubC(&bp,q,pos,pos+45-1);
 	    if(mark)
-		ajStrAssSubC(&mp,r,pos,pos+45-1);
+		ajStrAssignSubC(&mp,r,pos,pos+45-1);
 	    for(i=0,aend=acnt,bend=bcnt;i<45;++i)
 	    {
 		if(p[pos+i]!=' ' && p[pos+i]!='.')
@@ -1705,10 +1705,10 @@ void embAlignPrintLocal(AjPFile outf, const char *a, const char *b,
 	    continue;
 	}
 
-	ajStrAssC(&ap,&p[pos]);
-	ajStrAssC(&bp,&q[pos]);
+	ajStrAssignC(&ap,&p[pos]);
+	ajStrAssignC(&bp,&q[pos]);
 	if(mark)
-	    ajStrAssC(&mp,&r[pos]);
+	    ajStrAssignC(&mp,&r[pos]);
 	for(i=0,aend=acnt,bend=bcnt;i<45 && p[pos+i];++i)
 	{
 	    if(p[pos+i]!=' ' && p[pos+i]!='.')
@@ -1857,12 +1857,12 @@ void embAlignPathCalcFast(const char *a, const char *b, ajint lena, ajint lenb,
     if(jlenb < 0)
 	jlenb = lenb-1;
 
-    ajDebug("embAlignPathCalcFast\n");
+    /* ajDebug("embAlignPathCalcFast\n"); */
 
-    ajDebug("lena: %d lenb: %d width: %d pathwidth: %d\n", lena, lenb,
-	    width, pathwidth);
-    ajDebug("a: '%10.10s .. %10.10s' %d\n", a, &a[jlena], lena);
-    ajDebug("b: '%10.10s .. %10.10s' %d\n", b, &b[jlenb], lenb);
+    /* ajDebug("lena: %d lenb: %d width: %d pathwidth: %d\n", lena, lenb,
+	    width, pathwidth); */
+    /* ajDebug("a: '%10.10s .. %10.10s' %d\n", a, &a[jlena], lena); */
+    /* ajDebug("b: '%10.10s .. %10.10s' %d\n", b, &b[jlenb], lenb); */
 
     /* Create stores for the maximum values in a row or column */
 
@@ -1874,8 +1874,8 @@ void embAlignPathCalcFast(const char *a, const char *b, ajint lena, ajint lenb,
     {
 	path[i*width] = sub[ajSeqCvtK(cvt,a[i])][ajSeqCvtK(cvt,b[0])];
 	compass[i*width] = 0;
-	ajDebug("CalcFast inita [%d] path: %.2f compass: %d\n",
-		i*width, path[i*width], compass[i*width]);
+	/* ajDebug("CalcFast inita [%d] path: %.2f compass: %d\n",
+		i*width, path[i*width], compass[i*width]); */
     }
 
     for(i=0;i<lena;++i)
@@ -1885,8 +1885,8 @@ void embAlignPathCalcFast(const char *a, const char *b, ajint lena, ajint lenb,
     {
 	path[j] = sub[ajSeqCvtK(cvt,a[0])][ajSeqCvtK(cvt,b[j])];
 	compass[j] = 0;
-	ajDebug("CalcFast initb [%d] path: %.2f compass: %d\n",
-		j, path[j], compass[j]);
+	/* ajDebug("CalcFast initb [%d] path: %.2f compass: %d\n",
+		j, path[j], compass[j]); */
     }
 
     for(j=width;j<lenb;++j)
@@ -1915,8 +1915,9 @@ void embAlignPathCalcFast(const char *a, const char *b, ajint lena, ajint lenb,
 	    /* Set compass to diagonal value 0 */
 	    compass[i*width+xpos] = 0;
 	    path[i*width+xpos] = mscore;
-	    ajDebug("CalcFast initc [%d] path: %.2f compass: %d\n",
-		    i*width+xpos, path[i*width+xpos], compass[i*width+xpos]);
+	    /* ajDebug("CalcFast initc [%d] path: %.2f compass: %d\n",
+		    i*width+xpos, path[i*width+xpos],
+		    compass[i*width+xpos]); */
 
 	    /* update the maximum against the previous point */
 	    if(xpos > 0)
@@ -1949,9 +1950,9 @@ void embAlignPathCalcFast(const char *a, const char *b, ajint lena, ajint lenb,
 		mscore = maxa[i-1]+match;
 		path[i*width+xpos] = mscore;
 		compass[i*width+xpos] = 1; /* Score comes from left */
-		ajDebug("CalcFast initd [%d] path: %.2f compass: %d\n",
+		/* ajDebug("CalcFast initd [%d] path: %.2f compass: %d\n",
 			i*width+xpos, path[i*width+xpos],
-			compass[i*width+xpos]);
+			compass[i*width+xpos]); */
 	    }
 
 
@@ -1961,9 +1962,9 @@ void embAlignPathCalcFast(const char *a, const char *b, ajint lena, ajint lenb,
 		mscore = maxb[i+xpos-1]+match;
 		path[i*width+xpos] = mscore;
 		compass[i*width+xpos] = 2; /* Score comes from bottom */
-		ajDebug("CalcFast inite [%d] path: %.2f compass: %d\n",
+		/* ajDebug("CalcFast inite [%d] path: %.2f compass: %d\n",
 			i*width+xpos, path[i*width+xpos],
-			compass[i*width+xpos]);
+			compass[i*width+xpos]); */
 	    }
 
 	    xpos++;
@@ -1977,20 +1978,20 @@ void embAlignPathCalcFast(const char *a, const char *b, ajint lena, ajint lenb,
     {
 	for(i=0;i<lena;++i)
 	{
-	    ajStrDelReuse(&outstr);
+	    ajStrDelStatic(&outstr);
 	    for(j=0;j<width;++j)
 	    {
 		ajFmtPrintAppS(&outstr,"%6.2f ",path[i*width+j]);
 		if(path[i*width+j] > max)
 		    max = path[i*width+j];
 	    }
-	    ajDebug("%S\n", outstr);
+	    /* ajDebug("%S\n", outstr); */
 	}
     }
 
     AJFREE(maxa);
     AJFREE(maxb);
-    ajStrDelReuse(&outstr);
+    ajStrDelStatic(&outstr);
 
     return;
 }
@@ -2059,8 +2060,8 @@ float embAlignScoreSWMatrixFast(const float *path, const ajint *compass,
 
 
     /* ajDebug extra */
-    ajDebug("SeqA '%s' %d %d\n", ajSeqName(a), ajSeqLen(a), lena);
-    ajDebug("SeqB '%s' %d %d\n", ajSeqName(b), ajSeqLen(b), lenb);
+    ajDebug("SeqA '%s' %d %d\n", ajSeqGetNameS(a), ajSeqGetLen(a), lena);
+    ajDebug("SeqB '%s' %d %d\n", ajSeqGetNameS(b), ajSeqGetLen(b), lenb);
     ajDebug("start1: %d start2: %d width; %d\n", *start1, *start2, width);
 
     pmax = (float) (-1*INT_MAX);
@@ -2284,8 +2285,8 @@ void embAlignWalkSWMatrixFast(const float *path, const ajint *compass,
 
     xpos2 = xpos+ypos;
 
-    ajStrAssK(m,p[ypos]);
-    ajStrAssK(n,q[xpos2]);
+    ajStrAssignK(m,p[ypos]);
+    ajStrAssignK(n,q[xpos2]);
 
 
     while(xpos>=0 && ypos && path[ypos*width+xpos] >0.)
@@ -2300,8 +2301,8 @@ void embAlignWalkSWMatrixFast(const float *path, const ajint *compass,
 
 	    if(path[(ypos-1)*width+xpos]<=0.0)
 		break;
-	    ajStrAppK(m,p[--ypos]);
-	    ajStrAppK(n,q[--xpos2]);
+	    ajStrAppendK(m,p[--ypos]);
+	    ajStrAppendK(n,q[--xpos2]);
 	    continue;
 	}
 	else if(compass[ypos*width+xpos]==1) /* Left, gap(s) in vertical */
@@ -2329,11 +2330,11 @@ void embAlignWalkSWMatrixFast(const float *path, const ajint *compass,
 
 	    for(ic=-1;ic<gapcnt;++ic)
 	    {
-		ajStrAppK(m,'.');
-		ajStrAppK(n,q[t--]);
+		ajStrAppendK(m,'.');
+		ajStrAppendK(n,q[t--]);
 	    }
-	    ajStrAppK(n,q[t]);
-	    ajStrAppK(m,p[ypos]);
+	    ajStrAppendK(n,q[t]);
+	    ajStrAppendK(m,p[ypos]);
 
 	    xpos2 = t;			/* change xpos2 */
 	    xpos  = ix;
@@ -2365,11 +2366,11 @@ void embAlignWalkSWMatrixFast(const float *path, const ajint *compass,
 		break;
 	    for(ic=-1;ic<gapcnt;++ic)
 	    {
-		ajStrAppK(n,'.');
-		ajStrAppK(m,p[t--]);
+		ajStrAppendK(n,'.');
+		ajStrAppendK(m,p[t--]);
 	    }
-	    ajStrAppK(m,p[t]);
-	    ajStrAppK(n,q[--xpos2]);
+	    ajStrAppendK(m,p[t]);
+	    ajStrAppendK(n,q[--xpos2]);
 	    ypos = iy;
 	    continue;
 	}
@@ -2377,8 +2378,8 @@ void embAlignWalkSWMatrixFast(const float *path, const ajint *compass,
 	    ajFatal("Walk Error in SW");
     }
 
-    ajStrRev(m);
-    ajStrRev(n);
+    ajStrReverse(m);
+    ajStrReverse(n);
 
     *start1 += ypos;
     *start2 += xpos2;
@@ -2520,7 +2521,7 @@ void embAlignProfilePathCalc(const char *a, ajint proflen, ajint seqlen,
     {
 	for(row=proflen-1;row>-1;--row)
 	{
-	    ajStrDelReuse(&outstr);
+	    ajStrDelStatic(&outstr);
 	    for(column=0;column<seqlen;++column)
 		ajFmtPrintAppS(&outstr,"%6.2f ",
 			       path[row*seqlen+column]);
@@ -2529,7 +2530,7 @@ void embAlignProfilePathCalc(const char *a, ajint proflen, ajint seqlen,
     }
 
 
-    ajStrDelReuse(&outstr);
+    ajStrDelStatic(&outstr);
     return;
 }
 
@@ -2590,9 +2591,11 @@ void embAlignWalkProfileMatrix(const float *path, const ajint *compass,
     const char *p;
     const char *q;
 
-    float errbounds = 0.01;
+    float errbounds;
 
     ajDebug("embAlignWalkProfileMatrix\n");
+
+    errbounds = (float) 0.01;
 
     /* Get maximum path score and save position */
     pathmax = -(float) INT_MAX;
@@ -2609,11 +2612,11 @@ void embAlignWalkProfileMatrix(const float *path, const ajint *compass,
     column = xpos;
     row = ypos;
 
-    p = ajStrStr(cons);
-    q = ajStrStr(seq);
+    p = ajStrGetPtr(cons);
+    q = ajStrGetPtr(seq);
 
-    ajStrAssK(m,p[row]);
-    ajStrAssK(n,q[column]);
+    ajStrAssignK(m,p[row]);
+    ajStrAssignK(n,q[column]);
 
     while(row && column)
     {
@@ -2769,9 +2772,9 @@ void embAlignPrintProfile(AjPFile outf, const char *a, const char *b,
 
 
     /* Now deal with the alignment overlap */
-    p    = ajStrStr(m);
-    q    = ajStrStr(n);
-    olen = strlen(p);
+    p    = ajStrGetPtr(m);
+    q    = ajStrGetPtr(n);
+    olen = (ajint) strlen(p);
     fa   = m;
     fb   = n;
 
@@ -2787,34 +2790,34 @@ void embAlignPrintProfile(AjPFile outf, const char *a, const char *b,
 		++cpos;
 	    if(p[i]=='.' || q[i]=='.')
 	    {
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
 		continue;
 	    }
 	    match=fmatrix[cpos][ajAZToInt(q[i])];
 
 	    if(p[i]==q[i])
 	    {
-		ajStrAppC(&fm,"|");
+		ajStrAppendC(&fm,"|");
 		continue;
 	    }
 
 	    if(match>0.0)
-		ajStrAppC(&fm,":");
+		ajStrAppendC(&fm,":");
 	    else
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
 	}
     }
 
     /* Get start residues */
-    p    = ajStrStr(fa);
-    q    = ajStrStr(fb);
+    p    = ajStrGetPtr(fa);
+    q    = ajStrGetPtr(fb);
     acnt = begina+start1;
     bcnt = beginb+start2;
 
-    len = ajStrLen(fa);
+    len = ajStrGetLen(fa);
     pos = 0;
     if(mark)
-	r = ajStrStr(fm);
+	r = ajStrGetPtr(fm);
 
 
     /* Add header stuff here */
@@ -2825,10 +2828,10 @@ void embAlignPrintProfile(AjPFile outf, const char *a, const char *b,
     {
 	if(pos+45 < len)
 	{
-	    ajStrAssSubC(&ap,p,pos,pos+45-1);
-	    ajStrAssSubC(&bp,q,pos,pos+45-1);
+	    ajStrAssignSubC(&ap,p,pos,pos+45-1);
+	    ajStrAssignSubC(&bp,q,pos,pos+45-1);
 	    if(mark)
-		ajStrAssSubC(&mp,r,pos,pos+45-1);
+		ajStrAssignSubC(&mp,r,pos,pos+45-1);
 	    for(i=0,aend=acnt,bend=bcnt;i<45;++i)
 	    {
 		if(p[pos+i]!=' ' && p[pos+i]!='.')
@@ -2871,10 +2874,10 @@ void embAlignPrintProfile(AjPFile outf, const char *a, const char *b,
 	    continue;
 	}
 
-	ajStrAssC(&ap,&p[pos]);
-	ajStrAssC(&bp,&q[pos]);
+	ajStrAssignC(&ap,&p[pos]);
+	ajStrAssignC(&bp,&q[pos]);
 	if(mark)
-	    ajStrAssC(&mp,&r[pos]);
+	    ajStrAssignC(&mp,&r[pos]);
 	for(i=0,aend=acnt,bend=bcnt;i<45 && p[pos+i];++i)
 	{
 	    if(p[pos+i]!=' ' && p[pos+i]!='.')
@@ -2961,14 +2964,14 @@ void embAlignCalcSimilarity(const AjPStr m, const AjPStr n,
     AjPStr fm = NULL;
     AjPStr fn = NULL;
 
-    ajStrAssS(&fm, m);
-    ajStrAssS(&fn, n);
-    ajStrToUpper(&fm);
-    ajStrToUpper(&fn);
+    ajStrAssignS(&fm, m);
+    ajStrAssignS(&fn, n);
+    ajStrFmtUpper(&fm);
+    ajStrFmtUpper(&fn);
 
-    p = ajStrStr(fm);
-    q = ajStrStr(fn);
-    olen = strlen(p);
+    p = ajStrGetPtr(fm);
+    q = ajStrGetPtr(fn);
+    olen = (ajint) strlen(p);
 
 
     *id = *sim = 0.;
@@ -2997,10 +3000,10 @@ void embAlignCalcSimilarity(const AjPStr m, const AjPStr n,
 
     max = (lenm>lenn) ? lenm : lenn;
     
-    *idx  = *id / (float)max * 100.;
-    *simx = *sim / (float)max * 100.;
-    *id   *= (100. / (float)(olen-gaps));
-    *sim  *= (100. / (float)(olen-gaps));
+    *idx  = *id / (float)max * (float)100.;
+    *simx = *sim / (float)max * (float)100.;
+    *id   *= ((float)100. / (float)(olen-gaps));
+    *sim  *= ((float)100. / (float)(olen-gaps));
 
 
     ajStrDel(&fm);
@@ -3061,9 +3064,11 @@ float embAlignScoreProfileMatrix(const float *path, const ajint *compass,
 
     const char *q;
 
-    float errbounds=0.01;
+    float errbounds;
 
     ajDebug("embAlignWalkProfileMatrix\n");
+
+    errbounds = (float) 0.01;
 
     /* Get maximum path score and save position */
     pathmax = -(float) INT_MAX;
@@ -3080,7 +3085,7 @@ float embAlignScoreProfileMatrix(const float *path, const ajint *compass,
     column = xpos;
     row    = ypos;
 
-    q = ajStrStr(seq);
+    q = ajStrGetPtr(seq);
 
     wscore = fmatrix[row][ajAZToInt(q[column])];
 
@@ -3218,7 +3223,7 @@ void embAlignReportGlobal(AjPAlign align,
     const char* a;
     const char* b;
 
-    maxlen = AJMAX(ajStrLen(m), ajStrLen(n));
+    maxlen = AJMAX(ajStrGetLen(m), ajStrGetLen(n));
     ajDebug("embAlignReportGlobal %d %d\n", start1, start2);
     ajDebug("  start1:%d start2:%d offset1:%d offset2:%d\n",
 	    start1, start2, offset1, offset2);
@@ -3228,52 +3233,52 @@ void embAlignReportGlobal(AjPAlign align,
 
     /* generate the full aligned sequences */
 
-    ajStrModL(&fa, maxlen);
-    ajStrModL(&fb, maxlen);
+    ajStrSetRes(&fa, maxlen);
+    ajStrSetRes(&fb, maxlen);
 
     /* pad the start of either sequence */
 
     if(start1>start2)
     {
 	for(i=0;i<start1;++i)
-	    ajStrAppK(&fa,a[i]);
+	    ajStrAppendK(&fa,a[i]);
 
 	nc = start1-start2;
 	for(i=0;i<nc;++i)
-	    ajStrAppK(&fb,' ');
+	    ajStrAppendK(&fb,' ');
 
 	ajDebug("start1>start2 start a: seqa 1..%d b: %d spaces seqb 1..%d\n",
 		start1, nc, start1-nc);
 	for(++nc;i<start1;++i)
-	    ajStrAppK(&fb,b[i-nc]);
+	    ajStrAppendK(&fb,b[i-nc]);
     }
     else if(start2>start1)
     {
 	for(i=0;i<start2;++i)
-	    ajStrAppK(&fb,b[i]);
+	    ajStrAppendK(&fb,b[i]);
 
 	nc = start2-start1;
 	for(i=0;i<nc;++i)
-	    ajStrAppK(&fa,' ');
+	    ajStrAppendK(&fa,' ');
 
 	ajDebug("start1<start2 start a: %d spaces seqb 1..%d b: seqa 1..%d \n",
 		 nc, start1-nc, start1);
 	for(++nc;i<start2;++i)
-	    ajStrAppK(&fa,a[i-nc]);
+	    ajStrAppendK(&fa,a[i-nc]);
     }
 
-    apos = start1 + ajStrLen(m) - ajSeqGapCountS(m);
-    bpos = start2 + ajStrLen(n) - ajSeqGapCountS(n);
+    apos = start1 + ajStrGetLen(m) - ajSeqGapCountS(m);
+    bpos = start2 + ajStrGetLen(n) - ajSeqGapCountS(n);
 
-    ajStrApp(&fa, m);
-    ajStrApp(&fb, n);
+    ajStrAppendS(&fa, m);
+    ajStrAppendS(&fb, n);
 
     ajDebug("append alignment len (ungapped) a: %d (%d) b: %d (%d)\n",
-	    ajStrLen(m), ajStrLen(m) - ajSeqGapCountS(m),
-	    ajStrLen(n), ajStrLen(n) - ajSeqGapCountS(n));
+	    ajStrGetLen(m), ajStrGetLen(m) - ajSeqGapCountS(m),
+	    ajStrGetLen(n), ajStrGetLen(n) - ajSeqGapCountS(n));
 
-    alen=ajSeqLen(seqa) - apos;
-    blen=ajSeqLen(seqb) - bpos;
+    alen=ajSeqGetLen(seqa) - apos;
+    blen=ajSeqGetLen(seqb) - bpos;
 
     ajDebug("alen: %d blen: %d apos: %d bpos: %d\n", alen, blen, apos, bpos);
 
@@ -3281,45 +3286,45 @@ void embAlignReportGlobal(AjPAlign align,
 
     if(alen>blen)
     {
-	ajStrAppC(&fa,&a[apos]);
+	ajStrAppendC(&fa,&a[apos]);
 	for(i=0;i<blen;++i)
-	    ajStrAppK(&fb,b[bpos+i]);
+	    ajStrAppendK(&fb,b[bpos+i]);
 
 	nc = alen-blen;
 	for(i=0;i<nc;++i)
-	    ajStrAppC(&fb," ");
+	    ajStrAppendC(&fb," ");
     }
     else if(blen>alen)
     {
-	ajStrAppC(&fb,&b[bpos]);
+	ajStrAppendC(&fb,&b[bpos]);
 	for(i=0;i<alen;++i)
-	    ajStrAppK(&fa,a[apos+i]);
+	    ajStrAppendK(&fa,a[apos+i]);
 
 	nc = blen-alen;
 	for(i=0;i<nc;++i)
-	    ajStrAppC(&fa," ");
+	    ajStrAppendC(&fa," ");
     }
     else				/* same length, just copy */
     {
-	ajStrAppC(&fa,&a[apos]);
-	ajStrAppC(&fb,&b[bpos]);
+	ajStrAppendC(&fa,&a[apos]);
+	ajStrAppendC(&fb,&b[bpos]);
     }
 
-    ajDebug("  res1: %5d '%S' \n", ajStrLen(fa), fa);
-    ajDebug("  res2: %5d '%S' \n", ajStrLen(fb), fb);
-    maxlen = AJMAX(ajSeqLen(seqa), ajSeqLen(seqb));
+    ajDebug("  res1: %5d '%S' \n", ajStrGetLen(fa), fa);
+    ajDebug("  res2: %5d '%S' \n", ajStrGetLen(fb), fb);
+    maxlen = AJMAX(ajSeqGetLen(seqa), ajSeqGetLen(seqb));
 
-    res1   = ajSeqNewRangeCI(ajStrStr(fa), ajStrLen(fa),
-			     ajSeqOffset(seqa), ajSeqOffend(seqa),
-			     ajSeqRev(seqa));
-    ajSeqAssName(res1, ajSeqGetName(seqa));
-    ajSeqAssUsa(res1, ajSeqGetUsa(seqa));
+    res1   = ajSeqNewRangeCI(ajStrGetPtr(fa), ajStrGetLen(fa),
+			     ajSeqGetOffset(seqa), ajSeqGetOffend(seqa),
+			     ajSeqIsReversed(seqa));
+    ajSeqAssignNameS(res1, ajSeqGetNameS(seqa));
+    ajSeqAssignUsaS(res1, ajSeqGetUsaS(seqa));
 
-    res2   = ajSeqNewRangeCI(ajStrStr(fb), ajStrLen(fb),
-			     ajSeqOffset(seqb), ajSeqOffend(seqb),
-			     ajSeqRev(seqb));
-    ajSeqAssName(res2, ajSeqGetName(seqb));
-    ajSeqAssUsa(res2, ajSeqGetUsa(seqb));
+    res2   = ajSeqNewRangeCI(ajStrGetPtr(fb), ajStrGetLen(fb),
+			     ajSeqGetOffset(seqb), ajSeqGetOffend(seqb),
+			     ajSeqIsReversed(seqb));
+    ajSeqAssignNameS(res2, ajSeqGetNameS(seqb));
+    ajSeqAssignUsaS(res2, ajSeqGetUsaS(seqb));
 
     ajSeqGapStandard(res1, '-');
     ajSeqGapStandard(res2, '-');
@@ -3330,18 +3335,18 @@ void embAlignReportGlobal(AjPAlign align,
     ajAlignSetScoreR(align, score);
     ajAlignSetMatrixFloat(align, matrix);
 /*
-    end1 = start1 - ajStrCountK(m, '-') + ajStrLen(m);
-    end2 = start2 - ajStrCountK(n, '-') + ajStrLen(n);
+    end1 = start1 - ajStrCalcCountK(m, '-') + ajStrGetLen(m);
+    end2 = start2 - ajStrCalcCountK(n, '-') + ajStrGetLen(n);
 */
     /* ajAlignSetRange(align, start1+1, end1+1, start2+1, end2);*/
     /*
     ajAlignSetRange(align,
 		    start1, end1-1,
-                    ajSeqOffset(seqa)+ajSeqLen(res1)+ajSeqOffend(seqa)
+                    ajSeqGetOffset(seqa)+ajSeqGetLen(res1)+ajSeqGetOffend(seqa)
                            -ajSeqGapCount(res1),
                     offset1,
 		    start2, end2-1,
-                    ajSeqOffset(seqb)+ajSeqLen(res1)+ajSeqOffend(seqb)
+                    ajSeqGetOffset(seqb)+ajSeqGetLen(res1)+ajSeqGetOffend(seqb)
                            -ajSeqGapCount(res1),
                     offset2);
 */
@@ -3388,36 +3393,52 @@ void embAlignReportLocal(AjPAlign align,
 {
     AjPSeq res1 = NULL;
     AjPSeq res2 = NULL;
-/*
-    ajint end1;
-    ajint end2;
-*/
+    ajint offend1;
+    ajint offend2;
 
-    ajDebug("embAlignReportLocal %d %d\n", start1, start2);
+    offend1 = ajSeqGetLen(seqa) - ajStrGetLen(m) - start1
+	+ ajStrCalcCountK(m, '.')
+	+ ajStrCalcCountK(m, '-')
+	    + ajStrCalcCountK(m, ' ');
+    offend2 = ajSeqGetLen(seqb) - ajStrGetLen(n) - start2
+	+ ajStrCalcCountK(n, '.')
+	+ ajStrCalcCountK(n, '-')
+	    + ajStrCalcCountK(n, ' ');
+    ajDebug("embAlignReportLocal start: %d %d offset: %d %d offend: %d %d "
+	    "len:%d %d seqlen: %d %d Offset:%d %d Offend:%d %d\n",
+	    start1, start2,
+	    offset1, offset2,
+	    offend1, offend2,
+	    ajStrGetLen(m), ajStrGetLen(n),
+	    ajSeqGetLen(seqa), ajSeqGetLen(seqb),
+	    ajSeqGetOffset(seqa), ajSeqGetOffset(seqb),
+	    ajSeqGetOffend(seqa), ajSeqGetOffend(seqb));
 /*
     res1   = ajSeqNew();
     res2   = ajSeqNew();
 
-    ajSeqAssName(res1, ajSeqGetName(seqa));
-    ajSeqAssName(res2, ajSeqGetName(seqb));
-    ajSeqAssUsa(res1, ajSeqGetUsa(seqa));
-    ajSeqAssUsa(res2, ajSeqGetUsa(seqb));
-    ajSeqAssSeq(res1, m);
-    ajSeqAssSeq(res2, n);
+    ajSeqAssignNameS(res1, ajSeqGetNameS(seqa));
+    ajSeqAssignNameS(res2, ajSeqGetNameS(seqb));
+    ajSeqAssignUsaS(res1, ajSeqGetUsaS(seqa));
+    ajSeqAssignUsaS(res2, ajSeqGetUsaS(seqb));
+    ajSeqAssignSeqS(res1, m);
+    ajSeqAssignSeqS(res2, n);
 
     ajAlignDefineSS(align, res1, res2);
 */
-    res1   = ajSeqNewRangeCI(ajStrStr(m), ajStrLen(m),
-			     start1+ajSeqOffset(seqa), ajSeqOffend(seqa),
-			     ajSeqRev(seqa));
-    ajSeqAssName(res1, ajSeqGetName(seqa));
-    ajSeqAssUsa(res1, ajSeqGetUsa(seqa));
+    res1   = ajSeqNewRangeCI(ajStrGetPtr(m), ajStrGetLen(m),
+			     start1+ajSeqGetOffset(seqa),
+			     offend1+ajSeqGetOffend(seqa),
+			     ajSeqIsReversed(seqa));
+    ajSeqAssignNameS(res1, ajSeqGetNameS(seqa));
+    ajSeqAssignUsaS(res1, ajSeqGetUsaS(seqa));
 
-    res2   = ajSeqNewRangeCI(ajStrStr(n), ajStrLen(n),
-			     start2+ajSeqOffset(seqb), ajSeqOffend(seqb),
-			     ajSeqRev(seqb));
-    ajSeqAssName(res2, ajSeqGetName(seqb));
-    ajSeqAssUsa(res2, ajSeqGetUsa(seqb));
+    res2   = ajSeqNewRangeCI(ajStrGetPtr(n), ajStrGetLen(n),
+			     start2+ajSeqGetOffset(seqb),
+			     offend2+ajSeqGetOffend(seqb),
+			     ajSeqIsReversed(seqb));
+    ajSeqAssignNameS(res2, ajSeqGetNameS(seqb));
+    ajSeqAssignUsaS(res2, ajSeqGetUsaS(seqb));
 
     ajSeqGapStandard(res1, '-');
     ajSeqGapStandard(res2, '-');
@@ -3428,14 +3449,14 @@ void embAlignReportLocal(AjPAlign align,
     ajAlignSetScoreR(align, score);
     ajAlignSetMatrixFloat(align, matrix);
 /*
-    end1 = start1 - ajStrCountK(m, '-') + ajStrLen(m);
-    end2 = start2 - ajStrCountK(n, '-') + ajStrLen(n);
+    end1 = start1 - ajStrCalcCountK(m, '-') + ajStrGetLen(m);
+    end2 = start2 - ajStrCalcCountK(n, '-') + ajStrGetLen(n);
     ajAlignSetRange(align,
 		    start1, end1+1,
-                    ajSeqLen(seqa)-ajSeqGapCount(seqa),
+                    ajSeqGetLen(seqa)-ajSeqGapCount(seqa),
                     offset1,
 		    start2, end2+1,
-                    ajSeqLen(seqb)-ajSeqGapCount(seqb),
+                    ajSeqGetLen(seqb)-ajSeqGapCount(seqb),
                     offset2);
 */
 
@@ -3511,9 +3532,9 @@ void embAlignReportProfile(AjPAlign thys, const AjPSeqset seqset,
 
 
     /* Now deal with the alignment overlap */
-    p    = ajStrStr(m);
-    q    = ajStrStr(n);
-    olen = strlen(p);
+    p    = ajStrGetPtr(m);
+    q    = ajStrGetPtr(n);
+    olen = (ajint) strlen(p);
     fa   = m;
     fb   = n;
 
@@ -3530,33 +3551,33 @@ void embAlignReportProfile(AjPAlign thys, const AjPSeqset seqset,
 
 	    if(p[i]=='.' || q[i]=='.')
 	    {
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
 		continue;
 	    }
 	    match=fmatrix[cpos][ajAZToInt(q[i])];
 
 	    if(p[i]==q[i])
 	    {
-		ajStrAppC(&fm,"|");
+		ajStrAppendC(&fm,"|");
 		continue;
 	    }
 
 	    if(match>0.0)
-		ajStrAppC(&fm,":");
+		ajStrAppendC(&fm,":");
 	    else
-		ajStrAppC(&fm," ");
+		ajStrAppendC(&fm," ");
 	}
     }
 
     /* Get start residues */
-    p    = ajStrStr(fa);
-    q    = ajStrStr(fb);
+    p    = ajStrGetPtr(fa);
+    q    = ajStrGetPtr(fb);
     acnt = begina+start1;
     bcnt = beginb+start2;
 
-    len = ajStrLen(fa);
+    len = ajStrGetLen(fa);
     pos = 0;
-    if(mark) r=ajStrStr(fm);
+    if(mark) r=ajStrGetPtr(fm);
 
 
     /* Add header stuff here */
@@ -3565,10 +3586,10 @@ void embAlignReportProfile(AjPAlign thys, const AjPSeqset seqset,
     {
 	if(pos+45 < len)
 	{
-	    ajStrAssSubC(&ap,p,pos,pos+45-1);
-	    ajStrAssSubC(&bp,q,pos,pos+45-1);
+	    ajStrAssignSubC(&ap,p,pos,pos+45-1);
+	    ajStrAssignSubC(&bp,q,pos,pos+45-1);
 	    if(mark)
-		ajStrAssSubC(&mp,r,pos,pos+45-1);
+		ajStrAssignSubC(&mp,r,pos,pos+45-1);
 	    for(i=0,aend=acnt,bend=bcnt;i<45;++i)
 	    {
 		if(p[pos+i]!=' ' && p[pos+i]!='.')
@@ -3585,10 +3606,10 @@ void embAlignReportProfile(AjPAlign thys, const AjPSeqset seqset,
 	    continue;
 	}
 
-	ajStrAssC(&ap,&p[pos]);
-	ajStrAssC(&bp,&q[pos]);
+	ajStrAssignC(&ap,&p[pos]);
+	ajStrAssignC(&bp,&q[pos]);
 	if(mark)
-	    ajStrAssC(&mp,&r[pos]);
+	    ajStrAssignC(&mp,&r[pos]);
 	for(i=0,aend=acnt,bend=bcnt;i<45 && p[pos+i];++i)
 	{
 	    if(p[pos+i]!=' ' && p[pos+i]!='.')

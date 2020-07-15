@@ -71,6 +71,10 @@ extern "C"
 
 
 
+/*
+** Prototype definitions
+*/
+
 
 /* ======================================================================= */
 /* =========================== Pdb object ================================ */
@@ -99,7 +103,9 @@ float        embVdwRad(const AjPAtom atm, const AjPVdwall vdw);
 AjBool       embStrideToThree(AjPStr *to, const AjPStr from);
 
 
-
+/*
+** End of prototype definitions
+*/
 
 #endif
 

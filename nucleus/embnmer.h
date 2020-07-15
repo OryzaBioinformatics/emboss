@@ -32,6 +32,12 @@ extern "C"
 #define embnmer_h
 
 
+
+
+/*
+** Prototype definitions
+*/
+
 ajulong embNmerNuc2int (const char *seq, ajint wordsize, ajint offset,
 			AjBool *otherflag);
 ajint   embNmerInt2nuc (AjPStr *seq, ajint wordsize,
@@ -44,6 +50,9 @@ AjBool  embNmerGetNoElements (ajulong *no_elements,
 			      ajint word, AjBool seqisnuc,
 			      AjBool ignorebz);
 
+/*
+** End of prototype definitions
+*/
 
 #endif
 

@@ -29,8 +29,16 @@ typedef struct EmbSMolFrag
 
 
 
+
+/*
+** Prototype definitions
+*/
+
 ajint embMolGetFrags(const AjPStr thys, ajint rno, AjPList *l);
 
+/*
+** End of prototype definitions
+*/
 
 
 

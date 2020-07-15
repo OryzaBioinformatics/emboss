@@ -6,6 +6,9 @@ extern "C"
 #ifndef embWord_h
 #define embWord_h
 
+
+
+
 /* @data EmbPWordMatch ********************************************************
 **
 ** NUCLEUS data structure for word matches
@@ -26,6 +29,9 @@ typedef struct EmbSWordMatch {
 } EmbOWordMatch;
 #define EmbPWordMatch EmbOWordMatch*
 
+
+
+
 /* @data EmbPWord *************************************************************
 **
 ** NUCLEUS data structure for words
@@ -42,6 +48,9 @@ typedef struct EmbSWord {
   AjPList list;
 } EmbOWord;
 #define EmbPWord EmbOWord*
+
+
+
 
 /* @data EmbPWord2 ************************************************************
 **
@@ -60,9 +69,15 @@ typedef struct EmbSWord2 {
 
 
 
-AjPList embWordBuildMatchTable (AjPTable *seq1MatchTable,
+
+/*
+** Prototype definitions
+*/
+
+AjPList embWordBuildMatchTable (const AjPTable seq1MatchTable,
 				const AjPSeq seq2, ajint orderit);
 void    embWordClear (void);
+void    embWordExit(void);
 void    embWordFreeTable(AjPTable *table);
 ajint   embWordGetTable (AjPTable *table, const AjPSeq seq);
 void    embWordLength (ajint wordlen);
@@ -72,12 +87,20 @@ void    embWordMatchListDelete (AjPList* plist);
 void    embWordMatchListPrint (AjPFile file, const AjPList list);
 void    embWordPrintTable  (const AjPTable table);
 void    embWordPrintTableF (const AjPTable table, AjPFile outf);
+void    embWordPrintTableFI (const AjPTable table, ajint mincount,
+			     AjPFile outf);
 void    embWordMatchListConvToFeat(const AjPList list,
 				   AjPFeattable *tab1, AjPFeattable *tab2,
 				   const AjPSeq seq1, const AjPSeq seq2);
 
 void    embWordMatchMin(AjPList matchlist, ajint seq1length, int
         			seq2length);
+void    embWordUnused(void);
+
+/*
+** End of prototype definitions
+*/
+
 #endif
 
 #ifdef __cplusplus

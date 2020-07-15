@@ -54,34 +54,34 @@ void embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajint maxlen)
     line  = ajStrNew();
     token = ajStrNew();
     
-    ajStrAssC(&line, &MAJSTRSTR(kwline)[5]);
+    ajStrAssignC(&line, &MAJSTRGETPTR(kwline)[5]);
 
-    handle = ajStrTokenInit(line,"\n;");
+    handle = ajStrTokenNewC(line,"\n;");
 
-    while(ajStrToken(&token,&handle,NULL))
+    while(ajStrTokenNextParse(&handle,&token))
     {
 	ajStrTrimEndC(&token,".");
-	ajStrChomp(&token);
-	if(ajStrLen(token))
+	ajStrTrimWhite(&token);
+	if(ajStrGetLen(token))
 	{
 	    str = ajStrNew();
 	    if(maxlen)
 	    {
-		if(ajStrLen(token) > maxlen)
-		    ajStrAssSub(&str,token,0,maxlen-1);
+		if(ajStrGetLen(token) > maxlen)
+		    ajStrAssignSubS(&str,token,0,maxlen-1);
 		else
-		    ajStrAssS(&str,token);
+		    ajStrAssignS(&str,token);
 		
 	    }
 	    else
-		ajStrAssS(&str,token);
-	    ajStrToLower(&str);
+		ajStrAssignS(&str,token);
+	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
 	}
     }
 
     ajStrDel(&token);
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
     ajStrDel(&line);
     
     return;
@@ -112,35 +112,35 @@ void embBtreeEmblTX(const AjPStr txline, AjPList txlist, ajint maxlen)
     line  = ajStrNew();
     token = ajStrNew();
     
-    ajStrAssC(&line, &MAJSTRSTR(txline)[5]);
+    ajStrAssignC(&line, &MAJSTRGETPTR(txline)[5]);
 
-    handle = ajStrTokenInit(line,"\n;()");
+    handle = ajStrTokenNewC(line,"\n;()");
 
-    while(ajStrToken(&token,&handle,NULL))
+    while(ajStrTokenNextParse(&handle,&token))
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimEndC(&token," ");
-	ajStrChomp(&token);
-	if(ajStrLen(token))
+	ajStrTrimWhite(&token);
+	if(ajStrGetLen(token))
 	{
 	    str = ajStrNew();
 	    if(maxlen)
 	    {
-		if(ajStrLen(token) > maxlen)
-		    ajStrAssSub(&str,token,0,maxlen-1);
+		if(ajStrGetLen(token) > maxlen)
+		    ajStrAssignSubS(&str,token,0,maxlen-1);
 		else
-		    ajStrAssS(&str,token);
+		    ajStrAssignS(&str,token);
 		
 	    }
 	    else
-		ajStrAssS(&str,token);
-	    ajStrToLower(&str);
+		ajStrAssignS(&str,token);
+	    ajStrFmtLower(&str);
 	    ajListPush(txlist,(void *)str);
 	}
     }
 
     ajStrDel(&token);
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
     ajStrDel(&line);
     
     return;
@@ -182,21 +182,21 @@ void embBtreeEmblAC(const AjPStr acline, AjPList aclist)
     prefix = ajStrNew();
     format = ajStrNew();
     
-    ajStrAssC(&line, &MAJSTRSTR(acline)[5]);
+    ajStrAssignC(&line, &MAJSTRGETPTR(acline)[5]);
 
-    handle = ajStrTokenInit(line,"\n;");
+    handle = ajStrTokenNewC(line,"\n;");
 
-    while(ajStrToken(&token,&handle,NULL))
+    while(ajStrTokenNextParse(&handle,&token))
     {
-	ajStrChomp(&token);
-	if((p=strchr(MAJSTRSTR(token),(int)'-')))
+	ajStrTrimWhite(&token);
+	if((p=strchr(MAJSTRGETPTR(token),(int)'-')))
 	{
 	    q = p;
 	    while(isdigit((int)*(--q)));
 	    ++q;
-	    ajStrAssSubC(&tstr,q,0,p-q-1);
+	    ajStrAssignSubC(&tstr,q,0,(ajint)(p-q-1));
 	    ajStrToInt(tstr,&lo);
-	    field = p-q;
+	    field = (ajint) (p-q);
 	    ajFmtPrintS(&format,"%%S%%0%dd",field);
 	    
 	    ++p;
@@ -204,19 +204,19 @@ void embBtreeEmblAC(const AjPStr acline, AjPList aclist)
 	    while(!isdigit((int)*q))
 		++q;
 	    sscanf(q,"%d",&hi);
-	    ajStrAssSubC(&prefix,p,0,q-p-1);
+	    ajStrAssignSubC(&prefix,p,0,(ajint)(q-p-1));
 	    
 	    for(i=lo;i<=hi;++i)
 	    {
 		str = ajStrNew();
-		ajFmtPrintS(&str,MAJSTRSTR(format),prefix,i);
+		ajFmtPrintS(&str,MAJSTRGETPTR(format),prefix,i);
 		ajListPush(aclist,(void *)str);
 	    }
 	}
 	else
 	{
 	    str = ajStrNew();
-	    ajStrAssS(&str,token);
+	    ajStrAssignS(&str,token);
 	    ajListPush(aclist,(void *)str);
 	}
     }
@@ -225,12 +225,11 @@ void embBtreeEmblAC(const AjPStr acline, AjPList aclist)
     ajStrDel(&prefix);
     ajStrDel(&format);
     ajStrDel(&token);
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
     ajStrDel(&line);
     
     return;
 }
-
 
 
 
@@ -259,20 +258,20 @@ void embBtreeEmblSV(const AjPStr idline, AjPList svlist)
     idstr   = ajStrNew();
     svstr   = ajStrNew();
     
-    ajStrAssC(&line, &MAJSTRSTR(idline)[5]);
+    ajStrAssignC(&line, &MAJSTRGETPTR(idline)[5]);
 
-    handle = ajStrTokenInit(line," \t\n;");
+    handle = ajStrTokenNewC(line," \t\n;");
 
     str = ajStrNew();
-    if(!ajStrToken(&idstr,&handle,NULL))
-        return;
-    if(!ajStrToken(&token,&handle,NULL))
-        return;
-    if(!ajStrToken(&svstr,&handle,NULL))
-        return;
+    if(!ajStrTokenNextParse(&handle,&idstr))
+	return;
+    if(!ajStrTokenNextParse(&handle,&token))
+	return;
+    if(!ajStrTokenNextParse(&handle,&svstr))
+	return;
 
     if(!ajStrMatchC(token, "SV"))
-        return;
+	return;
 
     ajFmtPrintS(&str,"%S.%S", idstr, svstr);
 
@@ -281,7 +280,7 @@ void embBtreeEmblSV(const AjPStr idline, AjPList svlist)
     ajStrDel(&idstr);
     ajStrDel(&svstr);
     ajStrDel(&token);
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
     ajStrDel(&line);
     
     return;
@@ -312,34 +311,34 @@ void embBtreeEmblDE(const AjPStr deline, AjPList delist, ajint maxlen)
     line  = ajStrNew();
     token = ajStrNew();
     
-    ajStrAssC(&line, &MAJSTRSTR(deline)[5]);
+    ajStrAssignC(&line, &MAJSTRGETPTR(deline)[5]);
 
-    handle = ajStrTokenInit(line,"\n \t()");
+    handle = ajStrTokenNewC(line,"\n \t()");
 
-    while(ajStrToken(&token,&handle,NULL))
+    while(ajStrTokenNextParse(&handle,&token))
     {
 	ajStrTrimEndC(&token,".");
-	ajStrChomp(&token);
-	if(ajStrLen(token))
+	ajStrTrimWhite(&token);
+	if(ajStrGetLen(token))
 	{
 	    str = ajStrNew();
 	    if(maxlen)
 	    {
-		if(ajStrLen(token) > maxlen)
-		    ajStrAssSub(&str,token,0,maxlen-1);
+		if(ajStrGetLen(token) > maxlen)
+		    ajStrAssignSubS(&str,token,0,maxlen-1);
 		else
-		    ajStrAssS(&str,token);
+		    ajStrAssignS(&str,token);
 		
 	    }
 	    else
-		ajStrAssS(&str,token);
-	    ajStrToLower(&str);
+		ajStrAssignS(&str,token);
+	    ajStrFmtLower(&str);
 	    ajListPush(delist,(void *)str);
 	}
     }
 
     ajStrDel(&token);
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
     ajStrDel(&line);
     
     return;
@@ -381,21 +380,21 @@ void embBtreeGenBankAC(const AjPStr acline, AjPList aclist)
     prefix = ajStrNew();
     format = ajStrNew();
     
-    ajStrAssC(&line, &MAJSTRSTR(acline)[12]);
+    ajStrAssignC(&line, &MAJSTRGETPTR(acline)[12]);
 
-    handle = ajStrTokenInit(line,"\n ");
+    handle = ajStrTokenNewC(line,"\n ");
 
-    while(ajStrToken(&token,&handle,NULL))
+    while(ajStrTokenNextParse(&handle,&token))
     {
-	ajStrChomp(&token);
-	if((p=strchr(MAJSTRSTR(token),(int)'-')))
+	ajStrTrimWhite(&token);
+	if((p=strchr(MAJSTRGETPTR(token),(int)'-')))
 	{
 	    q = p;
 	    while(isdigit((int)*(--q)));
 	    ++q;
-	    ajStrAssSubC(&tstr,q,0,p-q-1);
+	    ajStrAssignSubC(&tstr,q,0,(ajint)(p-q-1));
 	    ajStrToInt(tstr,&lo);
-	    field = p-q;
+	    field = (ajint) (p-q);
 	    ajFmtPrintS(&format,"%%S%%0%dd",field);
 	    
 	    ++p;
@@ -403,19 +402,19 @@ void embBtreeGenBankAC(const AjPStr acline, AjPList aclist)
 	    while(!isdigit((int)*q))
 		++q;
 	    sscanf(q,"%d",&hi);
-	    ajStrAssSubC(&prefix,p,0,q-p-1);
+	    ajStrAssignSubC(&prefix,p,0,(ajint)(q-p-1));
 	    
 	    for(i=lo;i<=hi;++i)
 	    {
 		str = ajStrNew();
-		ajFmtPrintS(&str,MAJSTRSTR(format),prefix,i);
+		ajFmtPrintS(&str,MAJSTRGETPTR(format),prefix,i);
 		ajListPush(aclist,(void *)str);
 	    }
 	}
 	else
 	{
 	    str = ajStrNew();
-	    ajStrAssS(&str,token);
+	    ajStrAssignS(&str,token);
 	    ajListPush(aclist,(void *)str);
 	}
     }
@@ -424,7 +423,7 @@ void embBtreeGenBankAC(const AjPStr acline, AjPList aclist)
     ajStrDel(&prefix);
     ajStrDel(&format);
     ajStrDel(&token);
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
     ajStrDel(&line);
     
     return;
@@ -455,34 +454,34 @@ void embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajint maxlen)
     line  = ajStrNew();
     token = ajStrNew();
     
-    ajStrAssC(&line, &MAJSTRSTR(kwline)[8]);
+    ajStrAssignC(&line, &MAJSTRGETPTR(kwline)[8]);
 
-    handle = ajStrTokenInit(line,"\n;");
+    handle = ajStrTokenNewC(line,"\n;");
 
-    while(ajStrToken(&token,&handle,NULL))
+    while(ajStrTokenNextParse(&handle,&token))
     {
 	ajStrTrimEndC(&token,".");
-	ajStrChomp(&token);
-	if(ajStrLen(token))
+	ajStrTrimWhite(&token);
+	if(ajStrGetLen(token))
 	{
 	    str = ajStrNew();
 	    if(maxlen)
 	    {
-		if(ajStrLen(token) > maxlen)
-		    ajStrAssSub(&str,token,0,maxlen-1);
+		if(ajStrGetLen(token) > maxlen)
+		    ajStrAssignSubS(&str,token,0,maxlen-1);
 		else
-		    ajStrAssS(&str,token);
+		    ajStrAssignS(&str,token);
 		
 	    }
 	    else
-		ajStrAssS(&str,token);
-	    ajStrToLower(&str);
+		ajStrAssignS(&str,token);
+	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
 	}
     }
 
     ajStrDel(&token);
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
     ajStrDel(&line);
     
     return;
@@ -513,34 +512,34 @@ void embBtreeGenBankDE(const AjPStr kwline, AjPList kwlist, ajint maxlen)
     line  = ajStrNew();
     token = ajStrNew();
     
-    ajStrAssC(&line, &MAJSTRSTR(kwline)[10]);
+    ajStrAssignC(&line, &MAJSTRGETPTR(kwline)[10]);
 
-    handle = ajStrTokenInit(line,"\n \t()");
+    handle = ajStrTokenNewC(line,"\n \t()");
 
-    while(ajStrToken(&token,&handle,NULL))
+    while(ajStrTokenNextParse(&handle,&token))
     {
 	ajStrTrimEndC(&token,".");
-	ajStrChomp(&token);
-	if(ajStrLen(token))
+	ajStrTrimWhite(&token);
+	if(ajStrGetLen(token))
 	{
 	    str = ajStrNew();
 	    if(maxlen)
 	    {
-		if(ajStrLen(token) > maxlen)
-		    ajStrAssSub(&str,token,0,maxlen-1);
+		if(ajStrGetLen(token) > maxlen)
+		    ajStrAssignSubS(&str,token,0,maxlen-1);
 		else
-		    ajStrAssS(&str,token);
+		    ajStrAssignS(&str,token);
 		
 	    }
 	    else
-		ajStrAssS(&str,token);
-	    ajStrToLower(&str);
+		ajStrAssignS(&str,token);
+	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
 	}
     }
 
     ajStrDel(&token);
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
     ajStrDel(&line);
     
     return;
@@ -571,35 +570,35 @@ void embBtreeGenBankTX(const AjPStr kwline, AjPList kwlist, ajint maxlen)
     line  = ajStrNew();
     token = ajStrNew();
     
-    ajStrAssC(&line, &MAJSTRSTR(kwline)[9]);
+    ajStrAssignC(&line, &MAJSTRGETPTR(kwline)[9]);
 
-    handle = ajStrTokenInit(line,"\n;()");
+    handle = ajStrTokenNewC(line,"\n;()");
 
-    while(ajStrToken(&token,&handle,NULL))
+    while(ajStrTokenNextParse(&handle,&token))
     {
 	ajStrTrimEndC(&token,".");
 	ajStrTrimEndC(&token," ");
-	ajStrChomp(&token);
-	if(ajStrLen(token))
+	ajStrTrimWhite(&token);
+	if(ajStrGetLen(token))
 	{
 	    str = ajStrNew();
 	    if(maxlen)
 	    {
-		if(ajStrLen(token) > maxlen)
-		    ajStrAssSub(&str,token,0,maxlen-1);
+		if(ajStrGetLen(token) > maxlen)
+		    ajStrAssignSubS(&str,token,0,maxlen-1);
 		else
-		    ajStrAssS(&str,token);
+		    ajStrAssignS(&str,token);
 		
 	    }
 	    else
-		ajStrAssS(&str,token);
-	    ajStrToLower(&str);
+		ajStrAssignS(&str,token);
+	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
 	}
     }
 
     ajStrDel(&token);
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
     ajStrDel(&line);
     
     return;
@@ -628,32 +627,32 @@ void embBtreeFastaDE(const AjPStr kwline, AjPList kwlist, ajint maxlen)
     
     token = ajStrNew();
     
-    handle = ajStrTokenInit(kwline,"\n ");
+    handle = ajStrTokenNewC(kwline,"\n ");
 
-    while(ajStrToken(&token,&handle,NULL))
+    while(ajStrTokenNextParse(&handle,&token))
     {
 	ajStrTrimEndC(&token,".");
-	ajStrChomp(&token);
-	if(ajStrLen(token))
+	ajStrTrimWhite(&token);
+	if(ajStrGetLen(token))
 	{
 	    str = ajStrNew();
 	    if(maxlen)
 	    {
-		if(ajStrLen(token) > maxlen)
-		    ajStrAssSub(&str,token,0,maxlen-1);
+		if(ajStrGetLen(token) > maxlen)
+		    ajStrAssignSubS(&str,token,0,maxlen-1);
 		else
-		    ajStrAssS(&str,token);
+		    ajStrAssignS(&str,token);
 		
 	    }
 	    else
-		ajStrAssS(&str,token);
-	    ajStrToLower(&str);
+		ajStrAssignS(&str,token);
+	    ajStrFmtLower(&str);
 	    ajListPush(kwlist,(void *)str);
 	}
     }
 
     ajStrDel(&token);
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
     
     return;
 }
@@ -697,7 +696,7 @@ ajint embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
     {
 	ajListPop(lfiles,(void **)&file);
 	ajSysBasename(&file);
-	for(j=0;j<nremove && ! ajStrMatchWild(file,remove[j]);++j);
+	for(j=0;j<nremove && ! ajStrMatchWildS(file,remove[j]);++j);
 	if(j == nremove)
 	    ajListPushApp(lfiles,(void *)file);
     }
@@ -737,7 +736,7 @@ static AjPFile btreeCreateFile(const AjPStr idirectory, const AjPStr dbname,
 
     filename = ajStrNew();
 
-    ajFmtPrintS(&filename,"%S/%S%s",idirectory,dbname,add);
+    ajFmtPrintS(&filename,"%S%s%S%s",idirectory,SLASH_STRING,dbname,add);
     
     fp =  ajFileNewOut(filename);
 
@@ -916,14 +915,14 @@ void embBtreeSetDbInfo(EmbPBtreeEntry entry, const AjPStr name,
 		       const AjPStr type, const AjPStr directory,
 		       const AjPStr idirectory)
 {
-    ajStrAssS(&entry->dbname, name);
-    ajStrAssS(&entry->date, date);
-    ajStrAssS(&entry->release, release);
-    ajStrAssS(&entry->dbtype, type);
-    ajStrAssS(&entry->dbrs, dbrs);
+    ajStrAssignS(&entry->dbname, name);
+    ajStrAssignS(&entry->date, date);
+    ajStrAssignS(&entry->release, release);
+    ajStrAssignS(&entry->dbtype, type);
+    ajStrAssignS(&entry->dbrs, dbrs);
     
-    ajStrAssS(&entry->directory,directory);
-    ajStrAssS(&entry->idirectory,idirectory);
+    ajStrAssignS(&entry->directory,directory);
+    ajStrAssignS(&entry->idirectory,idirectory);
 
     return;
 }
@@ -967,7 +966,7 @@ ajint embBtreeGetFiles(EmbPBtreeEntry entry, const AjPStr fdirectory,
     {
 	ajListPop(entry->files,(void **)&file);
 	ajSysBasename(&file);
-	for(j=0;j<nremove && !ajStrMatchWild(file,remove[j]);++j);
+	for(j=0;j<nremove && !ajStrMatchWildS(file,remove[j]);++j);
 	if(j == nremove)
 	{
 	    ajListPushApp(entry->files,(void *)file);
@@ -975,7 +974,7 @@ ajint embBtreeGetFiles(EmbPBtreeEntry entry, const AjPStr fdirectory,
 	}
     }
 
-    ajListSort(entry->files,ajStrCmp);
+    ajListSort(entry->files,ajStrVcmp);
 
     entry->nfiles = count;
 
@@ -1029,15 +1028,14 @@ AjBool embBtreeWriteEntryFile(const EmbPBtreeEntry entry)
 	if(!do_ref)
 	{
 	    ajListPop(entry->files,(void **)&tmpstr);
-	    ajFmtPrintF(entfile,"%S%S\n",entry->directory,tmpstr);
+	    ajFmtPrintF(entfile,"%S\n",tmpstr);
 	    ajListPushApp(entry->files,(void *)tmpstr);
 	}
 	else
 	{
 	    ajListPop(entry->files,(void **)&tmpstr);
 	    ajListPop(entry->reffiles,(void **)&refstr);
-	    ajFmtPrintF(entfile,"%S%S %S%S\n",entry->directory,tmpstr,
-			entry->directory,refstr);
+	    ajFmtPrintF(entfile,"%S %S\n",tmpstr, refstr);
 	    ajListPushApp(entry->files,(void *)tmpstr);
 	    ajListPushApp(entry->reffiles,(void *)refstr);
 	}
@@ -1071,7 +1069,7 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
     value = ajStrNew();
     
 
-    resource = ajStrStr(entry->dbrs);
+    resource = ajStrGetPtr(entry->dbrs);
     if(!ajNamRsAttrValueC(resource,"type",&value))
 	ajFatal("Missing resource entry (%S) for indexing",entry->dbrs);
     if(!ajStrMatchCaseC(value,"Index"))
@@ -1206,7 +1204,15 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
     entry->desecfill  = (entry->pagesize - 16) / (entry->idlen + 4);
     entry->txsecfill  = (entry->pagesize - 16) / (entry->idlen + 4);
 
+    entry->idsecorder = (entry->pagesize - 60) / 24;
+    entry->idsecfill  = (entry->pagesize - 60) / 20;
 
+    entry->acsecorder = (entry->pagesize - 60) / 24;
+    entry->acsecfill  = (entry->pagesize - 60) / 20;
+
+    entry->svsecorder = (entry->pagesize - 60) / 24;
+    entry->svsecfill  = (entry->pagesize - 60) / 20;
+    
     ajStrDel(&value);
 
     return;
@@ -1239,28 +1245,38 @@ AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
 
     if(entry->do_id)
     {
-	entry->idcache = ajBtreeCacheNewC(basenam,ID_EXTENSION,idir,"w+",
-					  entry->pagesize, entry->idorder,
-					  entry->idfill, level,
-					  entry->cachesize);
+	entry->idcache = ajBtreeSecCacheNewC(basenam,ID_EXTENSION,idir,"w+",
+					     entry->pagesize, entry->idorder,
+					     entry->idfill, level,
+					     entry->cachesize,
+					     entry->idsecorder, slevel,
+					     entry->idsecfill, count,
+					     entry->kwlen);
 	ajBtreeCreateRootNode(entry->idcache,0L);
     }
 
     if(entry->do_accession)
     {
-	entry->accache = ajBtreeCacheNewC(basenam,AC_EXTENSION,idir,"w+",
-					  entry->pagesize, entry->acorder,
-					  entry->acfill, level,
-					  entry->cachesize);
+	entry->accache = ajBtreeSecCacheNewC(basenam,AC_EXTENSION,idir,"w+",
+					     entry->pagesize,
+					     entry->acorder, entry->acfill,
+					     level,
+					     entry->cachesize,
+					     entry->acsecorder, slevel,
+					     entry->acsecfill, count,
+					     entry->kwlen);
 	ajBtreeCreateRootNode(entry->accache,0L);
     }
 
     if(entry->do_sv)
     {
-	entry->svcache = ajBtreeCacheNewC(basenam,SV_EXTENSION,idir,"w+",
-					  entry->pagesize, entry->svorder,
-					  entry->svfill, level,
-					  entry->cachesize);
+	entry->svcache = ajBtreeSecCacheNewC(basenam,SV_EXTENSION,idir,"w+",
+					     entry->pagesize, entry->svorder,
+					     entry->svfill, level,
+					     entry->cachesize,
+					     entry->svsecorder, slevel,
+					     entry->svsecfill, count,
+					     entry->kwlen);
 	ajBtreeCreateRootNode(entry->svcache,0L);
     }
 
@@ -1326,18 +1342,27 @@ AjBool embBtreeCloseCaches(EmbPBtreeEntry entry)
 
     if(entry->do_id)
     {
+	ajBtreeFreePriArray(entry->idcache);
+	ajBtreeFreeSecArray(entry->idcache);
+
 	ajBtreeCacheSync(entry->idcache,0L);
 	ajBtreeCacheDel(&entry->idcache);
     }
 
     if(entry->do_accession)
     {
+	ajBtreeFreePriArray(entry->accache);
+	ajBtreeFreeSecArray(entry->accache);
+
 	ajBtreeCacheSync(entry->accache,0L);
 	ajBtreeCacheDel(&entry->accache);
     }
 
     if(entry->do_sv)
     {
+	ajBtreeFreePriArray(entry->svcache);
+	ajBtreeFreeSecArray(entry->svcache);
+
 	ajBtreeCacheSync(entry->svcache,0L);
 	ajBtreeCacheDel(&entry->svcache);
     }

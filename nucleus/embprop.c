@@ -42,6 +42,8 @@
 #define PROPENZCHYMOT  6
 #define PROPENZCNBR    7
 
+#define RAG_MINPEPLEN 3
+
 #define AMINODATFILE "Eamino.dat"
 
 static AjBool propInit = 0;
@@ -72,7 +74,11 @@ void embPropAminoRead(AjPFile mfptr)
 {
     AjPStr  line  = NULL;
     AjPStr  delim = NULL;
-
+#ifndef WIN32
+    static char *delimstr=" :\t\n";
+#else
+    static char *delimstr=" :\t\n\r";
+#endif
     const char *p;
 
     ajint cols = 0;
@@ -81,20 +87,20 @@ void embPropAminoRead(AjPFile mfptr)
 	return;
 
     line  = ajStrNew();
-    delim = ajStrNewC(" :\t\n");
+    delim = ajStrNewC(delimstr);
 
     while(ajFileGets(mfptr, &line))
     {
-	p = ajStrStr(line);
+	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
 
 	while(*p && (*p<'A' || *p>'Z'))
 	    ++p;
 
-	cols = ajStrTokenCount(line,ajStrStr(delim));
+	cols = ajStrParseCountC(line,ajStrGetPtr(delim));
 	EmbPropTable[ajAZToInt(toupper((ajint)*p))] =
-	    ajArrDoubleLine(line,ajStrStr(delim),cols,2,cols);
+	    ajArrDoubleLine(line,ajStrGetPtr(delim),cols,2,cols);
     }
 
 
@@ -266,6 +272,10 @@ const char* embPropIntToThree(ajint c)
 ** @param [w] ncomp [ajint *] number of complete digest fragments
 ** @param [w] npart [ajint *] number of partial digest fragments
 ** @param [w] rname [AjPStr *] name of reagent
+** @param [r] nterm [AjBool] nterm ragging
+** @param [r] cterm [AjBool] cterm ragging
+** @param [r] dorag [AjBool] true if ragging
+
 **
 ** @return [void]
 ** @@
@@ -275,7 +285,8 @@ void embPropCalcFragments(const char *s, ajint n, ajint begin,
 			  AjPList *l, AjPList *pa,
 			  AjBool unfavoured, AjBool overlap,
 			  AjBool allpartials, ajint *ncomp, ajint *npart,
-			  AjPStr *rname)
+			  AjPStr *rname, AjBool nterm, AjBool cterm,
+			  AjBool dorag)
 {
     static char *PROPENZReagent[]=
     {
@@ -316,10 +327,14 @@ void embPropCalcFragments(const char *s, ajint n, ajint begin,
     ajint *ival;
     ajint defcnt;
 
+    ajint it;
+    ajint st = 0;
+    ajint mt = 0;
+    ajint et = 0;
 
-    ajStrAssC(rname,PROPENZReagent[n]);
+    ajStrAssignC(rname,PROPENZReagent[n]);
     defcnt = 0;
-    len = strlen(s);
+    len = (ajint) strlen(s);
 
     t = ajListNew();			/* Temporary list */
 
@@ -393,15 +408,46 @@ void embPropCalcFragments(const char *s, ajint n, ajint begin,
     /* Push the hits */
     for(i=0;i<defcnt;++i)
     {
+	if(dorag)
+	{
+	    st = begsa[i];
+	    et = endsa[i];
+	    for(it=st+RAG_MINPEPLEN-1; it < et; ++it)
+	    {
+		AJNEW0(fr);
+		fr->start = st;
+		fr->end   = it;
+		fr->molwt = embPropCalcMolwt(s,st,it);
+		if(n == PROPENZCNBR)
+		    fr->molwt -= (17.045 + 31.095);
+		fr->isfrag = ajTrue;
+		ajListPush(*l,(void *)fr);
+	    }
+	}
+	
 	AJNEW0(fr);
 	fr->start  = begsa[i];
 	fr->end    = endsa[i];
 	fr->molwt  = molwtsa[i];
 	fr->isfrag = afrag[i];
 	ajListPush(*l,(void *) fr);
+
+	if(dorag && nterm)
+	    for(it=st+1; it < et-RAG_MINPEPLEN+2; ++it)
+	    {
+		AJNEW0(fr);
+		fr->start = it;
+		fr->end   = et;
+		fr->molwt = embPropCalcMolwt(s,it,et);
+		if(n == PROPENZCNBR)
+		    fr->molwt -= (17.045 + 31.095);
+		fr->isfrag = ajTrue;
+		ajListPush(*l,(void *)fr);
+	    }
     }
 
-    ajListSort(*l,propFragCompare);
+    if(!dorag)
+	ajListSort(*l,propFragCompare);
     *ncomp = defcnt;
 
 
@@ -413,6 +459,25 @@ void embPropCalcFragments(const char *s, ajint n, ajint begin,
     {
 	for(i=0;i<lim;++i)
 	{
+	    if(dorag)
+	    {
+		st = begsa[i];
+		mt = endsa[i];
+		et = endsa[i+1];
+		if(cterm)
+		    for(it=mt+1; it < et; ++it)
+		    {
+			AJNEW0(fr);
+			fr->start = st;
+			fr->end   = it;
+			fr->molwt = embPropCalcMolwt(s,st,it);
+			if(n == PROPENZCNBR)
+			    fr->molwt -= (17.045 + 31.095);
+			fr->isfrag = ajTrue;
+			ajListPush(*l,(void *)fr);
+		    }
+	    }
+
 	    AJNEW0(fr);
 	    fr->isfrag = ajTrue;
 	    fr->molwt = embPropCalcMolwt(s,begsa[i],endsa[i+1]);
@@ -422,6 +487,19 @@ void embPropCalcFragments(const char *s, ajint n, ajint begin,
 	    fr->end   = endsa[i+1];
 	    ajListPush(*pa,(void *)fr);
 	    ++(*npart);
+
+	    if(dorag && nterm)
+		for(it=st+1; it<mt; ++it)
+		{
+		    AJNEW0(fr);
+		    fr->start = it;
+		    fr->end   = et;
+		    fr->molwt = embPropCalcMolwt(s,it,et);
+		    if(n == PROPENZCNBR)
+			fr->molwt -= (17.045 + 31.095);
+		    fr->isfrag = ajTrue;
+		    ajListPush(*l,(void *)fr);
+		}
 	}
 
 	if(*npart)			/* Remove complete sequence */
@@ -429,7 +507,9 @@ void embPropCalcFragments(const char *s, ajint n, ajint begin,
 	    --(*npart);
 	    ajListPop(*pa,(void **)&fr);
 	}
-	ajListSort(*pa,propFragCompare);
+
+	if(!dorag)
+	    ajListSort(*pa,propFragCompare);
     }
 
     if(allpartials)
@@ -453,7 +533,9 @@ void embPropCalcFragments(const char *s, ajint n, ajint begin,
 	    --(*npart);
 	    ajListPop(*pa,(void **)&fr);
 	}
-	ajListSort(*pa,propFragCompare);
+
+	if(!dorag)
+	    ajListSort(*pa,propFragCompare);
     }
 
     if(defcnt)
@@ -509,17 +591,17 @@ AjPStr embPropProtGaps(AjPSeq seq, ajint pad)
     AjPStr temp;
     ajint i;
 
-    temp = ajStrNewL(ajSeqLen(seq)*3 + pad+1);
+    temp = ajStrNewRes(ajSeqGetLen(seq)*3 + pad+1);
 
     /* put any required padding spaces at the start */
     for(i=0; i<pad; i++)
-	ajStrAppC(&temp, " ");
+	ajStrAppendC(&temp, " ");
 
 
     for(p=ajSeqChar(seq); *p; p++)
     {
-	ajStrAppK(&temp, *p);
-	ajStrAppC(&temp, "  ");
+	ajStrAppendK(&temp, *p);
+	ajStrAppendC(&temp, "  ");
     }
 
     return temp;
@@ -547,29 +629,29 @@ AjPStr embPropProt1to3(AjPSeq seq, ajint pad)
     AjPStr temp;
     ajint i;
 
-    temp = ajStrNewL(ajSeqLen(seq)*3 + pad+1);
+    temp = ajStrNewRes(ajSeqGetLen(seq)*3 + pad+1);
 
     /* put any required padding spaces at the start */
     for(i=0; i<pad; i++)
-	ajStrAppC(&temp, " ");
+	ajStrAppendC(&temp, " ");
 
 
     for(p=ajSeqChar(seq); *p; p++)
     {
 	if(*p == '*')
-	    ajStrAppC(&temp, "***");
+	    ajStrAppendC(&temp, "***");
 	else if(*p == '.')
-	    ajStrAppC(&temp, "...");
+	    ajStrAppendC(&temp, "...");
 	else if(*p == '-')
-	    ajStrAppC(&temp, "---");
+	    ajStrAppendC(&temp, "---");
 	else if(!isalpha((ajint)*p))
-	    ajStrAppC(&temp, "???");
+	    ajStrAppendC(&temp, "???");
 	else
 	{
 	    p3 = embPropCharToThree(*p);
-	    ajStrAppK(&temp, *p3);
-	    ajStrAppK(&temp, *(p3+1));
-	    ajStrAppK(&temp, *(p3+2));
+	    ajStrAppendK(&temp, *p3);
+	    ajStrAppendK(&temp, *(p3+1));
+	    ajStrAppendK(&temp, *(p3+2));
 	}
     }
 
@@ -723,4 +805,22 @@ AjBool embPropTransition(char base1, char base2)
     ajDebug("embPropTransition result = %d", (u1 == u2));
 
     return (u1 == u2);
+}
+
+/* @func embPropExit *********************************************************
+**
+** Cleanup of properties data
+**
+** @return [void]
+******************************************************************************/
+
+void embPropExit(void)
+{
+    ajint i;
+    for(i=0;i<EMBPROPSIZE;i++)
+    {
+	AJFREE(EmbPropTable[i]);
+    }
+
+    return;
 }

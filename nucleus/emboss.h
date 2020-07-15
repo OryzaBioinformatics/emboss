@@ -13,6 +13,7 @@
 #include "embinit.h"
 #include "embword.h"
 #include "embpat.h"
+#include "embpatlist.h"
 #include "embmat.h"
 #include "embdata.h"
 #include "embnmer.h"
@@ -24,6 +25,12 @@
 #include "embdomain.h"
 #include "embsig.h"
 #include "embdmx.h"
+#include "embexit.h"
 #include "embindex.h"
+
+#ifdef WIN32
+#define VERSION "4.0.0"
+#endif
+
 
 #endif

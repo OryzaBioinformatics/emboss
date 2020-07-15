@@ -32,15 +32,17 @@
 ** @param [r] argc [ajint] Number of arguments provided on the command line,
 **        usually passsed as-is by the calling application.
 ** @param [r] argv [char* const[]] Actual arguments as an array of text.
-** @return [AjStatus] Always returns ajStatusOK or aborts.
+** @return [void]
 ** @@
 ******************************************************************************/
 
-AjStatus embInit (const char *pgm, ajint argc, char * const argv[])
+void  embInit (const char *pgm, ajint argc, char * const argv[])
 {
     ajNamInit("emboss");
 
-    return ajAcdInit (pgm, argc, argv);
+    ajAcdInit (pgm, argc, argv);
+
+    return;
 }
 
 
@@ -59,14 +61,16 @@ AjStatus embInit (const char *pgm, ajint argc, char * const argv[])
 **        usually passsed as-is by the calling application.
 ** @param [r] argv [char* const[]] Actual arguments as an array of text.
 ** @param [r] package [const char*] Package name, used to find the ACD file
-** @return [AjStatus] Always returns ajStatusOK or aborts.
+** @return [void]
 ** @@
 ******************************************************************************/
 
-AjStatus embInitP (const char *pgm, ajint argc, char * const argv[],
+void embInitP (const char *pgm, ajint argc, char * const argv[],
 		   const char *package)
 {
   ajNamInit("emboss");
 
-  return ajAcdInitP (pgm, argc, argv, package);
+  ajAcdInitP (pgm, argc, argv, package);
+
+  return;
 }

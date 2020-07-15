@@ -138,7 +138,7 @@
 
 AjPStr embScopToPdbid(const AjPStr scop, AjPStr *pdb)
 {
-    ajStrAssSub(pdb, scop, 1, 4);
+    ajStrAssignSubS(pdb, scop, 1, 4);
 
     return *pdb;
 }

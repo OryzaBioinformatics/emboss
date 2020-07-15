@@ -64,7 +64,7 @@ AjBool embReadAminoDataDoubleC(const char *s, double **a, double fill)
     line = ajStrNew();
     while(ajFileReadLine(inf,&line))
     {
-	p = ajStrStr(line);
+	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
 	p = ajSysStrtok(p," \t\r");
@@ -143,7 +143,7 @@ AjBool embReadAminoDataFloatC(const char *s, float **a, float fill)
     line = ajStrNew();
     while(ajFileReadLine(inf,&line))
     {
-	p = ajStrStr(line);
+	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
 
@@ -225,7 +225,7 @@ AjBool embReadAminoDataIntC(const char *s, ajint **a, ajint fill)
     line = ajStrNew();
     while(ajFileReadLine(inf,&line))
     {
-	p = ajStrStr(line);
+	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
 	p = ajSysStrtok(p," \t\r");

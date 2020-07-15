@@ -142,12 +142,12 @@ void embDataListRead(AjPList data, AjPFile pfile)
 
    while(dataListNextLine(pfile, commentLine, &line))
    {
-      tokens = ajStrTokenInit(line, whiteSpace);
+      tokens = ajStrTokenNewC(line, whiteSpace);
 
       /* the first token is the key for the row */
       key = ajStrNew();
-      ajStrToken(&key, &tokens, NULL);
-      if(!ajStrLen(key))
+      ajStrTokenNextParse(&tokens, &key);
+      if(!ajStrGetLen(key))
       {
          ajFmtError("Error, did not pick up first key");
          ajFatal("Error, did not pick up first key");
@@ -160,10 +160,10 @@ void embDataListRead(AjPList data, AjPFile pfile)
 	  ** add (key,value)
 	  */
          value = NULL;
-         if(ajStrToken(&value, &tokens, NULL))
+         if(ajStrTokenNextParse(&tokens, &value))
          {
             table = ajStrTableNewCase(350);
-            copyKey = ajStrDup(key);
+            copyKey = ajStrNewRef(key);
             ajTablePut(table, copyKey, value);
             ajListPushApp(data, table);
          }
@@ -176,8 +176,8 @@ void embDataListRead(AjPList data, AjPFile pfile)
 	 ** for rest of data iterate for each table in list adding
 	 ** (key,value) to each
 	 */
-         tokens = ajStrTokenInit(line, whiteSpace);
-         ajStrToken(&key, &tokens, NULL);
+         tokens = ajStrTokenNewC(line, whiteSpace);
+         ajStrTokenNextParse(&tokens, &key);
 	 /* check for end of data block*/
 	 if(! ajStrCmpC(key, endOfData))
 	     break;
@@ -185,9 +185,9 @@ void embDataListRead(AjPList data, AjPFile pfile)
          while(ajListIterMore(iter))
          {
             ptable = ajListIterNext(iter);
-            copyKey = ajStrDup(key);
-            if(!ajStrToken(&tmp, &tokens, NULL)) break;
-            value = ajStrDup(tmp);
+            copyKey = ajStrNewRef(key);
+            if(!ajStrTokenNextParse(&tokens, &tmp)) break;
+            value = ajStrNewRef(tmp);
             ajTablePut(ptable, copyKey, value);
          }
       }
@@ -195,7 +195,7 @@ void embDataListRead(AjPList data, AjPFile pfile)
 
    ajStrDel(&tmp);
    ajStrDel(&line);
-   ajStrTokenClear(&tokens);
+   ajStrTokenDel(&tokens);
    ajListIterFree(&iter);
 
    return;

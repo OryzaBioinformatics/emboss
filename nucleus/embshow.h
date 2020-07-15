@@ -22,6 +22,9 @@ enum ShowEValtype
     SH_NOTE
 };
 
+
+
+
 /* @data EmbPShow *************************************************************
 **
 ** NUCLEUS data structure for EmbPShow object for a sequence
@@ -58,6 +61,8 @@ typedef struct EmbSShow {
   AjBool html;
 } EmbOShow;
 #define EmbPShow EmbOShow*
+
+
 
 
 /* @data EmbPShowInfo *********************************************************
@@ -133,6 +138,10 @@ typedef struct EmbSShowSeq {
 
 /* blank line information, type = SH_BLANK */
 
+
+
+
+
 /* @data EmbPShowBlank ********************************************************
 **
 ** NUCLEUS data structure for  blank line information, type = SH_BLANK
@@ -147,6 +156,9 @@ typedef struct EmbSShowBlank {
   AjBool dummy;
 } EmbOShowBlank;
 #define EmbPShowBlank EmbOShowBlank*
+
+
+
 
 /* @data EmbPShowTicks ********************************************************
 **
@@ -163,6 +175,9 @@ typedef struct EmbSShowTicks {
 } EmbOShowTicks;
 #define EmbPShowTicks EmbOShowTicks*
 
+
+
+
 /* @data EmbPShowTicknum ******************************************************
 **
 ** NUCLEUS data structure for tick number line information, type = SH_TICKNUM
@@ -177,6 +192,9 @@ typedef struct EmbSShowTicknum {
   AjBool dummy;
 } EmbOShowTicknum;
 #define EmbPShowTicknum EmbOShowTicknum*
+
+
+
 
 /* @data EmbPShowTran *********************************************************
 **
@@ -214,6 +232,9 @@ typedef struct EmbSShowTran {
 } EmbOShowTran;
 #define EmbPShowTran EmbOShowTran*
 
+
+
+
 /* @data EmbPShowComp *********************************************************
 **
 ** NUCLEUS data structure for sequence complement information, type = SH_COMP
@@ -226,6 +247,9 @@ typedef struct EmbSShowComp {
   AjBool number;
 } EmbOShowComp;
 #define EmbPShowComp EmbOShowComp*
+
+
+
 
 /* @data EmbPShowRE ***********************************************************
 **
@@ -253,6 +277,9 @@ typedef struct EmbSShowRE {
 } EmbOShowRE;
 #define EmbPShowRE EmbOShowRE*
 
+
+
+
 /* @data EmbPShowFT ***********************************************************
 **
 ** NUCLEUS data structure for  Feature information, type = SH_FT
@@ -266,6 +293,9 @@ typedef struct EmbSShowFT {
 } EmbOShowFT;
 #define EmbPShowFT EmbOShowFT*
 
+
+
+
 /* @data EmbPShowNote *********************************************************
 **
 ** NUCLEUS data structure for annotation information, type = SH_NOTE
@@ -278,6 +308,8 @@ typedef struct EmbSShowNote {
   const AjPRange regions;
 } EmbOShowNote;
 #define EmbPShowNote EmbOShowNote*
+
+
 
 
 /********* assorted structures ***********/
@@ -298,7 +330,12 @@ typedef struct EmbSShowREsite {
 #define EmbPShowREsite EmbOShowREsite*
 
 
-/* declare functions **********************************************/
+
+
+/*
+** Prototype definitions
+*/
+
 EmbPShow embShowNew (const AjPSeq seq, ajint begin, ajint end, ajint width,
 		     ajint length, ajint margin, AjBool html, ajint offset);
 void     embShowDel (EmbPShow* pthis);
@@ -323,6 +360,10 @@ void     embShowUpperRange (AjPStr *line,
 			    const AjPRange upperrange, ajint pos);
 void     embShowColourRange (AjPStr *line,
 			     const AjPRange colour, ajint pos);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

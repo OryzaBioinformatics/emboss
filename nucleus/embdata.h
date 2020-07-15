@@ -8,11 +8,19 @@ extern "C"
 
 
 
+/*
+** Prototype definitions
+*/
+
 void     embDataListDel(AjPList *data);
 AjPTable embDataListGetTable(const AjPList fullList, ajuint required);
 void     embDataListGetTables(const AjPList fullList, AjPList returnList,
 			      ajuint required);
 void     embDataListRead(AjPList data, AjPFile file);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

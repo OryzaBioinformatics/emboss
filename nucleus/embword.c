@@ -29,6 +29,7 @@ static ajint wordLength = 0;
 /* list of wordlengths with current one at top of list */
 static AjPList wordLengthList = NULL;
 
+static AjPList wordCurList = NULL;
 
 
 
@@ -53,7 +54,7 @@ static void     wordOrderPosMatchTable(AjPList unorderedList);
 
 static unsigned wordStrHash(const void *key, unsigned hashsize);
 
-static void     wordVFree(const void *key, void **count, void *cl);
+static void     wordVFree(const void **key, void **count, void *cl);
 
 
 /* @funcstatic wordCmpStr *****************************************************
@@ -68,7 +69,7 @@ static void     wordVFree(const void *key, void **count, void *cl);
 
 static ajint wordCmpStr(const void *x, const void *y)
 {
-    return ajStrNCmpCaseCC((char *)x, (char *)y, wordLength);
+    return ajCharCmpCaseLen((char *)x, (char *)y, wordLength);
 }
 
 
@@ -176,8 +177,11 @@ void embWordClear(void)
     ** pop the previous word length from the list in case there's
     ** recursive word stuff
     */
-    ajListPop(wordLengthList, (void **)&pint);
-    AJFREE(pint);
+    if(ajListLength(wordLengthList))
+    {
+	ajListPop(wordLengthList, (void **)&pint);
+	AJFREE(pint);
+    }
 
     if(!ajListLength(wordLengthList))
     {
@@ -230,6 +234,42 @@ void embWordPrintTable(const AjPTable table)
 
 
 
+/* @func embWordPrintTableFI **************************************************
+**
+** Print the words found with their frequencies.
+**
+** @param [r] table [const AjPTable] table to be printed
+** @param [r] mincount [ajint] Minimum frequency to report
+** @param [u] outf [AjPFile] Output file.
+** @return [void]
+** @@
+******************************************************************************/
+
+void embWordPrintTableFI(const AjPTable table, ajint mincount, AjPFile outf)
+{
+    void **array;
+    EmbPWord ajnew;
+    ajint i;
+
+    array = ajTableToarray(table, NULL);
+
+    qsort(array, ajTableLength(table), 2*sizeof (*array),wordCompare);
+    for(i = 0; array[i]; i += 2)
+    {
+	ajnew = (EmbPWord) array[i+1];
+	if(ajnew->count < mincount) break;
+	ajFmtPrintF(outf, "%.*s\t%d\n",
+			   wordLength, ajnew->fword,ajnew->count);
+    }
+
+    AJFREE(array);
+
+    return;
+}
+
+
+
+
 /* @func embWordPrintTableF ***************************************************
 **
 ** Print the words found with their frequencies.
@@ -242,22 +282,7 @@ void embWordPrintTable(const AjPTable table)
 
 void embWordPrintTableF(const AjPTable table, AjPFile outf)
 {
-    void **array;
-    EmbPWord ajnew;
-    ajint i;
-
-    array = ajTableToarray(table, NULL);
-
-    qsort(array, ajTableLength(table), 2*sizeof (*array),wordCompare);
-    for(i = 0; array[i]; i += 2)
-    {
-	ajnew = (EmbPWord) array[i+1];
-	ajFmtPrintF(outf, "%.*s\t%d\n",
-			   wordLength, ajnew->fword,ajnew->count);
-    }
-
-    AJFREE(array);
-
+    embWordPrintTableFI(table, 1, outf);
     return;
 }
 
@@ -292,15 +317,20 @@ static void wordPositionListDelete(void **x,void *cl)
 **
 ** free the elements in a list of positons
 **
-** @param [r] key [const void*] key for a table item
+** @param [r] key [const void**] key for a table item
 ** @param [d] count [void**] Data values as void**
 ** @param [r] cl [void*] Ignored user data, usually NULL.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void wordVFree(const void *key, void **count, void *cl)
+static void wordVFree(const void **key, void **count, void *cl)
 {
+    char* ckey;
+
+    ckey = (char*) *key;
+    ajCharDel(&ckey);
+
     /* free the elements in the list of the positons */
     ajListMap(((EmbPWord)*count)->list,wordPositionListDelete, NULL);
 
@@ -327,7 +357,7 @@ static void wordVFree(const void *key, void **count, void *cl)
 
 void embWordFreeTable(AjPTable *table)
 {
-    ajTableMap(*table, wordVFree, NULL);
+    ajTableMapDel(*table, wordVFree, NULL);
     ajTableFree(table);
     table = 0;
 
@@ -465,10 +495,10 @@ void embWordMatchListConvToFeat(const AjPList list,
     if(!*tab2)
 	*tab2 = ajFeattableNewSeq(seq2);
     
-    ajStrAssC(&source,"wordmatch");
-    ajStrAssC(&type,"misc_feature");
+    ajStrAssignC(&source,"wordmatch");
+    ajStrAssignC(&type,"misc_feature");
     score = 1.0;
-    ajStrAssC(&tag,"note");
+    ajStrAssignC(&tag,"note");
     
     iter = ajListIterRead(list);
     while(ajListIterMore(iter))
@@ -478,13 +508,13 @@ void embWordMatchListConvToFeat(const AjPList list,
 			    p->seq1start+1,p->seq1start+p->length , score,
 			    strand, frame) ;
 	
-	ajFeatTagSet(feature, tag, ajSeqGetName(seq2));
+	ajFeatTagSet(feature, tag, ajSeqGetNameS(seq2));
 	
 	feature = ajFeatNew(*tab2, source, type,
 			    p->seq2start+1,p->seq2start+p->length , score,
 			    strand, frame) ;
 	
-	ajFeatTagSet(feature, tag, ajSeqGetName(seq1));
+	ajFeatTagSet(feature, tag, ajSeqGetNameS(seq1));
     }
     
     ajListIterFree(&iter);
@@ -517,34 +547,36 @@ ajint embWordGetTable(AjPTable *table, const AjPSeq seq)
     ajint ilast;
     ajint *k;
     EmbPWord rec;
+    char* key;
 
     ajint iwatch[] = {-1};
     ajint iw;
     AjBool dowatch;
+    size_t wordsize = wordLength+1;
 
     assert(wordLength > 0);
 
     ajDebug("embWordGetTable seq.len %d wordlength %d\n",
-	     ajSeqLen(seq), wordLength);
+	     ajSeqGetLen(seq), wordLength);
 
-    if(ajSeqLen(seq) < wordLength)
+    if(ajSeqGetLen(seq) < wordLength)
     {
 	ajErr("wordsize = %d, sequence length = %d",
-	      wordLength, ajSeqLen(seq));
+	      wordLength, ajSeqGetLen(seq));
 	return ajFalse;
     }
 
     if(!*table)
     {
-	*table = ajTableNewL(ajSeqLen(seq), wordCmpStr, wordStrHash);
+	*table = ajTableNewL(ajSeqGetLen(seq), wordCmpStr, wordStrHash);
 	ajDebug("make new table\n");
     }
 
     /* initialise ptr to start of seq string */
-    startptr = ajSeqChar(seq);
+    startptr = ajSeqGetSeqC(seq);
 
     i = 0;
-    ilast = ajSeqLen(seq) - wordLength;
+    ilast = ajSeqGetLen(seq) - wordLength;
 
     while(i <= ilast)
     {
@@ -569,10 +601,11 @@ ajint embWordGetTable(AjPTable *table, const AjPSeq seq)
 	{
 	    /* else create a new word */
 	    AJNEW0(rec);
-	    rec->count= 1;
-	    rec->fword = startptr;
+	    rec->count = 1;
+	    key = ajCharNewResLenC(startptr, wordsize, wordLength);
+	    rec->fword = key;
 	    rec->list = ajListNew();
-	    ajTablePut(*table, startptr, rec);
+	    ajTablePut(*table, key, rec);
 	}
 
 	AJNEW0(k);
@@ -663,7 +696,7 @@ static ajint wordGetWholeMatch(EmbPWordMatch match,
 
     nextpos = match->seq1start + 1;
 
-    ilast = ajSeqLen(seq2) - wordLength;
+    ilast = ajSeqGetLen(seq2) - wordLength;
     while(i <= ilast)
     {
 	/* find if it matches */
@@ -856,7 +889,7 @@ static ajint wordMatchCmpPos(const void* v1, const void* v2)
 **                 which is a list of items in "all hits" being updated
 **   (c) new hits, found in the word table from the other sequence.
 **
-** @param [u] seq1MatchTable [AjPTable*] Match table
+** @param [r] seq1MatchTable [const AjPTable] Match table
 ** @param [r] seq2 [const AjPSeq] Second sequence
 ** @param [r] orderit [ajint] 1 to sort results at end, else 0.
 ** @return [AjPList] List of matches.
@@ -864,13 +897,13 @@ static ajint wordMatchCmpPos(const void* v1, const void* v2)
 ** @@
 ******************************************************************************/
 
-AjPList embWordBuildMatchTable(AjPTable *seq1MatchTable,  const AjPSeq seq2,
+AjPList embWordBuildMatchTable(const AjPTable seq1MatchTable,
+			       const AjPSeq seq2,
 				ajint orderit)
 {
     ajint i = 0;
     ajint ilast;
     AjPList hitlist = NULL;
-    static AjPList curlist = NULL;
     const AjPList newlist = NULL;
     const char *startptr;
     EmbPWord wordmatch;
@@ -892,24 +925,24 @@ AjPList embWordBuildMatchTable(AjPTable *seq1MatchTable,  const AjPSeq seq2,
 
     hitlist = ajListNew();
 
-    if(!curlist)
-	curlist = ajListNew();
+    if(!wordCurList)
+	wordCurList = ajListNew();
 
-    if(ajSeqLen(seq2) < wordLength)
+    if(ajSeqGetLen(seq2) < wordLength)
     {
 	ajErr("ERROR: Sequence length = %d and word length = %d.\n",
-	      ajSeqLen(seq2), wordLength);
+	      ajSeqGetLen(seq2), wordLength);
 	ajErr("sequence length must be larger than word length");
 	return NULL;
     }
-    startptr = ajSeqChar(seq2);
-    ilast    = ajSeqLen(seq2) - wordLength;
+    startptr = ajSeqGetSeqC(seq2);
+    ilast    = ajSeqGetLen(seq2) - wordLength;
 
     /*ajDebug("ilast: %d\n", ilast);*/
 
     while(i <= ilast)
     {
-	if((wordmatch = ajTableGet(*seq1MatchTable, startptr)))
+	if((wordmatch = ajTableGet(seq1MatchTable, startptr)))
 	{
 	    /* match found so create EmbSWordMatch structure and fill it
 	    ** in. Then set next pos accordingly
@@ -929,10 +962,10 @@ AjPList embWordBuildMatchTable(AjPTable *seq1MatchTable,  const AjPSeq seq2,
 
 	    /* this is the list of matches for the current word and position */
 
-	    if(ajListLength(curlist))
+	    if(ajListLength(wordCurList))
 	    {
-	      /* ajDebug("CurList size %d\n",ajListLength(curlist)); */
-		curiter = ajListIter(curlist);
+	      /* ajDebug("wordCurList size %d\n",ajListLength(wordCurList)); */
+		curiter = ajListIter(wordCurList);
 
 		curmatch = ajListIterNext(curiter);
 		kcur = curmatch->seq1start + curmatch->length - wordLength + 1;
@@ -1001,17 +1034,17 @@ AjPList embWordBuildMatchTable(AjPTable *seq1MatchTable,  const AjPSeq seq2,
 		    /* ajDebug("Pushapp to hitlist\n"); */
 		    ajListPushApp(hitlist, match2); /* add to hitlist */
 		    if(curiter)
-		    {			/* add to curlist */
+		    {			/* add to wordCurList */
 		      /* ajDebug("ajListInsert using curiter\n"); */
 			wordListInsertOld(curiter, match2);
-			/*wordCurListTrace(curlist);*/
+			/*wordCurListTrace(wordCurList);*/
 			/*wordCurIterTrace(curiter);*/
 		    }
 		    else
 		    {
-		      /* ajDebug("ajListPushApp to curlist\n"); */
-			ajListPushApp(curlist, match2);
-			/* wordCurListTrace(curlist); */
+		      /* ajDebug("ajListPushApp to wordCurList\n"); */
+			ajListPushApp(wordCurList, match2);
+			/* wordCurListTrace(wordCurList); */
 		    }
 		}
 		/* ajDebug("k: %d i: %d\n", *k, i); */
@@ -1056,7 +1089,7 @@ AjPList embWordBuildMatchTable(AjPTable *seq1MatchTable,  const AjPSeq seq2,
 
     AJFREE(match);
 
-    while(ajListPop(curlist,(void **)&ptr));
+    while(ajListPop(wordCurList,(void **)&ptr));
 
     return hitlist;
 }
@@ -1548,6 +1581,23 @@ void embWordUnused(void)
     wordCurListTrace(NULL);	/* comment out in embWordBuildMatchTable */
     wordCurIterTrace(NULL);	/* comment out in embWordBuildMatchTable */
     wordNewListTrace(0, NULL);	/* comment out in embWordBuildMatchTable */
+
+    return;
+}
+
+
+
+/* @func embWordExit **********************************************************
+**
+** Cleanup word matching indexing internals on exit
+**
+** @return [void]
+******************************************************************************/
+
+void embWordExit(void)
+{
+    embWordClear();
+    ajListFree(&wordCurList);
 
     return;
 }

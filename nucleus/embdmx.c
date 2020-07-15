@@ -2,13 +2,13 @@
 **
 ** @source embdmx.c
 ** 
-** @source Algorithms for some of the DOMAINATRIX EMBASSY applications. 
+** Algorithms for some of the DOMAINATRIX EMBASSY applications. 
 ** For use with the Scophit and Scopalign objects.  
 ** The functionality will eventually be subsumed by other AJAX and NUCLEUS 
 ** libraries. 
 ** 
-** @author: Copyright (C) 2004 Ranjeeva Ranasinghe (rranasin@hgmp.mrc.ac.uk)
-** @author: Copyright (C) 2004 Jon Ison (jison@hgmp.mrc.ac.uk) 
+** @author Copyright (C) 2004 Ranjeeva Ranasinghe (rranasin@hgmp.mrc.ac.uk)
+** @author Copyright (C) 2004 Jon Ison (jison@hgmp.mrc.ac.uk) 
 ** @version 1.0 
 ** @@
 ** 
@@ -152,25 +152,25 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
     if(scoptmp->Class)
     {
 	do_class = ajTrue;
-	ajStrAssS(&class, scoptmp->Class);
+	ajStrAssignS(&class, scoptmp->Class);
     }
 
     if(scoptmp->Fold)
     {
 	do_fold= ajTrue;
-	ajStrAssS(&fold, scoptmp->Fold);
+	ajStrAssignS(&fold, scoptmp->Fold);
     }
 
     if(scoptmp->Superfamily)
     {
 	do_sfam = ajTrue;
-	ajStrAssS(&sfam, scoptmp->Superfamily);
+	ajStrAssignS(&sfam, scoptmp->Superfamily);
     }
 
     if(scoptmp->Family)
     {
 	do_fam = ajTrue;
-	ajStrAssS(&fam, scoptmp->Family);
+	ajStrAssignS(&fam, scoptmp->Family);
     }
 
     embDmxScophitToHit(&tmp, scoptmp);
@@ -186,28 +186,28 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
 	** next read
 	*/
 	if(do_class)
-	    if(!ajStrMatch(scoptmp->Class, class))
+	    if(!ajStrMatchS(scoptmp->Class, class))
 	    {
 		ajListIterBackNext(*iter);
 		break;
 	    }
 	
 	if(do_fold)
-	    if(!ajStrMatch(scoptmp->Fold, fold))
+	    if(!ajStrMatchS(scoptmp->Fold, fold))
 	    {
 		ajListIterBackNext(*iter);
 		break;
 	    }
 	
 	if(do_sfam)
-	    if(!ajStrMatch(scoptmp->Superfamily, sfam))
+	    if(!ajStrMatchS(scoptmp->Superfamily, sfam))
 	    {
 		ajListIterBackNext(*iter);
 		break;
 	    }
 	
 	if(do_fam)
-	    if(!ajStrMatch(scoptmp->Family, fam))
+	    if(!ajStrMatchS(scoptmp->Family, fam))
 	    {
 		ajListIterBackNext(*iter);
 		break;
@@ -218,10 +218,10 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
 	ajListPush(list, (AjPHit) tmp);
 	tmp = NULL;
     }
-    ajStrAssS(&(*out)->Class, class);
-    ajStrAssS(&(*out)->Fold, fold);
-    ajStrAssS(&(*out)->Superfamily, sfam);
-    ajStrAssS(&(*out)->Family, fam);
+    ajStrAssignS(&(*out)->Class, class);
+    ajStrAssignS(&(*out)->Fold, fold);
+    ajStrAssignS(&(*out)->Superfamily, sfam);
+    ajStrAssignS(&(*out)->Family, fam);
     (*out)->Sunid_Family = Sunid_Family;
     (*out)->Type = type;
     
@@ -266,17 +266,17 @@ AjBool embDmxScophitToHit(AjPHit *to, const AjPScophit from)
     if(!(*to))
 	*to = embHitNew();
 
-    ajStrAssS(&(*to)->Seq, from->Seq);
+    ajStrAssignS(&(*to)->Seq, from->Seq);
     (*to)->Start = from->Start;
     (*to)->End   = from->End;
-    ajStrAssS(&(*to)->Acc, from->Acc);
-    ajStrAssS(&(*to)->Spr, from->Spr);
-    ajStrAssS(&(*to)->Dom, from->Dom);
-    ajStrAssS(&(*to)->Typeobj, from->Typeobj);
-    ajStrAssS(&(*to)->Typesbj, from->Typesbj);
-    ajStrAssS(&(*to)->Model, from->Model);
-    ajStrAssS(&(*to)->Alg, from->Alg);
-    ajStrAssS(&(*to)->Group, from->Group);
+    ajStrAssignS(&(*to)->Acc, from->Acc);
+    ajStrAssignS(&(*to)->Spr, from->Spr);
+    ajStrAssignS(&(*to)->Dom, from->Dom);
+    ajStrAssignS(&(*to)->Typeobj, from->Typeobj);
+    ajStrAssignS(&(*to)->Typesbj, from->Typesbj);
+    ajStrAssignS(&(*to)->Model, from->Model);
+    ajStrAssignS(&(*to)->Alg, from->Alg);
+    ajStrAssignS(&(*to)->Group, from->Group);
     (*to)->Rank  = from->Rank;
     (*to)->Score = from->Score;
     (*to)->Eval  = from->Eval;
@@ -363,12 +363,12 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
     ** if necessary
     */
     if((ajStrMatchC(scoptmp->Acc,"Not_available")) ||
-       (MAJSTRLEN(scoptmp->Acc)==0))
+       (MAJSTRGETLEN(scoptmp->Acc)==0))
     {
 	while((scoptmp=(AjPScophit)ajListIterNext(*iter)))
 	{
 	    if((ajStrMatchC(scoptmp->Acc,"Not_available") == ajFalse) &&
-	       (MAJSTRLEN(scoptmp->Acc)!=0))
+	       (MAJSTRGETLEN(scoptmp->Acc)!=0))
 		break;
 	}
 	if(!scoptmp)
@@ -399,25 +399,25 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
     if(scoptmp->Class)
     {
 	do_class = ajTrue;
-	ajStrAssS(&class, scoptmp->Class);
+	ajStrAssignS(&class, scoptmp->Class);
     }
 
     if(scoptmp->Fold)
     {
 	do_fold= ajTrue;
-	ajStrAssS(&fold, scoptmp->Fold);
+	ajStrAssignS(&fold, scoptmp->Fold);
     }
 
     if(scoptmp->Superfamily)
     {
 	do_sfam = ajTrue;
-	ajStrAssS(&sfam, scoptmp->Superfamily);
+	ajStrAssignS(&sfam, scoptmp->Superfamily);
     }
 
     if(scoptmp->Family)
     {
 	do_fam = ajTrue;
-	ajStrAssS(&fam, scoptmp->Family);
+	ajStrAssignS(&fam, scoptmp->Family);
     }
 
     /* Only want to push the hit if it is not targetted */
@@ -433,23 +433,23 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
     while((scoptmp=(AjPScophit)ajListIterNext(*iter)))
     {
 	if(do_class)
-	    if(!ajStrMatch(scoptmp->Class, class))
+	    if(!ajStrMatchS(scoptmp->Class, class))
 		break;
 
 	if(do_fold)
-	    if(!ajStrMatch(scoptmp->Fold, fold))
+	    if(!ajStrMatchS(scoptmp->Fold, fold))
 		break;
 
 	if(do_sfam)
-	    if(!ajStrMatch(scoptmp->Superfamily, sfam))
+	    if(!ajStrMatchS(scoptmp->Superfamily, sfam))
 		break;
 
 	if(do_fam)
-	    if(!ajStrMatch(scoptmp->Family, fam))
+	    if(!ajStrMatchS(scoptmp->Family, fam))
 		break;
 	
 	if((ajStrMatchC(scoptmp->Acc,"Not_available")) ||
-	   (MAJSTRLEN(scoptmp->Acc)==0))
+	   (MAJSTRGETLEN(scoptmp->Acc)==0))
 	    continue;
 
 	if(scoptmp->Target2)
@@ -462,10 +462,10 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
 	continue;
     }
 
-    ajStrAssS(&(*out)->Class, class);
-    ajStrAssS(&(*out)->Fold, fold);
-    ajStrAssS(&(*out)->Superfamily, sfam);
-    ajStrAssS(&(*out)->Family, fam);
+    ajStrAssignS(&(*out)->Class, class);
+    ajStrAssignS(&(*out)->Fold, fold);
+    ajStrAssignS(&(*out)->Superfamily, sfam);
+    ajStrAssignS(&(*out)->Family, fam);
     (*out)->Sunid_Family = Sunid_Family;
     (*out)->Type = type;
         
@@ -621,30 +621,30 @@ AjBool embDmxScopToScophit(const AjPScop source, AjPScophit* target)
     }
     
 
-    ajStrAssS(&(*target)->Class,source->Class);
-    ajStrAssS(&(*target)->Fold,source->Fold);
-    ajStrAssS(&(*target)->Superfamily,source->Superfamily);
-    ajStrAssS(&(*target)->Family,source->Family);
+    ajStrAssignS(&(*target)->Class,source->Class);
+    ajStrAssignS(&(*target)->Fold,source->Fold);
+    ajStrAssignS(&(*target)->Superfamily,source->Superfamily);
+    ajStrAssignS(&(*target)->Family,source->Family);
     (*target)->Sunid_Family = source->Sunid_Family;
     
     /* The swissprot sequence was not available */
-    if(ajStrLen(source->SeqSpr)==0)
+    if(ajStrGetLen(source->SeqSpr)==0)
     {
-	ajStrAssS(&(*target)->Seq,source->SeqPdb);
+	ajStrAssignS(&(*target)->Seq,source->SeqPdb);
 	(*target)->Start = 0;
 	(*target)->End   = 0;
-	ajStrAssC(&(*target)->Acc,"Not_available");
-	ajStrAssC(&(*target)->Spr,"Not_available");
+	ajStrAssignC(&(*target)->Acc,"Not_available");
+	ajStrAssignC(&(*target)->Spr,"Not_available");
     }
     else
     {
-	ajStrAssS(&(*target)->Seq,source->SeqSpr);
+	ajStrAssignS(&(*target)->Seq,source->SeqSpr);
 	(*target)->Start = source->Startd;
 	(*target)->End   = source->Endd;
-	ajStrAssS(&(*target)->Acc,source->Acc);
-	ajStrAssS(&(*target)->Spr,source->Spr);
+	ajStrAssignS(&(*target)->Acc,source->Acc);
+	ajStrAssignS(&(*target)->Spr,source->Spr);
     }
-    ajStrAssS(&(*target)->Dom,source->Entry);
+    ajStrAssignS(&(*target)->Dom,source->Entry);
     
     return ajTrue;
 }
@@ -661,7 +661,7 @@ AjBool embDmxScopToScophit(const AjPScop source, AjPScophit* target)
 ** corresponding Scop objects from the scop classification file.
 **
 ** @param [r] align     [const AjPScopalg]  Contains a seed alignment.
-** @param [r] scop_arr  [const AjPScop *]    Array of AjPScop objects
+** @param [r] scop_arr  [AjPScop const*]    Array of AjPScop objects
 ** @param [r] scop_dim  [ajint]       Size of array
 ** @param [w] list      [AjPList*]    List of Scop objects.
 ** 
@@ -670,7 +670,7 @@ AjBool embDmxScopToScophit(const AjPScop source, AjPScophit* target)
 ** @@
 ****************************************************************************/
 
-AjBool embDmxScopalgToScop(const AjPScopalg align, const AjPScop *scop_arr, 
+AjBool embDmxScopalgToScop(const AjPScopalg align, AjPScop const *scop_arr, 
 			   ajint scop_dim, AjPList* list)
 {
     AjPStr entry_up = NULL;  /* Current entry, upper case */
@@ -697,8 +697,8 @@ AjBool embDmxScopalgToScop(const AjPScopalg align, const AjPScop *scop_arr,
     */
     for(i=0;i<align->N;i++)
     {
-	ajStrAssS(&entry_up, align->Codes[i]);
-	ajStrToUpper(&entry_up);
+	ajStrAssignS(&entry_up, align->Codes[i]);
+	ajStrFmtUpper(&entry_up);
 	
 	
         if((idx = ajScopArrFindScopid(scop_arr,scop_dim,entry_up))==-1)
@@ -743,15 +743,15 @@ AjBool embDmxScopalgToScop(const AjPScopalg align, const AjPScop *scop_arr,
 AjBool embDmxScophitsOverlapAcc(const AjPScophit h1, const AjPScophit h2,
 				ajint n)
 {
-    if((MAJSTRLEN(h1->Seq)<n) || (MAJSTRLEN(h2->Seq)<n))
+    if((MAJSTRGETLEN(h1->Seq)<n) || (MAJSTRGETLEN(h2->Seq)<n))
     {
 	ajWarn("Sequence length smaller than overlap limit in "
 	       "embDmxScophitsOverlapAcc ... checking for string "
 	       "match instead");
 
-	if(((ajStrFind(h1->Seq, h2->Seq)!=-1) ||
-	    (ajStrFind(h2->Seq, h1->Seq)!=-1)) &&
-	   (ajStrMatch(h1->Acc, h2->Acc)))
+	if(((ajStrFindS(h1->Seq, h2->Seq)!=-1) ||
+	    (ajStrFindS(h2->Seq, h1->Seq)!=-1)) &&
+	   (ajStrMatchS(h1->Acc, h2->Acc)))
 	    return ajTrue;
 	else
 	    return ajFalse;
@@ -759,7 +759,7 @@ AjBool embDmxScophitsOverlapAcc(const AjPScophit h1, const AjPScophit h2,
 
     if( ((((h1->End - h2->Start + 1)>=n) && (h2->Start >= h1->Start)) ||
 	 (((h2->End - h1->Start + 1)>=n) && (h1->Start >= h2->Start)))  &&
-       (ajStrMatch(h1->Acc, h2->Acc)))
+       (ajStrMatchS(h1->Acc, h2->Acc)))
 	return ajTrue;
 
     return ajFalse;
@@ -784,13 +784,13 @@ AjBool embDmxScophitsOverlapAcc(const AjPScophit h1, const AjPScophit h2,
 
 AjBool embDmxScophitsOverlap(const AjPScophit h1, const AjPScophit h2, ajint n)
 {
-    if((MAJSTRLEN(h1->Seq)<n) || (MAJSTRLEN(h2->Seq)<n))
+    if((MAJSTRGETLEN(h1->Seq)<n) || (MAJSTRGETLEN(h2->Seq)<n))
     {
 	ajWarn("Sequence length smaller than overlap limit in "
 	       "embDmxScophitsOverlap ... checking for string match instead");
 
-	if((ajStrFind(h1->Seq, h2->Seq)!=-1) ||
-	   (ajStrFind(h2->Seq, h1->Seq)!=-1))
+	if((ajStrFindS(h1->Seq, h2->Seq)!=-1) ||
+	   (ajStrFindS(h2->Seq, h1->Seq)!=-1))
 	    return ajTrue;
 	else
 	    return ajFalse;
@@ -841,7 +841,7 @@ AjPScophit embDmxScophitMerge(const AjPScophit hit1, const AjPScophit hit2)
 	return NULL;
     }
 
-    if(!ajStrMatch(hit1->Acc, hit2->Acc))
+    if(!ajStrMatchS(hit1->Acc, hit2->Acc))
     {
 	ajWarn("Merge attempted on 2 hits with different accession numbers");
 	return NULL;
@@ -857,23 +857,23 @@ AjPScophit embDmxScophitMerge(const AjPScophit hit1, const AjPScophit hit2)
     ret = ajDmxScophitNew();
     temp = ajStrNew();
     
-    ajStrAssS(&(ret->Acc), hit1->Acc);
-    ajStrAssS(&(ret->Spr), hit1->Spr);
-    ajStrAssS(&(ret->Dom), hit1->Dom);
+    ajStrAssignS(&(ret->Acc), hit1->Acc);
+    ajStrAssignS(&(ret->Spr), hit1->Spr);
+    ajStrAssignS(&(ret->Dom), hit1->Dom);
     ret->Type = hit1->Type;
     
         
-    if(ajStrMatch(hit1->Class, hit2->Class))
+    if(ajStrMatchS(hit1->Class, hit2->Class))
     {
-	ajStrAssS(&(ret->Class), hit1->Class);
-	if(ajStrMatch(hit1->Fold, hit2->Fold))
+	ajStrAssignS(&(ret->Class), hit1->Class);
+	if(ajStrMatchS(hit1->Fold, hit2->Fold))
 	{
-	    ajStrAssS(&(ret->Fold), hit1->Fold);
-	    if(ajStrMatch(hit1->Superfamily, hit2->Superfamily))
+	    ajStrAssignS(&(ret->Fold), hit1->Fold);
+	    if(ajStrMatchS(hit1->Superfamily, hit2->Superfamily))
 	    {
-		ajStrAssS(&(ret->Superfamily), hit1->Superfamily);
-		if(ajStrMatch(hit1->Family, hit2->Family))
-		    ajStrAssS(&(ret->Family), hit1->Family);
+		ajStrAssignS(&(ret->Superfamily), hit1->Superfamily);
+		if(ajStrMatchS(hit1->Family, hit2->Family))
+		    ajStrAssignS(&(ret->Family), hit1->Family);
 	    }
 	}
     }
@@ -885,14 +885,14 @@ AjPScophit embDmxScophitMerge(const AjPScophit hit1, const AjPScophit hit2)
     */
     if(hit1->Start <= hit2->Start)
     {
-	ajStrAssS(&(ret->Seq), hit1->Seq);
+	ajStrAssignS(&(ret->Seq), hit1->Seq);
 	ret->Start = hit1->Start;
 	end   = hit1->End;
 	start = hit2->Start;
     }	
     else
     {
-	ajStrAssS(&(ret->Seq), hit2->Seq);
+	ajStrAssignS(&(ret->Seq), hit2->Seq);
     	ret->Start = hit2->Start;
 	end   = hit2->End;
 	start = hit1->Start;
@@ -912,29 +912,29 @@ AjPScophit embDmxScophitMerge(const AjPScophit hit1, const AjPScophit hit2)
     */
     if(hit2->End > end)
     {
-	ajStrAssSub(&temp, hit2->Seq, end-start+1, -1);
-	ajStrApp(&(ret->Seq),temp);
+	ajStrAssignSubS(&temp, hit2->Seq, end-start+1, -1);
+	ajStrAppendS(&(ret->Seq),temp);
     }
     else if(hit1->End > end)
     {
-	ajStrAssSub(&temp, hit1->Seq, end-start+1, -1);
-	ajStrApp(&(ret->Seq),temp);
+	ajStrAssignSubS(&temp, hit1->Seq, end-start+1, -1);
+	ajStrAppendS(&(ret->Seq),temp);
     }
 
 
     /* Classify the merged hit */
     if(ajStrMatchC(hit1->Typeobj, "SEED") ||
        ajStrMatchC(hit1->Typeobj, "SEED"))
-	ajStrAssC(&(ret->Typeobj), "SEED");
+	ajStrAssignC(&(ret->Typeobj), "SEED");
     else if(ajStrMatchC(hit1->Typeobj, "HIT") ||
 	    ajStrMatchC(hit1->Typeobj, "HIT"))
-	ajStrAssC(&(ret->Typeobj), "HIT");
+	ajStrAssignC(&(ret->Typeobj), "HIT");
     else
-	ajStrAssC(&(ret->Typeobj), "OTHER");
+	ajStrAssignC(&(ret->Typeobj), "OTHER");
 
 
-    if(ajStrMatch(hit1->Model, hit2->Model))
-	ajStrAssS(&ret->Model, hit1->Model);
+    if(ajStrMatchS(hit1->Model, hit2->Model))
+	ajStrAssignS(&ret->Model, hit1->Model);
     
 
     if(hit1->Sunid_Family == hit2->Sunid_Family)
@@ -1279,7 +1279,7 @@ AjBool embDmxSeqNR(const AjPList input, AjPInt *keep, ajint *nset,
     /* Create an ajint array to hold lengths of sequences */
     lens = ajIntNewL(nin);
     for(x=0; x<nin; x++)
-	ajIntPut(&lens,x,ajSeqLen(inseqs[x]));
+	ajIntPut(&lens,x,ajSeqGetLen(inseqs[x]));
 
 
     /* Set the keep array elements to 1 */
@@ -1302,7 +1302,7 @@ AjBool embDmxSeqNR(const AjPList input, AjPInt *keep, ajint *nset,
 	    
 
 	    /* Process w/o alignment identical sequences */
-	    if(ajStrMatch(inseqs[x]->Seq, inseqs[y]->Seq))
+	    if(ajStrMatchS(inseqs[x]->Seq, inseqs[y]->Seq))
 	    {
 /*  DIAGNOSTICS		printf("Score=%f\n", 100.0);  */
 		
@@ -1324,8 +1324,8 @@ AjBool embDmxSeqNR(const AjPList input, AjPInt *keep, ajint *nset,
 	    p = ajSeqChar(inseqs[x]);
 	    q = ajSeqChar(inseqs[y]);
 
-	    ajStrAssC(&m,"");
-	    ajStrAssC(&n,"");
+	    ajStrAssignC(&m,"");
+	    ajStrAssignC(&n,"");
 
 
 	    /* Check that no sequence length is 0 */
@@ -1564,7 +1564,7 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPInt *keep, ajint *nset,
     /* Create an ajint array to hold lengths of sequences */
     lens = ajIntNewL(nin);
     for(x=0; x<nin; x++)
-	ajIntPut(&lens,x,ajSeqLen(inseqs[x]));
+	ajIntPut(&lens,x,ajSeqGetLen(inseqs[x]));
 
 
     /* Set the keep array elements to 1 */
@@ -1582,7 +1582,7 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPInt *keep, ajint *nset,
 	for(y=x+1; y<nin; y++)
 	{
 	    /* Process w/o alignment identical sequences */
-	    if(ajStrMatch(inseqs[x]->Seq, inseqs[y]->Seq))
+	    if(ajStrMatchS(inseqs[x]->Seq, inseqs[y]->Seq))
 	    {
 		ajFloat2dPut(&scores,x,y,(float)100.0);
 		continue;
@@ -1602,8 +1602,8 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPInt *keep, ajint *nset,
 	    p = ajSeqChar(inseqs[x]);
 	    q = ajSeqChar(inseqs[y]);
 
-	    ajStrAssC(&m,"");
-	    ajStrAssC(&n,"");
+	    ajStrAssignC(&m,"");
+	    ajStrAssignC(&n,"");
 
 
 	    /* Check that no sequence length is 0 */
@@ -1829,7 +1829,7 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
     /* Create an ajint array to hold lengths of sequences */
     lens = ajIntNewL(nin);
     for(x=0; x<nin; x++)
-	ajIntPut(&lens,x,ajSeqLen(inseqs[x]));
+	ajIntPut(&lens,x,ajSeqGetLen(inseqs[x]));
 
 
     /* Create a 2d float array to hold the similarity scores */
@@ -1847,7 +1847,7 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
 	    
 
 	    /* Process w/o alignment identical sequences */
-	    if(ajStrMatch(inseqs[x]->Seq, inseqs[y]->Seq))
+	    if(ajStrMatchS(inseqs[x]->Seq, inseqs[y]->Seq))
 	    {
 /*  DIAGNOSTICS		printf("Score=%f\n", 100.0);  */
 		
@@ -1869,8 +1869,8 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
 	    p = ajSeqChar(inseqs[x]);
 	    q = ajSeqChar(inseqs[y]);
 
-	    ajStrAssC(&m,"");
-	    ajStrAssC(&n,"");
+	    ajStrAssignC(&m,"");
+	    ajStrAssignC(&n,"");
 
 
 	    /* Check that no sequence length is 0 */
@@ -1966,7 +1966,7 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
     AjPList    tmplist   = NULL;    /* Temp. list of hits               */
     AjBool     donefirst = ajFalse; /* Read first code line.            */
     ajint     ntok       = 0;       /* No. tokens in a line.            */
-    AjPStr    token      = NULL;
+    const AjPStr token   = NULL;
     AjPStr    line       = NULL;    /* Line of text.                    */
     AjPStr    subline    = NULL;
     AjBool    ok         = ajFalse;
@@ -1988,14 +1988,14 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
 	    /* Process the last hit */
 	    if(donefirst)
 	    {
-		if(MAJSTRLEN(hit->Seq))
-		    ajStrCleanWhite(&hit->Seq);
+		if(MAJSTRGETLEN(hit->Seq))
+		    ajStrRemoveWhiteExcess(&hit->Seq);
 		ajListPushApp(tmplist, hit);
 	    }
 	    
 	    /* Check line has correct no. of tokens and allocate Hit */
-	    ajStrAssSub(&subline, line, 1, -1);
-	    if( (ntok=ajStrTokenCount(subline, "^")) != 17)
+	    ajStrAssignSubS(&subline, line, 1, -1);
+	    if( (ntok=ajStrParseCountC(subline, "^")) != 17)
 		ajFatal("Incorrect no. (%d) of tokens on line %S\n", ntok, line);
 	    else
 	    {
@@ -2004,29 +2004,29 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
 	    }
 	    
 	    /* Acc */
-	    token = ajStrTokC(subline, "^");
-	    ajStrAssS(&hit->Acc, token);
-	    ajStrChomp(&hit->Acc); 
+	    token = ajStrParseC(subline, "^");
+	    ajStrAssignS(&hit->Acc, token);
+	    ajStrTrimWhite(&hit->Acc); 
 	    if(ajStrMatchC(hit->Acc, "."))
-		ajStrClear(&hit->Acc);
+		ajStrSetClear(&hit->Acc);
 
 	    /* Spr */
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Spr, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Spr, token);
 	    if(ajStrMatchC(hit->Spr, "."))
-		ajStrClear(&hit->Spr);
+		ajStrSetClear(&hit->Spr);
 
 	    /* Start */
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%d", &hit->Start);
 
 	    /* End */
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%d", &hit->End);
 	    
 	    /* Type */
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&type, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&type, token);
 
 	    if(ajStrMatchC(type, "SCOP"))
 		hit->Type = ajSCOP;
@@ -2034,71 +2034,71 @@ AjPList  embDmxScophitReadAllFasta(AjPFile inf)
 		hit->Type = ajCATH;
 
 	    /* Dom */
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Dom, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Dom, token);
 	    if(ajStrMatchC(hit->Dom, "."))
-		ajStrClear(&hit->Dom);
+		ajStrSetClear(&hit->Dom);
 
 	    /* Read domain identifier */
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%d", &hit->Sunid_Family);
 	    
 
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Class, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Class, token);
 	    if(ajStrMatchC(hit->Class, "."))
-		ajStrClear(&hit->Class);	
+		ajStrSetClear(&hit->Class);	
 
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Architecture, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Architecture, token);
 	    if(ajStrMatchC(hit->Architecture, "."))
-		ajStrClear(&hit->Architecture);
+		ajStrSetClear(&hit->Architecture);
 
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Topology, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Topology, token);
 	    if(ajStrMatchC(hit->Topology, "."))
-		ajStrClear(&hit->Topology);
+		ajStrSetClear(&hit->Topology);
 
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Fold, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Fold, token);
 	    if(ajStrMatchC(hit->Fold, "."))
-		ajStrClear(&hit->Fold);
+		ajStrSetClear(&hit->Fold);
 
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Superfamily, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Superfamily, token);
 	    if(ajStrMatchC(hit->Superfamily, "."))
-		ajStrClear(&hit->Superfamily);
+		ajStrSetClear(&hit->Superfamily);
 
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Family, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Family, token);
 	    if(ajStrMatchC(hit->Family, "."))
-		ajStrClear(&hit->Family);
+		ajStrSetClear(&hit->Family);
 
-	    token = ajStrTokC(NULL, "^");
-	    ajStrAssS(&hit->Model, token);
+	    token = ajStrParseC(NULL, "^");
+	    ajStrAssignS(&hit->Model, token);
 	    if(ajStrMatchC(hit->Model, "."))
-		ajStrClear(&hit->Model);
+		ajStrSetClear(&hit->Model);
 
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%f", &hit->Score);
 	    
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%f", &hit->Pval);
 
-	    token = ajStrTokC(NULL, "^");
+	    token = ajStrParseC(NULL, "^");
 	    ajFmtScanS(token, "%f", &hit->Eval);
 
 	    donefirst = ajTrue;
 	}
 	else
-	    ajStrApp(&hit->Seq, line);
+	    ajStrAppendS(&hit->Seq, line);
     }
 
 
     /* EOF therefore process last hit */
     if((!ok) && (parseok))
     {
-	ajStrCleanWhite(&hit->Seq);
+	ajStrRemoveWhiteExcess(&hit->Seq);
 	ajListPushApp(tmplist, hit);
     }
 
@@ -2160,23 +2160,23 @@ AjBool embDmxHitlistToScophits(const AjPList in, AjPList *out)
 
 	    /* Assign scop classification records from hitlist structure */
 	    scophit->Type = hitlist->Type;
-	    ajStrAssS(&scophit->Class, hitlist->Class);
-	    ajStrAssS(&scophit->Fold, hitlist->Fold);
-	    ajStrAssS(&scophit->Superfamily, hitlist->Superfamily);
-	    ajStrAssS(&scophit->Family, hitlist->Family);
+	    ajStrAssignS(&scophit->Class, hitlist->Class);
+	    ajStrAssignS(&scophit->Fold, hitlist->Fold);
+	    ajStrAssignS(&scophit->Superfamily, hitlist->Superfamily);
+	    ajStrAssignS(&scophit->Family, hitlist->Family);
 	    scophit->Sunid_Family = hitlist->Sunid_Family;
 	    scophit->Priority = hitlist->Priority;
 	    
 	    /* Assign records from hit structure */
-	    ajStrAssS(&scophit->Seq, hitlist->hits[x]->Seq);
-	    ajStrAssS(&scophit->Acc, hitlist->hits[x]->Acc);
-	    ajStrAssS(&scophit->Spr, hitlist->hits[x]->Spr);
-	    ajStrAssS(&scophit->Dom, hitlist->hits[x]->Dom);
-	    ajStrAssS(&scophit->Typeobj, hitlist->hits[x]->Typeobj);
-	    ajStrAssS(&scophit->Typesbj, hitlist->hits[x]->Typesbj);
-	    ajStrAssS(&scophit->Model, hitlist->hits[x]->Model);
-	    ajStrAssS(&scophit->Alg, hitlist->hits[x]->Alg);
-	    ajStrAssS(&scophit->Group, hitlist->hits[x]->Group);
+	    ajStrAssignS(&scophit->Seq, hitlist->hits[x]->Seq);
+	    ajStrAssignS(&scophit->Acc, hitlist->hits[x]->Acc);
+	    ajStrAssignS(&scophit->Spr, hitlist->hits[x]->Spr);
+	    ajStrAssignS(&scophit->Dom, hitlist->hits[x]->Dom);
+	    ajStrAssignS(&scophit->Typeobj, hitlist->hits[x]->Typeobj);
+	    ajStrAssignS(&scophit->Typesbj, hitlist->hits[x]->Typesbj);
+	    ajStrAssignS(&scophit->Model, hitlist->hits[x]->Model);
+	    ajStrAssignS(&scophit->Alg, hitlist->hits[x]->Alg);
+	    ajStrAssignS(&scophit->Group, hitlist->hits[x]->Group);
 	    scophit->Start = hitlist->hits[x]->Start;
 	    scophit->End = hitlist->hits[x]->End;
 	    scophit->Rank = hitlist->hits[x]->Rank;

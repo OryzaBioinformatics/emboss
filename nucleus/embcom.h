@@ -7,17 +7,6 @@ extern "C"
 #define embcom_h
 
 
-#define MAX_W  50
-
-
-struct STR
- {
-  char WORD[MAX_W];
- };
-
-typedef struct STR STRING;
-
-
 struct traccia {
     ajint ind;
     float pc;
@@ -49,6 +38,13 @@ struct sqsim{
 
 typedef struct sqsim SEQSim;
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 void embComComplexity(const char *seq,const char *name,
 		      ajint len, ajint jmin, ajint jmax,
 		      ajint l, ajint step, ajint sim, ajint freq, ajint omnia,
@@ -59,6 +55,10 @@ void embComWriteValueOfSeq(AjPFile fp, ajint n,const char *name, ajint len,
 void embComWriteFile(AjPFile fp, ajint jmin, ajint jmax, ajint lwin,
 		     ajint step, ajint sim);
 void embComUnused (void);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

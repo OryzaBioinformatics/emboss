@@ -41,6 +41,13 @@ extern "C"
 /*****************************************************************************/
 /* These functions are NOT YET DOCUMENTED in the appropriate data structures */
 /*****************************************************************************/
+
+
+
+/*
+** Prototype definitions
+*/
+
 AjPList       embDmxScophitReadAllFasta(AjPFile in);
 
 AjBool        embDmxHitlistToScophits(const AjPList in, 
@@ -65,7 +72,7 @@ AjBool        embDmxScopToScophit(const AjPScop source,
 				  AjPScophit* target);
 
 AjBool        embDmxScopalgToScop(const AjPScopalg align,
-				  const AjPScop *scop_arr, 
+				  AjPScop const *scop_arr, 
 				  ajint scop_dim, 
 				  AjPList* list);
 
@@ -131,6 +138,10 @@ AjBool        embDmxSeqCompall(const AjPList input,
 			       const AjPMatrixf matrix, 
 			       float gapopen, 
 			       float gapextend);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

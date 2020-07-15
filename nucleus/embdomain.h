@@ -41,10 +41,18 @@ extern "C"
 /* ======================================================================= */
 /* ========================== Scop object ================================ */
 /* ======================================================================= */
+
+/*
+** Prototype definitions
+*/
+
 AjPStr   embScopToPdbid(const AjPStr scop, AjPStr *pdb);
 AjBool   embScopToSp(const AjPStr scop, AjPStr *spr, const AjPList list);
 AjBool   embScopToAcc(const AjPStr scop, AjPStr *acc, const AjPList list);
 
+/*
+** End of prototype definitions
+*/
 
 
 

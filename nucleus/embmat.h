@@ -10,6 +10,9 @@ extern "C"
 
 typedef ajint *PMAT_INT[26];
 
+
+
+
 /* @data EmbPMatPrints ********************************************************
 **
 ** NUCLEUS data structure for PRINTS protein fingerprints
@@ -37,6 +40,9 @@ typedef struct EmbSMatPrints
     PMAT_INT *matrix;
 } EmbOMatPrint;
 #define EmbPMatPrints EmbOMatPrint*
+
+
+
 
 /* @data EmbPMatMatch *********************************************************
 **
@@ -104,6 +110,11 @@ typedef struct EmbSMatMatch
 
 
 
+
+/*
+** Prototype definitions
+*/
+
 void   embMatMatchDel (EmbPMatMatch *s);
 void   embMatPrintsInit (AjPFile *fp);
 void   embMatProtDelInt (EmbPMatPrints *s);
@@ -111,6 +122,10 @@ EmbPMatPrints embMatProtReadInt (AjPFile fp);
 ajint    embMatProtScanInt (const AjPStr s, const AjPStr n,
 			    const EmbPMatPrints m, AjPList *l,
 			    AjBool *all, AjBool *ordered, AjBool overlap);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 
