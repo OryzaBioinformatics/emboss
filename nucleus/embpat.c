@@ -299,7 +299,7 @@ EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr,
     ajuint i;
     const char *ptr;
     AjBool nterm = ajFalse;
-    AjPListNode node;
+/*    AjPListNode node;*/
     AjPStr regstr = NULL;
 
     if(*regexp->Ptr == '^')
@@ -334,17 +334,17 @@ EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr,
 	AJNEW(len);
 	*len = ajRegLenI(regcomp,0);
 	*pos += (ajuint) (sptr-ptr);
-	node = ajListNodesNew(pos, NULL);
-	ajListAppend(poslist, &node);
-	node = ajListNodesNew(len, NULL);
-	ajListAppend(lenlist, &node);
+/*	node = ajListNodesNew(pos, NULL);*/
+	ajListPush(poslist, pos);
+/*	node = ajListNodesNew(len, NULL);*/
+	ajListPush(lenlist, len);
 	sptr += posi+1;
 	if(nterm)
 	    break;
     }
 
     ajRegFree(&regcomp);
-    results->number  = ajListLength(poslist);
+    results->number  = ajListGetLength(poslist);
 
     ajDebug("embPatMatchFindC '%S' nterm:%B results: %d\n",
 	    regstr, nterm, results->number);
@@ -355,22 +355,22 @@ EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr,
 	AJCNEW(results->len, results->number);
 
 	i = 0;
-	iter = ajListIterRead(poslist);
-	while(ajListIterMore(iter))
+	iter = ajListIterNewread(poslist);
+	while(!ajListIterDone(iter))
 	{
-	    results->start[i] = *(ajuint *) ajListIterNext(iter);
+	    results->start[i] = *(ajuint *) ajListIterGet(iter);
 	    i++;
 	}
-	ajListIterFree(&iter);
+	ajListIterDel(&iter);
 
 	i = 0;
-	iter = ajListIterRead(lenlist);
-	while(ajListIterMore(iter))
+	iter = ajListIterNewread(lenlist);
+	while(!ajListIterDone(iter))
 	{
-	    results->len[i] = *(ajuint *) ajListIterNext(iter);
+	    results->len[i] = *(ajuint *) ajListIterGet(iter);
 	    i++;
 	}
-	ajListIterFree(&iter);
+	ajListIterDel(&iter);
 
 	ajListMap(poslist,patStringFree, NULL);
 	ajListMap(lenlist,patStringFree, NULL);
@@ -775,25 +775,25 @@ AjBool embPatRestrictReadEntry(EmbPPatRestrict re, AjPFile inf)
     }
 
 
-    p = ajSysStrtok(p,"\t \n");
+    p = ajSysFuncStrtok(p,"\t \n");
     ajStrAssignC(&re->cod,p);
-    p = ajSysStrtok(NULL,"\t \n");
+    p = ajSysFuncStrtok(NULL,"\t \n");
     ajStrAssignC(&re->pat,p);
     ajStrAssignC(&re->bin,p);
 
-    p = ajSysStrtok(NULL,"\t \n");
+    p = ajSysFuncStrtok(NULL,"\t \n");
     sscanf(p,"%d",&re->len);
-    p = ajSysStrtok(NULL,"\t \n");
+    p = ajSysFuncStrtok(NULL,"\t \n");
     sscanf(p,"%d",&re->ncuts);
-    p = ajSysStrtok(NULL,"\t \n");
+    p = ajSysFuncStrtok(NULL,"\t \n");
     sscanf(p,"%d",&re->blunt);
-    p = ajSysStrtok(NULL,"\t \n");
+    p = ajSysFuncStrtok(NULL,"\t \n");
     sscanf(p,"%d",&re->cut1);
-    p = ajSysStrtok(NULL,"\t \n");
+    p = ajSysFuncStrtok(NULL,"\t \n");
     sscanf(p,"%d",&re->cut2);
-    p = ajSysStrtok(NULL,"\t \n");
+    p = ajSysFuncStrtok(NULL,"\t \n");
     sscanf(p,"%d",&re->cut3);
-    p = ajSysStrtok(NULL,"\t \n");
+    p = ajSysFuncStrtok(NULL,"\t \n");
     sscanf(p,"%d",&re->cut4);
 
     for(i=0,q=ajStrGetuniquePtr(&re->bin);i<re->len;++i)
@@ -1180,8 +1180,8 @@ ajuint embPatRestrictScan(const EmbPPatRestrict enz,
 	if(rhits<min || rhits>max)
 	{
 	    while(ajListPop(ty,(void **)&m));
-	    ajListDel(&tx);
-	    ajListDel(&ty);
+	    ajListFree(&tx);
+	    ajListFree(&ty);
 	    return 0;
 	}
 	else
@@ -1192,8 +1192,8 @@ ajuint embPatRestrictScan(const EmbPPatRestrict enz,
 	}
     }
 
-    ajListDel(&tx);
-    ajListDel(&ty);
+    ajListFree(&tx);
+    ajListFree(&ty);
 
     return hits;
 }
@@ -2408,7 +2408,7 @@ ajuint embPatBYGSearch(const AjPStr str, const AjPStr name,
 		    ++matches;
 		    embPatPushHit(l,name,pos,plen,begin,0);
 		  /* ajDebug("..pat hit matches:%d list:%d name:'%S' pos:%d\n",
-			    matches, ajListLength(l), name, pos); */
+			    matches, ajListGetLength(l), name, pos); */
 		}
 	    }
 	    ++p;
@@ -3349,16 +3349,16 @@ void embPatRestrictPreferred(AjPList l, const AjPTable t)
     EmbPMatMatch m = NULL;
     AjPStr value   = NULL;
 
-    iter = ajListIterRead(l);
+    iter = ajListIterNewread(l);
 
-    while((m = (EmbPMatMatch)ajListIterNext(iter)))
+    while((m = (EmbPMatMatch)ajListIterGet(iter)))
     {
-	value = ajTableGet(t,m->cod);
+	value = ajTableFetch(t,m->cod);
 	if(value)
 	    ajStrAssignS(&m->cod,value);
     }
 
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
 
     return;
 }
@@ -3469,7 +3469,7 @@ ajuint embPatRestrictRestrict(AjPList l, ajuint hits, AjBool isos,
     /* List l is currently empty - now reuse it  */
 
     hits = nc;
-    ajListDel(&tlist);
+    ajListFree(&tlist);
     tlist = ajListNew();
 
 
@@ -3544,7 +3544,7 @@ ajuint embPatRestrictRestrict(AjPList l, ajuint hits, AjBool isos,
 			if(m->cut1!=cut1 || m->cut2!=cut2 || m->cut3!=cut3 ||
 			   m->cut4!=cut4 || ajStrCmpS(ps,m->pat))
 			{
-			    ajListPushApp(tlist,(void *)m);
+			    ajListPushAppend(tlist,(void *)m);
 			    ++v;
 			}
 
@@ -3597,7 +3597,7 @@ ajuint embPatRestrictRestrict(AjPList l, ajuint hits, AjBool isos,
 		if(m->cut1!=cut1 || m->cut2!=cut2 || m->cut3!=cut3 ||
 		   m->cut4!=cut4 || ajStrCmpS(ps,m->pat))
 		{
-		    ajListPushApp(tlist,(void *)m);
+		    ajListPushAppend(tlist,(void *)m);
 		    ++v;
 		}
 		else
@@ -3627,18 +3627,18 @@ ajuint embPatRestrictRestrict(AjPList l, ajuint hits, AjBool isos,
 	{
 	    ajListPush(l, (void*) m);
 	}
-	ajListDel(&newlist);
+	ajListFree(&newlist);
     }
 
     /* Finally sort on position of recognition sequence and print */
     ajListSort(l,embPatRestrictStartCompare);
 
     if(alpha)
-	ajListSort2(l,embPatRestrictNameCompare, embPatRestrictStartCompare);
+	ajListSortTwo(l,embPatRestrictNameCompare, embPatRestrictStartCompare);
 
     ajStrDel(&ps);
-    ajListDel(&tlist);
-    ajListDel(&newlist);
+    ajListFree(&tlist);
+    ajListFree(&newlist);
 
     return hits;
 }

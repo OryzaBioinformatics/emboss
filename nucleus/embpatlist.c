@@ -265,7 +265,7 @@ void embPatternSeqSearch (AjPFeattable ftable, const AjPSeq seq,
     ajStrDel(&seqname);
     ajStrDel(&seqstr);
     ajStrDel(&tmp);
-    ajListDel(&list);
+    ajListFree(&list);
 
     return;
 }

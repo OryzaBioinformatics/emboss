@@ -138,7 +138,7 @@ AjPPatternSeq ajPatternSeqNewList (AjPPatlistSeq plist,
 	ajStrAssignS (&pthis->Name,name);
     else
 	ajFmtPrintS(&pthis->Name, "pattern%d",
-		    1+ajListLength(plist->Patlist));
+		    1+ajListGetLength(plist->Patlist));
 
     ajStrAssignS(&pthis->Pattern,pat);
     pthis->Protein  = plist->Protein;
@@ -175,7 +175,7 @@ AjPPatternRegex ajPatternRegexNewList(AjPPatlistRegex plist,
 	ajStrAssignS (&pthis->Name,name);
     else
 	ajFmtPrintS(&pthis->Name, "regex%d",
-		    1+ajListLength(plist->Patlist));
+		    1+ajListGetLength(plist->Patlist));
 
     ajStrAssignS  (&pthis->Pattern,pat);
     pthis->Type = plist->Type;
@@ -435,7 +435,7 @@ AjPPatlistRegex ajPatlistRegexNew (void)
     pthis->Patlist = ajListNew();
     pthis->Iter    = NULL;
 
-    // ajDebug ("ajPatlistRegexNew size '%d'\n",ajListLength(pthis->Patlist));
+    // ajDebug ("ajPatlistRegexNew size '%d'\n",ajListGetLength(pthis->Patlist));
 
     return pthis;
 }
@@ -458,7 +458,7 @@ AjPPatlistRegex ajPatlistRegexNewType (ajuint type)
     pthis->Iter    = NULL;
     pthis->Type = type;
 
-    // ajDebug ("ajPatlistRegexNew size '%d'\n",ajListLength(pthis->Patlist));
+    // ajDebug ("ajPatlistRegexNew size '%d'\n",ajListGetLength(pthis->Patlist));
 
     return pthis;
 }
@@ -526,11 +526,11 @@ void ajPatlistRegexDel (AjPPatlistRegex* pthys)
     while (ajListPop(thys->Patlist, (void **)&patternregex))
     {
 	ajDebug("ajPatlistRegexDel list size: %d\n",
-		ajListLength(thys->Patlist));
+		ajListGetLength(thys->Patlist));
 	ajPatternRegexDel(&patternregex);
     }
     if (thys->Iter)
-	ajListIterFree (&thys->Iter);
+	ajListIterDel(&thys->Iter);
     ajListFree(&thys->Patlist);
 
     AJFREE(*pthys);
@@ -556,7 +556,7 @@ void ajPatlistSeqDel (AjPPatlistSeq* pthys)
     while (ajListPop(thys->Patlist, (void **)&patternseq))
 	ajPatternSeqDel(&patternseq);
     if (thys->Iter)
-	ajListIterFree (&thys->Iter);
+	ajListIterDel(&thys->Iter);
     ajListFree(&thys->Patlist);
 
     AJFREE(*pthys);
@@ -828,7 +828,7 @@ AjPPatlistRegex ajPatlistRegexRead (const AjPStr patspec,
 ******************************************************************************/
 ajuint ajPatlistSeqGetSize (const AjPPatlistSeq thys)
 {
-    return ajListLength(thys->Patlist);
+    return ajListGetLength(thys->Patlist);
 }
 
 /* @func ajPatlistRegexGetSize ************************************************
@@ -841,7 +841,7 @@ ajuint ajPatlistSeqGetSize (const AjPPatlistSeq thys)
 ******************************************************************************/
 ajuint ajPatlistRegexGetSize (const AjPPatlistRegex thys)
 {
-    return ajListLength(thys->Patlist);
+    return ajListGetLength(thys->Patlist);
 }
 
 /* @func ajPatlistSeqGetNext **************************************************
@@ -856,10 +856,10 @@ ajuint ajPatlistRegexGetSize (const AjPPatlistRegex thys)
 AjBool ajPatlistSeqGetNext (AjPPatlistSeq thys, AjPPatternSeq* pattern)
 {
     if (!thys->Iter)
-	thys->Iter = ajListIter(thys->Patlist);
+	thys->Iter = ajListIterNew(thys->Patlist);
 
-    if (ajListIterMore(thys->Iter))
-	*pattern = ajListIterNext (thys->Iter);
+    if (!ajListIterDone(thys->Iter))
+	*pattern = ajListIterGet(thys->Iter);
     else
     {
 	ajPatlistSeqRewind(thys);
@@ -882,10 +882,10 @@ AjBool ajPatlistRegexGetNext (AjPPatlistRegex thys,
 			      AjPPatternRegex* pattern)
 {
     if (!thys->Iter)
-	thys->Iter = ajListIter(thys->Patlist);
+	thys->Iter = ajListIterNew(thys->Patlist);
 
-    if (ajListIterMore(thys->Iter))
-	*pattern = ajListIterNext (thys->Iter);
+    if (!ajListIterDone(thys->Iter))
+	*pattern = ajListIterGet(thys->Iter);
     else
     {
 	ajPatlistRegexRewind(thys);
@@ -908,7 +908,7 @@ AjBool ajPatlistRegexGetNext (AjPPatlistRegex thys,
 void ajPatlistRegexRewind (AjPPatlistRegex thys)
 {
     if (thys->Iter)
-	ajListIterFree (&thys->Iter);
+	ajListIterDel(&thys->Iter);
     thys->Iter=NULL;
 
     return;
@@ -925,7 +925,7 @@ void ajPatlistRegexRewind (AjPPatlistRegex thys)
 void ajPatlistSeqRewind (AjPPatlistSeq thys)
 {
     if (thys->Iter)
-	ajListIterFree (&thys->Iter);
+	ajListIterDel(&thys->Iter);
     thys->Iter=NULL;
 
     return;
@@ -945,8 +945,8 @@ void ajPatlistRegexRemoveCurrent (AjPPatlistRegex thys)
     if (!thys->Iter)
 	return;
 
-    ajListRemove (thys->Iter);
-    ajListIterBackNext (thys->Iter);
+    ajListIterRemove(thys->Iter);
+    ajListIterGetBack(thys->Iter);
 
     return;
 }
@@ -966,8 +966,8 @@ void ajPatlistSeqRemoveCurrent (AjPPatlistSeq thys)
     if (!thys->Iter)
 	return;
 
-    ajListRemove (thys->Iter);
-    ajListIterBackNext (thys->Iter);
+    ajListIterRemove(thys->Iter);
+    ajListIterGetBack(thys->Iter);
 
     return;
 }
@@ -985,9 +985,9 @@ void ajPatlistSeqRemoveCurrent (AjPPatlistSeq thys)
 void ajPatlistAddSeq (AjPPatlistSeq thys, AjPPatternSeq pat)
 {
     ajDebug ("ajPatlistAddSeq list size %d '%S' '%S' '%B' '%d'\n",
-             ajListLength (thys->Patlist), pat->Name,
+             ajListGetLength (thys->Patlist), pat->Name,
              pat->Pattern, pat->Protein, pat->Mismatch);
-    ajListPushApp (thys->Patlist, pat);
+    ajListPushAppend(thys->Patlist, pat);
 
     return;
 }
@@ -1005,9 +1005,9 @@ void ajPatlistAddSeq (AjPPatlistSeq thys, AjPPatternSeq pat)
 void ajPatlistAddRegex (AjPPatlistRegex thys, AjPPatternRegex pat)
 {
     ajDebug ("ajPatlistAddRegex list size %d '%S' '%S' '%d'\n",
-             ajListLength (thys->Patlist), pat->Name,
+             ajListGetLength (thys->Patlist), pat->Name,
              pat->Pattern, pat->Type);
-    ajListPushApp (thys->Patlist, pat);
+    ajListPushAppend(thys->Patlist, pat);
 
     return;
 }
@@ -1162,7 +1162,7 @@ ajuint ajPatlistRegexDoc (AjPPatlistRegex plist, AjPStr* pdoc)
 		       ajPatternRegexGetName(pat),
 		       ajPatternRegexGetPattern(pat));
     }
-    return ajListLength(plist->Patlist);
+    return ajListGetLength(plist->Patlist);
 }
 
 
@@ -1190,5 +1190,5 @@ ajuint ajPatlistSeqDoc (AjPPatlistSeq plist, AjPStr* pdoc)
 		       ajPatternSeqGetMismatch(pat),
 		       ajPatternSeqGetPattern(pat));
     }
-    return ajListLength(plist->Patlist);
+    return ajListGetLength(plist->Patlist);
 }
