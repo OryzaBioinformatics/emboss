@@ -769,6 +769,7 @@ sub writeUsage {
     $usage =~ s/seqsearch\-[0-9]+[.][0-9]+[.]/seqsearch-1234567890.1234./go;
     $usage =~ s/hmmalign\-[0-9]+[.][0-9]+/hmmalign-1234567890.1234/go;
     $usage =~ s/hmmpfam\-[0-9]+[.][0-9]+/hmmpfam-1234567890.1234/go;
+
     print OUT $usage;
     close(OUT);
     chmod 0664, $out;	# rw-rw-r--
@@ -785,7 +786,7 @@ sub writeInput {
 
     my $out = "$incdir/$application.input";
     open (OUT, "> $out") || die "Can't open $out";
-    $input =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 200[5-9]/DATE  Fri Jul 15 12:00:00 2005/go;
+    $input =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 200[5-9]/DATE  Sat Jul 15 12:00:00 2006/go;
     print OUT $input;
     close(OUT);
     chmod 0664, $out;	# rw-rw-r--
@@ -803,15 +804,17 @@ sub writeOutput {
     my $out = "$incdir/$application.output";
     open (OUT, "> $out") || die "Can't open $out";
     $output =~ s/\/homes\/pmr\/cvsemboss/\/homes\/user/go;
-    $output =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 200[5-9]/DATE  Fri Jul 15 12:00:00 2005/go;
-    $output =~ s/Rundate: ... ... \d\d 2[0-9][0-9][0-9] [0-9:]+$/Rundate: Fri Jul 15 2005 12:00:00/go;
-    $output =~ s/\#\#date 2[0-9][0-9][0-9][-][0-9][0-9][-][0-9][0-9]$/\#\#date 2005-07-15/go;
+    $output =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 200[5-9]/DATE  Sat Jul 15 12:00:00 2006/go;
+    $output =~ s/CreationDate: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/CreationDate: Sat Jul 15 12:00:00 2006/gom;
+    $output =~ s/Rundate: ... ... +\d+ 2[0-9][0-9][0-9] [0-9:]+$/Rundate: Sat Jul 15 2006 12:00:00/gom;
+    $output =~ s/\#\#date 2[0-9][0-9][0-9][-][0-9][0-9][-][0-9][0-9]$/\#\#date 2006-07-15/gom;
     $output =~ s/domainalign\-[0-9]+[.][0-9]+[.]/domainalign-1234567890.1234./go;
     $output =~ s/domainrep\-[0-9]+[.][0-9]+[.]/domainrep-1234567890.1234./go;
     $output =~ s/seqalign\-[0-9]+[.][0-9]+[.]/seqalign-1234567890.1234./go;
     $output =~ s/seqsearch\-[0-9]+[.][0-9]+[.]/seqsearch-1234567890.1234./go;
     $output =~ s/hmmalign\-[0-9]+[.][0-9]+/hmmalign-1234567890.1234/go;
     $output =~ s/hmmpfam\-[0-9]+[.][0-9]+/hmmpfam-1234567890.1234/go;
+    $output =~ s/Time 0\.00[1-5][0-9][0-9][0-9] secs\./Time 0.001999 secs./go;
     print OUT $output;
     close(OUT);
     chmod 0664, $out;	# rw-rw-r--
@@ -899,19 +902,29 @@ sub displayFile {
 # convert <, >, & to HTML codes if the file is not a .html file
     if ($path !~ /.html$/) {
         foreach my $l (@lines) {
-            $l =~ s/&/&amp;/g;
-            $l =~ s/</&lt;/g;
-            $l =~ s/>/&gt;/g;
+            $l =~ s/[&]/&amp;/g;
+            $l =~ s/[<]/&lt;/g;
+            $l =~ s/[>]/&gt;/g;
         }
     }
 
 # if file is too long, cut out the middle bit;
     if ($#lines > $MaxLines) {
         for ($count = 0; $count < $MaxLines/2; $count++) {
+	    if ($path =~ /.html$/) {
+		$lines[$count] =~ s/[&]/&amp;/g;
+		$lines[$count] =~ s/[<]/&lt;/g;
+		$lines[$count] =~ s/[>]/&gt;/g;
+	    }
             $result .= $lines[$count];
         }
         $result .= "\n\n<font color=red>  [Part of this file has been deleted for brevity]</font>\n\n";
         for ($count = $#lines - $MaxLines/2; $count <= $#lines; $count++) {
+	    if ($path =~ /.html$/) {
+		$lines[$count] =~ s/[&]/&amp;/g;
+		$lines[$count] =~ s/[<]/&lt;/g;
+		$lines[$count] =~ s/[>]/&gt;/g;
+	    }
             $result .= $lines[$count];
         }
     }

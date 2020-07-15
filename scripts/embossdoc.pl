@@ -332,7 +332,7 @@ sub testmodify($$\@\@) {
     print "testmodify tc undefined for $fname $pubout\n";
     }
     if ($tc ne "$tdata" && $tc ne "$tdata\*") {
-	print "bad category modify - parameter1 '$tc' not '$tdata\*'\n";
+	print "bad category modify - parameter1 '$tc' not '$tdata' or '$tdata\*'\n";
     }
     if ($tx !~ /[wu]/) {
 	print "bad category modify - code1 '$tx' not 'w' or 'u'\n";
@@ -494,7 +494,7 @@ $suffixdatacount=$#sufname;
 
 $dosecttest = 0;
 $datatype="undefined";
-
+$unused = "";
 $flastname = 0;
 
 ### cppreserved is a list of C++ reserved words not to be used as param names.
@@ -590,6 +590,8 @@ $functot = 0;
 # Process an entire block
 # We process each part below
 
+$fdata = "";
+
 while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
     $partnum=0;
     $mastertoken="undefined";
@@ -626,7 +628,6 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
     $dependtext = "See source code";
     $othertext = "See other functions in this section";
     $availtext = "In release 3.0.0";
-    $fdata = "";
     $ctype = "";
 
     while ($cc =~ m/\s@((\S+)\s+([^@]*[^@\s]))/gos) {
@@ -782,7 +783,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    ($argpref, $argname, $argtype, $argdesc) =
 		($data =~ /\S+\s+(\S+)\s+(\S+)\s+[\[]([^\]]+[\]]?)[\]]\s*(.*)/gos);
 	    if(!defined($argdesc)) {
-		print "bad argrule: $data";
+		print "bad argrule: $data\n";
 		next;
 	    }
 	    $argdesc =~ s/\n//;
@@ -841,6 +842,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
 	    ($ftype,$fname, $fargs) =
 		$rest =~ /^\s*([^\(\)]*\S)\s+(\S+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os;
+	    $ftype =~ s/^__noreturn +//;
 	    if($isprog) {$progname = $name}
 	    print "Function $name\n";
 	    print $OFILE "<hr><h3><a name=\"$name\">\n";
@@ -926,8 +928,8 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    }
 	    $type = $token;
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
-	    ($ftype,$fname, $fargs) =
-		$rest =~ /^\s*static\s+([^\(\)]*\S)\s+(\S+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os;
+	    ($unused,$ftype,$fname, $fargs) =
+		$rest =~ /^\s*(__noreturn\s*)?static\s+([^\(\)]*\S)\s+(\S+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os;
 	    print "Static function $name\n";
 	    print $OFILE "<h3><a name=\"$name\">\n";
 	    print $OFILE "Static function</a> ".srsref($name)."</h3>\n";
@@ -1113,7 +1115,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $cast =~ s/\{/\[/gos;	# brackets fixed
 	    $cast =~ s/\}/\]/gos;	# brackets fixed
 
-	    if ($code !~ /^[rwufdv?][CENP]*$/) { # deleted OSU (all unused)
+	    if ($code !~ /^[rwufdvo?][CENP]*$/) { # deleted OSU (all unused)
 		print "bad code <$code> var: <$var>\n";
 	    }
 
@@ -1539,6 +1541,16 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 		print "bad obsolete $oname - extra text\n"
 	    }
 	    $replaces = "";
+	    if ($rest =~ /^\s*__deprecated\s+([^\(\)]*\S)\s+(\S+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os) {
+		$ofname = $2;
+		$ofname =~ s/^[*]+//;
+		if ($oname ne $ofname) {
+		    print "bad obsolete function name <$ofname> <$oname>\n";
+		}
+	    }
+	    else {
+		print "bad obsolete function $oname - not __deprecated\n";
+	    }
 	    next;
 	}
 
@@ -1569,7 +1581,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    ($replace, $repargs, $norest) =
 		($data =~ /\S+\s+(\S+)\s+[\(]([^\)]+)[\)]\s*(.*)/gos);
 	    if(!defined($repargs)){
-		print "bad replace value: failed to parse\n";
+		print "bad replace $oname value: failed to parse\n";
 		next;
 	    }
 	    if($repargs ne "") {
@@ -1727,7 +1739,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 #       print "acnt: $acnt largs: $#largs\n";
 #       print "type $type test $test{$type}\n";
 
-	if ($dosecttest && $type ne "funcstatic") {
+	if ($dosecttest && $type eq "func") { # not funcstatic or funclist
 	    if($type eq "macro") {
 		@nameparts = nametorules($fname, @namrules);
 	    }
@@ -1783,6 +1795,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 
 	    @genargname=();
 	    @genargtype=();
+	    @genvalname=();
 	    @genvaltype=();
 	    $i=0;
 	    foreach $a (@argpref) {
@@ -1919,11 +1932,37 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    if ($acnt == $#largs) {
 		if ($largs[$#largs] ne "void") {
 		    print "bad last argument: $largs[$#largs]\n";
+		    if(!$acnt) {
+			for ($ii=0;$ii<=$#largs;$ii++) {
+			    ($itcast,$itname) = ($largs[$ii] =~ /(\S.*\S)\s+(\S+)/);
+			    if($itcast =~ /[*]/)
+			    {
+				print "** \@param [u] $itname [$itcast] Undocumented\n";
+			    }
+			    else
+			    {
+				print "** \@param [r] $itname [$itcast] Undocumented\n";
+			    }
+			}
+		    }
 		}
 	    }
 	    if ($acnt < $#largs) {   # allow one remaining
 		$w=$#largs+1;
 		print "bad \@param list $acnt found $w wanted\n";
+		if(!$acnt) {
+		    for ($ii=0;$ii<=$#largs;$ii++) {
+			($itcast,$itname) = ($largs[$ii] =~ /(\S.*\S)\s+(\S+)/);
+			if($itcast =~ /[*]/)
+			{
+			    print "** \@param [u] $itname [$itcast] Undocumented\n";
+			}
+			else
+			{
+			    print "** \@param [r] $itname [$itcast] Undocumented\n";
+			}
+		    }
+		}
 	    }
 	    if(!defined($ftype)) {$ftype = "unknown"}
 	    if (!$rtype && $ftype ne "void") {print "bad missing \@return\n"}

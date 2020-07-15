@@ -3,8 +3,8 @@
 
 set app = $argv[1]
 
-set embosshome = ~/cvsemboss
-set embossinst = ~/local
+#set embosshome = ~/cvsemboss
+#set embossinst = ~/local
 
 foreach embosshome (`embossversion -full -auto| grep '^BaseDirectory'`)
 #  echo "$embosshome"
@@ -31,5 +31,5 @@ cd ../emboss
 echo "make $app"
 make $app |& egrep '^[^ =\[]*:'
 echo "install $app"
-/usr/bin/install -c .libs/$app /homes/pmr/local/bin/$app
+/bin/sh ../libtool --mode=install /usr/bin/install -c $app /homes/pmr/local/bin/$app
 cp acd/$app.acd $embossinst/share/EMBOSS/acd/

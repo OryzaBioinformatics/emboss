@@ -4,13 +4,13 @@
 	      "myall.csh", "myalltest.csh",
 	      "myconfig.csh", "mydoc.csh", "myembassyall.csh",
 	      "myembassyconfig.csh", "myefunc.csh", "myacdvalid.csh",
-	      "src-embassy", "summary.log", "x", "jembossctl"
+	      "src-embassy", "summary.log", "x"
 	      );
 
 @validbase = ( "aclocal.m4", "autom4te.cache",
 	      "config.cache", "config.log", "config.status",
 	      "configure", "configure.lineno", "libtool", "so_locations",
-	       "Makefile", "Makefile.in"
+	       "Makefile", "Makefile.in", "jembossctl"
 	       );
 
 %knownfile = ();
@@ -54,7 +54,7 @@ close CHECK;
 
 # Process the input file (cvs update output)
 # Look for lines that start with '?'
-# check for files that coul dreasonably be there
+# check for files that could reasonably be there
 # report everything else as a directory (d) or file.
 
 while (<>) {

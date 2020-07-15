@@ -866,7 +866,7 @@ foreach $test (@ARGV) {
 	$singleapp = $test;
 	###print STDERR "Singleapp '$singleapp'\n";
     }
-    else {print STDERR "+++ only on application name allowed\n;usage()"}
+    else {print STDERR "+++ only one application name allowed\n;usage()"}
 }
 
 $cvscommit = $doccreate;
@@ -967,13 +967,16 @@ $progs{$thisprogram}
 # check the documentation for this file exists and is not a symbolic link 
 # if this is an EMBASSY document, note which EMBASSY directory it is in
 	if (!defined($embassyprogs{$thisprogram})) {
-	    if (-e "$progdocdir/$thisprogram.html") {
+	    if (-e "$cvsdoc/html/$thisprogram.html") {
 ###	  print "$progdocdir/$thisprogram.html found\n";
 		if (-e "$sfprogdocdir/$thisprogram.html") {
-		    system("diff -b $progdocdir/$thisprogram.html $sfprogdocdir/$thisprogram.html > z.z");
+		    system("diff -b $cvsdoc/html/$thisprogram.html $sfprogdocdir/$thisprogram.html > z.z");
 		    $s = (-s "z.z");
 		    if ($s) {
 			print LOG "** $sfprogdocdir/$thisprogram.html differences ** size:$s\n";
+			system "cp  $cvsdoc/html/$thisprogram.html $sfprogdocdir/$thisprogram.html";
+			chmod 0664, "$sfprogdocdir/$thisprogram.html";
+			
 			
 		    }
 		}
@@ -991,10 +994,21 @@ $progs{$thisprogram}
 	}
 	else {
 	    $progdir{$thisprogram} = $embassyprogs{$thisprogram};
-	    $edir = "$cvsedoc/$progdir{$thisprogram}/emboss_doc/master";
+	    $edir = "$cvsedoc/$progdir{$thisprogram}/emboss_doc/html";
 	    $sfedir = "$sfdoctop/embassy/$progdir{$thisprogram}";
 	    if(-e "$edir/$thisprogram.html") {
 ###	  print "$edir/$thisprogram.html found\n";
+		if (-e "$edir/$thisprogram.html") {
+		    system("diff -b $edir/$thisprogram.html $sfedir/$thisprogram.html > z.z");
+		    $s = (-s "z.z");
+		    if ($s) {
+			print LOG "** $sfedir/$thisprogram.html differences ** size:$s\n";
+			system "cp  $edir/$thisprogram.html $sfedir/$thisprogram.html";
+			chmod 0664, "$sfedir/$thisprogram.html";
+			
+			
+		    }
+		}
 	    }
 	    else {
 ###	  print "$progdocdir/$thisprogram.html missing - EMBASSY $embassyprogs{$thisprogram}\n";

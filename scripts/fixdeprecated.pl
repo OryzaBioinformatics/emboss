@@ -6,7 +6,7 @@ $basefile = $ARGV[0];
 
 open (DEP, "$ENV{HOME}/cvsemboss/deprecated.txt") || die "Cannot open deprecated.txt";
 open (SRC, "$basefile.c") || die "Cannot open $basefile.c";
-open (NEWSRC, ">$basefile.new") || die "Cannot open $basefile.new";
+open (OLDSRC, ">$basefile.save") || die "Cannot open $basefile.save";
 #open (DBG, ">fixdeprecated.dbg") || die "Cannot open fixdeprecated.dbg";
 
 $patcnt=0;
@@ -79,6 +79,11 @@ while (<SRC>) {
     }
 }
 close SRC;
+print OLDSRC $savesrc;
+
+close OLDSRC;
+
+open (NEWSRC, ">$basefile.c") || die "Cannot open $basefile.c for writing";
 
 $savepos = 0;
 foreach $n (sort (keys ( %argtest))) {
@@ -195,7 +200,6 @@ foreach $n (sort (keys ( %argtest))) {
 #	}
 }
 
-
 foreach $p (sort (keys ( %pat))) {
     $repcnt=0;
     while($savesrc =~ /$p/g) {$repcnt++}
@@ -211,6 +215,7 @@ foreach $p (sort (keys ( %pat))) {
 print NEWSRC $savesrc;
 
 close NEWSRC;
+
 foreach $n (sort (keys ( %subdone))) {
     ($na,$nb) = ($n =~ /([^_]+)_([^_]+)/);
     $new+=$subdone{$n};
