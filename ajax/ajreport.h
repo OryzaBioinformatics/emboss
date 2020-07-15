@@ -24,7 +24,6 @@ extern "C"
 ** @attr Name [AjPStr] As "Source" for features, usually empty
 ** @attr Type [AjPStr] "P" Protein or "N" Nucleotide
 ** @attr Formatstr [AjPStr] Report format (-rformat)
-** @attr Format [AjEnum] Report format (index number)
 ** @attr Fttable [AjPFeattable] Feature table to use (obsolete?)
 ** @attr Ftquery [AjPFeattabOut] Output definition for features
 ** @attr Extension [AjPStr] Output file extension
@@ -45,7 +44,11 @@ extern "C"
 ** @attr Showscore [AjBool] Report score (if optional for format)
 ** @attr Multi [AjBool] if true, assume >1 sequence
 ** @attr Mintags [ajint] Minimum number of tags to report
-** @attr Count [ajint] Number of sequences reported so far
+** @attr CountSeq [ajint] Number of sequences reported so far
+** @attr CountHit [ajint] Number of features reported so far
+** @attr MaxHitAll [ajint] Maximum number of hits to report overall
+** @attr MaxHitSeq [ajint] Maximum number of hits to report for each sequence
+** @attr Format [AjEnum] Report format (index number)
 **
 ** @new ajReportNew Default constructor
 ** @delete ajReportDel Default destructor
@@ -57,7 +60,6 @@ typedef struct AjSReport {
   AjPStr Name;
   AjPStr Type;
   AjPStr Formatstr;
-  AjEnum Format;
   AjPFeattable Fttable;
   AjPFeattabOut Ftquery;
   AjPStr Extension;
@@ -78,7 +80,11 @@ typedef struct AjSReport {
   AjBool Showscore;
   AjBool Multi;
   ajint Mintags;
-  ajint Count;
+  ajint CountSeq;
+  ajint CountHit;
+  ajint MaxHitAll;
+  ajint MaxHitSeq;
+  AjEnum Format;
 } AjOReport;
 
 #define AjPReport AjOReport*
@@ -100,24 +106,32 @@ AjBool       ajReportFindFormat (const AjPStr format, ajint* iformat);
 AjBool       ajReportFormatDefault (AjPStr* pformat);
 ajint        ajReportLists (const AjPReport thys,
 			    AjPStr** types, AjPStr** names,
-			    AjPStr** prints, ajint** tagsizes);
+			    AjPStr** prints, ajuint** tagsizes);
 AjPReport    ajReportNew (void);
 AjBool       ajReportOpen (AjPReport thys, const AjPStr name);
 void         ajReportPrintFormat (AjPFile outf, AjBool full);
 const AjPStr ajReportSeqName (const AjPReport thys, const AjPSeq seq);
+void         ajReportAppendHeader (AjPReport thys, const AjPStr header);
+void         ajReportAppendHeaderC (AjPReport thys, const char* header);
 void         ajReportSetHeader (AjPReport thys, const AjPStr header);
 void         ajReportSetHeaderC (AjPReport thys, const char* header);
+void         ajReportAppendSubHeader (AjPReport thys, const AjPStr header);
+void         ajReportAppendSubHeaderC (AjPReport thys, const char* header);
 void         ajReportSetSubHeader (AjPReport thys, const AjPStr header);
 void         ajReportSetSubHeaderC (AjPReport thys, const char* header);
 AjBool       ajReportSetTags (AjPReport thys, const AjPStr taglist);
+void         ajReportAppendTail (AjPReport thys, const AjPStr tail);
+void         ajReportAppendTailC (AjPReport thys, const char* tail);
 void         ajReportSetTail (AjPReport thys, const AjPStr tail);
 void         ajReportSetTailC (AjPReport thys, const char* tail);
+void         ajReportAppendSubTail (AjPReport thys, const AjPStr tail);
+void         ajReportAppendSubTailC (AjPReport thys, const char* tail);
 void         ajReportSetSubTail (AjPReport thys, const AjPStr tail);
 void         ajReportSetSubTailC (AjPReport thys, const char* tail);
 void         ajReportSetType (AjPReport thys,
 			      const AjPFeattable ftable, const AjPSeq seq);
 AjBool       ajReportValid (AjPReport thys);
-void         ajReportWrite (AjPReport thys,
+AjBool       ajReportWrite (AjPReport thys,
 			    const AjPFeattable ftable,  const AjPSeq seq);
 void         ajReportWriteHeader (AjPReport thys,
 				  const AjPFeattable ftable, const AjPSeq seq);
