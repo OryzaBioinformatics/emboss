@@ -10,7 +10,7 @@ section: input [
 
   sequence: sequence [
     parameter: "Y"
-    type: "pureprotein"
+    type: "protein"
   ]
 
   datafile: datafile [

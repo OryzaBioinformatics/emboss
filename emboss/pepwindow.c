@@ -20,6 +20,8 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
+#include <limits.h>
+#include <float.h>
 #include "emboss.h"
 
 #define AZ 28
@@ -46,7 +48,7 @@ int main(int argc, char **argv)
     AjPSeq seq;
     ajint llen;
     float matrix[AZ];
-    ajint i;
+    ajuint i;
     ajint midpoint;
     ajint j;
     AjPGraphPlpData graphdata;
@@ -54,20 +56,26 @@ int main(int argc, char **argv)
     float min = 555.5;
     float max = -555.5;
     float total;
-
+    float flen;
+    ajuint ilen;
+    ajuint tui;
+    
     ajGraphInit("pepwindow", argc, argv);
 
-    seq = ajAcdGetSeq("sequence");
-
+    seq  = ajAcdGetSeq("sequence");
+    ilen = ajSeqGetLen(seq);
+    tui  = ajSeqGetLen(seq);
+    flen = (float) tui;
+    
     mult     = ajAcdGetGraphxy("graph");
     datafile = ajAcdGetDatafile("datafile");
     llen     = ajAcdGetInt("length");
 
     s1 = ajStrGetPtr(ajSeqGetSeqS(seq));
 
-    aa0str = ajStrNewRes(ajSeqGetLen(seq)+1);
+    aa0str = ajStrNewRes(ilen+1);
 
-    graphdata = ajGraphPlpDataNewI(ajSeqGetLen(seq)-llen);
+    graphdata = ajGraphPlpDataNewI(ilen-llen);
 
     midpoint = (ajint)((llen+1)/2);
 
@@ -75,7 +83,7 @@ int main(int argc, char **argv)
 
     ajGraphDataAdd(mult,graphdata);
 
-    for(i=0;i<ajSeqGetLen(seq);i++)
+    for(i=0;i<ilen;i++)
 	ajStrAppendK(&aa0str,(char)ajAZToInt(*s1++));
 
 
@@ -84,7 +92,7 @@ int main(int argc, char **argv)
 
     s1 = ajStrGetPtr(aa0str);
 
-    for(i=0;i<ajSeqGetLen(seq)-llen;i++)
+    for(i=0;i<ilen-llen;i++)
     {
 	total = 0;
 	for(j=0;j<llen;j++)
@@ -102,13 +110,13 @@ int main(int argc, char **argv)
 	s1++;
     }
 
-    ajGraphPlpDataSetMaxima(graphdata,0.,(float)ajSeqGetLen(seq),min,max);
+    ajGraphPlpDataSetMaxima(graphdata,0.,flen,min,max);
 
-    min = min*1.1;
-    max = max*1.1;
+    min = min*(float)1.1;
+    max = max*(float)1.1;
 
-    ajGraphPlpDataSetMaxMin(graphdata,0.0,(float)ajSeqGetLen(seq),min,max);
-    ajGraphxySetMaxMin(mult,0.0,(float)ajSeqGetLen(seq),min,max);
+    ajGraphPlpDataSetMaxMin(graphdata,0.0,flen,min,max);
+    ajGraphxySetMaxMin(mult,0.0,flen,min,max);
 
     ajGraphxyDisplay(mult,AJTRUE);
     ajGraphxyDel(&mult);
@@ -146,7 +154,7 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
     AjPStrTok token;
     ajint line = 0;
     const char *ptr;
-
+    ajint i;
 
     if(!file)
 	return 0;
@@ -156,7 +164,9 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
     buf2   = ajStrNew();
     description = ajStrNew();
 
-
+    for (i=0;i<26;i++) {
+	matrix[i] = FLT_MIN;
+    }
 
     while(ajFileGets(file,&buffer))
     {
@@ -168,7 +178,7 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
 	else if(line == 1)
 	{
 	    line++;
-	    ajStrRemoveWhite(&buffer);
+	    ajStrRemoveWhiteExcess(&buffer);
 
 	    token = ajStrTokenNewS(buffer,delim);
 
@@ -208,7 +218,7 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
 	{
 	    line++;
 
-	    ajStrRemoveWhite(&buffer);
+	    ajStrRemoveWhiteExcess(&buffer);
 	    token = ajStrTokenNewS(buffer,delim);
 
 	    ajStrTokenNextParseS(&token,delim,&buf2);
@@ -244,6 +254,8 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
 	    ajStrTokenDel(&token);
 	}
     }
+
+    embPropFixF(matrix, FLT_MIN);
 
     ajStrDel(&buffer);
     ajStrDel(&description);
