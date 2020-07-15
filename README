@@ -33,7 +33,7 @@ shared libraries can be turned off by specifying the
 PLplot graphics
 ---------------
 
-EMBOSS now comes with a stripped down version of PLplot which
+EMBOSS now comes with a stripped down version of PLPlot which
 is now compiled under the same system as EMBOSS.
 
 The full PLplot can be obtained from http://www.plplot.org/
@@ -69,7 +69,10 @@ then add this new directory to your configure line for EMBOSS.
      ./configure --with-pngdriver=my_dir
 
 as gd (and the others) were installed using --prefix=my_dir 
-in their ./configure commands.
+in their ./configure commands. On Linux distributions the
+above is not usually necessary as PNG graphics will be detected
+automatically as long as both the library and development
+RPMs/PKGs have been installed.
 
 
 
@@ -80,40 +83,17 @@ We have considered other graphics libraries, including the GNU libplot
 library. The problem with GNU libplot currently is that it uses the
 full GNU license which is not suitable for the non-EMBOSS applications.
 We understand that there will be a future release of GNU libplot under
-the GNU Library license. If this happens then we will consider using
-the GNU libplot library as an alternative or a replacement for PLplot.
-
-
-Compilation scripts
--------------------
-
-Are no longer necessary due to PLplot being included in the
-EMBOSS configure system. See INSTALL.
-
-But you will need to set PLPLOT_LIB to get the fonts needed for 
-the graphics package.  
-      
-     setenv PLPLOT_LIB my_dir/EMBOSS-1.0.0/plplot/lib
-
-Using the current version number for the EMBOSS-1.n.n directory.
-You should add the PLPLOT_LIB line to your .cshrc to avoid
-typing this in each session.
+the GNU Library license. We also intend separating graphics by making
+the applications produce XML output which can then be rendered using
+a separate OpenGL-based graphics engine.
 
 
 Installation.
 -------------
 
-If you install EMBOSS (i.e, make install) then you will have
-to setenv PLPLOT_LIB to the appropriate new directory given by:-
-setenv PLPLOT_LIB $(prefix)/share/EMBOSS (see INSTALL for more info
-on the prefix)
-
-EMBOSS 1.0 can find the ACD files and data files in the install
-directory, or in the original sources.
-
 If you have copied the binaries to another directory instead, or
 made other changes to the file locations, you can also use
-enviromnent variables or the embossrc file(s) to tell the programs
+environment variables or the embossrc file(s) to tell the programs
 where to look
 
 You will need to use this command:
