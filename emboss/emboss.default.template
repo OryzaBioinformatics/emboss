@@ -85,8 +85,8 @@ DB tpir [ type: P dir: $emboss_tempdata/pir
 # =======
 
 DB tgb [ type: N method: srswww format: genbank
-   url: "http://www.cbr.nrc.ca/srs6bin/cgi-bin/wgetz"
-   dbalias: genbank
+   url: "http://cbr-rbc.nrc-cnrc.gc.ca/srs6bin/cgi-bin/wgetz"
+   dbalias: genbankrelease
    fields: "sv des org key"
    comment: "Genbank IDs" ]
 
