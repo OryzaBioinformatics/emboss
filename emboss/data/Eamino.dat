@@ -17,7 +17,7 @@
 # O is pyrrolysine in Archaea. Molecular weight from Expasy FindMod.
 # Properties assumed to be the same as lysine
 #
-A 	 71.0786	 1 1 0 0 1 0 0   0 0 0
+A 	 71.0786	 1 1 1 0 1 0 0   0 0 0
 B 	114.5960	 0 1 0 0 0 0 -.5 0 1 0
 C 	103.1386	 1 1 0 0 1 0 0   0 0 0
 D 	115.0884	 0 1 0 0 0 1 -1  0 1 0
