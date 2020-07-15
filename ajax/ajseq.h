@@ -60,9 +60,6 @@ typedef struct AjSSeqCvt {
 AjBool       ajSeqtestIsAccession (const AjPStr accnum);
 const AjPStr ajSeqtestIsSeqversion (const AjPStr sv);
 
-__deprecated AjBool       ajIsAccession (const AjPStr accnum);
-__deprecated const AjPStr ajIsSeqversion (const AjPStr sv);
-
 void         ajSeqallDel(AjPSeqall *thys);
 const AjPStr ajSeqallGetFilename(const AjPSeqall thys);
 const AjPStr ajSeqallGetseqName (const AjPSeqall thys);
@@ -70,9 +67,8 @@ ajint        ajSeqallGetseqBegin (const AjPSeqall seq);
 ajint        ajSeqallGetseqEnd (const AjPSeqall seq);
 ajint        ajSeqallGetseqLen (const AjPSeqall seqall);
 const AjPStr ajSeqallGetName(const AjPSeqall seq);
-__deprecated ajint        ajSeqallLen (const AjPSeqall seqall);
-__deprecated const AjPStr ajSeqallGetNameSeq (const AjPSeqall thys);
-ajint        ajSeqallGetseqRange (const AjPSeqall thys, ajint* begin, ajint* end);
+ajint        ajSeqallGetseqRange (const AjPSeqall thys,
+				  ajint* begin, ajint* end);
 const AjPStr ajSeqallGetUsa (const AjPSeqall thys);
 AjPSeqall    ajSeqallNew (void);
 void         ajSeqallClear (AjPSeqall thys);
@@ -110,14 +106,11 @@ AjPStr       ajSeqGetSeqCopyS(const AjPSeq seq);
 ajint        ajSeqCalcCheckgcg (const AjPSeq thys);
 void         ajSeqClear (AjPSeq thys);
 void         ajSeqComplement (AjPSeq thys);
-__deprecated void         ajSeqComplementOnly(AjPSeq pthis);
 void         ajSeqstrComplement (AjPStr* thys);
-__deprecated void         ajSeqstrComplementOnly (AjPStr* thys);
 AjBool       ajSeqstrConvertNum(const AjPStr seq, const AjPSeqCvt cvt,
 				AjPStr* Pnumseq);
 AjPFeattable ajSeqGetFeatCopy (const AjPSeq thys);
 void         ajSeqCalcCount (const AjPSeq thys, ajint *b);
-__deprecated ajuint       ajSeqCalcCrc(const AjPSeq seq );
 ajuint       ajSeqstrCountGaps(const AjPStr str);
 void         ajSeqcvtDel (AjPSeqCvt* thys);
 ajint        ajSeqcvtGetCodeK (const AjPSeqCvt thys, char ch);
@@ -131,37 +124,50 @@ AjPSeqCvt    ajSeqcvtNewStr (const AjPPStr bases, ajint n);
 AjPSeqCvt    ajSeqcvtNewStrAsym (const AjPPStr bases, ajint n, 
 				const AjPPStr rbases, ajint rn);
 void         ajSeqcvtTrace (const AjPSeqCvt cvt);
-__deprecated void         ajSeqCvtDel (AjPSeqCvt* thys);
-__deprecated ajint        ajSeqCvtK (const AjPSeqCvt thys, char ch);
-__deprecated ajint        ajSeqCvtKS (const AjPSeqCvt thys, const AjPStr ch);
-__deprecated ajint        ajSeqCvtKSRow (const AjPSeqCvt thys,
-					 const AjPStr ch);
-__deprecated ajint        ajSeqCvtKSColumn (const AjPSeqCvt thys,
-					    const AjPStr ch);
-__deprecated ajint        ajSeqCvtLen (const AjPSeqCvt thys);
-__deprecated AjPSeqCvt    ajSeqCvtNew (const char* bases);
-__deprecated AjPSeqCvt    ajSeqCvtNewText (const char* bases);
-__deprecated AjPSeqCvt    ajSeqCvtNewZero (const char* bases);
-__deprecated AjPSeqCvt    ajSeqCvtNewZeroS (const AjPPStr bases, ajint n);
-__deprecated AjPSeqCvt    ajSeqCvtNewZeroSS (const AjPPStr bases, ajint n, 
-				const AjPPStr rbases, ajint rn);
-__deprecated void         ajSeqCvtTrace (const AjPSeqCvt cvt);
+AjPSeqDate   ajSeqdateNew(void);
+AjPSeqDate   ajSeqdateNewDate(const AjPSeqDate date);
+AjBool       ajSeqdateSetCreateS(AjPSeqDate date, const AjPStr datestr);
+AjBool       ajSeqdateSetModifyS(AjPSeqDate date, const AjPStr datestr);
+AjBool       ajSeqdateSetModseqS(AjPSeqDate date, const AjPStr datestr);
+void         ajSeqdateDel(AjPSeqDate*);
+AjPSeqRef    ajSeqrefNew(void);
+AjPSeqRef    ajSeqrefNewRef(const AjPSeqRef);
+void         ajSeqrefDel(AjPSeqRef*);
+AjBool       ajSeqrefAppendAuthors(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefAppendComment(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefAppendGroupname(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefAppendLocation(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefAppendPosition(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefAppendTitle(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefAppendXref(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefFmtAuthorsEmbl(const AjPSeqRef ref, AjPStr* Pdest);
+AjBool       ajSeqrefFmtAuthorsGb(const AjPSeqRef ref, AjPStr* Pdest);
+AjBool       ajSeqrefFmtLocationEmbl(const AjPSeqRef ref, AjPStr* Pdest);
+AjBool       ajSeqrefFmtLocationGb(const AjPSeqRef ref, AjPStr* Pdest);
+AjBool       ajSeqrefFmtTitleGb(const AjPSeqRef ref, AjPStr* Pdest);
+AjBool       ajSeqreflistClone(const AjPList src, AjPList dest);
+AjBool       ajSeqrefSetAuthors(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefSetComment(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefSetGroupname(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefSetLocation(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefSetLoctype(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefSetnumNumber(AjPSeqRef ref, ajuint num);
+AjBool       ajSeqrefSetPosition(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefSetTitle(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefSetXref(AjPSeqRef ref, const AjPStr str);
+AjBool       ajSeqrefStandard(AjPSeqRef ref);
 void         ajSeqSetName(AjPSeq thys, const AjPStr setname);
 void         ajSeqSetNameMulti(AjPSeq thys, const AjPStr setname);
-__deprecated void         ajSeqDefName(AjPSeq thys, const AjPStr setname,
-				       AjBool multi);
 void         ajSeqDel (AjPSeq* pthis);
 ajuint       ajSeqGetEnd (const AjPSeq seq);
 void         ajSeqExit(void);
 void         ajSeqGapFill (AjPSeq seq, ajuint len);
-__deprecated ajint        ajSeqFill (AjPSeq seq, ajint len);
 ajuint       ajSeqCountGaps(const AjPSeq seq);
-__deprecated ajint        ajSeqGapCount (const AjPSeq thys);
-__deprecated ajint        ajSeqGapCountS (const AjPStr str);
 void         ajSeqGapStandard (AjPSeq thys, char gapch);
-__deprecated void         ajSeqGapStandardS(AjPStr thys, char gapch);
 const char*  ajSeqGetAccC (const AjPSeq thys);
 const AjPStr ajSeqGetAccS (const AjPSeq thys);
+const char*  ajSeqGetDbC (const AjPSeq thys);
+const AjPStr ajSeqGetDbS (const AjPSeq thys);
 const char*  ajSeqGetDescC (const AjPSeq thys);
 const AjPStr ajSeqGetDescS (const AjPSeq thys);
 const char*  ajSeqGetEntryC (const AjPSeq thys);
@@ -184,8 +190,18 @@ const AjPStr ajSeqGetUsaS (const AjPSeq thys);
 AjBool       ajSeqIsNuc (const AjPSeq thys);
 AjBool       ajSeqIsProt (const AjPSeq thys);
 ajuint       ajSeqGetLen (const AjPSeq seq);
+const char*  ajSeqclsGetEmbl(const AjPStr cls);
+AjBool       ajSeqclsSetEmbl(AjPStr *cls, const AjPStr clsembl);
+AjBool       ajSeqclsSetGb(AjPStr *cls, const AjPStr clsembl);
+const char*  ajSeqdivGetEmbl(const AjPStr div);
+const char*  ajSeqdivGetGb(const AjPStr div);
+AjBool       ajSeqdivSetEmbl(AjPStr *div, const AjPStr divembl);
+AjBool       ajSeqdivSetGb(AjPStr *div, const AjPStr divembl);
+const char*  ajSeqmolGetEmbl(const AjPStr mol);
+const char*  ajSeqmolGetGb(const AjPStr mol);
+AjBool       ajSeqmolSetEmbl(AjPStr *mol, const AjPStr molembl);
+AjBool       ajSeqmolSetGb(AjPStr *mol, const AjPStr molgb);
 void         ajSeqSetUnique(AjPSeq seq);
-__deprecated void         ajSeqMod (AjPSeq thys);
 float        ajSeqCalcMolwt (const AjPSeq seq);
 float        ajSeqstrCalcMolwt (const AjPStr seq);
 AjPSeq       ajSeqNew (void);
@@ -199,10 +215,6 @@ AjPSeq       ajSeqNewRangeS(const AjPStr str,
 			   ajint offset, ajint offend, AjBool rev);
 AjBool       ajSeqConvertNum (const AjPSeq thys, const AjPSeqCvt cvt,
 		       AjPStr *numseq);
-__deprecated AjBool       ajSeqNum (const AjPSeq thys, const AjPSeqCvt cvt,
-		       AjPStr *numseq);
-__deprecated AjBool       ajSeqNumS (const AjPStr thys, const AjPSeqCvt cvt,
-			AjPStr *numseq);
 AjBool       ajSeqIsReversedTrue(const AjPSeq seq);
 AjBool       ajSeqIsReversed (const AjPSeq thys);
 AjBool       ajSeqIsTrimmed (const AjPSeq thys);
@@ -211,24 +223,19 @@ void         ajSeqReverseForce (AjPSeq thys);
 void         ajSeqstrReverse (AjPStr* thys);
 void         ajSeqReverseOnly (AjPSeq thys);
 ajuint       ajSeqsetGetBegin (const AjPSeqset seq);
-__deprecated ajint        ajSeqsetBegin (const AjPSeqset seq);
 void         ajSeqsetDel(AjPSeqset *thys);
 void         ajSeqsetDelarray(AjPSeqset **thys);
 ajuint       ajSeqsetGetEnd (const AjPSeqset seq);
-__deprecated ajint        ajSeqsetEnd (const AjPSeqset seq);
 ajint        ajSeqsetFill (AjPSeqset seq);
 const AjPStr ajSeqsetGetFormat (const AjPSeqset thys);
 const char*  ajSeqsetGetNameC (const AjPSeqset thys);
 const AjPStr ajSeqsetGetNameS (const AjPSeqset thys);
-__deprecated const AjPStr ajSeqsetGetName (const AjPSeqset thys);
 ajint        ajSeqsetGetOffend(const AjPSeqset seq);
 ajint        ajSeqsetGetOffset(const AjPSeqset seq);
 ajint        ajSeqsetGetRange (const AjPSeqset thys, ajint* begin, ajint* end);
 const AjPSeq ajSeqsetGetseqSeq (const AjPSeqset thys, ajuint i);
 const char*  ajSeqsetGetseqSeqC (const AjPSeqset thys, ajuint i);
 const AjPStr ajSeqsetGetseqSeqS (const AjPSeqset thys, ajuint i);
-__deprecated const AjPSeq ajSeqsetGetSeq (const AjPSeqset thys, ajint i);
-__deprecated AjPSeq*      ajSeqsetGetSeqArray(const AjPSeqset thys);
 AjPSeq*      ajSeqsetGetSeqarray(const AjPSeqset thys);
 const AjPStr ajSeqsetGetUsa (const AjPSeqset thys);
 const AjPStr ajSeqsetGetFilename(const AjPSeqset thys);
@@ -237,35 +244,26 @@ AjBool       ajSeqsetIsNuc (const AjPSeqset thys);
 AjBool       ajSeqsetIsProt (const AjPSeqset thys);
 AjBool       ajSeqsetIsRna (const AjPSeqset thys);
 ajuint       ajSeqsetGetLen (const AjPSeqset seq);
-__deprecated ajint        ajSeqsetLen (const AjPSeqset seq);
 const char*  ajSeqsetGetseqAccC (const AjPSeqset seq, ajuint i);
 const AjPStr ajSeqsetGetseqAccS (const AjPSeqset seq, ajuint i);
 const char*  ajSeqsetGetseqNameC (const AjPSeqset seq, ajuint i);
 const AjPStr ajSeqsetGetseqNameS (const AjPSeqset seq, ajuint i);
-__deprecated const AjPStr ajSeqsetName (const AjPSeqset seq, ajint i);
-__deprecated const AjPStr ajSeqsetAcc (const AjPSeqset seq, ajint i);
 AjPSeqset    ajSeqsetNew (void);
 void         ajSeqSetOffsets(AjPSeq seq, ajint ioff, ajint ioriglen);
 void         ajSeqSetRange (AjPSeq seq, ajint ibegin, ajint iend);
 void         ajSeqSetRangeRev (AjPSeq seq, ajint ibegin, ajint iend);
 void         ajSeqsetReverse (AjPSeqset thys);
-__deprecated const char*  ajSeqsetSeq (const AjPSeqset seq, ajint i);
 void         ajSeqsetSetRange (AjPSeqset seq, ajint ibegin, ajint iend);
 ajuint       ajSeqsetGetSize (const AjPSeqset seq);
-__deprecated ajint        ajSeqsetSize (const AjPSeqset seq);
 void         ajSeqsetFmtLower (AjPSeqset seq);
 void         ajSeqsetFmtUpper (AjPSeqset seq);
 float        ajSeqsetGetTotweight (const AjPSeqset seq);
-__deprecated float        ajSeqsetTotweight (const AjPSeqset seq);
 void         ajSeqsetTrim(AjPSeqset thys);
 float        ajSeqsetGetseqWeight (const AjPSeqset seq, ajuint i) ;
-__deprecated float        ajSeqsetWeight (const AjPSeqset seq, ajint i) ;
 void         ajSeqFmtLower (AjPSeq thys);
 void         ajSeqFmtUpper (AjPSeq thys);
 void         ajSeqTrace (const AjPSeq seq);
 void         ajSeqTraceTitle (const AjPSeq seq, const char* title);
-__deprecated void         ajSeqTraceT (const AjPSeq seq, const char* title);
-AjBool       ajSeqFindOutFormat (const AjPStr format, ajint* iformat);
 void         ajSeqTrim(AjPSeq thys);
 ajuint       ajSeqGetBeginTrue (const AjPSeq seq);
 ajuint       ajSeqGetEndTrue (const AjPSeq seq);
@@ -273,6 +271,21 @@ ajuint       ajSeqGetLenTrue (const AjPSeq seq);
 ajint        ajSeqCalcTruepos (const AjPSeq thys, ajint ipos);
 ajint        ajSeqCalcTrueposMin (const AjPSeq thys, ajint imin, ajint ipos);
 
+/*
+** End of prototype definitions
+*/
+
+/*
+**  These prototypes do not have any corresponding .c code so cannot
+**  go into the block above, otherwise the VC compilation will fail 
+*/
+
+const char*  ajSeqdivGetDdbj(const AjPStr div);
+AjBool       ajSeqdivSetDdbj(AjPStr *div, const AjPStr divembl);
+const char*  ajSeqmolGetDdbj(const AjPStr mol);
+AjBool       ajSeqmolSetDdbj(AjPStr *mol, const AjPStr molddbj);
+
+/* End of prototypes without C code */
 
 __deprecated ajint ajSeqallBegin(const AjPSeqall seq);
 __deprecated ajint ajSeqallEnd(const AjPSeqall seq);
@@ -381,9 +394,53 @@ __deprecated void          ajSeqCompOnlyStr (AjPStr* thys);
 __deprecated float         ajSeqMW (const AjPStr seq);
 __deprecated ajuint        ajSeqCrc(const AjPStr seq );
 
-/*
-** End of prototype definitions
-*/
+__deprecated void         ajSeqCvtDel (AjPSeqCvt* thys);
+__deprecated ajint        ajSeqCvtK (const AjPSeqCvt thys, char ch);
+__deprecated ajint        ajSeqCvtKS (const AjPSeqCvt thys, const AjPStr ch);
+__deprecated ajint        ajSeqCvtKSRow (const AjPSeqCvt thys,
+					 const AjPStr ch);
+__deprecated ajint        ajSeqCvtKSColumn (const AjPSeqCvt thys,
+					    const AjPStr ch);
+__deprecated ajint        ajSeqCvtLen (const AjPSeqCvt thys);
+__deprecated AjPSeqCvt    ajSeqCvtNew (const char* bases);
+__deprecated AjPSeqCvt    ajSeqCvtNewText (const char* bases);
+__deprecated AjPSeqCvt    ajSeqCvtNewZero (const char* bases);
+__deprecated AjPSeqCvt    ajSeqCvtNewZeroS (const AjPPStr bases, ajint n);
+__deprecated AjPSeqCvt    ajSeqCvtNewZeroSS (const AjPPStr bases, ajint n, 
+					     const AjPPStr rbases, ajint rn);
+__deprecated void         ajSeqCvtTrace (const AjPSeqCvt cvt);
+
+__deprecated AjBool       ajIsAccession (const AjPStr accnum);
+__deprecated const AjPStr ajIsSeqversion (const AjPStr sv);
+__deprecated ajint        ajSeqallLen (const AjPSeqall seqall);
+__deprecated const AjPStr ajSeqallGetNameSeq (const AjPSeqall thys);
+__deprecated void         ajSeqComplementOnly(AjPSeq pthis);
+__deprecated void         ajSeqstrComplementOnly (AjPStr* thys);
+__deprecated ajuint       ajSeqCalcCrc(const AjPSeq seq );
+__deprecated void         ajSeqDefName(AjPSeq thys, const AjPStr setname,
+				       AjBool multi);
+__deprecated ajint        ajSeqFill (AjPSeq seq, ajint len);
+__deprecated ajint        ajSeqGapCount (const AjPSeq thys);
+__deprecated ajint        ajSeqGapCountS (const AjPStr str);
+__deprecated void         ajSeqGapStandardS(AjPStr thys, char gapch);
+__deprecated void         ajSeqMod (AjPSeq thys);
+__deprecated AjBool       ajSeqNum (const AjPSeq thys, const AjPSeqCvt cvt,
+		       AjPStr *numseq);
+__deprecated AjBool       ajSeqNumS (const AjPStr thys, const AjPSeqCvt cvt,
+			AjPStr *numseq);
+__deprecated ajint        ajSeqsetBegin (const AjPSeqset seq);
+__deprecated ajint        ajSeqsetEnd (const AjPSeqset seq);
+__deprecated const AjPStr ajSeqsetGetName (const AjPSeqset thys);
+__deprecated const AjPSeq ajSeqsetGetSeq (const AjPSeqset thys, ajint i);
+__deprecated AjPSeq*      ajSeqsetGetSeqArray(const AjPSeqset thys);
+__deprecated ajint        ajSeqsetLen (const AjPSeqset seq);
+__deprecated const AjPStr ajSeqsetName (const AjPSeqset seq, ajint i);
+__deprecated const AjPStr ajSeqsetAcc (const AjPSeqset seq, ajint i);
+__deprecated const char*  ajSeqsetSeq (const AjPSeqset seq, ajint i);
+__deprecated ajint        ajSeqsetSize (const AjPSeqset seq);
+__deprecated float        ajSeqsetTotweight (const AjPSeqset seq);
+__deprecated float        ajSeqsetWeight (const AjPSeqset seq, ajint i) ;
+__deprecated void         ajSeqTraceT (const AjPSeq seq, const char* title);
 
 #endif
 

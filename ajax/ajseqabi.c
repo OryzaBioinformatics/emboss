@@ -555,15 +555,18 @@ static AjBool seqABIReadInt4(AjPFile fp,ajlong *i4)
 
     if (ajFileRead((void *)buf,4,1,fp) != 1)
 	return ajFalse;
+
     *i4 = (ajlong)
         (((ajulong)buf[3]) +
          ((ajulong)buf[2]<<8) +
          ((ajulong)buf[1]<<16) +
          ((ajulong)buf[0]<<24));
 
-    ajDebug("seqABIReadInt4 %c %c %c %c\n",buf[0],buf[1],buf[2],buf[3]);
+    /*ajDebug("seqABIReadInt4 %Ld, %x %x %x %x\n", *i4,
+	    (int) buf[0],(int) buf[1],
+	    (int) buf[2],(int) buf[3]);*/
 
-    return (AJTRUE);
+    return ajTrue;
 }
 
 
