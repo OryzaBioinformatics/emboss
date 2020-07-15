@@ -1,7 +1,7 @@
 The EMBOSS Frequently Asked Questions list
 ==========================================
 
-Last modified: 9 Jan 2003
+Last modified: 15 July 2005
 
 
 SECTION A - Help and Support
@@ -9,7 +9,7 @@ SECTION A - Help and Support
 
 Q) How do I report bugs ?
 
-A) mail emboss-bug@embnet.org
+A) mail emboss-bug@emboss.open-bio.org
 
 
 
@@ -17,43 +17,51 @@ A) mail emboss-bug@embnet.org
 
 Q) Are there any mailing lists about EMBOSS?
 
-A) emboss@embnet.org 
+A) emboss@emboss.open-bio.org 
    is an open list (anyone can join) for general announcements and
    discussions by end users. 
 
-   emboss-dev@embnet.org 
+   emboss-dev@emboss.open-bio.org 
    is a closed list for discussions by developers using EMBOSS. 
    
-   To subscribe to either list, send mail to majordomo@embnet.org
-   with the message text subscribe emboss or subscribe emboss-dev 
+   emboss-announce@emboss.open-bio.org 
+   is a closed list for announcements of new releases. 
+   
+You can access the archives, subscribe/unsubscribe and alter
+the way email is sent to you (e.g. digests) by visiting:
 
-
-
+  http://emboss.open-bio.org/mailman/listinfo/emboss<
+  http://emboss.open-bio.org/mailman/listinfo/emboss-dev<
+  http://emboss.open-bio.org/mailman/listinfo/emboss-announce
 
 
 Q) Where's the documentation?
    
 A) All the documentation can be found at the following web page
-   http://www.uk.embnet.org/Software/EMBOSS/
+   http://emboss.sourceforge.net/
 
 
 
 
 Q) Where's the applications' documentation?
 
-A) http://www.uk.embnet.org/Software/EMBOSS/Apps/
+A) http://emboss.sourceforge.net/apps/
 
+   and in the EMBOSS distribution, installed under
+   share/EMBOSS/doc/programs/html (HTML files) and
+   share/EMBOSS/doc/programs/text (plan text, as used by the tfm program).
 
+   You can also use thtfm program to display the plain text
+   documentation, adding the name of the program on the command line,
+   for example:
+
+% tfm seqret
 
 
 Q) Is there a tutorial?
 
-A) Short tutorial:
-   http://www.hgmp.mrc.ac.uk/Registered/Help/emboss/short_emboss_tutorial/
-
-   Long tutorial:
-   http://www.hgmp.mrc.ac.uk/Registered/Help/emboss/
-
+A) See the EMBOSS tutorial on the website:
+   http://emboss./sourceforge.net/docs/emboss_tutorial/
 
 
 
@@ -65,7 +73,7 @@ A) A revised version is now available incorporating many of the suggestions
    version. 
 
    ftp://ftp.no.embnet.org/embnet/tutorials/EMBOSS_QG.ps  (Postscript file)
-   ftp://ftp.no.embnet.org/embnet/tutorials/EMBOSS_QG.doc (Word 97 format- Yuk!)
+   ftp://ftp.no.embnet.org/embnet/tutorials/EMBOSS_QG.doc (Word 97 format)
 
 
 
@@ -73,7 +81,10 @@ A) A revised version is now available incorporating many of the suggestions
 
 Q) Is there a table of substitutes for GCG programs?
 
-A) http://www.no.embnet.org/FromGCG.html
+A) Several lists are available, but not maintained by the EMBOSS
+team. For example:
+http://www.biobind.com/faq/emboss/gcg-emboss.html
+
 
 
 
@@ -272,7 +283,7 @@ Q) Can I get the latest code via CVS ?
 
 A) Yes. Here is the information you will need:-
 
-   Make sure you have cvs on your system Then log into the cvs server at
+   Make sure you have cvs on your system. Then log into the cvs server at
    'open-bio.org' as: user 'cvs' with password 'cvs'. 
 
    cvs -d :pserver:cvs@cvs.open-bio.org:/home/repository/emboss login
@@ -344,22 +355,22 @@ A)  a) from the anonymous cvs code.
        make
        make install
 
-    b) from  MSE-0.0.4.tar.gz 
+    b) from  MSE-1.0.0.tar.gz 
 
-    available from our FTP server ftp://ftp.uk.embnet.org/pub/EMBOSS/ 
-    in file MSE-0.0.4.tar.gz 
+    available from our FTP server ftp://emboss.open-bio.org/pub/EMBOSS/ 
+    in file MSE-1.0.0.tar.gz 
 
 
     If you have done a full installation of EMBOSS using a 'prefix'
     e.g. you configured with ./configure --prefix=/usr/local/emboss
-    and followed this with a 'make install' then:
+    and followed this with a 'make install' (highly recommended) then:
 
        1) gunzip and untar the file anywhere
-       gunzip MSE-0.0.4.tar.gz
-       tar xvf MSE-0.0.4.tar
+       gunzip MSE-1.0.0.tar.gz
+       tar xvf MSE-1.0.0.tar
 
        2) go into the mse directory
-       cd MSE-0.0.4
+       cd MSE-1.0.0
 
        3) configure using the same prefix and compile [e.g.]:
        ./configure --prefix=/usr/local/emboss
@@ -373,7 +384,8 @@ A)  a) from the anonymous cvs code.
             ./configure --prefix=/usr/local --enable-localforce
 
 
-    If, on the other hand, you did not do a 'make install' then:
+    If, on the other hand, you did not do a 'make install' of EMBOSS
+    then:
 
        1) Go to the emboss directory 
        cd EMBOSS-2.10.0
@@ -385,17 +397,18 @@ A)  a) from the anonymous cvs code.
        cd embassy
 
        4) gunzip and untar the file
-       gunzip MSE-0.0.4.tar.gz
-       tar xvf MSE-0.0.4.tar
+       gunzip MSE-1.0.0.tar.gz
+       tar xvf MSE-1.0.0.tar
 
        5) go into the mse directory
-       cd MSE-0.0.4
+       cd MSE-1.0.0
 
        6) configure and compile
        ./configure (use same options as you used to compile emboss)
        make
-       make install
    
+       7) Set your PATH to include the full path of the 'src'
+          directory
 
  
 Q) Installing associated software PHYLIP
@@ -415,13 +428,39 @@ A)  a) from the anonymous cvs code.
        make
        make install
 
-    b) from PHYLIP-3.573c.tar.gz 
+    b) from PHYLIP-3.6b.tar.gz 
 
-    available from our FTP server ftp://ftp.uk.embnet.org/pub/EMBOSS/ 
-    in file PHYLIP-3.573c.tar.gz 
+    available from our FTP server ftp://emboss.open-bio.org/pub/EMBOSS/
+    in file PHYLIP-3.6b.tar.gz 
+
+
+    If you have done a full installation of EMBOSS using a 'prefix'
+    e.g. you configured with ./configure --prefix=/usr/local/emboss
+    and followed this with a 'make install' (highly recommended) then:
+
+       1) gunzip and untar the file anywhere
+       gunzip PHYLIP-3.6b.tar.gz
+       tar xf PHYLIP-3.6b.tar
+
+       2) go into the phylip directory
+       cd PHYLIP-3.6b
+
+       3) configure and compile
+       ./configure (use same options as you used to compile emboss)
+       make
+       make install
+
+       N.B. If you configured without using a prefix but did do
+            a 'make install' (or specified a prefix of /usr/local,
+            which amounts to the same thing) then you must configure
+            using:
+            ./configure --prefix=/usr/local --enable-localforce
+
+    If, on the other hand, you did not do a 'make install' of EMBOSS
+    then:
 
        1) Go to the emboss directory 
-       cd EMBOSS-0.0.4
+       cd EMBOSS-3.0.0
 
        2) make new directory embassy if it does not exist already.
        mkdir embassy
@@ -429,17 +468,19 @@ A)  a) from the anonymous cvs code.
        3) Go into that directory
        cd embassy
 
-       4) unzip and untar the file
-       gunzip PHYLIP-3.573c.tar.gz
-       tar xvf PHYLIP-3.573c.tar
+       4) gunzip and untar the file
+       gunzip PHYLIP-3.6b.tar.gz
+       tar xvf PHYLIP-3.6b.tar
 
        5) go into the phylip directory
-       cd PHYLIP-3.573c
+       cd PHYLIP-3.6b
 
        6) configure and compile
        ./configure (use same options as you used to compile emboss)
        make
-       make install
+
+       7) Set your PATH to include the full path of the 'src'
+          directory
 
 
 
