@@ -155,7 +155,18 @@ static AjPStrTok featVocabSplit  = NULL;
 static AjPStr featLocStr   = NULL;
 static AjPStr featLocToken = NULL;
 static AjPStr featLocDb = NULL;
+static AjPStr featSaveGroupStr   = NULL;
+static AjPStr featTagNote = NULL;
+static AjPStr featTagComm = NULL;
+static AjPStr featTagFtid = NULL;
 
+static AjPStr featTransBegStr = NULL;
+static AjPStr featTransEndStr = NULL;
+static AjPStr featTransAaStr  = NULL;
+
+static ajint featSaveExon  = 0;
+static ajint featSaveGroup = 0;
+ 
 static void         featClear ( AjPFeature thys );
 static ajint        featCompByEnd(const void *a, const void *b);
 static ajint        featCompByGroup(const void *a, const void *b);
@@ -222,13 +233,12 @@ static AjPSeq       featLocToSeq(const AjPStr location, const AjPStr db,
 static void         featGroupSet(AjPFeature gf, AjPFeattable table,
 				 const AjPStr grouptag);
 static void         featInit(void);
-static void         featLocEmblWrapC(AjPStr* pval, ajint width,
+static void         featLocEmblWrapC(AjPStr* pval, ajuint margin,
 				     const char* prefix, const char* preftyp,
 				     AjPStr* retstr);
 static AjBool       featoutUfoProcess(AjPFeattabOut thys, const AjPStr ufo);
 static AjPFeature   featPirFromLine (AjPFeattable thys,
 				     const AjPStr origline);
-static AjBool       featReadUnknown (AjPFeattable thys, AjPFileBuff file);
 static AjBool       featReadEmbl(AjPFeattable thys, AjPFileBuff file);
 static AjBool       featReadGff(AjPFeattable thys, AjPFileBuff file);
 static AjBool       featReadPir(AjPFeattable thys, AjPFileBuff file);
@@ -269,7 +279,7 @@ static AjBool       featTagAllLimit(AjPStr* pval, const AjPStr values);
 static const AjPStr featTagDna(const AjPStr type, AjBool* known);
 static void         featTagEmblDefault(AjPStr* pout,
 				       const AjPStr tag, AjPStr* pval);
-static void         featTagEmblWrapC(AjPStr* pval, ajint width,
+static void         featTagEmblWrapC(AjPStr* pval, ajuint margin,
 				     const char* prefix,
 				     AjPStr* retstr);
 static void         featTagFmt (const AjPStr name, const AjPTable table,
@@ -311,7 +321,7 @@ static AjBool       featTagSpecialAllReplace(AjPStr* pval);
 static AjBool       featTagSpecialAllTranslation(AjPStr* pval);
 static AjBool       featTagSpecialAllEstimatedlength(AjPStr* pval);
 static AjBool       featTagSpecialAllCompare(const AjPStr val);
-static void         featTagSwissWrapC(AjPStr* pval, ajint width,
+static void         featTagSwissWrapC(AjPStr* pval, ajuint margin,
 				      const char* prefix,
 				      AjPStr* retstr);
 static FeatPTagval  featTagval(const AjPFeature thys, const AjPStr tag);
@@ -336,7 +346,7 @@ static void         featWarn(const char* fmt, ...);
 ** @alias FeatSInFormat
 ** @alias FeatOInFormat
 **
-** @attr Name [char*] Input format name
+** @attr Name [const char*] Input format name
 ** @attr Alias [AjBool] True if name is an alias for an identical definition
 ** @attr Dna [AjBool] True if suitable for nucleotide data
 ** @attr Prot [AjBool] True if suitable for protein data
@@ -344,13 +354,13 @@ static void         featWarn(const char* fmt, ...);
 ** @attr Read [(AjBool*)] Function to read feature data
 ** @attr InitReg [(AjBool*)] Function to initialise regular expressions
 ** @attr DelReg [(AjBool*)] Function to clean up regular expressions
-** @attr Desc [char*] Description
+** @attr Desc [const char*] Description
 ** @@
 ******************************************************************************/
 
 typedef struct FeatSInFormat
 {
-    char* Name;
+    const char* Name;
     AjBool Alias;
     AjBool Dna;
     AjBool Prot;
@@ -358,7 +368,7 @@ typedef struct FeatSInFormat
     AjBool (*Read)  (AjPFeattable thys, AjPFileBuff file);
     AjBool (*InitReg)(void);
     AjBool (*DelReg)(void);
-    char* Desc;
+    const char* Desc;
 } FeatOInFormat;
 #define FeatPInFormat FeatOInFormat*
 
@@ -383,7 +393,7 @@ static FeatOInFormat featInFormatDef[] =
          ReadFunction      RegInitFunction    RegDelFunction
          Description*/
     {"unknown",       AJFALSE, AJFALSE, AJFALSE, AJFALSE,
-	 featReadUnknown, NULL,               NULL,
+	 featReadGff,     NULL,               NULL,
 	 "unknown format"},
     {"embl",          AJFALSE, AJTRUE,  AJFALSE, AJFALSE,
 	 featReadEmbl,    featRegInitEmbl,    featDelRegEmbl,
@@ -398,6 +408,9 @@ static FeatOInFormat featInFormatDef[] =
 	 featReadEmbl,    featRegInitEmbl,    featDelRegEmbl,
 	 "embl/genbank/ddbj format"},
     {"ddbj",          AJTRUE,  AJTRUE,  AJFALSE, AJFALSE,
+	 featReadEmbl,    featRegInitEmbl,    featDelRegEmbl,
+	 "embl/genbank/ddbj format"},
+    {"refseq",        AJTRUE,  AJTRUE,  AJFALSE, AJFALSE,
 	 featReadEmbl,    featRegInitEmbl,    featDelRegEmbl,
 	 "embl/genbank/ddbj format"},
     {"gff",           AJFALSE, AJTRUE,  AJTRUE,  AJFALSE,
@@ -451,25 +464,28 @@ static void        featGffProcessTagval(AjPFeature gf,
 ** @alias FeatSOutFormat
 ** @alias FeatOOutFormat
 **
-** @attr Name [char*] Format name
-** @attr Alias [AjBool] True if name is an alias for an identical definition
+** @attr Name [const char*] Format name
+
 ** @attr Dna [AjBool] True if suitable for nucleotide data
 ** @attr Prot [AjBool] True if suitable for protein data
 ** @attr VocInit [(AjBool*)] Function to initialise vocabulary
 ** @attr Write [(AjBool*)] Function to write data
-** @attr Desc [char*] Description
+** @attr Desc [const char*] Description
+** @attr Alias [AjBool] True if name is an alias for an identical definition
+** @attr Padding [ajint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct FeatSOutFormat
 {
-    char* Name;
-    AjBool Alias;
+    const char* Name;
     AjBool Dna;
     AjBool Prot;
     AjBool (*VocInit) (void);
     AjBool (*Write) (const AjPFeattable thys, AjPFile file);
-    char* Desc;
+    const char* Desc;
+    AjBool Alias;
+    ajint Padding;
 } FeatOOutFormat;
 #define FeatPOutFormat FeatOOutFormat*
 
@@ -491,37 +507,40 @@ static FeatOOutFormat featOutFormatDef[] =
     /* Name       Alias    Nucleotide Prot
          VocInit             WriteFunction
 	 Description*/
-    {"unknown",   AJFALSE, AJFALSE,   AJFALSE,
+    {"unknown", AJFALSE,   AJFALSE,
 	 NULL,               feattableWriteUnknown,
-	 "unknown format"},
-    {"embl",      AJFALSE, AJTRUE,    AJFALSE,
+	 "unknown format", AJFALSE, 0},
+    {"embl",      AJTRUE,    AJFALSE,
 	 featVocabInitEmbl,  ajFeattableWriteEmbl,
-	 "embl format"},
-    {"genbank",   AJFALSE, AJTRUE,    AJFALSE,
+	 "embl format", AJFALSE, 0},
+    {"genbank",   AJTRUE,    AJFALSE,
 	 featVocabInitEmbl,  ajFeattableWriteGenbank,
-	 "genbank format"},
-    {"gb",        AJTRUE,  AJTRUE,    AJFALSE,
+	 "genbank format", AJFALSE, 0},
+    {"gb",        AJTRUE,    AJFALSE,
 	 featVocabInitEmbl,  ajFeattableWriteGenbank,
-	 "genbank format"},
-    {"ddbj",      AJFALSE, AJTRUE,    AJFALSE,
+	 "genbank format", AJTRUE, 0},
+    {"ddbj",      AJTRUE,    AJFALSE,
 	 featVocabInitEmbl,  ajFeattableWriteDdbj,
-	 "ddbj format"},
-    {"gff",       AJFALSE, AJTRUE,    AJTRUE,
+	 "ddbj format", AJFALSE, 0},
+    {"refseq",    AJTRUE,    AJFALSE,
+	 featVocabInitEmbl,  ajFeattableWriteGenbank,
+	 "genbank format", AJTRUE, 0},
+    {"gff",       AJTRUE,    AJTRUE,
 	 featVocabInitGff,   ajFeattableWriteGff,
-	 "GFF version 2"},
-    {"pir",       AJFALSE, AJFALSE,   AJTRUE,
+	 "GFF version 2", AJFALSE, 0},
+    {"pir",       AJFALSE,   AJTRUE,
 	 featVocabInitPir,   ajFeattableWritePir,
-	 "PIR format"},
-    {"swiss",     AJFALSE, AJFALSE,   AJTRUE,
+	 "PIR format", AJFALSE, 0},
+    {"swiss",     AJFALSE,   AJTRUE,
 	 featVocabInitSwiss, ajFeattableWriteSwiss,
-	 "SwissProt format"},
-    {"sw",        AJTRUE,  AJFALSE,   AJTRUE,
+	 "SwissProt format", AJFALSE, 0},
+    {"sw",        AJFALSE,   AJTRUE,
 	 featVocabInitSwiss, ajFeattableWriteSwiss,
-	 "SwissProt format"},
-    {"swissprot", AJTRUE,  AJFALSE,   AJTRUE,
+	 "SwissProt format", AJTRUE, 0},
+    {"swissprot", AJFALSE,   AJTRUE,
 	 featVocabInitSwiss, ajFeattableWriteSwiss,
-	 "SwissProt format"},
-    {NULL, AJFALSE, AJFALSE, AJFALSE, NULL, NULL, NULL}
+	 "SwissProt format", AJFALSE, 0},
+    {NULL, AJFALSE, AJFALSE, NULL, NULL, NULL, AJFALSE, 0}
 };
 
 static FeatPOutFormat featOutFormat = featOutFormatDef;
@@ -567,6 +586,20 @@ static AjPRegexp featRegMore = NULL;
 static AjPRegexp featRegQuote = NULL;
 
 static AjPRegexp featTagTrans = NULL;    
+static AjPRegexp featRegGroup = NULL;
+
+static AjPRegexp featRegSpecialCompare = NULL;
+static AjPRegexp featRegSpecialEstlen = NULL;
+static AjPRegexp featRegSpecialTrans = NULL;
+static AjPRegexp featRegSpecialTransBad = NULL;
+static AjPRegexp featRegSpecialTransComp = NULL;
+static AjPRegexp featRegSpecialTransBadComp = NULL;
+static AjPRegexp featRegSpecialAnticodon = NULL;
+static AjPRegexp featRegSpecialRptunitSeq = NULL;
+static AjPRegexp featRegSpecialRptRange = NULL;
+static AjPRegexp featRegSpecialRptRangeLab = NULL;
+static AjPRegexp featRegSpecialRptRangeComp = NULL;
+static AjPRegexp featRegSpecialPrimer = NULL;
 
 /* @datastatic FeatPTypeIn ****************************************************
 **
@@ -575,15 +608,15 @@ static AjPRegexp featTagTrans = NULL;
 ** @alias FeatSTypeIn
 ** @alias FeatOTypeIn
 **
-** @attr Name [char*] Specified name
-** @attr Value [char*] Internal type "P" or "N"
+** @attr Name [const char*] Specified name
+** @attr Value [const char*] Internal type "P" or "N"
 ** @@
 ******************************************************************************/
 
 typedef struct FeatSTypeIn
 {
-    char* Name;
-    char* Value;
+    const char* Name;
+    const char* Value;
 } FeatOTypeIn;
 #define FeatPTypeIn FeatOTypeIn*
 
@@ -610,15 +643,15 @@ static FeatOTypeIn featInTypes[] =
 ** @alias FeatSTypeOut
 ** @alias FeatOTypeOut
 **
-** @attr Name [char*] Specified name
-** @attr Value [char*] Internal type "P" or "N"
+** @attr Name [const char*] Specified name
+** @attr Value [const char*] Internal type "P" or "N"
 ** @@
 ******************************************************************************/
 
 typedef struct FeatSTypeOut
 {
-    char* Name;
-    char* Value;
+    const char* Name;
+    const char* Value;
 } FeatOTypeOut;
 #define FeatPTypeOut FeatOTypeOut*
 
@@ -684,9 +717,18 @@ AjBool ajFeattabOutOpen(AjPFeattabOut thys, const AjPStr ufo)
     if (thys->Handle)
 	return ajTrue;
 
-    if (!ajStrGetLen(thys->Filename))
+    if (ajStrGetLen(thys->Filename))
+    {
+	if(!featFindOutFormat (thys->Formatstr, &thys->Format))
+	    ajErr("unknown output feature format '%S' "
+		  "will write as gff instead\n",
+		  thys->Formatstr );
+    }
+    else
+    {
 	if (!featoutUfoProcess (thys, ufo))
 	    return ajFalse;
+    }
 
     /*ajDebug("trying to open dir:'%S' file:'%S' fmt:'%S'\n",
 	    thys->Directory, thys->Filename, thys->Formatstr);*/
@@ -1140,12 +1182,20 @@ AjPFeature ajFeatNewII(AjPFeattable thys,
 
     AjPFeature ret = NULL ;
 
+    /*ajDebug("ajFeatNewII %d %d\n", Start, End);*/
+
     if(!featTypeMiscfeat)
 	featTypeMiscfeat = ajStrNewC("misc_feature");
 
-    ret = featFeatNew(thys,source,featTypeMiscfeat,
-		      Start,End,score,strand,frame,
-		      0,0,0,NULL, NULL,flags);
+    if(Start > End)
+	ret = featFeatNew(thys,source,featTypeMiscfeat,
+			  Start,End,score,'-',frame,
+			  0,0,0,NULL, NULL,flags);
+    else
+	ret = featFeatNew(thys,source,featTypeMiscfeat,
+			  Start,End,score,strand,frame,
+			  0,0,0,NULL, NULL,flags);
+
     return ret;
 }
 
@@ -1176,7 +1226,13 @@ AjPFeature ajFeatNewIIRev(AjPFeattable thys,
 {
     AjPFeature ret = NULL ;
 
-    ret = ajFeatNewII(thys,Start,End);
+    /*ajDebug("ajFeatNewIIRev %d %d\n", Start, End);*/
+
+    if(Start >= End)
+	ret = ajFeatNewII(thys,Start,End);
+    else
+	ret = ajFeatNewII(thys,End,Start);
+
     ret->Strand = '-';
 
     return ret;
@@ -1235,12 +1291,12 @@ AjPFeature ajFeatNewProt(AjPFeattable thys,
 
 static ajint featCompByStart(const void *a, const void *b)
 {
-    AjPFeature gfa;
-    AjPFeature gfb;
+    const AjPFeature gfa;
+    const AjPFeature gfb;
     ajint val = 0;
 
-    gfa = *(AjPFeature *) a;
-    gfb = *(AjPFeature *) b;
+    gfa = *(AjPFeature const *) a;
+    gfb = *(AjPFeature const *) b;
 
     val = gfa->Start - gfb->Start;
 
@@ -1272,13 +1328,13 @@ static ajint featCompByStart(const void *a, const void *b)
 
 static ajint featCompByEnd(const void *a, const void *b)
 {
-    AjPFeature gfa;
-    AjPFeature gfb;
+    const AjPFeature gfa;
+    const AjPFeature gfb;
 
     ajint val = 0;
 
-    gfa = *(AjPFeature *) a;
-    gfb = *(AjPFeature *) b;
+    gfa = *(AjPFeature const *) a;
+    gfb = *(AjPFeature const *) b;
 
     val = gfa->End - gfb->End;
     if(val)
@@ -1309,13 +1365,13 @@ static ajint featCompByEnd(const void *a, const void *b)
 
 static ajint featCompByGroup(const void *a, const void *b)
 {
-    AjPFeature gfa;
-    AjPFeature gfb;
+    const AjPFeature gfa;
+    const AjPFeature gfb;
 
     ajint val = 0;
 
-    gfa = *(AjPFeature *) a;
-    gfb = *(AjPFeature *) b;
+    gfa = *(AjPFeature const *) a;
+    gfb = *(AjPFeature const *) b;
 
     val = gfa->Group - gfb->Group;
     if(val)
@@ -1342,13 +1398,13 @@ static ajint featCompByGroup(const void *a, const void *b)
 
 static ajint featCompByType(const void *a, const void *b)
 {
-    AjPFeature gfa;
-    AjPFeature gfb;
+    const AjPFeature gfa;
+    const AjPFeature gfb;
 
     ajint val = 0;
 
-    gfa = *(AjPFeature *) a;
-    gfb = *(AjPFeature *) b;
+    gfa = *(AjPFeature const *) a;
+    gfb = *(AjPFeature const *) b;
 
     val = ajStrVcmp(&gfa->Type,&gfb->Type);
     if(val)
@@ -1422,6 +1478,8 @@ static AjPFeature featFeatNew(AjPFeattable thys,
     AjPFeature ret          = NULL;
     static ajint maxexon    = 0;
     
+    /* ajDebug("featFeatNew %d %d '%c'\n", Start, End, strand);*/
+
     if(!featDefSource)
 	ajStrAssignS(&featDefSource, ajAcdGetProgram());
     
@@ -1457,7 +1515,8 @@ static AjPFeature featFeatNew(AjPFeattable thys,
     else
 	ajStrAssignS(&ret->Source, featDefSource);
 
-    ajDebug("featFeatNew type '%S'\n", thys->Type);
+    /*ajDebug("featFeatNew type '%S'\n", thys->Type);*/
+
     if(ajStrMatchC(thys->Type, "P"))
 	ajStrAssignS(&ret->Type, featTypeProt(type));
     else
@@ -2370,24 +2429,6 @@ static AjBool featReadEmbl (AjPFeattable thys, AjPFileBuff file)
 
 
 
-/* @funcstatic featReadUnknown ************************************************
-**
-** Reads feature data in Unknown format
-**
-** @param [u] thys [AjPFeattable] Feature table
-** @param [u] file [AjPFileBuff] Buffered input file
-** @return [AjBool] ajTrue on success
-** @@
-******************************************************************************/
-
-static AjBool featReadUnknown(AjPFeattable thys, AjPFileBuff file)
-{
-    return ajFalse;
-}
-
-
-
-
 /* @funcstatic featReadPir ****************************************************
 **
 ** Reads feature data in PIR format
@@ -2442,17 +2483,15 @@ static AjBool featReadPir(AjPFeattable thys, AjPFileBuff file)
 static AjPFeature featPirFromLine(AjPFeattable thys,
 				  const AjPStr origline)
 {
-    static AjPStr temp     = NULL;
+    AjPStr temp     = NULL;
     static AjPFeature gf   = NULL ;    /* made static so that it's easy
 					  to add second line of description */
-    static AjPStr locstr   = NULL;
-    static AjPStr typstr   = NULL;
-    static AjPStr notestr  = NULL;
-    static AjPStr comstr   = NULL;
-    static AjPStr exonstr  = NULL;
-    static AjPStr posstr   = NULL;
-    static AjPStr tagnote  = NULL;
-    static AjPStr tagcomm  = NULL;
+    AjPStr locstr   = NULL;
+    AjPStr typstr   = NULL;
+    AjPStr notestr  = NULL;
+    AjPStr comstr   = NULL;
+    AjPStr exonstr  = NULL;
+    AjPStr posstr   = NULL;
     ajint i = 0;
     AjBool mother = ajTrue;
     ajint Start = 0;
@@ -2461,10 +2500,10 @@ static AjPFeature featPirFromLine(AjPFeattable thys,
     
     /*ajDebug("featPirFromLine..........\n'%S'\n", origline);*/
     
-    if(!tagnote)
-	ajStrAssignC(&tagnote, "note");
-    if(!tagcomm)
-	ajStrAssignC(&tagcomm, "comment");
+    if(!featTagNote)
+	ajStrAssignC(&featTagNote, "note");
+    if(!featTagComm)
+	ajStrAssignC(&featTagComm, "comment");
     if(!featSourcePir)
 	featSourcePir = ajStrNewC("PIR");
     
@@ -2480,7 +2519,7 @@ static AjPFeature featPirFromLine(AjPFeattable thys,
     ajStrExchangeCC(&typstr, " ", "_");
     
     featTypePirIn(&typstr);
-    ajStrRemoveWhite(&notestr);
+    ajStrRemoveWhiteExcess(&notestr);
     
     /* decode the position(s) */
     
@@ -2516,14 +2555,14 @@ static AjPFeature featPirFromLine(AjPFeattable thys,
 	if(mother)
 	{
 	    if(ajStrGetLen(notestr))
-		ajFeatTagAdd (gf, tagnote, notestr);
+		ajFeatTagAdd (gf, featTagNote, notestr);
 
 	    ajRegPost(PirRegexAll, &temp);
 	    while(ajRegExec(PirRegexCom, temp))
 	    {
 		ajRegSubI(PirRegexCom, 1, &comstr);
-		ajStrRemoveWhite(&comstr);
-		ajFeatTagAdd(gf, tagcomm, comstr);
+		ajStrRemoveWhiteExcess(&comstr);
+		ajFeatTagAdd(gf, featTagComm, comstr);
 		ajRegPost(PirRegexCom, &temp);
 	    }
 	}
@@ -2534,7 +2573,15 @@ static AjPFeature featPirFromLine(AjPFeattable thys,
     
     if (mother)
 	featWarn("featPirFromLine: Did not understand location '%S'", locstr);
-    
+
+    ajStrDel(&temp);
+    ajStrDel(&locstr);
+    ajStrDel(&typstr);
+    ajStrDel(&notestr);
+    ajStrDel(&comstr);
+    ajStrDel(&exonstr);
+    ajStrDel(&posstr);
+
     return gf;
 }
 
@@ -2554,10 +2601,10 @@ static AjPFeature featPirFromLine(AjPFeattable thys,
 static AjBool featReadSwiss  (AjPFeattable thys, AjPFileBuff file)
 {
     AjBool found           = ajFalse;
-    static AjPStr savefeat = NULL;
-    static AjPStr saveline = NULL;
-    static AjPStr savefrom = NULL;
-    static AjPStr saveto   = NULL;
+    AjPStr savefeat = NULL;
+    AjPStr saveline = NULL;
+    AjPStr savefrom = NULL;
+    AjPStr saveto   = NULL;
 
     /*ajDebug("featReadSwiss..........\n");*/
 
@@ -2581,6 +2628,11 @@ static AjBool featReadSwiss  (AjPFeattable thys, AjPFileBuff file)
 	found = ajTrue;
 
     /*ajDebug("featReadSwiss returns %B\n", found);*/
+
+    ajStrDel(&savefeat);
+    ajStrDel(&savefrom);
+    ajStrDel(&saveto);
+    ajStrDel(&saveline);
 
     return found ;
 }
@@ -2610,9 +2662,9 @@ static AjBool featReadSwiss  (AjPFeattable thys, AjPFileBuff file)
 
 static void featFlagSet (AjPFeature gf, const AjPStr flagstr)
 {
-    static AjPStr savstr     = NULL;
-    static AjPStr typstr     = NULL;
-    static AjPStr valstr     = NULL;
+    AjPStr savstr     = NULL;
+    AjPStr typstr     = NULL;
+    AjPStr valstr     = NULL;
     ajint flags = 0;
     ajint num   = 0;
 
@@ -2663,6 +2715,10 @@ static void featFlagSet (AjPFeature gf, const AjPStr flagstr)
 	ajStrAssignS(&savstr, featTmpStr);
     }
 
+    ajStrDel(&savstr);
+    ajStrDel(&typstr);
+    ajStrDel(&valstr);
+
     return;
 }
 
@@ -2683,36 +2739,32 @@ static void featFlagSet (AjPFeature gf, const AjPStr flagstr)
 static void featGroupSet(AjPFeature gf, AjPFeattable table,
 			 const AjPStr grouptag)
 {
-    static AjPRegexp groupexp = NULL;
-    static AjPStr namstr      = NULL;
-    static AjPStr grpstr      = NULL;
-    static AjPStr savgrpstr   = NULL;
-    static ajint saveexon  = 0;
-    static ajint savegroup = 0;
+    AjPStr namstr      = NULL;
+    AjPStr grpstr      = NULL;
     ajint grpnum;
 
-    if(!groupexp)
-	groupexp = ajRegCompC("^\"(([^.]*)[.])?([0-9]+)");
+    if(!featRegGroup)
+	featRegGroup = ajRegCompC("^\"(([^.]*)[.])?([0-9]+)");
 
-    if(ajStrGetLen(grouptag) && ajStrMatchCaseS(grouptag, savgrpstr))
+    if(ajStrGetLen(grouptag) && ajStrMatchCaseS(grouptag, featSaveGroupStr))
     {
-	gf->Group = savegroup;
-	gf->Exon  = ++saveexon;
+	gf->Group = featSaveGroup;
+	gf->Exon  = ++featSaveExon;
 	return;
     }
 
 
-    if(ajStrGetLen(grouptag) && ajRegExec(groupexp, grouptag))
+    if(ajStrGetLen(grouptag) && ajRegExec(featRegGroup, grouptag))
     {
-	ajStrAssignS(&savgrpstr, grouptag);
-	ajRegSubI(groupexp, 2, &namstr);
-	ajRegSubI(groupexp, 3, &grpstr);
+	ajStrAssignS(&featSaveGroupStr, grouptag);
+	ajRegSubI(featRegGroup, 2, &namstr);
+	ajRegSubI(featRegGroup, 3, &grpstr);
 	/*ajDebug("featGroupSet '%S' name: '%S' group: '%S'\n",
 	        grouptag, namstr, grpstr);*/
 	if(ajStrToInt(grpstr, &grpnum)) /* true, if the regex worked */
 	{
 	    gf->Group = grpnum;
-	    savegroup = grpnum;
+	    featSaveGroup = grpnum;
 	}
 	else
 	    gf->Group = ++(table->Groups);
@@ -2731,11 +2783,12 @@ static void featGroupSet(AjPFeature gf, AjPFeattable table,
     {
 	ajStrAssignS(&grpstr, grouptag);
 	gf->Group = ++(table->Groups);
-	savegroup = gf->Group;
+	featSaveGroup = gf->Group;
 	gf->Exon  = 0;
-	saveexon  = 0;
+	featSaveExon  = 0;
     }
-
+    ajStrDel(&namstr);
+    ajStrDel(&grpstr);
     return;
 }
 
@@ -2759,8 +2812,7 @@ static void featGroupSet(AjPFeature gf, AjPFeattable table,
 static void featGffProcessTagval(AjPFeature gf, AjPFeattable table,
 				 const AjPStr groupfield, float version)
 {
-    static AjPStr  TvString  = NULL;
-
+    AjPStr  TvString  = NULL;
     AjPStr  tmptag      = NULL;
     AjBool  grpset      = ajFalse;
     
@@ -2818,7 +2870,6 @@ static void featGffProcessTagval(AjPFeature gf, AjPFeattable table,
 	    /*ajDebug("Choked on '%S'\n", TvString);*/
 	    featWarn("GFF tag parsing failed on '%S' in\n'%S'",
 		   TvString, groupfield);
-	    ajStrDel(&TvString);
 	}
     }
     
@@ -2827,6 +2878,9 @@ static void featGffProcessTagval(AjPFeature gf, AjPFeattable table,
 	featGroupSet(gf, table, NULL);
 	grpset = ajTrue;
     }
+
+    ajStrDel(&TvString);
+    ajStrDel(&tmptag);
     
     return;
 }
@@ -2862,7 +2916,7 @@ static AjPFeature featSwissFromLine(AjPFeattable thys,
 				    AjPStr* saveto,
 				    AjPStr* saveline)
 {
-    static AjPStr temp     = NULL;
+    AjPStr temp     = NULL;
     static AjPFeature gf   = NULL;     /* made static so that it's easy
 					  to add second line of description */
     AjBool newft = ajFalse;
@@ -2887,10 +2941,10 @@ static AjPFeature featSwissFromLine(AjPFeattable thys,
 	else 			   /*  maybe there were no features */
 	    gf = NULL;
 
-	ajStrDelStatic(savefeat);
-	ajStrDelStatic(savefrom);
-	ajStrDelStatic(saveto);
-	ajStrDelStatic(saveline);
+	ajStrDel(savefeat);
+	ajStrDel(savefrom);
+	ajStrDel(saveto);
+	ajStrDel(saveline);
     }
     
     if(!origline)		/* we are only cleaning up */
@@ -2920,6 +2974,7 @@ static AjPFeature featSwissFromLine(AjPFeattable thys,
 		   thys->Seqid, origline);
     }
     
+    ajStrDel(&temp);
     return gf;    
 }
 
@@ -2950,20 +3005,17 @@ static AjPFeature featSwissProcess(AjPFeattable thys, const AjPStr feature,
     ajint End   = 0;
     ajint flags = 0;
 
-    static AjPStr note    = NULL;
-    static AjPStr comment = NULL;
-    static AjPStr ftid    = NULL;
-    static AjPStr tagnote = NULL;
-    static AjPStr tagftid = NULL;
-    static AjPStr tagcomm = NULL;
-    static AjPStr tagstr  = NULL;
+    AjPStr note    = NULL;
+    AjPStr comment = NULL;
+    AjPStr ftid    = NULL;
+    AjPStr tagstr  = NULL;
     
-    if(!tagnote)
-	ajStrAssignC(&tagnote, "note");
-    if(!tagcomm)
-	ajStrAssignC(&tagcomm, "comment");
-    if(!tagftid)
-	ajStrAssignC(&tagftid, "ftid");
+    if(!featTagNote)
+	ajStrAssignC(&featTagNote, "note");
+    if(!featTagComm)
+	ajStrAssignC(&featTagComm, "comment");
+    if(!featTagFtid)
+	ajStrAssignC(&featTagFtid, "ftid");
     
     switch(ajStrGetCharFirst(fromstr))
     {
@@ -3027,7 +3079,7 @@ static AjPFeature featSwissProcess(AjPFeattable thys, const AjPStr feature,
 	/*ajDebug("Swiss ftid found\nftid: '%S'\n",
 		ftid);*/
 	if(ajStrGetLen(ftid))
-	    ajFeatTagAdd(ret, tagftid, ftid);
+	    ajFeatTagAdd(ret, featTagFtid, ftid);
 	ajStrAssignS(&tagstr, note);
 	ajStrTrimC(&tagstr, " .");
     }
@@ -3040,17 +3092,22 @@ static AjPFeature featSwissProcess(AjPFeattable thys, const AjPStr feature,
 		note, comment);*/
 	ajStrTrimC(&note, " .");
 	if(ajStrGetLen(note))
-	    ajFeatTagAdd(ret, tagnote, note);
+	    ajFeatTagAdd(ret, featTagNote, note);
 	if(ajStrGetLen(comment))
-	    ajFeatTagAdd(ret, tagcomm, comment);
+	    ajFeatTagAdd(ret, featTagComm, comment);
     }
     else 
     {
 	/*ajDebug("Simple swiss note: '%S'\n", tagstr);*/
 	if(ajStrGetLen(tagstr))
-	    ajFeatTagAdd(ret, tagnote, tagstr);
+	    ajFeatTagAdd(ret, featTagNote, tagstr);
     }
-    
+
+    ajStrDel(&note);
+    ajStrDel(&comment);
+    ajStrDel(&ftid);
+    ajStrDel(&tagstr);
+
     return ret;
 }
 
@@ -3132,7 +3189,7 @@ static AjPFeature featEmblFromLine(AjPFeattable thys,
     if(!origline)		/* we are only cleaning up */
 	return gf;
     
-    ajStrRemoveWhite(&featProcessLine);
+    ajStrRemoveWhiteExcess(&featProcessLine);
 
     if(newft) 		/* if new feature initialise for it */
     {
@@ -3228,8 +3285,8 @@ static AjPFeature featEmblProcess(AjPFeattable thys, const AjPStr feature,
     ajint itags = 0;
     const AjPStr tmpft = NULL;
     
-    ajStrRemoveWhiteExcess(loc);	/* no white space needed */
-    ajStrRemoveWhite(tags);		/* single spaces only */
+    ajStrRemoveWhite(loc);	/* no white space needed */
+    ajStrRemoveWhiteExcess(tags);		/* single spaces only */
 
     /* ajDebug("cleaned feat loc: '%S'\n            tags: '%S'\n",
      *loc, *tags);*/
@@ -3503,7 +3560,7 @@ static AjBool featEmblOperOut(const AjPStr loc, AjPStr* opnam, AjPStr* value)
 {
     ajint left=0;
     ajint right=0;
-    ajint ipos=0;
+    ajuint ipos=0;
     ajint bracepos = 0;
     const char* cp = ajStrGetPtr(loc);
 
@@ -3572,7 +3629,7 @@ static AjBool featEmblOperIn(const AjPStr loc, AjPStr* opnam, AjPStr* value,
     ajint left=0;
     ajint right=0;
     ajint depth;
-    ajint ipos=0;
+    ajuint ipos=0;
     ajint bracepos = 0;
     const char* cp = ajStrGetPtr(loc);
 
@@ -3632,8 +3689,8 @@ static AjBool featEmblOperIn(const AjPStr loc, AjPStr* opnam, AjPStr* value,
 static AjBool featEmblOperNone(const AjPStr loc, AjPStr* entryid,
 			       AjPStr* value, AjPStr* rest)
 {
-    ajint ipos=0;
-    ajint idpos = 0;
+    ajuint ipos=0;
+    ajuint idpos = 0;
     const char* cp = ajStrGetPtr(loc);
 
     while (*cp)
@@ -3816,7 +3873,7 @@ static AjBool featEmblLocNum(const AjPStr loc, AjBool* bound, ajint* num)
 
 static AjBool featEmblLocRange(const AjPStr loc, ajint* num1, ajint* num2)
 {
-    ajint ipos=0;
+    ajuint ipos=0;
     AjBool dot = ajFalse;
     const char* cp = ajStrGetPtr(loc);
 
@@ -3946,12 +4003,18 @@ static AjBool featEmblTvTagVal(AjPStr* tags, AjPStr* name, AjPStr* value)
 			ajStrAssignC(tags, cp);
 		    else
 			ajStrAssignC(tags, "");
+		    ajStrDel(&testtags);
+		    ajStrDel(&testname);
+		    ajStrDel(&testvalue);
 		    return ajTrue;
 		}
 		else			/* "" but is it really internal */
 		{
 		    if(depth)
 		    {
+			ajStrDel(&testtags);
+			ajStrDel(&testname);
+			ajStrDel(&testvalue);
 			return ajTrue;
 		    }
 		    depth++;
@@ -3993,6 +4056,9 @@ static AjBool featEmblTvTagVal(AjPStr* tags, AjPStr* name, AjPStr* value)
 	ajStrAssignC(tags, cp);
 	return ajTrue;
     }
+    ajStrDel(&testtags);
+    ajStrDel(&testname);
+    ajStrDel(&testvalue);
 
     return ajFalse;
 
@@ -4329,7 +4395,7 @@ static AjPFeature featGffFromLine(AjPFeattable thys, const AjPStr line,
 
 static AjBool featReadGff(AjPFeattable thys, AjPFileBuff file)
 {
-    static AjPStr line  = NULL;
+    AjPStr line  = NULL;
     AjPStr verstr       = NULL;
     AjPStr start        = NULL;
     AjPStr end          = NULL;
@@ -4379,8 +4445,8 @@ static AjBool featReadGff(AjPFeattable thys, AjPFileBuff file)
 	    end   = ajStrNew();
 	    ajRegSubI (GffRegexregion, 2, &start);
 	    ajRegSubI (GffRegexregion, 3, &end);
-	    (void) ajStrToInt(start, &(thys->Start));
-	    (void) ajStrToInt(end,   &(thys->End));
+	    (void) ajStrToUint(start, &(thys->Start));
+	    (void) ajStrToUint(end,   &(thys->End));
 	    ajStrDel(&start);
 	    ajStrDel(&end);
 	}
@@ -4401,8 +4467,8 @@ static AjBool featReadGff(AjPFeattable thys, AjPFileBuff file)
 	    if(featGffFromLine(thys, line, version)) /* does ajFeattableAdd */
 		found = ajTrue ;
 
-	ajStrDelStatic(&line);
     }
+    ajStrDel(&line);
 
     return found;
 }
@@ -4809,7 +4875,7 @@ static AjBool feattableWriteEmbl(const AjPFeattable thys, AjPFile file,
     AjPStr location     = NULL;              /* location list as a string */
     AjPStr temp         = NULL;
     AjPStr pos          = NULL;
-    ajint oldgroup = -1;
+    ajuint oldgroup = UINT_MAX;
     
     /* Check arguments */
     
@@ -5031,6 +5097,8 @@ static AjBool feattableWriteEmbl(const AjPFeattable thys, AjPFile file,
 static AjBool feattableWriteUnknown(const AjPFeattable thys,
 				    AjPFile file)
 {
+    (void) thys;			/* just so it is used */
+
     if(!file)
 	return ajFalse;
     ajFmtPrintF(file, "Unknown feature format hence no output."
@@ -5057,7 +5125,7 @@ AjBool ajFeattableWriteSwiss(const AjPFeattable thys, AjPFile file)
     AjIList iter     = NULL;
     AjPFeature gf    = NULL;
     AjPFeature gftop = NULL;
-    ajint oldgroup   = -1;
+    ajuint oldgroup   = UINT_MAX;
 
     /* Check arguments */
     ajDebug("ajFeattableWriteSwiss Checking arguments\n");
@@ -5116,7 +5184,7 @@ AjBool ajFeattableWritePir (const AjPFeattable thys, AjPFile file)
     AjPStr location   = NULL;        /* location list as a string */
     AjPStr temp       = NULL;
     AjPStr pos        = NULL;
-    ajint oldgroup    = -1;
+    ajuint oldgroup    = UINT_MAX;
     
     /* Check arguments */
     
@@ -5526,7 +5594,7 @@ AjBool ajFeatLocToSeq(const AjPStr seq, const AjPStr line,
 	++p;
     }
     
-    ajStrRemoveWhiteExcess(&featLocStr);
+    ajStrRemoveWhite(&featLocStr);
     
     /* Replace sites by a single location */
     p   = ajStrGetuniquePtr(&featLocStr);
@@ -5542,7 +5610,7 @@ AjBool ajFeatLocToSeq(const AjPStr seq, const AjPStr line,
 	else
 	    ++p;
     }
-    ajStrRemoveWhiteExcess(&featLocStr);
+    ajStrRemoveWhite(&featLocStr);
     
     
     /* Replace any x.y with x */
@@ -5558,7 +5626,7 @@ AjBool ajFeatLocToSeq(const AjPStr seq, const AjPStr line,
 	    p[off++] = ' ';
     }
     ajRegFree(&exp_ndotn);
-    ajStrRemoveWhiteExcess(&featLocStr);
+    ajStrRemoveWhite(&featLocStr);
     
     /* Replace any (n) with n */
     exp_brnbr = ajRegCompC("[(]([0-9]+)[)]");
@@ -5572,7 +5640,7 @@ AjBool ajFeatLocToSeq(const AjPStr seq, const AjPStr line,
 	p[off++] = ' ';
     }
     ajRegFree(&exp_brnbr);
-    ajStrRemoveWhiteExcess(&featLocStr);
+    ajStrRemoveWhite(&featLocStr);
     
     /* See if its a global complement and remove complement enclosure */
     if(ajStrPrefixC(featLocStr,"complement("))
@@ -5594,7 +5662,7 @@ AjBool ajFeatLocToSeq(const AjPStr seq, const AjPStr line,
 	++p;
     }
     
-    ajStrRemoveWhiteExcess(&featLocStr);
+    ajStrRemoveWhite(&featLocStr);
     
     
     /* Replace complement(n-n) with ^n-n */
@@ -5612,7 +5680,7 @@ AjBool ajFeatLocToSeq(const AjPStr seq, const AjPStr line,
 	    ++off;
 	p[off++] = ' ';
     }
-    ajStrRemoveWhiteExcess(&featLocStr);
+    ajStrRemoveWhite(&featLocStr);
     ajRegFree(&exp_compbrndashnbr);
     
     
@@ -5670,7 +5738,7 @@ AjBool ajFeatLocToSeq(const AjPStr seq, const AjPStr line,
 		featWarn("Couldn't find embedded entry %S\n",featLocToken);
 		return ajFalse;
 	    }
-	    ajStrAssignSubC(&tmp,ajSeqChar(ent),--begin,--end);
+	    ajStrAssignSubS(&tmp,ajSeqGetSeqS(ent),--begin,--end);
 	    ajSeqDel(&ent);
 	}
 	else
@@ -5708,6 +5776,211 @@ AjBool ajFeatLocToSeq(const AjPStr seq, const AjPStr line,
 
 
 
+/* @func ajFeatLocMark *******************************************************
+**
+** Returns a sequence entry coverted to lower case where a feature
+** location matches.
+**
+** @param [u] seq [AjPStr*] Upper case sequence
+** @param [r] line [const AjPStr] location
+** @return [AjBool] true on success
+** @@
+******************************************************************************/
+
+AjBool ajFeatLocMark(AjPStr *seq, const AjPStr line)
+{
+    char *p;
+    const char *cp;
+    const char *cq;
+    
+    ajint len;
+    ajint i;
+    ajint off;
+
+    AjPRegexp exp_ndotn = NULL;
+    AjPRegexp exp_brnbr = NULL;
+
+    AjPRegexp exp_compbrndashnbr = NULL;
+    AjPRegexp exp_joinbr = NULL;
+    AjPStrTok handle     = NULL;
+    
+    AjBool dbentry    = ajFalse;
+    
+    ajint begin = 0;
+    ajint end   = 0;
+    
+    ajStrGetuniquePtr(seq);
+    if(!featLocStr)
+    {
+	featLocStr   = ajStrNew();
+	featLocToken = ajStrNew();
+	featLocDb    = ajStrNew();
+    }
+    
+    ajStrAssignS(&featLocStr,line);    
+    
+    /* Remove chevrons */
+    p   = ajStrGetuniquePtr(&featLocStr);
+    len = ajStrGetLen(featLocStr);
+    for(i=0;i<len;++i)
+    {
+	if(*p=='<' || *p=='>')
+	    *p=' ';
+	++p;
+    }
+    
+    ajStrRemoveWhite(&featLocStr);
+    
+    /* Replace sites by a single location */
+    p   = ajStrGetuniquePtr(&featLocStr);
+    len = ajStrGetLen(featLocStr);
+    while(*p)
+    {
+	if(*p=='^')
+	{
+	    *(p++)=' ';
+	    while(*p>='0' && *p<='9')
+		*(p++) = ' ';
+	}
+	else
+	    ++p;
+    }
+    ajStrRemoveWhite(&featLocStr);
+    
+    
+    /* Replace any x.y with x */
+    exp_ndotn = ajRegCompC("([0-9]+)[.]([0-9]+)");
+    p = ajStrGetuniquePtr(&featLocStr);
+    while(ajRegExec(exp_ndotn,featLocStr))
+    {
+	off = ajRegOffset(exp_ndotn);
+	while(p[off]!='.')
+	    ++off;
+	p[off++] = ' ';
+	while(p[off]>='0' && p[off]<='9')
+	    p[off++] = ' ';
+    }
+    ajRegFree(&exp_ndotn);
+    ajStrRemoveWhite(&featLocStr);
+    
+    /* Replace any (n) with n */
+    exp_brnbr = ajRegCompC("[(]([0-9]+)[)]");
+    p = ajStrGetuniquePtr(&featLocStr);
+    while(ajRegExec(exp_brnbr,featLocStr))
+    {
+	off = ajRegOffset(exp_brnbr);
+	p[off++] = ' ';
+	while(p[off]!=')')
+	    ++off;
+	p[off++] = ' ';
+    }
+    ajRegFree(&exp_brnbr);
+    ajStrRemoveWhite(&featLocStr);
+    
+    /* See if its a global complement and remove complement enclosure */
+    if(ajStrPrefixC(featLocStr,"complement("))
+    {
+	len = ajStrGetLen(featLocStr);
+	ajStrAssignSubS(&featLocStr,featLocStr,11,len-2);
+    }
+    
+    /* Replace .. with - */
+    p = ajStrGetuniquePtr(&featLocStr);
+    while(*p)
+    {
+	if(*p=='.' && *(p+1)=='.')
+	{
+	    *p     = '-';
+	    *(p+1) = ' ';
+	}
+	++p;
+    }
+    
+    ajStrRemoveWhite(&featLocStr);
+    
+    
+    /* Replace complement(n-n) with ^n-n */
+    exp_compbrndashnbr = ajRegCompC("complement[(]([A-Za-z0-9:.]+)"
+				    "[-]([0-9]+)[)]");
+    
+    p = ajStrGetuniquePtr(&featLocStr);
+    while(ajRegExec(exp_compbrndashnbr,featLocStr))
+    {
+	off = ajRegOffset(exp_compbrndashnbr);
+	for(i=0;i<10;++i)
+	    p[off++] = ' ';
+	p[off] = '^';
+	while(p[off]!=')')
+	    ++off;
+	p[off++] = ' ';
+    }
+    ajStrRemoveWhite(&featLocStr);
+    ajRegFree(&exp_compbrndashnbr);
+    
+    
+    /* Check for only one "join" */
+    exp_joinbr = ajRegCompC("join[(]");
+    i=0;
+    while(ajRegExec(exp_joinbr,featLocStr))
+    {
+	off = ajRegOffset(exp_joinbr);
+	++i;
+	if(off)
+	{
+	    featWarn("Too many joins");
+	    return ajFalse;
+	}
+	len = ajStrGetLen(featLocStr);
+	ajStrAssignSubS(&featLocStr,featLocStr,5,len-2);
+    }
+    ajRegFree(&exp_joinbr);
+    
+    
+    /* Construct the sequence */
+    handle = ajStrTokenNewC(featLocStr,",");
+    while(ajStrTokenNextParse(&handle,&featLocToken))
+    {
+	cp = ajStrGetPtr(featLocToken);
+	if(*cp=='^')
+	{
+	    ++cp;
+	}
+	
+	cq=cp;
+	dbentry = ajFalse;
+	while(*cq)
+	    if(*(cq++)==':')
+	    {
+		dbentry = ajTrue;
+		break;
+	    }
+	
+	if(!dbentry)			/* something in this sequence */
+	{
+	    if(sscanf(cp,"%d-%d",&begin,&end)!=2)
+	    {
+		if(*cp>='0' && *cp<='9')
+		{
+		    if(sscanf(cp,"%d",&begin)==1)
+			end = begin;
+		    else
+		    {
+			featWarn("LocToSeq: Unpaired range");
+			return ajFalse;
+		    }
+		}
+	    }
+	    ajStrFmtLowerSub(seq,--begin,--end);
+	}
+	
+    }
+    ajStrTokenDel(&handle);
+
+    return ajTrue;
+}
+
+
+
 /* @func ajFeatGetLocs ********************************************************
 **
 ** Returns location information from catenated sequence entry
@@ -5716,11 +5989,11 @@ AjBool ajFeatLocToSeq(const AjPStr seq, const AjPStr line,
 ** @param [w] cds [AjPStr**] array of locations
 ** @param [r] type [const char*] type (e.g. CDS/mrna)
 
-** @return [ajint] number of location lines
+** @return [ajuint] number of location lines
 ** @@
 ******************************************************************************/
 
-ajint ajFeatGetLocs(const AjPStr str, AjPStr **cds, const char *type)
+ajuint ajFeatGetLocs(const AjPStr str, AjPStr **cds, const char *type)
 {
     AjPStr *entry = NULL;
     ajint nlines  = 0;
@@ -5776,7 +6049,7 @@ ajint ajFeatGetLocs(const AjPStr str, AjPStr **cds, const char *type)
 	    ajStrAppendC(&(*cds)[nc],cp+21);
 	    ++i;
 	}
-	ajStrRemoveWhiteExcess(&(*cds)[nc]);
+	ajStrRemoveWhite(&(*cds)[nc]);
     }
     
     
@@ -5851,7 +6124,7 @@ AjBool ajFeatGetNoteCI(const AjPFeature thys, const char* name, ajint count,
     AjIList iter     = NULL;
     FeatPTagval item = NULL;
     ajint icount     = 0;
-    ajint ilen = strlen(name);
+    ajuint ilen = strlen(name);
     /*ajDebug("ajFeatGetNoteCI '%s'\n", name);*/
     if(thys->Tags)
     {
@@ -5922,6 +6195,8 @@ AjBool ajFeatGetNoteI(const AjPFeature thys, const AjPStr name, ajint count,
 **
 ** Returns the nth value of a named feature tag.
 **
+** If not found as a tag, also searches for a named note
+**
 ** @param [r] thys [const AjPFeature] Feature object
 ** @param [r] name [const AjPStr] Tag name
 ** @param [r] num [ajint] Tag number
@@ -5937,6 +6212,13 @@ AjBool ajFeatGetTag(const AjPFeature thys, const AjPStr name, ajint num,
     AjIList iter     = NULL;
     FeatPTagval item = NULL;
     ajint inum       = 0;
+    AjBool isnote;
+    ajint noteposcolon=0;
+    ajint noteposvalue=0;
+
+    isnote = ajStrMatchC(name, "note");
+    noteposcolon = ajStrGetLen(name) + 1;
+    noteposvalue = ajStrGetLen(name) + 3;
 
     if(thys->Tags)
     {
@@ -5950,6 +6232,20 @@ AjBool ajFeatGetTag(const AjPFeature thys, const AjPStr name, ajint num,
 		if (num == inum)
 		{
 		    ajStrAssignS(val, item->Value);
+		    ajListIterFree(&iter);
+		    return ajTrue;
+		}
+	    }
+	    else if (!isnote &&
+		     ajStrMatchCaseC(item->Tag, "note") &&
+		     ajStrGetCharFirst(item->Value) == '*' &&
+		     ajCharPrefixCaseS(ajStrGetPtr(item->Value)+1, name) &&
+		     ajStrGetCharPos(item->Value, noteposcolon) == ':')
+	    {
+		inum++;
+		if (num == inum)
+		{
+		    ajStrAssignSubS(val, item->Value, noteposvalue, -1);
 		    ajListIterFree(&iter);
 		    return ajTrue;
 		}
@@ -6013,11 +6309,11 @@ const AjPStr ajFeatGetSource(const AjPFeature thys)
 **
 ** @param [r] thys [const AjPFeature] Feature object
 **
-** @return [ajint] Feature start position
+** @return [ajuint] Feature start position
 ** @@
 ******************************************************************************/
 
-ajint ajFeatGetStart(const AjPFeature thys)
+ajuint ajFeatGetStart(const AjPFeature thys)
 {
     return thys->Start;
 }
@@ -6049,11 +6345,11 @@ char ajFeatGetStrand(const AjPFeature thys)
 **
 ** @param [r] thys [const AjPFeature] Feature object
 **
-** @return [ajint] Feature end position
+** @return [ajuint] Feature end position
 ** @@
 ******************************************************************************/
 
-ajint ajFeatGetEnd(const AjPFeature thys)
+ajuint ajFeatGetEnd(const AjPFeature thys)
 {
     return thys->End;
 }
@@ -6064,11 +6360,11 @@ ajint ajFeatGetEnd(const AjPFeature thys)
 **
 ** @param [r] thys [const AjPFeature] Feature object
 **
-** @return [ajint] Feature length
+** @return [ajuint] Feature length
 ** @@
 ******************************************************************************/
 
-ajint ajFeatGetLength(const AjPFeature thys)
+ajuint ajFeatGetLength(const AjPFeature thys)
 {
     return thys->End - thys->Start + 1;
 }
@@ -6140,11 +6436,11 @@ ajint ajFeatGetFrame(const AjPFeature thys)
 ** @param [r] str [const AjPStr] catenated (seq->TextPtr) entry
 ** @param [w] cds [AjPStr**] array of translations
 **
-** @return [ajint] number of location lines
+** @return [ajuint] number of location lines
 ** @@
 ******************************************************************************/
 
-ajint ajFeatGetTrans(const AjPStr str, AjPStr **cds)
+ajuint ajFeatGetTrans(const AjPStr str, AjPStr **cds)
 {
     AjPStr *entry = NULL;
     ajint nlines  = 0;
@@ -6200,7 +6496,7 @@ ajint ajFeatGetTrans(const AjPStr str, AjPStr **cds)
 	}
 	p = ajStrGetuniquePtr(&(*cds)[nc]);
 	p[ajStrGetLen((*cds)[nc])-2] = ' ';
-	ajStrRemoveWhiteExcess(&(*cds)[nc]);
+	ajStrRemoveWhite(&(*cds)[nc]);
     }
     
     
@@ -6397,7 +6693,7 @@ static AjBool featVocabRead(const char* name,
     AjPStr intids    = NULL;
     AjPStr firstid    = NULL;
     AjPStr token     = NULL;
-    const AjPStr savetype  = NULL;
+    AjPStr savetype  = NULL;
     const AjPStr storetype  = NULL;
     AjPStr tagstr    = NULL;
     AjPStr typtagstr = NULL;
@@ -6415,7 +6711,7 @@ static AjBool featVocabRead(const char* name,
     ajint linecount = 0;
     ajint i;
 
-    char* TagType[] =
+    const char* TagType[] =
     {
 	"QTEXT",			/* quoted text */
 	"QWORD",			/* quoted text, no space */
@@ -6448,7 +6744,7 @@ static AjBool featVocabRead(const char* name,
     while(ajFileReadLine(TagsFile,&line))
     {
 	linecount++;
-	ajStrRemoveWhite(&line);
+	ajStrRemoveWhiteExcess(&line);
 	if(ajStrGetLen(line) && ajStrCmpLenC(line,"#",1)) /* skip comments */
 	{
 	    tagname = NULL;		/* create a new tag */
@@ -6541,7 +6837,7 @@ static AjBool featVocabRead(const char* name,
     typecount = 0;
     while(ajFileReadLine(TypeFile,&line))
     {
-	ajStrRemoveWhite(&line);
+	ajStrRemoveWhiteExcess(&line);
 	if(ajStrCmpLenC(line,"#",1)) /* if a comment skip it */
 	{
 	    if(featFeatType(line, &type, &intids, &tag, &req))
@@ -6555,8 +6851,8 @@ static AjBool featVocabRead(const char* name,
 			typtagstr = NULL;
 			ajStrAssignC(&defname, "");
 			ajStrAssignS(&typtagstr, type);
-			ajDebug("Efeatures.%s %d saved '%S'\n",
-				name, typecount, type);
+			/*ajDebug("Efeatures.%s %d saved '%S'\n",
+				name, typecount, type);*/
 			if(ajTablePut (pTypeTable, defname, typtagstr))
 			    ajErr("Efeatures.%s duplicate tag for '%S'",
 				  name, defname);
@@ -6564,8 +6860,8 @@ static AjBool featVocabRead(const char* name,
 		    }
 		    else	  /* save the previous feature type + tags */
 		    {
-			ajDebug("Efeatures.%s %d saved '%S' as '%S'\n",
-				name, typecount, savetype, typtagstr);
+			/*ajDebug("Efeatures.%s %d saved '%S' as '%S'\n",
+				name, typecount, savetype, typtagstr);*/
 			if(ajTablePut (pTypeTable, savetype, typtagstr))
 			    ajErr("Efeatures.%s duplicate tag for '%S'",
 				  name, savetype);
@@ -6589,8 +6885,8 @@ static AjBool featVocabRead(const char* name,
 			    {
 				ajStrAssignS(&localname, storetype);
 				ajStrAssignS(&sofaname, firstid);
-				ajDebug("Efeatures.%s sofaid '%S' = '%S'\n",
-					name,localname, sofaname);
+				/*ajDebug("Efeatures.%s sofaid '%S' = '%S'\n",
+					name,localname, sofaname);*/
 				if(ajTablePut (pTypeTable,
 					       localname, sofaname))
 				    ajErr("Efeatures.%s "
@@ -6667,6 +6963,7 @@ static AjBool featVocabRead(const char* name,
     ajStrDel(&req);
     ajStrDel(&tag);
     ajStrDel(&type);
+    ajStrDel(&intids);
     
     return ajTrue;    
 }
@@ -6796,19 +7093,18 @@ static AjBool featVocabInitSwiss(void)
 void ajFeatSetDescApp(AjPFeature thys, const AjPStr desc)
 {
     FeatPTagval tv        = NULL;
-    static AjPStr tagnote = NULL;
 
-    if(!tagnote)
-	ajStrAssignC(&tagnote, "note");
+    if(!featTagNote)
+	ajStrAssignC(&featTagNote, "note");
 
-    tv = featTagval(thys, tagnote);
+    tv = featTagval(thys, featTagNote);
     if(tv)
     {
 	ajStrAppendC(&tv->Value, ", ");
 	ajStrAppendS(&tv->Value, desc);
     }
     else
-	ajFeatTagSet (thys, tagnote, desc);
+	ajFeatTagSet (thys, featTagNote, desc);
 
     return;
 }
@@ -7131,13 +7427,18 @@ AjBool ajFeatTagSet(AjPFeature thys, const AjPStr tag,const  AjPStr value)
 
 AjBool ajFeatTagAddCC(AjPFeature thys, const char* tag, const char* value)
 {
-    static AjPStr tagstr = NULL;
-    static AjPStr valstr = NULL;
+    AjBool ret;
+    AjPStr tagstr = NULL;
+    AjPStr valstr = NULL;
 
     ajStrAssignC(&tagstr, tag);
     ajStrAssignC(&valstr, value);
 
-    return ajFeatTagAdd(thys, tagstr, valstr);
+    ret = ajFeatTagAdd(thys, tagstr, valstr);
+    ajStrDel(&tagstr);
+    ajStrDel(&valstr);
+
+    return ret;
 }
 
 
@@ -7190,8 +7491,8 @@ AjBool ajFeatTagAdd(AjPFeature thys, const AjPStr tag, const AjPStr value)
     AjBool knowntag = ajTrue;
     const char* cp;
     
-    ajDebug("ajFeatTagAdd '%S' '%S' Prot: %B\n",
-	    tag, value, thys->Protein);
+/*    ajDebug("ajFeatTagAdd '%S' '%S' Prot: %B\n",
+	    tag, value, thys->Protein);*/
     
     featInit();
     
@@ -7245,8 +7546,8 @@ AjBool ajFeatTagAdd(AjPFeature thys, const AjPStr tag, const AjPStr value)
 	/* ajDebug("case qtext\n"); */
 	if(!knowntag && tag)
 	    ajFmtPrintS(&featValTmp2, "*%S: %S", tag, value);
-	ajDebug("ajFeatTagAdd qtext knowntag %B tag '%S' Tmp '%S' '%S'\n",
-		knowntag, tag, featTagTmp2, featValTmp2);
+	/*ajDebug("ajFeatTagAdd qtext knowntag %B tag '%S' Tmp '%S' '%S'\n",
+		knowntag, tag, featTagTmp2, featValTmp2);*/
 	break;
     case CASE2('Q','W') :		    /* escape quotes, remove space */
 	/* ajDebug("case qword\n"); */
@@ -7946,6 +8247,55 @@ AjPFeattable ajFeattableCopy(const AjPFeattable orig)
 
 
 
+/* @func ajFeattableCopyLimit *************************************************
+**
+** Makes a copy of a feature table using only a limited number of features.
+**
+** For cases where we need a copy we can safely change and/or delete.
+**
+** @param [r]   orig  [const AjPFeattable]  Original feature table
+** @param [r]   limit  [ajint]  Limit to number of features copied
+** @return [AjPFeattable] Feature table copy of the original
+** @@
+******************************************************************************/
+
+AjPFeattable ajFeattableCopyLimit(const AjPFeattable orig, ajint limit)
+{
+    AjPFeattable ret = NULL;
+    AjIList iter;
+    AjPFeature featorig;
+    AjPFeature feat = NULL;
+    ajint ift = 0;
+
+    if(!orig)
+	return NULL;
+
+    ret = featTableNew();
+
+    ajStrAssignS(&ret->Seqid, orig->Seqid);
+    ajStrAssignS(&ret->Type, orig->Type);
+    ret->DefFormat = orig->DefFormat;
+    ret->Start     = orig->Start;
+    ret->End       = orig->End;
+    ret->Len       = orig->Len;
+    ret->Groups    = orig->Groups;
+
+    iter = ajListIterRead(orig->Features);
+
+    while(ajListIterMore(iter) && (ift++ < limit))
+    {
+	featorig = ajListIterNext(iter);
+	feat = ajFeatCopy(featorig);
+	ajFeattableAdd(ret, feat);
+    }
+    ajListIterFree(&iter);
+
+    return ret;
+}
+
+
+
+
 /* @func ajFeatCopy ***********************************************************
 **
 ** Makes a copy of a feature.
@@ -8245,20 +8595,18 @@ static const AjPStr featTableTypeExternal(const AjPStr type,
     static AjPStr tmpstr = NULL;
     ajint i;
 
-    retkey = (AjPStr) ajTableKey(table, type);
+    retkey = (const AjPStr) ajTableKey(table, type);
     if(retkey)
     {
 	ret = (AjPStr)ajTableGet(table, retkey);
-	ajDebug ("featTableTypeExternal a '%S' found in internal table as"
-		 " '%S' = '%S\n",
-		 type, retkey, ret);
+	/*ajDebug ("featTableTypeExternal a '%S' found in internal table as"
+		 " '%S' = '%S\n", type, retkey, ret);*/
 	if(ajStrGetCharLast(ret) != ';')
 	{
 	    retkey = ret;
 	    ret = (AjPStr)ajTableGet(table, retkey);
-	    ajDebug ("featTableTypeExternal b '%S' found in internal table as"
-		     " '%S' = '%S\n",
-		     type, retkey, ret);
+	    /*ajDebug ("featTableTypeExternal b '%S' found in internal table"
+		     " as '%S' = '%S\n", type, retkey, ret);*/
 	}
 	if(ajStrGetCharLast(ret) == ';')
 	{
@@ -8270,31 +8618,31 @@ static const AjPStr featTableTypeExternal(const AjPStr type,
 	    {
 		i = ajStrFindAnyK(ret, ';');
 		ajStrAssignSubS(&tmpstr, ret, 0, i-1);
-		ajDebug ("featTableTypeExternal '%S' is an alias for '%S'\n",
-			 retkey, tmpstr);
-		ret = (AjPStr) ajTableKey(table, tmpstr);
-		if(!ret)			/* oops, back to the previous one */
+		/*ajDebug ("featTableTypeExternal '%S' is an alias for '%S'\n",
+			 retkey, tmpstr);*/
+		ret = (const AjPStr) ajTableKey(table, tmpstr);
+		if(!ret)	  /* oops, back to the previous one */
 		{
-		    featWarn("featTableTypeExternal failed to find '%S' alias '%S",
+		    featWarn("featTableTypeExternal failed to find"
+			     " '%S' alias '%S",
 			     type, tmpstr);
 		    ret = (AjPStr)ajTableGet(table, retkey);
 		}
 		ajStrDel(&tmpstr);
 	    }
 	}
-	ajDebug ("featTableTypeExternal result '%S'\n",
-		 ret);
+	/*ajDebug ("featTableTypeExternal result '%S'\n",
+		 ret);*/
 	return ret;
     }
 
     ret = (AjPStr) ajTableGet(table, ajStrNew());
-    ajDebug("featTableTypeExternal '%S' not in internal table %x, "
-	    "default to '%S'\n",
-	    type, table, ret);
+    /*ajDebug("featTableTypeExternal '%S' not in internal table %x, "
+	    "default to '%S'\n", type, table, ret);*/
     /* ajStrTableTrace (table); */
 
-    ajDebug ("featTableTypeExternal result '%S'\n",
-	     ret);
+    /*ajDebug ("featTableTypeExternal result '%S'\n",
+	     ret);*/
     return ret;
 }
 
@@ -8319,31 +8667,31 @@ static const AjPStr featTableTypeInternal(const AjPStr type,
     static const AjPStr retkey = NULL;
     static const AjPStr tmpstr = NULL;
 
-    retkey = (AjPStr) ajTableKey(table, type);
+    retkey = (const AjPStr) ajTableKey(table, type);
     if(retkey)
     {
-	ajDebug ("featTableTypeInternal '%S' found in internal table as '%S'\n",
-		 type, retkey);
+	/*ajDebug ("featTableTypeInternal '%S' found in internal table"
+	  " as '%S'\n",type, retkey);*/
 	tmpstr = (AjPStr)ajTableGet(table, retkey);
 	if(ajStrGetCharLast(tmpstr) != ';')
 	{
-	    ajDebug ("featTableTypeInternal '%S' is an alias for '%S'\n",
-		 retkey, tmpstr);
-	    retkey = (AjPStr) ajTableKey(table, tmpstr);
+	    /*ajDebug ("featTableTypeInternal '%S' is an alias for '%S'\n",
+		 retkey, tmpstr);*/
+	    retkey = (const AjPStr) ajTableKey(table, tmpstr);
 	}
-	ajDebug ("featTableTypeInternal result '%S'\n",
-		 retkey);
+	/*ajDebug ("featTableTypeInternal result '%S'\n",
+		 retkey);*/
 	return retkey;
     }
 
     ret = (AjPStr) ajTableGet(table, ajStrNew());
-    ajDebug("featTableTypeInternal '%S' not in internal table %x, "
-	    "default to '%S'\n",
-	    type, table, ret);
+    /*ajDebug("featTableTypeInternal '%S' not in internal table %x, "
+	    "default to '%S'\n", type, table, ret);*/
+
     /* ajStrTableTrace (table); */
 
-    ajDebug ("featTableTypeInternal result '%S'\n",
-	     ret);
+    /*ajDebug ("featTableTypeInternal result '%S'\n",
+	     ret);*/
     return ret;
 }
 
@@ -8373,7 +8721,7 @@ static const AjPStr featTableTag(const AjPStr tag, const AjPTable table,
 
     if(tag)
     {
-	ret = (AjPStr) ajTableKey (table, tag);
+	ret = (const AjPStr) ajTableKey (table, tag);
 	if(ret)
 	{
 	    *knowntag = ajTrue;
@@ -8422,12 +8770,12 @@ static const AjPStr featTableTag(const AjPStr tag, const AjPTable table,
 static const AjPStr featTableTagC (const char* tag, const AjPTable table,
 				   AjBool* knowntag)
 {
-    static AjPStr ret    = NULL;
+    static const AjPStr ret    = NULL;
     static AjPStr tmptag = NULL;
 
     ajStrAssignC(&tmptag, tag);
 
-    ret = (AjPStr) ajTableKey(table, tmptag);
+    ret = (const AjPStr) ajTableKey(table, tmptag);
     if(ret)
     {
 	*knowntag = ajTrue;
@@ -8467,26 +8815,30 @@ static const AjPStr featTableTagC (const char* tag, const AjPTable table,
 
 static AjBool featTagSpecialAllAnticodon(const AjPStr val)
 {
-    static AjPRegexp exp = NULL;
-
-    static AjPStr begstr = NULL;
-    static AjPStr endstr = NULL;
-    static AjPStr aastr  = NULL;
-    AjBool saveit = ajFalse;
+    /*
+       static AjPStr begstr = NULL;
+       static AjPStr endstr = NULL;
+       static AjPStr aastr  = NULL;
+       AjBool saveit = ajFalse;
+    */
     AjBool ret = ajFalse;
 
-    if(!exp)
-	exp = ajRegCompC("^[(]pos:([0-9]+)[.][.]([0-9]+),aa:([^)]+)[)]$");
+    if(!featRegSpecialAnticodon)
+	featRegSpecialAnticodon =
+	    ajRegCompC("^[(]pos:([0-9]+)[.][.]([0-9]+),aa:([^)]+)[)]$");
 
-    if(ajRegExec(exp, val))
+    if(ajRegExec(featRegSpecialAnticodon, val))
     {
 	ret = ajTrue;
+	/*
 	if(saveit)
 	{
-	    ajRegSubI(exp, 1, &begstr);
-	    ajRegSubI(exp, 2, &endstr);
-	    ajRegSubI(exp, 3, &aastr);
+	    ajRegSubI(featRegSpecialAnticodon, 1, &begstr);
+	    ajRegSubI(featRegSpecialAnticodon, 2, &endstr);
+	    ajRegSubI(featRegSpecialAnticodon, 3, &aastr);
 	}
+	*/
+
     }
 
     if(!ret)
@@ -8631,8 +8983,8 @@ static AjBool featTagSpecialAllCollectiondate(const AjPStr val)
     ajint i;
     AjBool ret = ajFalse;
     AjBool ok;
-    char* months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-		      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    const char* months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+			    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
     if(!exp)
 	exp = ajRegCompC("^((\\d\\d)[-])?(([ADFJMNOS][a-z][a-z])[-])?([12][90]\\d\\d)$");
@@ -8812,7 +9164,7 @@ static AjBool featTagSpecialAllInference(const AjPStr val)
     ajint i;
     AjBool ret = ajFalse;
     AjBool ok;
-    char* types[] = {
+    const char* types[] = {
 	"non-experimental evidence, no additional details recorded",
 	"similar to sequence",
 	"similar to AA sequence",
@@ -8928,23 +9280,26 @@ static AjBool featTagSpecialAllLatlon(const AjPStr val)
 
 static AjBool featTagSpecialAllPcrprimers(const AjPStr val)
 {
-    static AjPRegexp primexp = NULL;
-
-    AjPStr labstr = NULL;
-    AjBool saveit = ajFalse;
     AjBool ret = ajFalse;
 
-    if(!primexp)
-      primexp = ajRegCompC("^(fwd_name: \\S+, )?"
-			   "fwd_seq: [acgtubdhkmnrsvwxy]+, "
-			   "(rev_name: \\S+, )?"
-			   "rev_seq: [acgtubdhkmnrsvwxy]+$");
+    /*
+    AjBool saveit = ajFalse;
+    AjPStr labstr = NULL;
+    */
 
-    if(ajRegExec(primexp, val))
+    if(!featRegSpecialPrimer)
+      featRegSpecialPrimer = ajRegCompC("^(fwd_name: \\S+, )?"
+					"fwd_seq: [acgtubdhkmnrsvwxy]+, "
+					"(rev_name: \\S+, )?"
+					"rev_seq: [acgtubdhkmnrsvwxy]+$");
+
+    if(ajRegExec(featRegSpecialPrimer, val))
     {
 	ret = ajTrue;
+	/*
 	if(saveit)
-	    ajRegSubI(primexp, 1, &labstr);
+	    ajRegSubI(featRegSpecialPrimer, 1, &labstr);
+        */
     }
 
     if(!ret)
@@ -8985,58 +9340,72 @@ static AjBool featTagSpecialAllPcrprimers(const AjPStr val)
 
 static AjBool featTagSpecialAllRptunit(const AjPStr val)
 {
-    static AjPRegexp exp    = NULL;
-    static AjPRegexp labexp = NULL;
-    static AjPRegexp compexp = NULL;
-    static AjPRegexp seqexp = NULL;
-
-    static AjPStr begstr = NULL;
-    static AjPStr endstr = NULL;
-    AjPStr labstr = NULL;
-    AjBool saveit = ajFalse;
     AjBool ret = ajFalse;
 
-    if(!exp)				/* base range */
-	exp = ajRegCompC("^(([a-zA-Z0-9_]+:)?[0-9]+)[.][.]([0-9]+)$");
-    if(!labexp)			/* feature label */
-	labexp = ajRegCompC("^(([a-zA-Z0-9_]+:)?[a-zA-Z0-9_]+)$");
-    if(!compexp)			/* complement(base range) */
-	compexp = ajRegCompC("^(complement[(]([a-zA-Z0-9_]+:)?[0-9]+)[.][.]([0-9]+)[)]$");
-    if(!seqexp)
-      seqexp = ajRegCompC("^([abcdghkmnrstuvwxyABCDGHKMNRSTUVWXY0-9/();-]+)$");
+    /*
+    AjBool saveit = ajFalse;
+    AjPStr begstr = NULL;
+    AjPStr endstr = NULL;
+    AjPStr labstr = NULL;
+    */
 
-    if(ajRegExec(exp, val))
+    if(!featRegSpecialRptRange)				/* base range */
+	featRegSpecialRptRange =
+	    ajRegCompC("^(([a-zA-Z0-9_]+:)?[0-9]+)[.][.]([0-9]+)$");
+    if(!featRegSpecialRptRangeLab)			/* feature label */
+	featRegSpecialRptRangeLab =
+	    ajRegCompC("^(([a-zA-Z0-9_]+:)?[a-zA-Z0-9_]+)$");
+    if(!featRegSpecialRptRangeComp)	/* complement(base range) */
+	featRegSpecialRptRangeComp =
+	    ajRegCompC("^(complement[(]([a-zA-Z0-9_]+:)?[0-9]+)"
+		       "[.][.]([0-9]+)[)]$");
+    if(!featRegSpecialRptunitSeq)
+      featRegSpecialRptunitSeq =
+	  ajRegCompC("^([abcdghkmnrstuvwxyABCDGHKMNRSTUVWXY0-9/();-]+)$");
+
+    if(ajRegExec(featRegSpecialRptRange, val))
     {
 	ret = ajTrue;
+	/*
 	if(saveit)
 	{
-	    ajRegSubI(exp, 1, &begstr);
-	    ajRegSubI(exp, 3, &endstr);
+	    ajRegSubI(featRegSpecialRptRange, 1, &begstr);
+	    ajRegSubI(featRegSpecialRptRange, 3, &endstr);
 	}
+        */
     }
 
-    else if(ajRegExec(labexp, val))
+    else if(ajRegExec(featRegSpecialRptRangeLab, val))
     {
 	ret = ajTrue;
+	/*
 	if(saveit)
-	    ajRegSubI(exp, 1, &labstr);
+	    ajRegSubI(featRegSpecialRptRangeLab, 1, &labstr);
+        */
     }
 
-    else if(ajRegExec(compexp, val))
+    else if(ajRegExec(featRegSpecialRptRangeComp, val))
     {
 	ret = ajTrue;
+	/*
 	if(saveit)
 	{
-	    ajRegSubI(exp, 3, &begstr);
-	    ajRegSubI(exp, 1, &endstr);
+	    ajRegSubI(featRegSpecialRptRangeComp, 3, &begstr);
+	    ajRegSubI(featRegSpecialRptRangeComp, 1, &endstr);
 	}
+        */
     }
 
-    if(ajRegExec(compexp, val))
+    if(ajRegExec(featRegSpecialRptRangeComp, val))
     {
-	ajRegSubI(exp, 3, &begstr);
-	ajRegSubI(exp, 1, &endstr);
 	ret = ajTrue;
+	/*
+	if(saveit)
+	{
+	  ajRegSubI(featRegSpecialRptRangeComp, 3, &begstr);
+	  ajRegSubI(featRegSpecialRptRangeComp, 1, &endstr);
+	}
+        */
     }
 
     /* provided because EMBL/Genbank has things like this:
@@ -9044,11 +9413,13 @@ static AjBool featTagSpecialAllRptunit(const AjPStr val)
        /rpt_unit=(A)n
        */
 
-    else if(ajRegExec(seqexp, val))
+    else if(ajRegExec(featRegSpecialRptunitSeq, val))
     {
 	ret = ajTrue;
+	/*
 	if(saveit)
-	    ajRegSubI(exp, 1, &labstr);
+	    ajRegSubI(featRegSpecialRptunitSeq, 1, &labstr);
+        */
     }
 
     if(!ret)
@@ -9089,48 +9460,55 @@ static AjBool featTagSpecialAllRptunit(const AjPStr val)
 
 static AjBool featTagSpecialAllRptunitrange(const AjPStr val)
 {
-    static AjPRegexp exp    = NULL;
-    static AjPRegexp labexp = NULL;
-    static AjPRegexp compexp = NULL;
-
-    static AjPStr begstr = NULL;
-    static AjPStr endstr = NULL;
-    AjPStr labstr = NULL;
+     AjBool ret = ajFalse;
+    /*
     AjBool saveit = ajFalse;
-    AjBool ret = ajFalse;
+    AjPStr begstr = NULL;
+    AjPStr endstr = NULL;
+    AjPStr labstr = NULL;
+    */
+    if(!featRegSpecialRptRange)				/* base range */
+	featRegSpecialRptRange =
+	    ajRegCompC("^(([a-zA-Z0-9_]+:)?[0-9]+)[.][.]([0-9]+)$");
+    if(!featRegSpecialRptRangeLab)			/* feature label */
+	featRegSpecialRptRangeLab =
+	    ajRegCompC("^(([a-zA-Z0-9_]+:)?[a-zA-Z0-9_]+)$");
+    if(!featRegSpecialRptRangeComp)	/* complement(base range) */
+	featRegSpecialRptRangeComp =
+	    ajRegCompC("^(complement[(]([a-zA-Z0-9_]+:)?[0-9]+)"
+		       "[.][.]([0-9]+)[)]$");
 
-    if(!exp)				/* base range */
-	exp = ajRegCompC("^(([a-zA-Z0-9_]+:)?[0-9]+)[.][.]([0-9]+)$");
-    if(!labexp)			/* feature label */
-	labexp = ajRegCompC("^(([a-zA-Z0-9_]+:)?[a-zA-Z0-9_]+)$");
-    if(!compexp)			/* complement(base range) */
-	compexp = ajRegCompC("^(complement[(]([a-zA-Z0-9_]+:)?[0-9]+)[.][.]([0-9]+)[)]$");
-
-    if(ajRegExec(exp, val))
+    if(ajRegExec(featRegSpecialRptRange, val))
     {
 	ret = ajTrue;
+	/*
 	if(saveit)
 	{
-	    ajRegSubI(exp, 1, &begstr);
-	    ajRegSubI(exp, 3, &endstr);
+	    ajRegSubI(featRegSpecialRptRange, 1, &begstr);
+	    ajRegSubI(featRegSpecialRptRange, 3, &endstr);
 	}
+        */
     }
 
-    else if(ajRegExec(labexp, val))
+    else if(ajRegExec(featRegSpecialRptRangeLab, val))
     {
 	ret = ajTrue;
+	/*
 	if(saveit)
-	    ajRegSubI(exp, 1, &labstr);
+	    ajRegSubI(featRegSpecialRptRangeLab, 1, &labstr);
+        */
     }
 
-    else if(ajRegExec(compexp, val))
+    else if(ajRegExec(featRegSpecialRptRangeComp, val))
     {
 	ret = ajTrue;
+	/*
 	if(saveit)
 	{
-	    ajRegSubI(exp, 3, &begstr);
-	    ajRegSubI(exp, 1, &endstr);
+	    ajRegSubI(featRegSpecialRptRangeComp, 3, &begstr);
+	    ajRegSubI(featRegSpecialRptRangeComp, 1, &endstr);
 	}
+        */
     }
 
 
@@ -9162,20 +9540,22 @@ static AjBool featTagSpecialAllRptunitrange(const AjPStr val)
 
 static AjBool featTagSpecialAllRptunitseq(const AjPStr val)
 {
-    static AjPRegexp seqexp = NULL;
-
-    AjPStr labstr = NULL;
-    AjBool saveit = ajFalse;
     AjBool ret = ajFalse;
+    /*
+    AjBool saveit = ajFalse;
+    AjPStr labstr = NULL;
+    */
+    if(!featRegSpecialRptunitSeq)
+      featRegSpecialRptunitSeq =
+	  ajRegCompC("^([abcdghkmnrstuvwxyABCDGHKMNRSTUVWXY0-9/();-]+)$");
 
-    if(!seqexp)
-      seqexp = ajRegCompC("^([abcdghkmnrstuvwxyABCDGHKMNRSTUVWXY0-9/();-]+)$");
-
-    if(ajRegExec(seqexp, val))
+    if(ajRegExec(featRegSpecialRptunitSeq, val))
     {
 	ret = ajTrue;
+	/*
 	if(saveit)
-	    ajRegSubI(seqexp, 1, &labstr);
+	    ajRegSubI(featRegSpecialRptunitSeq, 1, &labstr);
+        */
     }
 
     if(!ret)
@@ -9209,68 +9589,64 @@ static AjBool featTagSpecialAllRptunitseq(const AjPStr val)
 
 static AjBool featTagSpecialAllTranslexcept(const AjPStr val)
 {
-    static AjPRegexp exp = NULL;
-    static AjPRegexp badexp = NULL;
-    static AjPRegexp compexp = NULL;
-    static AjPRegexp badcompexp = NULL;
-
-    static AjPStr begstr = NULL;
-    static AjPStr endstr = NULL;
-    static AjPStr aastr  = NULL;
     AjBool saveit = ajFalse;
     AjBool ret = ajFalse;
 
-    if(!exp)
-	exp = ajRegCompC("^[(]pos:([0-9]+)[.][.]([0-9]+),aa:([^)]+)[)]$");
-    if(!badexp)				/* start position only */
-	badexp = ajRegCompC("^[(]pos:([0-9]+),aa:([^)]+)[)]$");
-    if(!compexp)
-	compexp = ajRegCompC("^[(]pos:complement\\(([0-9]+)[.][.]([0-9]+)\\),"
-			     "aa:([^)]+)[)]$");
-    if(!badcompexp)
-	badcompexp = ajRegCompC("^[(]pos:complement\\(([0-9]+)\\),"
-			     "aa:([^)]+)[)]$");
+    if(!featRegSpecialTrans)
+	featRegSpecialTrans =
+	    ajRegCompC("^[(]pos:([0-9]+)[.][.]([0-9]+),aa:([^)]+)[)]$");
+    if(!featRegSpecialTransBad)		/* start position only */
+	featRegSpecialTransBad =
+	    ajRegCompC("^[(]pos:([0-9]+),aa:([^)]+)[)]$");
+    if(!featRegSpecialTransComp)
+	featRegSpecialTransComp =
+	    ajRegCompC("^[(]pos:complement\\(([0-9]+)[.][.]([0-9]+)\\),"
+		       "aa:([^)]+)[)]$");
+    if(!featRegSpecialTransBadComp)
+	featRegSpecialTransBadComp =
+	    ajRegCompC("^[(]pos:complement\\(([0-9]+)\\),"
+		       "aa:([^)]+)[)]$");
 
-    if(ajRegExec(exp, val))
+    if(ajRegExec(featRegSpecialTrans, val))
     {
 	ret = ajTrue;
 	if(saveit)
 	{
-	    ajRegSubI(exp, 1, &begstr);
-	    ajRegSubI(exp, 2, &endstr);
-	    ajRegSubI(exp, 3, &aastr);
+	    ajRegSubI(featRegSpecialTrans, 1, &featTransBegStr);
+	    ajRegSubI(featRegSpecialTrans, 2, &featTransEndStr);
+	    ajRegSubI(featRegSpecialTrans, 3, &featTransAaStr);
 	}
     }
-    else if(ajRegExec(compexp, val))
+    else if(ajRegExec(featRegSpecialTransComp, val))
     {
 	ret = ajTrue;
 	if(saveit)
 	{
-	    ajRegSubI(compexp, 1, &begstr);
-	    ajRegSubI(compexp, 2, &endstr);
-	    ajRegSubI(compexp, 3, &aastr);
+	    ajRegSubI(featRegSpecialTransComp, 1, &featTransBegStr);
+	    ajRegSubI(featRegSpecialTransComp, 2, &featTransEndStr);
+	    ajRegSubI(featRegSpecialTransComp, 3, &featTransAaStr);
 	}
     }
 
 /* Can have single base (or 2 base) positions where trailing As are
    added as post-processing in some species */
 
-    else if(ajRegExec(badexp, val))
+    else if(ajRegExec(featRegSpecialTransBad, val))
     {
 	ret = ajTrue;
 	if(saveit)
 	{
-	    ajRegSubI(badexp, 1, &begstr);
-	    ajRegSubI(badexp, 2, &aastr);
+	    ajRegSubI(featRegSpecialTransBad, 1, &featTransBegStr);
+	    ajRegSubI(featRegSpecialTransBad, 2, &featTransAaStr);
 	}
     }
-    else if(ajRegExec(badcompexp, val))
+    else if(ajRegExec(featRegSpecialTransBadComp, val))
     {
 	ret = ajTrue;
 	if(saveit)
 	{
-	    ajRegSubI(badcompexp, 1, &begstr);
-	    ajRegSubI(badcompexp, 2, &aastr);
+	    ajRegSubI(featRegSpecialTransBadComp, 1, &featTransBegStr);
+	    ajRegSubI(featRegSpecialTransBadComp, 2, &featTransAaStr);
 	}
     }
 
@@ -9297,20 +9673,26 @@ static AjBool featTagSpecialAllTranslexcept(const AjPStr val)
 
 static AjBool featTagSpecialAllDbxref(const AjPStr val)
 {
-    static AjPStr dbstr  = NULL;
-    static AjPStr idstr  = NULL;
     const char* cp = NULL;
-    AjBool saveit = ajFalse;
     AjBool ret           = ajTrue;
 
+    /*
+    AjBool saveit = ajFalse;
+    AjPStr dbstr  = NULL;
+    AjPStr idstr  = NULL;
+    */
+
     cp = ajStrGetPtr(val);
+    /*
     if(saveit)
 	ajStrAssignResC(&dbstr, ajStrGetLen(val), "");
-
+    */
     while (*cp && (*cp != ':'))
     {
+	/*
 	if(saveit)
 	    ajStrAppendK(&dbstr, *cp);
+	*/
 	cp++;
     }
 
@@ -9322,10 +9704,10 @@ static AjBool featTagSpecialAllDbxref(const AjPStr val)
 	if (!*cp)
 	    ret = ajFalse;
     }
-
+    /*
     if(saveit)
 	ajStrAssignC(&idstr, cp);
-
+    */
     if(!ret)
     {
 	/*ajDebug("bad /db_xref value '%S'\n", val);*/
@@ -9352,15 +9734,18 @@ static AjBool featTagSpecialAllDbxref(const AjPStr val)
 
 static AjBool featTagSpecialAllProteinid(const AjPStr val)
 {
-    static AjPStr idstr    = NULL;
-    static AjPStr preidstr = NULL;
     const char* cp = ajStrGetPtr(val);
     const char* cq;
     ajint icp;
     ajint i = 0;
     ajint idot = 0;
-    AjBool saveit = ajFalse;
     AjBool ret = ajFalse;
+
+    /*
+    AjBool saveit = ajFalse;
+    AjPStr idstr    = NULL;
+    AjPStr preidstr = NULL;
+    */
 
     if (ajStrPrefixC(val, "ENSP"))  /* older entries had ENSEMBL Protein IDs */
     {
@@ -9376,11 +9761,13 @@ static AjBool featTagSpecialAllProteinid(const AjPStr val)
 
 	if(ret)
 	    featWarn("ENSEMBL /protein_id value '%S'",   val);
+	/*
 	if(saveit)
 	{
 	    ajStrAssignS(&preidstr, val);
 	    ajStrAssignS(&idstr, val);
 	}
+	*/
     }
     else
     {
@@ -9391,8 +9778,14 @@ static AjBool featTagSpecialAllProteinid(const AjPStr val)
 	{
 	    i++;
 	    icp = *cp;
-	    if(i <= 3) {
-		if(!isalpha(icp) || !isupper(icp))
+	    if(i <= 3)
+	    {
+	      if(icp == '_')
+	      {
+		if(i!=3)
+		  break;
+	      }
+	      else if(!isalpha(icp) || !isupper(icp))
 		    break;
 	    }
 	    else if(*cp == '.')
@@ -9410,11 +9803,13 @@ static AjBool featTagSpecialAllProteinid(const AjPStr val)
 	    }
 	    cp++;
 	}
+	/*
 	if(saveit)
 	{
 	    ajStrAssignLenC(&preidstr, cq, idot-1);
 	    ajStrAssignLenC(&idstr, cq, i);
 	}
+        */
 
 	if(!*cp && idot && (i > idot))
 	    ret = ajTrue;
@@ -9469,7 +9864,7 @@ static AjBool featTagSpecialAllReplace (AjPStr* pval)
        ajStrGetCharFirst(*pval), ajStrGetCharLast(*pval));
        */
 
-    ajStrRemoveWhiteExcess(pval);   /* remove wrapping spaces in long seq. */
+    ajStrRemoveWhite(pval);   /* remove wrapping spaces in long seq. */
 
     if(ajRegExec(featRegTagReplace, *pval))
 	ret = ajTrue;	    /* substring 1 has the matched sequence */
@@ -9502,13 +9897,13 @@ static AjBool featTagSpecialAllReplace (AjPStr* pval)
 
 static AjBool featTagSpecialAllTranslation(AjPStr* pval)
 {
-    static AjPStr seqstr = NULL;
+    AjPStr seqstr = NULL;
     const char* cp;
     ajint icp;
     AjBool saveit = ajFalse;
     AjBool ret = ajFalse;
 
-    ajStrRemoveWhiteExcess(pval);   /* remove wrapping spaces in long seq. */
+    ajStrRemoveWhite(pval);   /* remove wrapping spaces in long seq. */
     cp = ajStrGetPtr(*pval);
 
     if(saveit)
@@ -9557,20 +9952,18 @@ static AjBool featTagSpecialAllTranslation(AjPStr* pval)
 
 static AjBool featTagSpecialAllEstimatedlength(AjPStr* pval)
 {
-    static AjPRegexp exp   = NULL;
-
-    static AjPStr numstr = NULL;
+    AjPStr numstr = NULL;
     AjBool saveit = ajFalse;
     AjBool ret = ajFalse;
 
-    if(!exp)
-	exp = ajRegCompC("^(unknown|[1-9][0-9]*)$");
+    if(!featRegSpecialEstlen)
+	featRegSpecialEstlen = ajRegCompC("^(unknown|[1-9][0-9]*)$");
 
-    if(ajRegExec(exp, *pval))
+    if(ajRegExec(featRegSpecialEstlen, *pval))
     {
 	ret = ajTrue;
 	if(saveit)
-	    ajRegSubI(exp, 1, &numstr);
+	    ajRegSubI(featRegSpecialEstlen, 1, &numstr);
     }
 
     if(!ret)
@@ -9580,6 +9973,7 @@ static AjBool featTagSpecialAllEstimatedlength(AjPStr* pval)
 	       *pval);
 	ajStrAssignC(pval, "unknown");
     }
+    ajStrDel(&numstr);
 
     return ret;
 }
@@ -9601,21 +9995,19 @@ static AjBool featTagSpecialAllEstimatedlength(AjPStr* pval)
 
 static AjBool featTagSpecialAllCompare(const AjPStr val)
 {
-    static AjPRegexp exp   = NULL;
-
-    static AjPStr numstr = NULL;
+    AjPStr numstr = NULL;
     AjBool saveit = ajFalse;
     AjBool ret = ajFalse;
 
 /* value is a sequence version accnumber.number */
-    if(!exp)
-	exp = ajRegCompC("^([A-Z]+[0-9]+[.][1-9][0-9]*)$");
+    if(!featRegSpecialCompare)
+	featRegSpecialCompare = ajRegCompC("^([A-Z]+[0-9]+[.][1-9][0-9]*)$");
 
-    if(ajRegExec(exp, val))
+    if(ajRegExec(featRegSpecialCompare, val))
     {
 	ret = ajTrue;
 	if(saveit)
-	    ajRegSubI(exp, 1, &numstr);
+	    ajRegSubI(featRegSpecialCompare, 1, &numstr);
     }
 
     if(!ret)
@@ -9623,6 +10015,7 @@ static AjBool featTagSpecialAllCompare(const AjPStr val)
 	/*ajDebug("bad /cmopare value '%S'\n", val);*/
 	featWarn("bad /compare value '%S'", val);
     }
+    ajStrDel(&numstr);
 
     return ret;
 }
@@ -9721,7 +10114,7 @@ static void featTagQuoteGff(AjPStr* pval)
 ** and adds the appropriate prefix (e.g. the EMBL FT line type)
 **
 ** @param  [u] ploc [AjPStr*] location as a string
-** @param  [r] margin [ajint] Right margin
+** @param  [r] margin [ajuint] Right margin
 ** @param  [r] prefix [const char*] Left margin prefix string
 ** @param  [r] preftyp [const char*] Left margin prefix string for first line
 **                            (includes the feature key)
@@ -9730,7 +10123,7 @@ static void featTagQuoteGff(AjPStr* pval)
 ** @@
 ******************************************************************************/
 
-static void featLocEmblWrapC (AjPStr *ploc, ajint margin,
+static void featLocEmblWrapC (AjPStr *ploc, ajuint margin,
 			      const char* prefix, const char* preftyp,
 			      AjPStr* retstr)
 {
@@ -9745,7 +10138,7 @@ static void featLocEmblWrapC (AjPStr *ploc, ajint margin,
     left = strlen(prefix);
     width = margin - left;	    /* available width for printing */
 
-    ajStrRemoveWhiteExcess(ploc);	     /* no white space in locations */
+    ajStrRemoveWhite(ploc);	     /* no white space in locations */
     len = ajStrGetLen(*ploc);
 
     k = width;			/* for safety - will be set in time */
@@ -9802,14 +10195,14 @@ static void featLocEmblWrapC (AjPStr *ploc, ajint margin,
 ** prefix (e.g. the EMBL FT line type)
 **
 ** @param  [u] pval [AjPStr*] parameter value
-** @param  [r] margin [ajint] Right margin
+** @param  [r] margin [ajuint] Right margin
 ** @param  [r] prefix [const char*] Left margin prefix string
 ** @param  [w] retstr [AjPStr*] string with formatted value.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void featTagEmblWrapC(AjPStr *pval, ajint margin, const char* prefix,
+static void featTagEmblWrapC(AjPStr *pval, ajuint margin, const char* prefix,
 			     AjPStr* retstr)
 {
     ajint left  = 0;
@@ -9823,7 +10216,7 @@ static void featTagEmblWrapC(AjPStr *pval, ajint margin, const char* prefix,
     left = strlen(prefix);
     width = margin - left;	    /* available width for printing */
 
-    ajStrRemoveWhite(pval);			/* single spaces only */
+    ajStrRemoveWhiteExcess(pval);	/* single spaces only */
     len = ajStrGetLen(*pval);
 
     k = width;			/* for safety - will be set in time */
@@ -9880,14 +10273,14 @@ static void featTagEmblWrapC(AjPStr *pval, ajint margin, const char* prefix,
 ** prefix (e.g. the SwissProt FT line type)
 **
 ** @param  [u] pval [AjPStr*] parameter value
-** @param  [r] margin [ajint] Right margin
+** @param  [r] margin [ajuint] Right margin
 ** @param  [r] prefix [const char*] Left margin prefix string
 ** @param  [w] retstr [AjPStr*] string with formatted value.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void featTagSwissWrapC(AjPStr *pval, ajint margin, const char* prefix,
+static void featTagSwissWrapC(AjPStr *pval, ajuint margin, const char* prefix,
 			      AjPStr* retstr)
 {
     ajint left  = 0;
@@ -9897,7 +10290,7 @@ static void featTagSwissWrapC(AjPStr *pval, ajint margin, const char* prefix,
     ajint j;
     ajint k;
 
-    static AjPStr valstr = NULL;
+    AjPStr valstr = NULL;
     ajint last;
     
     left = strlen(prefix);
@@ -9961,7 +10354,9 @@ static void featTagSwissWrapC(AjPStr *pval, ajint margin, const char* prefix,
 	else
 	    ajFmtPrintAppS(retstr, "%.*S\n", j, featTmpStr);
     }
-    
+
+    ajStrDel(&valstr);
+
     return;
 }
 
@@ -10252,16 +10647,13 @@ static void featDumpEmbl(const AjPFeature feat, const AjPStr location,
     const AjPStr tmptyp  = NULL;		/* these come from AjPTable */
     const AjPStr tmptag  = NULL;		/* so please, please */
     /* don't delete them */
-    static AjPStr tmplim = NULL;
-    static AjPStr deftag = NULL;
+    AjPStr tmplim = NULL;
     AjBool knowntag = ajTrue;
     const char* cp;
     AjPStr wrapstr           = NULL;
-    static AjPStr preftyploc = NULL;
-    static AjPStr preftyptag = NULL;
-    static AjPStr tmploc     = NULL;
-    
-    ajStrAssignC(&deftag, "note");
+    AjPStr preftyploc = NULL;
+    AjPStr preftyptag = NULL;
+    AjPStr tmploc     = NULL;
     
     /* ajDebug("featDumpEmbl Start\n"); */
     
@@ -10346,7 +10738,7 @@ static void featDumpEmbl(const AjPFeature feat, const AjPStr location,
 		break;
 	    case CASE2('T','E') :     /* no space, no quotes, wrap at margin */
 		/* ajDebug("case text\n"); */
-		ajStrRemoveWhiteExcess(&featValTmp);
+		ajStrRemoveWhite(&featValTmp);
 		ajFmtPrintAppS(&featOutStr, "=%S\n", featValTmp);
 		break;
 	    case CASE2('V','O') :	     /* no value, so an error here */
@@ -10360,7 +10752,7 @@ static void featDumpEmbl(const AjPFeature feat, const AjPStr location,
 	    case CASE2('Q','W') :	   /* escape quotes, remove space */
 		/* ajDebug("case qword\n"); */
 		featTagQuoteEmbl(&featValTmp);
-		ajStrRemoveWhiteExcess(&featValTmp);	/* no white space needed */
+		ajStrRemoveWhite(&featValTmp);	/* no white space needed */
 		ajFmtPrintAppS(&featOutStr, "=%S\n", featValTmp);
 		break;
 	    default:
@@ -10381,7 +10773,10 @@ static void featDumpEmbl(const AjPFeature feat, const AjPStr location,
     /* ajDebug ("featDumpEmbl Done %d tags\n", i); */
     
     ajListIterFree(&iter);
-
+    ajStrDel(&preftyploc);
+    ajStrDel(&preftyptag);
+    ajStrDel(&tmploc);
+    ajStrDel(&tmplim);
     return;
 }
 
@@ -10406,8 +10801,8 @@ static void featDumpPir(const AjPFeature thys, const AjPStr location,
     AjPStr outtyp = NULL;		/* these come from AjPTable */
     const AjPStr outtag = NULL;		/* so please, please */
     /* don't delete them */
-    static AjPStr outcomm = NULL;
-    static AjPStr outfmt  = NULL;
+    AjPStr outcomm = NULL;
+    AjPStr outfmt  = NULL;
     FeatPTagval tv        = NULL;
     AjBool knowntag = ajTrue;
     const char* cp;
@@ -10474,7 +10869,10 @@ static void featDumpPir(const AjPFeature thys, const AjPStr location,
     ajListIterFree(&iter);
     ajFeatDel(&copy);
     ajFmtPrintF(file, "%S\n", outcomm);
-    
+    ajStrDel(&outcomm);
+    ajStrDel(&outfmt);
+    ajStrDel(&outtyp);
+
     return;
 }
 
@@ -10499,15 +10897,15 @@ static void featDumpSwiss(const AjPFeature thys, AjPFile file,
     const AjPStr outtyp = NULL;		/* these come from AjPTable */
     const AjPStr outtag = NULL;		/* so please, please */
     /* don't delete them */
-    static AjPStr outfmt = NULL;
-    static AjPStr tmplim = NULL;
+    AjPStr outfmt = NULL;
+    AjPStr tmplim = NULL;
     FeatPTagval tv       = NULL;
     ajint i =0;
     AjBool knowntag = ajTrue;
     const char* cp;
     AjPStr wrapstr        = NULL;
-    static AjPStr fromstr = NULL;
-    static AjPStr tostr   = NULL;
+    AjPStr fromstr = NULL;
+    AjPStr tostr   = NULL;
     
     outtyp = featTableTypeExternal(thys->Type, FeatTypeTableSwiss);
     
@@ -10607,7 +11005,11 @@ static void featDumpSwiss(const AjPFeature thys, AjPFile file,
     ajFmtPrintF(file, "%S", wrapstr);
     ajStrDelStatic(&featOutStr);
     ajStrDel(&wrapstr);
-    
+    ajStrDel(&tostr);
+    ajStrDel(&fromstr);
+    ajStrDel(&outfmt);
+    ajStrDel(&tmplim);
+
     return;
 }
 
@@ -10762,7 +11164,7 @@ static void featDumpGff(const AjPFeature thys, const AjPFeattable owner,
 		break;
 	    case CASE2('T','E') : /* no space, no quotes, wrap at margin */
 		/*ajDebug("case text\n");*/
-		ajStrRemoveWhiteExcess(&featValTmp);
+		ajStrRemoveWhite(&featValTmp);
 		ajFmtPrintAppS(&featOutStr, " %S", featValTmp);
 		break;
 	    case CASE2('Q','T') :	/* escape quotes, wrap at space */
@@ -10773,7 +11175,7 @@ static void featDumpGff(const AjPFeature thys, const AjPFeattable owner,
 	    case CASE2('Q','W') :	/* escape quotes, remove space */
 		/*ajDebug("case qtext\n");*/
 		featTagQuoteGff(&featValTmp);
-		ajStrRemoveWhiteExcess(&featValTmp);
+		ajStrRemoveWhite(&featValTmp);
 		ajFmtPrintAppS(&featOutStr, " %S", featValTmp);
 		break;
 	    case CASE2('Q', 'S') :	/* special regexp, quoted */
@@ -10989,6 +11391,12 @@ void ajFeatExit(void)
     ajStrTableFree(&FeatTypeTableGff);
     ajStrTableFree(&FeatTagsTableGff);
 
+    ajStrTableFree(&FeatTypeTablePir);
+    ajStrTableFree(&FeatTagsTablePir);
+
+    ajStrTableFree(&FeatTypeTableGffprotein);
+    ajStrTableFree(&FeatTagsTableGffprotein);
+
     ajStrTableFree(&FeatTypeTableSwiss);
     ajStrTableFree(&FeatTagsTableSwiss);
 
@@ -11019,6 +11427,10 @@ void ajFeatExit(void)
     ajStrDel(&featSource);
     ajStrDel(&featFeature);
 
+    ajStrDel(&featTagNote);
+    ajStrDel(&featTagComm);
+    ajStrDel(&featTagFtid);
+
     ajStrDel(&featSourcePir);
     ajStrDel(&featSourceSwiss);
     ajStrDel(&featSourceEmbl);
@@ -11028,6 +11440,11 @@ void ajFeatExit(void)
     ajStrDel(&featLocStr);
     ajStrDel(&featLocToken);
     ajStrDel(&featLocDb);
+    ajStrDel(&featSaveGroupStr);
+
+    ajStrDel(&featTransBegStr);
+    ajStrDel(&featTransEndStr);
+    ajStrDel(&featTransAaStr);
 
     ajStrTokenDel(&featGffSplit);
     ajStrTokenDel(&featEmblSplit);
@@ -11041,6 +11458,20 @@ void ajFeatExit(void)
     ajRegFree(&featRegQuote);
 
     ajRegFree(&featTagTrans);
+    ajRegFree(&featRegGroup);
+
+    ajRegFree(&featRegSpecialCompare);
+    ajRegFree(&featRegSpecialEstlen);
+    ajRegFree(&featRegSpecialTrans);
+    ajRegFree(&featRegSpecialTransBad);
+    ajRegFree(&featRegSpecialTransComp);
+    ajRegFree(&featRegSpecialTransBadComp);
+    ajRegFree(&featRegSpecialAnticodon);
+    ajRegFree(&featRegSpecialRptunitSeq);
+    ajRegFree(&featRegSpecialRptRange);
+    ajRegFree(&featRegSpecialRptRangeLab);
+    ajRegFree(&featRegSpecialRptRangeComp);
+    ajRegFree(&featRegSpecialPrimer);
 
     return;
 }
@@ -11163,13 +11594,13 @@ AjBool ajFeatIsLocal(const AjPFeature gf)
 ** (Any label location is assumed to be outside the range.)
 **
 ** @param [r] gf       [const AjPFeature]  Feature
-** @param [r] start    [ajint]  start of range
-** @param [r] end      [ajint]  end of range
+** @param [r] start    [ajuint]  start of range
+** @param [r] end      [ajuint]  end of range
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-AjBool ajFeatIsLocalRange(const AjPFeature gf, ajint start, ajint end)
+AjBool ajFeatIsLocalRange(const AjPFeature gf, ajuint start, ajuint end)
 {
     if(gf->Flags & FEATFLAG_REMOTEID)
 	return AJFALSE;
@@ -11239,6 +11670,42 @@ AjBool ajFeatIsCompMult(const AjPFeature gf)
 
 
 
+/* @func ajFeattabOutClear ****************************************************
+**
+** Resets a feature table output object
+**
+** @param [d] thys [AjPFeattabOut *] feature format
+** @return [void] Feature table output object
+** @category delete [AjPFeattabOut] Destructor
+** @@
+******************************************************************************/
+
+void ajFeattabOutClear(AjPFeattabOut *thys)
+{
+    AjPFeattabOut pthis;
+
+    pthis = *thys;
+    if(!pthis) return;
+
+    ajStrSetClear(&pthis->Ufo);
+    ajStrSetClear(&pthis->Formatstr);
+    ajStrSetClear(&pthis->Filename);
+    ajStrSetClear(&pthis->Directory);
+    ajStrSetClear(&pthis->Seqid);
+    ajStrSetClear(&pthis->Type);
+    ajStrSetClear(&pthis->Seqname);
+    ajStrSetClear(&pthis->Basename);
+
+    /* "Local" tables have borrowed an open file with NewSSF */
+    if(!pthis->Local)
+	ajFileClose(&pthis->Handle);
+
+    return;
+}
+
+
+
+
 /* @func ajFeattabOutDel ******************************************************
 **
 ** Destructor for a feature table output object
@@ -11287,11 +11754,11 @@ void ajFeattabOutDel(AjPFeattabOut *thys)
 **
 ** @param [r] thys [const AjPFeattable] Target feature table.
 ** @param [r] ipos [ajint] Position.
-** @return [ajint] string position between 1 and length.
+** @return [ajuint] string position between 1 and length.
 ** @@
 ******************************************************************************/
 
-ajint ajFeattablePos(const AjPFeattable thys, ajint ipos)
+ajuint ajFeattablePos(const AjPFeattable thys, ajint ipos)
 {
     return ajFeattablePosII (ajFeattableLen(thys), 1, ipos);
 }
@@ -11309,13 +11776,13 @@ ajint ajFeattablePos(const AjPFeattable thys, ajint ipos)
 ** is being tested.
 **
 ** @param [r] thys [const AjPFeattable] Target feature table.
-** @param [r] imin [ajint] Start position.
+** @param [r] imin [ajuint] Start position.
 ** @param [r] ipos [ajint] Position.
-** @return [ajint] string position between 1 and length.
+** @return [ajuint] string position between 1 and length.
 ** @@
 ******************************************************************************/
 
-ajint ajFeattablePosI(const AjPFeattable thys, ajint imin, ajint ipos)
+ajuint ajFeattablePosI(const AjPFeattable thys, ajuint imin, ajint ipos)
 {
     return ajFeattablePosII (ajFeattableLen(thys), imin, ipos);
 }
@@ -11335,16 +11802,16 @@ ajint ajFeattablePosI(const AjPFeattable thys, ajint imin, ajint ipos)
 ** For strings, the result can go off the end to the terminating NULL.
 ** For sequences the maximum is the last base.
 **
-** @param [r] ilen [ajint] maximum length.
-** @param [r] imin [ajint] Start position.
+** @param [r] ilen [ajuint] maximum length.
+** @param [r] imin [ajuint] Start position.
 ** @param [r] ipos [ajint] Position.
-** @return [ajint] string position between 1 and length.
+** @return [ajuint] string position between 1 and length.
 ** @@
 ******************************************************************************/
 
-ajint ajFeattablePosII(ajint ilen, ajint imin, ajint ipos)
+ajuint ajFeattablePosII(ajuint ilen, ajuint imin, ajint ipos)
 {
-    ajint jpos;
+    ajuint jpos;
 
     if(ipos < 0)
 	jpos = ilen + ipos + 1;
@@ -11379,20 +11846,20 @@ ajint ajFeattablePosII(ajint ilen, ajint imin, ajint ipos)
 ** missing sequence positions at the start (ioffset) or at the end (ilen).
 **
 ** @param [u] thys [AjPFeattable] Target feature table.
-** @param [r] ioffset [ajint] Offset from start of sequence
-** @param [r] ilen [ajint] Length of sequence
+** @param [r] ioffset [ajuint] Offset from start of sequence
+** @param [r] ilen [ajuint] Length of sequence
 ** @return [AjBool] AjTrue returned if successful.
 ** @@
 ******************************************************************************/
 
-AjBool ajFeattableTrimOff(AjPFeattable thys, ajint ioffset, ajint ilen)
+AjBool ajFeattableTrimOff(AjPFeattable thys, ajuint ioffset, ajuint ilen)
 {
     AjBool ok      = ajTrue;
     AjBool dobegin = ajFalse;
     AjBool doend   = ajFalse;
-    ajint begin    = 0;
-    ajint end      = 0;
-    ajint iseqlen;
+    ajuint begin    = 0;
+    ajuint end      = 0;
+    ajuint iseqlen;
     AjIList     iter = NULL ;
     AjPFeature  ft   = NULL ;
     
@@ -11421,7 +11888,7 @@ AjBool ajFeattableTrimOff(AjPFeattable thys, ajint ioffset, ajint ilen)
     /*ajDebug("  ready to trim dobegin %B doend %B begin %d end %d\n",
 	     dobegin, doend, begin, end);*/
     
-    iter = ajListIterRead(thys->Features) ;
+    iter = ajListIter(thys->Features) ;
     while(ajListIterMore(iter))
     {
 	ft = (AjPFeature)ajListIterNext (iter);
@@ -11448,17 +11915,17 @@ AjBool ajFeattableTrimOff(AjPFeattable thys, ajint ioffset, ajint ilen)
 ** missing sequence positions at the start (ioffset) or at the end (ilen).
 **
 ** @param [u] ft [AjPFeature] Target feature
-** @param [r] ioffset [ajint] Offset from start of sequence
-** @param [r] begin [ajint] Range start of sequence
-** @param [r] end [ajint] range end of sequence
+** @param [r] ioffset [ajuint] Offset from start of sequence
+** @param [r] begin [ajuint] Range start of sequence
+** @param [r] end [ajuint] range end of sequence
 ** @param [r] dobegin [AjBool] Reset begin
 ** @param [r] doend [AjBool] Reset end
 ** @return [AjBool] AjTrue returned if successful.
 ** @@
 ******************************************************************************/
 
-AjBool ajFeatTrimOffRange(AjPFeature ft, ajint ioffset,
-			  ajint begin, ajint end,
+AjBool ajFeatTrimOffRange(AjPFeature ft, ajuint ioffset,
+			  ajuint begin, ajuint end,
 			  AjBool dobegin, AjBool doend)
 {
     AjBool ok = ajTrue;

@@ -4,10 +4,12 @@
   [-outfile]           outfile    [*.coderet] Output file name
   [-cdsoutseq]         seqoutall  [<sequence>.<format>] Coding nucleotide
                                   output sequence(s) (optional)
-  [-mrnaoutseq]        seqoutall  Messenger RNA nucleotide output sequence(s)
-                                  (optional)
-  [-translationoutseq] seqoutall  Translated coding protein output sequence(s)
-                                  (optional)
+  [-mrnaoutseq]        seqoutall  [<sequence>.<format>] Messenger RNA
+                                  nucleotide output sequence(s) (optional)
+  [-translationoutseq] seqoutall  [<sequence>.<format>] Translated coding
+                                  protein output sequence(s) (optional)
+  [-restoutseq]        seqoutall  [<sequence>.<format>] Non-coding nucleotide
+                                  output sequence(s) (optional)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -67,6 +69,18 @@
    -offormat5          string     Features format
    -ofname5            string     Features file name
    -ofdirectory5       string     Output directory
+
+   "-restoutseq" associated qualifiers
+   -osformat6          string     Output seq format
+   -osextension6       string     File name extension
+   -osname6            string     Base file name
+   -osdirectory6       string     Output directory
+   -osdbname6          string     Database name to add
+   -ossingle6          boolean    Separate file for each entry
+   -oufo6              string     UFO features
+   -offormat6          string     Features format
+   -ofname6            string     Features file name
+   -ofdirectory6       string     Output directory
 
    General qualifiers:
    -auto               boolean    Turn off prompts

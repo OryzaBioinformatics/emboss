@@ -58,4 +58,14 @@ section: output [
     knowntype: "translated cds sequence"
   ]
 
+  seqoutall: restoutseq [
+    parameter: "Y"
+    type: "nucleotide"
+    information: "Non-coding nucleotide output sequence(s)
+                  (optional)"
+    osextension: "noncoding"
+    nullok: "Y"
+    knowntype: "mrna sequence"
+  ]
+
 endsection: output

@@ -1,6 +1,6 @@
 <b>Here is a sample session with coderet</b>
 <p>
-To extract all of the CDS, mRNA and the protein translations: 
+To extract all of the CDS, mRNA, non-coding and the protein translations: 
 <p>
 
 <p>
@@ -13,6 +13,7 @@ Output file [hsferg1.coderet]: <b></b>
 Coding nucleotide output sequence(s) (optional) [hsferg1.cds]: <b></b>
 Messenger RNA nucleotide output sequence(s) (optional) [hsferg1.mrna]: <b></b>
 Translated coding protein output sequence(s) (optional) [hsferg1.prot]: <b></b>
+Non-coding nucleotide output sequence(s) (optional) [hsferg1.noncoding]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -26,7 +27,7 @@ To only extract the mRNA sequence:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>coderet -nocds -notranslation </b>
+% <b>coderet -nocds -notranslation -norest </b>
 Extract CDS, mRNA and translations from feature tables
 Input nucleotide sequence(s): <b>tembl:X03487</b>
 Output file [hsferg1.coderet]: <b></b>

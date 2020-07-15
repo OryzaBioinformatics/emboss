@@ -120,7 +120,7 @@ directly from the translation sequence held in the feature table.
 
 <b>Here is a sample session with coderet</b>
 <p>
-To extract all of the CDS, mRNA and the protein translations: 
+To extract all of the CDS, mRNA, non-coding and the protein translations: 
 <p>
 
 <p>
@@ -133,6 +133,7 @@ Output file [hsferg1.coderet]: <b></b>
 Coding nucleotide output sequence(s) (optional) [hsferg1.cds]: <b></b>
 Messenger RNA nucleotide output sequence(s) (optional) [hsferg1.mrna]: <b></b>
 Translated coding protein output sequence(s) (optional) [hsferg1.prot]: <b></b>
+Non-coding nucleotide output sequence(s) (optional) [hsferg1.noncoding]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -146,7 +147,7 @@ To only extract the mRNA sequence:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>coderet -nocds -notranslation </b>
+% <b>coderet -nocds -notranslation -norest </b>
 Extract CDS, mRNA and translations from feature tables
 Input nucleotide sequence(s): <b>tembl:X03487</b>
 Output file [hsferg1.coderet]: <b></b>
@@ -168,10 +169,12 @@ Messenger RNA nucleotide output sequence(s) (optional) [hsferg1.mrna]: <b></b>
   [-outfile]           outfile    [*.coderet] Output file name
   [-cdsoutseq]         seqoutall  [<sequence>.<format>] Coding nucleotide
                                   output sequence(s) (optional)
-  [-mrnaoutseq]        seqoutall  Messenger RNA nucleotide output sequence(s)
-                                  (optional)
-  [-translationoutseq] seqoutall  Translated coding protein output sequence(s)
-                                  (optional)
+  [-mrnaoutseq]        seqoutall  [<sequence>.<format>] Messenger RNA
+                                  nucleotide output sequence(s) (optional)
+  [-translationoutseq] seqoutall  [<sequence>.<format>] Translated coding
+                                  protein output sequence(s) (optional)
+  [-restoutseq]        seqoutall  [<sequence>.<format>] Non-coding nucleotide
+                                  output sequence(s) (optional)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -232,6 +235,18 @@ Messenger RNA nucleotide output sequence(s) (optional) [hsferg1.mrna]: <b></b>
    -ofname5            string     Features file name
    -ofdirectory5       string     Output directory
 
+   "-restoutseq" associated qualifiers
+   -osformat6          string     Output seq format
+   -osextension6       string     File name extension
+   -osname6            string     Base file name
+   -osdirectory6       string     Output directory
+   -osdbname6          string     Database name to add
+   -ossingle6          boolean    Separate file for each entry
+   -oufo6              string     UFO features
+   -offormat6          string     Features format
+   -ofname6            string     Features file name
+   -ofdirectory6       string     Output directory
+
    General qualifiers:
    -auto               boolean    Turn off prompts
    -stdout             boolean    Write standard output
@@ -268,28 +283,35 @@ Messenger RNA nucleotide output sequence(s) (optional) [hsferg1.mrna]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.coderet</td>
 </tr>
 
 <tr>
 <td>[-cdsoutseq]<br>(Parameter 3)</td>
 <td>Coding nucleotide output sequence(s) (optional)</td>
 <td>Writeable sequence(s)</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr>
 <td>[-mrnaoutseq]<br>(Parameter 4)</td>
 <td>Messenger RNA nucleotide output sequence(s) (optional)</td>
 <td>Writeable sequence(s)</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr>
 <td>[-translationoutseq]<br>(Parameter 5)</td>
 <td>Translated coding protein output sequence(s) (optional)</td>
 <td>Writeable sequence(s)</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>[-restoutseq]<br>(Parameter 6)</td>
+<td>Non-coding nucleotide output sequence(s) (optional)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -471,12 +493,23 @@ LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
 NES
 </pre>
 </td></tr></table><p>
+<p><h3>File: hsferg1.noncoding</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;x03487_noncoding_1
+agnncaaacctnagctccgccagagcgcgcgaggcctccagcggccgcccctcccccaca
+gcaggggcggggntcccgcgcccaccggaaggagcgggctcggggcgggcggcgctgatt
+ggccggggcgggcctgacgccgacgcggctataagagaccacaagcgacccgcagggc
+&gt;x03487_noncoding_501
+gtgagcgcgggc
+</pre>
+</td></tr></table><p>
 <p><h3>File: hsferg1.coderet</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-   CDS  mRNA Trans Total Sequence
- ===== ===== ===== ===== ========
-     1     1     1     3 HSFERG1
+   CDS  mRNA non-c Trans Total Sequence
+ ===== ===== ===== ===== ===== ========
+     1     1     2     1     5 HSFERG1
 </pre>
 </td></tr></table><p>
 

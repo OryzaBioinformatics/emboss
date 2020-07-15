@@ -30,6 +30,8 @@ static void coderet_put_seq(const AjPSeq seq, const AjPStr strseq,
 			    ajint n, const char *name,
 			    ajint type, AjPSeqout seqout);
 
+static void coderet_put_rest(const AjPSeq seq, const AjPStr copyseq,
+			     const char* name, AjPSeqout seqout);
 
 
 
@@ -46,21 +48,26 @@ int main(int argc, char **argv)
     AjPSeqout seqoutcds   = NULL;
     AjPSeqout seqoutmrna  = NULL;
     AjPSeqout seqoutprot  = NULL;
+    AjPSeqout seqoutrest  = NULL;
     AjPFile logf     = NULL;
 
     ajint ncds  = 0;
     ajint nmrna = 0;
+    ajint nrest = 0;
+    ajint nrestall = 0;
     ajint ntran = 0;
     ajint i =0;
 
     AjPStr cds  = NULL;
     AjPStr mrna = NULL;
     AjPStr usa  = NULL;
+    AjPStr copyseq  = NULL;
 
     AjBool ret = ajFalse;
     AjPStr *cdslines  = NULL;
     AjPStr *mrnalines = NULL;
     AjPStr *tranlines = NULL;
+    AjPStr *restlines = NULL;
 
     embInit("coderet",argc,argv);
 
@@ -68,6 +75,7 @@ int main(int argc, char **argv)
 
     seqoutcds  = ajAcdGetSeqoutall("cdsoutseq");
     seqoutmrna = ajAcdGetSeqoutall("mrnaoutseq");
+    seqoutrest = ajAcdGetSeqoutall("restoutseq");
     seqoutprot = ajAcdGetSeqoutall("translationoutseq");
     logf = ajAcdGetOutfile("outfile");
 
@@ -88,6 +96,9 @@ int main(int argc, char **argv)
     if(seqoutmrna)
 	ajFmtPrintF(logf, "  mRNA");
 
+    if(seqoutrest)
+	ajFmtPrintF(logf, " non-c");
+
     if(seqoutprot)
 	ajFmtPrintF(logf, " Trans");
 
@@ -96,6 +107,9 @@ int main(int argc, char **argv)
 	ajFmtPrintF(logf, " =====");
 
     if(seqoutmrna)
+	ajFmtPrintF(logf, " =====");
+
+    if(seqoutrest)
 	ajFmtPrintF(logf, " =====");
 
     if(seqoutprot)
@@ -111,10 +125,10 @@ int main(int argc, char **argv)
 
 	    for(i=0;i<ncds;++i)
 	    {
-		ret = ajFeatLocToSeq(ajSeqStr(seq),cdslines[i],&cds,usa);
+		ret = ajFeatLocToSeq(ajSeqGetSeqS(seq),cdslines[i],&cds,usa);
 		if(!ret)
 		{
-		    ajWarn("Cannot extract %s\n",ajSeqName(seq));
+		    ajWarn("Cannot extract %s\n",ajSeqGetNameC(seq));
 		    continue;
 		}
 		coderet_put_seq(seq,cds,i,"cds",0,seqoutcds);
@@ -131,10 +145,10 @@ int main(int argc, char **argv)
 
 	    for(i=0;i<nmrna;++i)
 	    {
-		ret = ajFeatLocToSeq(ajSeqStr(seq),mrnalines[i],&mrna,usa);
+		ret = ajFeatLocToSeq(ajSeqGetSeqS(seq),mrnalines[i],&mrna,usa);
 		if(!ret)
 		{
-		    ajWarn("Cannot extract %s",ajSeqName(seq));
+		    ajWarn("Cannot extract %s",ajSeqGetNameC(seq));
 		    continue;
 		}
 		coderet_put_seq(seq,mrna,i,"mrna",0,seqoutmrna);
@@ -146,6 +160,54 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(logf, "%6d", nmrna);
 	}
 
+
+	if(seqoutrest)
+	{
+	    nrestall = 0;
+	    copyseq = ajSeqGetSeqCopyS(seq);
+	    ajStrFmtUpper(&copyseq);
+
+	    nrest = ajFeatGetLocs(seq->TextPtr, &restlines, "CDS");
+	    for(i=0;i<nrest;++i)
+	    {
+		ajFeatLocMark(&copyseq,restlines[i]);
+		ajStrDel(&restlines[i]);
+	    }
+	    if(nrest)
+		AJFREE(restlines);
+	    nrestall += nrest;
+
+	    nrest = ajFeatGetLocs(seq->TextPtr, &restlines, "mRNA");
+	    for(i=0;i<nrest;++i)
+	    {
+		ajFeatLocMark(&copyseq,restlines[i]);
+		ajStrDel(&restlines[i]);
+	    }
+	    if(nrest)
+		AJFREE(restlines);
+	    nrestall += nrest;
+
+	    nrest = ajFeatGetLocs(seq->TextPtr, &restlines, "exon");
+	    for(i=0;i<nrest;++i)
+	    {
+		ajFeatLocMark(&copyseq,restlines[i]);
+		ajStrDel(&restlines[i]);
+	    }
+	    if(nrest)
+		AJFREE(restlines);
+	    nrestall += nrest;
+
+	    ajFmtPrintF(logf, "%6d", nrestall);
+
+/*
+	    ajDebug("after CDS copyseq:\n");
+	    for(k=0;k<ajStrGetLen(copyseq);k+=50)
+	    {
+		ajDebug("%6d %50.50s\n", k, k+ajStrGetPtr(copyseq));
+	    }
+*/
+	    coderet_put_rest(seq,copyseq,"noncoding",seqoutrest);
+	}
 
 	if(seqoutprot)
 	{
@@ -161,29 +223,35 @@ int main(int argc, char **argv)
 		AJFREE(tranlines);
 	    ajFmtPrintF(logf, "%6d", ntran);
 	}
-	ajFmtPrintF(logf, "%6d %s\n", ncds+nmrna+ntran, ajSeqName(seq));
+
+	ajFmtPrintF(logf, "%6d %s\n",
+		    ncds+nmrna+nrestall+ntran, ajSeqGetNameC(seq));
     }
 
 
     if(seqoutcds)
-	ajSeqWriteClose(seqoutcds);
+	ajSeqoutClose(seqoutcds);
     if(seqoutmrna)
-	ajSeqWriteClose(seqoutmrna);
+	ajSeqoutClose(seqoutmrna);
     if(seqoutprot)
-	ajSeqWriteClose(seqoutprot);
+	ajSeqoutClose(seqoutprot);
+    if(seqoutrest)
+	ajSeqoutClose(seqoutrest);
 
 
     ajStrDel(&cds);
     ajStrDel(&mrna);
     ajStrDel(&usa);
+    ajStrDel(&copyseq);
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);
     ajSeqoutDel(&seqoutcds);
     ajSeqoutDel(&seqoutmrna);
     ajSeqoutDel(&seqoutprot);
+    ajSeqoutDel(&seqoutrest);
     ajFileClose(&logf);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -214,10 +282,10 @@ static void coderet_put_seq(const AjPSeq seq, const AjPStr strseq,
     fn = ajStrNew();
 
 
-    ajFmtPrintS(&fn,"%S_%s_%d",ajSeqGetAcc(seq),name,n+1);
+    ajFmtPrintS(&fn,"%S_%s_%d",ajSeqGetAccS(seq),name,n+1);
     ajStrFmtLower(&fn);
 
-    nseq = ajSeqNewL(ajStrGetLen(strseq));
+    nseq = ajSeqNewRes(ajStrGetLen(strseq));
     ajSeqAssignNameS(nseq, fn);
     ajSeqAssignEntryS(nseq, fn);
 
@@ -229,11 +297,99 @@ static void coderet_put_seq(const AjPSeq seq, const AjPStr strseq,
     ajSeqAssignSeqS(nseq,strseq);
 
 
-    ajSeqWrite(seqout,nseq);
+    ajSeqoutWriteSeq(seqout,nseq);
 
 
     ajSeqDel(&nseq);
     ajStrDel(&fn);
+
+    return;
+}
+
+
+
+
+/* @funcstatic coderet_put_rest ***********************************************
+**
+** Undocumented.
+**
+** @param [r] seq [const AjPSeq] Undocumented
+** @param [r] copyseq [const AjPStr] Undocumented
+** @param [r] name [const char*] Undocumented
+** @param [u] seqout [AjPSeqout] Undocumented
+** @@
+******************************************************************************/
+
+static void coderet_put_rest(const AjPSeq seq, const AjPStr copyseq,
+			     const char* name, AjPSeqout seqout)
+{
+    AjPSeq nseq = NULL;
+    const AjPStr strseq = NULL;
+    AjPStr subseq = NULL;
+    AjPStr fn   = NULL;
+
+    const char* cp = ajStrGetPtr(copyseq);
+    ajint i = 0;
+    ajint j = 0;
+    AjBool isup;
+
+    fn = ajStrNew();
+    isup = ajFalse;
+    strseq = ajSeqGetSeqS(seq);
+
+    while(*cp)
+    {
+	if(islower(*cp))
+	{
+	    if(isup)
+	    {
+		ajFmtPrintS(&fn,"%S_%s_%d",ajSeqGetAccS(seq),name,i+1);
+		ajStrFmtLower(&fn);
+		nseq = ajSeqNewRes(j-i);
+		ajSeqAssignNameS(nseq, fn);
+		ajSeqAssignEntryS(nseq, fn);
+		ajSeqSetNuc(nseq);
+		ajStrAssignSubS(&subseq, strseq, i, j-1);
+		ajSeqAssignSeqS(nseq,subseq);
+		ajSeqoutWriteSeq(seqout,nseq);
+		ajSeqDel(&nseq);
+		isup = ajFalse;
+	    }
+	}
+	else
+	{
+	    if(!isup)
+	    {
+		i = j;
+		isup = ajTrue;
+	    }
+	}
+	cp++;
+	j++;
+    }
+
+    if(isup)
+    {
+	ajFmtPrintS(&fn,"%S_%s_%d",ajSeqGetAccS(seq),name,i+1);
+	ajStrFmtLower(&fn);
+
+	nseq = ajSeqNewRes(j-i);
+	ajSeqAssignNameS(nseq, fn);
+	ajSeqAssignEntryS(nseq, fn);
+
+	ajSeqSetNuc(nseq);
+
+	ajStrAssignSubS(&subseq, strseq, i, j);
+	ajSeqAssignSeqS(nseq,subseq);
+
+
+	ajSeqoutWriteSeq(seqout,nseq);
+
+	ajSeqDel(&nseq);
+    }
+
+    ajStrDel(&fn);
+    ajStrDel(&subseq);
 
     return;
 }

@@ -88,7 +88,8 @@ Usage
 
    Here is a sample session with coderet
 
-   To extract all of the CDS, mRNA and the protein translations:
+   To extract all of the CDS, mRNA, non-coding and the protein
+   translations:
 
 
 % coderet 
@@ -98,6 +99,7 @@ Output file [hsferg1.coderet]:
 Coding nucleotide output sequence(s) (optional) [hsferg1.cds]: 
 Messenger RNA nucleotide output sequence(s) (optional) [hsferg1.mrna]: 
 Translated coding protein output sequence(s) (optional) [hsferg1.prot]: 
+Non-coding nucleotide output sequence(s) (optional) [hsferg1.noncoding]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -107,7 +109,7 @@ Translated coding protein output sequence(s) (optional) [hsferg1.prot]:
    To only extract the mRNA sequence:
 
 
-% coderet -nocds -notranslation 
+% coderet -nocds -notranslation -norest 
 Extract CDS, mRNA and translations from feature tables
 Input nucleotide sequence(s): tembl:X03487
 Output file [hsferg1.coderet]: 
@@ -123,10 +125,12 @@ Command line arguments
   [-outfile]           outfile    [*.coderet] Output file name
   [-cdsoutseq]         seqoutall  [.] Coding nucleotide
                                   output sequence(s) (optional)
-  [-mrnaoutseq]        seqoutall  Messenger RNA nucleotide output sequence(s)
-                                  (optional)
-  [-translationoutseq] seqoutall  Translated coding protein output sequence(s)
-                                  (optional)
+  [-mrnaoutseq]        seqoutall  [.] Messenger RNA
+                                  nucleotide output sequence(s) (optional)
+  [-translationoutseq] seqoutall  [.] Translated coding
+                                  protein output sequence(s) (optional)
+  [-restoutseq]        seqoutall  [.] Non-coding nucleotide
+                                  output sequence(s) (optional)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -186,6 +190,18 @@ Command line arguments
    -offormat5          string     Features format
    -ofname5            string     Features file name
    -ofdirectory5       string     Output directory
+
+   "-restoutseq" associated qualifiers
+   -osformat6          string     Output seq format
+   -osextension6       string     File name extension
+   -osname6            string     Base file name
+   -osdirectory6       string     Output directory
+   -osdbname6          string     Database name to add
+   -ossingle6          boolean    Separate file for each entry
+   -oufo6              string     UFO features
+   -offormat6          string     Features format
+   -ofname6            string     Features file name
+   -ofdirectory6       string     Output directory
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -349,11 +365,20 @@ HEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECALHLEKNVNQSLLELHK
 LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
 NES
 
+  File: hsferg1.noncoding
+
+>x03487_noncoding_1
+agnncaaacctnagctccgccagagcgcgcgaggcctccagcggccgcccctcccccaca
+gcaggggcggggntcccgcgcccaccggaaggagcgggctcggggcgggcggcgctgatt
+ggccggggcgggcctgacgccgacgcggctataagagaccacaagcgacccgcagggc
+>x03487_noncoding_501
+gtgagcgcgggc
+
   File: hsferg1.coderet
 
-   CDS  mRNA Trans Total Sequence
- ===== ===== ===== ===== ========
-     1     1     1     3 HSFERG1
+   CDS  mRNA non-c Trans Total Sequence
+ ===== ===== ===== ===== ===== ========
+     1     1     2     1     5 HSFERG1
 
   Output files for usage example 2
 

@@ -16,28 +16,35 @@
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.coderet</td>
 </tr>
 
 <tr>
 <td>[-cdsoutseq]<br>(Parameter 3)</td>
 <td>Coding nucleotide output sequence(s) (optional)</td>
 <td>Writeable sequence(s)</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr>
 <td>[-mrnaoutseq]<br>(Parameter 4)</td>
 <td>Messenger RNA nucleotide output sequence(s) (optional)</td>
 <td>Writeable sequence(s)</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr>
 <td>[-translationoutseq]<br>(Parameter 5)</td>
 <td>Translated coding protein output sequence(s) (optional)</td>
 <td>Writeable sequence(s)</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>[-restoutseq]<br>(Parameter 6)</td>
+<td>Non-coding nucleotide output sequence(s) (optional)</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

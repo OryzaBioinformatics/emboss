@@ -31,12 +31,12 @@ extern "C"
 **
 ** @attr Ufo [AjPStr] Original UFO
 ** @attr Formatstr [AjPStr] Input format name
-** @attr Format [ajint] Input format index
 ** @attr Filename [AjPStr] Original filename
 ** @attr Seqid [AjPStr] Sequence entryname
 ** @attr Type [AjPStr] Type N or P
 ** @attr Handle [AjPFileBuff] Input buffered file
 ** @attr Seqname [AjPStr] name of AjPSeq assoc. with feature table
+** @attr Format [ajint] Input format index
 ** @attr Local [AjBool] Opened as a local file if ajTrue
 ** @@
 ******************************************************************************/
@@ -44,12 +44,12 @@ extern "C"
 typedef struct AjSFeattabIn {
   AjPStr        Ufo;
   AjPStr        Formatstr;
-  ajint         Format;
   AjPStr        Filename;
   AjPStr        Seqid;
   AjPStr        Type;
   AjPFileBuff   Handle;
   AjPStr        Seqname;
+  ajint         Format;
   AjBool        Local;
 }  AjOFeattabIn;
 
@@ -69,7 +69,6 @@ typedef struct AjSFeattabIn {
 **
 ** @attr Ufo [AjPStr] Original output UFO
 ** @attr Formatstr [AjPStr] Output format name
-** @attr Format [ajint] Output format index
 ** @attr Filename [AjPStr] Output filename
 ** @attr Directory [AjPStr] Output directory
 ** @attr Seqid [AjPStr] Output entryname
@@ -77,6 +76,7 @@ typedef struct AjSFeattabIn {
 ** @attr Handle [AjPFile] Output file
 ** @attr Seqname [AjPStr] AjPSeq assoc. with feature table
 ** @attr Basename [AjPStr] Basename for output file
+** @attr Format [ajint] Output format index
 ** @attr Local [AjBool] Opened as a local file if ajTrue
 ** @@
 ******************************************************************************/
@@ -84,7 +84,6 @@ typedef struct AjSFeattabIn {
 typedef struct AjSFeattabOut {
   AjPStr        Ufo;
   AjPStr        Formatstr;
-  ajint         Format;
   AjPStr        Filename;
   AjPStr        Directory;
   AjPStr        Seqid;
@@ -92,6 +91,7 @@ typedef struct AjSFeattabOut {
   AjPFile       Handle;
   AjPStr        Seqname;
   AjPStr        Basename;
+  ajint         Format;
   AjBool        Local;
 }  AjOFeattabOut;
 
@@ -113,26 +113,26 @@ typedef struct AjSFeattabOut {
 **
 ** @attr Seqid [AjPStr] Sequence name
 ** @attr Type [AjPStr] Sequence type: P or N
-** @attr DefFormat [ajint] Original input or 'source' format of feature table
 ** @attr Features [AjPList] List of AjPFeatures...
-** @attr Start [ajint] First position used (like sequence begin)
-** @attr End [ajint] Last position used (like sequence end)
-** @attr Len [ajint] Maximum length
-** @attr Offset [ajint] Offset when trimmed
-** @attr Groups [ajint] Number of current group being added
+** @attr DefFormat [ajuint] Original input or 'source' format of feature table
+** @attr Start [ajuint] First position used (like sequence begin)
+** @attr End [ajuint] Last position used (like sequence end)
+** @attr Len [ajuint] Maximum length
+** @attr Offset [ajuint] Offset when trimmed
+** @attr Groups [ajuint] Number of current group being added
 ** @@
 ******************************************************************************/
 
 typedef struct AjSFeattable {
   AjPStr            Seqid;
   AjPStr            Type;
-  ajint             DefFormat;
   AjPList           Features;
-  ajint             Start;
-  ajint             End;
-  ajint             Len;
-  ajint             Offset;
-  ajint             Groups;
+  ajuint            DefFormat;
+  ajuint            Start;
+  ajuint            End;
+  ajuint            Len;
+  ajuint            Offset;
+  ajuint            Groups;
 }  AjOFeattable;
 
 #define AjPFeattable AjOFeattable*
@@ -175,44 +175,46 @@ typedef struct AjSFeattable {
 ** @delete ajFeatDel             Default destructor
 ** @new    ajFeatCopy            Copy constructor
 **
-** @attr Protein [AjBool] true for a protein feature
 ** @attr Source [AjPStr] Source program name (or EMBL)
 ** @attr Type [AjPStr] Feature type (feature key) from internal list
 **                    for protein or nucleotide
-** @attr Start [ajint] Start position
-** @attr End [ajint] End position
-** @attr Start2 [ajint] Second start position - EMBL (a.b)
-** @attr End2 [ajint] Second end position - EMBL ..(a.b)
-** @attr Score [float] Score or 0.0 if none
-** @attr Tags [AjPList] Tag-value list (qualifier list)
-** @attr Strand [char] Strand +/- or NULL
+** @attr Protein [AjBool] true for a protein feature
+** @attr Start [ajuint] Start position
+** @attr End [ajuint] End position
+** @attr Start2 [ajuint] Second start position - EMBL (a.b)
+** @attr End2 [ajuint] Second end position - EMBL ..(a.b)
 ** @attr Frame [ajint] Frame 1..3, -1..-3 or 0
-** @attr Flags [ajint] Flag bit mask for EMBL location
-** @attr Group [ajint] Group for join/order/one-of
-** @attr Exon [ajint] Exon number
+** @attr Tags [AjPList] Tag-value list (qualifier list)
+** @attr Flags [ajuint] Flag bit mask for EMBL location
+** @attr Group [ajuint] Group for join/order/one-of
 ** @attr Remote [AjPStr] Remote ID - EMBL Remote:a.b
 ** @attr Label [AjPStr] Label name for location - EMBL legacy
+** @attr Exon [ajuint] Exon number
+** @attr Score [float] Score or 0.0 if none
+** @attr Strand [char] Strand +/- or NULL
+** @attr Padding [char[7]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSFeature {
-  AjBool            Protein;
+
   AjPStr            Source;
   AjPStr            Type;
-  ajint             Start;
-  ajint             End;
-  ajint             Start2;
-  ajint             End2;
-  float             Score;
-  AjPList           Tags;
-  char              Strand;
+  AjBool            Protein;
+  ajuint            Start;
+  ajuint            End;
+  ajuint            Start2;
+  ajuint            End2;
   ajint             Frame;
-  ajint             Flags;
-  ajint             Group;
-  ajint             Exon;
+  AjPList           Tags;
+  ajuint            Flags;
+  ajuint            Group;
   AjPStr            Remote;
-
   AjPStr            Label;
+  ajuint            Exon;
+  float             Score;
+  char              Strand;
+  char              Padding[7];
 } AjOFeature;
 
 #define AjPFeature AjOFeature*
