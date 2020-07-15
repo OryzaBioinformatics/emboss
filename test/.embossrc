@@ -7,7 +7,7 @@ SET emboss_tempdata /homes/pmr/local/share/EMBOSS/test
 # Used to make the output consistent where an application reports
 # today's date
 
-SET emboss_timetoday "2006-07-15 12:00:00"
+SET emboss_timetoday "2007-07-15 12:00:00"
 
 #######################################
 # Standard test databases
@@ -24,7 +24,7 @@ SET emboss_timetoday "2006-07-15 12:00:00"
 ##################################################################
 
 
-# swissprot (Puffer fish entries)
+# swissprot
 # =========
 
 DB tsw [ type: P dir: $emboss_tempdata/swiss
@@ -32,15 +32,15 @@ DB tsw [ type: P dir: $emboss_tempdata/swiss
    fields: "sv des org key"
    comment: "Swissprot native format with EMBL CD-ROM index" ]
 
-# swnew (Puffer fish entries)
-# =====
+# trembl
+# ======
 
 DB tswnew [ type: P dir: $emboss_tempdata/swnew
    method: emblcd format: swiss release: 37 
    fields: "sv des org key"
-   comment: "Swissnew as 3 files in native format with EMBL CD-ROM index" ]
+   comment: "SpTrEmbl as 3 files in native format with EMBL CD-ROM index" ]
 
-# wormpep (cosmid ZK637)
+# wormpep
 # =======
 
 DB twp [ type: P dir: $emboss_tempdata/wormpep
@@ -48,7 +48,7 @@ DB twp [ type: P dir: $emboss_tempdata/wormpep
    fields: "des"
    comment: "EMBL new in native format with EMBL CD-ROM index" ]
 
-# embl (worm cosmid ZK637 and a few other entries)
+# embl
 # ====
 
 DB tembl [ type: N dir: $emboss_tempdata/embl
@@ -56,7 +56,7 @@ DB tembl [ type: N dir: $emboss_tempdata/embl
    fields: "sv des org key"
    comment: "EMBL in native format with EMBL CD-ROM index" ]
 
-# pir (cytochrome C plus first entries in other divisions)
+# pir
 # ===
 
 DB tpir [ type: P dir: $emboss_tempdata/pir
@@ -66,7 +66,7 @@ DB tpir [ type: P dir: $emboss_tempdata/pir
    fields: "des org key"
    comment: "PIR using NBRF access for 4 files" ]
 
-# Genbank (Canadian EMBnet node - so long as they are running SRS version 6)
+# Genbank (DKFZ - we are not using the GCG formatted files in test/gb)
 # =======
 
 DB tgb [ type: N method: srswww format: genbank
@@ -75,13 +75,21 @@ DB tgb [ type: N method: srswww format: genbank
    fields: "sv des org key"
    comment: "Genbank IDs" ]
 
-# Genbank (local copy of the TEMBL entries from Genbank)
+# Genbank
 # =======
 
 DB tgenbank [ type: N dir: $emboss_tempdata/genbank
    method: emblcd format: genbank release: 01 
    fields: "sv des org key"
    comment: "GenBank in native format with EMBL CD-ROM index" ]
+
+# TestDB
+# =======
+
+DB testdb [ type: N dir: $emboss_tempdata/testdb
+   method: emblcd format: fasta release: 01
+   fields: "des"
+   comment: "test sequence data" ]
 
 #######################################
 ### Access method EMBLCD, flatfile data
@@ -96,11 +104,56 @@ DB qanflat  [ type: N format: embl method: emblcd
   comment: "EMBL flatfiles"
 ]
 
+DB qanflatall  [ type: N format: embl method: emblcd
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbiflat-embl-allsys-keep
+  comment: "EMBL flatfiles"
+]
+
+DB qanflatexc  [ type: N format: embl method: emblcd
+  dir: $emboss_qadata/embl
+  exclude: rod.dat
+  indexdir: $emboss_qadata/qa/dbiflat-embl-allsys-keep
+  comment: "EMBL flatfiles, no rodent file"
+]
+
+DB qanflatinc  [ type: N format: embl method: emblcd
+  dir: $emboss_qadata/embl
+  file: rod.dat
+  exclude: *.dat
+  indexdir: $emboss_qadata/qa/dbiflat-embl-allsys-keep
+  comment: "EMBL flatfiles, only rodent file"
+]
+
 DB qanxflat  [ type: N format: embl method: emboss
   dir: $emboss_qadata/embl
   indexdir: $emboss_qadata/qa/dbxflat-ex-keep
   dbalias: embl
   comment: "EMBL flatfiles"
+]
+
+DB qanxflatall  [ type: N format: embl method: emboss
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbxflat-all-keep
+  dbalias: embl
+  comment: "EMBL flatfiles"
+]
+
+DB qanxflatexc  [ type: N format: embl method: emboss
+  dir: $emboss_qadata/embl
+  exclude: rod.dat
+  indexdir: $emboss_qadata/qa/dbxflat-all-keep
+  dbalias: embl
+  comment: "EMBL flatfiles, no rodent file"
+]
+
+DB qanxflatinc  [ type: N format: embl method: emboss
+  dir: $emboss_qadata/embl
+  file: rod.dat
+  exclude: *.dat
+  indexdir: $emboss_qadata/qa/dbxflat-all-keep
+  dbalias: embl
+  comment: "EMBL flatfiles, only rodent file"
 ]
 
 # Protein data (3 files)
@@ -109,28 +162,13 @@ DB qanxflat  [ type: N format: embl method: emboss
 DB qapflat  [ type: P format: swiss method: emblcd
   dir: $emboss_qadata/swnew
   indexdir: $emboss_qadata/qa/dbiflat-swiss-keep
-  comment: "Swissnew flatfiles"
-]
-
-DB qapflatexc  [ type: P format: swiss method: emblcd
-  dir: $emboss_qadata/swnew
-  exclude: upd_seq.dat
-  indexdir: $emboss_qadata/qa/dbiflat-swiss-keep
-  comment: "Swissnew flatfiles, no updated sequence file"
-]
-
-DB qapflatinc  [ type: P format: swiss method: emblcd
-  dir: $emboss_qadata/swnew
-  file: upd_seq.dat
-  exclude: *.dat
-  indexdir: $emboss_qadata/qa/dbiflat-swiss-keep
-  comment: "Swissnew flatfiles, only updated sequence file"
+  comment: "SpTrEmbl flatfile"
 ]
 
 DB qapflatall  [ type: P format: swiss method: emblcd
   dir: $emboss_qadata/swnew
-  indexdir: $emboss_qadata/qa/dbiflat-swiss-allsys-keep
-  comment: "Swissnew flatfiles, all fields indexed"
+  indexdir: $emboss_qadata/qa/dbiflat-swiss-keep
+  comment: "SpTrEmbl flatfiles, all fields indexed"
   fields: "sv des org key"
 ]
 
@@ -139,23 +177,6 @@ DB qapxflat  [ type: P format: swiss method: emboss
   indexdir: $emboss_qadata/qa/dbxflat-swiss-keep
   dbalias: swnew
   comment: "Swissnew flatfiles"
-]
-
-DB qapxflatexc  [ type: P format: swiss method: emboss
-  dir: $emboss_qadata/swnew
-  exclude: upd_seq.dat
-  indexdir: $emboss_qadata/qa/dbxflat-swiss-keep
-  dbalias: swnew
-  comment: "Swissnew flatfiles, no updated sequence file"
-]
-
-DB qapxflatinc  [ type: P format: swiss method: emboss
-  dir: $emboss_qadata/swnew
-  file: upd_seq.dat
-  exclude: *.dat
-  indexdir: $emboss_qadata/qa/dbxflat-swiss-keep
-  dbalias: swnew
-  comment: "Swissnew flatfiles, only updated sequence file"
 ]
 
 DB qanxflatall  [ type: N format: embl method: emboss
