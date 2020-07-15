@@ -7,7 +7,27 @@
 # Valgrind is free software, with documentation online at
 # http://devel-home.kde.org/~sewardj/docs/index.html
 #
-# Valgrind requires EMBOSS built with shared libraries
+# Valgrind requires EMBOSS built without shared libraries
+
+%precommands = (
+		"domainalign-qa1" => "mkdir daf",
+		"seqnr-qa1" => "mkdir hitsnr;mkdir hitsred",
+		"sigscanlig-qa1" => "mkdir lhf;mkdir aln;mkdir results",
+		"ehmmindex-qa1" => "cp ../../qa/ehmmcalibrate-ex2-keep/myhmmso .",
+		"ohmmindex-qa1" => "cp ../../qa/ohmm-own-keep/myhmms .",
+		"ohmmcalibrate-qa1" => "cp ../../qa/ohmmbuild-ex-keep/globin.hmm .",
+
+		"ohmmcalibrate-qa2" => "cp ../../qa/ohmm-own-keep/myhmms .",
+		"ohmmcalibrate-qa3" => "cp ../../qa/ohmm-own-keep/myhmms .",
+		"intconv-qa1" => "cp ../../qa/intconv-check/stdin .",
+		"fdnamove-qa1" => "cp ../../data/fmove.in ./stdin",
+		"fdolmove-qa1" => "cp ../../data/fmove.in ./stdin",
+		"fdrawgram-qa1" => "cp ../../data/fdrawgram.in ./stdin",
+		"fmove-qa1" => "cp ../../data/fmove.in ./stdin",
+		"fretree-qa1" => "cp ../../data/fretree.in ./stdin",
+		"mse-qa1" => "cp ../../qa/mse-ex/stdin ./stdin",
+		"" => ""
+		);
 
 sub runtest ($) {
     my ($name) = @_;
@@ -16,12 +36,14 @@ sub runtest ($) {
     my $posbytes = 0;
     my $rembytes = 0;
     my $errcount = 0;
-    my $timeout = 600;
+    my $timeout = 1800;
     my $timealarm = 0;
-
+    my $testkeep = $dokeep;
+    my $infile = "";
     if (defined($tests{$name})) {
 	if (defined($testcheck{$name})) {
-	    $myvalgpath = "../../emboss/";
+#	    $myvalgpath = "../../emboss/";
+	    $myvalgpath = "/homes/pmr/check/bin/";
 	}
 	else {
 	    $myvalgpath = $valgpath;
@@ -29,9 +51,22 @@ sub runtest ($) {
 	    print "Running valgrind $valgopts $myvalgpath$tests{$name}\n";
 
 	eval {
+	    $sysstat = system( "rm -rf $name");
+	    $status = $sysstat >> 8;
+	    if ($status) {
+		$testerr = "failed to delete old directory $name, status $status\n";
+		print STDERR $testerr;
+	    }
+	    if(-e "$name" && -d "$name") { system ("rm -rf $name");}
+	    mkdir ("$name", 0777);
+	    chdir $name;
+	    if(defined($precommands{$name})) {
+		system ("$precommands{$name}");
+	    }
+	    if(-e "stdin") { $infile = "< stdin" }
 	    $status = 0;
 	    alarm($timeout);
-	    $sysstat = system ("EMBOSSRC=.. ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;valgrind $valgopts $myvalgpath$tests{$name} 9> valgrind/$name.valgrind" );
+	    $sysstat = system ("EMBOSSRC=../.. ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;valgrind $valgopts $myvalgpath$tests{$name} $infile 9> ../valgrind/$name.valgrind" );
 	    alarm(0);
 	    $status = $sysstat >> 8;
 	};
@@ -45,6 +80,7 @@ sub runtest ($) {
 	    }
 	}
     
+	chdir "..";
 	if ($timealarm) {
 	    print STDERR "Valgrind test $name timed out\n";
 	    return -1;
@@ -72,10 +108,12 @@ sub runtest ($) {
 	}
 	if ($status) {
 	    print STDERR "Valgrind test $name returned status $status\n";
+	    $testkeep=1;
 	}
 	else {
 	    if ($errcount){
 		print STDERR "Valgrind test $name errors $errcount [$errcontexts]\n";
+		$testkeep=1;
 	    }
 	    elsif ($defbytes){
 		print STDERR "Valgrind test $name leak $defbytes [$defblocks] (possibly $posbytes [$posblocks]) bytes, still reachable $rembytes bytes [$remblocks]\n";
@@ -86,6 +124,9 @@ sub runtest ($) {
 	    else {
 		print STDERR "Valgrind test $name OK (all clean)\n";
 	    }
+	}
+	if(!$testkeep) {
+	    system "rm -rf $name";
 	}
 	return $status;
     }
@@ -106,9 +147,42 @@ else {
     $valgpath = "";
 }
 
-open (MEMTEST, "../memtest.dat");
+
+$testfile = "../memtest.dat";
+@dotest = ();
+$blocksize=1;
+$blockcount = 0;
+$block = 1;
+$dolist=0;
+$doall = 0;
+$dokeep=0;
+foreach $test (@ARGV) {
+    if ($test =~ /^-(.*)/) {
+	$arg=$1;
+	if ($arg =~ /testfile=(\S+)/) {$testfile=$1}
+#    elsif ($arg =~ /logfile=(\S+)/) {$logfile=">$1"} # append to logfile
+	elsif ($arg eq "list") {
+	    $dolist = 1;
+	}
+	elsif ($arg eq "all") {$doall=1;}
+	elsif ($arg eq "keep") {$dokeep=1;}
+	elsif ($arg =~ /block=(\d+)/) {
+	    $block=$1;
+	    $i=0;
+	    $blocksize=10;
+	    $blockcount=0;
+	}
+	else {print STDERR "+++ unknown option '$arg'\n"; usage()}
+    }
+    else {
+	$test =~ s/\/$//;
+	push @dotest, $test;
+    }
+}
+
+open (MEMTEST, "$testfile") || die "failed to open test file $testfile";
 while (<MEMTEST>) {
-    if (/^[#]/) {next}
+    if (/^[\#]/) {next}
     if (/(\S+) += +(\S.*)/) {
 	$tests{$1}="$2";
     }
@@ -119,6 +193,12 @@ while (<MEMTEST>) {
 }
 close MEMTEST;
 
+if($doall || $dolist) {
+    foreach $x (sort (keys (%tests))) {
+	push @dotest, $x;
+    }
+}
+
 $valgopts = "--leak-check=yes --show-reachable=yes --num-callers=15 --verbose --log-fd=9 --error-limit=no --leak-resolution=high";
 ## --leak-check=yes       Test for memory leaks at end
 ## --show-reachable=yes   Show allocated memory still reachable
@@ -128,47 +208,24 @@ $valgopts = "--leak-check=yes --show-reachable=yes --num-callers=15 --verbose --
 ## --error-limit=no       Don't stop after 300 errors
 ## --leak-resolution=high Report alternate backtraces
 
-@dotest = @ARGV;
-
 $SIG{ALRM} = sub { print STDERR "+++ timeout handler\n"; die "memtest timeout" };
-foreach $name (@dotest) {
-    if ($name =~ /^-(\S+)$/) {
-	$arg = $1;
-	if ($arg eq "all") {
-	    foreach $x (sort (keys (%tests))) {
-		runtest($x);
-	    }
-	    exit;
-	}
-	elsif ($arg eq "list") {
-	    foreach $x (sort (keys (%tests))) {
-		printf "%-15s %s\n", $x, $tests{$x};
-	    }
-	    exit;
-	}
-	elsif ($arg =~ /block=(\d+)/) {
-	    $block=$1;
-	    $i=0;
-	    $blocksize=10;
-	    $blockcount=0;
-	    foreach $x (sort (keys (%tests))) {
-		if (!$i) {
-		    $blockcount++;
-		}
-		$i++;
-		if ($i >= $blocksize) {$i=0}
-		if ($blockcount == $block) {
-		    runtest($x);
-		}
-	    }
-	    exit;
+
+$i=0;
+foreach $x (@dotest) {
+    if (!$i) {
+	$blockcount++;
+    }
+    $i++;
+    if ($i >= $blocksize) {$i=0}
+    if ($blockcount == $block) {
+	if($dolist) {
+	    printf "%-15s %s\n", $x, $tests{$x};
 	}
 	else {
-	    print STDERR "Invalid argument $name (ignored)\n";
-	    next;
+	    runtest($x);
 	}
+	$blockcount = 0;
     }
-    runtest ($name);
 }
 
 exit();
