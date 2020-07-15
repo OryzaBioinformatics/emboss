@@ -27,10 +27,10 @@ edithtml.pl
 doctree
 
 	Converts the EMBOSS Web pages on the HGMP Web server to a
-	version that is easy to distribute and can be included in the CVS source
-	tree
+	version that is easy to distribute and can be included in the
+	CVS source tree
 
-	Files are copied, replaced or converted.  If they woudl change the
+	Files are copied, replaced or converted.  If they would change the
 	current CVS version of the file then the change is committed. 
 
 	Copied:
