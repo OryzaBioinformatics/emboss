@@ -142,12 +142,13 @@ sub runtest ($) {
 	$apcount{$testapp}++;
 	if (!defined($tfm{$testapp})) {
 	    $tfm{$testapp}=0;
-	    if (-e "../../doc/programs/html/$testapp.html") {$tfm{$testapp}++}
+	    $dtop = "../../doc/programs/";
+	    if (-e "$dtop/html/$testapp.html") {$tfm{$testapp}++}
 	    else {print STDERR "No HTML docs for $testapp\n";$misshtml++;}
-	    if (-e "../../doc/programs/text/$testapp.txt") {$tfm{$testapp}++}
+	    if (-e "$dtop/text/$testapp.txt") {$tfm{$testapp}++}
 	    else {print STDERR "No tfm text docs for $testapp\n";$misstext++;}
-	    if (-e "../../doc/sourceforge/apps/$testapp.html") {$sf{$testapp}++}
-	    else {print STDERR "No SourceForge docs for $testapp\n";$misssf++;}
+	    if (-e "$dtop/master/emboss/apps/$testapp.html") {$sf{$testapp}++}
+	    else {print STDERR "No master (sourceforge) docs for $testapp\n";$misssf++;}
 	}
     }
     elsif ($line =~ /^DL\s+(success|keep|all)/) {$globaltestdelete = $1}
@@ -168,13 +169,14 @@ sub runtest ($) {
 	if ($packa eq "unknown") {
 	    print STDERR "No AB line before AA line in test $testid\n";
 	}
+	$dtop = "../../embassy/$packa/emboss_doc";
 	if (!defined($tfm{$testapp})) {
 	    $tfm{$testapp}=0;
-	    if (-e "../../doc/programs/html/$testapp.html") {$tfm{$testapp}++}
+	    if (-e "$dtop/html/$testapp.html") {$tfm{$testapp}++}
 	    else {print STDERR "No HTML docs for $testapp\n";$misshtml++;}
-	    if (-e "../../doc/programs/text/$testapp.txt") {$tfm{$testapp}++}
+	    if (-e "$dtop/text/$testapp.txt") {$tfm{$testapp}++}
 	    else {print STDERR "No tfm text docs for $testapp\n";$misstext++;}
-	    if (-e "../../doc/sourceforge/embassy/$packa/$testapp.html") {$sf{$testapp}++}
+	    if (-e "$dtop/master/$testapp.html") {$sf{$testapp}++}
 	    else {print STDERR "No SourceForge docs for $testapp\n";$misssf++;}
 	}
     }
@@ -703,6 +705,7 @@ foreach $test (@ARGV) {
     else {print STDERR "+++ unknown option '$opt'\n"; usage()}
   }
   else {
+    $test =~ s/\/$//;
     $dotest{$test} = 1;
     $numtests++;
   }
