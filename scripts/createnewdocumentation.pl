@@ -27,10 +27,10 @@ while (<VERS>) {
     if(/BaseDirectory: +(\S+)/) {$distribtop = $1}
 }
 close VERS;
-my $doctop = "$distribtop/doc/sourceforge";
+my $doctop = "$ENV{HOME}/sfdoc";
 my $thisprogram = $ARGV[0];
-my $progdocdir = "$doctop/apps";
-if ($#ARGV > 1) { $progdocdir =  "$doctop/embassy/" . $ARGV[1]}
+my $progdocdir = "$doctop/apps/cvs/emboss/apps/";
+if ($#ARGV > 1) { $progdocdir =  "$doctop/apps/cvs/embassy/" . $ARGV[1]}
 
 my $ans;
 my $indexfile = "$progdocdir/index.html";

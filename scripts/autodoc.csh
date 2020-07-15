@@ -1,6 +1,6 @@
 #!/bin/csh -f
 
-cd ~/hgmp
+cd ~/cvsemboss
 
 cd test/qa
 

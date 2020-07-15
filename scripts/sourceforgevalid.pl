@@ -2,26 +2,35 @@
 
 
 %validhref = ("www.sanger.ac.uk/" => "Sanger",
-	      "www.rfcgr.mrc.ac.uk/CCP11/index.jsp" => "CCP11",
-	      "www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/jnlp/Jemboss.jnlp" => "Jemboss.jnlp",
-	      "www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/jnlp_axis/DNADraw.jnlp" => "DNADraw.jnlp",
-	      "www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/jnlp_axis/Jemboss_Alignment.jnlp" => "Jemboss_Alignment.jnlp",
-	      "www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/statistics" => "Jemboss stats",
-	      "www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/statistics/hits.html" => "Jemboss hits",
-	      "srs.rfcgr.mrc.ac.uk/" => "SRS rfcgr",
+	      "www.bioinformatics.ac.uk/" => "CCP11",
+	      "/Jemboss/jnlp/Jemboss.jnlp" => "Jemboss.jnlp",
+	      "/Jemboss/jnlp_axis/DNADraw.jnlp" => "DNADraw.jnlp",
+	      "/Jemboss/jnlp_axis/Jemboss_Alignment.jnlp" => "Jemboss_Alignment.jnlp",
+	      "/Jemboss/statistics" => "Jemboss stats",
+	      "/Jemboss/statistics/hits.html" => "Jemboss hits",
 	      "srs.ebi.ac.uk/" => "SRS ebi",
 	      "www.sanger.ac.uk/Software/Wise2/" => "Sanger Wise2",
 	      "www.sanger.ac.uk/Software/Pfam/" => "Sanger Pfam",
 	      "www.sanger.ac.uk/Software/formats/GFF/" => "Sanger GFF",
 	      "www.sanger.ac.uk/" => "Sanger",
-	      "www.hgmp.mrc.ac.uk/" => "HGMP home"
+	      "http://www.dl.ac.uk/CCP/CCP11/newsletter/vol1_1/DISguISE.html" => "DISguiSE",
+	      "http://www.es.embnet.org/~bioinfo/Colimate/Extra_Docs/" => "CoLiMate",
+	      "http://aig.cs.man.ac.uk/research/utopia/cinema/cinema.php" => "CINEMA"
+#	      "www.hgmp.mrc.ac.uk/" => "HGMP home"
 	      );
 
 %fixhref = ("" => "",
-	    "www.sanger.ac.uk/srs/" => "srs.rfcgr.mrc.ac.uk",
-	    "www.sanger.ac.uk/srs6/" => "srs.rfcgr.mrc.ac.uk",
+	    "www.sanger.ac.uk/srs/" => "srs.ebi.ac.uk/",
+	    "www.sanger.ac.uk/srs6/" => "srs.ebi.ac.uk/",
+	    "srs.rfcgr.mrc.ac.uk/" => "srs.ebi.ac.uk/",
+	    "srs.hgmp.mrc.ac.uk/" => "srs.ebi.ac.uk/",
 	    "www.sanger.ac.uk/Users/pmr/" => "www.ebi.ac.uk/~pmr/",
-	    "www.hgmp.mrc.ac.uk/Software/EMBOSS/Apps/index.html" => "emboss.sourceforge.net/apps/"
+	    "www.hgmp.mrc.ac.uk/Software/EMBOSS/Apps/index.html" => "emboss.sourceforge.net/apps/",
+	    "www.rfcgr.mrc.ac.uk/Software/EMBOSS/Apps/index.html" => "emboss.sourceforge.net/apps/",
+	    "www.rfcgr.mrc.ac.uk/Software/EMBOSS/" => "/",
+	    "www.hgmp.mrc.ac.uk/Software/EMBOSS/" => "/",
+	    "www.sanger.ac.uk/Software/EMBOSS/" => "/",
+	    "www.rfcgr.mrc.ac.uk/CCP11/index.jsp" => "www.bioinformatics.ac.uk/",
 	    );
 
 %ignorelref = ("serializedForm" => "JavaApi",
@@ -32,7 +41,9 @@
 sub processfile($$) {
     my ($filename,$path) = @_;
     my $fullname = "$path/$filename";
-    print "Process file $fullname\n";
+    #print "Process file $fullname\n";
+    $fileprint .= "    Process file $fullname\n";
+    my $ferr = 0;
     my $lpath = $path;
 
     if ($path =~ /(.*)\/inc\/?/) {$lpath = $1}
@@ -48,6 +59,7 @@ sub processfile($$) {
 	if (/name=\"([^\"]+)\"/ig && !$head) {
 	    #print "  Local name '$1'\n";
 	    if (defined($lref{$1}) && !defined($ignorelref{$1})) {
+		if(!$ferr){$ferr++;print $fileprint;}
 		print "+ Duplicate name \#$1\n";
 	    }
 	    $lref{$1}=1;
@@ -59,18 +71,25 @@ sub processfile($$) {
 	    if ($href=~ /[.]rfcgr[.]/ig) {$ok=0}
 	    if ($href=~ /[.]hgmp[.]/ig) {$ok=0}
 	    if ($href=~ /[.]sanger[.]/ig) {$ok=0}
-	    if ($href=~ /emboss[.]org/ig) {$ok=0}
+	    if ($href=~ /[^w]emboss[.]org/ig) {$ok=0}
 	    if ($href=~ /embnet[.]org/ig) {$ok=0}
 	    if ($validhref{$href}) {$ok=1}
 	    if (!$ok) {
 		if ($fixhref{$href}) {
+		    if(!$ferr){$ferr++;print $fileprint;}
 		    print "+  Fix remote href: '$href'\n";
 		    print "+                => '$fixhref{$href}'\n";
 		}
-		elsif ($href=~ /^srs.rfcgr.mrc.ac.uk\/srs7bin\/cgi-bin\/wgetz/){
+		elsif ($href=~ /^srs.[hgmprfc]+.mrc.ac.uk\/srs7bin\/cgi-bin\/wgetz(.*)/){
+		    if(!$ferr){$ferr++;print $fileprint;}
+		    print "+  Fix remote href: '$href'\n";
+		    print "+                => 'srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz$1'\n";
+		}
+		elsif ($href=~ /^srs.ebi.ac.uk\/srs7bin\/cgi-bin\/wgetz/){
 		}
 		else {
 		    $badremote{$href}++;
+		    if(!$ferr){$ferr++;print $fileprint;}
 		    print "+  Bad remote href: '$href'\n";
 		}
 	    }
@@ -91,6 +110,7 @@ sub processfile($$) {
 		if (-e "$lpath/$href") {$ok=1}
 	    }
 	    if (!$ok) {
+		if(!$ferr){$ferr++;print $fileprint;}
 		print "+  Bad local href: '$href'\n";
 		if ($href =~ /^\//) {
 		    $fullpath = ".$href";
@@ -99,6 +119,7 @@ sub processfile($$) {
 		    $fullpath = "$lpath/$href";
 		    $fullpath =~ s/\/[^\/]+\/[.].//g;
 		}
+		if(!$ferr){$ferr++;print $fileprint;}
 		print "+       Not found: '$fullpath'\n";
 		$badlocal{$fullpath}++;
 	    }
@@ -111,6 +132,7 @@ sub processfile($$) {
 		    if($x =~ /^input[.]\d+$/) {next}
 		    if($x =~ /^output[.]\d+$/) {next}
 	    }
+	    if(!$ferr){$ferr++;print $fileprint;}
 	    print "+ Bad internal href: '\#$x'\n";
 	    $badinternal{"$path/$filename\#$x"}++;
 	}
@@ -140,14 +162,17 @@ sub processdir($$) {
 	if ($file =~ /[.]gz$/) {next}
 	if ($file =~ /[.]Z$/) {next}
 	if (-d "$mypath/$file") {
-	    print "  Directory $file\n";
-	    processdir($file,$mypath);
+	    #print "  Directory $file\n";
+	    $fileprint = "";
+	    &processdir($file,$mypath);	#& avoids prototype recursion warning
 	}
 	else {
-	    print "    File $file\n";
-	    processfile($file, $mypath);
+	    #print "    File $file\n";
+	    $fileprint = "";
+	    &processfile($file, $mypath); # &avoids prototype recursion warning
 	}
     }
+    print "  Closing directory $mypath\n";
     closedir(DIR);
 }
 
@@ -157,7 +182,10 @@ while (<VERS>) {
     if(/BaseDirectory: +(\S+)/) {$distribtop = $1}
 }
 close VERS;
-chdir("$distribtop/doc/sourceforge");
+
+$fileprint = "";
+
+chdir("$ENV{HOME}sfdoc");
 processdir(".","");
 
 print "\n";

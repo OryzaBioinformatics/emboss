@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 # preferred scetion order
 %allsections = ();
@@ -24,8 +24,8 @@
 sub numerically { $allsections{$b} <=> $allsections{$a} }
 sub numericallyb { $secnames{$b} <=> $secnames{$a} }
 
-chdir( "/homes/pmr/local/share/EMBOSS/acd/");
-#chdir( "/homes/pmr/hgmp/emboss/acd/");
+chdir( "$ENV{HOME}/local/share/EMBOSS/acd/");
+#chdir( "$ENV{HOME}/cvsemboss/emboss/acd/");
 opendir (ACD,".");
 
 while ($acdfile = readdir(ACD)) {

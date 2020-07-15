@@ -42,7 +42,7 @@ EMBOSS: AJAX Command Definition (ACD files)</title></head>
 <table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 <tbody><tr><td valign=\"top\">
 <a href=\"index.html\" <img border=\"0\"
-  src=\"contents_files/emboss_icon.jpg\" alt=\"\"
+  src=\"/images/emboss_icon.jpg\" alt=\"\"
    width=\"150\" height=\"48\"></a>
 </td>
 <td align=\"left\" valign=\"middle\">
@@ -1166,6 +1166,7 @@ while (<TEMPLATE>) {
 
 	if (/^<a name=([^>]+)>/)  {
 	    $contentname = $1;
+	    $contentname =~ s/\"//gos;
 	}
 	if (/^<h([1-3])>([^<]+)<\/h/) {
 	    $level=$1;

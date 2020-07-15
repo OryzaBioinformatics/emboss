@@ -29,6 +29,8 @@
    "Sequence set '\\S+' has no 'aligned'" => "Seqset aligned undefined",
 #   "" => "",
    "^Multiple definition of parameter/standard/additional" => "Multiple definition of parameter/standard/additional",
+   "Information string for '\\S+' not standard" => "Nonstandard info",
+   "Missing standard information '\\S+' expected" => "Missing standard info",
    "Dummy message" => "dummy"
 	     );
 
@@ -61,13 +63,21 @@ while (<>) {
 	    $countmsg{$message}++;
 	    print "$file: Message '++other++' $countmsg{$message}: $message\n";
 	}
+	if($isembassy) {$embassy{$index} .= $_}
+	else {$apps{$index} .= $_}
     }
-    elsif (/^[+](\S+)\s+[\(][a-z]+[\)]$/) {
+    elsif (/^[+](\S+)\s+[\(]([a-zA-Z0-9]+)[\)]$/) {
 	$embassycnt++;
+	$index = "$2 $1";
+	$embassy{$index} = $_;
+	$isembassy=1;
     }
 
     elsif (/^(\S+)$/) {
 	$applcnt++;
+	$index = $1;
+	$apps{$index} = $_;
+	$isembassy=0;
     }
 
 }
@@ -77,3 +87,9 @@ foreach $x (sort (keys ( %countknown ) ) ) {
 }
 
 print "\n$applcnt EMBOSS and $embassycnt EMBASSY applications\n";
+
+foreach $x(sort(keys(%apps))) {
+    print "\n$apps{$x}";
+}foreach $x(sort(keys(%embassy))) {
+    print "\n$embassy{$x}";
+}

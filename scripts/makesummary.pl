@@ -5,8 +5,8 @@ print "========================\n\n";
 
 printf "%15s %6s %6s\n\n", "Package", "Errors", "Warn";
 
-$myerr = int(`grep -c error: /homes/pmr/out/osf-emboss.out`);
-$mywarn = int(`grep -c warning: /homes/pmr/out/osf-emboss.out`);
+$myerr = int(`grep -c error: $ENV{HOME}/out/emboss10-emboss.out`);
+$mywarn = int(`grep -c warning: $ENV{HOME}/out/emboss10-emboss.out`);
 $tote = $myerr;
 $totw = $mywarn;
 
@@ -28,8 +28,8 @@ $embassylist = `ls -1 embassy/*/Makefile.am`;
 foreach $x (@embassy) {
     $x =~ /^embassy\/([^\/]+)\/Makefile.am/;
     $name = $1;
-    $myerr = int(`grep -c error: /homes/pmr/out/osf-$name.out`);
-    $mywarn =  int(`grep -c warning: /homes/pmr/out/osf-$name.out`);
+    $myerr = int(`grep -c error: $ENV{HOME}/out/emboss10-$name.out`);
+    $mywarn =  int(`grep -c warning: $ENV{HOME}/out/emboss10-$name.out`);
     $tote += $myerr;
     $totw += $mywarn;
     if ($myerr || $mywarn) {
@@ -106,7 +106,7 @@ print "\n";
 print "ValGrind Memory Test Results\n";
 print "============================\n";
 
-open (VG, "/homes/pmr/public_html/valgrind.txt") || die "Cannot open valgrind.txt";
+open (VG, "$ENV{HOME}/public_html/valgrind.txt") || die "Cannot open valgrind.txt";
 
 $tot = 0;
 $totok = -1;
@@ -184,7 +184,7 @@ print "\n";
 print "EFUNC documentation\n";
 print "===================\n";
 
-open (EF, "/homes/pmr/data/efunc/efunc.summary") || die "Cannot open efunc.summary";
+open (EF, "$ENV{HOME}/data/efunc/efunc.summary") || die "Cannot open efunc.summary";
 
 $tot =  0;
 while (<EF>) {
@@ -205,7 +205,7 @@ print "\n";
 print "EDATA documentation\n";
 print "===================\n";
 
-open (ED, "/homes/pmr/data/efunc/edata.summary") || die "Cannot open edata.summary";
+open (ED, "$ENV{HOME}/data/efunc/edata.summary") || die "Cannot open edata.summary";
 
 $tot = 0;
 while (<ED>) {
@@ -227,7 +227,7 @@ print "\n";
 print "ECAT documentation\n";
 print "==================\n";
 
-open (EC, "/homes/pmr/data/efunc/embossdoccatreport.log") || die "Cannot open embossdoccatreport.log";
+open (EC, "$ENV{HOME}/data/efunc/embossdoccatreport.log") || die "Cannot open embossdoccatreport.log";
 
 $totmod = $totbad = $totdes = $totund = 0;
 while (<EC>) {

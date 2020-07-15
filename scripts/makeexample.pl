@@ -54,14 +54,14 @@ if (!defined $application || $application eq "") {
 }
 
 # where the web pages and include files live
-$doctop = "$distribtop/doc/sourceforge";
+$doctop = "$ENV{HOME}/cvsemboss";
 if ($embassy eq "") {
-    $docdir = "$doctop/apps";
-    $incdir = "$doctop/apps/inc";
+    $docdir = "$doctop/doc/programs/master/emboss/apps";
+    $incdir = "$docdir/inc";
 }
 else {
-    $docdir = "$doctop/embassy/$embassy";
-    $incdir = "$doctop/embassy/$embassy/inc";
+    $docdir = "$doctop/embassy/$embassy/emboss_doc/master";
+    $incdir = "$docdir/inc";
 }
 
 
@@ -197,7 +197,7 @@ foreach $dotest (@dirs) {
         if ($line =~ /^DL\s+keep/) {$testkeep{$dotest} = 1;}
         if ($line =~ /^AB\s+(\S+)/) {
 	    $embassypackage = "$1";
-	    $docdir = "$doctop/embassy/$embassypackage";
+	    $docdir = "$doctop/embassy/$embassypackage/emboss_doc/master";
 	    $incdir = "$docdir/inc";
 	}
         if ($line =~ /^IN\s+/) {$hasinput = 1;}
@@ -476,8 +476,9 @@ foreach $dotest (@dirs) {
 
 # have we used all of our answers?
     if ($#answers != -1) {
-	print "WARNING **** 
-application '$application' example $count hasn't used ", $#answers+1, " answers\n";
+	print STDERR "WARNING **** 
+application '$application' example $count test $dotest 
+hasn't used ", $#answers+1, " answers\n";
 	print LOG "WARNING **** 
 test $dotest hasn't used ", $#answers+1, " answers\n";
     }
@@ -591,7 +592,7 @@ test $dotest hasn't used ", $#answers+1, " answers\n";
 		$giffile = $file;
 		$giffile =~ s/\.ps/.gif/;
 # add -delay to see the first page of an animated gif for 10 mins
-		system("2>&1 /sw/arch/bin/convert -delay 65535 -rotate '-90<' $path $giffile >/dev/null");
+		system("2>&1 convert -delay 65535 -rotate '-90<' $path $giffile >/dev/null");
 		$file = $giffile;
 		$path = $giffile;
 	    }
@@ -757,10 +758,17 @@ sub writeUsage {
 
     my $out = "$incdir/$application.usage";
     open (OUT, "> $out") || die "Can't open $out";
+    $usage =~ s/\/homes\/pmr\/cvsemboss/\/homes\/user/go;
     $usage =~ s/(Guide tree +file created: +)\[[A-Z0-9]+\]/$1\[12345678A]/go;
     $usage =~ s/(GCG-Alignment file created +)\[[A-Z0-9]+\]/$1\[12345678A]/go;
+    $usage =~ s/domainalign\-[0-9]+[.][0-9]+/domainalign-1234567890.1234/go;
+    $usage =~ s/domainrep\-[0-9]+[.][0-9]+[.]/domainrep-1234567890.1234./go;
+    $usage =~ s/domainrep\-[0-9]+[.][0-9]+ /domainrep-1234567890.1234 /go;
+    $usage =~ s/pdbplus\-[0-9]+[.][0-9]+ /pdbplus-1234567890.1234 /go;
     $usage =~ s/seqalign\-[0-9]+[.][0-9]+[.]/seqalign-1234567890.1234./go;
     $usage =~ s/seqsearch\-[0-9]+[.][0-9]+[.]/seqsearch-1234567890.1234./go;
+    $usage =~ s/hmmalign\-[0-9]+[.][0-9]+/hmmalign-1234567890.1234/go;
+    $usage =~ s/hmmpfam\-[0-9]+[.][0-9]+/hmmpfam-1234567890.1234/go;
     print OUT $usage;
     close(OUT);
     chmod 0664, $out;	# rw-rw-r--
@@ -794,11 +802,16 @@ sub writeOutput {
 
     my $out = "$incdir/$application.output";
     open (OUT, "> $out") || die "Can't open $out";
+    $output =~ s/\/homes\/pmr\/cvsemboss/\/homes\/user/go;
     $output =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 200[5-9]/DATE  Fri Jul 15 12:00:00 2005/go;
     $output =~ s/Rundate: ... ... \d\d 2[0-9][0-9][0-9] [0-9:]+$/Rundate: Fri Jul 15 2005 12:00:00/go;
     $output =~ s/\#\#date 2[0-9][0-9][0-9][-][0-9][0-9][-][0-9][0-9]$/\#\#date 2005-07-15/go;
+    $output =~ s/domainalign\-[0-9]+[.][0-9]+[.]/domainalign-1234567890.1234./go;
+    $output =~ s/domainrep\-[0-9]+[.][0-9]+[.]/domainrep-1234567890.1234./go;
     $output =~ s/seqalign\-[0-9]+[.][0-9]+[.]/seqalign-1234567890.1234./go;
     $output =~ s/seqsearch\-[0-9]+[.][0-9]+[.]/seqsearch-1234567890.1234./go;
+    $output =~ s/hmmalign\-[0-9]+[.][0-9]+/hmmalign-1234567890.1234/go;
+    $output =~ s/hmmpfam\-[0-9]+[.][0-9]+/hmmpfam-1234567890.1234/go;
     print OUT $output;
     close(OUT);
     chmod 0664, $out;	# rw-rw-r--

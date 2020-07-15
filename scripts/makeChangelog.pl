@@ -9,10 +9,10 @@
 ###################################################################
 
 # where the CVS tree ChangeLog file is
-my $cvsfile = "/homes/pmr/hgmp/ChangeLog";
+my $cvsfile = "$ENV{HOME}/cvsemboss/ChangeLog";
 
 # where the web page file is
-my $htmlfile = "/homes/pmr/hgmp/doc/sourceforge/developers/changelog.html";
+my $htmlfile = "$ENV{HOME}/sfdoc/developers/changelog.html";
 
 
 my @headings;	# list of heading titles
