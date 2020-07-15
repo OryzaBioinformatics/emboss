@@ -4,7 +4,7 @@ AC_DEFUN([CHECK_SGI],
 #
 [AC_MSG_CHECKING(for sgiabi)
 AC_ARG_WITH(sgiabi,
-[  --with-sgiabi     [Defaults to no]],
+[  --with-sgiabi           SGI compiler flags [default=no]],
 [if test "$withval" != no ; then
   AC_MSG_RESULT(yes)
 

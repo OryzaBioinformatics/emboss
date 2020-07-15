@@ -166,7 +166,7 @@ AC_DEFUN([CHECK_THREADS],
 #
 [AC_MSG_CHECKING(if any threading type is given)
 AC_ARG_WITH(thread,
-[  --with-thread=TYPE [     defaults linux] ],
+[  --with-thread=TYPE [     thread type [default=linux]] ],
 [if test "$withval" != no ; then
   AC_MSG_RESULT(yes)
 

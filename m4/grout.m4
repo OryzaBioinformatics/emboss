@@ -4,7 +4,7 @@ AC_DEFUN([CHECK_GROUT],
 #
 [AC_MSG_CHECKING(for gdome2)
 AC_ARG_WITH(grout,
-[  --with-grout     [Defaults to no]],
+[  --with-grout [           Grout graphics output alternative [default=no]] ],
 [if test "$withval" != no ; then
   AC_MSG_RESULT(yes)
   CPPFLAGS="$CPPFLAGS -DGROUT `gdome-config --cflags`"
