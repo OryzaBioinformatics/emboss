@@ -319,8 +319,8 @@ IN
 FI act1_fugru.antigenic
 FZ = 0
 FI antigenic.acdlog
-FC = 4962
-FP 47 /^acdProcess/
+FC = 5223
+FP 49 /^acdProcess/
 FI stderr
 FC = 2
 FP 0 /Warning: /
@@ -385,7 +385,7 @@ PP EMBOSS_ACDROOT=../../acd
 PP export EMBOSS_ACDROOT
 CL qatest -help
 FI stderr
-FZ = 1426
+FZ = 1437
 FP 3 / qualifiers:\n/
 FP 4 / qualifiers:/
 FP 1 /^ +\[-asequence\] +sequence +Sequence filename and optional format, or\n/
@@ -403,7 +403,7 @@ PP EMBOSS_ACDROOT=../../acd
 PP export EMBOSS_ACDROOT
 CL qatest -help -verbose
 FI stderr
-FZ = 4388
+FZ = 4399
 FP 26 /   boolean /
 FP  7 /   integer /
 FP 26 /   string /
@@ -2100,6 +2100,22 @@ FP 0 /Error: /
 FP 0 /Died: /
 //
 
+ID backtranseq-nbrf
+UC Using an NBRF format sequence
+AP backtranseq
+IN ../../data/104k.nbrf
+IN
+FI 104k_thean.fasta
+FP /^>104K_THEAN/
+FP /^GGCATCCTGTGA\n/
+FZ = 2709
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+//
+
 ID banana-data
 AP banana
 CL -outfile banana.data -nograph
@@ -2334,7 +2350,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI cirdna.ps
-FZ = 23067
+FC = 735
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 FI stdout
@@ -2364,7 +2380,6 @@ FP /^Codons not appearing   = 0\n/
 
 ID codcopy-ex
 AP codcopy
-DL keep
 IN Eecoli.cut
 IN
 FI stderr
@@ -2987,9 +3002,10 @@ FP /^TAG    \*     0.072     0.228    365\n/
 
 
 ID coderet-ex
-UC To extract all of the CDS, mRNA and the protein translations:
+UC To extract all of the CDS, mRNA, non-coding and the protein translations:
 AP coderet
 IN tembl:X03487
+IN
 IN
 IN
 IN
@@ -3005,15 +3021,17 @@ FI hsferg1.mrna
 FP /^>x03487_mrna_1\ncagacgttcttcgccgagagtcgtcggggttt/
 FI hsferg1.prot
 FP /^>x03487_pro_1\nMTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMS/
+FI hsferg1.noncoding
+FP /^>x03487_noncoding_501\ngtgagcgcgggc/
 FI hsferg1.coderet
 FC = 3
-FP /     1     1     1     3 HSFERG1\n/
+FP /     1     1     2     1     5 HSFERG1\n/
 //
 
 ID coderet-ex2
 UC To only extract the mRNA sequence:
 AP coderet
-CL -nocds -notranslation
+CL -nocds -notranslation -norest
 IN tembl:X03487
 IN
 IN
@@ -4373,7 +4391,7 @@ FP /# Date: 15\/07\/06\n/
 FP /# Files: 1\n/
 FP /#   File 1: .*/rod.dat\n/
 FP /# Fields: 2\n/
-FP /# Rundate: Sat Jul 15 2006 12:00:00\n/
+FP /# Rundate: Sat 15 Jul 2006 12:00:00\n/
 FP 1 /^Index \S+ maxlen \d+ items \d+\n/
 FP 1 /^filename: /
 //
@@ -4413,7 +4431,7 @@ FP /# Date: 15\/07\/06\n/
 FP /# Files: 1\n/
 FP /#   File 1: .*/rod.dat\n/
 FP /# Fields: 2\n/
-FP /# Rundate: Sat Jul 15 2006 12:00:00\n/
+FP /# Rundate: Sat 15 Jul 2006 12:00:00\n/
 FP 1 /^Index \S+ maxlen \d+ items \d+\n/
 FP 1 /^filename: /
 //
@@ -8210,6 +8228,25 @@ FC = 36
 
 
 
+ID digest-range
+AP digest
+CL -sbegin 10 -send 250
+IN tsw:opsd_human
+IN
+IN
+FI stderr
+FC = 11
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI opsd_human.digest
+FP /^    246     248    346\.378 K      E      AEK\s*\n/
+FP /yields 8 fragments/
+FC = 32
+//
+
+
+
 ID distmat-ex
 AP distmat
 CC Example file missing test/data/pax.align
@@ -8257,7 +8294,7 @@ FC = 1
 FP /Created dotmatcher1.dat\n/
 FI dotmatcher1.dat
 FC = 30
-FP /^Text2 x1 73.000000 y1 163.5[0-9]+ colour 0 size 1.000000 Dotmatcher: HBA_HUMAN vs HBB_HUMAN\n/
+FP /^Text2 x1 73.000000 y1 163.5[0-9]+ colour 0 size 1.000000 Dotmatcher: tsw-id:HBA_HUMAN vs tsw-id:HBB_HUMAN\n/
 //
 
 ID dotmatcher-stretchdata
@@ -8273,7 +8310,7 @@ FC = 1
 FP /Created dotmatcher1.dat\n/
 FI dotmatcher1.dat
 FC = 27
-FP /^##Title Dotmatcher: HBA_HUMAN vs HBB_HUMAN\n/
+FP /^##Title Dotmatcher: tsw-id:HBA_HUMAN vs tsw-id:HBB_HUMAN\n/
 FP /^##XminA 1.000000 XmaxA 141.000000 YminA 1.000000 YmaxA 146.000000\n/
 FP /^##Xmin 1.000000 Xmax 141.000000 Ymin 1.000000 Ymax 146.000000\n/
 FP /^##ScaleXmin 1.000000 ScaleXmax 141.000000 ScaleYmin 1.000000 ScaleYmax 146.000000\n/
@@ -8419,8 +8456,80 @@ IN tembl:paamir
 IN ggtacc
 IN
 FI paamir.dreg
-FZ = 577
+FC = 29
 FP /      1       6 regex1       ggtacc\n/
+FP 1 /^# Total_sequences: 1\n/
+FP 1 /^# Total_hitcount: 1\n/
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+//
+
+ID dreg-test-fwd
+AP dreg
+CL -rformat listfile
+IN asis::caaggttccaacc
+IN aa
+IN test.out
+FI test.out
+FC = 31
+FP 2 /^asis::/
+FP 1 /^asis::caaggttccaacc\[2\:3\]\n/
+FP 1 /^asis::caaggttccaacc\[10\:11\]\n/
+FP 1 /^# Total_sequences: 1\n/
+FP 1 /^# Total_hitcount: 2\n/
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+//
+
+ID dreg-test-rev
+AP dreg
+CL -rformat listfile -srev
+IN asis::caaggttccaacc
+IN aa
+IN test.out
+FI test.out
+FC = 31
+FP 1 /^asis::/
+FP 1 /^asis::caaggttccaacc\[7:8\:r\]\n/
+FP 1 /^# Total_sequences: 1\n/
+FP 1 /^# Total_hitcount: 1\n/
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+//
+
+ID edialign-ex
+AP edialign
+IN ../../data/vtest.seq
+IN
+IN
+FI vtest.fasta
+FC = 12
+FP /ldtapC-LFSDGSPQKAAYVLWDQTILQQDITPLPSHethsaqkgELLAliCglraAKPW\n/
+FP /pghqkghsaeargnrmADQAARKAAITETPDTSTLL-----\n/
+FP /rpgl-CqVFADATPTGWGLVMGHQRMRGTFSAPLPIHta------ELLAa-Cf---ARSR\n/
+FP /SGANIIg-----------------------------------------------------\n/
+FP /----------------TDNSGRTSLYADSPSVPSHLpdrvh\n/
+FP 3 /^>/
+FI vtest.edialign
+FC = 76
+FP 4 /^HTL2 +/
+FP /HTL2 +1   ldtapC-LFS DGSPQKAAYV LWDQTILQQD ITPLPSHeth saqkgELLAl \n/
+FP / +0000000999 9999999999 9999999999 9999999000 0000000000 \n/
+FP / +0000000000 0077777777 7000000000 0000000000 0000000000 \n/
+FP / +0000000000 0000000000 0000000000 0000001111 1111111111 \n/
+FP / +1111110000 0 \n/
+FP /\n/
+FP /\n/
+FP /\n/
 FI stderr
 FC = 2
 FP 0 /Warning: /
@@ -9509,6 +9618,21 @@ FP /^    494     529      26      6      6     94.4 ccctaa   \n/
 FP /^    568     597      24      6      5    100.0 aaccct   \n/
 //
 
+ID extractalign-ex
+UC Extract the region from position 10 to 20:
+AP extractalign
+CL ../../data/dna.msf result.seq -regions '11-30'
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI result.seq
+FZ = 84
+FP /^GTACGTACGT----ACGTAC\n/
+FP 3 /^>/
+//
+
 ID extractfeat-ex
 UC To write out the exons of a sequence: 
 AP extractfeat
@@ -9704,10 +9828,100 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI hhtetra.fuzznuc
-FZ = 717
+FC = 33
 FP /^# HitCount: 2\n/
 FP /^      1       6 pattern1            . aagctt\n/
 FP /^   1267    1272 pattern1            . aagctt\n/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 2\n/
+//
+
+ID fuzznuc-rev
+AP fuzznuc
+CL -complement
+IN asis::GATAAAAAAAAAAAAAAAAAAAAAAAAGATAAAATATCGATA
+IN GATA
+IN test.out
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI test.out
+FC = 37
+FP /^# HitCount: 4\n/
+FP /^      1       4 pattern1            . GATA\n/
+FP /^     28      31 pattern1            . GATA\n/
+FP /^     39      42 pattern1            . GATA\n/
+FP /^     38      35 pattern1            . GATA\n/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 4\n/
+//
+
+ID fuzznuc-ex2
+AP fuzznuc
+IN tembl:hhtetra
+IN @../../data/nucseq.pat
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI hhtetra.fuzznuc
+FC = 33
+FP /^# HitCount: 2\n/
+FP /^    429     448 targetseq           \. cggccctaaccctagcccta\n/
+FP /^    491     510 targetseq           \. cggccctaaccctagcccta\n/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 2\n/
+//
+
+ID fuzznuc-ex3
+AP fuzznuc
+CL -pname test
+IN tembl:hhtetra
+IN @../../data/nucsimple.pat
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI hhtetra.fuzznuc
+FC = 46
+FP /^# HitCount: 13\n/
+FP /^    429     438 test1               \. cggccctaac\n/
+FP /^    801     810 test2               \. cctagcccta\n/
+FP 8 /^ +\d+ +\d+ test1 +/
+FP 5 /^ +\d+ +\d+ test2 +/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 13\n/
+//
+
+ID fuzznuc-ex4
+AP fuzznuc
+IN tembl:hhtetra
+IN @../../data/nuc.pat
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI hhtetra.fuzznuc
+FC = 52
+FP /^# HitCount: 19\n/
+FP /^    429     448 pat1                \. cggccctaaccctagcccta\n/
+FP /^    491     510 pat2                \. cggccctaaccctagcccta\n/
+FP /^    535     554 pat2                1 cggccctaaccctaacccta\n/
+FP /^    753     764 pat3                . cggccctaaccc\n/
+FP 8 /^\s+\d+\s+\d+\s+pat3/
+FP 9 /^\s+\d+\s+\d+\s+pat2/
+FP 7 /^\s+\d+\s+\d+\s+pat2\s+1\s+/
+FP 2 /^\s+\d+\s+\d+\s+pat2\s+\.\s+/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 19\n/
 //
 
 ID fuzzpro-ex
@@ -9721,12 +9935,14 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI 100k_rat.fuzzpro
-FZ = 33232
+FC = 105
 FP 6 /^# HitCount: 1\n/
 FP 6 /^# HitCount: [1-9]\d*/
 FP /^     53      63 pattern1            . YVGDEAQSKRG\n/
 FP 3 /^     53      63 pattern1            . YVGDEAQSKRG\n/
 FP 3 /^     55      65 pattern1            . YVGDEAQSKRG\n/
+FP /^# Total_sequences: 6\n/
+FP /^# Total_hitcount: 6\n/
 //
 
 ID fuzztran-ex
@@ -9743,7 +9959,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI rnops.fuzztran
-FZ = 1392
+FC = 42
 FP /^# HitCount: 9\n/
 FP /^    919     924       2 pattern1            .      1    307    308 RA         \n/
 FP /^    752     757       2 pattern1            .      2    251    252 RA         \n/
@@ -9751,6 +9967,8 @@ FP /^     72      77       2 pattern1            .      3     24     25 RA      
 FP 6 /^.* 1 +\d+ +\d+ RA +\n/
 FP 2 /^.* 2 +\d+ +\d+ RA +\n/
 FP 1 /^.* 3 +\d+ +\d+ RA +\n/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 9\n/
 //
 
 ID feat-embl
@@ -9879,9 +10097,11 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI amic_pseae.garnier
-FZ = 3329
+FC = 82
 FP /^#  Residue totals: H:111   E: 98   T: 81   C: 94\n/
 FP /RADAL\nhelix               HHHHHH            HHHH H     HHHHHH \n/
+FP 1 /^# Total_sequences: 1\n/
+FP 1 /^# Total_hitcount: 111\n/
 //
 
 ID garnier-range
@@ -9895,10 +10115,12 @@ FP 0 /Error: /
 FP 0 /Died: /
 FC = 2
 FI amic_pseae.garnier
-FZ = 1228
+FC = 48
 FP /^#  Residue totals: H: 17   E: 21   T: 22   C: 10\n/
 FP /RADAL\nhelix               HHHHHH            HHHH H     HHHHHH \n/
 FP /^turns       T TTT  TT   TT\n/
+FP 1 /^# Total_sequences: 1\n/
+FP 1 /^# Total_hitcount: 26\n/
 //
 
 ID garnier-short
@@ -10281,7 +10503,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI lindna.ps
-FZ = 14370
+FC = 518
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 //
@@ -10393,7 +10615,7 @@ FP 0 /Died: /
 FI makeseq.fasta
 FC = 300
 FP 100 /^>EMBOSS_[0-9][0-9][0-9]/
-FP /\A>EMBOSS_001\ngggcgtctg.*gtcaacttc\ngcgcggcag.*gtgcgcgaa\n/
+FP /\A>EMBOSS_001\ngggcgtctg.*gtcaacttc\ngcgcggcag.*gtgcgcg\n/
 //
 
 ID pepstats-keep
@@ -10407,7 +10629,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI laci_ecoli.pepstats
-FZ = 1500
+FZ = 1502
 FP /^Molecular weight = 38563\.97/
 FP /^Average Residue Weight  = 107\.122\s+Charge\s+= 1\.5\s+\n/
 FP /^Isoelectric Point = 6\.8820\n/
@@ -11010,12 +11232,14 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI 100k_rat.patmatdb 
-FZ = 1350
+FC = 78
 FP /^# Sequence: HD_FUGRU     from: 1   to: 3148\n# HitCount: 1\n/
 FP /^Length = 4\n/
 FP /^Start = position 1038 of sequence\n/
 FP /^End = position 1041 of sequence\n/
 FP /^STPASSTTSSAVDP\n/
+FP /^# Total_sequences: 3\n/
+FP /^# Total_hitcount: 3\n/
 //
 
 # change the example (was an arabidopsis entry)
@@ -11077,14 +11301,64 @@ FI stdout
 FZ = 19
 FP /^Created pepinfo.ps\n/
 FI opsd_human.pepinfo 
-FZ = 202670
+FC = 4248
 FP 3 /^\s+4\s+T\s+1\n/
 FP 6 /^\s+4\s+T\s+0\n/
 FP 3 /^\s+4\s+T\s+0\.000\n/
 FI pepinfo.ps
-FZ = 758243
+FC = 25434
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 2\n/
+//
+
+ID pepinfo-plot1
+AP pepinfo
+CL -nohydropathyplot
+IN tsw:opsd_human
+IN cps
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FZ = 19
+FP /^Created pepinfo.ps\n/
+FI opsd_human.pepinfo 
+FC = 3186
+FP 3 /^\s+4\s+T\s+1\n/
+FP 6 /^\s+4\s+T\s+0\n/
+FP 0 /^\s+4\s+T\s+0\.000\n/
+FI pepinfo.ps
+FC = 23905
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+ID pepinfo-plot2
+AP pepinfo
+CL -nogeneralplot
+IN tsw:opsd_human
+IN cps
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FZ = 19
+FP /^Created pepinfo.ps\n/
+FI opsd_human.pepinfo 
+FC = 1062
+FP 0 /^\s+4\s+T\s+1\n/
+FP 0 /^\s+4\s+T\s+0\n/
+FP 3 /^\s+4\s+T\s+0\.000\n/
+FI pepinfo.ps
+FC = 1618
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
 //
 
 ID pepnet-ex
@@ -11103,7 +11377,7 @@ FI stdout
 FZ = 18
 FP /^Created pepnet.ps\n/
 FI pepnet.ps
-FZ = 12979
+FC = 508
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 //
@@ -11115,7 +11389,6 @@ CL -sask -graph data
 IN tsw:gcn4_yeast
 IN 253
 IN 274
-IN cps
 FI stdout
 FC = 1
 FP /^Created pepnet1.dat\n/
@@ -11125,7 +11398,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI pepnet1.dat
-FC = 104
+FC = 103
 FP /^Text1 x1 139.599991 y1 93.500000 colour 1 size 0.750000 D\n/
 FP /^Rectangle x1 134.499985 y1 85.430000 x2 137.499985 y2 88.430000 colour 9\n/
 //
@@ -11143,7 +11416,7 @@ FI stdout
 FZ = 20
 FP /^Created pepwheel.ps\n/
 FI pepwheel.ps
-FZ = 13599
+FC = 559
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 //
@@ -11160,7 +11433,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI pepwheel1.dat
-FC = 138
+FC = 137
 FP /^Text1 x1 -?0.000000 y1 0.453300 colour 9 size 1.000000 V\n/
 FP /^Rectangle x1 -0.025000 y1 0.431300 x2 0.025000 y2 0.481300 colour 9\n/
 //
@@ -11404,8 +11677,10 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI 100k_rat.preg
-FZ = 579
+FC = 29
 FP /^    390     393 regex1       IAQA\n/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 1\n/
 //
 
 ID prettyplot-ex
@@ -11458,23 +11733,23 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI prettyplot1.dat
-FC = 602
-FP /^Text1 x1 -10.000000 y1 50.200001 colour 0 size 8.000000 LGB2_LUPLU\n/
-FP /^Text1 x1 -10.000000 y1 43.599998 colour 0 size 8.000000 Consensus\n/
-FP /^Text1 x1 59.000000 y1 53.500000 colour 0 size 8.000000 50\n/
-FP /^Text1 x1 9.000000 y1 53.500000 colour 0 size 8.000000 A\n/
+FC = 601
+FP /^Text1 x1 -10.000000 y1 49.[12][09][09][09][09][71] colour 0 size 8.000000 LGB2_LUPLU\n/
+FP /^Text1 x1 -10.000000 y1 42.599998 colour 0 size 8.000000 Consensus\n/
+FP /^Text1 x1 59.000000 y1 52.500000 colour 0 size 8.000000 50\n/
+FP /^Text1 x1 9.000000 y1 52.500000 colour 0 size 8.000000 A\n/
 FI prettyplot2.dat
 FC = 862
-FP /^Text1 x1 -10.000000 y1 50.200001 colour 0 size 8.000000 LGB2_LUPLU\n/
-FP /^Text1 x1 1.000000 y1 56.799999 colour 0 size 8.000000 K\n/
+FP /^Text1 x1 -10.000000 y1 49.[12][09][09][09][09][71] colour 0 size 8.000000 LGB2_LUPLU\n/
+FP /^Text1 x1 1.000000 y1 55.799999 colour 0 size 8.000000 K\n/
 FI prettyplot3.dat
 FC = 815
-FP /^Text1 x1 -10.000000 y1 50.200001 colour 0 size 8.000000 LGB2_LUPLU\n/
-FP /^Text1 x1 2.000000 y1 43.599998 colour 0 size 8.000000 H\n/
+FP /^Text1 x1 -10.000000 y1 49.[12][09][09][09][09][71] colour 0 size 8.000000 LGB2_LUPLU\n/
+FP /^Text1 x1 2.000000 y1 42.599998 colour 0 size 8.000000 H\n/
 FI prettyplot4.dat
 FC = 181
-FP /^Text1 x1 -10.000000 y1 50.200001 colour 0 size 8.000000 LGB2_LUPLU\n/
-FP /^Text1 x1 1.000000 y1 70.000000 colour 0 size 8.000000 N\n/
+FP /^Text1 x1 -10.000000 y1 49.[12][09][09][09][09][71] colour 0 size 8.000000 LGB2_LUPLU\n/
+FP /^Text1 x1 1.000000 y1 69.000000 colour 0 size 8.000000 N\n/
 //
 
 ID prettyseq-ex
@@ -11698,7 +11973,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI 1hmp_a.psiphi 
-FZ = 3990
+FZ = 4003
 FP /     56      56     0\.0  \-139\.15   162\.01\n/
 //
 
@@ -11711,15 +11986,16 @@ PP EMBOSS_DATA=./
 PP export EMBOSS_DATA
 IN ../../data/withrefm
 IN ../../data/proto
-FI embossre.equ
-FZ = 76
-FP 1 /BshI HaeIII/
 FI stderr
 FC = 2
 FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 DI REBASE
+DF embossre.enz
+DF embossre.equ
+DF embossre.ref
+DF embossre.sup
 //
 
 ID recoder-ex
@@ -11736,8 +12012,10 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI hsfau.recoder
-FZ = 3280
+FC = 70
 FP 3 / +77 +81 . +EcoRII +CCWGG +78 +P.P +C->[ACGT]\n/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 34\n/
 //
 
 ID recoder-seqs
@@ -11755,9 +12033,11 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI hsfau.recoder
-FZ = 5131
+FC = 106
 FP 3 / +77 +81 . +EcoRII +CCWGG +78 +P.P +C->[ACGT]\n/
 FP /# 61 +AGCTCTTTGT CCGCGCCCAG GAGCTACACA CCTTCGAGGT GACCGGCCAG GAAACGGTCG \n/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 34\n/
 //
 
 # make bamhi explicit in reply to prompt
@@ -11852,7 +12132,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI eclac.remap
-FZ = 2057
+FZ = 2410
 FP /^\s+TaqI\s+1\s+\n/
 //
 
@@ -12030,10 +12310,11 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI stdout
-FC = 6
+FC = 7
 FP /^seqmatchall/
 FP /^supermatcher/
 FP /^water/
+FP /^wordfinder/
 FP /^wordmatch/
 //
 
@@ -12049,7 +12330,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI eclac.seqmatchall
-FZ = 1608
+FZ = 1610
 FP /^  1832 ECLAC +[+] +5646..7477     ECLACA +[+] +1..1832\n/
 FP /^  1113 ECLAC +[+] +49..1161     ECLACI +[+] +1..1113\n/
 FP /^  1500 ECLAC +[+] +4305..5804     ECLACY +[+] +1..1500\n/
@@ -14861,7 +15142,7 @@ FP 5 /^>ECLAC/
 FP 5 /^>/
 //
 
-ID seqretall-ex1
+ID seqretall-ex2
 AP seqret
 CL -auto tembl:eclacz test.out -osf fasta
 FI test.out
@@ -15058,9 +15339,183 @@ AP seqret
 CL ../../data/testids.ncbi:BLAST test.out -auto
 FI test.out
 FP 1 /^>/
-FP /^>blast formatdb /
+FP /^>Blast formatdb /
 FP /^BLAST$/
 FZ = 46
+//
+
+#####################################################
+# Testing NCBI formatted ID lines are correctly reproduced
+#####################################################
+
+ID seqret-ncbiout-gb
+AP seqret
+CL ../../data/testids.ncbi:GENBANK test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>gb\|G12345\|GENBANK genbank /
+FP /^GENBANK$/
+FZ = 61
+//
+
+ID seqret-ncbiout-embl
+AP seqret
+CL ../../data/testids.ncbi:EMBL test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>emb\|E12345\|EMBL embl /
+FP /^EMBL$/
+FZ = 53
+//
+
+ID seqret-ncbiout-ddbj
+AP seqret
+CL ../../data/testids.ncbi:DDBJ test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>dbj\|D12345\|DDBJ DDBJ /
+FP /^DDB-$/
+FZ = 53
+//
+
+ID seqret-ncbiout-pir
+AP seqret
+CL ../../data/testids.ncbi:PIR test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>pir\|\|PIR /
+FP /^PIR$/
+FZ = 45
+//
+
+ID seqret-ncbiout-prf
+AP seqret
+CL ../../data/testids.ncbi:PRF test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>prf\|\|PRF /
+FP /^PRF$/
+FZ = 63
+//
+
+ID seqret-ncbiout-swissprt
+AP seqret
+CL ../../data/testids.ncbi:SWISS_PRT test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>sp\|P01234\|SWISS_PRT swissprot /
+FP /^SWISSPR-T$/
+FZ = 67
+//
+
+ID seqret-ncbiout-pdb
+AP seqret
+CL ../../data/testids.ncbi:2PDBA test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>gnl\|pdb\|2PDBA PDB /
+FP /^-PDB-A$/
+FZ = 43
+//
+
+ID seqret-ncbiout-pat
+AP seqret
+CL ../../data/testids.ncbi:12345 test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>gnl\|unk\|12345 Patent /
+FP /^PAT-K$/
+FZ = 47
+//
+
+ID seqret-ncbiout-bbs
+AP seqret
+CL ../../data/testids.ncbi:GENINFO test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>gnl|unk|geninfo Geninfo /
+FP /^GENINF-$/
+FZ = 45
+//
+
+ID seqret-ncbiout-gnl
+AP seqret
+CL ../../data/testids.ncbi:E1234 test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>gnl\|PID\|e1234 General/
+FP /^GNLPID$/
+FZ = 76
+//
+
+ID seqret-ncbiout-ref1
+AP seqret
+CL ../../data/testids.ncbi:REF_12345 test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>ref\|NP_007225[.]1\|REF_12345 NCBI /
+FP /^REFSEQ$/
+FZ = 58
+//
+
+ID seqret-ncbiout-ref2
+AP seqret
+CL ../../data/testids.ncbi:NM_012488.1 test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>ref\|NM_012488[.]1\| NCBI /
+FP /^REFSEQ$/
+FZ = 63
+//
+
+ID seqret-ncbiout-lcl
+AP seqret
+CL ../../data/testids.ncbi:LOCALID test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>lcl\|localid Local /
+FP /^L-CALID$/
+FZ = 57
+//
+
+ID seqret-ncbiout-gi
+AP seqret
+CL ../../data/testids.ncbi:123456 test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>gi\|123456 gi prefix/
+FP /^GIPREFIX$/
+FZ = 30
+//
+
+ID seqret-ncbiout-gigb
+AP seqret
+CL ../../data/testids.ncbi:GIGENBANK test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>gi\|123456\|gb\|G67890\|GIGENBANK gi /
+FP /^GIGENBANK$/
+FZ = 65
+//
+
+ID seqret-ncbiout-gisp
+AP seqret
+CL ../../data/testids.ncbi:GISWISS_PRT test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>gi\|234567\|sp\|P01234\|GISWISS_PRT gi /
+FP /^GISWISSPR-T$/
+FZ = 71
+//
+
+ID seqret-ncbiout-gnlblast
+AP seqret
+CL ../../data/testids.ncbi:BLAST test.out -osf ncbi -auto
+FI test.out
+FP 1 /^>/
+FP /^>gnl\|BL_ORD_ID\|0 Blast formatdb /
+FP /^BLAST$/
+FZ = 62
 //
 
 ###############################################
@@ -16050,7 +16505,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI paamir.showseq 
-FZ = 793
+FZ = 729
 FP 2 /^\s+\|=+\|\n\s+promoter note="/
 OC Note that although we asked for the sequence display to end at
 OC position '100', it has displayed the sequence up to the end of the line
@@ -16091,8 +16546,9 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI paamir.showseq 
-FZ = 143
+FZ = 123
 FP /^          ggtacc/
+FP /^          ctacctggcgagcctggagcacgagcgggttcgcttcgta\n/
 //
 
 ID showseq-ex4
@@ -16106,7 +16562,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI rs24_fugru.showseq
-FZ = 990
+FZ = 892
 FP /^          MAATVT/
 //
 
@@ -16121,7 +16577,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI paamir.showseq 
-FZ = 232
+FZ = 212
 FP /^        1 ggtacc/
 //
 
@@ -16136,7 +16592,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI paamir.showseq 
-FZ = 233
+FZ = 213
 FP /^      123 ggtacc/
 //
 
@@ -16151,8 +16607,10 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI paamir.showseq 
-FZ = 225
+FZ = 205
 FP /tgctCGAT/
+FP /^          ggtaccgctggccgagcatctgctCGATCACCACCAGCCGGGCGAcgggaactgcacgat\n/
+FP /^          ctacctggcgagcctggagcacgagcgggttcgcttcgta\n/
 //
 
 ID showseq-ex8
@@ -16253,8 +16711,10 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI hsfau.silent 
-FZ = 962
+FC = 37
 FP /^ +272 +267 Rev +HindIII +AAGCTT +268 +A.A +Yes +A->T\n/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 1\n/
 //
 
 ID silent-seqs
@@ -16271,9 +16731,11 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI hsfau.silent 
-FZ = 2802
+FC = 73
 FP /^ +272 +267 Rev +HindIII +AAGCTT +268 +A.A +Yes +A->T\n/
 FP /^\n/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 1\n/
 //
 
 ID sixpack-ex
@@ -16287,13 +16749,13 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI paamir.sixpack
-FZ = 25535
+FZ = 25376
 FP /^          P  P  A  W  A  G  D  R  S  H  E  R  Q  L  A  A  R  Q  P  A     F1\n/
 FP /^           R  Q  H  G  R  G  T  A  P  M  S  A  N  S  L  L  G  S  L  R    F2\n/
 FP /^            A  S  M  G  G  G  P  L  P  [*]  A  P  T  R  C  S  A  A  C  A   F3\n/
 FP /^     1261 ccgccagcatgggcgggggaccgctcccatgagcgccaactcgctgctcggcagcctgcg 1320\n/
 FI paamir.fasta
-FZ = 9444
+FZ = 9445
 FP /^>PAAMIR_2_ORF4  Translation of PAAMIR in frame 2, ORF 4, threshold 1, 210aa\n/
 FP /^PRRLVRQHGRGTAPMSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPP\n/
 FP 67 /^>/
@@ -16311,7 +16773,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI paamir.sixpack
-FZ = 25535
+FZ = 25376
 FP /^          P  P  A  W  A  G  D  R  S  H  E  R  Q  L  A  A  R  Q  P  A     F1\n/
 FP /^           R  Q  H  G  R  G  T  A  P  M  S  A  N  S  L  L  G  S  L  R    F2\n/
 FP /^            A  S  M  G  G  G  P  L  P  [*]  A  P  T  R  C  S  A  A  C  A   F3\n/
@@ -16334,10 +16796,12 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI hsfau.sirna
-FZ = 7286
+FC = 112
 FP /GAAGAAGACAGGUCGGGCUdTdT AGCCCGACCUGUCUUCUUCdTdT/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 85\n/
 FI hsfau.fasta
-FZ = 6035
+FC = 170
 FP /aaaagtgagaggtcagactccta/
 //
 
@@ -16354,8 +16818,10 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI hsfau.sirna
-FZ = 7783
+FC = 116
 FP /\(AA\)GAAGAAGACAGGUCGGGCUdTdT AGCCCGACCUGUCUUCUUCdTdT/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 85\n/
 FI hsfau.fasta
 FZ = 6035
 FP /aaaagtgagaggtcagactccta/
@@ -16524,10 +16990,8 @@ FP 0 /Died: /
 FI stdout
 FZ = 16
 FP /^Created syco.ps\n/
-FI paamir.syco
-FZ = 0
 FI syco.ps
-FZ = 62558
+FZ = 76061
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 //
@@ -16543,9 +17007,9 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI hsfau1.tcode
-FZ = 21740
+FZ = 21866
 FP /^      1     200   0.673 Non-coding/
-FP /^     22     221   0.767 No opinion/
+FP /^     22     221   0.76[78] No opinion/
 FP /^     37     236   0.951 Coding/
 //
 
@@ -16686,6 +17150,28 @@ FP /^ +T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.\n/
 
 ID tmap-ex
 AP tmap
+CL ../../data/opsd.msf -out tmap.res -graph cps
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FZ = 16
+FP /^Created tmap.ps\n/
+FI tmap.res
+FZ = 2290
+FP 3 /^     43      70        1 YMF.*KLRT\n/
+FP /^# Total_sequences: 3\n/
+FP /^# Total_hitcount: 21\n/
+FI tmap.ps
+FZ = 39613
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+ID tmap-single
+AP tmap
 CL tsw:opsd_human -out tmap.res -graph cps
 FI stderr
 FC = 1
@@ -16696,8 +17182,10 @@ FI stdout
 FZ = 16
 FP /^Created tmap.ps\n/
 FI tmap.res
-FZ = 1524
+FZ = 1649
 FP 2 /^     43      69        1 YMFLLIVLGFPINFLTLYVTVQHKKLR\n/
+FP /^# Total_sequences: 2\n/
+FP /^# Total_hitcount: 14\n/
 FI tmap.ps
 FZ = 39837
 FP /^%%Title: PLplot Graph\n/
@@ -16774,7 +17262,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI amir.pep
-FZ = 2460
+FZ = 2461
 FP /^>PAAMIR_1/
 FP /^>PAAMIR_2/
 FP /^>PAAMIR_3/
@@ -16809,7 +17297,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI amir.pep
-FZ = 4921
+FZ = 4922
 FP /^>PAAMIR_1/
 FP /^>PAAMIR_2/
 FP /^>PAAMIR_3/
@@ -16912,100 +17400,85 @@ FZ = 574
 FP /poly-A tail removed/
 //
 
-# madness - never trims anything
 ID trimseq-ex
 AP trimseq
-CL tembl:hsfau hsfau.seq -window 1 -percent 100
+CL ../../data/untrimmed.seq trim1.seq -window 1 -percent 100
 FI stderr
 FC = 1
 FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
-FI hsfau.seq
-FZ = 562
-FP /^>HSFAU /
+FI trim1.seq
+FZ = 528
+FP /^>myseq/
+FP /^ttyyyctttctcgactc/
+FP /ttca-gnntcy\n/
 //
 
 ID trimseq-ex2
 AP trimseq
-CL tembl:hsfau hsfau.seq -window 5 -percent 40
+CL ../../data/untrimmed.seq trim2.seq -window 5 -percent 40
 FI stderr
 FC = 1
 FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
-FI hsfau.seq
-FZ = 562
-FP /^>HSFAU /
+FI trim2.seq
+FZ = 523
+FP /^>myseq/
+FP /^ttyyyctttctcgactc/
+FP /ttca-g\n/
 //
+
 
 ID trimseq-ex3
 AP trimseq
-CL tembl:hsfau hsfau.seq -window 20 -percent 80
+CL ../../data/untrimmed.seq trim3.seq -window 5 -percent 50
 FI stderr
 FC = 1
 FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
-FI hsfau.seq
-FZ = 562
-FP /^>HSFAU /
+FI trim3.seq
+FZ = 528
+FP /^>myseq/
+FP /^ttyyyctttctcgactc/
+FP /ttca-gnntcy\n/
 //
 
 ID trimseq-ex4
 AP trimseq
-CL tembl:hsfau hsfau.seq -window 20 -percent 10
+CL ../../data/untrimmed.seq trim4.seq -window 5 -percent 50 -strict
 FI stderr
 FC = 1
 FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
-FI hsfau.seq
-FZ = 562
-FP /^>HSFAU /
+FI trim4.seq
+FZ = 522
+FP /^>myseq/
+FP /^ctttctcgactc/
+FP /ttca-gnntc\n/
 //
 
 ID trimseq-ex5
 AP trimseq
-CL tembl:hsfau hsfau.seq -window 20 -percent 50 -strict
+CL ../../data/untrimmed.seq trim5.seq -window 5 -percent 50 -strict -noright
 FI stderr
 FC = 1
 FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
-FI hsfau.seq
-FZ = 562
-FP /^>HSFAU /
-//
-
-ID trimseq-ex6
-AP trimseq
-CL tembl:hsfau hsfau.seq -window 1 -percent 100 -star
-FI stderr
-FC = 1
-FP 0 /Warning: /
-FP 0 /Error: /
-FP 0 /Died: /
-FI hsfau.seq
-FZ = 562
-FP /^>HSFAU /
-//
-
-ID trimseq-ex7
-AP trimseq
-CL tembl:hsfau hsfau.seq -window 20 -percent 50 -noright
-FI stderr
-FC = 1
-FP 0 /Warning: /
-FP 0 /Error: /
-FP 0 /Died: /
-FI hsfau.seq
-FZ = 562
-FP /^>HSFAU /
+FI trim5.seq
+FZ = 529
+FP /^>myseq/
+FP /^ctttctcgactc/
+FP /ttca-gnntcynnnnnn\n/
 //
 
 ID twofeat-ex
-UC Without the -twoout option the output report contains just one feature for every pair of features found.
+UC Without the -twoout option the output report contains just one feature
+UC for every pair of features found.
 AP twofeat
 CL tembl:hsfau
 IN polyA_signal
@@ -17019,12 +17492,14 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI hsfau.twofeat
-FZ = 652
+FZ = 776
 FP /484     509   0.000    484    489    509    509/
+FP /^# Total_sequences: 1\n/
+FP /^# Total_hitcount: 1\n/
 //
 
 ID twofeat-ex2
-UC The -twoout option makes the output report give the pairs of features found. The ouput report format type has been changed to display the full original pairs of faetures in GFF format.
+UC The -twoout option makes the output report give the pairs of features found. The output report format type has been changed to display the full original pairs of features in GFF format.
 AP twofeat
 CL -twoout -rformat gff tembl:hsfau
 IN polyA_signal
@@ -17043,7 +17518,7 @@ FP /polyA_signal/
 //
 
 ID union-ex
-UC the file 'cds.list' contains a list of the regions making up the coding sequence of 'embl:hsfau':
+UC The file 'cds.list' contains a list of the regions making up the coding sequence of 'embl:hsfau':
 AP union
 IN @../../data/cds.list
 IN
@@ -17155,6 +17630,31 @@ FI rnu68037.wordcount
 FZ = 432
 FP /\Actg\s+54\n/
 FP /^aaa\s+1\Z/
+//
+
+ID wordfinder-ex
+TI 400
+AP wordfinder
+CL tembl:eclac tembl:ec* -word 50 
+IN
+IN 3.0
+IN
+FI stderr
+FC = 6
+FP 4 /^Target [0-9]+ EC[A-Z]+ matches 1\n/
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout 
+FZ = 0
+FI wordfinder.error
+FC = 0
+FI eclac.wordfinder
+FZ > 71230
+FP /^ECLAC +1 /
+FP /^# Score: 37385\.0/
+FP 5 /^# Score: /
+FP /^ECLACA +1801 [acgt]+ +1832\n/
 //
 
 ID wordmatch-ex
@@ -17308,7 +17808,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI eclac.seqmatchall
-FZ = 1608
+FZ = 1610
 FP /^  1832 ECLAC +[+] +5646..7477     ECLACA +[+] +1..1832\n/
 FP /^  1113 ECLAC +[+] +49..1161     ECLACI +[+] +1..1113\n/
 FP /^  1500 ECLAC +[+] +4305..5804     ECLACY +[+] +1..1500\n/
@@ -19896,7 +20396,7 @@ ID complex-check
 AQ complex
 TI 300
 CL -omnia
-IN tembl:*
+IN tembl:hs*
 IN
 IN
 IN
@@ -19911,11 +20411,11 @@ FP 0 /Died: /
 FI complex.ujtable
 FZ = 0
 FI hs989235.complex
-FZ = 3880
-FP /^ +10 +HSHT +1658 +0[.]7314 +\n/
+FZ = 1660
+FP /^ +9 +HSHT +1658 +0[.]7314 +\n/
 FI hs989235.fasta
-FZ = 658123
-FP 45 /^>/
+FZ = 153216
+FP 15 /^>/
 //
 
 ID corbatest-check
@@ -20057,6 +20557,7 @@ FP 0 /Died: /
 
 ID intconv-check
 AQ intconv
+DL keep
 CL stdin stdout -auto
 IN int main (int argc, char* argv[]) {
 IN   int number;
@@ -20089,9 +20590,8 @@ FP 0 /Died: /
 
 ID prima-check
 AQ prima
+CL -minprodlen 200 -maxprodlen 250
 IN tembl:eclaci
-IN
-IN
 IN
 IN
 IN
@@ -20102,8 +20602,10 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI eclaci.prima
-FZ = 1597
-FP /^3 pairs found\n/
+FZ = 1259
+FP /^2 pairs found\n/
+FP / +266 TTGTCGCGGCGATTAAATCTC +286\s+510 GTACCGTCTTCATGGGAGAAA +530\n/
+FP / +452 CTAATGTTCCGGCGTTATTT +471\s+696 TTTGTTGAAAACCGGACATG +715\n/
 //
 
 ID primers-check
@@ -20404,15 +20906,15 @@ FP 3 /^SECBOTH/
 FP /^SECBOTH        1 1 VAL 78 ILE 81\n/
 FI 1cs4.ccf
 FC = 537
-FZ = 51353
+FZ = 51361
 FP 475 /^AT /
 FI 1ii7.ccf
 FC = 462
-FZ = 44215
+FZ = 44223
 FP 402 /^AT /
 FI 2hhb.ccf
 FC = 5398
-FZ = 533145
+FZ = 533177
 FP 4779 /^AT /
 //
 
@@ -20441,15 +20943,15 @@ FP 1 /^DUPATOMRES/
 FP 5 /^BADINDEX/
 FI 1fx2.ccf
 FC = 2399
-FZ = 235421
+FZ = 235429
 FP 2141 /^AT /
 FI 4at1.ccf
 FC = 8134
-FZ = 808387
+FZ = 808419
 FP 7170 /^AT /
 FI 1cs4.ccf
 FC = 6610
-FZ = 654080
+FZ = 654104
 FP 5843 /^AT /
 //
 
@@ -20493,16 +20995,16 @@ FP 3 /naccess: using defualt vdw.radii\n/
 FP 3 /naccess: using default STD FILE\n/
 FI 1cs4.ccf
 FC = 537
-FZ = 51353
-FP /^SQ   SEQUENCE    52 AA;   5817 MW;  47362A43 CRC32;\n/
+FZ = 51361
+FP /^SQ   SEQUENCE    52 AA;   5817 MW;  D8CCAE0E1FC0849A CRC64;\n/
 FI 1ii7.ccf
 FC = 462
-FZ = 44215
-FP /^SQ   SEQUENCE    65 AA;   7396 MW;  0CFB92A3 CRC32;\n/
+FZ = 44223
+FP /^SQ   SEQUENCE    65 AA;   7396 MW;  75FBE75B22FD3678 CRC64;\n/
 FI 2hhb.ccf
 FC = 5398
-FZ = 533145
-FP /^SQ   SEQUENCE   141 AA;  15127 MW;  5EC7DB1E CRC32;\n/
+FZ = 533177
+FP /^SQ   SEQUENCE   141 AA;  15127 MW;  34D13618E62A33C1 CRC64;\n/
 //
 
 
@@ -20556,17 +21058,17 @@ FZ = 29889
 FC = 369
 FP /^ATOM\s+31\s+CA\s+PHE\s+A\s\d+\s+60.914 -11.143  59.200  1.00 58.07\s+C\s+\n/
 FI d1cs4a_.ccf
-FZ = 40509
+FZ = 40517
 FC = 418
-FP /SQ   SEQUENCE    52 AA;   5817 MW;  47362A43 CRC32;\n/
+FP /SQ   SEQUENCE    52 AA;   5817 MW;  D8CCAE0E1FC0849A CRC64;\n/
 FI d1ii7a_.ent
 FZ = 29727
 FC = 367
 FP /ATOM      1  N   ASP A   8       7.977  32.254  19.055  1.00 26.65           N  /
 FI d1ii7a_.ccf
-FZ = 39748
+FZ = 39756
 FC = 413
-FP /SQ   SEQUENCE    65 AA;   7396 MW;  0CFB92A3 CRC32;/
+FP /SQ   SEQUENCE    65 AA;   7396 MW;  75FBE75B22FD3678 CRC64;/
 //
 
 ID domainer-keep2
@@ -20600,15 +21102,15 @@ FZ = 123201
 FC = 1521
 FP 1476 /ATOM/
 FI d1cs4a_.ccf
-FZ = 166802
+FZ = 166810
 FC = 1684
-FP /SQ   SEQUENCE   225 AA;  25486 MW;  437C8290 CRC32;\n/
+FP /SQ   SEQUENCE   225 AA;  25486 MW;  F04351B12FCADEE0 CRC64;\n/
 FI d1fx2a_.ent
 FZ = 152928
 FC = 1888
 FP 1856 /ATOM/
 FI d1fx2a_.ccf
-FZ = 209167
+FZ = 209175
 FC = 2110
 FP 235 /RE   /
 FI d4at1b1.ent
@@ -20616,7 +21118,7 @@ FZ = 60183
 FC = 743
 FP 725 /ATOM/
 FI d4at1b1.ccf
-FZ = 82081
+FZ = 82089
 FC = 835
 FP 93 /RE   /
 FI d4at1d1.ent
@@ -20624,7 +21126,7 @@ FZ = 60183
 FC = 743
 FP 725 /ATOM/
 FI d4at1d1.ccf
-FZ = 82081
+FZ = 82089
 FC = 835
 FP 93 /RE   /
 //
@@ -20652,19 +21154,19 @@ FP /^1cs4\n/
 FP /^2hhb\n/
 FI 1cs4.con
 FC = 183
-FZ = 3736
+FZ = 3744
 FP /CN   MO 1; CN1 1; CN2 .; ID1 A; ID2 .; NRES1 52; NRES2 .\n/
 FP /NC   SM 163; LI .\n/
 FP /SM   ASP 46 ; CYS 47\n/
 FI 1ii7.con
 FC = 172
-FZ = 3545
+FZ = 3553
 FP /CN   MO 1; CN1 1; CN2 .; ID1 A; ID2 .; NRES1 65; NRES2 .\n/
 FP /NC   SM 151; LI .\n/
 FP /SM   ASP 49 ; LEU 50\n/
 FI 2hhb.con
 FC = 2696
-FZ = 58326
+FZ = 58358
 FP /CN   MO 1; CN1 1; CN2 .; ID1 A; ID2 .; NRES1 141; NRES2 .\n/
 FP /NC   SM 643; LI .\n/
 FP /SM   VAL 1 ; LEU 2\n/
@@ -20696,13 +21198,13 @@ FP /^D1II7A_\n/
 FP /^D1CS4A_\n/
 FI d1cs4a_.con
 FC = 183
-FZ = 3742
+FZ = 3750
 FP /CN   MO 1; CN1 1; CN2 .; ID1 A; ID2 .; NRES1 52; NRES2 .\n/
 FP /NC   SM 163; LI .\n/
 FP /SM   ASP 2 ; ILE 3\n/
 FI d1ii7a_.con
 FC = 172
-FZ = 3551
+FZ = 3559
 FP /CN   MO 1; CN1 1; CN2 .; ID1 A; ID2 .; NRES1 65; NRES2 .\n/
 FP /NC   SM 151; LI .\n/
 FP /SM   ASP 49 ; LEU 50\n/
@@ -20730,7 +21232,7 @@ FP 0 /^Error:/
 FP 0 /^Died:/
 FI 2hhb.con
 FC = 274
-FZ = 7000
+FZ = 7096
 FP /CN   MO 1; CN1 1; CN2 2; ID1 A; ID2 B; NRES1 141; NRES2 146\n/
 FP 152 /^SM   /
 FI interface.log
@@ -20765,7 +21267,7 @@ FP 0 /^Error:/
 FP 0 /^Died:/
 FI SITES.con
 FC = 299
-FZ = 5173
+FZ = 5261
 FP 11 /^ID   /
 FP 3 /^LI   ASP 2/
 FP /ID   PDB 1cs4; DOM d1cs4a_; LIG POP;\n/
@@ -20871,7 +21373,7 @@ FZ = 38
 FP 2 /^\/\/\n/
 FI all_s.scop
 FC = 59
-FZ = 1064
+FZ = 1080
 FP 2 /^ID   /
 FI domainseqs.log
 FC = 6
@@ -20902,7 +21404,7 @@ FP 0 /Error: /
 FP 0 /Died: /
 FI all_nr.scop
 FC = 30
-FZ = 527
+FZ = 535
 FP 1 /^ID/
 FI domainnr.log
 FC = 7
@@ -20955,7 +21457,7 @@ FP 0 /^Error:/
 FP 0 /^Died:/
 FI domainsse.out
 FC = 62
-FZ = 1052
+FZ = 1068
 FP 2 /^ID   /
 FI domainsse.log
 FZ = 0
@@ -20979,11 +21481,11 @@ FP 0 /^Error:/
 FP 0 /^Died:/
 FI res.dcf
 FC = 33
-FZ = 543
+FZ = 551
 FP 1 /^ID /
 FI elm.dcf 
 FC = 33
-FZ = 573
+FZ = 581
 FP 1 /^ID /
 FP /^SE   HH\n/
 FI ssematch.log 
@@ -21714,7 +22216,7 @@ FP /^408-487  \(27391-27469\)   88%\n/
 #    date info. to output files. 
 ####################################################
 
-ID ehmmbuild-ex1-keep
+ID ehmmbuild-ex-keep
 AB hmmernew
 RQ hmmer
 AA ehmmbuild
@@ -21814,13 +22316,13 @@ FP /^CKSUM 4536\n/
 //
 
 ## Specify seed to get consistent output.
-ID ehmmcalibrate-ex1-keep
+ID ehmmcalibrate-ex-keep
 AB hmmernew
 RQ hmmer
 AA ehmmcalibrate
 TI 120
 DL keep
-CL ../ehmmbuild-ex1-keep/globin.hmm globino.hmm -seed 1
+CL ../ehmmbuild-ex-keep/globin.hmm globino.hmm -seed 1
 FI stderr
 FC = 1
 FP 0 /Warning: /
@@ -21829,12 +22331,12 @@ FP 0 /Died: /
 FP /Calibrate HMM search statistics\n/
 FI stdout
 FC =21
-FP /^hmmcalibrate --mean 350.000000  --num 5000  --sd 350.000000  --seed 1 ../ehmmbuild-ex1-keep/globin.hmm\n/
-FP /^HMM file:                 ../ehmmbuild-ex1-keep/globin.hmm\n/
+FP /^hmmcalibrate --mean 350.000000  --num 5000  --sd 350.000000  --seed 1 ../ehmmbuild-ex-keep/globin.hmm\n/
+FP /^HMM file:                 ../ehmmbuild-ex-keep/globin.hmm\n/
 FI globino.hmm
 FC =449
 FP /^COM   hmmbuild -n globins50 --pbswitch 1000 --archpri 0.850000 --idlevel 0.620000 --swentry 0.500000 --swexit 0.500000 --wgsc -A -F globin.hmm ../../data/hmmnew/globins50.msf\n/
-FP /^COM   hmmcalibrate --mean 350.000000 --num 5000 --sd 350.000000 --seed 1 ../ehmmbuild-ex1-keep/globin.hmm\n/
+FP /^COM   hmmcalibrate --mean 350.000000 --num 5000 --sd 350.000000 --seed 1 ../ehmmbuild-ex-keep/globin.hmm\n/
 FP /^CKSUM 9858\n/
 //
 
@@ -21873,7 +22375,7 @@ AB hmmernew
 RQ hmmer
 AA ehmmsearch
 DL keep
-CL ../ehmmcalibrate-ex1-keep/globino.hmm ../../data/hmmnew/Artemia.fa globino.ehmmsearch -a 100
+CL ../ehmmcalibrate-ex-keep/globino.hmm ../../data/hmmnew/Artemia.fa globino.ehmmsearch -a 100
 FI stderr
 FC = 1
 FP 0 /Warning: /
@@ -21882,10 +22384,10 @@ FP 0 /Died: /
 FP /^Search a sequence database with a profile HMM\n/
 FI stdout
 FC =3
-FP /^hmmsearch -A 100 -E 10.000000 -T -1000000.000000 -Z 0 --domE 1000000.000000 --domT -1000000.000000  ../ehmmcalibrate-ex1-keep/globino.hmm ../../data/hmmnew/Artemia.fa > globino.ehmmsearch\n/
+FP /^hmmsearch -A 100 -E 10.000000 -T -1000000.000000 -Z 0 --domE 1000000.000000 --domT -1000000.000000  ../ehmmcalibrate-ex-keep/globino.hmm ../../data/hmmnew/Artemia.fa > globino.ehmmsearch\n/
 FI globino.ehmmsearch
 FC =216
-FP /^HMM file:                   ../ehmmcalibrate-ex1-keep/globino.hmm \[globins50\]\n/
+FP /^HMM file:                   ../ehmmcalibrate-ex-keep/globino.hmm \[globins50\]\n/
 FP /^     Total hits:           1\n/
 FP /^     Total hits:           9\n/
 //
@@ -21918,7 +22420,7 @@ AB hmmernew
 RQ hmmer
 AA ehmmalign
 DL keep
-CL ../ehmmcalibrate-ex1-keep/globino.hmm ../../data/hmmnew/globins630.fa globins630.ali
+CL ../ehmmcalibrate-ex-keep/globino.hmm ../../data/hmmnew/globins630.fa globins630.ali
 FI stderr
 FC = 1
 FP 0 /Warning: /
@@ -21928,7 +22430,7 @@ FP 0 /Died: /
 FI stdout
 FC =13
 ## This is not the full command-line so as to avoid checking against a (variable) temp. file name.
-FP /^hmmalign  --informat FASTA --outformat A2M  -o globins630.ali ../ehmmcalibrate-ex1-keep/globino.hmm/
+FP /^hmmalign  --informat FASTA --outformat A2M  -o globins630.ali ../ehmmcalibrate-ex-keep/globino.hmm/
 FP /^Alignment saved in file globins630.ali\n/
 FI globins630.ali
 FC =3150
@@ -21941,7 +22443,7 @@ AB hmmernew
 RQ hmmer
 AA ehmmconvert
 DL keep
-CL ../ehmmcalibrate-ex1-keep/globino.hmm globino.ehmmconvert -format G
+CL ../ehmmcalibrate-ex-keep/globino.hmm globino.ehmmconvert -format G
 FI stderr
 FC = 1
 FP 0 /Warning: /
@@ -21950,7 +22452,7 @@ FP 0 /Died: /
 FP /^Convert between profile HMM file formats\n/
 FI stdout
 FC =16
-FP /^hmmconvert -p  -F  ../ehmmcalibrate-ex1-keep/globino.hmm globino.ehmmconvert\n/
+FP /^hmmconvert -p  -F  ../ehmmcalibrate-ex-keep/globino.hmm globino.ehmmconvert\n/
 FP /^1 HMM\(s\) converted and written to globino.ehmmconvert\n/
 FI globino.ehmmconvert
 FC =169
@@ -21963,7 +22465,7 @@ AB hmmernew
 RQ hmmer
 AA ehmmemit
 DL keep
-CL ../ehmmcalibrate-ex1-keep/globino.hmm globino.ehmmemit -c N -n 10
+CL ../ehmmcalibrate-ex-keep/globino.hmm globino.ehmmemit -c N -n 10
 FI stderr
 FC =1
 FP 0 /Warning: /
@@ -21972,7 +22474,7 @@ FP 0 /Died: /
 FP /^Generate sequences from a profile HMM.\n/
 FI stdout
 FC =14
-FP /^hmmemit --seed 0  -n 10  -o globino.ehmmemit ../ehmmcalibrate-ex1-keep/globino.hmm\n/
+FP /^hmmemit --seed 0  -n 10  -o globino.ehmmemit ../ehmmcalibrate-ex-keep/globino.hmm\n/
 FP /^Output saved in file globino.ehmmemit\n/
 FI globino.ehmmemit
 FC =40
@@ -22524,7 +23026,7 @@ FP 3 /^MOTIF/
 #    to the output files. 
 #######################################
 
-ID ememe-ex1-keep
+ID ememe-keep
 AB memenew
 RQ meme
 AA ememe
@@ -22614,7 +23116,7 @@ FP /^Motif detection\n/
 FI stdout
 FC =0
 FI ex5.html
-FC =1500
+FC > 1499
 FP /^ICYA_MANSE               1.0000    189  LACB_BOVIN               1.0000    178  \n/
 FP /^BBP_PIEBR                1.0000    173  RETB_BOVIN               1.0000    183  \n/
 //
@@ -22652,7 +23154,7 @@ FP /^Motif detection\n/
 FI stdout
 FC =0
 FI ex7.html
-FC =2057
+FC > 2056
 FP /^RAM1_YEAST               1.0000    431  PFTB_RAT                 1.0000    437  \n/
 FP /^BET2_YEAST               1.0000    325  RATRABGERB               1.0000    331  \n/
 //
@@ -22696,13 +23198,13 @@ FP /^2BHD_STREX               1.0000    255  3BHD_COMTE               1.0000    
 FP /^ADH_DROME                1.0000    255  AP27_MOUSE               1.0000    244  \n/
 //
 
-ID emast-ex1-ex
+ID emast-ex
 AB memenew
 RQ meme
 AA emast
-## PP cp ../ememe-ex1-keep/ex1.html .
-## Cannot use ouptput of ememe-ex1-keep test as input,
-## because temporary sequence file named in /ememe-ex1-keep/ex1.html
+## PP cp ../ememe-keep/ex1.html .
+## Cannot use output of ememe-keep test as input,
+## because temporary sequence file named in /ememe-keep/ex1.html
 ## after "DATAFILE" will have been deleted.
 ## Instead use data/memenew/ex1.html which names the sequence file "crp0.s"
 ## which must be copied to the test directory. 
@@ -22735,6 +23237,7 @@ FP /^>ce1cg\n/
 ID mse-ex
 AB mse
 AA mse
+DL keep
 CL ../../data/dna.msf msf::mse.msf
 IK :21
 IK :1 up
@@ -22964,7 +23467,7 @@ AB phylip
 AA ednaml
 ## may need to play with the input file format for this one
 CL -categories -catnum 2 -catvals "1.0 3.2" -catprob "0.4 0.6"
-CL -lambda 1.5 -autog -printdata -progress
+CL -lambda 1.5 -deflambda -printdata -progress
 IN ../../data/evolution/dnaml.dat
 IN
 IN
@@ -23408,15 +23911,14 @@ CL -weights ../../data/evolution/clique.weights
 IN ../../data/evolution/clique.dat
 IN
 FI clique.fclique
-FC = 58
+FC = 35
 FP /^     11223 4\n/
 FP /^Actual Characters: \(  1  4\)\n/
 FP /^Binary Characters: \(  1  2  6\)\n/
-FP 2 /Tree and binary characters:/
+FP 1 /Tree and binary characters:/
 FI clique.treefile
-FC = 2
-FP /^\(\(\(Alpha,Beta\),Gamma\),Delta,Epsilon\)\[0.5000\];\n/
-FP /^\(\(Alpha,Gamma,Epsilon\),Delta,Beta\)\[0.5000\];\n/
+FC = 1
+FP /^\(\(\(\(Alpha,Beta\),Gamma\),Epsilon\),Delta\);\n/
 FI stderr
 FC = 2
 FP 0 /Warning: /
@@ -23700,13 +24202,13 @@ FI dnaml.fdnamlk
 FC = 89
 FP /^        1           0.264            0.522\n/
 FP /^        2           2.000\n/
-FP /^Ln Likelihood =   -60.782[0-9][0-9]\n/
-FP /^ +2 +Gamma +4.52915 +0.90799\n/
+FP /^Ln Likelihood =   -60.78[0-9][0-9][0-9]\n/
+FP /^ +2 +Gamma +4.529[0-9][0-9] +0.90[78][09][92]\n/
 FP /^             1121121111 111\n/
 FI dnaml.treefile
 FC = 2
-FP /^\(\(Epsilon:0.58058,Delta:0.58058\):3.94856,\(Gamma:0.90799,\n/
-FP /^\(Beta:0.67846,Alpha:0.67846\):0.22953\):3.62116\);\n/
+FP /^\(\(Epsilon:0.58[01]58,Delta:0.58[01]58\):3.94[0-9][0-9][0-9],\(Gamma:0.90[78][90][92],\n/
+FP /^\(Beta:0.678[0-9][0-9],Alpha:0.678[0-9][0-9]\):0.229[0-9][0-9]\):3.621[0-9][0-9]\);\n/
 FI stderr
 FC = 2
 FP 0 /Warning: /
@@ -24427,7 +24929,10 @@ IN ../../data/evolution/restdist.dat
 IN
 FI restdist.frestdist
 FC = 6
-FP /^Gamma       0.107681  0.107681  0.000000  0.176484  0.192466\n/
+## This is what we get from a fixed frestdist
+## phylip-3.6b restdist has the same valgrind error
+## Need to check current release to see if it is fixed
+FP /^Gamma       0.107681  0.107681  0.000000  0.192466  0.207319\n/
 FI stderr
 FC = 2
 FP 0 /Warning: /
@@ -24771,13 +25276,13 @@ IN ../../data/cofold-blue.fasta
 IN ../../data/cofold-conc.dat
 IN
 FI red.vrnacofoldconc
-FC = 17
+FC = 15
 FP /^AUGAAGAUGA\&CUGUCUGUCUUGAGACA\n/
 FP /^\.\.\.\.\(\(\(\(\.\.\&\.\.\)\)\)\)\(\(\(\.\.\.\.\)\)\)\. \( -4\.40\)\n/
 FP /^Expinit2 = 0.513986\n/
 FP /^tab = -1.738299\ttaa = 4.679345\ttbb = -12.558919\n/
 FP /^-5.884889\t-0.208509\t-16.658920\t-0.003662\t-4.266495\n/
-FP /^10.000000\t+0.000000\t+0.000000\t+4.053814\t+0.000000\t+1.892373\t+0.000000 f\n/
+FP /^10.000000\t+10.000000\t+0.844630\t+3.676596\t+4.491062\t+1.802178\t+0.173246 f\n/
 FI red.ssps
 FC = 131
 FP /^%%Pages: 1\n/
@@ -25041,7 +25546,7 @@ IN ../../data/cofold-red.fasta
 IN
 FI red.vrnaheat
 FC = 900
-FP /^74\.2\s+0\.000322\n/
+FP /^74\.2\s+0\.00032\d+\n/
 FI stderr
 FC = 2
 FP 0 /Warning: /
@@ -25052,7 +25557,7 @@ FC = 0
 //
 
 
-ID vrnainverse-ex1
+ID vrnainverse-ex
 AB vienna
 AA vrnainverse
 CL -repeats 3
@@ -25062,6 +25567,9 @@ IN
 FI rna3.vrnainverse
 FC = 3
 FP 3 /^[ACGU]{76}   [0-9][0-9](   d = [0-9.]+)?\n/
+FP  /^GUGAUGGGCACCCUGGUAU.*GUCGCCGCC   20\n/
+FP  /^UGUGCUCCAACCUUAGACA.*GCGCAACUG   30\n/
+FP  /^UAACUUCAUUUCUUAUCGU.*GGUUGAUAU   32\n/
 FI stderr
 FC = 2
 FP 0 /Warning: /
@@ -25082,6 +25590,9 @@ IN
 FI rna3.vrnainverse
 FC = 3
 FP 3 /^[ACGU]{76}   [0-9][0-9]\n/
+FP  /^GUGAUGGGCACCCUGGUAU.*GUCGCCGCC   20\n/
+FP  /^UGUGCUCCAACCUUAGACA.*GCGCAACUG   30\n/
+FP  /^UAACUUCAUUUCUUAUCGU.*GGUUGAUAU   32\n/
 FI stderr
 FC = 2
 FP 0 /Warning: /
