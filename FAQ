@@ -388,7 +388,7 @@ A)  a) from the anonymous cvs code.
     then:
 
        1) Go to the emboss directory 
-       cd EMBOSS-2.10.0
+       cd EMBOSS-5.0.0
 
        2) make new directory embassy if it does not exist already.
        mkdir embassy
@@ -460,7 +460,7 @@ A)  a) from the anonymous cvs code.
     then:
 
        1) Go to the emboss directory 
-       cd EMBOSS-3.0.0
+       cd EMBOSS-5.0.0
 
        2) make new directory embassy if it does not exist already.
        mkdir embassy
@@ -687,20 +687,10 @@ A) To get the PNG driver you will need to have installed z,png and gd
 Q) Where to look for the additional libraries needed for PNG.
 
 A)
-   GD)  http://www.boutell.com/gd/
-   Z)   http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/infozip/zlib/
+   GD)  http://www.libgd.org
+   Z)   http://www.zlib.net
    JPEG) http://www.ijg.org/
-   PNG) http://www.mirror.ac.uk/sites/ftp.libpng.org/pub/png/libpng.html
-
-   These also list the various mirror sites for non UK people.
-
-   Alternatively, using ftp :-
-
-   GD)  (boutell.com no longer allows FTP, no known mirror sites, use HTTP)
-   Z)   ftp://ftp.info-zip.org/pub/infozip/zlib/zlib-1.1.3.tar.gz
-   JPEG) ftp://ftp.uu.net/graphics/jpeg/
-   PNG) ftp://swrinde.nde.swri.edu/pub/png/src/libpng.1.2.1.tar.gz
-
+   PNG) http://www.libpng.org
 
 
 Q) Plotters and pen colours.
@@ -744,15 +734,16 @@ Q) I am trying to compile PNG support into EMBOSS on our CTU Unix system.  This
 A) You should be able to compile them from the source on just about any
    Unix platform. 
 
-  http://www.info-zip.org/pub/infozip/zlib/
-  http://libpng.sourceforge.net/
-  http://www.boutell.com/gd/
+  http://www.zlib.net
+  http://www.libpng.org
+  http://www.libgd.org
 
 
 Q) I get error messages when I try to display X11 on my PC.
    I am running the Hummingbird Exceed X11 emulator.
 
-A) The Hummingbird Exceed X11 emulator (and maybe other systems) use the
+A) This should only affect versions of EMBOSS pre-5.0.0
+   The Hummingbird Exceed X11 emulator (and maybe other systems) use the
    'TrueColor' display by default. 
    You should change the configuration settings so that it uses 'PseudoColor'.
    In version 6.1 of Hummingbird Exceed, this is done by clicking on the
