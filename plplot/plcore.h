@@ -744,6 +744,20 @@ static PLDispatchTable dispatch_table[] = {
 	plD_state_null,
 	plD_esc_null
     },
+
+    {
+	"Data file",
+	"data",
+	-1,
+	plD_init_null,
+	plD_line_null,
+	plD_polyline_null,
+	plD_eop_null,
+	plD_bop_null,
+	plD_tidy_null,
+	plD_state_null,
+	plD_esc_null
+    },
 #endif
 
 #ifdef PLD_png

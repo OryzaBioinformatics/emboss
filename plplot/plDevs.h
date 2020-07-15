@@ -17,6 +17,7 @@
 
 #define PLD_plmeta 1
 #define PLD_null 1
+#define PLD_data 1
 #define PLD_xterm 1
 #define PLD_tek4010 1
 #define PLD_tek4107 1
