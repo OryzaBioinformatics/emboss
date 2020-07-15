@@ -1,3 +1,231 @@
+Fixes to Version 4.0.0 included
+
+The post-release fixed for 4.0.0 were already included in the distribution
+used to recreate this stage of the code history. The changes are included
+in earlier commits. The original README.fixes is added below for information.
+
+The files in this directory are bugfix replacements for files in
+the EMBOSS-4.0.0 distribution. Just drop the replacement files in
+the location shown and redo the 'make install.'
+
+Fix 1. EMBOSS-4.0.0/nucleus/embpatlist.c
+
+31 Jul 2006: Fixes a problem with searching for patterns and regular
+expression in the reverse strand of nucleotide sequences. The change
+is to use ajSeqReverseForce (always reverses the sequence provided)
+instead of ajSeqReverseDo (which only reverses if the reverse flag is
+set)
+
+9 Aug 2006: Revised to also fix a problem with reverse strand sequence
+positions.
+
+Fix 2. EMBOSS-4.0.0/ajax/ajfile.c
+
+31 Jul 2006: This fixes a bug where deleting the last line of buffered
+input fails to reset the pointer to the last buffered line. This only
+affected debug traces. Unfortunately, the ajFileBuffClear function
+does call the debug trace. In practice we have only seen this bug when
+processing sequence data in EMBL format from an MRS server.
+
+Fix 3. EMBOSS-4.0.0/ajax/ajnam.c
+
+31 Jul 3006: New database access methods MRS and DBFETCH need to be
+explicitly turned on so that showdb can report them.
+
+
+Fix 4. EMBOSS-4.0.0/ajax/ajseqdb.c
+
+31 Jul 2006: The new MRS access method used a general search. This
+gave strange results when the ID or accession appeared in any other
+entry. It appears that MRS can search for id or accession only. This
+worked on the main MRS server at least.
+
+MRS access will be further extended in the next release. Please
+contact the developers emboss-bug@emboss.open-bio.org if you would
+like to help test new features in MRS access.
+
+25 Aug 2006: Further change to allow multiple %s replacements in
+complex URLs for access method URL. Needed for complex SRS queries to
+resolve EMBL IDs so the following definition can be used for EMBL:
+
+DB embl [
+	method: "url" format: "embl" type: "N" url:
+	"http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-noSession+-ascii+-vn+2+-e+[embl-id:%s]|[embl-acc:%s]|([emblidacc-id:%s]>embl)"
+	comment: "EMBL from SRS including old IDs" ]
+
+Fix 5. EMBOSS-4.0.0/configure
+
+07 Aug 2006: Fix configuration problem on Intel Mac machines. Make sure
+this file is executable (chmod 755 configure) after downloading it.
+
+Fix 6. EMBOSS-4.0.0/ajax/ajseq.c
+
+09 Aug 2006: Return correct USA for "asis::" sequence input.
+
+Fix 7. EMBOSS-4.0.0/emboss/dreg.c
+
+09 Aug 2006: Correct sequence positions on the reverse strand.
+
+Fix 8. See Fix 13
+
+Fix 9. See Fix 13
+
+Fix10. EMBOSS-4.0.0/doc/programs/html/banana.1.banana.gif
+       EMBOSS-4.0.0/doc/programs/html/tcode.2.tcode.gif
+
+14 Aug 2006: These graphics example outputs were missing from the
+distribution.  When you run make install they will be copied to the
+installed documentation.
+
+Fix 11. EMBOSS-4.0.0/emboss/merger.c
+	EMBOSS-4.0.0/emboss/needle.c
+	EMBOSS-4.0.0/emboss/prophet.c
+	EMBOSS-4.0.0/emboss/water.c
+
+14 Aug 2006: These programs calculate an internal path size from the
+lengths of the input sequences. For sequences that are too long, a
+fatal error is produced. But if the sequences are extremely long, the
+test failed and the program gave a segmentation fault. This fix tests
+in a different way that will catch all cases.
+
+Fix 12. See Fix13
+
+Fix 13. EMBOSS-4.0.0/ajax/ajacd.c
+        EMBOSS-4.0.0/ajax/ajfeat.c
+        EMBOSS-4.0.0/ajax/ajfeat.h
+        EMBOSS-4.0.0/ajax/ajreport.c
+        EMBOSS-4.0.0/ajax/ajreport.h
+        EMBOSS-4.0.0/emboss/fuzznuc.c
+        EMBOSS-4.0.0/emboss/fuzzpro.c
+        EMBOSS-4.0.0/emboss/fuzztran.c
+
+21 Aug 2006: This provides new qualifiers to limit report output to a
+number of hits in total (-rmaxall) or for any one sequence
+(-rmaxseq). It also fixes reversed feature locations for reports in
+EMBL format. The files fixed overlap with earlier fixes which are
+included here.
+
+09 Aug 2006: Fix 8: In release 4.0.0 these 3 programs were changed to report
+even when no hits were found. The aim was to avoid empty output for a
+single sequence.
+
+Many users were running these programs over large input sets, and now
+get excessively large output files.
+
+The change has been reversed. Fix 9 makes sure a small output
+file is produced when no hits are found.
+
+09 Aug 2006: Fix 9: When closing a report (with ajReportClose) make sure a
+standard report header and footer are printed if nothing has been
+reported so far. The header reports the command line. The new footer
+reports the total number of sequences and features reported.
+
+Reversed sequence positions are corrected for listfile report format.
+
+No header can be reported for some formats (EMBL, Genbank, GFF, PIR,
+Swiss, Excel, Feattable).
+
+14 Aug 2006: Fix12: This fixes a bug where putting -ofopenfile on the command
+line for features output failed to set the feature output format.
+
+
+Fix 14. EMBOSS-4.0.0/ajax/ajseqread.c
+        EMBOSS-4.0.0/ajax/ajseqread.h
+        EMBOSS-4.0.0/ajax/ajseqwrite.c
+        EMBOSS-4.0.0/emboss/dbiblast.c
+        EMBOSS-4.0.0/emboss/dbifasta.c
+        EMBOSS-4.0.0/emboss/dbxfasta.c
+        EMBOSS-4.0.0/emboss/acd/dbifasta.acd
+        EMBOSS-4.0.0/emboss/acd/dbxfasta.acd
+
+24 Aug 2006: Pearson format preserves dbname:entryname style IDs
+NCBI format parsing (includes FASTA format parsing) extracts database
+name from NCBI piped ids and uses on output unless EMBOSS has defined
+some other database name.
+
+Three indexing programs call the NCBI parsing function which has an
+extra argument.
+
+Fasta parsing was also modified to allow UniProt style (yet another
+FASTA format) where the accession number is in brackets. The "idacc"
+default format now removes brackets before checking for an accession
+number or version next on the line.
+
+Fix 15. EMBOSS-4.0.0/emboss/restrict.c
+
+24 Aug 2006: If EMBL feature table output was selected then hits on
+the reverse strand were reported in a non-standard form.
+
+
+Fix 16. EMBOSS-4.0.0/emboss/dbigcg.c
+        EMBOSS-4.0.0/emboss/dbxgcg.c
+
+
+15 Sep 2006: dbigcg and dbxgcg needed a minor change to parse the new
+EMBL database ID line format.
+
+Fix 17. EMBOSS-4.0.0/emboss/einverted.c
+
+18 Sep 2006: einverted when run with a reversed input sequence
+numbered the results from the wrong end. It is rare to run an inverted
+repeat program in the reverse direction so nobody reported this bug
+which was in every release since 1.0.0, but we had a user with a
+genome-scale input and a lot of positions to recalculate who needs the
+fix.
+
+Fix 18. EMBOSS-4.0.0/emboss/tfm.c
+        EMBOSS-4.0.0/nucleus/embgroup.c
+        EMBOSS-4.0.0/nucleus/embgroup.h
+
+18 Sep 2006: tfm -html copies the installed HTML version of the
+documentation. The installed HTML documentation moved in release
+4.0.0. This fix finds the new documentation directory (embgroup.c has
+new functions to find the EMBASSY package so the correct install
+directory can be searched). Some EMBOSS interfaces need this fix to
+find the documentation.
+
+Fix 19. Various in the EMBOSS-4.0.0/jemboss/ directory
+
+8th November 2006: The file associated with this fix is jemboss-08112006.jar.
+To apply, change directory to the EMBOSS-4.0.0/jemboss directory and type:
+    jar xf jemboss-08112006.jar
+This fixes a problem with the specification of mismatches in "the fuzzies"
+(i.e. fuzznuc etc).
+
+Fix 20. EMBOSS-4.0.0/emboss/restrict.c
+
+30 Nov 2006: If no hits are found then fragment lengths from a previous
+sequence are no longer reported. This only happened when -fragments was
+selected with a set of sequences.
+
+Fix 21. EMBOSS-4.0.0/emboss/prettyplot.c
+        EMBOSS-4.0.0/emboss/acd/prettyplot.acd
+
+7 Dec 2006: Prettyplot has an incorrect definition for the
+"-alternative" command line option which selects how the consensus is
+calculated when there is a choice of consensus residues. This applies
+when the plurality score is less than half of the total sequence
+weights.
+
+When this option was used on the command line, strange error messages
+would be reported for ambiguous values (1, 2 or 3) or for unacceptable
+values (0). The default value gave no error. It appears this option is
+not widely used because this was reported only by wrappers such as
+SoapLab that pass the default value explicitly to the prgram.
+
+The ACD definition is for a "selection" menu, but the values are
+defined in "list" style which returns a value from 1 to 4. The fix is
+simply to redefine this option as a "list" with values from 0 to 3.
+
+Fix 22. EMBOSS-4.0.0/emboss/dbxflat.c
+
+3 Jan 2007: Fixes memory leaks in GenBank parsing
+
+Fix 23: EMBOSS-4.0.0/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java
+
+5 Jan 2007: Allow Jemboss compilation with Java version 6
+
+
 Version 4.0.0
 	The format of the knowntypes.standard file in the emboss/acd
 	directory has changed to list the knowntype first, then the
