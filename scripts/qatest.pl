@@ -776,7 +776,7 @@ if (!$numtests) {
 
   undef @acdfiles;
 
-  open (WOSSNAME, "wossname -alpha -auto|") || die "Cannot run wossname";
+  open (WOSSNAME, "export -n EMBOSS_ACDCOMMANDLINE;wossname -alpha -auto|") || die "Cannot run wossname";
   while (<WOSSNAME>) {
     if (/^[a-z]\S+/) {
       $app = $&;
