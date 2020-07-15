@@ -19,18 +19,22 @@ extern "C"
 ** @attr Acc [AjPStr] Accession number (primary only)
 ** @attr Sv [AjPStr] SeqVersion number
 ** @attr Gi [AjPStr] GI NCBI version number
-** @attr Tax [AjPStr] Main taxonomy (species)
 ** @attr Desc [AjPStr] One-line description
+** @attr Tax [AjPStr] Main taxonomy (species)
+** @attr Organelle [AjPStr] Organelle taxonomy
 ** @attr Type [AjPStr] Type N or P
 ** @attr Outputtype [AjPStr] Output sequence known type
+** @attr Molecule [AjPStr] Molecule type
+** @attr Class [AjPStr] Class of entry
+** @attr Division [AjPStr] Database division
 ** @attr Db [AjPStr] Database name from input name
 ** @attr Setdb [AjPStr] Database name from input command line
 ** @attr Setoutdb [AjPStr] Database name from command line
 ** @attr Full [AjPStr] Full name
-** @attr Date [AjPStr] Date
+** @attr Date [AjPSeqDate] Dates
 ** @attr Doc [AjPStr] Obsolete - see TextPtr
 ** @attr Rev [AjBool] true: to be reverse-complemented
-** @attr Offset [ajint] offset from start
+** @attr Circular [AjBool] true: circular nucleotide molecule
 ** @attr Usa [AjPStr] USA for re-reading
 ** @attr Ufo [AjPStr] UFO for re-reading
 ** @attr Fttable [AjPFeattable] Feature table
@@ -47,6 +51,9 @@ extern "C"
 ** @attr Acclist [AjPList] Secondary accessions
 ** @attr Keylist [AjPList] Keyword list
 ** @attr Taxlist [AjPList] Taxonomy list (just species for now)
+** @attr Reflist [AjPList] References (citations)
+** @attr Cmtlist [AjPList] Comment block list
+** @attr Xreflist [AjPList] Database cross reference list
 ** @attr Seq [AjPStr] The sequence
 ** @attr File [AjPFile] Output file
 ** @attr Knownfile [AjPFile] Already open output file (we don't close this one)
@@ -57,7 +64,7 @@ extern "C"
 ** @attr Savelist [AjPList] Previous sequences saved for later output
 **                          (e.g. MSF format)
 ** @attr Count [ajint] Number of sequences
-** @attr Padding [char[4]] Padding to alignment boundary
+** @attr Offset [ajint] offset from start
 **
 ** @new ajSeqoutNew Default constructor
 ** @delete ajSeqoutDel Default destructor
@@ -77,18 +84,22 @@ typedef struct AjSSeqout {
   AjPStr Acc;
   AjPStr Sv;
   AjPStr Gi;
-  AjPStr Tax;
   AjPStr Desc;
+  AjPStr Tax;
+  AjPStr Organelle;
   AjPStr Type;
   AjPStr Outputtype;
+  AjPStr Molecule;
+  AjPStr Class;
+  AjPStr Division;
   AjPStr Db;
   AjPStr Setdb;
   AjPStr Setoutdb;
   AjPStr Full;
-  AjPStr Date;
+  AjPSeqDate Date;
   AjPStr Doc;
   AjBool Rev;
-  ajint Offset;
+  AjBool Circular;
   AjPStr Usa;
   AjPStr Ufo;
   AjPFeattable Fttable;
@@ -105,6 +116,9 @@ typedef struct AjSSeqout {
   AjPList Acclist;
   AjPList Keylist;
   AjPList Taxlist;
+  AjPList Reflist;
+  AjPList Cmtlist;
+  AjPList Xreflist;
   AjPStr Seq;
   AjPFile File;
   AjPFile Knownfile;
@@ -114,7 +128,7 @@ typedef struct AjSSeqout {
   ajint* Accuracy;
   AjPList Savelist;
   ajint Count;
-  char Padding[4];
+  ajint Offset;
 } AjOSeqout;
 
 #define AjPSeqout AjOSeqout*
@@ -126,40 +140,69 @@ typedef struct AjSSeqout {
 ** Prototype definitions
 */
 
-__deprecated void          ajSeqAllWrite (AjPSeqout outseq, const AjPSeq seq);
 void         ajSeqoutWriteSeq (AjPSeqout outseq, const AjPSeq seq);
 AjBool       ajSeqoutOpenFilename (AjPSeqout seqout, const AjPStr name);
-__deprecated AjBool        ajSeqFileNewOut (AjPSeqout seqout,
-					   const AjPStr name);
-ajint        ajSeqoutCheckGcg (const AjPSeqout outseq);
+ajint        ajSeqoutGetCheckgcg (const AjPSeqout outseq);
 void         ajSeqoutClear (AjPSeqout thys);
-void         ajSeqoutCount(const AjPSeqout seqout, ajuint* b);
-void         ajSeqoutDefName(AjPSeqout thys,
-			     const AjPStr setname, AjBool multi);
+void         ajSeqoutGetBasecount(const AjPSeqout seqout, ajuint* bases);
+AjBool       ajSeqoutSetNameDefaultC(AjPSeqout thys,
+				     AjBool multi, const char* txt);
+AjBool       ajSeqoutSetNameDefaultS(AjPSeqout thys,
+				     AjBool multi, const AjPStr str);
 void         ajSeqoutDel (AjPSeqout* thys);
-AjBool       ajSeqOutFormatDefault (AjPStr* pformat);
-AjBool       ajSeqOutFormatSingle (AjPStr format);
+AjBool       ajSeqoutstrGetFormatDefault (AjPStr* Pformat);
+AjBool       ajSeqoutstrIsFormatExists(const AjPStr format);
+AjBool       ajSeqoutstrIsFormatSingle (const AjPStr format);
 AjPSeqout    ajSeqoutNew (void);
 AjPSeqout    ajSeqoutNewFile (AjPFile file);
-__deprecated AjPSeqout     ajSeqoutNewF (AjPFile file);
+AjPSeqout    ajSeqoutNewFormatC(const char* txt);
+AjPSeqout    ajSeqoutNewFormatS(const AjPStr str);
 AjBool       ajSeqoutOpen (AjPSeqout thys);
-AjBool       ajSeqOutSetFormat (AjPSeqout thys, const AjPStr format);
-AjBool       ajSeqOutSetFormatC (AjPSeqout thys, const char* format);
+AjBool       ajSeqoutSetFormatC (AjPSeqout thys, const char* format);
+AjBool       ajSeqoutSetFormatS (AjPSeqout thys, const AjPStr format);
 void         ajSeqoutTrace (const AjPSeqout seq);
-void         ajSeqPrintOutFormat (AjPFile outf, AjBool full);
-void         ajSeqoutUsa (AjPSeqout* pthis, const AjPStr Usa);
+void         ajSeqoutPrintFormat (AjPFile outf, AjBool full);
+void         ajSeqoutClearUsa (AjPSeqout thys, const AjPStr Usa);
 void         ajSeqoutWriteSet (AjPSeqout seqout, const AjPSeqset seq);
-__deprecated void          ajSeqWrite (AjPSeqout seqout, const AjPSeq seq);
 void         ajSeqoutClose (AjPSeqout outseq);
-__deprecated void          ajSeqWriteClose (AjPSeqout outseq);
-void         ajSeqWriteExit(void);
-void         ajSeqWriteXyz(AjPFile outf, const AjPStr seq, const char *prefix);
-void         ajSssWriteXyz(AjPFile outf, const AjPStr seq, const char *prefix);
-__deprecated void         ajSeqsetWrite(AjPSeqout outseq, const AjPSeqset seq);
+void         ajSeqoutExit(void);
+
+void         ajSeqoutDumpSwisslike(AjPSeqout outseq,const AjPStr seq,
+				   const char *prefix);
+
 /*
 ** End of prototype definitions
 */
 
+__deprecated void         ajSeqoutCount(const AjPSeqout seqout, ajuint* b);
+__deprecated void         ajSeqAllWrite (AjPSeqout outseq, const AjPSeq seq);
+__deprecated AjBool       ajSeqFileNewOut (AjPSeqout seqout,
+					   const AjPStr name);
+__deprecated AjPSeqout    ajSeqoutNewF (AjPFile file);
+__deprecated void         ajSeqWrite (AjPSeqout seqout, const AjPSeq seq);
+__deprecated void         ajSeqsetWrite(AjPSeqout outseq, const AjPSeqset seq);
+__deprecated void         ajSeqWriteClose (AjPSeqout outseq);
+__deprecated AjBool       ajSeqOutFormatSingle (AjPStr format);
+__deprecated AjBool       ajSeqOutSetFormat (AjPSeqout thys,
+					     const AjPStr format);
+__deprecated AjBool       ajSeqOutSetFormatC (AjPSeqout thys,
+					      const char* format);
+__deprecated AjBool       ajSeqOutFormatDefault (AjPStr* pformat);
+
+__deprecated void         ajSeqoutUsa (AjPSeqout* pthis, const AjPStr Usa);
+
+__deprecated void         ajSeqPrintOutFormat (AjPFile outf, AjBool full);
+__deprecated AjBool       ajSeqFindOutFormat(const AjPStr format,
+					     ajint* iformat);
+__deprecated void         ajSeqWriteExit(void);
+__deprecated ajint        ajSeqoutCheckGcg (const AjPSeqout outseq);
+
+__deprecated void         ajSeqoutDefName(AjPSeqout thys,
+					  const AjPStr setname, AjBool multi);
+__deprecated void         ajSeqWriteXyz(AjPFile outf,
+					const AjPStr seq, const char *prefix);
+__deprecated void         ajSssWriteXyz(AjPFile outf,
+					const AjPStr seq, const char *prefix);
 #endif
 
 #ifdef __cplusplus
