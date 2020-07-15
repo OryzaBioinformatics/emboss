@@ -1,4 +1,5 @@
-pkgdata_DATA =  abiview.1.abiview.gif chaos.1.chaos.gif cirdna.1.cirdna.gif \
+pkgdata_DATA =  abiview.1.abiview.gif banana.1.banana.gif \
+	chaos.1.chaos.gif cirdna.1.cirdna.gif \
 	cpgplot.1.cpgplot.gif dan.2.dan.gif \
 	dotmatcher.1.dotmatcher.gif dotpath.1.dotpath.gif \
 	dottup.1.dottup.gif emboss_icon.gif findkm.1.findkm.gif \
@@ -28,7 +29,7 @@ pkgdata_DATA =  abiview.1.abiview.gif chaos.1.chaos.gif cirdna.1.cirdna.gif \
 	dbxgcg.html degapseq.html descseq.html \
 	diffseq.html digest.html display_group.html distmat.html \
 	dotmatcher.html dotpath.html dottup.html dreg.html \
-	einverted.html embossdata.html \
+	edialign.html einverted.html embossdata.html \
 	embossversion.html emma.html emowse.html \
 	entret.html enzyme_kinetics_group.html \
 	epestfind.html eprimer3.html equicktandem.html \
@@ -83,7 +84,8 @@ pkgdata2_DATA = lindna.html listor.html makenucseq.html makeprotseq.html \
 	showseq.html shuffleseq.html sigcleave.html silent.html \
 	sirna.html sixpack.html skipseq.html \
 	splitter.html stretcher.html stssearch.html supermatcher.html \
-	syco.html tcode.html template.html test_group.html \
+	syco.html tcode.html tcode.2.tcode.gif \
+	template.html test_group.html \
 	textsearch.html tfextract.html tfm.html tfscan.html \
 	tmap.html tranalign.html transeq.html trimest.html \
 	trimseq.html twofeat.html union.html \
@@ -91,7 +93,8 @@ pkgdata2_DATA = lindna.html listor.html makenucseq.html makeprotseq.html \
 	utils_database_indexing_group.html utils_misc_group.html \
 	vectorstrip.html \
 	water.html whichdb.html wobble.html \
-	wordcount.html wordmatch.html wossname.html yank.html \
+	wordcount.html wordfinder.html wordmatch.html \
+	wossname.html yank.html \
 	emboss_icon.jpg
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)/doc/html/emboss/apps

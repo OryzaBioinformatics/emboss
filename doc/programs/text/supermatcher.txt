@@ -43,7 +43,7 @@ Command line arguments
                                   penalty (Number from 0.000 to 100.000)
    -gapextend          float      [0.5 for any sequence type] Gap extension
                                   penalty (Number from 0.000 to 10.000)
-  [-outfile]           align      Output alignment file name
+  [-outfile]           align      [*.supermatcher] Output alignment file name
 
    Additional (Optional) qualifiers:
    -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -320,9 +320,9 @@ Output file format
 
 ########################################
 # Program: supermatcher
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: supermatcher
-#    [-asequence] tembl:ec*
+#    [-asequence] "tembl:ec*"
 #    [-bsequence] tembl:eclac
 #    -wordlen 50
 #    -gapextend 3.0
@@ -513,6 +513,7 @@ See also
    matcher      Finds the best local alignments between two sequences
    seqmatchall  All-against-all comparison of a set of sequences
    water        Smith-Waterman local alignment
+   wordfinder   Match large sequences against one or more other sequences
    wordmatch    Finds all exact matches of a given size between 2 sequences
 
 Author(s)

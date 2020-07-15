@@ -42,7 +42,7 @@ Command line arguments
                                   0.000 to 100.000)
    -gapextend          float      [1.0] Gap extension coefficient (Number from
                                   0.000 to 100.000)
-  [-outfile]           align      Output alignment file name
+  [-outfile]           align      [*.prophet] Output alignment file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -305,9 +305,9 @@ Output file format
 
 ########################################
 # Program: prophet
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: prophet
-#    -sequence tsw:h*
+#    -sequence "tsw:h*"
 #    -infile ../../data/globins.gribskov
 # Align_format: simple
 # Report_file: hd_fugru.prophet
@@ -357,9 +357,6 @@ HD_FUGRU        2439 PVDFLQEKDVFREFLYR   2455
 
   [Part of this file has been deleted for brevity]
 
-# Gaps:           5/146 ( 3.4%)
-# Score: 170.08
-#
 #
 #=======================================
 
@@ -407,6 +404,10 @@ HBB_HUMAN         99 HVD--DPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAH    146
 globins          156 KYR    158
                      ||.
 HBB_HUMAN        147 KYH    149
+
+
+#---------------------------------------
+#---------------------------------------
 
 Data files
 

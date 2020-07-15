@@ -78,6 +78,7 @@ Command line arguments
 
    "-graph" associated qualifiers
    -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
    -gtitle             string     Graph title
    -gsubtitle          string     Graph subtitle
    -gxtitle            string     Graph x axis title
@@ -265,8 +266,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 Output file format
 
   Output files for usage example
-
-  File: paamir.syco
 
   Graphics File: syco.ps
 

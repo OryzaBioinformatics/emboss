@@ -26,7 +26,7 @@ Usage
 % acdc antigenic 
 Finds antigenic sites in proteins
 Input protein sequence(s): tsw:act1_fugru
-Minimum length [6]: 
+Minimum length of antigenic region [6]: 
 Output report [act1_fugru.antigenic]: 
 
    Go to the input files for this example

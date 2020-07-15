@@ -16,7 +16,7 @@
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>List of USAs output file</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.yank</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

@@ -70,9 +70,11 @@ matcher          Finds the best local alignments between two sequences
 seqmatchall      All-against-all comparison of a set of sequences
 supermatcher     Match large sequences against one or more other sequences
 water            Smith-Waterman local alignment
+wordfinder       Match large sequences against one or more other sequences
 wordmatch        Finds all exact matches of a given size between 2 sequences
 
 ALIGNMENT MULTIPLE
+edialign         Local multiple alignment of sequences
 emma             Multiple alignment program - interface to ClustalW program
 infoalign        Information on a multiple sequence alignment
 mse              Multiple Sequence Editor
@@ -105,6 +107,7 @@ cutseq           Removes a specified section from a sequence
 degapseq         Removes gap characters from sequences
 descseq          Alter the name or description of a sequence
 entret           Reads and writes (returns) flatfile entries
+extractalign     Extract regions from a sequence alignment
 extractfeat      Extract features from a sequence
 extractseq       Extract regions from a sequence
 listor           Write a list file of the logical OR of two sets of sequences
@@ -174,6 +177,22 @@ emnu             Simple menu of EMBOSS applications
 
 NUCLEIC 2D STRUCTURE
 einverted        Finds DNA inverted repeats
+vrnaalifold      RNA alignment folding
+vrnaalifoldpf    RNA alignment folding with partition
+vrnacofold       RNA cofolding
+vrnacofoldconc   RNA cofolding with concentrations
+vrnacofoldpf     RNA cofolding with partitioning
+vrnadistance     RNA distances
+vrnaduplex       RNA duplex calculation
+vrnaeval         RNA eval
+vrnaevalpair     RNA eval with cofold
+vrnafold         Calculate secondary structures of RNAs
+vrnafoldpf       Secondary structures of RNAs with partition
+vrnaheat         RNA melting
+vrnainverse      RNA sequences matching a structure
+vrnalfold        Calculate locally stable secondary structures of RNAs
+vrnaplot         Plot vrnafold output
+vrnasubopt       Calculate RNA suboptimals
 
 NUCLEIC CODON USAGE
 cai              CAI codon adaptation index
@@ -345,7 +364,7 @@ ffreqboot        Bootstrapped genetic frequencies algorithm
 fproml           Protein phylogeny by maximum likelihood
 fpromlk          Protein phylogeny by maximum likelihood
 fprotdist        Protein distance algorithm
-fprotpars        Protein pasimony algorithm
+fprotpars        Protein parsimony algorithm
 frestboot        Bootstrapped restriction sites algorithm
 frestdist        Distance matrix from restriction sites or fragments
 frestml          Restriction site maximum Likelihood method
@@ -550,6 +569,7 @@ eclique          Largest clique program
 econsense        Majority-rule and strict consensus tree
 econtml          Continuous character Maximum Likelihood method
 econtrast        Continuous character Contrasts
+edialign         Local multiple alignment of sequences
 ednacomp         DNA compatibility algorithm
 ednadist         Nucleic acid sequence Distance Matrix program
 ednainvar        Nucleic acid sequence Invariants method
@@ -594,6 +614,7 @@ eseqboot         Bootstrapped sequences algorithm
 esim4            Align an mRNA to a genomic DNA sequence
 est2genome       Align EST and genomic DNA sequences
 etandem          Looks for tandem repeats in a nucleotide sequence
+extractalign     Extract regions from a sequence alignment
 extractfeat      Extract features from a sequence
 extractseq       Extract regions from a sequence
 fclique          Largest clique program
@@ -628,7 +649,7 @@ fpenny           Penny algorithm, branch-and-bound
 fproml           Protein phylogeny by maximum likelihood
 fpromlk          Protein phylogeny by maximum likelihood
 fprotdist        Protein distance algorithm
-fprotpars        Protein pasimony algorithm
+fprotpars        Protein parsimony algorithm
 freak            Residue/base frequency table or plot
 frestboot        Bootstrapped restriction sites algorithm
 frestdist        Distance matrix from restriction sites or fragments
@@ -794,6 +815,7 @@ water            Smith-Waterman local alignment
 whichdb          Search all databases for an entry
 wobble           Wobble base plot
 wordcount        Counts words of a specified size in a DNA sequence
+wordfinder       Match large sequences against one or more other sequences
 wordmatch        Finds all exact matches of a given size between 2 sequences
 wossname         Finds programs by keywords in their one-line documentation
 yank             Reads a sequence range, appends the full USA to a list file

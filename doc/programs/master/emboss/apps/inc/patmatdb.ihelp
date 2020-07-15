@@ -12,7 +12,7 @@
                                   search is case-independent, so 'AAA' matches
                                   'aaa'. (Any string of at least 2
                                   characters)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.patmatdb] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -43,6 +43,8 @@
    -rdesshow3          boolean    Show description in the report
    -rscoreshow3        boolean    Show the score in the report
    -rusashow3          boolean    Show the full USA in the report
+   -rmaxall3           integer    Maximum total hits to report
+   -rmaxseq3           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts

@@ -83,13 +83,13 @@ Command line arguments
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
-  [-outfile]           report     File for output of MAR/SAR recognition
-                                  signature (MRS) regions. This contains
-                                  details of the MRS in normal GFF format. The
-                                  MRS consists of two recognition sites, one
-                                  of 8 bp and one of 16 bp on either sense
-                                  strand of the genomic DNA, within 200 bp of
-                                  each other.
+  [-outfile]           report     [*.marscan] File for output of MAR/SAR
+                                  recognition signature (MRS) regions. This
+                                  contains details of the MRS in normal GFF
+                                  format. The MRS consists of two recognition
+                                  sites, one of 8 bp and one of 16 bp on
+                                  either sense strand of the genomic DNA,
+                                  within 200 bp of each other.
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -120,6 +120,8 @@ Command line arguments
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts

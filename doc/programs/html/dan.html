@@ -114,9 +114,10 @@ Created dan.ps
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tekt, tek, none, data, xterm, png)
-*  -outfile            report     If a plot is not being produced then data on
-                                  the melting point etc. in each window along
-                                  the sequence is output to the file.
+*  -outfile            report     [*.dan] If a plot is not being produced then
+                                  data on the melting point etc. in each
+                                  window along the sequence is output to the
+                                  file.
 
    Additional (Optional) qualifiers (* if not always prompted):
    -product            toggle     This prompts for percent formamide, percent
@@ -169,6 +170,7 @@ Created dan.ps
 
    "-graph" associated qualifiers
    -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
    -gtitle             string     Graph title
    -gsubtitle          string     Graph subtitle
    -gxtitle            string     Graph x axis title
@@ -185,6 +187,8 @@ Created dan.ps
    -rdesshow           boolean    Show description in the report
    -rscoreshow         boolean    Show the score in the report
    -rusashow           boolean    Show the full USA in the report
+   -rmaxall            integer    Maximum total hits to report
+   -rmaxseq            integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -264,7 +268,7 @@ Created dan.ps
 <td>-outfile</td>
 <td>If a plot is not being produced then data on the melting point etc. in each window along the sequence is output to the file.</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.dan</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -504,7 +508,7 @@ By default <b>dan</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: dan
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: dan
 #    -sequence tembl:paamir
 # Report_format: seqtable

@@ -78,7 +78,7 @@ Output report [100k_rat.patmatdb]: <b></b>
                                   search is case-independent, so 'AAA' matches
                                   'aaa'. (Any string of at least 2
                                   characters)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.patmatdb] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -109,6 +109,8 @@ Output report [100k_rat.patmatdb]: <b></b>
    -rdesshow3          boolean    Show description in the report
    -rscoreshow3        boolean    Show the score in the report
    -rusashow3          boolean    Show the full USA in the report
+   -rmaxall3           integer    Maximum total hits to report
+   -rmaxseq3           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -154,7 +156,7 @@ Output report [100k_rat.patmatdb]: <b></b>
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.patmatdb</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -298,10 +300,10 @@ By default <b>patmatdb</b> writes a 'dbmotif' report file.
 <pre>
 ########################################
 # Program: patmatdb
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: patmatdb
-#    -sequence tsw:*
-#    -motif st[ty]s
+#    -sequence "tsw:*"
+#    -motif "st[ty]s"
 # Report_format: dbmotif
 # Report_file: 100k_rat.patmatdb
 ########################################
@@ -368,6 +370,11 @@ LADLESTTSHISKR
 
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 3
+# Total_hitcount: 3
 #---------------------------------------
 </pre>
 </td></tr></table><p>

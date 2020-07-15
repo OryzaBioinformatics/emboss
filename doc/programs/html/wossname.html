@@ -124,9 +124,11 @@ matcher          Finds the best local alignments between two sequences
 seqmatchall      All-against-all comparison of a set of sequences
 supermatcher     Match large sequences against one or more other sequences
 water            Smith-Waterman local alignment
+wordfinder       Match large sequences against one or more other sequences
 wordmatch        Finds all exact matches of a given size between 2 sequences
 
 ALIGNMENT MULTIPLE
+edialign         Local multiple alignment of sequences
 emma             Multiple alignment program - interface to ClustalW program
 infoalign        Information on a multiple sequence alignment
 mse              Multiple Sequence Editor
@@ -159,6 +161,7 @@ cutseq           Removes a specified section from a sequence
 degapseq         Removes gap characters from sequences
 descseq          Alter the name or description of a sequence
 entret           Reads and writes (returns) flatfile entries
+extractalign     Extract regions from a sequence alignment
 extractfeat      Extract features from a sequence
 extractseq       Extract regions from a sequence
 listor           Write a list file of the logical OR of two sets of sequences
@@ -228,6 +231,22 @@ emnu             Simple menu of EMBOSS applications
 
 NUCLEIC 2D STRUCTURE
 einverted        Finds DNA inverted repeats
+vrnaalifold      RNA alignment folding
+vrnaalifoldpf    RNA alignment folding with partition
+vrnacofold       RNA cofolding
+vrnacofoldconc   RNA cofolding with concentrations
+vrnacofoldpf     RNA cofolding with partitioning
+vrnadistance     RNA distances
+vrnaduplex       RNA duplex calculation
+vrnaeval         RNA eval
+vrnaevalpair     RNA eval with cofold
+vrnafold         Calculate secondary structures of RNAs
+vrnafoldpf       Secondary structures of RNAs with partition
+vrnaheat         RNA melting
+vrnainverse      RNA sequences matching a structure
+vrnalfold        Calculate locally stable secondary structures of RNAs
+vrnaplot         Plot vrnafold output
+vrnasubopt       Calculate RNA suboptimals
 
 NUCLEIC CODON USAGE
 cai              CAI codon adaptation index
@@ -399,7 +418,7 @@ ffreqboot        Bootstrapped genetic frequencies algorithm
 fproml           Protein phylogeny by maximum likelihood
 fpromlk          Protein phylogeny by maximum likelihood
 fprotdist        Protein distance algorithm
-fprotpars        Protein pasimony algorithm
+fprotpars        Protein parsimony algorithm
 frestboot        Bootstrapped restriction sites algorithm
 frestdist        Distance matrix from restriction sites or fragments
 frestml          Restriction site maximum Likelihood method
@@ -604,6 +623,7 @@ eclique          Largest clique program
 econsense        Majority-rule and strict consensus tree
 econtml          Continuous character Maximum Likelihood method
 econtrast        Continuous character Contrasts
+edialign         Local multiple alignment of sequences
 ednacomp         DNA compatibility algorithm
 ednadist         Nucleic acid sequence Distance Matrix program
 ednainvar        Nucleic acid sequence Invariants method
@@ -648,6 +668,7 @@ eseqboot         Bootstrapped sequences algorithm
 esim4            Align an mRNA to a genomic DNA sequence
 est2genome       Align EST and genomic DNA sequences
 etandem          Looks for tandem repeats in a nucleotide sequence
+extractalign     Extract regions from a sequence alignment
 extractfeat      Extract features from a sequence
 extractseq       Extract regions from a sequence
 fclique          Largest clique program
@@ -682,7 +703,7 @@ fpenny           Penny algorithm, branch-and-bound
 fproml           Protein phylogeny by maximum likelihood
 fpromlk          Protein phylogeny by maximum likelihood
 fprotdist        Protein distance algorithm
-fprotpars        Protein pasimony algorithm
+fprotpars        Protein parsimony algorithm
 freak            Residue/base frequency table or plot
 frestboot        Bootstrapped restriction sites algorithm
 frestdist        Distance matrix from restriction sites or fragments
@@ -848,6 +869,7 @@ water            Smith-Waterman local alignment
 whichdb          Search all databases for an entry
 wobble           Wobble base plot
 wordcount        Counts words of a specified size in a DNA sequence
+wordfinder       Match large sequences against one or more other sequences
 wordmatch        Finds all exact matches of a given size between 2 sequences
 wossname         Finds programs by keywords in their one-line documentation
 yank             Reads a sequence range, appends the full USA to a list file
@@ -1195,111 +1217,111 @@ that the programs belong to or the word that is being searched for.
 <h3>Output files for usage example 5</h3>
 <p><h3>File: wossname.html</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
-<h2><a name="ACD">ACD</a></h2>
-<table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
-<tr>
-<td><a href="acdc.html">acdc</a></td>
-<td>ACD compiler</td>
-</tr>
+&lt;h2&gt;&lt;a name="ACD"&gt;ACD&lt;/a&gt;&lt;/h2&gt;
+&lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
+&lt;tr&gt;&lt;th&gt;Program name&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="acdc.html"&gt;acdc&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;ACD compiler&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="acdpretty.html">acdpretty</a></td>
-<td>ACD pretty printing utility</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="acdpretty.html"&gt;acdpretty&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;ACD pretty printing utility&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="acdtable.html">acdtable</a></td>
-<td>Creates an HTML table from an ACD file</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="acdtable.html"&gt;acdtable&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Creates an HTML table from an ACD file&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="acdtrace.html">acdtrace</a></td>
-<td>ACD compiler on-screen trace</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="acdtrace.html"&gt;acdtrace&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;ACD compiler on-screen trace&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="acdvalid.html">acdvalid</a></td>
-<td>ACD file validation</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="acdvalid.html"&gt;acdvalid&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;ACD file validation&lt;/td&gt;
+&lt;/tr&gt;
 
-</table>
-<h2><a name="ALIGNMENT CONSENSUS">ALIGNMENT CONSENSUS</a></h2>
-<table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
-<tr>
-<td><a href="cons.html">cons</a></td>
-<td>Creates a consensus from multiple alignments</td>
-</tr>
+&lt;/table&gt;
+&lt;h2&gt;&lt;a name="ALIGNMENT CONSENSUS"&gt;ALIGNMENT CONSENSUS&lt;/a&gt;&lt;/h2&gt;
+&lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
+&lt;tr&gt;&lt;th&gt;Program name&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="cons.html"&gt;cons&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Creates a consensus from multiple alignments&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="megamerger.html">megamerger</a></td>
-<td>Merge two large overlapping nucleic acid sequences</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="megamerger.html"&gt;megamerger&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Merge two large overlapping nucleic acid sequences&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="merger.html">merger</a></td>
-<td>Merge two overlapping sequences</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="merger.html"&gt;merger&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Merge two overlapping sequences&lt;/td&gt;
+&lt;/tr&gt;
 
-</table>
-<h2><a name="ALIGNMENT DIFFERENCES">ALIGNMENT DIFFERENCES</a></h2>
-<table border cellpadding=4 bgcolor="#FFFFF0">
+&lt;/table&gt;
+&lt;h2&gt;&lt;a name="ALIGNMENT DIFFERENCES"&gt;ALIGNMENT DIFFERENCES&lt;/a&gt;&lt;/h2&gt;
+&lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-<tr><th>Program name</th><th>Description</th></tr>
-<tr>
-<td><a href="dbiblast.html">dbiblast</a></td>
-<td>Index a BLAST database</td>
-</tr>
+&lt;tr&gt;&lt;th&gt;Program name&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbiblast.html"&gt;dbiblast&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index a BLAST database&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="dbifasta.html">dbifasta</a></td>
-<td>Database indexing for fasta file databases</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbifasta.html"&gt;dbifasta&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Database indexing for fasta file databases&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="dbiflat.html">dbiflat</a></td>
-<td>Index a flat file database</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbiflat.html"&gt;dbiflat&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index a flat file database&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="dbigcg.html">dbigcg</a></td>
-<td>Index a GCG formatted database</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbigcg.html"&gt;dbigcg&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index a GCG formatted database&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="dbxfasta.html">dbxfasta</a></td>
-<td>Database b+tree indexing for fasta file databases</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbxfasta.html"&gt;dbxfasta&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Database b+tree indexing for fasta file databases&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="dbxflat.html">dbxflat</a></td>
-<td>Database b+tree indexing for flat file databases</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbxflat.html"&gt;dbxflat&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Database b+tree indexing for flat file databases&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="dbxgcg.html">dbxgcg</a></td>
-<td>Database b+tree indexing for GCG formatted databases</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbxgcg.html"&gt;dbxgcg&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Database b+tree indexing for GCG formatted databases&lt;/td&gt;
+&lt;/tr&gt;
 
-</table>
-<h2><a name="UTILS MISC">UTILS MISC</a></h2>
-<table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
-<tr>
-<td><a href="embossdata.html">embossdata</a></td>
-<td>Finds or fetches data files read by EMBOSS programs</td>
-</tr>
+&lt;/table&gt;
+&lt;h2&gt;&lt;a name="UTILS MISC"&gt;UTILS MISC&lt;/a&gt;&lt;/h2&gt;
+&lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
+&lt;tr&gt;&lt;th&gt;Program name&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="embossdata.html"&gt;embossdata&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Finds or fetches data files read by EMBOSS programs&lt;/td&gt;
+&lt;/tr&gt;
 
-<tr>
-<td><a href="embossversion.html">embossversion</a></td>
-<td>Writes the current EMBOSS version number</td>
-</tr>
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="embossversion.html"&gt;embossversion&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Writes the current EMBOSS version number&lt;/td&gt;
+&lt;/tr&gt;
 
-</table>
+&lt;/table&gt;
 </td></tr></table><p>
 
 

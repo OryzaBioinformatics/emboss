@@ -1,7 +1,7 @@
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
                                   format, or reference (input USA)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.patmatmotifs] Output report file name
 
    Additional (Optional) qualifiers:
    -full               boolean    [N] Provide full documentation for matching
@@ -41,6 +41,8 @@
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts

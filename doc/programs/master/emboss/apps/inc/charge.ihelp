@@ -7,7 +7,7 @@
 *  -outfile            outfile    [*.charge] Output file name
 
    Additional (Optional) qualifiers:
-   -window             integer    [5] Window (Integer 1 or more)
+   -window             integer    [5] Window length (Integer 1 or more)
 
    Advanced (Unprompted) qualifiers:
    -aadata             datafile   [Eamino.dat] Amino acids properties and
@@ -34,6 +34,7 @@
 
    "-graph" associated qualifiers
    -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
    -gtitle             string     Graph title
    -gsubtitle          string     Graph subtitle
    -gxtitle            string     Graph x axis title

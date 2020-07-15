@@ -79,7 +79,7 @@ Output report [hhtetra.qtan]: <b></b>
    -maxrepeat          integer    [600] Maximum repeat size (Any integer
                                   value)
    -threshold          integer    [20] Threshold score (Any integer value)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.equicktandem] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -113,6 +113,8 @@ Output report [hhtetra.qtan]: <b></b>
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    "-origfile" associated qualifiers
    -odirectory         string     Output directory
@@ -167,7 +169,7 @@ Output report [hhtetra.qtan]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.equicktandem</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -190,7 +192,7 @@ Output report [hhtetra.qtan]: <b></b>
 <td>-origfile</td>
 <td>Sanger Centre program quicktandem output file (optional)</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.equicktandem</td>
 </tr>
 
 </table>
@@ -317,7 +319,7 @@ By default <b>equicktandem</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: equicktandem
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: equicktandem
 #    -noorigfile
 #    -sequence tembl:hhtetra

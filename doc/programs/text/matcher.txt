@@ -62,7 +62,7 @@ Command line arguments
                                   reference (input USA)
   [-bsequence]         sequence   Sequence filename and optional format, or
                                   reference (input USA)
-  [-outfile]           align      Output alignment file name
+  [-outfile]           align      [*.matcher] Output alignment file name
 
    Additional (Optional) qualifiers:
    -datafile           matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -75,9 +75,9 @@ Command line arguments
    -alternatives       integer    [1] This sets the number of alternative
                                   matches output. By default only the highest
                                   scoring alignment is shown. A value of 2
-                                  gves you other reasonable alignments. In
+                                  gives you other reasonable alignments. In
                                   some cases, for example multidomain proteins
-                                  of cDNA and gemomic DNA comparisons, there
+                                  of cDNA and genomic DNA comparisons, there
                                   may be other interesting and significant
                                   alignments. (Integer 1 or more)
    -gapopen            integer    [14 for protein, 16 for nucleic] The gap
@@ -416,7 +416,7 @@ Output file format
 
 ########################################
 # Program: matcher
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: matcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -470,7 +470,7 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 
 ########################################
 # Program: matcher
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: matcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -626,6 +626,7 @@ See also
    seqmatchall  All-against-all comparison of a set of sequences
    supermatcher Match large sequences against one or more other sequences
    water        Smith-Waterman local alignment
+   wordfinder   Match large sequences against one or more other sequences
    wordmatch    Finds all exact matches of a given size between 2 sequences
 
    water will give a single best rigorous local alignment. It will use

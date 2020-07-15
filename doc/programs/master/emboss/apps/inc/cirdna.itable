@@ -111,49 +111,49 @@
 
 <tr>
 <td>-textheight</td>
-<td>Height of text. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Height of text. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
 <tr>
 <td>-textlength</td>
-<td>Length of text. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Length of text. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
 <tr>
 <td>-tickheight</td>
-<td>Height of ticks. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Height of ticks. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
 <tr>
 <td>-blockheight</td>
-<td>Height of blocks. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Height of blocks. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
 <tr>
 <td>-rangeheight</td>
-<td>Height of range ends. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Height of range ends. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
 <tr>
 <td>-gapgroup</td>
-<td>Space between groups. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Space between groups. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>
 
 <tr>
 <td>-postext</td>
-<td>Space between text and ticks, blocks, and ranges. Enter a number <1.0 or >1.0 to decrease or increase the size, respectively</td>
+<td>Space between text and ticks, blocks, and ranges. Enter a number &lt;1.0 or &gt;1.0 to decrease or increase the size, respectively</td>
 <td>Number 0.000 or more</td>
 <td>1.0</td>
 </tr>

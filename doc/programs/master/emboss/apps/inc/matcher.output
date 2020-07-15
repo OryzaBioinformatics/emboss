@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: matcher
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: matcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -63,7 +63,7 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 <pre>
 ########################################
 # Program: matcher
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: matcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human

@@ -24,7 +24,7 @@ Usage
 
    Here is a sample session with union
 
-   the file 'cds.list' contains a list of the regions making up the
+   The file 'cds.list' contains a list of the regions making up the
    coding sequence of 'embl:hsfau':
 
 
@@ -173,6 +173,7 @@ See also
    degapseq     Removes gap characters from sequences
    descseq      Alter the name or description of a sequence
    entret       Reads and writes (returns) flatfile entries
+   extractalign Extract regions from a sequence alignment
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
    listor       Write a list file of the logical OR of two sets of sequences

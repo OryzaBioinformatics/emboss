@@ -33,8 +33,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = x86_64-unknown-linux-gnu
-host_triplet = x86_64-unknown-linux-gnu
+build_triplet = x86_64-redhat-linux-gnu
+host_triplet = x86_64-redhat-linux-gnu
 subdir = doc/programs/html
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -61,17 +61,17 @@ pkgdata2DATA_INSTALL = $(INSTALL_DATA)
 DATA = $(pkgdata_DATA) $(pkgdata2_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 pkgdatadir = $(prefix)/share/$(PACKAGE)/doc/html/emboss/apps
-ACLOCAL = ${SHELL} /m4/emboss/emboss/missing --run aclocal-1.9
-AJAX_FIXED_ROOT = \"/m4/emboss/emboss/emboss\"
+ACLOCAL = ${SHELL} /m1/emboss/emboss/missing --run aclocal-1.9
+AJAX_FIXED_ROOT = \"/m1/emboss/emboss/emboss\"
 AMDEP_FALSE = #
 AMDEP_TRUE = 
 AMPNG_FALSE = #
 AMPNG_TRUE = 
-AMTAR = ${SHELL} /m4/emboss/emboss/missing --run tar
+AMTAR = ${SHELL} /m1/emboss/emboss/missing --run tar
 AR = ar
-AUTOCONF = ${SHELL} /m4/emboss/emboss/missing --run autoconf
-AUTOHEADER = ${SHELL} /m4/emboss/emboss/missing --run autoheader
-AUTOMAKE = ${SHELL} /m4/emboss/emboss/missing --run automake-1.9
+AUTOCONF = ${SHELL} /m1/emboss/emboss/missing --run autoconf
+AUTOHEADER = ${SHELL} /m1/emboss/emboss/missing --run autoheader
+AUTOMAKE = ${SHELL} /m1/emboss/emboss/missing --run automake-1.9
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -83,16 +83,16 @@ CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2 
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"EMBOSS\" -DVERSION=\"4.0.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DHAVE_DIRENT_H=1 -DSTDC_HEADERS=1 -DHAVE_UNISTD_H=1 -DGETPGRP_VOID=1 -DHAVE_STRFTIME=1 -DHAVE_UNISTD_H=1 -DHAVE_FORK=1 -DHAVE_VFORK=1 -DHAVE_WORKING_VFORK=1 -DHAVE_WORKING_FORK=1 -DHAVE_VPRINTF=1 -DHAVE_MEMMOVE=1 -DHAVE_LIBM=1 -DPLD_png=1 
+DEFS = -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"EMBOSS\" -DVERSION=\"4.1.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DHAVE_DIRENT_H=1 -DSTDC_HEADERS=1 -DHAVE_UNISTD_H=1 -DGETPGRP_VOID=1 -DHAVE_STRFTIME=1 -DHAVE_UNISTD_H=1 -DHAVE_FORK=1 -DHAVE_VFORK=1 -DHAVE_WORKING_VFORK=1 -DHAVE_WORKING_FORK=1 -DHAVE_VPRINTF=1 -DHAVE_MEMMOVE=1 -DHAVE_LIBM=1 -DPLD_png=1 
 DEPDIR = .deps
 ECHO = echo
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
 EGREP = grep -E
-EMBOSS_TOP = /m4/emboss/emboss
+EMBOSS_TOP = /m1/emboss/emboss
 EXEEXT = 
-F77 = g77
+F77 = f95
 FFLAGS = -g -O2
 HAVE_MEMMOVE = 
 HAVE_STRERROR = 
@@ -115,7 +115,7 @@ LIBS = -lm  -lgd -lpng -lz -lm
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /m4/emboss/emboss/missing --run makeinfo
+MAKEINFO = ${SHELL} /m1/emboss/emboss/missing --run makeinfo
 NEEDAJAX = 
 NEEDAJAX_FALSE = 
 NEEDAJAX_TRUE = #
@@ -137,19 +137,20 @@ POSIX_MALLOC_THRESHOLD = -DPOSIX_MALLOC_THRESHOLD=10
 PURIFY_FALSE = 
 PURIFY_TRUE = #
 RANLIB = ranlib
+SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = strip
-VERSION = 4.0.0
-XLIB =  -lX11 
+VERSION = 4.1.0
+XLIB =  -L/usr/lib64 -lX11 
 X_CFLAGS = 
 X_EXTRA_LIBS = 
-X_LIBS = 
+X_LIBS =  -L/usr/lib64
 X_PRE_LIBS =  -lSM -lICE
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
-ac_ct_F77 = g77
+ac_ct_F77 = f95
 ac_ct_RANLIB = ranlib
 ac_ct_STRIP = strip
 am__fastdepCC_FALSE = #
@@ -162,22 +163,22 @@ am__quote =
 am__tar = ${AMTAR} chof - "$$tardir"
 am__untar = ${AMTAR} xf -
 bindir = ${exec_prefix}/bin
-build = x86_64-unknown-linux-gnu
+build = x86_64-redhat-linux-gnu
 build_alias = 
 build_cpu = x86_64
 build_os = linux-gnu
-build_vendor = unknown
+build_vendor = redhat
 datadir = ${prefix}/share
 exec_prefix = ${prefix}
 havejavac = 
-host = x86_64-unknown-linux-gnu
+host = x86_64-redhat-linux-gnu
 host_alias = 
 host_cpu = x86_64
 host_os = linux-gnu
-host_vendor = unknown
+host_vendor = redhat
 includedir = ${prefix}/include
 infodir = ${prefix}/info
-install_sh = /m4/emboss/emboss/install-sh
+install_sh = /m1/emboss/emboss/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localstatedir = ${prefix}/var
@@ -190,7 +191,8 @@ sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 sysconfdir = ${prefix}/etc
 target_alias = 
-pkgdata_DATA = abiview.1.abiview.gif chaos.1.chaos.gif cirdna.1.cirdna.gif \
+pkgdata_DATA = abiview.1.abiview.gif banana.1.banana.gif \
+	chaos.1.chaos.gif cirdna.1.cirdna.gif \
 	cpgplot.1.cpgplot.gif dan.2.dan.gif \
 	dotmatcher.1.dotmatcher.gif dotpath.1.dotpath.gif \
 	dottup.1.dottup.gif emboss_icon.gif findkm.1.findkm.gif \
@@ -220,7 +222,7 @@ pkgdata_DATA = abiview.1.abiview.gif chaos.1.chaos.gif cirdna.1.cirdna.gif \
 	dbxgcg.html degapseq.html descseq.html \
 	diffseq.html digest.html display_group.html distmat.html \
 	dotmatcher.html dotpath.html dottup.html dreg.html \
-	einverted.html embossdata.html \
+	edialign.html einverted.html embossdata.html \
 	embossversion.html emma.html emowse.html \
 	entret.html enzyme_kinetics_group.html \
 	epestfind.html eprimer3.html equicktandem.html \
@@ -276,7 +278,8 @@ pkgdata2_DATA = lindna.html listor.html makenucseq.html makeprotseq.html \
 	showseq.html shuffleseq.html sigcleave.html silent.html \
 	sirna.html sixpack.html skipseq.html \
 	splitter.html stretcher.html stssearch.html supermatcher.html \
-	syco.html tcode.html template.html test_group.html \
+	syco.html tcode.html tcode.2.tcode.gif \
+	template.html test_group.html \
 	textsearch.html tfextract.html tfm.html tfscan.html \
 	tmap.html tranalign.html transeq.html trimest.html \
 	trimseq.html twofeat.html union.html \
@@ -284,7 +287,8 @@ pkgdata2_DATA = lindna.html listor.html makenucseq.html makeprotseq.html \
 	utils_database_indexing_group.html utils_misc_group.html \
 	vectorstrip.html \
 	water.html whichdb.html wobble.html \
-	wordcount.html wordmatch.html wossname.html yank.html \
+	wordcount.html wordfinder.html wordmatch.html \
+	wossname.html yank.html \
 	emboss_icon.jpg
 
 pkgdata2dir = $(prefix)/share/$(PACKAGE)/doc/html/emboss/apps

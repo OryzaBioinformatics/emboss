@@ -120,7 +120,7 @@ Output report [opsd_human.digest]: <b></b>
                                   (Lys-C); 3 (Arg-C); 4 (Asp-N); 5
                                   (V8-bicarb); 6 (V8-phosph); 7
                                   (Chymotrypsin); 8 (CNBr))
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.digest] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -172,6 +172,8 @@ Output report [opsd_human.digest]: <b></b>
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -216,7 +218,7 @@ Output report [opsd_human.digest]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.digest</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -439,7 +441,7 @@ By default <b>digest</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: digest
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: digest
 #    -seqall tsw:opsd_human
 # Report_format: seqtable
@@ -455,7 +457,7 @@ By default <b>digest</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Mol_Weight cterm  nterm  Sequence
+  Start     End Mol_Weight Cterm  Nterm  Sequence
      70     135   7129.319 R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIER
     178     231   6335.495 R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIIIFFCYGQLVFTVK
      22      69   5788.873 R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLR

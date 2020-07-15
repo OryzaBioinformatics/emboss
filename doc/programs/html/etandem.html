@@ -94,7 +94,7 @@ Output report [hhtetra.tan]: <b></b>
                                   higher)
    -maxrepeat          integer    [Same as -minrepeat] Maximum repeat size
                                   (Integer, same as -minrepeat or higher)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.etandem] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -131,6 +131,8 @@ Output report [hhtetra.tan]: <b></b>
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    "-origfile" associated qualifiers
    -odirectory         string     Output directory
@@ -186,7 +188,7 @@ Output report [hhtetra.tan]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.etandem</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -230,7 +232,7 @@ Output report [hhtetra.tan]: <b></b>
 <td>-origfile</td>
 <td>Sanger Centre program tandem output file (optional)</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.etandem</td>
 </tr>
 
 </table>
@@ -359,7 +361,7 @@ By default <b>etandem</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: etandem
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: etandem
 #    -noorigfile
 #    -sequence tembl:hhtetra

@@ -34,7 +34,7 @@ Command line arguments
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.helixturnhelix] Output report file name
 
    Additional (Optional) qualifiers:
    -mean               float      [238.71] Mean value (Number from 1.000 to
@@ -73,6 +73,8 @@ Command line arguments
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -227,7 +229,7 @@ Output file format
 
 ########################################
 # Program: helixturnhelix
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: helixturnhelix
 #    -sequence tsw:laci_ecoli
 # Report_format: motif
@@ -254,6 +256,11 @@ Maximum_score_at at "*"
 
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 1
 #---------------------------------------
 
 Data files

@@ -16,7 +16,7 @@
 <td>[-outseq]<br>(Parameter 2)</td>
 <td>Sequence set(s) filename and optional format (output USA)</td>
 <td>Writeable sequence(s)</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -41,7 +41,7 @@
 
 <tr>
 <td>-source</td>
-<td>Split using source features with /oridif qualifiers</td>
+<td>Split using source features with /origid qualifiers</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>

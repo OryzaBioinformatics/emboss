@@ -338,6 +338,7 @@ Known bugs
 See also
 
    Program name                        Description
+   edialign     Local multiple alignment of sequences
    emma         Multiple alignment program - interface to ClustalW program
    infoalign    Information on a multiple sequence alignment
    plotcon      Plot quality of conservation of a sequence alignment

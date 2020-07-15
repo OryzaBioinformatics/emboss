@@ -23,7 +23,7 @@
 <td>[-outseq]<br>(Parameter 3)</td>
 <td>(Aligned) nucleotide sequence set filename and optional format (output USA)</td>
 <td>Writeable sequences</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

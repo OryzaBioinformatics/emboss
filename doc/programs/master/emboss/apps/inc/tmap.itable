@@ -23,7 +23,7 @@
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.tmap</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

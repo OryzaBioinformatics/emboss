@@ -3,7 +3,7 @@
                                   reference (input USA)
   [-bsequence]         sequence   Sequence filename and optional format, or
                                   reference (input USA)
-  [-outfile]           align      Output alignment file name
+  [-outfile]           align      [*.stretcher] Output alignment file name
 
    Additional (Optional) qualifiers:
    -datafile           matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]

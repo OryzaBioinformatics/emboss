@@ -9,7 +9,7 @@ Database b+tree indexing for fasta file databases
 Basename for index files: <b>emrod</b>
 Resource name: <b>embl</b>
     simple : >ID
-     idacc : >ID ACC
+     idacc : >ID ACC or >ID (ACC)
      gcgid : >db:ID
   gcgidacc : >db:ID ACC
       dbid : >db ID

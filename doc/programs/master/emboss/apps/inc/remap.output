@@ -121,22 +121,26 @@ ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
                                                       HspAI
-                 TaqI                                 Hin6I 
-                 |  Bsc4I                             HinP1I
-                 |  |   HspAI                         | HhaI 
-                 |  |   Hin6I                         | Bsu6I
-                 |  |   HinP1I                        | BssKI 
-                 |  |   | HhaI        AciI            | | BsiSI
+                                                      Hin6I 
+                 TaqI                                 HinP1I
+                 |  BsiYI                             | HhaI 
+                 |  Bsc4I                             | Bsu6I
+                 |  |   HspAI                         | BssKI 
+                 |  |   Hin6I                         | Ksp632I
+                 |  |   HinP1I                        | | HpaII 
+                 |  |   | HhaI        AciI            | | BsiSI 
                  \  \   \ \           \               \ \ \
           gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
                    10        20        30        40        50        60        
           ----:----|----:----|----:----|----:----|----:----|----:----|
           ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
                  / /    / /             /             / /  ///
-                 | TaqI | HinP1I        AciI          | |  ||BssKI
-                 Bsc4I  | Hin6I                       | |  |BsiSI
-                        | HspAI                       | |  Bsu6I
-                        HhaI                          | HinP1I
+                 | TaqI | HinP1I        AciI          | |  ||BssKI 
+                 Bsc4I  | Hin6I                       | |  |BsiSI  
+                 BsiYI  | HspAI                       | |  |HpaII  
+                        HhaI                          | |  Ksp632I
+                                                      | |  Bsu6I
+                                                      | HinP1I
                                                       | Hin6I 
                                                       | HspAI
                                                       HhaI
@@ -146,12 +150,15 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
       AciI	    1	
      Bsc4I	    1	
      BsiSI	    1	
+     BsiYI	    1	
      BssKI	    1	
      Bsu6I	    1	
       HhaI	    2	
      Hin6I	    2	
     HinP1I	    2	
+     HpaII	    1	
      HspAI	    2	
+   Ksp632I	    1	
       TaqI	    1	
 
 
@@ -168,8 +175,9 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 # Enzymes that do not cut
 
-AclI      BamHI     BceAI     Bse1I     BseYI     BshI      ClaI      EcoRI     
-EcoRII    Hin4I     HindII    HindIII   HpyCH4IV  KpnI      NotI      
+AclI      BamHI     BceAI     Bse1I     BseYI     BshI      BsrI      ClaI      
+EcoRI     EcoRII    HaeIII    Hin4I     HindII    HindIII   HpyCH4IV  KpnI      
+MaeII     NotI      
 
 
 # No. of cutting enzymes which do not match the

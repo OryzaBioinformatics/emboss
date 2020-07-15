@@ -46,9 +46,10 @@ sequence and this sequence.
 
 <p>
 
-The reference sequence can be either the calculated consensus sequence (the default) or it can be one of
-the set of aligned sequences, specified by either the ordinal number of that sequence in the input file, or
-by its name. 
+The reference sequence can be either the calculated consensus sequence
+(the default) or it can be one of the set of aligned sequences,
+specified by either the ordinal number of that sequence in the input
+file, or by its name.
 
 <p>
 
@@ -397,7 +398,7 @@ Output file [globins.infoalign]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.infoalign</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -973,17 +974,39 @@ of more space or TAB characters:
 <p>
 
 <UL>
-<LI> The USA (Uniform Sequence Address) that EMBOSS can use to read in the sequence.
+<LI> The USA (Uniform Sequence Address) that EMBOSS can use to read in
+the sequence.
+
 <LI> Name - name of the sequence.
+
 <LI> SeqLen - length of the sequence when all gap characters are removed.
-<LI> AlignLen - length of the sequence including internal gap characters i.e. gaps at the start or the end are not included.
-<LI> Gaps - number of gaps e.g. 'AAA---AAA' is 1 gap (and 3 gap characters long (see GapLen)).
-<LI> GapLen - total number of internal gap characters, see the 3 gap characters above. This is the sum total of all of the internal gap characters in this sequence.
-<LI> Ident - number of characters that are identical to the specified reference sequence (uppercase 'A' is identical to lowercase 'a').
-<LI> Similar - number of characters which are non-identical - which score > 0 in the comparison matrix when compared to the reference sequence, but which are not identical.
-<LI> Different - number of characters which score <= 0 in the comparison matrix when compared to the reference sequence.
-<LI> %Change - a simple measure of the percentage change as compared to the reference sequence: (AlignLen - Ident) * 100 / AlignLen
-<LI> Description - the description annotation of teh sequence (if any).
+
+<LI> AlignLen - length of the sequence including internal gap
+characters i.e. gaps at the start or the end are not included.
+
+<LI> Gaps - number of gaps e.g. 'AAA---AAA' is 1 gap (and 3 gap
+characters long (see GapLen)).
+
+<LI> GapLen - total number of internal gap characters, see the 3 gap
+characters above. This is the sum total of all of the internal gap
+characters in this sequence.
+
+<LI> Ident - number of characters that are identical to the specified
+reference sequence (uppercase 'A' is identical to lowercase 'a').
+
+<LI> Similar - number of characters which are non-identical - which
+score > 0 in the comparison matrix when compared to the reference
+sequence, but which are not identical.
+
+<LI> Different - number of characters which score <= 0 in the
+comparison matrix when compared to the reference sequence.
+
+<LI> %Change - a simple measure of the percentage change as compared
+to the reference sequence: (AlignLen - Ident) * 100 / AlignLen
+
+<LI> Description - the description annotation of the sequence (if
+any).
+
 </UL>
 
 <p>
@@ -1103,6 +1126,11 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr>
+<td><a href="edialign.html">edialign</a></td>
+<td>Local multiple alignment of sequences</td>
+</tr>
+
 <tr>
 <td><a href="emma.html">emma</a></td>
 <td>Multiple alignment program - interface to ClustalW program</td>

@@ -111,6 +111,7 @@ Command line arguments
 
    "-graph" associated qualifiers
    -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
    -gtitle             string     Graph title
    -gsubtitle          string     Graph subtitle
    -gxtitle            string     Graph x axis title
@@ -120,6 +121,7 @@ Command line arguments
 
    "-xygraph" associated qualifiers
    -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
    -gtitle             string     Graph title
    -gsubtitle          string     Graph subtitle
    -gxtitle            string     Graph x axis title

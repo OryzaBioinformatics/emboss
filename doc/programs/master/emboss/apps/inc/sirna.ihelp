@@ -1,21 +1,21 @@
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
-  [-outfile]           report     The output is a table of the forward and
-                                  reverse parts of the 21 base siRNA duplex.
-                                  Both the forward and reverse sequences are
-                                  written 5' to 3', ready to be ordered. The
-                                  last two bases have been replaced by 'dTdT'.
-                                  The starting position of the 23 base region
-                                  and the %GC content is also given. If you
-                                  wish to see the complete 23 base sequence,
-                                  then either look at the sequence in the
-                                  other output file, or use the qualifier
-                                  '-context' which will display the 23 bases
-                                  of the forward sequence in this report
-                                  withthe first two bases in brackets. These
-                                  first two bases do not form part of the
-                                  siRNA probe to be ordered.
+  [-outfile]           report     [*.sirna] The output is a table of the
+                                  forward and reverse parts of the 21 base
+                                  siRNA duplex. Both the forward and reverse
+                                  sequences are written 5' to 3', ready to be
+                                  ordered. The last two bases have been
+                                  replaced by 'dTdT'. The starting position of
+                                  the 23 base region and the %GC content is
+                                  also given. If you wish to see the complete
+                                  23 base sequence, then either look at the
+                                  sequence in the other output file, or use
+                                  the qualifier '-context' which will display
+                                  the 23 bases of the forward sequence in this
+                                  report withthe first two bases in brackets.
+                                  These first two bases do not form part of
+                                  the siRNA probe to be ordered.
   [-outseq]            seqoutall  [<sequence>.<format>] This is a file of the
                                   sequences of the 23 base regions that the
                                   siRNAs are selected from. You may use it to
@@ -90,6 +90,8 @@
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    "-outseq" associated qualifiers
    -osformat3          string     Output seq format

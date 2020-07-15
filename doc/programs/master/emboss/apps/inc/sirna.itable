@@ -16,14 +16,14 @@
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>The output is a table of the forward and reverse parts of the 21 base siRNA duplex. Both the forward and reverse sequences are written 5' to 3', ready to be ordered. The last two bases have been replaced by 'dTdT'. The starting position of the 23 base region and the %GC content is also given. If you wish to see the complete 23 base sequence, then either look at the sequence in the other output file, or use the qualifier '-context' which will display the 23 bases of the forward sequence in this report withthe first two bases in brackets. These first two bases do not form part of the siRNA probe to be ordered.</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.sirna</td>
 </tr>
 
 <tr>
 <td>[-outseq]<br>(Parameter 3)</td>
 <td>This is a file of the sequences of the 23 base regions that the siRNAs are selected from. You may use it to do searches of mRNA databases (e.g. REFSEQ) to confirm that the probes are unique to the gene you wish to use it on.</td>
 <td>Writeable sequence(s)</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

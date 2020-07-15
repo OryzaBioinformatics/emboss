@@ -9,7 +9,7 @@
    -finishresiduenumber integer    [1] Last residue in chain for which torsion
                                   angles should be calculated (1 = last
                                   residue) (Any integer value)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.psiphi] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -24,6 +24,8 @@
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts

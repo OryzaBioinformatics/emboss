@@ -97,7 +97,7 @@
 '-nohead -notype -noid -noquery -noall'
 to get only the comment output, you can specify
 '-only -comment'</td>
-<td>Boolean value Yes/No</td>
+<td>Toggle value Yes/No</td>
 <td>No</td>
 </tr>
 

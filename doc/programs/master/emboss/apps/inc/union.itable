@@ -16,7 +16,7 @@
 <td>[-outseq]<br>(Parameter 2)</td>
 <td>Sequence filename and optional format (output USA)</td>
 <td>Writeable sequence</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -29,7 +29,7 @@
 <td>-overlapfile</td>
 <td>Sequence overlaps output file (optional)</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.union</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

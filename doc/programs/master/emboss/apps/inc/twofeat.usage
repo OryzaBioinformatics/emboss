@@ -20,7 +20,7 @@ Output report [hsfau.twofeat]: <b></b>
 <p>
 <b>Example 2</b>
 <p>
-The -twoout option makes the output report give the pairs of features found. The ouput report format type has been changed to display the full original pairs of faetures in GFF format. 
+The -twoout option makes the output report give the pairs of features found. The output report format type has been changed to display the full original pairs of features in GFF format. 
 <p>
 
 <p>

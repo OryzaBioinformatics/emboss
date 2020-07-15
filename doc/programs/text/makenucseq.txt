@@ -14,8 +14,6 @@ Description
 
 Algorithm
 
-   **************** EDIT HERE ****************
-
 Usage
 
    Here is a sample session with makenucseq
@@ -226,52 +224,52 @@ ttatggggtgccaggtttagcctcttgttacatagtgacg
 
 >EMBOSS_001
 gggcgtctgggcgccgtcacggtcggccgctacctcgacccggcgttctccgtcaacttc
-gcgcggcagggcttcatctgactgctgttcggcgtgcgcgaa
+gcgcggcagggcttcatctgactgctgttcggcgtgcgcg
 >EMBOSS_002
 gacgccggcgcgaccgagcggcaccgcttcgtccgaggaggcggcggcttcaccctcgtg
-gccttcgacgacagcaccctggaagagaaggactacccgggc
+gccttcgacgacagcaccctggaagagaaggactacccgg
 >EMBOSS_003
 cgcgccttcgccgccggtggcctgcactggggggttctgaccgagggcaggatcggccgc
-aggggcccggtgctgatcgtcgcccaccacctgaccctgctg
+aggggcccggtgctgatcgtcgcccaccacctgaccctgc
 >EMBOSS_004
 ctgcagaaggacttaatgcacaccctgttcaagcggggtaaacccgagctgggcatcctg
-ttcggccagcgcgtgccggccttgtcgaccggctacggcctg
+ttcggccagcgcgtgccggccttgtcgaccggctacggcc
 >EMBOSS_005
 ttcctctcctacctgcgctacctgaacgtgccagaagagtccagcggcgaacgcagcgcc
-ggcaccgacctgcgctcccccttcctgcggctgtgaggtgag
+ggcaccgacctgcgctcccccttcctgcggctgtgaggtg
 >EMBOSS_006
 gccgacgcgtgcgaccataccgaccgcctggacatccgcagcaccatgttccccctgcgc
-gagctcatccgcgcggaggcgatcatctacgacgagggcgtc
+gagctcatccgcgcggaggcgatcatctacgacgagggcg
 >EMBOSS_007
 ccgcacctgcgcctgctgaccgtgaacgccattccggccaattggatcacctcgtgcctg
-ctggtgggcatcaagggcgggaccgaggccggcttcctggtc
+ctggtgggcatcaagggcgggaccgaggccggcttcctgg
 >EMBOSS_008
 ggcggcctggcgcctcgctatcgtgccaactgcatcttcgcgctgctgcggcggccgctg
-gacctgccggatgcggaggtcgccgagagtgacccggttggg
+gacctgccggatgcggaggtcgccgagagtgacccggttg
 >EMBOSS_009
 aagggcccgctgctctcagggaacgtcacgcgcgcgtacgtcggcgcggaagccgccgcg
-gttgtggccctgtcgctgctgcgggactatgccgtagagacg
+gttgtggccctgtcgctgctgcgggactatgccgtagaga
 >EMBOSS_010
 gtcgacggtaaggccgtggcgacctcgttccaggccctggaacttgagggctccacctcg
-ggaaaagagctgatgatccgttacgtaagcggccgccgtcag
+ggaaaagagctgatgatccgttacgtaagcggccgccgtc
 >EMBOSS_011
 cggcgcgcggcactcccggtctcgttcgccccgcggaactggcacctgtggacgatccgc
-caagtcgagaagtaaggccacgccctcacgggccgcaagatc
+caagtcgagaagtaaggccacgccctcacgggccgcaaga
 >EMBOSS_012
 tatcaggcccagctcgagcaacaccatccgtgcagctgactcggccgtaattggcagcat
-ctttcgatcttggccccgaagggtaagcgcttgctggcggtg
+ctttcgatcttggccccgaagggtaagcgcttgctggcgg
 >EMBOSS_013
 ctgatctacacccatgcccagaccctagtgggcccgcacaaggcgcaccaacgttgaact
-ggctgagaccagtgggaaccgaaacgctacgggggcctcctg
+ggctgagaccagtgggaaccgaaacgctacgggggcctcc
 >EMBOSS_014
 gccatggccaccaacgaagatggctgcgccatccgcagcctccagcaggacgcgggcgag
-acggaccaaccgctgcacggcgacgtgatgaacattttcgtc
+acggaccaaccgctgcacggcgacgtgatgaacattttcg
 >EMBOSS_015
 cgccagagctcgcgcggcgaggcgacccagggcgcgctgcagtggggacaggtcaacgcg
-ccgctggacttcgcgagcaacctgcagatgctcattgagctg
+ccgctggacttcgcgagcaacctgcagatgctcattgagc
 >EMBOSS_016
 ctgggcgcgtcgctggagggcgaccacggcgtggcgcagaaagctaatgccagtgatggt
-gtcgatacccgactgcctgcgatgtgggccgacaagccgatg
+gtcgatacccgactgcctgcgatgtgggccgacaagccga
 >EMBOSS_017
 ctcggcttcagccccacccctgcgagcctggacgtgggcgctaagttcggcctctcgggc
 
@@ -280,59 +278,57 @@ ctcggcttcagccccacccctgcgagcctggacgtgggcgctaagttcggcctctcgggc
 
 >EMBOSS_084
 ctgcgccacctgcgcggggaaaacggcatcgccacgatgtcggagatcggtgagtacgcg
-agcaagcggggcatggaagccgaggccttcctgagcacactg
+agcaagcggggcatggaagccgaggccttcctgagcacac
 >EMBOSS_085
 cactactacatccgcctgctgctgcaggccaccatcttcctggtcagccgcacgcgcacc
-ggcgtattgattatctgtcgctttgagccggtgtttaagacc
+ggcgtattgattatctgtcgctttgagccggtgtttaaga
 >EMBOSS_086
 actgccgagatcaagcagtacggtgcgccgccggcaccgggtgacgccctcggcgaccgc
-gactgccgcggcgccgtgggtctgctgagccgccaatccgtc
+gactgccgcggcgccgtgggtctgctgagccgccaatccg
 >EMBOSS_087
 cggaggaacaccagcgacatctatgaatggttcctgcagctggccaccgtgtcgctgatc
-gccgaggagctcatcaacttccgtaccggccagaatgcccgc
+gccgaggagctcatcaacttccgtaccggccagaatgccc
 >EMBOSS_088
 gggatcctggacgaagcggccgccttctcgaaggagaacagaagctactatccggacggc
-ctgtacacccacgtgtacaagcgcaacgagcaatggcggaac
+ctgtacacccacgtgtacaagcgcaacgagcaatggcgga
 >EMBOSS_089
 gcgctgctgcgcgcccgctcgaaatgggatcgctacgagaacatcgccaagtacctgatg
-aaggaggaggcagacgccgaccaggaacaggtcaccctcctg
+aaggaggaggcagacgccgaccaggaacaggtcaccctcc
 >EMBOSS_090
 ccgatcgacggctacggtaccaacctgtacgccccgatgccgcatctgggcaggagcgac
-cccccgcgcgccctcgggcccccaattcaacagatcgctcgc
+cccccgcgcgccctcgggcccccaattcaacagatcgctc
 >EMBOSS_091
 gcgaaccactcgaacgttctggtgatggcgcataccaattacaaccgcgacgccggccgt
-atcccctaccaaccgagtcgacacaccggcgaggccggcgat
+atcccctaccaaccgagtcgacacaccggcgaggccggcg
 >EMBOSS_092
 tccatcgagaaggccatcccgccggtccgtatcaaggggctggccggccgcccgtgcctc
-ctaggccgggcgagcctagcgaccatcgcctatgacgccagc
+ctaggccgggcgagcctagcgaccatcgcctatgacgcca
 >EMBOSS_093
 attctgcccgacgaagacctctacgagatccgcggcttcatgcacaaggccgggcatgcg
-gacccgggcgacgaacatatcaccgtgccgctcaggcaccgg
+gacccgggcgacgaacatatcaccgtgccgctcaggcacc
 >EMBOSS_094
 cgcgtctacccgcgtcaggacgcgctgaccgccgtcctggtgaaccgccttgacaatttc
-ctgaccctgggcaaccagatgctggagctcaacgtccaattc
+ctgaccctgggcaaccagatgctggagctcaacgtccaat
 >EMBOSS_095
 gacctgatggagcatttcagctcgtacctgtccctggccggcggcctcttaggcataaag
-cgcaccgccccgctatcccgtatcgggacggccctggatagc
+cgcaccgccccgctatcccgtatcgggacggccctggata
 >EMBOSS_096
 tgactggtcagctacggccgcttcctgctcatcgccccgctgggtctgcggacggagttc
-gaacagctgtccctgggcggcgagccgggcccggccgaccgc
+gaacagctgtccctgggcggcgagccgggcccggccgacc
 >EMBOSS_097
 gcccatcggggtcgctgcgtgaatccgtgcgttggagcgcggcgcgcctgcgaaaacctg
-ccgctgtcgccggcggtgctgctggaggtggtccgcagcgaa
+ccgctgtcgccggcggtgctgctggaggtggtccgcagcg
 >EMBOSS_098
 cgcgcccctatggaacgcctgttcgcggcgttcgcgatcgccatcctggggatcatggtg
-ttcgccatgctggacatcagcatcgaagagcgtttcccgctg
+ttcgccatgctggacatcagcatcgaagagcgtttcccgc
 >EMBOSS_099
 gcgaagtgccgcaccttcgtgggcagctacacgattcagagtttggacacccgggagacg
-aagcagaccgtcatcgatgaggagaccaagaccaaattgacc
+aagcagaccgtcatcgatgaggagaccaagaccaaattga
 >EMBOSS_100
 ctcggccggcaactgcggcgcgaaccgatgccgccctacgcggccctgcgttagatggac
-ctcgcccccgcccgcgaccgagtcgcgctcgacacggtcgcg
+ctcgcccccgcccgcgaccgagtcgcgctcgacacggtcg
 
 Data files
-
-   **************** EDIT HERE ****************
 
 Notes
 
@@ -367,6 +363,7 @@ See also
    degapseq     Removes gap characters from sequences
    descseq      Alter the name or description of a sequence
    entret       Reads and writes (returns) flatfile entries
+   extractalign Extract regions from a sequence alignment
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
    listor       Write a list file of the logical OR of two sets of sequences
@@ -391,7 +388,8 @@ See also
 
 Author(s)
 
-   **************** EDIT HERE ****************
+   This application was contributed by Henrikki Almusa, Medicel,
+   Helsinki, Finland
 
 History
 

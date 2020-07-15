@@ -57,7 +57,7 @@ Description
    queries and external applications.
 
    See the full specification of USA syntax at:
-   http://emboss.sourceforge.net/doc/themes/UniformSequenceAddress.html 
+   http://emboss.sourceforge.net/docs/themes/UniformSequenceAddress.html 
 
    The basic USA syntax is one of:
      * "file"
@@ -233,7 +233,7 @@ Description
 
    N.B This behaviour changed in EMBOSS version 1.7.0. (31 Oct 2000)
    Previously, EMBOSS programs that were asked to write multiple
-   sequences in a single format whould ignore the requested output file
+   sequences in a single format would ignore the requested output file
    name and would write each sequence into a separate file whose name was
    constructed from the sequence name and the name of the format. This
    resulted in ouput to files whose names could not be reliably
@@ -1028,6 +1028,7 @@ See also
    degapseq     Removes gap characters from sequences
    descseq      Alter the name or description of a sequence
    entret       Reads and writes (returns) flatfile entries
+   extractalign Extract regions from a sequence alignment
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
    listor       Write a list file of the logical OR of two sets of sequences

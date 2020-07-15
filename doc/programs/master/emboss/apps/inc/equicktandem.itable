@@ -30,7 +30,7 @@
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.equicktandem</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -53,7 +53,7 @@
 <td>-origfile</td>
 <td>Sanger Centre program quicktandem output file (optional)</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.equicktandem</td>
 </tr>
 
 </table>

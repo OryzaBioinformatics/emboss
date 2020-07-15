@@ -648,7 +648,7 @@ References
     3. Myers, EW and Miller, W (1988) Optimal alignments in linear space.
        Comput. Applic. Biosci. 4:11-17
     4. Smith, TE and Waterman, MS (1981) Identification of common
-       molecular subseqeunces. J. Mol. Biol. 147:195-197
+       molecular subsequences. J. Mol. Biol. 147:195-197
 
 Warnings
 
@@ -660,7 +660,7 @@ Diagnostic Error Messages
 
 Exit status
 
-   It return 0 unless an error occurs.
+   It returns 0 unless an error occurs.
 
 Known bugs
 

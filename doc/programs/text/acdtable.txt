@@ -45,7 +45,7 @@ Usage
 
 
  -minlen
- Minimum length
+ Minimum length of antigenic region
  Integer from 1 to 50
  6
 
@@ -55,7 +55,7 @@ Usage
 (Parameter 2)
  Output report file name
  Report output file
-
+ <*>.antigenic
 
 
 

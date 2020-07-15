@@ -58,31 +58,31 @@ Rich Roberts                                                    May 31 2001
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-&lt;6&gt;S.A. Thompson
-&lt;7&gt;N
-&lt;8&gt;Morgan, R.D., Unpublished observations.
-Morgan, R.D., Xu, Q., US Patent Office, 2001.
-Xu, Q., Morgan, R., Blaser, M., Unpublished observations.
-
-&lt;1&gt;HspAI
-&lt;2&gt;HhaI,AspLEI,BcaI,BspLAI,BstHHI,CcoP95I,CfoI,Csp1470I,FnuDIII,Hin6I,Hin7I,HinGUI,HinP1I,HinS1I,HinS2I,Hpy99III,HpyF10I,HsoI,MnnIV,NgoEII,SciNI
-&lt;3&gt;G^CGC
-&lt;4&gt;
-&lt;5&gt;Haemophilus species A
-&lt;6&gt;S.K. Degtyarev
-&lt;7&gt;I
-&lt;8&gt;Rechkunova, N.I., Prikhod'ko, E.A., Shevchenko, A.V., Degtyarev, S.K., Unpublished observations.
-
-&lt;1&gt;KpnI
-&lt;2&gt;Acc65I,AhaB8I,Asp718I,BspJ106I,Eco149I,Esp19I,KpnK14I,MvsI,MvsAI,MvsBI,MvsCI,MvsDI,MvsEI,NmiI,Sau10I,SthI,SthAI,SthBI,SthCI,SthDI,SthEI,SthFI,SthGI,SthHI,SthJI,SthKI,SthLI,SthMI,SthNI,Uba76I,Uba85I,Uba86I,Uba87I,Uba1201I
-&lt;3&gt;GGTAC^C
-&lt;4&gt;4(6)
 &lt;5&gt;Klebsiella pneumoniae OK8
 &lt;6&gt;ATCC 49790
 &lt;7&gt;ABCDEFGHIJKLMNOQRSTU
 &lt;8&gt;Kiss, A., Finta, C., Venetianer, P., (1991) Nucleic Acids Res., vol. 19, pp. 3460.
 Smith, D.I., Blattner, F.R., Davies, J., (1976) Nucleic Acids Res., vol. 3, pp. 343-353.
 Tomassini, J., Roychoudhury, R., Wu, R., Roberts, R.J., (1978) Nucleic Acids Res., vol. 5, pp. 4055-4064.
+
+&lt;1&gt;Ksp632I
+&lt;2&gt;Bco5I,Bco116I,BcoKI,BcoSI,BcrAI,BseZI,BsrEI,Bst6I,Bst158I,Bsu6I,Eam1104I,EarI,TdeII,Uba1192I,Uba1276I,VpaKutEI,VpaKutFI,VpaO5I
+&lt;3&gt;CTCTTC(1/4)
+&lt;4&gt;
+&lt;5&gt;Kluyvera species 632
+&lt;6&gt;DSM 4196
+&lt;7&gt;M
+&lt;8&gt;Bolton, B.J., Schmitz, G.G., Jarsch, M., Comer, M.J., Kessler, C., (1988) Gene, vol. 66, pp. 31-43.
+Tsukahara, S., Yamakawa, H., Takai, K., Takaku, H., (1994) Nucleosides &amp; Nucleotides, vol. 13, pp. 1617-1626.
+
+&lt;1&gt;MaeII
+&lt;2&gt;HpyCH4IV,HpyF13III,HpyF35II,HpyF74II,TaiI,TscI,Tsp49I,TspIDSI,TspWAM8AI,TtmI
+&lt;3&gt;A^CGT
+&lt;4&gt;
+&lt;5&gt;Methanococcus aeolicus PL-15/H
+&lt;6&gt;K.O. Stetter
+&lt;7&gt;M
+&lt;8&gt;Schmid, K., Thomm, M., Laminet, A., Laue, F.G., Kessler, C., Stetter, K.O., Schmitt, R., (1984) Nucleic Acids Res., vol. 12, pp. 2619-2628.
 
 &lt;1&gt;NotI
 &lt;2&gt;CciNI,CspBI,MchAI

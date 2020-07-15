@@ -24,7 +24,7 @@ Thus if you want to count codon frequencies, you should enter 3 here.</td>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>This is the results file.</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.compseq</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

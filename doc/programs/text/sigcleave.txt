@@ -63,7 +63,7 @@ Command line arguments
    -minweight          float      [3.5] Minimum scoring weight value for the
                                   predicted cleavage site (Number from 0.000
                                   to 100.000)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.sigcleave] Output report file name
 
    Additional (Optional) qualifiers:
    -prokaryote         boolean    Specifies the sequence is prokaryotic and
@@ -97,6 +97,8 @@ Command line arguments
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -232,7 +234,7 @@ Output file format
 
 ########################################
 # Program: sigcleave
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: sigcleave
 #    -sequence tsw:ach2_drome
 # Report_format: motif
@@ -304,6 +306,11 @@ Output file format
 
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 9
 #---------------------------------------
 
 Data files

@@ -77,7 +77,7 @@ trim off any dangling gap characters from the ends .
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>trimseq tembl:hsfau hsfau.seq -window 1 -percent 100 </b>
+% <b>trimseq untrimmed.seq trim1.seq -window 1 -percent 100 </b>
 Trim ambiguous bits off the ends of sequences
 
 </pre></td></tr></table><p>
@@ -90,12 +90,12 @@ Trim ambiguous bits off the ends of sequences
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>trimseq tembl:hsfau hsfau.seq -window 5 -percent 40 </b>
+% <b>trimseq untrimmed.seq trim2.seq -window 5 -percent 40 </b>
 Trim ambiguous bits off the ends of sequences
 
 </pre></td></tr></table><p>
 <p>
-<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 3</b>
 <p>
@@ -103,12 +103,12 @@ Trim ambiguous bits off the ends of sequences
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>trimseq tembl:hsfau hsfau.seq -window 20 -percent 80 </b>
+% <b>trimseq untrimmed.seq trim3.seq -window 5 -percent 50 </b>
 Trim ambiguous bits off the ends of sequences
 
 </pre></td></tr></table><p>
 <p>
-<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 4</b>
 <p>
@@ -116,12 +116,12 @@ Trim ambiguous bits off the ends of sequences
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>trimseq tembl:hsfau hsfau.seq -window 20 -percent 10 </b>
+% <b>trimseq untrimmed.seq trim4.seq -window 5 -percent 50 -strict </b>
 Trim ambiguous bits off the ends of sequences
 
 </pre></td></tr></table><p>
 <p>
-<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
 <p>
 <b>Example 5</b>
 <p>
@@ -129,38 +129,12 @@ Trim ambiguous bits off the ends of sequences
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>trimseq tembl:hsfau hsfau.seq -window 20 -percent 50 -strict </b>
+% <b>trimseq untrimmed.seq trim5.seq -window 5 -percent 50 -strict -noright </b>
 Trim ambiguous bits off the ends of sequences
 
 </pre></td></tr></table><p>
 <p>
-<p>
-<p>
-<b>Example 6</b>
-<p>
-
-<p>
-<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
-
-% <b>trimseq tembl:hsfau hsfau.seq -window 1 -percent 100 -star </b>
-Trim ambiguous bits off the ends of sequences
-
-</pre></td></tr></table><p>
-<p>
-<p>
-<p>
-<b>Example 7</b>
-<p>
-
-<p>
-<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
-
-% <b>trimseq tembl:hsfau hsfau.seq -window 20 -percent 50 -noright </b>
-Trim ambiguous bits off the ends of sequences
-
-</pre></td></tr></table><p>
-<p>
-<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
 
 <H2>
     Command line arguments
@@ -266,7 +240,7 @@ Trim ambiguous bits off the ends of sequences
 <td>[-outseq]<br>(Parameter 2)</td>
 <td>Sequence set(s) filename and optional format (output USA)</td>
 <td>Writeable sequence(s)</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -335,87 +309,19 @@ Normal sequence.
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-
-'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
-<p>
-<p><h3>Database entry: tembl:hsfau</h3>
+<p><h3>File: untrimmed.seq</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HSFAU      standard; RNA; HUM; 518 BP.
-XX
-AC   X65923;
-XX
-SV   X65923.1
-XX
-DT   13-MAY-1992 (Rel. 31, Created)
-DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
-XX
-DE   H.sapiens fau mRNA
-XX
-KW   fau gene.
-XX
-OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
-XX
-RN   [1]
-RP   1-518
-RA   Michiels L.M.R.;
-RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
-RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
-RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
-XX
-RN   [2]
-RP   1-518
-RX   MEDLINE; 93368957.
-RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
-RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
-RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
-RL   Oncogene 8:2537-2546(1993).
-XX
-DR   SWISS-PROT; P35544; UBIM_HUMAN.
-DR   SWISS-PROT; Q05472; RS30_HUMAN.
-XX
-FH   Key             Location/Qualifiers
-FH
-FT   source          1..518
-FT                   /chromosome="11q"
-FT                   /db_xref="taxon:9606"
-FT                   /organism="Homo sapiens"
-FT                   /tissue_type="placenta"
-FT                   /clone_lib="cDNA"
-FT                   /clone="pUIA 631"
-FT                   /map="13"
-FT   misc_feature    57..278
-FT                   /note="ubiquitin like part"
-FT   CDS             57..458
-FT                   /db_xref="SWISS-PROT:P35544"
-FT                   /db_xref="SWISS-PROT:Q05472"
-FT                   /gene="fau"
-FT                   /protein_id="CAA46716.1"
-FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
-FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
-FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
-FT   misc_feature    98..102
-FT                   /note="nucleolar localization signal"
-FT   misc_feature    279..458
-FT                   /note="S30 part"
-FT   polyA_signal    484..489
-FT   polyA_site      509
-XX
-SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
-     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
-     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
-     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
-     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
-     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
-     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
-     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
-     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
-     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
-//
-</pre>
+&gt;myseq
+...ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca.gnntcynnnnnn</pre>
 </td></tr></table><p>
 
 <H2>
@@ -428,11 +334,11 @@ Normal sequence file.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hsfau.seq</h3>
+<p><h3>File: trim1.seq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;HSFAU X65923.1 H.sapiens fau mRNA
-ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+&gt;myseq
+ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
 agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
 cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
 tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
@@ -440,7 +346,79 @@ tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
 gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
 agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
 cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
-tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+tctaataaaaaagccacttagttca-gnntcy
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: trim2.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;myseq
+ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca-g
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: trim3.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;myseq
+ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca-gnntcy
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: trim4.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;myseq
+ctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagctc
+tttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcccag
+atcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctg
+gcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgact
+accctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggcccgtgct
+ggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagaca
+ggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccaccttt
+ggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctctaa
+taaaaaagccacttagttca-gnntc
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: trim5.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;myseq
+ctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagctc
+tttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcccag
+atcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctg
+gcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgact
+accctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggcccgtgct
+ggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagaca
+ggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccaccttt
+ggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctctaa
+taaaaaagccacttagttca-gnntcynnnnnn
 </pre>
 </td></tr></table><p>
 
@@ -525,6 +503,11 @@ None noted.
 <tr>
 <td><a href="entret.html">entret</a></td>
 <td>Reads and writes (returns) flatfile entries</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
 </tr>
 
 <tr>

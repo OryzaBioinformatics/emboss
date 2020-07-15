@@ -58,7 +58,7 @@
 <td>-outfile</td>
 <td>If a plot is not being produced then data on the melting point etc. in each window along the sequence is output to the file.</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.dan</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

@@ -88,6 +88,7 @@ tswnew           P    OK  OK  OK  Swissnew as 3 files in native format with EMB
 L CD-ROM index
 twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
 dex
+genbanksrs       N    OK  -   -   Genbank IDs
 qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
 qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
 qanflat          N    OK  OK  OK  EMBL flatfiles
@@ -200,6 +201,8 @@ Displays information on the currently available databases
 index
 
  twp P OK   OK   OK   EMBL new in native format with EMBL CD-ROM index
+
+ genbanksrs N OK   -    -    Genbank IDs
 
  qanfasta N OK   OK   OK   FASTA file EMBL rodents
 
@@ -332,6 +335,7 @@ tswnew           P    OK  OK  OK  Swissnew as 3 files in native format with EMB
 L CD-ROM index
 twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
 dex
+genbanksrs       N    OK  -   -   Genbank IDs
 qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
 qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
 qanflat          N    OK  OK  OK  EMBL flatfiles
@@ -391,6 +395,7 @@ tpir
 tsw
 tswnew
 twp
+genbanksrs
 qanfasta
 qanfastaall
 qanflat
@@ -450,6 +455,7 @@ tpir             P
 tsw              P
 tswnew           P
 twp              P
+genbanksrs       N
 qanfasta         N
 qanfastaall      N
 qanflat          N
@@ -485,102 +491,112 @@ tgenbank         N
 % showdb -full 
 Displays information on the currently available databases
 
-# Name           Type  ID  Qry All Method    Fields         Defined  Release  C
-omment
-# ============== ==== ==  === === ========= ============== ======= ======= ====
-===
-qapblast         P    OK  OK  OK  blast     -              special         BLAS
-T swissnew
-qapblastall      P    OK  OK  OK  blast     sv,des         special         BLAS
-T swissnew, all fields indexed
-qapblastsplit    P    OK  OK  OK  blast     -              special         BLAS
-T swissnew split in 5 files
-qapblastsplitexc P    OK  OK  OK  blast     -              special         BLAS
-T swissnew split in 5 files, not file 02
-qapblastsplitinc P    OK  OK  OK  blast     -              special         BLAS
-T swissnew split in 5 files, only file 02
-qapfasta         P    OK  OK  OK  emblcd    -              special         FAST
-A file swissnew entries
-qapflat          P    OK  OK  OK  emblcd    -              special         Swis
-snew flatfiles
-qapflatall       P    OK  OK  OK  emblcd    sv,des,org,key special         Swis
-snew flatfiles, all fields indexed
-qapflatexc       P    OK  OK  OK  emblcd    -              special         Swis
-snew flatfiles, no updated sequence file
-qapflatinc       P    OK  OK  OK  emblcd    -              special         Swis
-snew flatfiles, only updated sequence file
-qapir            P    OK  OK  OK  gcg       -              special         PIR
-qapirall         P    OK  OK  OK  gcg       des,org,key    special         PIR
-qapirinc         P    OK  OK  OK  gcg       -              special         PIR
-qapxfasta        P    OK  OK  OK  emboss    -              special         FAST
-A file swissnew entries
-qapxflat         P    OK  OK  OK  emboss    -              special         Swis
-snew flatfiles
-qapxflatexc      P    OK  OK  OK  emboss    -              special         Swis
-snew flatfiles, no updated sequence file
-qapxflatinc      P    OK  OK  OK  emboss    -              special         Swis
-snew flatfiles, only updated sequence file
-qaxpir           P    OK  OK  OK  embossgcg -              special         PIR
-qaxpirall        P    OK  OK  OK  embossgcg des,org,key    special         PIR
-qaxpirinc        P    OK  OK  OK  embossgcg -              special         PIR
-tpir             P    OK  OK  OK  gcg       des,org,key    special         PIR
-using NBRF access for 4 files
-tsw              P    OK  OK  OK  emblcd    sv,des,org,key special 36      Swis
-sprot native format with EMBL CD-ROM index
-tswnew           P    OK  OK  OK  emblcd    sv,des,org,key special 37      Swis
-snew as 3 files in native format with EMBL CD-ROM index
-twp              P    OK  OK  OK  emblcd    des            special 16      EMBL
- new in native format with EMBL CD-ROM index
-qanfasta         N    OK  OK  OK  emblcd    -              special         FAST
-A file EMBL rodents
-qanfastaall      N    OK  OK  OK  emblcd    sv,des         special         FAST
-A file EMBL rodents, all fields indexed
-qanflat          N    OK  OK  OK  emblcd    -              special         EMBL
- flatfiles
-qangcg           N    OK  OK  OK  gcg       -              special         GCG
-format EMBL
-qangcgall        N    OK  OK  OK  gcg       sv,des,org,key special         GCG
-format EMBL
-qangcgexc        N    OK  OK  OK  gcg       -              special         GCG
-format EMBL without prokaryotes
-qangcginc        N    OK  OK  OK  gcg       -              special         GCG
-format EMBL only prokaryotes
-qanxfasta        N    OK  OK  OK  emboss    -              special         FAST
-A file EMBL rodents
-qanxfastaall     N    OK  OK  OK  emboss    sv,des         special         FAST
-A file EMBL rodents, all fields indexed
-qanxflat         N    OK  OK  OK  emboss    -              special         EMBL
- flatfiles
-qanxflatall      N    OK  OK  OK  emboss    des,org,key    special         EMBL
- flatfiles, all fields indexed
-qanxgcg          N    OK  OK  OK  embossgcg -              special         GCG
-format EMBL
-qanxgcgall       N    OK  OK  OK  embossgcg sv,des,org,key special         GCG
-format EMBL
-qanxgcgexc       N    OK  OK  OK  embossgcg -              special         GCG
-format EMBL without prokaryotes
-qanxgcginc       N    OK  OK  OK  embossgcg -              special         GCG
-format EMBL only prokaryotes
-qapirexc         N    OK  OK  OK  gcg       -              special         PIR
-qasrswww         N    OK  -   -   srswww    sv,des,org,key special         Remo
-te SRS web server
-qawfasta         N    OK  OK  OK  emblcd    -              special         FAST
-A file wormpep entries
-qawxfasta        N    OK  OK  OK  emboss    -              special         FAST
-A file wormpep entries
-qaxpirexc        N    OK  OK  OK  embossgcg -              special         PIR
-tembl            N    OK  OK  OK  emblcd    sv,des,org,key special 57      EMBL
- in native format with EMBL CD-ROM index
-temblall         N    -   -   OK  direct    sv,des,org,key special 57      EMBL
- in native format with EMBL CD-ROM index
-temblrest        N    -   -   OK  direct    sv,des,org,key special 57      EMBL
- in native format with EMBL CD-ROM index
-temblvrt         N    -   -   OK  direct    sv,des,org,key special 57      EMBL
- in native format with EMBL CD-ROM index
-tgb              N    OK  -   -   srswww    sv,des,org,key special         Genb
-ank IDs
-tgenbank         N    OK  OK  OK  emblcd    sv,des,org,key special 01      GenB
-ank in native format with EMBL CD-ROM index
+# Name           Type  ID  Qry All Method    Fields            Defined  Release
+  Comment
+# ============== ==== ==  === === ========= ================= ======= ======= =
+======
+qapblast         P    OK  OK  OK  blast     -                 special         B
+LAST swissnew
+qapblastall      P    OK  OK  OK  blast     sv,des            special         B
+LAST swissnew, all fields indexed
+qapblastsplit    P    OK  OK  OK  blast     -                 special         B
+LAST swissnew split in 5 files
+qapblastsplitexc P    OK  OK  OK  blast     -                 special         B
+LAST swissnew split in 5 files, not file 02
+qapblastsplitinc P    OK  OK  OK  blast     -                 special         B
+LAST swissnew split in 5 files, only file 02
+qapfasta         P    OK  OK  OK  emblcd    -                 special         F
+ASTA file swissnew entries
+qapflat          P    OK  OK  OK  emblcd    -                 special         S
+wissnew flatfiles
+qapflatall       P    OK  OK  OK  emblcd    sv,des,org,key    special         S
+wissnew flatfiles, all fields indexed
+qapflatexc       P    OK  OK  OK  emblcd    -                 special         S
+wissnew flatfiles, no updated sequence file
+qapflatinc       P    OK  OK  OK  emblcd    -                 special         S
+wissnew flatfiles, only updated sequence file
+qapir            P    OK  OK  OK  gcg       -                 special         P
+IR
+qapirall         P    OK  OK  OK  gcg       des,org,key       special         P
+IR
+qapirinc         P    OK  OK  OK  gcg       -                 special         P
+IR
+qapxfasta        P    OK  OK  OK  emboss    -                 special         F
+ASTA file swissnew entries
+qapxflat         P    OK  OK  OK  emboss    -                 special         S
+wissnew flatfiles
+qapxflatexc      P    OK  OK  OK  emboss    -                 special         S
+wissnew flatfiles, no updated sequence file
+qapxflatinc      P    OK  OK  OK  emboss    -                 special         S
+wissnew flatfiles, only updated sequence file
+qaxpir           P    OK  OK  OK  embossgcg -                 special         P
+IR
+qaxpirall        P    OK  OK  OK  embossgcg des,org,key       special         P
+IR
+qaxpirinc        P    OK  OK  OK  embossgcg -                 special         P
+IR
+tpir             P    OK  OK  OK  gcg       des,org,key       special         P
+IR using NBRF access for 4 files
+tsw              P    OK  OK  OK  emblcd    sv,des,org,key    special 36      S
+wissprot native format with EMBL CD-ROM index
+tswnew           P    OK  OK  OK  emblcd    sv,des,org,key    special 37      S
+wissnew as 3 files in native format with EMBL CD-ROM index
+twp              P    OK  OK  OK  emblcd    des               special 16      E
+MBL new in native format with EMBL CD-ROM index
+genbanksrs       N    OK  -   -   srswww    gi,sv,des,org,key global          G
+enbank IDs
+qanfasta         N    OK  OK  OK  emblcd    -                 special         F
+ASTA file EMBL rodents
+qanfastaall      N    OK  OK  OK  emblcd    sv,des            special         F
+ASTA file EMBL rodents, all fields indexed
+qanflat          N    OK  OK  OK  emblcd    -                 special         E
+MBL flatfiles
+qangcg           N    OK  OK  OK  gcg       -                 special         G
+CG format EMBL
+qangcgall        N    OK  OK  OK  gcg       sv,des,org,key    special         G
+CG format EMBL
+qangcgexc        N    OK  OK  OK  gcg       -                 special         G
+CG format EMBL without prokaryotes
+qangcginc        N    OK  OK  OK  gcg       -                 special         G
+CG format EMBL only prokaryotes
+qanxfasta        N    OK  OK  OK  emboss    -                 special         F
+ASTA file EMBL rodents
+qanxfastaall     N    OK  OK  OK  emboss    sv,des            special         F
+ASTA file EMBL rodents, all fields indexed
+qanxflat         N    OK  OK  OK  emboss    -                 special         E
+MBL flatfiles
+qanxflatall      N    OK  OK  OK  emboss    des,org,key       special         E
+MBL flatfiles, all fields indexed
+qanxgcg          N    OK  OK  OK  embossgcg -                 special         G
+CG format EMBL
+qanxgcgall       N    OK  OK  OK  embossgcg sv,des,org,key    special         G
+CG format EMBL
+qanxgcgexc       N    OK  OK  OK  embossgcg -                 special         G
+CG format EMBL without prokaryotes
+qanxgcginc       N    OK  OK  OK  embossgcg -                 special         G
+CG format EMBL only prokaryotes
+qapirexc         N    OK  OK  OK  gcg       -                 special         P
+IR
+qasrswww         N    OK  -   -   srswww    sv,des,org,key    special         R
+emote SRS web server
+qawfasta         N    OK  OK  OK  emblcd    -                 special         F
+ASTA file wormpep entries
+qawxfasta        N    OK  OK  OK  emboss    -                 special         F
+ASTA file wormpep entries
+qaxpirexc        N    OK  OK  OK  embossgcg -                 special         P
+IR
+tembl            N    OK  OK  OK  emblcd    sv,des,org,key    special 57      E
+MBL in native format with EMBL CD-ROM index
+temblall         N    -   -   OK  direct    sv,des,org,key    special 57      E
+MBL in native format with EMBL CD-ROM index
+temblrest        N    -   -   OK  direct    sv,des,org,key    special 57      E
+MBL in native format with EMBL CD-ROM index
+temblvrt         N    -   -   OK  direct    sv,des,org,key    special 57      E
+MBL in native format with EMBL CD-ROM index
+tgb              N    OK  -   -   srswww    sv,des,org,key    special         G
+enbank IDs
+tgenbank         N    OK  OK  OK  emblcd    sv,des,org,key    special 01      G
+enBank in native format with EMBL CD-ROM index
 
 Command line arguments
 
@@ -604,7 +620,7 @@ Command line arguments
    -outfile            outfile    [stdout] Output file name
 
    Advanced (Unprompted) qualifiers:
-   -only               boolean    [N] This is a way of shortening the command
+   -only               toggle     [N] This is a way of shortening the command
                                   line if you only want a few standard columns
                                   to be displayed. Instead of specifying:
                                   '-nohead -notype -noid -noquery -noall'
@@ -683,6 +699,7 @@ tswnew           P    OK  OK  OK  Swissnew as 3 files in native format with EMB
 L CD-ROM index
 twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
 dex
+genbanksrs       N    OK  -   -   Genbank IDs
 qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
 qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
 qanflat          N    OK  OK  OK  EMBL flatfiles

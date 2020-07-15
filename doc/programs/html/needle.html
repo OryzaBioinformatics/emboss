@@ -97,7 +97,7 @@ The two methods are basically equivalent.
 
 In a Needleman-Wunsch global alignment, the entire length of each 
 sequence is aligned. This can be thought of as an overlap between the 
-two sequences (one can be completely within the otehr, or their ends can 
+two sequences (one can be completely within the other, or their ends can 
 overlap).
 
 <p>
@@ -160,7 +160,7 @@ Output alignment [hba_human.needle]: <b></b>
                                   very low) and using the gap extension
                                   penalty to control gap scoring. (Floating
                                   point number from 0.0 to 10.0)
-  [-outfile]           align      Output alignment file name
+  [-outfile]           align      [*.needle] Output alignment file name
 
    Additional (Optional) qualifiers:
    -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -277,7 +277,7 @@ Output alignment [hba_human.needle]: <b></b>
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output alignment file name</td>
 <td>Alignment output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.needle</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -590,7 +590,7 @@ for further information on alignment formats.
 <pre>
 ########################################
 # Program: needle
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: needle
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human

@@ -2,7 +2,7 @@
   [-sequence]          seqset     Sequence set filename and optional format,
                                   or reference (input USA)
    -wordsize           integer    [4] Word size (Integer 2 or more)
-  [-outfile]           align      Output alignment file name
+  [-outfile]           align      [*.seqmatchall] Output alignment file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)

@@ -6,9 +6,9 @@
 <pre>
 ########################################
 # Program: seqmatchall
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: seqmatchall
-#    -sequence tembl:eclac*
+#    -sequence "tembl:eclac*"
 #    -wordsize 15
 # Align_format: match
 # Report_file: eclac.seqmatchall

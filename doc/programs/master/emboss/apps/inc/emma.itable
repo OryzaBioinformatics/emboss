@@ -16,14 +16,14 @@
 <td>[-outseq]<br>(Parameter 2)</td>
 <td>Sequence set filename and optional format (output USA)</td>
 <td>Writeable sequences</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr>
 <td>[-dendoutfile]<br>(Parameter 3)</td>
 <td>Dendrogram (tree file) from clustalw output file</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.emma</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -108,7 +108,7 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 <tr>
 <td>-[no]slow</td>
 <td>A distance is calculated between every pair of sequences and these are used to construct the dendrogram which guides the final multiple alignment. The scores are calculated from separate pairwise alignments. These can be calculated using 2 methods: dynamic programming (slow but accurate) or by the method of Wilbur and Lipman (extremely fast but approximate).
-The slow-accurate method is fine for short sequences but will be VERY SLOW for many (e.g. >100) long (e.g. >1000 residue) sequences.</td>
+The slow-accurate method is fine for short sequences but will be VERY SLOW for many (e.g. &gt;100) long (e.g. &gt;1000 residue) sequences.</td>
 <td>Toggle value Yes/No</td>
 <td>Yes</td>
 </tr>
@@ -129,7 +129,7 @@ The slow-accurate method is fine for short sequences but will be VERY SLOW for m
 
 <tr>
 <td>-ktup</td>
-<td>This is the size of exactly matching fragment that is used. INCREASE for speed (max= 2 for proteins; 4 for DNA), DECREASE for sensitivity. For longer sequences (e.g. >1000 residues) you may need to increase the default.</td>
+<td>This is the size of exactly matching fragment that is used. INCREASE for speed (max= 2 for proteins; 4 for DNA), DECREASE for sensitivity. For longer sequences (e.g. &gt;1000 residues) you may need to increase the default.</td>
 <td>integer from 0 to 4</td>
 <td>1 for protein, 2 for nucleic</td>
 </tr>

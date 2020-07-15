@@ -10,7 +10,8 @@ pkgdata_DATA =  aaindexextract.txt abiview.txt acdc.txt acdlog.txt \
 	dbifasta.txt dbiflat.txt dbigcg.txt dbxfasta.txt dbxflat.txt \
 	dbxgcg.txt degapseq.txt descseq.txt \
 	diffseq.txt digest.txt distmat.txt dotmatcher.txt dotpath.txt \
-	dottup.txt dreg.txt einverted.txt embossdata.txt embossversion.txt \
+	dottup.txt dreg.txt \
+        edialign.txt einverted.txt embossdata.txt embossversion.txt \
 	emma.txt emowse.txt entret.txt epestfind.txt eprimer3.txt \
 	equicktandem.txt est2genome.txt etandem.txt extractfeat.txt \
 	extractseq.txt findkm.txt freak.txt \
@@ -44,7 +45,8 @@ pkgdata2_DATA = jembossctl.txt lindna.txt listor.txt \
 	tranalign.txt transeq.txt trimest.txt trimseq.txt \
 	twofeat.txt union.txt vectorstrip.txt \
 	water.txt whichdb.txt wobble.txt \
-	wordcount.txt wordmatch.txt wossname.txt yank.txt
+	wordcount.txt wordfinder.txt wordmatch.txt \
+	wossname.txt yank.txt
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)/doc/programs/text
 pkgdata2dir=$(prefix)/share/$(PACKAGE)/doc/programs/text

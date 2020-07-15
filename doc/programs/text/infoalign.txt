@@ -779,7 +779,7 @@ tosidase (EC 3.2.1.23).
        comparison matrix when compared to the reference sequence.
      * %Change - a simple measure of the percentage change as compared to
        the reference sequence: (AlignLen - Ident) * 100 / AlignLen
-     * Description - the description annotation of teh sequence (if any).
+     * Description - the description annotation of the sequence (if any).
 
    If qualifiers to inhibit various columns of information are used, then
    the remaining columns of information are output in the same order as
@@ -857,6 +857,7 @@ Known bugs
 See also
 
    Program name                        Description
+   edialign     Local multiple alignment of sequences
    emma         Multiple alignment program - interface to ClustalW program
    infoseq      Displays some simple information about sequences
    plotcon      Plot quality of conservation of a sequence alignment

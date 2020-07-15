@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: restrict
 #    -sequence tembl:hsfau
 # Report_format: table
@@ -86,6 +86,11 @@
 
 #---------------------------------------
 #---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 54
+#---------------------------------------
 </pre>
 </td></tr></table><p>
 
@@ -96,7 +101,7 @@
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: restrict
 #    -fragments
 #    -sequence tembl:hsfau
@@ -148,11 +153,6 @@
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-#---------------------------------------
-#
-# Fragment lengths:
-#     79
-#     41
 #     39
 #     33
 #     29
@@ -199,6 +199,11 @@
 #     1
 #
 #---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 54
+#---------------------------------------
 </pre>
 </td></tr></table><p>
 
@@ -209,7 +214,7 @@
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: restrict
 #    -solofragment
 #    -sequence tembl:hsfau
@@ -261,11 +266,6 @@
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-# [CCNNNNNNNGG]
-# 	15	36	77	95	99	196
-# 
-# BsrI:
-# [ACTGG]
 # 	70	151	297
 # 
 # BssKI:
@@ -311,6 +311,11 @@
 # [TCGA]
 # 	11	83	424
 #
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 54
 #---------------------------------------
 </pre>
 </td></tr></table><p>

@@ -31,7 +31,7 @@ To insert before the start use the position 0.</td>
 <td>[-outseq]<br>(Parameter 3)</td>
 <td>Sequence filename and optional format (output USA)</td>
 <td>Writeable sequence</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

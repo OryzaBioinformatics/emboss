@@ -44,14 +44,14 @@
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Sanger Centre program inverted output file</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.einverted</td>
 </tr>
 
 <tr>
 <td>[-outseq]<br>(Parameter 3)</td>
 <td>The sequence of the inverted repeat regions without gap characters.</td>
 <td>Writeable sequence</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

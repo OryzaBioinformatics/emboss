@@ -102,7 +102,7 @@ Output report [hsfau.twofeat]: <b></b>
 <p>
 <b>Example 2</b>
 <p>
-The -twoout option makes the output report give the pairs of features found. The ouput report format type has been changed to display the full original pairs of faetures in GFF format. 
+The -twoout option makes the output report give the pairs of features found. The output report format type has been changed to display the full original pairs of features in GFF format. 
 <p>
 
 <p>
@@ -160,7 +160,7 @@ Output report [hsfau.twofeat]: <b></b>
    -maxrange           integer    [0] If this is less than or equal to
                                   'minrange', then no min or max range is
                                   specified (Any integer value)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.twofeat] Output report file name
 
    Additional (Optional) qualifiers (* if not always prompted):
    -asource            string     [*] By default any feature source in the
@@ -375,6 +375,8 @@ Output report [hsfau.twofeat]: <b></b>
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -448,7 +450,7 @@ If you wish to allow more than one type, separate their names with the character
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.twofeat</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -751,7 +753,7 @@ outputs a report format file. The default format is <b>table</b>
 <pre>
 ########################################
 # Program: twofeat
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: twofeat
 #    [-sequence] tembl:hsfau
 #    -atype polyA_signal
@@ -772,6 +774,11 @@ outputs a report format file. The default format is <b>table</b>
     484     509   0.000    484    489    509    509
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 1
 #---------------------------------------
 </pre>
 </td></tr></table><p>

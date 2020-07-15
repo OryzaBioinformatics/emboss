@@ -85,7 +85,7 @@ Command line arguments
                                   reference (input USA)
   [-bsequence]         sequence   Sequence filename and optional format, or
                                   reference (input USA)
-  [-outfile]           align      Output alignment file name
+  [-outfile]           align      [*.merger] Output alignment file name
   [-outseq]            seqout     [.] Sequence filename and
                                   optional format (output USA)
 
@@ -466,7 +466,7 @@ Output file format
 
 ########################################
 # Program: merger
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: merger
 #    -asequence tembl:eclacy
 #    -bsequence tembl:eclaca

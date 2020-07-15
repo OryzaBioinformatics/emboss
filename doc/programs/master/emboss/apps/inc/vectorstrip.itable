@@ -58,14 +58,14 @@
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.vectorstrip</td>
 </tr>
 
 <tr>
 <td>[-outseq]<br>(Parameter 4)</td>
 <td>Sequence set(s) filename and optional format (output USA)</td>
 <td>Writeable sequence(s)</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -75,7 +75,10 @@
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-allsequences</td>
+<td>Show all sequences in output</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

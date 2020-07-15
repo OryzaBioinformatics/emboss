@@ -39,7 +39,7 @@ Command line arguments
                                   format, or reference (input USA)
    -enzymes            string     [all] Comma separated enzyme list (Any
                                   string is accepted)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.silent] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -74,6 +74,8 @@ Command line arguments
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -196,7 +198,7 @@ Output file format
 
 ########################################
 # Program: silent
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: silent
 #    -sequence tembl:hsfau
 #    -enzymes ecori,hindiii
@@ -225,6 +227,11 @@ Output file format
     272     267 Rev    HindIII    AAGCTT           268    A.A    Yes     A->T
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 1
 #---------------------------------------
 
 Data files

@@ -116,7 +116,9 @@ output sequence(s) [pbluescript.fasta]: <b>vector.fasta</b>
   [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
                                   filename and optional format (output USA)
 
-   Additional (Optional) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -allsequences       boolean    [N] Show all sequences in output
+
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
@@ -229,14 +231,14 @@ output sequence(s) [pbluescript.fasta]: <b>vector.fasta</b>
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.vectorstrip</td>
 </tr>
 
 <tr>
 <td>[-outseq]<br>(Parameter 4)</td>
 <td>Sequence set(s) filename and optional format (output USA)</td>
 <td>Writeable sequence(s)</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -246,7 +248,10 @@ output sequence(s) [pbluescript.fasta]: <b>vector.fasta</b>
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-allsequences</td>
+<td>Show all sequences in output</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -516,6 +521,11 @@ None.
 <tr>
 <td><a href="entret.html">entret</a></td>
 <td>Reads and writes (returns) flatfile entries</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
 </tr>
 
 <tr>

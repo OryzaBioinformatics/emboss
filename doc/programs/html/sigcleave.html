@@ -109,7 +109,7 @@ Output report [ach2_drome.sig]: <b></b>
    -minweight          float      [3.5] Minimum scoring weight value for the
                                   predicted cleavage site (Number from 0.000
                                   to 100.000)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.sigcleave] Output report file name
 
    Additional (Optional) qualifiers:
    -prokaryote         boolean    Specifies the sequence is prokaryotic and
@@ -143,6 +143,8 @@ Output report [ach2_drome.sig]: <b></b>
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -186,7 +188,7 @@ Output report [ach2_drome.sig]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.sigcleave</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -362,7 +364,7 @@ By default <b>sigcleave</b> writes a 'motif' report file.
 <pre>
 ########################################
 # Program: sigcleave
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: sigcleave
 #    -sequence tsw:ach2_drome
 # Report_format: motif
@@ -434,6 +436,11 @@ By default <b>sigcleave</b> writes a 'motif' report file.
 
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 9
 #---------------------------------------
 </pre>
 </td></tr></table><p>

@@ -1,8 +1,9 @@
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
-   -minlen             integer    [6] Minimum length (Integer from 1 to 50)
-  [-outfile]           report     Output report file name
+   -minlen             integer    [6] Minimum length of antigenic region
+                                  (Integer from 1 to 50)
+  [-outfile]           report     [*.antigenic] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -33,6 +34,8 @@
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts

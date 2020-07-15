@@ -65,7 +65,7 @@ parameter and thus very simple to use.
 % <b>antigenic </b>
 Finds antigenic sites in proteins
 Input protein sequence(s): <b>tsw:act1_fugru</b>
-Minimum length [6]: <b></b>
+Minimum length of antigenic region [6]: <b></b>
 Output report [act1_fugru.antigenic]: <b></b>
 
 </pre></td></tr></table><p>
@@ -83,7 +83,7 @@ By using the '-rformat gff' qualifier, a GFF file of the predicted regions can b
 % <b>antigenic -rformat gff </b>
 Finds antigenic sites in proteins
 Input protein sequence(s): <b>tsw:act1_fugru</b>
-Minimum length [6]: <b></b>
+Minimum length of antigenic region [6]: <b></b>
 Output report [act1_fugru.antigenic]: <b></b>
 
 </pre></td></tr></table><p>
@@ -108,8 +108,9 @@ IT IS DONE FOR YOU.
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
-   -minlen             integer    [6] Minimum length (Integer from 1 to 50)
-  [-outfile]           report     Output report file name
+   -minlen             integer    [6] Minimum length of antigenic region
+                                  (Integer from 1 to 50)
+  [-outfile]           report     [*.antigenic] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -140,6 +141,8 @@ IT IS DONE FOR YOU.
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -175,7 +178,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-minlen</td>
-<td>Minimum length</td>
+<td>Minimum length of antigenic region</td>
 <td>Integer from 1 to 50</td>
 <td>6</td>
 </tr>
@@ -184,7 +187,7 @@ IT IS DONE FOR YOU.
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.antigenic</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -320,7 +323,7 @@ By default <b>antigenic</b> writes a 'motif' report file.
 <pre>
 ########################################
 # Program: antigenic
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: antigenic
 #    -sequence tsw:act1_fugru
 # Report_format: motif

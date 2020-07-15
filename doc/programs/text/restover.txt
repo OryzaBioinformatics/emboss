@@ -67,7 +67,6 @@ Command line arguments
    -[no]limit          boolean    [Y] Limits reports to one isoschizomer
    -alphabetic         boolean    [N] Sort output alphabetically
    -fragments          boolean    [N] Show fragment lengths
-   -name               boolean    [N] Show sequence name
 
    Associated qualifiers:
 

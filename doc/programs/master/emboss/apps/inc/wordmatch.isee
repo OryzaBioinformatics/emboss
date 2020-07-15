@@ -21,4 +21,9 @@
 <td>Smith-Waterman local alignment</td>
 </tr>
 
+<tr>
+<td><a href="wordfinder.html">wordfinder</a></td>
+<td>Match large sequences against one or more other sequences</td>
+</tr>
+
 </table>

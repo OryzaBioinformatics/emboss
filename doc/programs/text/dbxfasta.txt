@@ -48,7 +48,7 @@ Database b+tree indexing for fasta file databases
 Basename for index files: emrod
 Resource name: embl
     simple : >ID
-     idacc : >ID ACC
+     idacc : >ID ACC or >ID (ACC)
      gcgid : >db:ID
   gcgidacc : >db:ID ACC
       dbid : >db ID
@@ -101,9 +101,9 @@ Command line arguments
                                   characters, matching regular expression
                                   /[A-z][A-z0-9_]+/)
    -idformat           menu       [idacc] ID line format (Values: simple
-                                  (>ID); idacc (>ID ACC); gcgid (>db:ID);
-                                  gcgidacc (>db:ID ACC); dbid (>db ID); ncbi
-                                  (| formats))
+                                  (>ID); idacc (>ID ACC or >ID (ACC)); gcgid
+                                  (>db:ID); gcgidacc (>db:ID ACC); dbid (>db
+                                  ID); ncbi (| formats))
    -directory          directory  [.] Database directory
    -filenames          string     [*.dat] Wildcard database filename (Any
                                   string is accepted)

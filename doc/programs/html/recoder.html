@@ -79,7 +79,7 @@ Output report [hsfau.recoder]: <b></b>
                                   format, or reference (input USA)
    -enzymes            string     [all] Comma separated enzyme list (Any
                                   string is accepted)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.recoder] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -113,6 +113,8 @@ Output report [hsfau.recoder]: <b></b>
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -157,7 +159,7 @@ Output report [hsfau.recoder]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.recoder</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -301,7 +303,7 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 <pre>
 ########################################
 # Program: recoder
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: recoder
 #    -sequence tembl:hsfau
 #    -enzymes EcoRII
@@ -363,6 +365,11 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
     297     293 Rev    EcoRII     CCWGG            295    P.P     A-&gt;C
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 34
 #---------------------------------------
 </pre>
 </td></tr></table><p>

@@ -37,7 +37,7 @@
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output alignment file name</td>
 <td>Alignment output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.needle</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

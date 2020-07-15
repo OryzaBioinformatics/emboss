@@ -346,21 +346,21 @@ output sequence(s) [hsfau.fasta]: <b></b>
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
-  [-outfile]           report     The output is a table of the forward and
-                                  reverse parts of the 21 base siRNA duplex.
-                                  Both the forward and reverse sequences are
-                                  written 5' to 3', ready to be ordered. The
-                                  last two bases have been replaced by 'dTdT'.
-                                  The starting position of the 23 base region
-                                  and the %GC content is also given. If you
-                                  wish to see the complete 23 base sequence,
-                                  then either look at the sequence in the
-                                  other output file, or use the qualifier
-                                  '-context' which will display the 23 bases
-                                  of the forward sequence in this report
-                                  withthe first two bases in brackets. These
-                                  first two bases do not form part of the
-                                  siRNA probe to be ordered.
+  [-outfile]           report     [*.sirna] The output is a table of the
+                                  forward and reverse parts of the 21 base
+                                  siRNA duplex. Both the forward and reverse
+                                  sequences are written 5' to 3', ready to be
+                                  ordered. The last two bases have been
+                                  replaced by 'dTdT'. The starting position of
+                                  the 23 base region and the %GC content is
+                                  also given. If you wish to see the complete
+                                  23 base sequence, then either look at the
+                                  sequence in the other output file, or use
+                                  the qualifier '-context' which will display
+                                  the 23 bases of the forward sequence in this
+                                  report withthe first two bases in brackets.
+                                  These first two bases do not form part of
+                                  the siRNA probe to be ordered.
   [-outseq]            seqoutall  [<sequence>.<format>] This is a file of the
                                   sequences of the 23 base regions that the
                                   siRNAs are selected from. You may use it to
@@ -435,6 +435,8 @@ output sequence(s) [hsfau.fasta]: <b></b>
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    "-outseq" associated qualifiers
    -osformat3          string     Output seq format
@@ -484,14 +486,14 @@ output sequence(s) [hsfau.fasta]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>The output is a table of the forward and reverse parts of the 21 base siRNA duplex. Both the forward and reverse sequences are written 5' to 3', ready to be ordered. The last two bases have been replaced by 'dTdT'. The starting position of the 23 base region and the %GC content is also given. If you wish to see the complete 23 base sequence, then either look at the sequence in the other output file, or use the qualifier '-context' which will display the 23 bases of the forward sequence in this report withthe first two bases in brackets. These first two bases do not form part of the siRNA probe to be ordered.</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.sirna</td>
 </tr>
 
 <tr>
 <td>[-outseq]<br>(Parameter 3)</td>
 <td>This is a file of the sequences of the 23 base regions that the siRNAs are selected from. You may use it to do searches of mRNA databases (e.g. REFSEQ) to confirm that the probes are unique to the gene you wish to use it on.</td>
 <td>Writeable sequence(s)</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -681,7 +683,7 @@ outputs a report format file. The default format is 'table'
 <pre>
 ########################################
 # Program: sirna
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: sirna
 #    -sequence tembl:hsfau
 # Report_format: table
@@ -733,11 +735,6 @@ outputs a report format file. The default format is 'table'
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-    252     274   5.000   55.0 AGUAGCAGGCCGCAUGCUUdTdT AAGCAUGCGGCCUGCUACUdTdT
-    274     296   5.000   45.0 GGUAAAGUUCAUGGUUCCCdTdT GGGAACCAUGAACUUUACCdTdT
-    307     329   5.000   45.0 AAAGUGAGAGGUCAGACUCdTdT GAGUCUGACCUCUCACUUUdTdT
-    316     338   5.000   55.0 GGUCAGACUCCUAAGGUGGdTdT CCACCUUAGGAGUCUGACCdTdT
-    350     372   5.000   45.0 AGAAGAAGAAGACAGGUCGdTdT CGACCUGUCUUCUUCUUCUdTdT
     353     375   5.000   55.0 AGAAGAAGACAGGUCGGGCdTdT GCCCGACCUGUCUUCUUCUdTdT
     360     382   5.000   65.0 GACAGGUCGGGCUAAGCGGdTdT CCGCUUAGCCCGACCUGUCdTdT
     374     396   5.000   55.0 AGCGGCGGAUGCAGUACAAdTdT UUGUACUGCAUCCGCCGCUdTdT
@@ -783,6 +780,11 @@ outputs a report format file. The default format is 'table'
     486     508   2.000   35.0 AAAAAGCCACUUAGUUCAGdTdT CUGAACUAAGUGGCUUUUUdTdT
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 85
 #---------------------------------------
 </pre>
 </td></tr></table><p>
@@ -904,7 +906,7 @@ taaaaaagccacttagttcagtc
 <pre>
 ########################################
 # Program: sirna
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: sirna
 #    -context
 #    -sequence tembl:hsfau
@@ -956,11 +958,6 @@ taaaaaagccacttagttcagtc
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-    252     274   5.000   55.0 (GA)AGUAGCAGGCCGCAUGCUUdTdT AAGCAUGCGGCCUGCUACUdTdT
-    274     296   5.000   45.0 (GA)GGUAAAGUUCAUGGUUCCCdTdT GGGAACCAUGAACUUUACCdTdT
-    307     329   5.000   45.0 (GA)AAAGUGAGAGGUCAGACUCdTdT GAGUCUGACCUCUCACUUUdTdT
-    316     338   5.000   55.0 (GA)GGUCAGACUCCUAAGGUGGdTdT CCACCUUAGGAGUCUGACCdTdT
-    350     372   5.000   45.0 (GA)AGAAGAAGAAGACAGGUCGdTdT CGACCUGUCUUCUUCUUCUdTdT
     353     375   5.000   55.0 (GA)AGAAGAAGACAGGUCGGGCdTdT GCCCGACCUGUCUUCUUCUdTdT
     360     382   5.000   65.0 (AA)GACAGGUCGGGCUAAGCGGdTdT CCGCUUAGCCCGACCUGUCdTdT
     374     396   5.000   55.0 (UA)AGCGGCGGAUGCAGUACAAdTdT UUGUACUGCAUCCGCCGCUdTdT
@@ -1006,6 +1003,11 @@ taaaaaagccacttagttcagtc
     486     508   2.000   35.0 (UA)AAAAAGCCACUUAGUUCAGdTdT CUGAACUAAGUGGCUUUUUdTdT
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 85
 #---------------------------------------
 </pre>
 </td></tr></table><p>

@@ -30,7 +30,7 @@
 <td>[-outfile]<br>(Parameter 4)</td>
 <td>Whitehead primer3_core program output file</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.primersearch</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

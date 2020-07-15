@@ -33,7 +33,7 @@
    -maxrange           integer    [0] If this is less than or equal to
                                   'minrange', then no min or max range is
                                   specified (Any integer value)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.twofeat] Output report file name
 
    Additional (Optional) qualifiers (* if not always prompted):
    -asource            string     [*] By default any feature source in the
@@ -248,6 +248,8 @@
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts

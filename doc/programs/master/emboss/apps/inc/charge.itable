@@ -23,7 +23,7 @@
 <td>-outfile</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.charge</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -34,7 +34,7 @@
 
 <tr>
 <td>-window</td>
-<td>Window</td>
+<td>Window length</td>
 <td>Integer 1 or more</td>
 <td>5</td>
 </tr>

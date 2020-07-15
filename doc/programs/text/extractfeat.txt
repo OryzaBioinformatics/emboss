@@ -954,6 +954,7 @@ See also
    degapseq     Removes gap characters from sequences
    descseq      Alter the name or description of a sequence
    entret       Reads and writes (returns) flatfile entries
+   extractalign Extract regions from a sequence alignment
    extractseq   Extract regions from a sequence
    listor       Write a list file of the logical OR of two sets of sequences
    makenucseq   Creates random nucleotide sequences

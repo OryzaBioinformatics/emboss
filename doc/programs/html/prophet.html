@@ -78,7 +78,7 @@ Output alignment [hd_fugru.prophet]: <b></b>
                                   0.000 to 100.000)
    -gapextend          float      [1.0] Gap extension coefficient (Number from
                                   0.000 to 100.000)
-  [-outfile]           align      Output alignment file name
+  [-outfile]           align      [*.prophet] Output alignment file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -169,7 +169,7 @@ Output alignment [hd_fugru.prophet]: <b></b>
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output alignment file name</td>
 <td>Alignment output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.prophet</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -334,9 +334,9 @@ Consensus	PIVDTGSVVSLSEEELSAVDKAWVKANSVAEVGGHALERGLFASEPMTLEFFDTFKYLSTFDLSKGSADV
 <pre>
 ########################################
 # Program: prophet
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: prophet
-#    -sequence tsw:h*
+#    -sequence "tsw:h*"
 #    -infile ../../data/globins.gribskov
 # Align_format: simple
 # Report_file: hd_fugru.prophet
@@ -386,9 +386,6 @@ HD_FUGRU        2439 PVDFLQEKDVFREFLYR   2455
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-# Gaps:           5/146 ( 3.4%)
-# Score: 170.08
-# 
 #
 #=======================================
 
@@ -437,6 +434,9 @@ globins          156 KYR    158
                      ||.
 HBB_HUMAN        147 KYH    149
 
+
+#---------------------------------------
+#---------------------------------------
 </pre>
 </td></tr></table><p>
 

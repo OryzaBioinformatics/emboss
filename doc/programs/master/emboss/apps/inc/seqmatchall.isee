@@ -17,6 +17,11 @@
 </tr>
 
 <tr>
+<td><a href="wordfinder.html">wordfinder</a></td>
+<td>Match large sequences against one or more other sequences</td>
+</tr>
+
+<tr>
 <td><a href="wordmatch.html">wordmatch</a></td>
 <td>Finds all exact matches of a given size between 2 sequences</td>
 </tr>

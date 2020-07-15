@@ -3,7 +3,7 @@
                                   format, or reference (input USA)
    -enzymes            string     [all] Comma separated enzyme list (Any
                                   string is accepted)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.recoder] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -37,6 +37,8 @@
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts

@@ -76,7 +76,7 @@ Output alignment [eclac.seqmatchall]: <b></b>
   [-sequence]          seqset     Sequence set filename and optional format,
                                   or reference (input USA)
    -wordsize           integer    [4] Word size (Integer 2 or more)
-  [-outfile]           align      Output alignment file name
+  [-outfile]           align      [*.seqmatchall] Output alignment file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -153,7 +153,7 @@ Output alignment [eclac.seqmatchall]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output alignment file name</td>
 <td>Alignment output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.seqmatchall</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -212,9 +212,9 @@ The sequences must be either all protein or all nucleic acid.
 <pre>
 ########################################
 # Program: seqmatchall
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: seqmatchall
-#    -sequence tembl:eclac*
+#    -sequence "tembl:eclac*"
 #    -wordsize 15
 # Align_format: match
 # Report_file: eclac.seqmatchall
@@ -373,6 +373,11 @@ None.
 <tr>
 <td><a href="water.html">water</a></td>
 <td>Smith-Waterman local alignment</td>
+</tr>
+
+<tr>
+<td><a href="wordfinder.html">wordfinder</a></td>
+<td>Match large sequences against one or more other sequences</td>
 </tr>
 
 <tr>

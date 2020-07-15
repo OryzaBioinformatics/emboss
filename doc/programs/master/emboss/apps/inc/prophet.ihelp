@@ -6,7 +6,7 @@
                                   0.000 to 100.000)
    -gapextend          float      [1.0] Gap extension coefficient (Number from
                                   0.000 to 100.000)
-  [-outfile]           align      Output alignment file name
+  [-outfile]           align      [*.prophet] Output alignment file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)

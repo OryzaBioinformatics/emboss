@@ -23,7 +23,7 @@ Description
    are devoid of dots (or heavily covered with dots) indicate short
    sequence motifs that are unusually infrequent (or frequent). The
    sequence of such motifs can be deduced by looking to see which quarter
-   of teh square the region is in - the letter that this quarter belongs
+   of the square the region is in - the letter that this quarter belongs
    to is the first base of the motif. The quarter is then quartered again
    and the appropriate base letters are assigned to the corners of the
    quarter - the eigth part that the region is in gives the second base
@@ -77,6 +77,7 @@ Command line arguments
 
    "-graph" associated qualifiers
    -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
    -gtitle             string     Graph title
    -gsubtitle          string     Graph subtitle
    -gxtitle            string     Graph x axis title

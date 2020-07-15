@@ -132,7 +132,7 @@ into the correct orientation to make it join. For example:
                                   reference (input USA)
   [-bsequence]         sequence   Sequence filename and optional format, or
                                   reference (input USA)
-  [-outfile]           align      Output alignment file name
+  [-outfile]           align      [*.merger] Output alignment file name
   [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
                                   optional format (output USA)
 
@@ -251,14 +251,14 @@ into the correct orientation to make it join. For example:
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output alignment file name</td>
 <td>Alignment output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.merger</td>
 </tr>
 
 <tr>
 <td>[-outseq]<br>(Parameter 4)</td>
 <td>Sequence filename and optional format (output USA)</td>
 <td>Writeable sequence</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -562,7 +562,7 @@ uppercase.
 <pre>
 ########################################
 # Program: merger
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: merger
 #    -asequence tembl:eclacy
 #    -bsequence tembl:eclaca

@@ -43,7 +43,7 @@ Usage
    Here is a sample session with trimseq
 
 
-% trimseq tembl:hsfau hsfau.seq -window 1 -percent 100 
+% trimseq untrimmed.seq trim1.seq -window 1 -percent 100 
 Trim ambiguous bits off the ends of sequences
 
    Go to the input files for this example
@@ -52,38 +52,34 @@ Trim ambiguous bits off the ends of sequences
    Example 2
 
 
-% trimseq tembl:hsfau hsfau.seq -window 5 -percent 40 
+% trimseq untrimmed.seq trim2.seq -window 5 -percent 40 
 Trim ambiguous bits off the ends of sequences
+
+   Go to the output files for this example
 
    Example 3
 
 
-% trimseq tembl:hsfau hsfau.seq -window 20 -percent 80 
+% trimseq untrimmed.seq trim3.seq -window 5 -percent 50 
 Trim ambiguous bits off the ends of sequences
+
+   Go to the output files for this example
 
    Example 4
 
 
-% trimseq tembl:hsfau hsfau.seq -window 20 -percent 10 
+% trimseq untrimmed.seq trim4.seq -window 5 -percent 50 -strict 
 Trim ambiguous bits off the ends of sequences
+
+   Go to the output files for this example
 
    Example 5
 
 
-% trimseq tembl:hsfau hsfau.seq -window 20 -percent 50 -strict 
+% trimseq untrimmed.seq trim5.seq -window 5 -percent 50 -strict -noright 
 Trim ambiguous bits off the ends of sequences
 
-   Example 6
-
-
-% trimseq tembl:hsfau hsfau.seq -window 1 -percent 100 -star 
-Trim ambiguous bits off the ends of sequences
-
-   Example 7
-
-
-% trimseq tembl:hsfau hsfau.seq -window 20 -percent 50 -noright 
-Trim ambiguous bits off the ends of sequences
+   Go to the output files for this example
 
 Command line arguments
 
@@ -170,108 +166,10 @@ Input file format
 
   Input files for usage example
 
-   'tembl:hsfau' is a sequence entry in the example nucleic acid database
-   'tembl'
+  File: untrimmed.seq
 
-  Database entry: tembl:hsfau
-
-ID   HSFAU      standard; RNA; HUM; 518 BP.
-XX
-AC   X65923;
-XX
-SV   X65923.1
-XX
-DT   13-MAY-1992 (Rel. 31, Created)
-DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
-XX
-DE   H.sapiens fau mRNA
-XX
-KW   fau gene.
-XX
-OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
-XX
-RN   [1]
-RP   1-518
-RA   Michiels L.M.R.;
-RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
-RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
-RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
-XX
-RN   [2]
-RP   1-518
-RX   MEDLINE; 93368957.
-RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
-RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
-RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
-RL   Oncogene 8:2537-2546(1993).
-XX
-DR   SWISS-PROT; P35544; UBIM_HUMAN.
-DR   SWISS-PROT; Q05472; RS30_HUMAN.
-XX
-FH   Key             Location/Qualifiers
-FH
-FT   source          1..518
-FT                   /chromosome="11q"
-FT                   /db_xref="taxon:9606"
-FT                   /organism="Homo sapiens"
-FT                   /tissue_type="placenta"
-FT                   /clone_lib="cDNA"
-FT                   /clone="pUIA 631"
-FT                   /map="13"
-FT   misc_feature    57..278
-FT                   /note="ubiquitin like part"
-FT   CDS             57..458
-FT                   /db_xref="SWISS-PROT:P35544"
-FT                   /db_xref="SWISS-PROT:Q05472"
-FT                   /gene="fau"
-FT                   /protein_id="CAA46716.1"
-FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
-G
-FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
-G
-FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
-FT   misc_feature    98..102
-FT                   /note="nucleolar localization signal"
-FT   misc_feature    279..458
-FT                   /note="S30 part"
-FT   polyA_signal    484..489
-FT   polyA_site      509
-XX
-SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
-     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
-0
-     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
-0
-     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
-0
-     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
-0
-     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
-0
-     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
-0
-     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
-0
-     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
-0
-     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
-8
-//
-
-Output file format
-
-   Normal sequence file.
-
-  Output files for usage example
-
-  File: hsfau.seq
-
->HSFAU X65923.1 H.sapiens fau mRNA
-ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+>myseq
+...ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
 agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
 cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
 tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
@@ -279,7 +177,86 @@ tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
 gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
 agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
 cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
-tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+tctaataaaaaagccacttagttca.gnntcynnnnnn
+
+Output file format
+
+   Normal sequence file.
+
+  Output files for usage example
+
+  File: trim1.seq
+
+>myseq
+ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca-gnntcy
+
+  Output files for usage example 2
+
+  File: trim2.seq
+
+>myseq
+ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca-g
+
+  Output files for usage example 3
+
+  File: trim3.seq
+
+>myseq
+ttyyyctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttca-gnntcy
+
+  Output files for usage example 4
+
+  File: trim4.seq
+
+>myseq
+ctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagctc
+tttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcccag
+atcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctg
+gcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgact
+accctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggcccgtgct
+ggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagaca
+ggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccaccttt
+ggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctctaa
+taaaaaagccacttagttca-gnntc
+
+  Output files for usage example 5
+
+  File: trim5.seq
+
+>myseq
+ctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagctc
+tttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcccag
+atcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctg
+gcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgact
+accctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggcccgtgct
+ggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagaca
+ggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccaccttt
+ggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctctaa
+taaaaaagccacttagttca-gnntcynnnnnn
 
 Data files
 
@@ -320,6 +297,7 @@ See also
    degapseq     Removes gap characters from sequences
    descseq      Alter the name or description of a sequence
    entret       Reads and writes (returns) flatfile entries
+   extractalign Extract regions from a sequence alignment
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
    listor       Write a list file of the logical OR of two sets of sequences

@@ -1173,7 +1173,7 @@ Diagnostic Error Messages
 
 Exit status
 
-   Exits with a staus of 0 unless an error occurs.
+   It exits with status 0 unless an error is reported
 
 Known bugs
 
@@ -1182,6 +1182,7 @@ Known bugs
 See also
 
    Program name                       Description
+   edialign     Local multiple alignment of sequences
    infoalign    Information on a multiple sequence alignment
    plotcon      Plot quality of conservation of a sequence alignment
    prettyplot   Displays aligned sequences, with colouring and boxing

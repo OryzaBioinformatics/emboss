@@ -31,7 +31,7 @@ Thus if you want to count frequencies in a 40 aa stretch you should enter 40 her
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>This is the results file.</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.oddcomp</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

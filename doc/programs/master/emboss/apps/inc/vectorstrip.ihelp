@@ -13,7 +13,9 @@
   [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
                                   filename and optional format (output USA)
 
-   Additional (Optional) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -allsequences       boolean    [N] Show all sequences in output
+
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 

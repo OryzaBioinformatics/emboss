@@ -42,7 +42,7 @@ Command line arguments
   [-bsequence]         sequence   Sequence filename and optional format, or
                                   reference (input USA)
    -wordsize           integer    [4] Word size (Integer 2 or more)
-  [-outfile]           align      Output alignment file name
+  [-outfile]           align      [*.wordmatch] Output alignment file name
   [-aoutfeat]          featout    [unknown.gff] Output features UFO
   [-boutfeat]          featout    [unknown.gff] Output features UFO
 
@@ -375,7 +375,7 @@ Output file format
 
 ########################################
 # Program: wordmatch
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: wordmatch
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -466,6 +466,7 @@ See also
    seqmatchall  All-against-all comparison of a set of sequences
    supermatcher Match large sequences against one or more other sequences
    water        Smith-Waterman local alignment
+   wordfinder   Match large sequences against one or more other sequences
 
 Author(s)
 

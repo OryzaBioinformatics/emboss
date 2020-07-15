@@ -4,7 +4,7 @@
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>tmap tsw:opsd_human -out tmap.res -graph cps </b>
+% <b>tmap opsd.msf -out tmap.res -graph cps </b>
 Displays membrane spanning regions
 
 Created tmap.ps

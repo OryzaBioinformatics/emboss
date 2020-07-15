@@ -15,7 +15,7 @@
                                   improve the resolution of nearby
                                   differences, but the program will go much
                                   slower. (Integer 2 or more)
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.diffseq] Output report file name
   [-aoutfeat]          featout    [$(asequence.name).diffgff] File for output
                                   of first sequence's features
   [-boutfeat]          featout    [$(bsequence.name).diffgff] File for output
@@ -82,6 +82,8 @@
    -rdesshow3          boolean    Show description in the report
    -rscoreshow3        boolean    Show the score in the report
    -rusashow3          boolean    Show the full USA in the report
+   -rmaxall3           integer    Maximum total hits to report
+   -rmaxseq3           integer    Maximum hits to report for one sequence
 
    "-aoutfeat" associated qualifiers
    -offormat4          string     Output feature format

@@ -33,7 +33,7 @@ Usage
 % antigenic 
 Finds antigenic sites in proteins
 Input protein sequence(s): tsw:act1_fugru
-Minimum length [6]: 
+Minimum length of antigenic region [6]: 
 Output report [act1_fugru.antigenic]: 
 
    Go to the input files for this example
@@ -48,7 +48,7 @@ Output report [act1_fugru.antigenic]:
 % antigenic -rformat gff 
 Finds antigenic sites in proteins
 Input protein sequence(s): tsw:act1_fugru
-Minimum length [6]: 
+Minimum length of antigenic region [6]: 
 Output report [act1_fugru.antigenic]: 
 
    Go to the output files for this example
@@ -58,8 +58,9 @@ Command line arguments
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
-   -minlen             integer    [6] Minimum length (Integer from 1 to 50)
-  [-outfile]           report     Output report file name
+   -minlen             integer    [6] Minimum length of antigenic region
+                                  (Integer from 1 to 50)
+  [-outfile]           report     [*.antigenic] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -90,6 +91,8 @@ Command line arguments
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -190,7 +193,7 @@ Output file format
 
 ########################################
 # Program: antigenic
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: antigenic
 #    -sequence tsw:act1_fugru
 # Report_format: motif
