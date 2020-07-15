@@ -1,7 +1,8 @@
 
 pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
 	acdpretty.acd acdtable.acd acdtrace.acd acdvalid.acd ajbad.acd \
-	ajfeatest.acd ajtest.acd antigenic.acd backtranseq.acd banana.acd \
+	ajfeatest.acd ajtest.acd antigenic.acd \
+	backtranambig.acd backtranseq.acd banana.acd \
 	biosed.acd btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd \
 	chips.acd cirdna.acd codcmp.acd codcopy.acd coderet.acd complex.acd \
 	compseq.acd cons.acd corbatest.acd cpgplot.acd cpgreport.acd \
@@ -9,7 +10,8 @@ pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
 	dbifasta.acd dbiflat.acd dbigcg.acd dbxfasta.acd dbxflat.acd \
 	dbxgcg.acd degapseq.acd demoalign.acd \
 	demofeatures.acd demolist.acd demoreport.acd demosequence.acd \
-	demostring.acd demotable.acd descseq.acd diffseq.acd digest.acd \
+	demostring.acd demostringnew.acd \
+	demotable.acd descseq.acd diffseq.acd digest.acd \
 	distmat.acd dotmatcher.acd dotpath.acd dottup.acd dreg.acd \
 	einverted.acd embossdata.acd embossversion.acd emma.acd emowse.acd \
 	entrails.acd entret.acd epestfind.acd eprimer3.acd equicktandem.acd \
@@ -17,12 +19,14 @@ pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
 	freak.acd fuzznuc.acd fuzzpro.acd fuzztran.acd garnier.acd \
 	geecee.acd getorf.acd giep.acd helixturnhelix.acd histogramtest.acd \
 	hmoment.acd iep.acd infoalign.acd infoseq.acd intconv.acd \
-	isochore.acd kmrsplitter.acd kmrunion.acd lindna.acd listor.acd \
-	marscan.acd maskfeat.acd maskseq.acd matcher.acd megamerger.acd \
+	isochore.acd lindna.acd listor.acd \
+	makenucseq.acd makeprotseq.acd marscan.acd maskfeat.acd maskseq.acd \
+	matcher.acd megamerger.acd \
 	merger.acd msbar.acd mwcontam.acd mwfilter.acd
 
 pkgdata2_DATA = needle.acd newcoils.acd newcpgreport.acd newcpgseek.acd \
-	newseq.acd noreturn.acd notseq.acd nthseq.acd octanol.acd oddcomp.acd \
+	newseq.acd noreturn.acd notseq.acd nthseq.acd \
+	octanol.acd oddcomp.acd origsplitter.acd origunion.acd \
 	palindrome.acd pasteseq.acd patmatdb.acd patmatmotifs.acd \
 	patmattest.acd pepcoil.acd pepinfo.acd pepnet.acd pepstats.acd \
 	pepwheel.acd pepwindow.acd pepwindowall.acd plotcon.acd plotorf.acd \
@@ -43,7 +47,7 @@ pkgdata2_DATA = needle.acd newcoils.acd newcpgreport.acd newcpgseek.acd \
 	wossname.acd yank.acd
 
 pkgdata3_DATA =	codes.english  \
-	groups.standard knowntypes.standard \
+	groups.standard keywords.standard knowntypes.standard \
 	sections.standard variables.standard
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)/acd

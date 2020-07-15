@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 3.0.0)
+AM_INIT_AUTOMAKE(EMBOSS, 4.0.0)
 
 
 AC_PROG_AWK
@@ -19,7 +19,7 @@ AC_PROG_CPP
 dnl Test whether --with-sgiabi given for IRIX (n32m3 n32m4 64m3 64m4)
 if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64" ; then
 if test "$CC" != "gcc"; then
-  CFLAGS="$CFLAGS -woff 1048"
+  CFLAGS="$CFLAGS"
   CHECK_SGI
 fi
 fi
@@ -99,7 +99,7 @@ fi
 dnl test for SGI optimisation
 if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64" ; then
 LD="/usr/bin/ld -IPA"
-CFLAGS="$CFLAGS -Ofast"
+CFLAGS="$CFLAGS -O3"
 fi
 
 dnl Test for HP-UX optimisation
@@ -129,6 +129,15 @@ fi
 dnl Test for FreeBSD optimisation
 if test "`uname`" = "FreeBSD"; then
 CFLAGS="$CFLAGS -O2"
+fi
+
+dnl Intel MacOSX requires reduced optimisation for PCRE code
+if test "`uname -a | grep Darwin`"; then
+  if test "`uname -a | grep i386`"; then
+    CFLAGS="$CFLAGS -O1"
+  else
+    CFLAGS="$CFLAGS -O2"
+  fi
 fi
 
 
@@ -234,6 +243,7 @@ CHECK_JAVAOS
 CHECK_PNGDRIVER
 CHECK_AUTH
 CHECK_GROUT
+CHECK_AMD64
 
 dnl "Export" these variables for PCRE
 
@@ -368,9 +378,11 @@ fi
 
 dnl Test if --enable-debug given
 AC_ARG_ENABLE(warnings,
-[  --enable-warnings          warnings (-Wall option on compiler)])
+[  --enable-warnings          warnings (-Wall option on gcc compiler)])
 if test "${enable_warnings}" = "yes" ; then
+if test "$CC" = "gcc"; then
   CFLAGS="$CFLAGS -Wall -fno-strict-aliasing"
+fi
 fi          
 
 dnl Set extra needed compiler flags

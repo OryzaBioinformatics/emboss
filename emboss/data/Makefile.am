@@ -19,13 +19,15 @@ pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                Eaa_acc_surface.dat Eaa_hydropathy.dat Eaa_properties.dat \
                Eamino.dat Eangles.dat Eangles_tri.dat Eantigenic.dat \
                Ebases.iub Edayhoff.freq Edna.melt Eembl.ior Eenergy.dat \
-               Efeatures.embl Efeatures.emboss Efeatures.gff \
+               Efeatures.embl Efeatures.emboss \
+               Efeatures.gff Efeatures.gff3 Efeatures.gffprotein \
                Efeatures.pir Efeatures.protein Efeatures.swiss \
                Efreqs.dat Ehet.dat Ehth.dat \
                Ehth87.dat Ememe.dat Enakai.dat Epepcoil.dat Epk.dat \
                Epprofile Eprior1.plib Eprior30.plib Erna.melt \
                Esig.euk Esig.pro \
-               Etags.embl Etags.emboss Etags.gff \
+               Etags.embl Etags.emboss \
+               Etags.gff Etags.gff3 Etags.gffprotein \
                Etags.pir Etags.protein Etags.swiss \
                Etcode.dat Evdw.dat Ewhite-wimley.dat \
                embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \

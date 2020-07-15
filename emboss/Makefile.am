@@ -15,9 +15,9 @@ endif
 check_PROGRAMS = acdlog ajtest \
 complex corbatest \
 demoalign demofeatures demolist demoreport \
-demosequence demostring demotable \
+demosequence demostring demostringnew demotable \
 entrails giep histogramtest intconv \
-kmrsplitter kmrunion \
+origsplitter origunion \
 newcoils \
 patmattest \
 prima primers \
@@ -28,7 +28,7 @@ testplot treetypedisplay
 bin_PROGRAMS = aaindexextract abiview \
 acdc acdpretty acdtable acdtrace acdvalid \
 antigenic \
-backtranseq banana biosed btwisted \
+backtranambig backtranseq banana biosed btwisted \
 cai chaos charge checktrans chips \
 cirdna codcmp codcopy coderet \
 compseq cons cpgplot cpgreport \
@@ -45,7 +45,7 @@ findkm freak fuzznuc fuzzpro fuzztran \
 garnier geecee getorf helixturnhelix hmoment \
 iep infoalign infoseq isochore \
 jembossctl lindna listor \
-marscan maskfeat maskseq \
+makenucseq makeprotseq marscan maskfeat maskseq \
 matcher megamerger merger msbar \
 mwcontam mwfilter \
 needle newcpgreport newcpgseek newseq \
@@ -83,6 +83,7 @@ acdtable_SOURCES = acdtable.c
 acdtrace_SOURCES = acdtrace.c
 acdvalid_SOURCES = acdvalid.c
 antigenic_SOURCES = antigenic.c
+backtranambig_SOURCES = backtranambig.c
 backtranseq_SOURCES = backtranseq.c
 banana_SOURCES = banana.c
 biosed_SOURCES = biosed.c
@@ -250,12 +251,13 @@ demolist_SOURCES = demolist.c
 demoreport_SOURCES = demoreport.c
 demosequence_SOURCES = demosequence.c
 demostring_SOURCES = demostring.c
+demostringnew_SOURCES = demostringnew.c
 demotable_SOURCES = demotable.c
 entrails_SOURCES = entrails.c
 histogramtest_SOURCES = histogramtest.c
 intconv_SOURCES = intconv.c
-kmrsplitter_SOURCES = kmrsplitter.c
-kmrunion_SOURCES = kmrunion.c
+origsplitter_SOURCES = origsplitter.c
+origunion_SOURCES = origunion.c
 newcoils_SOURCES = newcoils.c
 patmattest_SOURCES = patmattest.c
 prima_SOURCES = prima.c
