@@ -1,4 +1,4 @@
-abiview = abiview ../data/abiview.abi -graph cps -auto
+abiview = abiview ../../data/abiview.abi -graph cps -auto
 acdc = acdc embossversion -auto
 antigenic = antigenic tsw:opsd_human -auto
 backtranseq = backtranseq tsw:opsd_human -auto
@@ -9,17 +9,17 @@ graphpng = banana tembl:hsfau -graph png -auto
 cai = cai tembl:hsfau -auto
 chaos = chaos tembl:hsfau -graph ps -auto
 charge = charge tsw:opsd_human -auto
-checktrans = checktrans ../data/paamir.pep -auto
+checktrans = checktrans ../../data/paamir.pep -auto
 chips = chips tembl:hsfau -auto
-cirdna = cirdna -infile ../data/data.cirp -graph ps -auto
+cirdna = cirdna -infile ../../data/data.cirp -graph ps -auto
 codcmp = codcmp -first Eecoli.cut -second Ehaein.cut -auto
 coderet = coderet tembl:hsfau -auto
 compseq = compseq tsw:opsd_human -auto
-cons = cons ../data/globins.msf -auto
+cons = cons ../../data/globins.msf -auto
 cpgplot = cpgplot tembl:hsfau -graph ps -auto
 cpgreport = cpgreport tembl:hsfau -auto
 cusp = cusp tembl:hsfau -auto
-cutgextract = cutgextract ../data -auto
+cutgextract = cutgextract ../../data -auto
 cutseq = cutseq tembl:hsfau -from 20 -to 500 -auto
 dan = dan tembl:hsfau -auto
 #
@@ -64,35 +64,35 @@ xdbgcg-query = seqret qanxgcg:r* -out x.x -auto
 xdbgcg-all = seqret qanxgcg:* -out x.x -auto
 xdbgcgpir-des = seqret qaxpirall-des:cytochrome -out x.x -auto
 #
-dbiblast = dbiblast -dir ../wormpep -file wormpep -index ./output -db worm -auto
-dbiblastmem = dbiblast -nosystemsort -dir ../wormpep -file wormpep -index ./output -db worm -auto
-dbiblastswnew = dbiblast -dir ../data -db swnew -auto
-dbiblastlist = dbiblast -dir ../data -file 'swsplit.00.pin,swsplit.01.pin,swsplit.02.pin,swsplit.03.pin,swsplit.04.pin' -index ./output -db swsplit -auto
-dbiblastwild = dbiblast -dir ../data -file swsplit.*.pin -index ./output -db swsplit -auto
-dbiblastwildstar = dbiblast -dir ../data -file swsplit.*.* -index ./output -db swsplit -auto
-dbifasta = dbifasta -dir ../wormpep -file wormpep -index ./output -id idacc -db worm -auto
-dbifastamem = dbifasta -dir ../wormpep -file wormpep -index ./output -id idacc -db worm -nosystemsort -auto
-dbiflat = dbiflat -dir ../swiss -file seq.dat -index ./output -id swiss -db swiss -auto
-dbiflatmem = dbiflat -dir ../swiss -file seq.dat -index ./output -id swiss -db swiss -nosystemsort -auto
-dbigcg = dbigcg -dir ../embl -file '*.seq' -index ./output -id embl -db embl -auto
-dbigcgmem = dbigcg -nosystemsort -dir ../embl -file '*.seq' -index ./output -id embl -db embl -auto
-dbigcg2 = dbigcg -dir ../pir -file '*.seq' -index ./output -id pir -db pir -auto
-dbigcgmem2 = dbigcg -nosystemsort -dir ../pir -file '*.seq' -index ./output -id pir -db pir -auto
-#dbxblast =test= dbxblast -dir ../wormpep -file wormpep -index ./output  -id idacc -dbres worm -db worm -auto
-#dbxblastlist =test= dbxblast -dir ../data -file 'swsplit.00.pin,swsplit.01.pin,swsplit.02.pin,swsplit.03.pin,swsplit.04.pin' -index ./output -dbres swnew -dbname swsplit -auto
-#dbxblastwild =test= dbxblast -dir ../data -file swsplit.*.pin -index ./output -dbres swnew -dbname swsplit -auto
-#dbxblastwildstar =test= dbxblast -dir ../data -file swsplit.*.* -index ./output -dbres swnew -dbname swsplit -auto
-dbxfasta =test= dbxfasta -dir ../wormpep -file wormpep -index ./output -id idacc -dbres swnew -dbname worm -auto
-dbxflat =test= dbxflat -dir ../swiss -file seq.dat -index ./output -id swiss -dbres swnew -dbname swiss -auto
-dbxgcg =test= dbxgcg -dir ../embl -file '*.seq' -index ./output -id embl -dbres embl -dbname embl -auto
-dbxgcg2 =test= dbxgcg -dir ../pir -file '*.seq' -index ./output -id pir -dbres pir -dbname pir -auto
-dbxgcg3 =test= dbxgcg -dir ../pir -file '*.seq' -index ./output -id pir -dbres pir -dbname pir -fields "id,acc,des,key,org" -auto
+dbiblast = dbiblast -dir ../../wormpep -file wormpep -index . -db worm -auto
+dbiblastmem = dbiblast -nosystemsort -dir ../../wormpep -file wormpep -index . -db worm -auto
+dbiblastswnew = dbiblast -dir ../../data -db swnew -auto
+dbiblastlist = dbiblast -dir ../../data -file 'swsplit.00.pin,swsplit.01.pin,swsplit.02.pin,swsplit.03.pin,swsplit.04.pin' -index . -db swsplit -auto
+dbiblastwild = dbiblast -dir ../../data -file swsplit.*.pin -index . -db swsplit -auto
+dbiblastwildstar = dbiblast -dir ../../data -file swsplit.*.* -index . -db swsplit -auto
+dbifasta = dbifasta -dir ../../wormpep -file wormpep -index . -id idacc -db worm -auto
+dbifastamem = dbifasta -dir ../../wormpep -file wormpep -index . -id idacc -db worm -nosystemsort -auto
+dbiflat = dbiflat -dir ../../swiss -file seq.dat -index . -id swiss -db swiss -auto
+dbiflatmem = dbiflat -dir ../../swiss -file seq.dat -index . -id swiss -db swiss -nosystemsort -auto
+dbigcg = dbigcg -dir ../../embl -file '*.seq' -index . -id embl -db embl -auto
+dbigcgmem = dbigcg -nosystemsort -dir ../../embl -file '*.seq' -index . -id embl -db embl -auto
+dbigcg2 = dbigcg -dir ../../pir -file '*.seq' -index . -id pir -db pir -auto
+dbigcgmem2 = dbigcg -nosystemsort -dir ../../pir -file '*.seq' -index . -id pir -db pir -auto
+#dbxblast =test= dbxblast -dir ../../wormpep -file wormpep -index .  -id idacc -dbres worm -db worm -auto
+#dbxblastlist =test= dbxblast -dir ../../data -file 'swsplit.00.pin,swsplit.01.pin,swsplit.02.pin,swsplit.03.pin,swsplit.04.pin' -index . -dbres swnew -dbname swsplit -auto
+#dbxblastwild =test= dbxblast -dir ../../data -file swsplit.*.pin -index . -dbres swnew -dbname swsplit -auto
+#dbxblastwildstar =test= dbxblast -dir ../../data -file swsplit.*.* -index . -dbres swnew -dbname swsplit -auto
+dbxfasta = dbxfasta -dir ../../wormpep -file wormpep -index . -id idacc -dbres swnew -dbname worm -auto
+dbxflat = dbxflat -dir ../../swiss -file seq.dat -index . -id swiss -dbres swnew -dbname swiss -auto
+dbxgcg = dbxgcg -dir ../../embl -file '*.seq' -index . -id embl -dbres embl -dbname embl -auto
+dbxgcg2 = dbxgcg -dir ../../pir -file '*.seq' -index . -id pir -dbres pir -dbname pir -auto
+dbxgcg3 = dbxgcg -dir ../../pir -file '*.seq' -index . -id pir -dbres pir -dbname pir -fields "id,acc,des,key,org" -auto
 #
-degapseq = degapseq ../data/globins.msf -auto
+degapseq = degapseq ../../data/globins.msf -auto
 descseq = descseq -desc 'Test' tsw:opsd_human -auto
 diffseq = diffseq tembl:hsfau tembl:hsfau1 -auto
 digest = digest tsw:opsd_human -auto
-distmat = distmat ../data/globins.msf -auto
+distmat = distmat ../../data/globins.msf -auto
 dotmatcher = dotmatcher tembl:hsfau tembl:hsfau1 -graph ps -auto
 dotpath = dotpath tembl:hsfau tembl:hsfau1 -graph ps -auto
 dottup = dottup tembl:hsfau tembl:hsfau1 -graph ps -auto
@@ -101,9 +101,9 @@ einverted = einverted tembl:hsts1 -auto
 einvertedhs = einverted 'tembl:hs*' -auto
 embl1 = seqret -auto tembl:hsfau
 emblmany = seqret -auto 'tembl:hsf*'
-embossdata = embossdata -fetch -file Eamino.dat -outfile output/Eamino.dat -auto
+embossdata = embossdata -fetch -file Eamino.dat -outfile ./Eamino.dat -auto
 embossversion = embossversion -auto
-emowse = emowse 'tsw:*fugru' ../data/test.mowse -auto
+emowse = emowse 'tsw:*fugru' ../../data/test.mowse -auto
 entrails =test= entrails -auto
 entret = entret tembl:hsfau -auto
 equicktandem = equicktandem tembl:hsfau -auto
@@ -114,7 +114,7 @@ etandem = etandem tembl:hsfau -auto
 extractseq = extractseq tembl:hsfau -region '20-50' -auto
 feat1 =test= seqretallfeat -auto tembl:hsfau
 featmany =test= seqretallfeat -auto 'tembl:hsf*'
-findkm = findkm ../data/test.findkm -graph ps -auto
+findkm = findkm ../../data/test.findkm -graph ps -auto
 freak = freak tembl:hsfau -auto
 fuzznuc = fuzznuc tembl:hsfau -patt ggcaggcgcgc -auto
 fuzzpro = fuzzpro tsw:opsd_human -patt MMNKQFR -auto
@@ -124,11 +124,11 @@ geecee = geecee tembl:hsfau -auto
 getorf = getorf tembl:hsfau -auto
 hmoment = hmoment tsw:opsd_human -auto
 iep = iep tsw:opsd_human -auto
-infoalign = infoalign ../data/globins.msf -auto
+infoalign = infoalign ../../data/globins.msf -auto
 infoseq = infoseq tsw:opsd_human
-intconv =test= intconv ../data/data.linp -auto
+intconv =test= intconv ../../data/data.linp -auto
 isochore = isochore tembl:paamir -graph ps -graph ps -auto
-lindna = lindna -infile ../data/data.linp -graph cps -auto
+lindna = lindna -infile ../../data/data.linp -graph cps -auto
 marscan = marscan tembl:hsfau -auto
 maskfeat = maskfeat tembl:hsfau -auto
 maskseq = maskseq tembl:hsfau -regions '20-50' -auto
@@ -140,11 +140,11 @@ needle = needle tembl:hsfau tembl:hsfau1 -auto
 newcpgreport = newcpgreport tembl:xl23808 -auto
 newcpgseek = newcpgseek tembl:xl23808 -auto
 newseq = newseq -name fred -desc test -type p -seq acdefg -auto
-noreturn = noreturn ../data/oddcomp.comp -auto
+noreturn = noreturn ../../data/oddcomp.comp -auto
 notseq = notseq 'tsw:*' -exclude='ops*' -auto
-nthseq = nthseq ../swiss/seq.dat -num 5 -auto
+nthseq = nthseq ../../swiss/seq.dat -num 5 -auto
 octanol = octanol tsw:opsd_human -graph ps -auto
-oddcomp = oddcomp 'tsw:*' -infile ../data/oddcomp.comp -auto
+oddcomp = oddcomp 'tsw:*' -infile ../../data/oddcomp.comp -auto
 palindrome = palindrome tembl:hsfau1 -min 4 -auto
 pasteseq = pasteseq tembl:hsfau tembl:hsfau1 -pos 200 -auto
 patmatdb = patmatdb 'tsw:*' -motif kat -auto
@@ -156,17 +156,17 @@ pepstats = pepstats tsw:opsd_human -auto
 pepwheel = pepwheel tsw:opsd_human -graph ps -auto
 pepwindow = pepwindow tsw:opsd_human -graph ps -auto
 pepwindowall = pepwindowall tsw:opsd_human -graph ps -auto
-plotcon = plotcon ../data/globins.msf -graph ps -auto
+plotcon = plotcon ../../data/globins.msf -graph ps -auto
 plotorf = plotorf 'tembl:hsfau' -graph ps -auto
 polydot = polydot 'tembl:hsfa*' -graph ps -auto
 preg = preg 'tsw:*' -pattern kat -auto
-prettyplot = prettyplot ../data/globins.msf -graph ps -auto
+prettyplot = prettyplot ../../data/globins.msf -graph ps -auto
 prettyseq = prettyseq tembl:hsfau -auto
 prima =test= prima tembl:hsfau -auto
-primersearch = primersearch 'tembl:*' ../data/primers -auto
-profit = profit ../data/globins.prophecy tsw:100k_rat -auto
-prophecy = prophecy ../data/globins.msf -type g -auto
-prophet = prophet tsw:100k_rat ../data/prophecy.gribskov -auto
+primersearch = primersearch 'tembl:*' ../../data/primers -auto
+profit = profit ../../data/globins.prophecy tsw:100k_rat -auto
+prophecy = prophecy ../../data/globins.msf -type g -auto
+prophet = prophet tsw:100k_rat ../../data/prophecy.gribskov -auto
 recoder = recoder tembl:hsfau -sbeg 31 -send 50 -auto
 remap = remap -notran -sbeg 1 -send 60 tembl:eclac -enzymes 'taqi,bsu6i,acii,bsski' -auto
 remaptran = remap -sbeg 1 -send 60 tembl:eclac -enzymes 'taqi,bsu6i,acii,bsski' -auto
@@ -180,11 +180,11 @@ seqret = seqret tsw:opsd_human -auto
 seqretall =test= seqretall 'tembl:hsfau*' -auto
 seqretallfeat =test= seqretallfeat 'tembl:hsfau*' -auto
 seqretfeat = seqret -feat tembl:hsfau -auto
-seqretset =test= seqretset ../data/globins.msf -auto
+seqretset =test= seqretset ../../data/globins.msf -auto
 seqretsplit = seqretsplit 'tembl:hsfau*' -auto
 set1 =test= seqretset -auto tsw:opsd_human
 setmany =test= seqretset -auto 'tsw:opsd_*'
-showalign = showalign ../data/globins.msf -auto
+showalign = showalign ../../data/globins.msf -auto
 showdb = showdb
 showfeat = showfeat tembl:hsfau -auto
 showorf = showorf tembl:hsfau -auto
@@ -203,7 +203,7 @@ tfm = tfm tfm -nomore
 tmap = tmap tsw:opsd_human -graph ps -auto
 transeq = transeq -frame r tembl:hsfau -auto
 trimseq = trimseq tembl:hsfau -window 20 -percent 10 -auto
-vectorstrip = vectorstrip tembl:hsfau -vectors ../data/data.vectorstrip -vectorfile -auto
+vectorstrip = vectorstrip tembl:hsfau -vectors ../../data/data.vectorstrip -vectorfile -auto
 water = water tsw:opsd_human tsw:opsd_xenla -auto
 whichdb = whichdb hsfau1 -auto
 whichdbnone = whichdb notfound -auto
@@ -218,13 +218,13 @@ wossname = wossname -search codon -auto
 # DOMAINATRIX
 # -----------
 #
-#contacts = contacts -cpdb ../data -cpdbextn .pxyz -con ../data -conextn .con -thresh 1.0 -vdwf Evdw.dat -conlogf contacts.log
-domainer = domainer -scop ../qa/scopparse-keep/all.scop -ccfp ../qa/pdbplus-keep/ -ccfoutdir ./output  -pdboutdir ./output  -cpdblogf domainer.log1 -pdblogf domainer.log2 -auto
+#contacts = contacts -cpdb ../../data -cpdbextn .pxyz -con ../../data -conextn .con -thresh 1.0 -vdwf Evdw.dat -conlogf contacts.log
+domainer = domainer -scop ../../qa/scopparse-keep/all.scop -ccfp ../../qa/pdbplus-keep/ -ccfoutdir .  -pdboutdir .  -cpdblogf domainer.log1 -pdblogf domainer.log2 -auto
 # requires a modified stamp package installed to run scopalign
-#scopalign = scopalign -scopf ../data/structure/all.scop2 -path ../data
+#scopalign = scopalign -scopf ../../data/structure/all.scop2 -path ../../data
 # broken. ACD changed. How to specify now? Wait for qatest example
-###siggen = siggen -algpath ../data -algextn .align -conpath ../data -conextn .con -sparsity 10 -randomize N -datafile EBLOSUM62 -scoreseq Y -scorencon Y -scoreccon Y -scoreboth N -postsim Y -auto
-#swissparse = swissparse -keyfile ../data/test.terms -spfile ../data/test.seq -auto
+###siggen = siggen -algpath ../../data -algextn .align -conpath ../../data -conextn .con -sparsity 10 -randomize N -datafile EBLOSUM62 -scoreseq Y -scorencon Y -scoreccon Y -scoreboth N -postsim Y -auto
+#swissparse = swissparse -keyfile ../../data/test.terms -spfile ../../data/test.seq -auto
 #
 # TOPO
 # ----
