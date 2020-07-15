@@ -2,7 +2,7 @@
 **
 ** Calculate isoelectric point of a protein
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
     {
 	be=ajSeqallBegin(all);
 	en=ajSeqallEnd(all);
-	ajStrAssSubC(&substr,ajSeqChar(a),be-1,en-1);
+	ajStrAssignSubC(&substr,ajSeqChar(a),be-1,en-1);
 
 	for(i=0;i<EMBIEPSIZE;++i)
 	{
@@ -125,13 +125,13 @@ int main(int argc, char **argv)
 	    pro[i]=0.;
 	}
 
-	embIepComp(ajStrStr(substr),amino,c); /* Get sequence composition */
+	embIepCompS(substr,amino,0,0,c); /* Get sequence composition */
 
 
 	if (dofile)
 	{
 	    ajFmtPrintF(outf,"IEP of %s from %d to %d\n",ajSeqName(a),be,en);
-	    if(!embIepIEP(ajStrStr(substr),amino,&iep,termini))
+	    if(!embIepIepS(substr,amino,0,0,&iep,termini))
 		ajFmtPrintF(outf,"Isoelectric Point = None\n\n");
 	    else
 		ajFmtPrintF(outf,"Isoelectric Point = %-6.4lf\n\n",iep);
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
 
 	    for(pH=1.0;pH<=14.0;pH+=step)
 	    {
-		H=embIepPhToHConc(pH);
+		H=embIepPhToHconc(pH);
 		if(!termini)
 		    c[EMBIEPAMINO]=c[EMBIEPCARBOXYL]=0;
 		embIepGetProto(K,c,op,H,pro);
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 	    for(pH=1.0,k=0;pH<=14.0;pH+=GSTEP,++k)
 	    {
 		xa[k]=(float)pH;
-		H=embIepPhToHConc(pH);
+		H=embIepPhToHconc(pH);
 		if(!termini)
 		    c[EMBIEPAMINO]=c[EMBIEPCARBOXYL]=0;
 		embIepGetProto(K,c,op,H,pro);
@@ -175,16 +175,16 @@ int main(int argc, char **argv)
 	    tmp = ajStrNew();
 	    ajFmtPrintS(&tit,"%s %d-%d IEP=",ajSeqName(a),be,en);
 
-	    if(!embIepIEP(ajStrStr(substr),amino,&iep,termini))
-		ajStrAssC(&tmp,"none");
+	    if(!embIepIepS(substr, amino,0,0,&iep,termini))
+		ajStrAssignC(&tmp,"none");
 	    else
 		ajFmtPrintS(&tmp,"%-8.4f",iep);
-	    ajStrApp(&tit,tmp);
+	    ajStrAppendS(&tit,tmp);
 
 
 #ifndef GROUT
 	    phGraph=ajGraphPlpDataNewI(npoints);
-	    ajGraphSetTitleC(graph,ajStrStr(tit));
+	    ajGraphSetTitleC(graph,ajStrGetPtr(tit));
 	    ajGraphSetXTitleC(graph,"pH");
 	    ajGraphSetYTitleC(graph,"Charge");
 

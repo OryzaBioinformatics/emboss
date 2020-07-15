@@ -16,26 +16,50 @@ section: input [
 
 endsection: input
 
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  integer: amino [
+    additional: "Y"
+    information: "Number of N-termini"
+    default: "1"
+    minimum: "0"
+  ]
+
+  boolean: termini [
+    additional: "Y"
+    information: "Include charge at N and C terminus"
+    default: "Y"
+  ]
+
+  integer: lysinemodified [
+    additional: "Y"
+    information: "Number of modified lysines"
+    default: "0"
+    minimum: "0"
+  ]
+
+  integer: disulphides [
+    additional: "Y"
+    information: "Number of disulphide bridges"
+    default: "0"
+    minimum: "0"
+  ]
+
+endsection: additional
+
 section: advanced [
   information: "Advanced section"
   type: "page"
 ]
 
-  float: step  [
+  float: step [
     information: "Step value for pH"
     minimum: ".01"
     maximum: "1."
     default: ".5"
-  ]
-
-  integer: amino  [
-    information: "Number of N-termini"
-    default: "1"
-  ]
-
-  boolean: termini  [
-    default: "Y"
-    information: "Include charge at N and C terminus"
   ]
 
 endsection: advanced
@@ -45,21 +69,21 @@ section: output [
   type: "page"
 ]
 
-  toggle: plot  [
+  toggle: plot [
     default: "N"
     information: "Plot charge vs pH"
   ]
 
-  toggle: report  [
+  toggle: report [
     default: "Y"
     information: "Write results to a file"
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "$(plot)"
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     standard: "$(report)"
     knowntype: "iep output"
     nullok: "@(!$(report))"

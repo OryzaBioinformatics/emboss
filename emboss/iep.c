@@ -2,7 +2,7 @@
 **
 ** Calculate isoelectric point of a protein
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -42,6 +42,8 @@ int main(int argc, char **argv)
     AjPStr substr;
     AjPFile outf;
     AjBool termini;
+    ajint sscount;
+    ajint modlysine;
     AjBool doplot;
     AjBool dofile;
     AjPGraph graph = NULL;
@@ -82,6 +84,8 @@ int main(int argc, char **argv)
     step      = ajAcdGetFloat("step");
     termini   = ajAcdGetBool("termini");
     amino     = ajAcdGetInt("amino");
+    sscount   = ajAcdGetInt("disulphides");
+    modlysine = ajAcdGetInt("lysinemodified");
     outf      = ajAcdGetOutfile("outfile");
 
 
@@ -102,7 +106,7 @@ int main(int argc, char **argv)
     {
 	be = ajSeqallBegin(all);
 	en = ajSeqallEnd(all);
-	ajStrAssSubC(&substr,ajSeqChar(a),be-1,en-1);
+	ajStrAssignSubC(&substr,ajSeqChar(a),be-1,en-1);
 
 	for(i=0;i<EMBIEPSIZE;++i)
 	{
@@ -110,22 +114,23 @@ int main(int argc, char **argv)
 	    pro[i]=0.;
 	}
 
-	embIepComp(ajStrStr(substr),amino,c); /* Get sequence composition */
-
+	embIepCompS(substr, amino, sscount, modlysine, c);
 
 	if(dofile)
 	{
-	    ajFmtPrintF(outf,"IEP of %s from %d to %d\n",ajSeqName(a),be,en);
-	    if(!embIepIEP(ajStrStr(substr),amino,&iep,termini))
+	    ajFmtPrintF(outf,"IEP of %S from %d to %d\n",
+			ajSeqGetNameS(a), be, en);
+	    if(!embIepIepS(substr, amino, sscount, modlysine,
+			  &iep, termini))
 		ajFmtPrintF(outf,"Isoelectric Point = None\n\n");
 	    else
-		ajFmtPrintF(outf,"Isoelectric Point = %-6.4lf\n\n",iep);
+		ajFmtPrintF(outf,"Isoelectric Point = %-6.4lf\n\n", iep);
 
 	    ajFmtPrintF(outf,"   pH     Bound    Charge\n");
 
 	    for(pH=1.0;pH<=14.0;pH+=step)
 	    {
-		H = embIepPhToHConc(pH);
+		H = embIepPhToHconc(pH);
 		if(!termini)
 		    c[EMBIEPAMINO]=c[EMBIEPCARBOXYL]=0;
 		embIepGetProto(K,c,op,H,pro);
@@ -146,7 +151,7 @@ int main(int argc, char **argv)
 	    for(pH=1.0,k=0;pH<=14.0;pH+=GSTEP,++k)
 	    {
 		xa[k] = (float)pH;
-		H=embIepPhToHConc(pH);
+		H = embIepPhToHconc(pH);
 		if(!termini)
 		    c[EMBIEPAMINO] = c[EMBIEPCARBOXYL]=0;
 		embIepGetProto(K,c,op,H,pro);
@@ -161,11 +166,12 @@ int main(int argc, char **argv)
 	    tmp = ajStrNew();
 	    ajFmtPrintS(&tit,"%s %d-%d IEP=",ajSeqName(a),be,en);
 
-	    if(!embIepIEP(ajStrStr(substr),amino,&iep,termini))
-		ajStrAssC(&tmp,"none");
+	    if(!embIepIepS(substr, amino, sscount, modlysine,
+			   &iep,termini))
+		ajStrAssignC(&tmp,"none");
 	    else
 		ajFmtPrintS(&tmp,"%-8.4f",iep);
-	    ajStrApp(&tit,tmp);
+	    ajStrAppendS(&tit,tmp);
 
 
 	    phGraph = ajGraphPlpDataNewI(npoints);
@@ -195,6 +201,8 @@ int main(int argc, char **argv)
 	}
     }
     ajGraphClose();
+    ajGraphxyDel(&graph);
+
     AJFREE(K);
     AJFREE(pro);
     AJFREE(op);
@@ -203,7 +211,10 @@ int main(int argc, char **argv)
     ajStrDel(&substr);
     ajFileClose(&outf);
 
-    ajExit();
+    ajSeqallDel(&all);
+    ajSeqDel(&a);
+
+    embExit();
 
     return 0;
 }

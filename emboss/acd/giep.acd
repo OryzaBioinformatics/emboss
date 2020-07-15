@@ -1,5 +1,6 @@
 application: giep [
-  documentation: "Calculates the isoelectric point of a protein"
+  documentation: "Calculates the isoelectric point of a
+                  protein"
   groups: "Protein:Composition"
 ]
 
@@ -8,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "pureprotein"
   ]
@@ -20,19 +21,19 @@ section: advanced [
   type: "page"
 ]
 
-  float: step  [
+  float: step [
     information: "Step pH value"
     minimum: ".01"
     maximum: "1."
     default: ".5"
   ]
 
-  integer: amino  [
+  integer: amino [
     information: "Number of N-termini"
     default: "1"
   ]
 
-  boolean: termini  [
+  boolean: termini [
     default: "Y"
     information: "Include charge at N and C terminus"
   ]
@@ -44,21 +45,21 @@ section: output [
   type: "page"
 ]
 
-  toggle: plot  [
+  toggle: plot [
     default: "N"
     information: "Plot charge vs pH"
   ]
 
-  toggle: report  [
+  toggle: report [
     default: "Y"
     information: "Write results to a file"
   ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "$(plot)"
   ]
 
-  outfile: outfile  [
+  outfile: outfile [
     standard: "$(report)"
     knowntype: "giep output"
     nullok: "@(!$(report))"

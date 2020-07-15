@@ -35,7 +35,7 @@ static  double AjpK[EMBIEPSIZE];	/* pK values from Epk.dat      */
 
 
 
-/* @func embIepPhToHConc  *****************************************************
+/* @func embIepPhToHconc  *****************************************************
 **
 ** Convert pH to hydrogen ion concontration
 **
@@ -44,7 +44,7 @@ static  double AjpK[EMBIEPSIZE];	/* pK values from Epk.dat      */
 ** @return [double] hydrogen ion concentrration
 ******************************************************************************/
 
-double embIepPhToHConc(double pH)
+double embIepPhToHconc(double pH)
 {
     return pow(10.0,-pH);
 }
@@ -52,7 +52,7 @@ double embIepPhToHConc(double pH)
 
 
 
-/* @func embIepHConcToPh  *****************************************************
+/* @func embIepPhFromHconc ****************************************************
 **
 ** Convert hydrogen ion concontration to pH
 **
@@ -61,7 +61,7 @@ double embIepPhToHConc(double pH)
 ** @return [double] pH
 ******************************************************************************/
 
-double embIepHConcToPh(double H)
+double embIepPhFromHconc(double H)
 {
     return -log10(H);
 }
@@ -86,7 +86,7 @@ double embIepPkToK(double pK)
 
 
 
-/* @func embIePkTopK  *********************************************************
+/* @func embIepPkFromK ********************************************************
 **
 ** Convert dissociation constant to pK
 **
@@ -95,7 +95,7 @@ double embIepPkToK(double pK)
 ** @return [double] pK
 ******************************************************************************/
 
-double embIePkTopK(double K)
+double embIepPkFromK(double K)
 {
     return -log10(K);
 }
@@ -133,29 +133,50 @@ void embIepPkRead(void)
     line = ajStrNew();
     while(ajFileGets(inf,&line))
     {
-	p = ajStrStr(line);
+	p = ajStrGetPtr(line);
+#ifndef WIN32
 	if(*p=='#' || *p=='!' || *p=='\n')
+#else
+	if(*p=='#' || *p=='!' || *p=='\n' || *p=='\r')
+#endif
 	    continue;
 
-	if(!ajStrNCmpC(line,"Amino",5))
+	if(!ajStrCmpLenC(line,"Amino",5))
 	{
+#ifndef WIN32
 	    p = ajSysStrtok(p," \t\n");
 	    p = ajSysStrtok(NULL," \t\n");
+#else
+	    p = ajSysStrtok(p," \t\n\r");
+	    p = ajSysStrtok(NULL," \t\n\r");
+#endif
 	    sscanf(p,"%lf",&amino);
 	    continue;
 	}
 
-	if(!ajStrNCmpC(line,"Carboxyl",8))
+	if(!ajStrCmpLenC(line,"Carboxyl",8))
 	{
+#ifndef WIN32
 	    p = ajSysStrtok(p," \t\n");
 	    p = ajSysStrtok(NULL," \t\n");
+#else
+	    p = ajSysStrtok(p," \t\n\r");
+	    p = ajSysStrtok(NULL," \t\n\r");
+#endif
+
 	    sscanf(p,"%lf",&carboxyl);
 	    continue;
 	}
 
+#ifndef WIN32
 	p  = ajSysStrtok(p," \t\n");
 	ch = ajSysItoC(toupper((ajint)*p));
 	p  = ajSysStrtok(NULL," \t\n");
+#else
+	p  = ajSysStrtok(p," \t\n\r");
+	ch = ajSysItoC(toupper((ajint)*p));
+	p  = ajSysStrtok(NULL," \t\n\r");
+#endif
 	sscanf(p,"%lf",&AjpK[ajAZToInt(ch)]);
     }
 
@@ -172,18 +193,22 @@ void embIepPkRead(void)
 
 
 
-/* @func embIepComp ***********************************************************
+/* @func embIepCompC **********************************************************
 **
 ** Calculate the amino acid composition of a protein sequence
 **
 ** @param [r] s [const char *] protein sequence
 ** @param [r] amino [ajint] number of amino termini
+** @param [r] sscount [ajint] number of disulphide bridges
+** @param [r] modlysine [ajint] number of modified lysines
 ** @param [w] c [ajint *] amino acid composition
 **
 ** @return [void]
 ******************************************************************************/
 
-void embIepComp(const char *s, ajint amino, ajint *c)
+void embIepCompC(const char *s, ajint amino,
+		 ajint sscount, ajint modlysine,
+		 ajint *c)
 {
     ajint i;
     const char *p;
@@ -200,12 +225,69 @@ void embIepComp(const char *s, ajint amino, ajint *c)
 
     c[EMBIEPAMINO]    = amino;
     c[EMBIEPCARBOXYL] = 1;
+    if (sscount > 0)
+    {
+	if(c[EMBIEPCYSTEINE] <  2*sscount)
+	{
+	    ajWarn("embIepCompC %d disulphides but only %d cysteines\n",
+		   sscount, c[EMBIEPCYSTEINE]+2*sscount);
+	    c[EMBIEPCYSTEINE] = 0;
+	}
+	else
+	{
+	    c[EMBIEPCYSTEINE] -= 2*sscount;
+	}
+    }
+    if (modlysine > 0)
+    {
+	if(c[EMBIEPLYSINE] < modlysine)
+	{
+	    ajWarn("embIepCompC %d modified lysines but only %d lysines\n",
+		   sscount, c[EMBIEPLYSINE]);
+	    c[EMBIEPLYSINE] = 0;
+	}
+	else
+	{
+	    c[EMBIEPLYSINE] -= modlysine;
+	}
+    }
 
     return;
 }
 
 
 
+/* @func embIepCompS **********************************************************
+**
+** Calculate the amino acid composition of a protein sequence
+**
+** @param [r] str [const AjPStr] protein sequence
+** @param [r] amino [ajint] number of amino termini
+** @param [r] sscount [ajint] number of disulphide bridges
+** @param [r] modlysine [ajint] number of modified lysines
+** @param [w] c [ajint *] amino acid composition
+**
+** @return [void]
+******************************************************************************/
+
+void embIepCompS(const AjPStr str, ajint amino,
+		 ajint sscount, ajint modlysine,
+		 ajint *c)
+{
+    embIepCompC(ajStrGetPtr(str), amino, sscount, modlysine, c);
+    return;
+}
+
+
+
+/* @obsolete embIepComp
+** @replace embIepCompC (1,2,3/1,2,0,0,3)
+*/
+void __deprecated embIepComp(const char *s, ajint amino, ajint *c)
+{
+    embIepCompC(s, amino, 0, 0, c);
+    return;
+}
 
 /* @func embIepCalcK  *********************************************************
 **
@@ -332,10 +414,10 @@ double embIepPhConverge(const ajint *c, const double *K,
     double tph = 1.0;
     double bph = 14.0;
 
-    H = embIepPhToHConc(tph);
+    H = embIepPhToHconc(tph);
     embIepGetProto(K,c,op,H,pro);
     top = embIepGetCharge(c,pro,&sum);
-    H = embIepPhToHConc(bph);
+    H = embIepPhToHconc(bph);
     embIepGetProto(K,c,op,H,pro);
     bot = embIepGetCharge(c,pro,&sum);
     if((top>0.0 && bot>0.0) || (top<0.0 && bot<0.0))
@@ -344,7 +426,7 @@ double embIepPhConverge(const ajint *c, const double *K,
     while(bph-tph>0.0001)
     {
 	mid = ((bph-tph) / 2.0) + tph;
-	H = embIepPhToHConc(mid);
+	H = embIepPhToHconc(mid);
 	embIepGetProto(K,c,op,H,pro);
 	charge = embIepGetCharge(c,pro,&sum);
 	if(charge>0.0)
@@ -368,19 +450,23 @@ double embIepPhConverge(const ajint *c, const double *K,
 
 
 
-/* @func embIepIEP  ***********************************************************
+/* @func embIepIepC ***********************************************************
 **
 ** Calculate the pH nearest the IEP.
 **
 ** @param [r] s [const char *] sequence
 ** @param [r] amino [ajint] number of N-termini
+** @param [r] sscount [ajint] number of disulphide bridges
+** @param [r] modlysine [ajint] number of modified lysines
 ** @param [w] iep [double *] IEP
 ** @param [r] termini [AjBool] use termini
 **
 ** @return [AjBool] True if IEP exists
 ******************************************************************************/
 
-AjBool embIepIEP(const char *s, ajint amino, double *iep, AjBool termini)
+AjBool embIepIepC(const char *s, ajint amino,
+		  ajint sscount, ajint modlysine,
+		  double *iep, AjBool termini)
 {
     ajint *c    = NULL;
     ajint *op   = NULL;
@@ -396,7 +482,7 @@ AjBool embIepIEP(const char *s, ajint amino, double *iep, AjBool termini)
 
     embIepPkRead();			/* read pK's */
     embIepCalcK(K);			/* Convert to dissoc consts */
-    embIepComp(s,amino,c);		/* Get sequence composition */
+    embIepCompC(s,amino,sscount, modlysine,c); /* Get sequence composition */
 
     if(!termini)
 	c[EMBIEPAMINO] = c[EMBIEPCARBOXYL] = 0;
@@ -412,4 +498,41 @@ AjBool embIepIEP(const char *s, ajint amino, double *iep, AjBool termini)
 	return ajFalse;
 
     return ajTrue;
+}
+
+
+
+/* @func embIepIepS ***********************************************************
+**
+** Calculate the pH nearest the IEP.
+**
+** @param [r] str [const AjPStr] sequence
+** @param [r] amino [ajint] number of N-termini
+** @param [r] sscount [ajint] number of disulphide bridges
+** @param [r] modlysine [ajint] number of modified lysines
+** @param [w] iep [double *] IEP
+** @param [r] termini [AjBool] use termini
+**
+** @return [AjBool] True if IEP exists
+******************************************************************************/
+
+AjBool embIepIepS(const AjPStr str, ajint amino,
+		  ajint sscount, ajint modlysine,
+		  double *iep, AjBool termini)
+{
+    return embIepIepC(ajStrGetPtr(str), amino, sscount, modlysine,
+		      iep, termini);
+}
+
+
+
+
+/* @obsolete embIepIEP
+** @replace embIepIepC (1,2,3,4/1,2,0,0,3,4)
+*/
+
+AjBool __deprecated embIepIEP(const char *s, ajint amino,
+			      double *iep, AjBool termini)
+{
+    return embIepIepC(s, amino, 0, 0, iep, termini);
 }
