@@ -1,6 +1,244 @@
 #!/usr/bin/perl -w
 
+#############################################################################
+#
+# Processing new @section blocks for ajstr etc.
+#
+# Controls
+#
+# @filesection
+# Expected to contain @nam1rule and perhaps @nam2rule
+# which overwrite all later name rules
+#
+# @datasection
+# subdivides for multiple types in one file e.g. ajstr.c
+# expected to have @nam2rule
+# which overwrites all later name rules
+#
+# @fdata [Datatype]
+# should automatically pick up rules from an @datasection block
+#
+# @nam*rule Name Descriptive text
+# describes a name element and its level
+# if attached always to a lower level name, include both e.g. NewRes
+# (or they could be simply nested if the name can appear anywhere)
+#
+# @suffix Name
+# single letter suffix appended to any function name
+# defined globally in @filesection or @datasection
+# or just for a single section
+#
+# @argrule Name Argname [Argtype] Descriptive text
+# attached to a name from @namrule or @suffix
+# the argument name must appear in the order specified in the rules
+# Name can (should) be * to apply to all functions in a section.
+#
+# @valrule Name [Valtype] Descriptive text
+# The return value for a named set of functions.
+# Name can (should) be * to apply to all functions in a section.
+#############################################################################
+
 use English;
+
+sub nametowords($) {
+    my ($name) = @_;
+    my $fname = $name;
+    $name =~ s/([A-Z])/ $1/go;
+    my @nameparts = split(' ', $name);
+#    print LOG "sub function $fname parts $#nameparts\n";
+    return @nameparts;
+}
+
+sub nametorules($\@) {
+    my ($name,$rules) = @_;
+    my $fname = $name;
+    my $ok = 1;
+    if (!($name =~ s/^M//)) {return 0}
+
+    print LOG "nametorules $fname\n";
+    my $ilevel = 0;
+    my $irule = 0;
+    my $urule = "";
+    my $nname = $name;
+    my @nametorules = ();
+
+    foreach $rulelevel (@$rules) {
+	$ok = 1;
+	$ilevel++;
+	print LOG "nametorules level $ilevel\n";
+	$irule = 0;
+	$nname = $name;
+	foreach $currule (@$rulelevel) {
+	    $irule++;
+	    print LOG "nametorules level $ilevel rule $irule\n";
+	    $currule =~ s/([A-Z])/ $1/gos;
+	    @ruleparts = split(' ', $currule);
+	    $rule = pop(@ruleparts);
+	    $urule = uc($rule);
+	    print LOG "nametorules rule '$rule'\n";
+	    if($nname =~ s/^$urule//) {
+		print LOG "nametorules matched name: '...$nname'\n";
+		$ok = 1;
+		push(@nametorules, $rule);
+		if($nname eq "") {last}
+		next;
+	    }
+	    else {
+		print LOG "nametorules no match\n";
+		$ok = 0;
+	    }
+	}
+	if($ok) {
+	    if ($nname eq "") {
+		print LOG "nametorules success\n";
+		return @nametorules;
+	    }
+	    else {
+		print LOG "nametorules matched up to: '...$nname'\n";
+		$name = $nname;
+	    }
+	}
+	else {
+	    print LOG "nametorules not found '...$nname'\n";
+	}
+    }
+
+    print LOG "nametorules failed $fname ok:$ok name: '$nname'\n";
+
+    return 0;
+}
+
+sub testorder($@$) {
+    my($lastname, @newparts, $type) = @_;
+    print LOG "testorder '$lastname' '$name'\n";
+    if($lastname eq "") {return 1}
+    $lastname =~ s/([A-Z])/ $1/go;
+    my @oldparts = split(' ', $lastname);
+    my $o;
+    foreach $o (@oldparts) {
+	if($#newparts < 0) {return 0}
+	$n = shift(@newparts);
+	if($o =~ /^[A-Z]$/) {	# last name within suffix list
+	    print LOG "testorder suffix '$n' '$o'\n";
+	    if($n =~ /^[A-Z]$/) {
+		if($n lt $o) {return 0}
+		if($n gt $o) {return 1}
+	    }
+	    else {return 1}	# new name level
+	}
+	else {
+	    print LOG "testorder name '$n' '$o'\n";
+	    if($n lt $o) {return 0}
+	    if($n gt $o) {return 1}
+	}
+    }
+    if($#newparts >= 0) {return 1}
+    # oops - names seem to be the same
+    print LOG "testorder fail: identity\n";
+    if($type eq "macro") {return 1} # macro can follow function of same name
+    return 0;
+}
+
+sub issuffix($@) {
+    my ($name,@suffixes) = @_;
+    my $s;
+    if($#suffixes < 0) {return 0}
+
+    foreach $s (@suffixes) {
+#	print LOG "issuffix '$name' '$s'\n";
+	if ($name eq $s) {return 1}
+    }
+
+#    print LOG "issuffix failed\n";
+    return 0;
+}
+
+sub isnamrule($\@@) {
+    my ($i, $rules, @nameparts) = @_;
+    my $j = $i-1;
+#    print LOG "isnamrule ++ i: $i rules $#{$rules} names $#nameparts '$nameparts[$i]'\n";
+    if($i > $#nameparts) {
+#	print LOG "isnamrule i: $i names $#nameparts\n";
+	return 0;
+    }
+    my $rule;
+    my $r;
+    my @ruleparts;
+    my $ok;
+    foreach $currule (@$rules) {
+#	print LOG "isnamrule: rule '$currule'\n";
+	$rule = $currule;
+	$rule =~ s/([A-Z])/ $1/gos;
+	@ruleparts = split(' ', $rule);
+	$j = $i - $#ruleparts;
+	if($j < 0) {next}
+	$ok = 1;
+	foreach $r (@ruleparts) {
+#	    print LOG "isnamrule $j name: '$nameparts[$j]' rule '$r'\n";
+	    if($nameparts[$j] ne $r) {$ok=0;last}
+	    $j++;
+	}
+	if(!$ok) {next}
+#	print LOG "isnamrule OK\n";
+	return 1;
+    }
+#    print LOG "isnamrule all rules failed\n";
+    return 0;
+}
+
+sub matchargname($$@) {
+    my ($aname, $anum, @nameparts) = @_;
+    my $j = $#nameparts;
+    my $argname = $aname;
+    $argname =~ s/^[*]//go;
+    $argname =~ s/([A-Z])/ $1/go;
+    my @argparts = split(' ', $argname);
+    my $k = $#argparts;
+    if($j < $k) {return 0} 	# argname longer than function name!
+    my $curarg;
+    my $ok;
+    my $imax = $j - $k;
+    my $i;
+    my $ii;
+    my $kk;
+    my $n = "";
+    my $sufcnt = 0;
+    print LOG "matchargname '$aname' <$anum> '$fname' imax:$imax\n";
+    print LOG "matchargname parts: \n";
+    foreach $n (@nameparts) { print LOG " '$n'"}
+    print LOG "\n";
+    for ($i=0;$i<=$imax; $i++) {
+	$ok = 1;
+	$aname = "";
+	$sufcnt = 0;
+	for ($ii=0; $ii < $i; $ii++) {
+	    if($nameparts[$ii] =~ /^[A-Z]$/) {
+		print LOG "i:$i suffix '$nameparts[$ii]'\n";
+		$sufcnt++;
+	    }
+	}
+	print LOG "i:$i sufcnt: $sufcnt\n";
+	for ($kk=0;$kk<=$k;$kk++) {
+	    $ii = $i+$kk;
+	    print LOG "matchargname test $nameparts[$ii] $argparts[$kk]\n";
+	    if($nameparts[$ii] =~ /^[A-Z]$/) {$sufcnt++}
+	    if($nameparts[$ii] ne $argparts[$kk]) {
+		print LOG "matchargname reject $nameparts[$ii] $argparts[$kk]\n";
+		$ok = 0;
+		last;
+	    }
+	    $aname .= $nameparts[$ii];
+	    print LOG "matchargname OK so far: $aname\n";
+	}
+	if($ok) {
+	    print LOG "matchargname: matched i:$i '$aname' $sufcnt/$anum\n";
+	    if($anum && ($sufcnt != $anum)) {next}
+	    return 1;
+	}
+    }
+    print LOG "matchargname failed\n";
+    return 0;
+}
 
 sub srsref {
     return "<a href=\"http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz?-e+[EFUNC-ID:$_[0]]\">$_[0]</a>";
@@ -20,7 +258,7 @@ sub secttest($$) {
     elsif ($sect =~ /Casts$/) {$stype = "cast"}
     elsif ($sect =~ /Input$/) {$stype = "input"}
     elsif ($sect =~ /Output$/) {$stype = "output"}
-    elsif ($sect =~ /Miscellaneous$/) {$stype = "use"}
+    elsif ($sect =~ /Miscellaneous$/) {$stype = "misc"}
     if ($stype eq "") {return $stype}
     if ($stype ne $ctype) {
 	print "bad category '$ctype' in section '$sect'\n";
@@ -56,7 +294,7 @@ sub testdelete($$\@\@) {
 	print "bad category delete - only one parameter allowed\n";
 	return 0;
     }
-    if (${$tcast}[0] ne "$tdata\*") {
+    if (${$tcast}[0] !~ /$tdata\*+/) {
 	$tc = ${$tcast}[0];
 	print "bad category delete - only parameter '$tc' must be '$tdata\*'\n";
     }
@@ -72,7 +310,7 @@ sub testassign($$\@\@) {
     }
     $tc = ${$tcast}[0];
     $tx = ${$tcode}[0];
-    if ($tc ne "$cdata\*") {
+    if ($tc ne "$tdata\*") {
 	print "bad category assign - parameter1 '$tc' not '$tdata\*'\n";
     }
     if ($tx !~ /[w]/) {
@@ -90,7 +328,10 @@ sub testmodify($$\@\@) {
     }
     $tc = ${$tcast}[0];
     $tx = ${$tcode}[0];
-    if ($tc ne "$cdata" && $tc ne "$cdata\*") {
+    if(!defined($tc)) {
+    print "testmodify tc undefined for $fname $pubout\n";
+    }
+    if ($tc ne "$tdata" && $tc ne "$tdata\*") {
 	print "bad category modify - parameter1 '$tc' not '$tdata\*'\n";
     }
     if ($tx !~ /[wu]/) {
@@ -114,6 +355,25 @@ sub testcast($$\@\@) {
     }
     if ($tx !~ /[r]/) {
 	print "bad category cast - code1 '$tx' not 'r'\n";
+    }
+}
+
+sub testderive($$\@\@) {
+    my ($tdata, $ttype, $tcast, $tcode) = @_;
+    if ($#{$tcast} < 0) {
+	print "bad category derive - no parameters\n";
+	return 0;
+    }
+    if ($#{$tcast} == 0 && $ttype eq "void") {
+	print "bad category derive - one parameter and returns void\n";
+    }
+    $tc = ${$tcast}[0];
+    $tx = ${$tcode}[0];
+    if ($tc ne "const $tdata") {
+	print "bad category derive - parameter1 '$tc' not 'const $tdata'\n";
+    }
+    if ($tx !~ /[r]/) {
+	print "bad category derive - code1 '$tx' not 'r'\n";
     }
 }
 
@@ -195,12 +455,47 @@ sub testoutput($\@\@) {
     }
 }
 
+sub testmisc($\@\@) {
+    my ($tdata, $tcast, $tcode) = @_;
+    my $ok = 0;
+    my $i = 0;
+#    if ($#{$tcast} < 0) {
+#	print "bad category misc - no parameters\n";
+#	return 0;
+#    }
+#    for ($i=0; $i <= $#{$tcast}; $i++) {
+#	$tc = ${$tcast}[$i];
+#	$tx = ${$tcode}[$i];
+#	if ($tc eq "$tdata" || $tc eq "const $tdata") {
+#	    if  ($tx =~ /[ru]/) {
+#		$ok = 1;
+#	    }
+#	}
+#    }
+#    if (!$ok) {
+#	print "bad category misc - no parameter (const) '$tdata' and code 'r' or 'u'\n";
+#    }
+}
+
 $pubout = "public";
 $local = "local";
 $infile = "";
 $lib = "unknown";
 $countglobal=0;
 $countstatic=0;
+$countsection = 0;
+
+@namrules = ();
+@sufname = ();
+$namrulesfilecount=$#namrules;
+$namrulesdatacount=$#namrules;
+$suffixfilecount=$#sufname;
+$suffixdatacount=$#sufname;
+
+$dosecttest = 0;
+$datatype="undefined";
+
+$flastname = 0;
 
 ### cppreserved is a list of C++ reserved words not to be used as param names.
 ### test is whether to test the return etc.
@@ -211,8 +506,8 @@ $countstatic=0;
 %body = ("func" => 1, "funcstatic" => 1, "funclist" => 1, "prog" => 1);
 
 %categs = ("new" => 1, "delete" => 1, "assign" => 1, "modify" => 1,
-	   "cast" => 1, "use" => 1, "iterate" => 1,
-	   "input" => 1, "output" => 1);
+	   "cast" => 1, "derive" => 1, "use" => 1, "iterate" => 1,
+	   "input" => 1, "output" => 1, "misc" => 1);
 %ctot = ();
 if ($ARGV[0]) {$infile = $ARGV[0];}
 if ($ARGV[1]) {$lib = $ARGV[1];}
@@ -236,6 +531,14 @@ foreach $x ("CallFunc", "AjMessVoidRoutine", "AjMessOutRoutine") {
     $functype{$x} = 1;
 }
 
+foreach $x ("datastatic", "alias", "attr") {
+    $datatoken{$x} = 1;
+}
+
+foreach $x("plus") {
+    $ignore{$x} = 1;
+}
+
 $source = "";
 
 if ($infile) {
@@ -251,10 +554,16 @@ else {
     while (<>) {$source .= $_}
 }
 
+if($pubout eq "ajstr") {
+    $dosecttest = 1;
+}
+
+open (OBS, ">>deprecated.new");
+print OBS "#$pubout\n";
 open (HTML, ">$pubout.html");
 open (HTMLB, ">$local\_static.html");
 open (SRS, ">$pubout.srs");
-
+open (LOG, ">$local.log");
 $file = "$pubout\.c";
 $title = "$file";
 
@@ -267,6 +576,8 @@ print HTML  "<h1>$file</h1>\n";
 print HTMLB "<h1>$file</h1>\n";
 
 $sect = $lastfsect = $laststatfsect = "";
+$mainprog = 0;
+$functot = 0;
 
 ##############################################################
 ## $source is the entire source file as a string with newlines
@@ -276,13 +587,19 @@ $sect = $lastfsect = $laststatfsect = "";
 ## $rest is the rest of the file
 ##############################################################
 
+# Process an entire block
+# We process each part below
+
 while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
+    $partnum=0;
+    $mastertoken="undefined";
     $ccfull = $&;
     $rest = $POSTMATCH;
 
     ($cc) = ($ccfull =~ /^..\s*(.*\S)*\s*..$/gos);
     if (defined($cc)) {
 	$cc =~ s/[* ]*\n[* ]*/\n/gos;
+	$cc = " ".$cc;
     }
     else {
 	$cc = "";
@@ -297,13 +614,190 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
     @savecode = ();
     @savevar = ();
     @savecast = ();
-    while ($cc =~ m/@((\S+)([^@]+))/gos) {
+    $inputargs = "";
+    $outputargs = "";
+    $modifyargs = "";
+    $returnargs = "";
+    $longdesc = "";
+    $shortdesc = "";
+    $usetext = "See source code";
+    $exampletext = "In preparation";
+    $errtext = "See source code";
+    $dependtext = "See source code";
+    $othertext = "See other functions in this section";
+    $availtext = "In release 3.0.0";
+    $fdata = "";
+    $ctype = "";
+
+    while ($cc =~ m/\s@((\S+)\s+([^@]*[^@\s]))/gos) {
 	$data = $1;
 	$token = $2;
 	#print "<$token>\n";
 	#print "$data\n";
 
-	if ($token eq "section")  {
+	if(!$partnum) {$mastertoken = $token}
+	$partnum++;
+	if ($dosecttest && $token eq "section")  {
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
+	    $OFILE = HTML;
+	    $countglobal++;
+	    if($sect ne "") {
+		if($countsection == 0) {
+		    print "bad section $sect has no public functions\n";
+		}
+	    }
+	    $countsection = 0;
+	    ($sect, $srest) = ($data =~ /\S+\s+([^*\n]+)\s*(.*)/gos);
+	    if(!defined($sect)) {
+		print "bad section: $data\n";
+	    }
+	    $sect =~ s/\s+/ /gos;
+	    $sect =~ s/^ //gos;
+	    $sect =~ s/ $//gos;
+	    $srest =~ s/>/\&gt;/gos;
+	    $srest =~ s/</\&lt;/gos;
+	    $srest =~ s/\n\n/\n<p>\n/gos;
+	    $srest =~ s/{([^\}]+)}/<a href="#$1">$1<\/a>/gos;
+	    print "\nSection $sect\n";
+	    print "-----------------------------\n";
+	    @argnumb = ();
+	    @argpref = ();
+	    @argname = ();
+	    @argtype = ();
+	    @argdesc = ();
+	    @valname = ();
+	    @valtype = ();
+	    $lastfname = "";
+	    $fdata = "";
+	    $ctype = "";
+	    splice(@namrules, 1+$namrulesdatacount);
+	    splice(@namdescs, 1+$namrulesdatacount);
+	    splice(@sufname, 1+$suffixdatacount);
+	    splice(@sufdesc, 1+$suffixdatacount);
+	}
+
+	elsif ($token eq "fdata")  {
+	    $dosecttest = 1;
+	    if($mastertoken ne "section") {
+		print "bad syntax \@$token must be in \@section\n";
+	    }
+	    ($fdata) =
+		($data =~ /^\S+\s+[\[]([^\]]+)[\]]\s*(.*)/gos);
+	    if(!defined($fdata)) {
+		print "bad fdata: $data\n";
+	    }
+	    if($fdata ne $datatype) {
+		print "bad fdata <$fdata> <$datatype>\n";
+	    }
+	}
+
+	elsif ($token eq "datasection")  {
+	    $dosecttest = 1;
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
+	    $flastname = "";
+	    ($datatype, $datadesc) =
+		($data =~ /\S+\s+[\[]([^\]]+)[\]]\s*(.*)/gos);
+	    if(!defined($datadesc)) {
+		print "bad datasection: $data\n";
+		next;
+	    }
+	    splice(@namrules, 1+$namrulesfilecount);
+	    splice(@namdescs, 1+$namrulesfilecount);
+	    splice(@sufname, 1+$suffixfilecount);
+	    splice(@sufdesc, 1+$suffixfilecount);
+	}
+
+	elsif ($token eq "filesection")  {
+	    $dosecttest = 1;
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
+	    $flastname = "";
+	    splice (@namrules, 0);
+
+	}
+
+	elsif ($token eq "fnote")  {
+	    if($mastertoken ne "section") {
+		print "bad syntax \@$token must be in \@section\n";
+	    }
+	}
+
+	elsif ($token eq "suffix")  {
+	    # can be on its own or in a block?
+	    ($sufname,$sufdesc) =
+		($data =~ /\S+\s+(\S+)\s+(.*)/gos);
+	    push(@sufname, $sufname);
+	    push(@sufdesc, $sufdesc);
+	}
+
+	elsif ($token =~ /^nam([1-9])rule$/)  {
+	    if($mastertoken ne "section" &&
+	       $mastertoken ne "filesection" &&
+	       $mastertoken ne "datasection") {
+		print "bad syntax \@$token must be in \@filesection, \@datasection or \@section\n";
+	    }
+	    $i = $1 - 1;
+	    ($namrule, $namdesc) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
+	    if(!defined($namdesc)) {
+		print "bad namrule: $data\n";
+		next;
+	    }
+	    print LOG "defined nam$i"."rule '$namrule'\n";
+	    $namdesc =~ s/\n//;
+	    $namdesc =~ s/[.]$//;
+	    push(@{$namrules[$i]},$namrule);
+	    push(@{$namdescs[$i]},$namdesc);
+	}
+
+	elsif ($token eq "valrule")  {
+	    if($mastertoken ne "section") {
+		print "bad syntax \@$token must be in \@section\n";
+	    }
+	    ($valname,$valtype,$valdesc) =
+		($data =~ /\S+\s+(\S+)\s+[\[]([^\]]+)[\]]\s*(.*)/gos);
+	    if(!defined($valdesc)) {
+		print "bad valrule: $data\n";
+		next;
+	    }
+	    $valdesc =~ s/\n//;
+	    $valdesc =~ s/[.]$//;
+	    push (@valname, $valname);
+	    push (@valtype, $valtype);
+	    push (@valdesc, $valdesc);
+	}
+
+	elsif ($token =~ /^arg(\d?)rule$/)  {
+	    if($mastertoken ne "section") {
+		print "bad syntax \@$token must be in \@section\n";
+	    }
+	    $argnumb = $1;
+	    if ($argnumb ne "") {
+		print LOG "$token argnumb: $argnumb\n";
+	    }
+	    ($argpref, $argname, $argtype, $argdesc) =
+		($data =~ /\S+\s+(\S+)\s+(\S+)\s+[\[]([^\]]+[\]]?)[\]]\s*(.*)/gos);
+	    if(!defined($argdesc)) {
+		print "bad argrule: $data";
+		next;
+	    }
+	    $argdesc =~ s/\n//;
+	    $argdesc =~ s/[.]$//;
+	    push (@argnumb, $argnumb);
+	    push (@argpref, $argpref);
+	    push (@argname, $argname);
+	    push (@argtype, $argtype);
+	    push (@argdesc, $argdesc);
+	}
+
+	elsif (!$dosecttest && $token eq "section")  {
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
 	    $OFILE = HTML;
 	    $countglobal++;
 	    ($sect, $srest) = ($data =~ /\S+\s+([^*\n]+)\s*(.*)/gos);
@@ -318,11 +812,25 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	}
 
 	elsif ($token eq "func" || $token eq "prog")  {
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
 	    $ismacro = 0;
 	    $isprog = 0;
-	    if ($token eq "prog") {$isprog = 1}
+	    if ($token eq "prog") {
+		$isprog = 1;
+		$mainprog=1;
+		if($functot) {
+		    print "bad ordering - main program should come first\n";
+		}
+	    }
+	    if($mainprog && !$isprog) {
+		print "bad function prototype: not static after main program\n";
+	    }
 	    $OFILE = HTML;
 	    $countglobal++;
+	    $functot++;
+	    if($sect ne "") {$countsection++;}
 	    if ($sect ne $lastfsect) {
 		print $OFILE "<hr><h2><a name=\"$sect\">\n";
 		print $OFILE "$sect</a></h2>\n";
@@ -333,15 +841,24 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
 	    ($ftype,$fname, $fargs) =
 		$rest =~ /^\s*([^\(\)]*\S)\s+(\S+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os;
-	    if ($isprog && $fname eq "main") {$fname = $pubout}
+	    if($isprog) {$progname = $name}
 	    print "Function $name\n";
 	    print $OFILE "<hr><h3><a name=\"$name\">\n";
 	    print $OFILE "Function</a> ".srsref($name)."</h3>\n";
+	    if(!defined($fargs)) {
+		print "bad function prototype: not parsed\n";
+		$ftype = "unknown";
+		$fname = "unknown";
+		next;
+	    }
+	    if ($isprog && $fname eq "main") {$fname = $pubout}
 	    $srest = $frest;
 	    $frest =~ s/>/\&gt;/gos;
 	    $frest =~ s/</\&lt;/gos;
 	    $frest =~ s/\n\n/\n<p>\n/gos;
-	    print $OFILE "$frest\n";
+	    #print $OFILE "$frest\n";
+	    $shortdesc = $frest;
+	    $longdesc = $frest;
 
 	    print SRS "ID $name\n";
 	    print SRS "TY public\n";
@@ -394,6 +911,9 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	}
 
 	elsif ($token eq "funcstatic")  {
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
 	    $ismacro = 0;
 	    $isprog = 0;
 	    $OFILE = HTMLB;
@@ -411,11 +931,22 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    print "Static function $name\n";
 	    print $OFILE "<h3><a name=\"$name\">\n";
 	    print $OFILE "Static function</a> ".srsref($name)."</h3>\n";
+	    if(!defined($ftype)){
+		print "bad static function prototype: not parsed\n";
+		next;
+	    }
+	    if($mainprog) {
+		if($name !~ /^$progname[_A-Z]/) {
+		    print "bad name expected prefix '$progname\_'\n";
+		}
+	    }
 	    $srest = $frest;
 	    $frest =~ s/>/\&gt;/gos;
 	    $frest =~ s/</\&lt;/gos;
 	    $frest =~ s/\n\n/\n<p>\n/gos;
-	    print $OFILE "$frest\n";
+	    #print $OFILE "$frest\n";
+	    $shortdesc = $frest;
+	    $longdesc = $frest;
 
 	    print SRS "ID $name\n";
 	    print SRS "TY static\n";
@@ -423,11 +954,11 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    print SRS "LB $lib\n";
 	    print SRS "XX\n";
 
-	    $ftype =~ s/\s+/ /gos;
-	    $ftype =~ s/ \*/\*/gos;
-	    if (!$ftype) {print "bad static function definition\n"}
 	    if ($fname ne $name) {print "bad function name <$name> <$fname>\n"}
 	    if (!$frest) {print "bad function '$name', no description\n"}
+
+	    $ftype =~ s/\s+/ /gos;
+	    $ftype =~ s/ \*/\*/gos;
 
 	    $srest =~ s/\n\n+$/\n/gos;
 	    $srest =~ s/\n\n\n+/\n\n/gos;
@@ -438,6 +969,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    chomp $srest;
 	    print SRS "DE $srest\n";
 	    print SRS "XX\n";
+
 
 	    $fargs =~ s/\s+/ /gos;    # all whitespace is one space
 	    $fargs =~ s/ ,/,/gos;   # no space before comma
@@ -453,9 +985,13 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	}
 
 	elsif ($token eq "macro")  {
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
 	    $ismacro = 1;
 	    $OFILE = HTML;
 	    $countglobal++;
+	    if($sect ne "") {$countsection++;}
 	    if ($sect ne $lastfsect) {
 		print $OFILE "<hr><h2><a name=\"$sect\">\n";
 		print $OFILE "$sect</a></h2>\n";
@@ -474,7 +1010,9 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $mrest =~ s/>/\&gt;/gos;
 	    $mrest =~ s/</\&lt;/gos;
 	    $mrest =~ s/\n\n/\n<p>\n/gos;
-	    print $OFILE "$mrest\n";
+	    #print $OFILE "$mrest\n";
+	    $shortdesc = $mrest;
+	    $longdesc = $mrest;
 
 	    print SRS "ID $name\n";
 	    print SRS "TY macro\n";
@@ -500,6 +1038,9 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	}
 
 	elsif ($token eq "funclist")  {
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
 	    $ismacro = 0;
 	    $isprog = 0;
 	    $islist = 1;
@@ -520,7 +1061,9 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $mrest =~ s/>/\&gt;/gos;
 	    $mrest =~ s/</\&lt;/gos;
 	    $mrest =~ s/\n\n/\n<p>\n/gos;
-	    print $OFILE "$mrest\n";
+	    #print $OFILE "$mrest\n";
+	    $shortdesc = $mrest;
+	    $longdesc = $mrest;
 
 	    print SRS "ID $name\n";
 	    print SRS "TY list\n";
@@ -540,15 +1083,28 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	}
 
 	elsif ($token eq "param")  {
+	    if($mastertoken ne "func" &&
+	       $mastertoken ne "funcstatic" &&
+	       $mastertoken ne "macro" &&
+	       $mastertoken ne "funclist") {
+		print "bad syntax \@$token must be in \@func, funcstatic, funclist or macro\n";
+	    }
 	    if (!$intable) {
-		print $OFILE "<p><table border=3>\n";
-		print $OFILE "<tr><th>RW</th><th>Name</th><th>Type</th><th>Description</th></tr>\n";
+		#print $OFILE "<p><table border=3>\n";
+		#print $OFILE "<tr><th>Type</th><th>Name</th><th>Read/Write</th><th>Description</th></tr>\n";
 		$intable = 1;
 	    }
 	    ($code,$var,$cast, $prest) = ($data =~ m/[\[]([^\]]+)[\]]\s*(\S*)\s*[\[]([^\]]+[\]]?)[\]]\s*(.*)/gos);
 	    if (!defined($code)) {
-		print STDERR "bad \@param syntax:\n$data";
+		print "bad \@param syntax:\n$data";
 		next;
+	    }
+
+	    if($prest =~ /([^\{]+)[\{]([^\}]+)[\}]/) {
+		if($usetext eq "See source code") {$usetext = ""}
+		else {$usetext .= "<p>\n"}
+		$usetext .= "<b>$var:</b> $2\n";
+		$prest = $1;
 	    }
 
 #           print "code: <$code> var: <$var> cast: <$cast>\n";
@@ -560,6 +1116,23 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    if ($code !~ /^[rwufdv?][CENP]*$/) { # deleted OSU (all unused)
 		print "bad code <$code> var: <$var>\n";
 	    }
+
+	    if($code =~ /^[rfv]/) {
+		if($code =~ /^r/) {$codename = "Input"}
+		elsif($code =~ /^f/) {$codename = "Function"}
+		elsif($code =~ /^v/) {$codename = "Vararg"}
+		$inputargs .= "<tr><td><b>$var:</b></td><td>($codename)</td><td>$prest</td></tr>";
+	    }
+	    elsif($code =~ /[wd]/) {
+		if($code =~ /^w/) {$codename = "Output"}
+		elsif($code =~ /^d/) {$codename = "Delete"}
+		$outputargs .= "<tr><td><b>$var:</b></td><td>($codename)</td><td>$prest</td></tr>";
+	    }
+	    elsif($code =~ /[u]/) {
+		if($code =~ /^u/) {$codename = "Modify"}
+		$modifyargs .= "<tr><td><b>$var:</b></td><td>($codename)</td><td>$prest</td></tr>";
+	    }
+	    else {$codename = "Unknown"}
 
 	    testvar($var);
 	    if ($ismacro) {               # No code to test for macros
@@ -595,8 +1168,6 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 		    }
 		    if (!$isprog && ($var ne $tname)) {
 			print "bad var <$var> <$tname>\n";
-			print "bad var <$var>\n";
-			print "bad var <$tname>\n";
 		    }
 		}
 	    }
@@ -620,7 +1191,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    print SRS "PX\n";
 
 	    if (!$prest) {print "bad \@param '$var', no description\n"}
-	    print $OFILE "<tr><td>$code</td><td>$var</td><td>$cast</td><td>$prest</td></tr>\n";
+	    #print $OFILE "<tr><td>$cast</td><td>$var</td><td>$codename</td><td>$prest</td></tr>\n";
 
 	    if ($simpletype{$cast}) {
 # Simple C types (not structs)
@@ -756,22 +1327,40 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	}
 
 	elsif ($token eq "return")  {
+	    if($mastertoken ne "func" &&
+	       $mastertoken ne "funcstatic" &&
+	       $mastertoken ne "macro" &&
+	       $mastertoken ne "funclist") {
+		print "bad syntax \@$token must be in \@func, funcstatic, funclist or macro\n";
+	    }
 	    if (!$intable) {
-		print $OFILE "<p><table border=3>\n";
-		print $OFILE "<tr><th>RW</th><th>Name</th><th>Type</th><th>Description</th></tr>\n";
+		#print $OFILE "<p><table border=3>\n";
+		#print $OFILE "<tr><th>Type</th><th>Name</th><th>Read/Write</th><th>Description</th></tr>\n";
 		$intable = 1;
 	    }
 	    ($rtype, $rrest) = ($data =~ /\S+\s+\[([^\]]+)\]\s*(.*)/gos);
+	    if(!defined($rtype)) {
+		print "bad return definition: not parsed\n";
+		next;
+	    }
+	    if(!defined($ftype)) {$ftype = "unknown";}
 	    if (!$ismacro && !$isprog && $rtype ne $ftype) {
 		print "bad return type <$rtype> <$ftype>\n";
 	    }
 	    if (!$rrest && $rtype ne "void") {
 		print "bad \@return [$rtype], no description\n";
 	    }
+
+	    if($rtype eq "void") {
+		$returnargs = "<tr><td><b>$rtype:</b></td><td>No return value</td></tr>";
+	    }
+	    else {
+		$returnargs = "<tr><td><b>$rtype:</b></td><td>$rrest</td></tr>";
+	    }
 	    $rrest =~ s/>/\&gt;/gos;
 	    $rrest =~ s/</\&lt;/gos;
-	    print $OFILE "<tr><td>\&nbsp;</td><td>RETURN</td><td>$rtype</td><td>$rrest</td></tr>\n";
-	    print $OFILE "</table><p>\n";
+	    #print $OFILE "<tr><td>$rtype</td><td>\&nbsp;</td><td>RETURN</td><td>$rrest</td></tr>\n";
+	    #print $OFILE "</table><p>\n";
 	    $intable = 0;
 
 	    $drest = $rrest;
@@ -788,15 +1377,41 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    print SRS "RX\n";
 	}
 
-	elsif ($token eq "category")  {
+	elsif ($token eq "fcategory")  {
+	    if($mastertoken ne "section") {
+		print "bad syntax \@fcategory must be in \@section\n";
+	    }
 	    if (!$intable) {
-		print $OFILE "<p><table border=3>\n";
-		print $OFILE "<tr><th>Datatype</th><th>Category</th><th>Description</th></tr>\n";
+		#print $OFILE "<p><table border=3>\n";
+		#print $OFILE "<tr><th>Datatype</th><th>Category</th><th>Description</th></tr>\n";
+		$intable = 1;
+	    }
+	    ($ctype, $crest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
+	    if ($crest) {
+		print "bad \@$token [$ctype], extra text\n";
+	    }
+
+	    $ctot{$ctype}++;
+	    secttest($sect,$ctype);
+	    if (!defined($categs{$ctype})) {
+		print "bad \@fcategory $ctype - unknown type\n";
+	    }
+	}
+
+	elsif ($token eq "category")  {
+	    if($mastertoken ne "func" &&
+		   $mastertoken ne "funcstatic" &&
+	       $mastertoken ne "macro") {
+		print "bad syntax \@category must be in \@func, funcstatic, or macro\n";
+	    }
+	    if (!$intable) {
+		#print $OFILE "<p><table border=3>\n";
+		#print $OFILE "<tr><th>Datatype</th><th>Category</th><th>Description</th></tr>\n";
 		$intable = 1;
 	    }
 	    ($ctype, $cdata, $crest) = ($data =~ /\S+\s+(\S+)\s+\[([^\]]+)\]\s*(.*)/gos);
 	    if (!$crest) {
-		print "bad \@category [$ctype], no description\n";
+		print "bad \@$token [$ctype], no description\n";
 	    }
 
 	    $crest =~ s/\s+/ /gos;
@@ -804,8 +1419,8 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $crest =~ s/ $//gos;
 	    $crest =~ s/>/\&gt;/gos;
 	    $crest =~ s/</\&lt;/gos;
-	    print $OFILE "<tr><td>$cdata</td><td>$ctype</td><td>$crest</td></tr>\n";
-	    print $OFILE "</table><p>\n";
+	    #print $OFILE "<tr><td>$cdata</td><td>$ctype</td><td>$crest</td></tr>\n";
+	    #print $OFILE "</table><p>\n";
 	    $intable = 0;
 
 	    $drest = $crest;
@@ -822,12 +1437,15 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    print SRS "CD $drest\n";
 	    print SRS "CX\n";
 
-	    print "category $ctype [$cdata] $fname $pubout $lib : $crest\n";
+###	    print "category $ctype [$cdata] $fname $pubout $lib : $crest\n";
 	    $ctot{$ctype}++;
 	    secttest($sect,$ctype);
 
+	    if ($dosecttest && $fdata ne "") {
+		$cdata = $fdata;
+	    }
 	    if (!defined($categs{$ctype})) {
-		print "bad \@category [$ctype], unknown type\n";
+		print "bad \@$type [$ctype], unknown type\n";
 	    }
 	    elsif ($ctype eq "new") {
 		testnew($cdata,$rtype);
@@ -844,6 +1462,9 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    elsif  ($ctype eq "cast") {
 		testcast($cdata,$rtype,@savecast,@savecode);
 	    }
+	    elsif  ($ctype eq "derive") {
+		testderive($cdata,$rtype,@savecast,@savecode);
+	    }
 	    elsif  ($ctype eq "use") {
 		testuse($cdata,@savecast,@savecode);
 	    }
@@ -856,22 +1477,444 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    elsif  ($ctype eq "output") {
 		testoutput($cdata,@savecast,@savecode);
 	    }
+	    elsif  ($ctype eq "misc") {
+		testmisc($cdata,@savecast,@savecode);
+	    }
 	    else {
 		print "bad category type '$ctype' - no validation\n";
 	    }
 	}
 
-	elsif ($token eq "cc")  {
+	elsif ($token eq "header")  {
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
 	    next;
 	}
 
+	elsif ($token eq "short")  {
+	    if($mastertoken ne "func" &&
+	       $mastertoken ne "funcstatic" &&
+	       $mastertoken ne "macro") {
+		print "bad syntax \@$token must be in \@func, funcstatic, or macro\n";
+	    }
+	    ($shortdesc) = ($data =~ /\S+\s+(.*)/);
+	    $shortdesc =~ s/>/\&gt;/gos;
+	    $shortdesc =~ s/</\&lt;/gos;
+	    $shortdesc =~ s/\n\n/\n<p>\n/gos;
+	}
+
+	elsif ($token eq "release")  {
+	    if($mastertoken ne "func" &&
+	       $mastertoken ne "funcstatic" &&
+	       $mastertoken ne "macro") {
+		print "bad syntax \@$token must be in \@func, funcstatic, or macro\n";
+	    }
+	    ($availtext) = ($data =~ /\S+\s+(.*)/);
+	    $availtext =~ s/\s+$//gos;
+	    if($availtext =~ /^(\d+[.][.\d]+)$/) {
+		$availtext = "EMBOSS $1";
+	    }
+	    $availtext =~ s/>/\&gt;/gos;
+	    $availtext =~ s/</\&lt;/gos;
+	    $availtext =~ s/\n\n/\n<p>\n/gos;
+	}
+
+	elsif ($token eq "cc")  {
+	    if($mastertoken ne "func" &&
+	       $mastertoken ne "funcstatic" &&
+	       $mastertoken ne "macro") {
+		print "bad syntax \@$token must be in \@func, funcstatic, or macro\n";
+	    }
+	    next;
+	}
+
+	elsif ($token eq "obsolete")  {
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
+	    ($oname, $norest) =
+		($data =~ /\S+\s+(\S+)\s*(.*)/gos);
+	    if($norest) {
+		print "bad obsolete $oname - extra text\n"
+	    }
+	    $replaces = "";
+	    next;
+	}
+
+	elsif ($token eq "rename")  {
+	    if($mastertoken ne "obsolete") {
+		print "bad syntax \@$token must be in \@obsolete\n";
+	    }
+	    if($partnum == 1) {
+		print "bad syntax \@$token cannot be the start\n";
+	    }
+	    ($rename, $norest) =
+		($data =~ /\S+\s+(\S+)\s*(.*)/gos);
+	    if($norest) {
+		print "bad rename $oname $rename - extra text\n";
+		next;
+	    }
+	    print OBS "$oname $rename\n";
+	    next;
+	}
+
+	elsif ($token eq "replace")  {
+	    if($mastertoken ne "obsolete") {
+		print "bad syntax \@$token must be in \@obsolete\n";
+	    }
+	    if($partnum == 1) {
+		print "bad syntax \@$token cannot be the start\n";
+	    }
+	    ($replace, $repargs, $norest) =
+		($data =~ /\S+\s+(\S+)\s+[\(]([^\)]+)[\)]\s*(.*)/gos);
+	    if(!defined($repargs)){
+		print "bad replace value: failed to parse\n";
+		next;
+	    }
+	    if($repargs ne "") {
+		($repold, $repnew) = split('/', $repargs);
+		@repold = split(',', $repold);
+		@repnew = split(',', $repnew);
+		print OBS "$oname =$replace $repold $repnew\n";
+	    }
+	    else {
+		print "bad replace $oname $replace - no arguments\n";
+		next;
+	    }
+	    if($norest) {
+		print "bad replace $oname $replace - extra text\n";
+		next;
+	    }
+
+	    if($replaces ne "") {
+		$replaces .= "_or_\@$replace";
+	    }
+	    else {
+		$replaces = "\@$replace";
+	    }
+	    next;
+	}
+
+	elsif ($token eq "remove")  {
+	    if($mastertoken ne "obsolete") {
+		print "bad syntax \@$token must be in \@obsolete\n";
+	    }
+	    if($partnum == 1) {
+		print "bad syntax \@$token cannot be the start\n";
+	    }
+	    ($delrest) =
+		($data =~ /\S+\s*(.*)/gos);
+	    if(!$delrest) {
+		print "bad remove $oname - no explanation\n";
+		next;
+	    }
+	    print OBS "$oname -\n";
+	    next;
+	}
+
+	elsif ($token eq "source")  {
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
+	    next;
+	}
+
+	elsif ($token eq "author")  {
+	    if($mastertoken ne "source") {
+		print "bad syntax \@$token must be in \@source\n";
+	    }
+	    next;
+	}
+
+	elsif ($token eq "version")  {
+	    if($mastertoken ne "source") {
+		print "bad syntax \@$token must be in \@source\n";
+	    }
+	    next;
+	}
+
+	elsif ($token eq "modified")  {
+	    if($mastertoken ne "source") {
+		print "bad syntax \@$token must be in \@source\n";
+	    }
+	    next;
+	}
+
+	elsif ($token eq "error")  {
+	    if($mastertoken ne "func" &&
+	       $mastertoken ne "funcstatic" &&
+	       $mastertoken ne "macro") {
+		print "bad syntax \@$token must be in \@func, funcstatic, or macro\n";
+	    }
+	    next;
+	}
+
+	elsif ($token eq "cre")  {
+	    if($mastertoken ne "func" &&
+	       $mastertoken ne "funcstatic" &&
+	       $mastertoken ne "macro") {
+		print "bad syntax \@$token must be in \@func, funcstatic, or macro\n";
+	    }
+	    next;
+	}
+
+	elsif ($token eq "see")  {
+	    if($mastertoken ne "func" &&
+	       $mastertoken ne "funcstatic" &&
+	       $mastertoken ne "macro") {
+		print "bad syntax \@$token must be in \@func, funcstatic, or macro\n";
+	    }
+	    next;
+	}
+
+	elsif ($token eq "ure")  {
+	    if($mastertoken ne "func" &&
+	       $mastertoken ne "funcstatic" &&
+	       $mastertoken ne "macro") {
+		print "bad syntax \@$token must be in \@func, funcstatic, or macro\n";
+	    }
+	    next;
+	}
+
+	elsif ($datatoken{$token}) {
+	}
+	elsif ($categs{$token}) {
+	}
+	elsif ($ignore{$token}) {
+	}
 	elsif ($token eq "@")  {
+	    if($partnum == 1) {
+		print "bad syntax \@$token cannot be the start\n";
+	    }
 	    last;
 	}
+	else {
+	    print "Unknown tag '\@$token\n";
+	}
     }
+
+# Whole block read.
+# Post-processing
+
+    if($dosecttest) {
+	if($mastertoken eq "obsolete") {
+	    if($replaces ne "") {
+		print OBS "$oname $replaces\n";
+	    }
+	}
+
+	if($mastertoken eq "filesection") {
+	    $namrulesfilecount=$#namrules;
+	    $suffixfilecount=$#sufname;
+	}
+	if($mastertoken eq "datasection") {
+	    $namrulesdatacount=$#namrules;
+	    $suffixdatacount=$#sufname;
+	}
+
+	if($mastertoken eq "section") {
+	    if($fdata eq "") {
+		print "bad section: no fdata $datatype assumed\n";
+	    }
+	    if($ctype eq "") {
+		print "bad section: no fcategory\n";
+	    }
+	}
+    }
+
     if ($type) {
 #       print "acnt: $acnt largs: $#largs\n";
 #       print "type $type test $test{$type}\n";
+
+	if ($dosecttest && $type ne "funcstatic") {
+	    if($type eq "macro") {
+		@nameparts = nametorules($fname, @namrules);
+	    }
+	    else {
+		@nameparts = nametowords($fname);
+	    }
+	    if(!testorder($lastfname, @nameparts, $type)) {
+		print "bad order: Function $fname follows $lastfname\n";
+	    }
+	    if($type eq "macro") {
+		$lastfname = "";
+		foreach $n(@nameparts) {
+		    $lastfname .= $n;
+		}
+		print LOG "Macro lastfname '$lastfname'\n";
+	    }
+	    else {
+		$lastfname = $fname;
+	    }
+	    print LOG "function $fname ...\n";
+
+# Function name compared to naming rules
+
+	    $i=0;
+	    foreach $f (@nameparts) {
+		$j = $i+1;
+#		print LOG "name $j '$f'\n";
+		if(defined($namrules[$i]) && ($f eq $namrules[$i])) {
+#		    print LOG "namecheck OK\n";
+		}
+		elsif(issuffix($f,@sufname)) {
+#		    print LOG "namecheck OK suffix\n";
+		}
+		else {
+		    if(defined($namrules[$i])) {
+#			print LOG "calling isnamrule i: $i rules $#{$namrules[$i]} names $#nameparts\n";
+			if(!isnamrule($i, @{$namrules[$i]}, @nameparts)) {
+			    print "bad name $fname: '$f' not found\n";
+			    last;
+			}
+		    }
+		    else {
+			print "bad name $fname: '$f' beyond last rule\n";
+			last;
+		    }
+		}
+		$i++;
+	    }
+
+# parameters compared to argument rules
+
+# First we use the name to generate a list of arguments
+
+	    @genargname=();
+	    @genargtype=();
+	    @genvaltype=();
+	    $i=0;
+	    foreach $a (@argpref) {
+		print LOG "argrule '$a' $argnumb[$i] testing $fname\n";
+		$j = $i+1;
+#		print LOG "argrule $j '$a' [$argtype[$i]] '$argdesc[$i]'\n";
+		if(($a eq "*") || matchargname($a, $argnumb[$i], @nameparts)) {
+#		    print LOG "argrule used: '$a' $argname[$i] [$argtype[$i]]\n";
+		    push (@genargname, $argname[$i]);
+		    push (@genargtype, $argtype[$i]);
+		}
+		$i++;
+	    }
+
+### return value = "*" for default, may also have a specific value
+
+	    $valtypeall = "";
+	    $i=0;
+	    foreach $v (@valname) {
+		$vv = $v;
+#		print LOG "valrule '$v' testing $fname\n";
+		$j = $i+1;
+#		print LOG "valrule $j '$v' [$valtype[$i]]'\n";
+		if(matchargname($v, 0, @nameparts)) {
+#		    print LOG "valrule used: '$vv' [$valtype[$i]]\n";
+		    if($vv =~ /^[*](.+)/) {
+			$vv = $1;
+			@genvalname = ();
+			@genvaltype = ();
+		    }
+		    push (@genvaltype, $valtype[$i]);
+		    push (@genvalname, $vv);
+		}
+		if($vv eq "*") {
+		    $valtypeall = $valtype[$i];
+		}
+		$i++;
+	    }
+	    if($valtypeall ne "") {
+		print LOG "valrule * [$valtypeall]\n";
+		if(!defined($genvaltype[0])) {
+#		    print LOG " valrule * [$valtypeall] used\n";
+		    push (@genvaltype, $valtypeall);
+		}
+	    }
+	    $i=0;
+	    foreach $x (@genargname) {
+		if(!defined($savevar[$i])) {
+		    print LOG "++ arg '$x' [$genargtype[$i]] ... <undefined>\n";
+		}
+		else {
+		    print LOG "++ arg '$x' [$genargtype[$i]] ... $savevar[$i] [$savecast[$i]]\n";
+		    if($x ne $savevar[$i]) {
+			print "bad param name <$savevar[$i]> rule <$x> \n";
+		    }
+		    if($genargtype[$i] ne $savecast[$i]) {
+			print "bad param type <$savevar[$i]> [$savecast[$i]] rule <$x> [$genargtype[$i]]\n";
+		    }
+		}
+		$i++;
+	    }
+#
+	    $isave = $#savevar + 1;
+	    $igen=$#genargname + 1;
+	    if($igen < $isave) {
+		print "bad argrule: $igen/$isave params defined\n";
+	    }
+	    elsif($igen > $isave) {
+		print "bad argrule: expected $isave params, found $igen\n";
+	    }
+
+	    if($#genvaltype <0) {
+		print "bad valrule: no matching rule\n"
+	    }
+	    elsif($#genvaltype >0) {
+		$igenvaltype = $#genvaltype+1;
+		print "bad valrule: $igenvaltype matching rules:";
+		foreach $g(@genvalname) {
+		    print "<$g>";
+		}
+		print "\n";
+	    }
+	    else {
+		print LOG "++ val [$genvaltype[0]] ... [$rtype]\n";
+		if($rtype ne $genvaltype[0]) {
+		    print "bad return <$rtype> rule <$genvaltype[0]>\n";
+		}
+	    }
+	    if($dosecttest && $fdata ne "") {
+		$cdata = $fdata;
+	    }
+	    if ($ctype eq "") {
+		# already an error above
+	    }
+	    elsif ($ctype eq "new") {
+		testnew($fdata,$rtype);
+	    }
+	    elsif  ($ctype eq "delete") {
+		testdelete($fdata, $rtype,@savecast,@savecode);
+	    }
+	    elsif  ($ctype eq "assign") {
+		testassign($fdata,$rtype,@savecast,@savecode);
+	    }
+	    elsif  ($ctype eq "modify") {
+		testmodify($fdata,$rtype,@savecast,@savecode);
+	    }
+	    elsif  ($ctype eq "cast") {
+		testcast($fdata,$rtype,@savecast,@savecode);
+	    }
+	    elsif  ($ctype eq "derive") {
+		testderive($fdata,$rtype,@savecast,@savecode);
+	    }
+	    elsif  ($ctype eq "use") {
+		testuse($fdata,@savecast,@savecode);
+	    }
+	    elsif  ($ctype eq "iterate") {
+		testiterate($fdata,$rtype,$crest,@savecast);
+	    }
+	    elsif  ($ctype eq "input") {
+		testinput($fdata,@savecast,@savecode);
+	    }
+	    elsif  ($ctype eq "output") {
+		testoutput($fdata,@savecast,@savecode);
+	    }
+	    elsif  ($ctype eq "misc") {
+		testmisc($fdata,@savecast,@savecode);
+	    }
+	    else {
+		print "bad category type '$ctype' - no validation\n";
+	    }
+	}
+
 	if ($test{$type}) {
 	    if ($acnt == $#largs) {
 		if ($largs[$#largs] ne "void") {
@@ -882,10 +1925,15 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 		$w=$#largs+1;
 		print "bad \@param list $acnt found $w wanted\n";
 	    }
+	    if(!defined($ftype)) {$ftype = "unknown"}
 	    if (!$rtype && $ftype ne "void") {print "bad missing \@return\n"}
 	    print "=============================\n";
 	}
 	print SRS "//\n";
+
+	if($shortdesc) {
+	    print $OFILE "$shortdesc\n";
+	}
 
 ##############################################################
 ## do we want to save what follows the comment?
@@ -898,7 +1946,33 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 # body is the code up to a '}' at the start of a line
 
 	    ($body) = ($rest =~ /(.*?\n\}[^\n]*\n)/os);
+	    if(!defined($body)) {
+		print "bad code body, closing brace not found\n";
+		$body = "\n";
+	    }
 	    print SRS $body;
+
+	    if(defined($fname)) {
+		print $OFILE "<h3>Synopsis</h3>";
+		print $OFILE "<h4>Prototype</h4><pre>";
+		print $OFILE "\n$ftype $fname (";
+		$firstarg = 1;
+		foreach $a (@largs) {
+		    if($firstarg) {
+			print $OFILE "\n      $a";
+		    }
+		    else {
+			print $OFILE ",\n      $a";
+		    }
+		    $firstarg = 0;
+		}
+		if($firstarg) {
+		    print $OFILE "void);\n</pre>\n";
+		}
+		else {
+		    print $OFILE "\n);\n</pre>\n";
+		}
+	    }
 	}
 
 	if (defined($test{$type}) && $test{$type} == 2) {
@@ -909,6 +1983,56 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    print SRS "==FUNCLIST\n$body\n==ENDLIST\n";
 	    print SRS "==REST\n$rest\n==ENDREST\n";
 	}
+	if($inputargs) {
+	    print $OFILE "<h4>Input</h4>\n";
+	    print $OFILE "<table>$inputargs</table>\n";
+	}
+	if($outputargs) {
+	    print $OFILE "<h4>Output</h4>\n";
+	    print $OFILE "<table>$outputargs</table>\n";
+	}
+	if($modifyargs) {
+	    print $OFILE "<h4>Input \&amp; Output</h4>\n";
+	    print $OFILE "<table>$modifyargs</table>\n";
+	}
+	if($returnargs) {
+	    print $OFILE "<h4>Returns</h4>\n";
+	    print $OFILE "<table>$returnargs</table>\n";
+	}
+	if($longdesc) {
+	    print $OFILE "<h3>Description</h3>\n";
+	    print $OFILE "$longdesc\n";
+	}
+	if($usetext) {
+	    print $OFILE "<h3>Usage</h3>\n";
+	    print $OFILE "$usetext\n";
+	}
+	if($exampletext) {
+	    print $OFILE "<h3>Example</h3>\n";
+	    print $OFILE "$exampletext\n";
+	}
+	if($errtext) {
+	    print $OFILE "<h3>Errors</h3>\n";
+	    print $OFILE "$errtext\n";
+	}
+	if($dependtext) {
+	    print $OFILE "<h3>Dependencies</h3>\n";
+	    print $OFILE "$dependtext\n";
+	}
+	if($othertext) {
+	    print $OFILE "<h3>See Also</h3>\n";
+	    print $OFILE "$othertext\n";
+	}
+	if($availtext) {
+	    print $OFILE "<h3>Availability</h3>\n";
+	    print $OFILE "$availtext\n";
+	}
+    }
+}
+
+if($sect ne "") {
+    if($countsection == 0) {
+	print "bad section $sect has no public functions\n";
     }
 }
 
@@ -927,4 +2051,3 @@ print HTML "</body></html>\n";
 print HTMLB "</body></html>\n";
 close HTML;
 close HTMLB;
-

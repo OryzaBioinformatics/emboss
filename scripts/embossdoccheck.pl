@@ -10,7 +10,7 @@ $infile =~ m"^([^.]+)"o;
 
 # $fpref = $1;
 
-open IN, $infile || die "Cannot open input file $infile";
+open (IN, $infile) || die "Cannot open input file $infile";
 
 while (<IN>) {
   $allsrc .= $_;

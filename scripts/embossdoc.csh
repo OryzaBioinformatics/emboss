@@ -20,7 +20,7 @@ echo >! ../edata.check
 
 touch $wdir/ajax/dummy.html
 foreach x ($wdir/ajax/*html $wdir/nucleus/*html \
-           $wdir/datadef/*html $wdir/appsource/*html)
+           $wdir/datadef/*html $wdir/datadef/*empty $wdir/appsource/*html)
 #    echo "'$x:t'"
     if ($x:t == "index.html") then
         echo "Preserve index $x"
@@ -170,7 +170,7 @@ cat *.srsdata >> ../edata.dat
 \rm *.srsdata
 \rm *.empty
 
-
+cp deprecated.new ~/cvsemboss/deprecated.txt
 cd ..
 \rm -rf x/
 

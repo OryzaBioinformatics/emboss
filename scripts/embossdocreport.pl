@@ -62,6 +62,24 @@ while (<>) {
 	}
     }
 
+    if (/^[.][.] File \/\S+\/([^\/]+)\/([^\/.]+)[.]([^\/.]+)$/) {
+	$newfileline = $_;
+	$newfilename = $2;
+	$newfilelib = $1;
+	$newfile = 1;
+	if ($3 eq 'c') {
+	    $newfiletype = "source";
+	}
+	elsif ($3 eq 'h') {
+	    $newfiletype = "include";
+	}
+	else {
+	    $newfiletype = "";
+	}
+	$funcline = "";
+	$funcname = "unknown";
+    }
+
     if ($newfunc || $newfile) {
 	if ($errcount) {
 	    $errtotcount += $errcount;
@@ -88,6 +106,16 @@ while (<>) {
 	$filelib = $newfilelib;
     }
 
+
+    if (/^bad or missing docheader for (\S+)/) {
+	$funcname = $1;
+	$newfunc = 1;
+    }
+
+    if (/^bad docheader for (\S+) precedes (\S+)/) {
+	$funcname = $2;
+	$newfunc = 1;
+    }
 
     if (/^bad/) {
 	if (!$errcount) {
