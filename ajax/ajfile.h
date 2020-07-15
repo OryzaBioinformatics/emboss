@@ -39,19 +39,18 @@ extern "C"
 ** @other AjPFileBuff Buffered input file.
 **
 ** @attr fp [FILE*] C file pointer
-** @attr Handle [ajint] AJAX file number 0 if unused
 ** @attr Name [AjPStr] File name as used when opening
 ** @attr List [AjPList] List of file names (first is open)
 ** @attr End [AjBool] True if EOF has been reached
 ** @attr App [AjBool] True if file was opened for append. 
 ** @attr Buff [AjPStr] Buffer for latest line read
 ** @attr Pid [pid_t] Process PID if any
+** @attr Handle [ajint] AJAX file number 0 if unused
 ** @@
 ******************************************************************************/
 
 typedef struct AjSFile {
   FILE *fp;
-  ajint Handle;
   AjPStr Name;
   AjPList List;
   AjBool End;
@@ -60,6 +59,7 @@ typedef struct AjSFile {
 #ifndef WIN32
   pid_t Pid;
 #endif
+  ajint Handle;
 } AjOFile;
 
 #define AjPFile AjOFile*
@@ -174,6 +174,7 @@ typedef struct AjSFileBuff {
 ** @attr Prefix [AjPStr] Default filename prefix
 ** @attr Extension [AjPStr] Default file extension
 ** @attr Output [AjBool] True if to be used for output
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -182,6 +183,7 @@ typedef struct AjSDir {
   AjPStr Prefix;
   AjPStr Extension;
   AjBool Output;
+  char Padding[4];
 } AjODir;
 
 #define AjPDir AjODir*
@@ -202,8 +204,8 @@ typedef struct AjSDir {
 **
 ** @attr File [AjPFile] File object
 ** @attr Type [AjPStr] Named data file type
-** @attr Itype [ajint] Index number for Type
 ** @attr Formatstr [AjPStr] Format specific for this data type
+** @attr Itype [ajint] Index number for Type
 ** @attr Format [ajint] Index for Formatstr for this data type
 ** @@
 ******************************************************************************/
@@ -211,8 +213,8 @@ typedef struct AjSDir {
 typedef struct AjSOutfile {
   AjPFile File;
   AjPStr Type;
-  ajint Itype;
   AjPStr Formatstr;
+  ajint Itype;
   ajint Format;
 } AjOOutfile;
 
@@ -271,6 +273,7 @@ AjBool      ajFileBuffGetStore (AjPFileBuff thys, AjPStr* pdest,
 				AjBool store, AjPStr *astr);
 AjBool      ajFileBuffGetStoreL (AjPFileBuff thys, AjPStr* pdest,
 				 ajlong* fpos, AjBool store, AjPStr *astr);
+AjBool      ajFileBuffGetTrim(AjPFileBuff thys, AjPStr* pdest);
 AjBool      ajFileBuffIsBuffered (const AjPFileBuff thys);
 void        ajFileBuffLoad (AjPFileBuff thys);
 void        ajFileBuffLoadC (AjPFileBuff thys, const char* str);
@@ -389,7 +392,7 @@ ajint       ajFileWriteChar (AjPFile thys, const char* str, ajint len);
 ajint       ajFileWriteInt2 (AjPFile thys, short i);
 ajint       ajFileWriteInt4 (AjPFile thys, ajint i);
 ajint       ajFileWriteInt8 (AjPFile thys, ajlong i);
-ajint       ajFileWriteStr  (AjPFile thys, const AjPStr str, ajint len);
+ajint       ajFileWriteStr  (AjPFile thys, const AjPStr str, ajuint len);
 
 void        ajOutfileClose(AjPOutfile* pthis);
 void        ajOutfileDel(AjPOutfile* pthis);

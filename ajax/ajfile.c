@@ -61,6 +61,7 @@ static AjPStr filePackTmp = NULL;
 static AjPStr fileDirfixTmp = NULL;
 static AjPStr fileCwd = NULL;
 static AjPStr fileTmpStr = NULL;
+static AjPStr fileTempFilename = NULL;
 
 static AjPRegexp fileUserExp = NULL;
 static AjPRegexp fileWildExp = NULL;
@@ -1079,6 +1080,7 @@ void ajOutfileClose(AjPOutfile* pthis)
 	return;
 
     fileClose(thys->File);
+    AJFREE(thys->File);
     ajStrDel(&thys->Type);
     ajStrDel(&thys->Formatstr);
     AJFREE(*pthis);
@@ -1266,10 +1268,13 @@ static void fileClose(AjPFile thys)
     if(thys->Handle)
     {
 	ajDebug("closing file '%F'\n", thys);
-	if(thys->fp != stdout && thys->fp != stderr)
+	if(thys->fp)
 	{
-	    if(fclose(thys->fp))
-		ajFatal("File close problem in fileClose");
+	    if(thys->fp != stdout && thys->fp != stderr)
+	    {
+		if(fclose(thys->fp))
+		    ajFatal("File close problem in fileClose");
+	    }
 	}
 	thys->Handle = 0;
 
@@ -2453,6 +2458,7 @@ void ajFileExit(void)
     ajStrDel(&fileDirfixTmp);
     ajStrDel(&fileCwd);
     ajStrDel(&fileTmpStr);
+    ajStrDel(&fileTempFilename);
 
     ajRegFree(&fileUserExp);
     ajRegFree(&fileWildExp);
@@ -3695,6 +3701,46 @@ AjBool ajFileBuffGet(AjPFileBuff thys, AjPStr* pdest)
     ajlong fpos = 0;
 
     return ajFileBuffGetL(thys, pdest, &fpos);
+}
+
+
+
+
+/* @func ajFileBuffGetTrim ****************************************************
+**
+** Reads a line from a buffered file. If the buffer has data, reads from the
+** buffer. If the buffer is exhausted, reads from the file. If the file is
+** exhausted, sets end of file and returns. If end of file was already set,
+** looks for another file to open.
+**
+** @param [u] thys [AjPFileBuff] Buffered input file.
+** @param [w] pdest [AjPStr*] Buffer to hold results.
+** @return [AjBool] ajTrue if data was read.
+** @category modify [AjPFileBuff] Reads a line from a buffered file.
+** @@
+******************************************************************************/
+
+AjBool ajFileBuffGetTrim(AjPFileBuff thys, AjPStr* pdest)
+{
+    AjBool ret;
+    ajlong fpos = 0;
+    AjPStr dest;
+
+    ret = ajFileBuffGetL(thys, pdest, &fpos);
+    
+    /* trim any trailing newline */
+
+    dest = *pdest;
+
+    /*ajDebug("Remove carriage-return characters from PC-style files\n");*/
+    if(ajStrGetCharLast(dest) == '\n')
+	ajStrCutEnd(pdest, 1);
+
+    /* PC files have \r\n Macintosh files have just \r : this fixes both */
+    if(ajStrGetCharLast(dest) == '\r')
+	ajStrCutEnd(pdest, 1);
+
+    return ret;
 }
 
 
@@ -4949,11 +4995,11 @@ AjPFile ajFileBuffFile(const AjPFileBuff thys)
 void ajFileBuffLoad(AjPFileBuff thys)
 {
     AjPStr rdline = NULL;
-    AjBool stat = ajTrue;
+    AjBool status = ajTrue;
 
-    while(stat)
+    while(status)
     {
-	stat = ajFileBuffGet(thys, &rdline);
+	status = ajFileBuffGet(thys, &rdline);
 	ajDebug("read: <%S>\n", rdline);
     }
 
@@ -5033,7 +5079,7 @@ AjBool ajFileNameDirSet(AjPStr* filename, const AjPStr dir)
 
 AjBool ajFileNameDirSetC(AjPStr* filename, const char* dir)
 {
-    AjPStr tmpnam = NULL;
+    AjPStr tmpname = NULL;
     AjPStr tmpdir = NULL;
 
     if(!dir)
@@ -5043,7 +5089,7 @@ AjBool ajFileNameDirSetC(AjPStr* filename, const char* dir)
 #ifndef WIN32
 	fileFilenameExp = ajRegCompC("(.*/)?([^/]+)$");
 #else
-	fileFilenameExp = ajRegCompC("(.*\\)?([^\\]+)$");
+	fileFilenameExp = ajRegCompC("(.*\\\\)?([^\\\\]+)$");
 #endif
 
     if(ajRegExec(fileFilenameExp, *filename))
@@ -5055,13 +5101,13 @@ AjBool ajFileNameDirSetC(AjPStr* filename, const char* dir)
 	    return ajFalse;
 	}
 
-	ajRegSubI(fileFilenameExp, 2, &tmpnam);
+	ajRegSubI(fileFilenameExp, 2, &tmpname);
 
 	if(dir[strlen(dir)-1] == SLASH_CHAR)
-	    ajFmtPrintS(filename, "%s%S", dir, tmpnam);
+	    ajFmtPrintS(filename, "%s%S", dir, tmpname);
 	else
-	    ajFmtPrintS(filename, "%s%s%S", dir, SLASH_STRING,tmpnam);
-	ajStrDel(&tmpnam);
+	    ajFmtPrintS(filename, "%s%s%S", dir, SLASH_STRING,tmpname);
+	ajStrDel(&tmpname);
     }
 
     return ajTrue;
@@ -5513,14 +5559,13 @@ const char* ajFileTempName(const char *dir)
 #else
     struct  stat buf;
 #endif
-    static  AjPStr dt = NULL;
     AjPStr  direct;
     ajint   retry;
     AjBool  ok;
     AjPFile outf;
     
-    if(!dt)
-	dt     = ajStrNew();
+    if(!fileTempFilename)
+	fileTempFilename = ajStrNew();
     
     direct = ajStrNew();
     
@@ -5532,38 +5577,41 @@ const char* ajFileTempName(const char *dir)
     
     
     
-    ajFmtPrintS(&dt,"%S%S-%d.%d",direct,ajAcdGetProgram(),time(0),
+    ajFmtPrintS(&fileTempFilename,
+		"%S%S-%d.%d",direct,ajAcdGetProgram(),time(0),
 		ajRandomNumber());
     
     retry = 5;
     ok    = ajTrue;
     
 #if defined(AJ_IRIXLF)
-    while(!stat64(ajStrGetPtr(dt),&buf) && retry)
+    while(!stat64(ajStrGetPtr(fileTempFilename),&buf) && retry)
 #else
-	while(!stat(ajStrGetPtr(dt),&buf) && retry)
+	while(!stat(ajStrGetPtr(fileTempFilename),&buf) && retry)
 #endif
 	{
-	    ajFmtPrintS(&dt,"%S%S-%d.%d",direct,ajAcdGetProgram(),time(0),
+	    ajFmtPrintS(&fileTempFilename,
+			"%S%S-%d.%d",direct,ajAcdGetProgram(),time(0),
 			ajRandomNumber());
 	    --retry;
 	}
     
     if(!retry)
     {
-	ajDebug("Cannot find a unique filename [last try %S]\n",dt);
+	ajDebug("Cannot find a unique filename [last try %S]\n",
+		fileTempFilename);
 	ok = ajFalse;
     }
     
-    if(!(outf = ajFileNewOut(dt)))
+    if(!(outf = ajFileNewOut(fileTempFilename)))
     {
-	ajDebug("Cannot write to file %S\n",dt);
+	ajDebug("Cannot write to file %S\n",fileTempFilename);
 	ok = ajFalse;
     }
     else
     {
 	ajFileClose(&outf);
-	unlink(ajStrGetPtr(dt));
+	unlink(ajStrGetPtr(fileTempFilename));
     }
     
     ajStrDel(&direct);
@@ -5571,7 +5619,7 @@ const char* ajFileTempName(const char *dir)
     if(!ok)
 	return NULL;
     
-    return ajStrGetPtr(dt);
+    return ajStrGetPtr(fileTempFilename);
 }
 
 
@@ -5703,15 +5751,15 @@ ajint ajFileWriteInt8(AjPFile thys, ajlong l)
 **
 ** @param [u] thys [AjPFile] Output file
 ** @param [r] str [const AjPStr] String
-** @param [r] len [ajint] Length (padded) to use in the file
+** @param [r] len [ajuint] Length (padded) to use in the file
 ** @return [ajint] Return value from fwrite
 ** @@
 ******************************************************************************/
 
-ajint ajFileWriteStr(AjPFile thys, const AjPStr str, ajint len)
+ajint ajFileWriteStr(AjPFile thys, const AjPStr str, ajuint len)
 {
     static char buf[256];
-    ajint i;
+    ajuint i;
 
     i = ajStrGetLen(str);
     strcpy(buf, ajStrGetPtr(str));
@@ -5740,9 +5788,7 @@ AjBool ajFileBuffStripHtmlPre(AjPFileBuff thys)
     AjPRegexp preexp = NULL;
     AjPRegexp endexp = NULL;
     ajint ifound = 0;
-    AjBool found;
     
-    found = ajFalse;
     lptr = thys->Curr;
     
     preexp = ajRegCompC("<[Pp][Rr][Ee]>");
@@ -5769,7 +5815,6 @@ AjBool ajFileBuffStripHtmlPre(AjPFileBuff thys)
 	return ajFalse;
     }
 
-    found = ajFalse;
     lptr=thys->Curr;
     
 
@@ -6041,6 +6086,7 @@ static void fileBuffLineDel(AjPFileBuff thys)
 	ajStrDel(&thys->Curr->Line);
 	AJFREE(thys->Curr);
 	thys->Curr = NULL;
+	thys->Last = saveprev;
 	--thys->Size;
 	thys->Pos = thys->Size;
 	return;
