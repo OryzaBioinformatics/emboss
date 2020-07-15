@@ -235,7 +235,7 @@ typedef struct AjSPhyloTree
 
 void           ajPhyloDistDel (AjPPhyloDist* pthis);
 AjPPhyloDist   ajPhyloDistNew (void);
-AjPPhyloDist   ajPhyloDistRead (const AjPStr filename, ajint size,
+AjPPhyloDist*  ajPhyloDistRead (const AjPStr filename, ajint size,
 				AjBool missing);
 void           ajPhyloDistTrace (const AjPPhyloDist thys);
 

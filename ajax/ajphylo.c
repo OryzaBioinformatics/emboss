@@ -372,20 +372,24 @@ void ajPhyloTreeDelarray(AjPPhyloTree** pthis)
 ** @param [r] filename [const AjPStr] input filename
 ** @param [r] size [ajint] Number of rows in distance matrix
 ** @param [r] missing [AjBool] Missing values (replicates zero) allowed
-** @return [AjPPhyloDist] Phylogenetic distances object on success
+** @return [AjPPhyloDist*] Phylogenetic distances object on success
 **                        NULL on failure
 ******************************************************************************/
 
-AjPPhyloDist ajPhyloDistRead(const AjPStr filename, ajint size, AjBool missing)
+AjPPhyloDist* ajPhyloDistRead(const AjPStr filename, ajint size,
+			      AjBool missing)
 {
-    AjPPhyloDist ret   = NULL;
+    AjPPhyloDist* ret   = NULL;
+    AjPPhyloDist dist   = NULL;
     AjPFile distfile   = NULL;
+    AjPList distlist  = NULL;
     AjPStr rdline      = NULL;
     ajint count;
-    ajint irow;
-    ajint icol;
-    ajint i;
-    ajint j;
+    ajint irow = 0 ;
+    ajint icol = 0;
+    ajint i = 0;
+    ajint j = 0;
+    ajint k = 0;
     ajint ncells;
     float dval;
     ajint ival;
@@ -403,6 +407,7 @@ AjPPhyloDist ajPhyloDistRead(const AjPStr filename, ajint size, AjBool missing)
 	phyloRegDistFloat =
 	    ajRegCompC("^\\s*([0-9]+[.]?[0-9]*)\\s+(([0-9]+)[^0-9.])?");
 
+    distlist = ajListNew();
     distfile = ajFileNewIn(filename);
 
     if(!distfile)
@@ -424,20 +429,25 @@ AjPPhyloDist ajPhyloDistRead(const AjPStr filename, ajint size, AjBool missing)
 	return NULL;
     }
 
-    ret = ajPhyloDistNew();
-    ret->Size = count;
-    AJCNEW0(ret->Names, count);
-    ncells = count*count;
-    AJCNEW0(ret->Data,ncells);
-    AJCNEW0(ret->Replicates,ncells);
 
-    irow = -1;
-    icol = 0;
-
-    i = 0;
-    done = ajFalse;
-    while(!done && ajFileGets(distfile, &rdline))
+    done = ajTrue;
+    while(ajFileGets(distfile, &rdline))
     {
+	if(done) {
+	    irow = -1;
+	    icol = 0;
+
+	    i = 0;
+	    done = ajFalse;
+
+	    dist = ajPhyloDistNew();
+	    dist->Size = count;
+	    AJCNEW0(dist->Names, count);
+	    ncells = count*count;
+	    AJCNEW0(dist->Data,ncells);
+	    AJCNEW0(dist->Replicates,ncells);
+	}
+
 	/*ajDebug("DistRead line: %S", rdline); */
 	if(!i || !ajRegExec(phyloRegDistFloat, rdline))
 	{
@@ -459,14 +469,14 @@ AjPPhyloDist ajPhyloDistRead(const AjPStr filename, ajint size, AjBool missing)
 
 		    for(j=count-1; j; j--)
 		    {
-			ret->Data[j] = ret->Data[j-1];
-			ret->Replicates[j] = ret->Replicates[j-1];
+			dist->Data[j] = dist->Data[j-1];
+			dist->Replicates[j] = dist->Replicates[j-1];
 		    }
 		}
 		else if(icol != count)	/* something wrong */
 		{
 		    ajErr("Distance file %S: Row '%S' has %d values",
-			  filename, ret->Names[irow], icol);
+			  filename, dist->Names[irow], icol);
 		}
 	    }
 	    else if(irow > 0) /* later rows - we know what to expect */
@@ -478,7 +488,7 @@ AjPPhyloDist ajPhyloDistRead(const AjPStr filename, ajint size, AjBool missing)
 		    if(icol != irow)
 			ajErr("Distance file %S: Row '%S' has %d values"
 			      " in lower-triangular format",
-			      filename, ret->Names[irow], icol);
+			      filename, dist->Names[irow], icol);
 		}
 		else if(uppertri)
 		{
@@ -487,7 +497,7 @@ AjPPhyloDist ajPhyloDistRead(const AjPStr filename, ajint size, AjBool missing)
 		    if(i)
 			ajErr("Distance file %S: Row '%S' has %d values"
 			      " in upper-triangular format",
-			      filename, ret->Names[irow], icol - irow - 1);
+			      filename, dist->Names[irow], icol - irow - 1);
 		}
 		else
 		{
@@ -496,7 +506,7 @@ AjPPhyloDist ajPhyloDistRead(const AjPStr filename, ajint size, AjBool missing)
 		    if(icol != count)
 			ajErr("Distance file %S: Row '%S' has %d values"
 			      " in square format",
-			      filename, ret->Names[irow], icol);
+			      filename, dist->Names[irow], icol);
 		}
 	    }
 
@@ -506,11 +516,11 @@ AjPPhyloDist ajPhyloDistRead(const AjPStr filename, ajint size, AjBool missing)
 		ajErr("Distances file read beyond %d rows", count);
 		return NULL;
 	    }
-	    ajStrAssignSubS(&ret->Names[irow], rdline, 0, 9);
+	    ajStrAssignSubS(&dist->Names[irow], rdline, 0, 9);
 	    ajStrCutStart(&rdline, 10);
-	    ajStrTrimWhiteEnd(&ret->Names[irow]);
+	    ajStrTrimWhiteEnd(&dist->Names[irow]);
 	    ajDebug("DistRead name [%d] '%S' i: %d\n",
-		    irow, ret->Names[irow], i);
+		    irow, dist->Names[irow], i);
 	    if(uppertri)
 	    {
 		icol = irow + 1;
@@ -533,16 +543,16 @@ AjPPhyloDist ajPhyloDistRead(const AjPStr filename, ajint size, AjBool missing)
 		ajStrToInt(tmpval, &ival);
 
 		if(ival)
-		    ret->HasReplicates = ajTrue;
+		    dist->HasReplicates = ajTrue;
 		else
 		{
 		    if(!missing)
 		    {
 			ajErr("Distances file %S: Zero (%S) replicates for %S",
-			      filename, tmpval, ret->Names[irow]);
+			      filename, tmpval, dist->Names[irow]);
 			return NULL;
 		    }
-		    ret->HasMissing = ajTrue;
+		    dist->HasMissing = ajTrue;
 		}
 		/*ajDebug("DistRead row %2d [%d] %.3f %d\n",
 			irow, i, dval, ival);*/
@@ -554,8 +564,8 @@ AjPPhyloDist ajPhyloDistRead(const AjPStr filename, ajint size, AjBool missing)
 			irow, i, dval);*/
 	    }
 	    ipos = irow*count + i;
-	    ret->Data[ipos] = dval;
-	    ret->Replicates[ipos] = ival;
+	    dist->Data[ipos] = dval;
+	    dist->Replicates[ipos] = ival;
 	    i++;
 	    icol++;
 	    if(i == count)
@@ -563,6 +573,51 @@ AjPPhyloDist ajPhyloDistRead(const AjPStr filename, ajint size, AjBool missing)
 	    ajRegPost(phyloRegDistFloat, &tmpstr);
 	    ajStrAssignS(&rdline, tmpstr);
 	    /*ajDebug("irow: %d icol: %d\n", irow, icol);*/
+	}
+	if(irow == (count-1))
+	{
+	    done = ajTrue;
+
+	    if(lowertri)			/* fill in the rest */
+	    {
+		for(k=0; k < count; k++)
+		{
+		    idiag = k*count + k;	/* diagonal */
+		    dist->Data[idiag] = 0.0;
+		    dist->Replicates[idiag] = 1;
+		    iend = k*count+count;	/* end of row */
+		    ipos = idiag + 1;
+		    jpos = ipos + count - 1;
+		    while(ipos < iend)
+		    {
+			dist->Data[ipos] = dist->Data[jpos];
+			dist->Replicates[ipos] = dist->Replicates[jpos];
+			ipos++;
+			jpos += count;
+		    }
+		}
+	    }
+	    if(uppertri)			/* fill in the rest */
+	    {
+		for(k=0; k < count; k++)
+		{
+		    idiag = k*count + i;	/* diagonal */
+		    dist->Data[idiag] = 0.0;
+		    dist->Replicates[idiag] = 1;
+		    ipos = k*count;		/* start of row*/
+		    jpos = k;
+		    while(ipos < idiag)
+		    {
+			dist->Data[ipos] = dist->Data[jpos];
+			dist->Replicates[ipos] = dist->Replicates[jpos];
+			ipos++;
+			jpos += count;
+		    }
+		}
+	    }
+
+	    ajListPushAppend(distlist, dist);
+	    dist = NULL;
 	}
     }
 
@@ -572,46 +627,14 @@ AjPPhyloDist ajPhyloDistRead(const AjPStr filename, ajint size, AjBool missing)
 	return NULL;
     }
 
-    if(lowertri)			/* fill in the rest */
-    {
-	for(i=0; i < count; i++)
-	{
-	    idiag = i*count + i;	/* diagonal */
-	    ret->Data[idiag] = 0.0;
-	    ret->Replicates[idiag] = 1;
-	    iend = i*count+count;	/* end of row */
-	    ipos = idiag + 1;
-	    jpos = ipos + count - 1;
-	    while(ipos < iend)
-	    {
-		ret->Data[ipos] = ret->Data[jpos];
-		ret->Replicates[ipos] = ret->Replicates[jpos];
-		ipos++;
-		jpos += count;
-	    }
-	}
-    }
-
-    if(uppertri)			/* fill in the rest */
-    {
-	for(i=0; i < count; i++)
-	{
-	    idiag = i*count + i;	/* diagonal */
-	    ret->Data[idiag] = 0.0;
-	    ret->Replicates[idiag] = 1;
-	    ipos = i*count;		/* start of row*/
-	    jpos = i;
-	    while(ipos < idiag)
-	    {
-		ret->Data[ipos] = ret->Data[jpos];
-		ret->Replicates[ipos] = ret->Replicates[jpos];
-		ipos++;
-		jpos += count;
-	    }
-	}
-    }
-
-    ajPhyloDistTrace(ret);
+    ajDebug("Distances file '%S' has %d (%d) distance matrices\n",
+	    filename, i, ajListGetLength(distlist));
+    ajFileClose(&distfile);
+    ajListToarray(distlist, (void***) &ret);
+    /*ret = (AjPPhyloTree*) trees;*/
+    ajListFree(&distlist);
+    for(i=0; ret[i]; i++)
+	ajPhyloDistTrace(ret[i]);
 
     return ret;
 }
@@ -1030,6 +1053,13 @@ AjPPhyloFreq ajPhyloFreqRead(const AjPStr filename,
 
     ajPhyloFreqTrace(ret);
 
+    ajStrDel(&tmpline);
+    ajStrDel(&tmpval);
+    ajStrDel(&tmpstr);
+    ajStrDel(&rdline);
+
+    ajFileClose(&freqfile);
+
     return ret;
 }
 
@@ -1273,18 +1303,18 @@ AjPPhyloProp ajPhyloPropRead(const AjPStr filename, const AjPStr propchars,
 		else if (ajFileEof(propfile))
 		    break;
 	    }
-	    ajListstrPushApp(proplist, propstr);
+	    ajListstrPushAppend(proplist, propstr);
 	    i++;
 	}
 	ajFileClose(&propfile);
-	ajListToArray(proplist, (void***) &props);
+	ajListToarray(proplist, (void***) &props);
 	ret->Str = (AjPStr*) props;
 
-	ret->Size = ajListLength(proplist);;
+	ret->Size = ajListGetLength(proplist);;
 	ret->Len = len;
     }
 
-    ajListDel(&proplist);
+    ajListFree(&proplist);
     ajStrDel(&proppat);
     ajStrDel(&token);
     ajStrDel(&rdline);
@@ -1372,6 +1402,7 @@ AjPPhyloState* ajPhyloStateRead(const AjPStr filename, const AjPStr statechars)
     ajint len;
     ajint count;
     ajint i;
+    ajint j;
     ajint ilen;
     const char* cp;
     void **states = NULL;
@@ -1443,12 +1474,23 @@ AjPPhyloState* ajPhyloStateRead(const AjPStr filename, const AjPStr statechars)
 	    
 	    ajStrFmtUpper(&rdline);
 	    cp = ajStrGetPtr(rdline);
+	    j = 0;
 	    while(cp && ajRegExecC(phyloRegStateChar, cp))
 	    {
 		ajRegSubI(phyloRegStateChar, 0, &token);
+		ajRegPre(phyloRegStateChar, &tmpstr);
 		ajStrAppendS(&state->Str[i], token);
 		ilen += ajStrGetLen(token);
 		ajRegPostC(phyloRegStateChar, &cp);
+		if(!j++ && !ajStrIsWhite(tmpstr))
+		{
+		    ajStrRemoveWhite(&tmpstr);
+		    ajErr("found bad state character(s) '%S' for '%S', expected [%S]",
+			  tmpstr, state->Names[i], statechars);
+		}
+		if(*cp && !isspace(*cp))
+		    ajErr("found bad state character '%c' for '%S', expected [%S]",
+			  *cp, state->Names[i], statechars);
 	    }
 
 	    if(ilen == len)
@@ -1458,7 +1500,7 @@ AjPPhyloState* ajPhyloStateRead(const AjPStr filename, const AjPStr statechars)
 	    }
 	    else if(ilen > len)
 	    {
-		ajErr("Bad discrete states file '%S':"
+		ajErr("Bad discrete states file b '%S':"
 		      " read %d states for '%S', expected %d",
 		      filename, ilen, state->Names[i], len);
 		return NULL;
@@ -1468,17 +1510,17 @@ AjPPhyloState* ajPhyloStateRead(const AjPStr filename, const AjPStr statechars)
 	if(i != size)
 	{
 	    ajErr("Bad discrete states file '%S':"
-		  " read %d states for '%S', expected %d",
-		  filename, ilen, state->Names[i], len);
+		  " read %d species, expected %d",
+		  filename, i, len);
 	    return NULL;
 	}
-	ajListPushApp(statelist, state);
+	ajListPushAppend(statelist, state);
     }
     ajFileClose(&statefile);
-    ajListToArray(statelist, (void***) &states);
+    ajListToarray(statelist, (void***) &states);
     ret = (AjPPhyloState*) states;
 
-    ajListDel(&statelist);
+    ajListFree(&statelist);
     ajStrDel(&tmpval);
     ajStrDel(&tmpstr);
     ajStrDel(&rdline);
@@ -1663,7 +1705,8 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
 			" treecopy: '%S'\n",
 			tree->Tree, tree->BaseBifurcated,
 			tree->BaseTrifurcated, treecopy);
-		ajListPushApp(treelist, tree);
+		ajListPushAppend(treelist, tree);
+		tree = NULL;
 
 		i++;
 		if(i == headcount)
@@ -1693,9 +1736,9 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
 	}
 	ajDebug("Tree file '%S' has %d (%d) trees,"
 		" required %d\n",
-		  filename, i, ajListLength(treelist), size);
+		  filename, i, ajListGetLength(treelist), size);
         ajFileClose(&treefile);
-	ajListToArray(treelist, (void***) &ret);
+	ajListToarray(treelist, (void***) &ret);
 	/*ret = (AjPPhyloTree*) trees;*/
 	ajListFree(&treelist);
     }
