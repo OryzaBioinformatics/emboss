@@ -8,6 +8,9 @@ extern "C"
 
 #include "ajax.h"
 
+
+
+
 /* @data AjPTrn ***************************************************************
 **
 ** Ajax Sequence translation object.
@@ -71,6 +74,8 @@ typedef struct AjSTrn {
 #define AjPTrn AjOTrn*
 
 
+
+
 /* table to convert character of base to translation array element value */
 /*static ajint trnconv[] = {*/
 /* characters less than 64 */
@@ -96,7 +101,12 @@ typedef struct AjSTrn {
 
 
 
+/*
+** Prototype definitions
+*/
+
 void   ajTrnDel (AjPTrn* pthis);
+void   ajTrnExit(void);
 AjPTrn ajTrnNew (const AjPStr trnFileName);
 AjPTrn ajTrnNewI (ajint trnFileNameInt);
 AjPTrn ajTrnNewC (const char *trnFileName);
@@ -137,6 +147,11 @@ AjPStr ajTrnGetFileName (const AjPTrn thys);
 ajint  ajTrnStartStop (const AjPTrn trnObj, const AjPStr codon, char *aa);
 ajint  ajTrnStartStopC (const AjPTrn trnObj, const char *codon, char *aa);
 AjPSeq ajTrnSeqOrig (const AjPTrn trnObj, const AjPSeq seq, ajint frame);
+
+/*
+** End of prototype definitions
+*/
+
 #endif
 
 #ifdef __cplusplus

@@ -144,20 +144,18 @@ static ajint trnconv[] =
     14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
     14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
 
-    /* @  A   B  C   D   E   F  G   H   I   J  K   L  M   N   O*/
-    14, 0, 13, 1, 12, 14, 14, 2, 11, 14, 14, 9, 14, 4, 14, 14,
+  /* @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O */
+    14,  0, 13,  1, 12, 14, 14,  2, 11, 14, 14,  9, 14,  4, 14, 14,
 
-    /* P   Q  R  S  T  U   V  W   X  Y   Z   [   \   ]   ^   _ */
-    14, 14, 5, 7, 3, 3, 10, 6, 14, 8, 14, 14, 14, 14, 14, 14,
+  /* P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _ */
+    14, 14,  5,  7,  3,  3, 10,  6, 14,  8, 14, 14, 14, 14, 14, 14,
 
-    /* `  a   b  c   d   e   f  g   h   i   j  k   l  m   n   o */
-    14, 0, 13, 1, 12, 14, 14, 2, 11, 14, 14, 9, 14, 4, 14, 14,
+  /* `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o */
+    14,  0, 13,  1, 12, 14, 14,  2, 11, 14, 14,  9, 14,  4, 14, 14,
 
-    /* p   q  r  s  t  u   v  w   x  y   z   {   |   }   ~   del */
-    14, 14, 5, 7, 3, 3, 10, 6, 14, 8, 14, 14, 14, 14, 14, 14
+  /* p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~   del */
+    14, 14,  5,  7,  3,  3, 10,  6, 14,  8, 14, 14, 14, 14, 14, 14
 };
-
-
 
 
 /*
@@ -173,34 +171,26 @@ static ajint trncomp[] =
     14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
     14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
 
-    /* @  A   B  C   D   E   F  G   H   I   J  K   L  M   N   O*/
-    14, 3, 10, 2, 11, 14, 14, 1, 12, 14, 14, 4, 14, 9, 14, 14,
+  /* @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O*/
+    14,  3, 10,  2, 11, 14, 14,  1, 12, 14, 14,  4, 14,  9, 14, 14,
 
-    /* P   Q  R  S  T  U   V  W   X  Y   Z   [   \   ]   ^   _ */
-    14, 14, 8, 7, 0, 0, 13, 6, 14, 5, 14, 14, 14, 14, 14, 14,
+  /* P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _ */
+    14, 14,  8,  7,  0,  0, 13,  6, 14,  5, 14, 14, 14, 14, 14, 14,
 
-    /* `  a   b  c   d   e   f  g   h   i   j  k   l  m   n   o */
-    14, 3, 10, 2, 11, 14, 14, 1, 12, 14, 14, 4, 14, 9, 14, 14,
+  /* `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o */
+    14,  3, 10,  2, 11, 14, 14,  1, 12, 14, 14,  4, 14,  9, 14, 14,
 
-    /* p   q  r  s  t  u   v  w   x  y   z   {   |   }   ~   del */
-    14, 14, 8, 7, 0, 0, 13, 6, 14, 5, 14, 14, 14, 14, 14, 14
+  /* p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~   del */
+    14, 14,  8,  7,  0,  0, 13,  6, 14,  5, 14, 14, 14, 14, 14, 14
 };
 
 
+static AjPStr trnResidueStr = NULL;
 
 
 static void trnNoComment(AjPStr* text);
 
-static void getwobblebases(AjPTrn trnObj, AjBool *w1a, AjBool *w1c,
-			   AjBool *w1g, AjBool *w1t, AjBool *w3a,
-			   AjBool *w3c, AjBool *w3g, AjBool *w3t,
-			   char base1, char base2, char base3, char aa);
-
-static void explode(AjPTrn trnObj, AjBool wa, AjBool wc, AjBool wg,
-		    AjBool wt, char base1, char base2, char base3,
-		    char aa, AjBool ajTrue);
-
-
+static AjBool trnComplete(AjPTrn thys);
 
 
 /* @func ajTrnDel *************************************************************
@@ -276,7 +266,7 @@ AjPTrn ajTrnNewI(ajint trnFileNameInt)
     trnFileName = ajStrNewC(TGC);
 
     ajStrFromInt(&value, trnFileNameInt);
-    ajStrApp(&trnFileName, value);
+    ajStrAppendS(&trnFileName, value);
 
     ret = ajTrnNew(trnFileName);
 
@@ -311,7 +301,7 @@ AjPTrn ajTrnNew(const AjPStr trnFileName)
     /* open the translation table file */
 
     /* if the file is not specified, use the standard table file */
-    if(!ajStrLen(trnFileName))
+    if(!ajStrGetLen(trnFileName))
 	trnFileName = ajStrNewC(TGCFILE);
 
 
@@ -333,7 +323,7 @@ AjPTrn ajTrnNew(const AjPStr trnFileName)
 		pthis->Starts[i][j][k] = '-';
 	    }
 
-    ajStrAssS(&(pthis->FileName), trnFileName);
+    ajStrAssignS(&(pthis->FileName), trnFileName);
     ajTrnReadFile(pthis, trnFile);
 
     ajFileClose(&trnFile);
@@ -376,21 +366,11 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     const char *base2;
     const char *base3;
     ajint dlen;
-    ajint i, j;
+    ajint i;
 
 
     /* positions of first use of a residue in the aa line */
     ajint firstaa[256];
-
-    /* first and last base wobble results */
-    AjBool w1a;
-    AjBool w1c;
-    AjBool w1g;
-    AjBool w1t;
-    AjBool w3a;
-    AjBool w3c;
-    AjBool w3g;
-    AjBool w3t;
 
     /*
     ** NB '-' and '*' are valid characters,
@@ -398,14 +378,13 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     */
     char white[] = " \t\n\r!@#$%^&()_+=|\\~`{[}]:;\"'<,>.?/";
 
-
     ajDebug("ajTrnReadFile\n");
 
     while(ajFileReadLine(trnFile, &trnLine))
     {
 	ajDebug("Line: '%S'\n", trnLine);
 	trnNoComment(&trnLine);
-	if(ajStrLen(trnLine))
+	if(ajStrGetLen(trnLine))
 	{
 	    if(ajStrFindC(trnLine, "Genetic Code") == -1)
 		ajFatal("The file '%S' is not a valid Genetic Code file.\n"
@@ -421,9 +400,9 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     {
 	ajDebug("Line: '%S'\n", trnLine);
 	trnNoComment(&trnLine);
-	if(ajStrLen(trnLine))
+	if(ajStrGetLen(trnLine))
 	{
-	    ajStrAssS(&(trnObj->Title), trnLine);
+	    ajStrAssignS(&(trnObj->Title), trnLine);
 	    break;
 	}
     }
@@ -433,64 +412,63 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     {
 	ajDebug("Line: '%S'\n", trnLine);
 	trnNoComment(&trnLine);
-	if(ajStrLen(trnLine))
+	if(ajStrGetLen(trnLine))
 	{
-	    ajStrApp(&trnText, trnLine);
-	    ajStrAppC(&trnText, " ");
+	    ajStrAppendS(&trnText, trnLine);
+	    ajStrAppendC(&trnText, " ");
 	}
     }
 
-
     /* data */
-    tokenhandle = ajStrTokenInit(trnText, white);
+    tokenhandle = ajStrTokenNewC(trnText, white);
 
-    ajStrToken(&tmpstr, &tokenhandle, NULL);
+    ajStrTokenNextParse(&tokenhandle, &tmpstr);
     if(ajStrCmpC(tmpstr, "AAs") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'AAs' line was not found.", trnObj->FileName);
 
-    ajStrToken(&aaline, &tokenhandle, NULL);
-    aa = ajStrStr(aaline);
+    ajStrTokenNextParse(&tokenhandle, &aaline);
+    aa = ajStrGetPtr(aaline);
 
-    ajStrToken(&tmpstr, &tokenhandle, NULL);
+    ajStrTokenNextParse(&tokenhandle, &tmpstr);
     if(ajStrCmpC(tmpstr, "Starts") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'Starts' line was not found.", trnObj->FileName);
 
-    ajStrToken(&startsline, &tokenhandle, NULL);
-    starts = ajStrStr(startsline);
+    ajStrTokenNextParse(&tokenhandle, &startsline);
+    starts = ajStrGetPtr(startsline);
 
-    ajStrToken(&tmpstr, &tokenhandle, NULL);
+    ajStrTokenNextParse(&tokenhandle, &tmpstr);
     if(ajStrCmpC(tmpstr, "Base1") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'Base1' line was not found.", trnObj->FileName);
 
-    ajStrToken(&base1line, &tokenhandle, NULL);
-    base1 = ajStrStr(base1line);
+    ajStrTokenNextParse(&tokenhandle, &base1line);
+    base1 = ajStrGetPtr(base1line);
 
-    ajStrToken(&tmpstr, &tokenhandle, NULL);
+    ajStrTokenNextParse(&tokenhandle, &tmpstr);
     if(ajStrCmpC(tmpstr, "Base2") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'Base2' line was not found.", trnObj->FileName);
 
-    ajStrToken(&base2line, &tokenhandle, NULL);
-    base2 = ajStrStr(base2line);
+    ajStrTokenNextParse(&tokenhandle, &base2line);
+    base2 = ajStrGetPtr(base2line);
 
-    ajStrToken(&tmpstr, &tokenhandle, NULL);
+    ajStrTokenNextParse(&tokenhandle, &tmpstr);
 
     if(ajStrCmpC(tmpstr, "Base3") == -1)
 	ajFatal("The file '%S' is not a valid Genetic Code file.\n"
 		"The 'Base3' line was not found.", trnObj->FileName);
 
-    ajStrToken(&base3line, &tokenhandle, NULL);
-    base3 = ajStrStr(base3line);
+    ajStrTokenNextParse(&tokenhandle, &base3line);
+    base3 = ajStrGetPtr(base3line);
 
 
-    ajStrTokenClear(&tokenhandle);
+    ajStrTokenDel(&tokenhandle);
     ajStrDel(&tmpstr);
 
     /* populate the Starts(Initiation sites) table */
-    dlen = ajStrLen(startsline);
+    dlen = ajStrGetLen(startsline);
 
     for(i=0; i<dlen; i++)
 	trnObj->Starts[trnconv[(ajint)base1[i]]]
@@ -499,8 +477,7 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
 		    = starts[i];
 
     /* populate the GC (Genetic code) table */
-    dlen = ajStrLen(aaline);
-
+    dlen = ajStrGetLen(aaline);
 
     /* initialise first use of aa array */
     for(i=0; i<256; i++)
@@ -511,57 +488,19 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
 	/*
 	** put the residue in the table using the unambiguous codon
 	*/
-	trnObj->GC  [trnconv[(ajint)base1[i]]]
+	trnObj->GC[trnconv[(ajint)base1[i]]]
 	    [trnconv[(ajint)base2[i]]]
 		[trnconv[(ajint)base3[i]]]
 		    = aa[i];
-
-	/*
-	** Work out the ambiguous codons for this residue so far
-	** If the first use of the residue in the aa line then
-        ** note its position else try to construct ambiguous codons
-	*/
-
-	if(firstaa[(ajint)aa[i]] == -1)
-	    firstaa[(ajint)aa[i]] = i;
-	else
-	{
-	    getwobblebases(trnObj, &w1a, &w1c, &w1g, &w1t, &w3a, &w3c, &w3g,
-			   &w3t, base1[i], base2[i], base3[i], aa[i]);
-
-	    for(j=i-1; j>=firstaa[(ajint)aa[i]]; j--)
-	    {
-		/*
-		** if previous aa is the same as aa[i] then construct
-		** abiguity codon
-		*/
-		if(aa[i] == aa[j])
-		{
-		    /*
-		    ** there are no ambiguous codons with a differing
-		    ** middle base
-		    */
-		    if(base2[i] != base2[j])
-			continue;
-
-		    /*
-		    ** don't look for ambiguous codons with a differing
-		    ** start and a differing end base
-		    */
-		    if(base1[i] != base1[j] && base3[i] != base3[j])
-			continue;
-
-		    /* Either only a differing start else end base */
-		    if(base1[i] != base1[j])
-			explode(trnObj, w1a, w1c, w1g, w1t, base1[i], base2[i],
-				base3[i], aa[i], ajTrue);
-		    else
-			explode(trnObj, w3a, w3c, w3g, w3t, base1[i], base2[i],
-				base3[i], aa[i], ajFalse);
-		}
-	    }
-	}
     }
+
+    /*
+       Check we have defined every codon
+       Calculate wobble in base3 and populate
+       For each amino acid (just once) calculate most ambiguous and populate
+     */
+
+    trnComplete(trnObj);
 
     ajStrDel(&trnText);
     ajStrDel(&startsline);
@@ -593,294 +532,22 @@ static void trnNoComment(AjPStr* text)
     ajint i;
     char *cp;
 
-    ajStrChomp(text);
-    i = ajStrLen(*text);
+    ajStrTrimWhite(text);
+    i = ajStrGetLen(*text);
 
     if(!i)
 	return;
 
-    cp = strchr(ajStrStrMod(text), '#');
+    cp = strchr(ajStrGetuniquePtr(text), '#');
     if(cp)
     {
 	/* comment found */
 	*cp = '\0';
-	ajStrFix(text);
+	ajStrSetValid(text);
     }
 
     return;
 }
-
-
-
-
-/* @funcstatic getwobblebases *************************************************
-**
-** Gets the results af wobbling the first and last bases of a standard codon.
-** Returns True or False for each wobble depending on whether the
-** result is the same as the input residue or not.
-**
-** @param [u] trnObj [AjPTrn] Translation tables
-** @param [w] w1a [AjBool *] result of changing base 1 to A
-** @param [w] w1c [AjBool *] result of changing base 1 to C
-** @param [w] w1g [AjBool *] result of changing base 1 to G
-** @param [w] w1t [AjBool *] result of changing base 1 to T
-** @param [w] w3a [AjBool *] result of changing base 3 to A
-** @param [w] w3c [AjBool *] result of changing base 3 to C
-** @param [w] w3g [AjBool *] result of changing base 3 to G
-** @param [w] w3t [AjBool *] result of changing base 3 to T
-** @param [r] base1 [char] standard base 1
-** @param [r] base2 [char] standard base 2
-** @param [r] base3 [char] standard base 3
-** @param [r] aa [char] residue that the standard codon codes for
-** @return [void]
-** @@
-******************************************************************************/
-static void getwobblebases(AjPTrn trnObj, AjBool *w1a, AjBool *w1c,
-			   AjBool *w1g, AjBool *w1t, AjBool *w3a,
-			   AjBool *w3c, AjBool *w3g, AjBool *w3t,
-			   char base1, char base2, char base3, char aa)
-{
-    *w1a = ajFalse;
-    *w1c = ajFalse;
-    *w1g = ajFalse;
-    *w1t = ajFalse;
-    *w3a = ajFalse;
-    *w3c = ajFalse;
-    *w3g = ajFalse;
-    *w3t = ajFalse;
-
-    if(trnObj->GC[trnconv[(ajint)'A']]
-                 [trnconv[(ajint)base2]]
-                 [trnconv[(ajint)base3]] == aa)
-	*w1a = ajTrue;
-
-    if(trnObj->GC[trnconv[(ajint)'C']]
-                 [trnconv[(ajint)base2]]
-                 [trnconv[(ajint)base3]] == aa)
-	*w1c = ajTrue;
-
-    if(trnObj->GC[trnconv[(ajint)'G']]
-                 [trnconv[(ajint)base2]]
-                 [trnconv[(ajint)base3]] == aa)
-	*w1g = ajTrue;
-
-    if(trnObj->GC[trnconv[(ajint)'T']]
-       [trnconv[(ajint)base2]]
-       [trnconv[(ajint)base3]] == aa)
-	*w1t = ajTrue;
-
-    if(trnObj->GC[trnconv[(ajint)base1]]
-                 [trnconv[(ajint)base2]]
-                 [trnconv[(ajint)'A']] == aa)
-	*w3a = ajTrue;
-
-    if(trnObj->GC[trnconv[(ajint)base1]]
-                 [trnconv[(ajint)base2]]
-                 [trnconv[(ajint)'C']] == aa)
-	*w3c = ajTrue;
-
-    if(trnObj->GC[trnconv[(ajint)base1]]
-                 [trnconv[(ajint)base2]]
-                 [trnconv[(ajint)'G']] == aa)
-	*w3g = ajTrue;
-
-    if(trnObj->GC[trnconv[(ajint)base1]]
-                 [trnconv[(ajint)base2]]
-                 [trnconv[(ajint)'T']] == aa)
-	*w3t = ajTrue;
-
-    return;
-}
-
-
-
-
-/* @funcstatic explode ********************************************************
-**
-** Sets the ambiguity codons in the translation table.
-**
-** @param [u] trnObj [AjPTrn] Translation tables
-** @param [r] wa [AjBool] result of changing base 1 to A
-** @param [r] wc [AjBool] result of changing base 1 to C
-** @param [r] wg [AjBool] result of changing base 1 to G
-** @param [r] wt [AjBool] result of changing base 1 to T
-** @param [r] base1 [char] standard base 1
-** @param [r] base2 [char] standard base 2
-** @param [r] base3 [char] standard base 3
-** @param [r] aa [char] residue that the standard codon codes for
-** @param [r] start [AjBool] the first base is being wobbled (else is the last)
-** @return [void]
-** @@
-******************************************************************************/
-static void explode(AjPTrn trnObj, AjBool wa, AjBool wc, AjBool wg,
-		    AjBool wt, char base1, char base2, char base3,
-		    char aa, AjBool start)
-{
-    AjBool doneone = ajFalse;
-
-    if(start)
-    {
-	if(wt && wc)
-	{
-	    trnObj->GC[trnconv[(ajint)'Y']]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)base3]] = aa;
-	    doneone = ajTrue;
-	}
-
-	if(wt && wa)
-	{
-	    trnObj->GC[trnconv[(ajint)'W']]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)base3]] = aa;
-	    doneone = ajTrue;
-	}
-
-	if(wt && wg)
-	{
-	    trnObj->GC[trnconv[(ajint)'K']]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)base3]] = aa;
-	    doneone = ajTrue;
-	}
-
-	if(wc && wa)
-	{
-	    trnObj->GC[trnconv[(ajint)'M']]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)base3]] = aa;
-	    doneone = ajTrue;
-	}
-
-	if(wc && wg)
-	{
-	    trnObj->GC[trnconv[(ajint)'S']]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)base3]] = aa;
-	    doneone = ajTrue;
-	}
-
-	if(wa && wg)
-	{
-	    trnObj->GC[trnconv[(ajint)'R']]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)base3]] = aa;
-	    doneone = ajTrue;
-	}
-
-	/* if no  set any ambiguity codons don't test triples */
-	if(!doneone)
-	    return;
-
-	if(wc && wa && wg)
-	    trnObj->GC[trnconv[(ajint)'V']]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)base3]] = aa;
-
-	if(wt && wc && wa)
-	    trnObj->GC[trnconv[(ajint)'H']]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)base3]] = aa;
-
-	if(wt && wa && wg)
-	    trnObj->GC[trnconv[(ajint)'D']]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)base3]] = aa;
-
-	if(wt && wc && wg)
-	    trnObj->GC[trnconv[(ajint)'B']]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)base3]] = aa;
-
-	if(wt && wc && wa && wg)
-	    trnObj->GC[trnconv[(ajint)'N']]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)base3]] = aa;
-    }
-    else
-    {
-	/* not start */
-	if(wt && wc)
-	{
-	    trnObj->GC[trnconv[(ajint)base1]]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)'Y']] = aa;
-	    doneone = ajTrue;
-	}
-
-	if(wt && wa)
-	{
-	    trnObj->GC[trnconv[(ajint)base1]]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)'W']] = aa;
-	    doneone = ajTrue;
-	}
-
-	if(wt && wg)
-	{
-	    trnObj->GC[trnconv[(ajint)base1]]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)'K']] = aa;
-	    doneone = ajTrue;
-	}
-
-	if(wc && wa)
-	{
-	    trnObj->GC[trnconv[(ajint)base1]]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)'M']] = aa;
-	    doneone = ajTrue;
-	}
-
-	if(wc && wg)
-	{
-	    trnObj->GC[trnconv[(ajint)base1]]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)'S']] = aa;
-	    doneone = ajTrue;
-	}
-
-	if(wa && wg)
-	{
-	    trnObj->GC[trnconv[(ajint)base1]]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)'R']] = aa;
-	    doneone = ajTrue;
-	}
-
-	/* if no set ambiguity codons don't test triples */
-	if(!doneone)
-	    return;
-
-	if(wc && wa && wg)
-	    trnObj->GC[trnconv[(ajint)base1]]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)'V']] = aa;
-
-	if(wt && wc && wa)
-	    trnObj->GC[trnconv[(ajint)base1]]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)'H']] = aa;
-
-	if(wt && wa && wg)
-	    trnObj->GC[trnconv[(ajint)base1]]
-		      [trnconv[(ajint)base2]]
-		      [trnconv['D']] = aa;
-
-	if(wt && wc && wg)
-	    trnObj->GC[trnconv[(ajint)base1]]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)'B']] = aa;
-
-	if(wt && wc && wa && wg)
-	    trnObj->GC[trnconv[(ajint)base1]]
-		      [trnconv[(ajint)base2]]
-		      [trnconv[(ajint)'N']] = aa;
-    }
-
-    return;
-}
-
 
 
 
@@ -905,7 +572,7 @@ static void explode(AjPTrn trnObj, AjBool wa, AjBool wc, AjBool wg,
 ** Frame 4 is the same as frame -1, 5 is -2, 6 is -3.
 **
 ** You will have to set the sequence of this object with something like:
-**  ajSeqReplace(trnPeptide, seqstr);
+**  ajSeqAssignSeqS(trnPeptide, seqstr);
 **
 **
 ** @param [r] nucleicSeq [const AjPSeq] nucleic sequence being translated
@@ -929,7 +596,7 @@ AjPSeq ajTrnNewPep(const AjPSeq nucleicSeq, ajint frame)
     value = ajStrNew();
 
     /* name for the subsequence */
-    ajStrAssS(&name, ajSeqGetName(nucleicSeq));
+    ajStrAssignS(&name, ajSeqGetNameS(nucleicSeq));
 
     /*
     ** if the frame is not 0 then append the frame number to the name to
@@ -939,15 +606,15 @@ AjPSeq ajTrnNewPep(const AjPSeq nucleicSeq, ajint frame)
     {
 	if(frame < -3) frame = frame + 3;
 	if(frame < 0) frame = -frame + 3;
-	ajStrAppC(&name, "_");
+	ajStrAppendC(&name, "_");
 
 	ajStrFromInt(&value, frame);
-	ajStrApp(&name, value);
+	ajStrAppendS(&name, value);
     }
 
-    ajSeqAssName(trnPeptide, name);
+    ajSeqAssignNameS(trnPeptide, name);
 
-    ajSeqAssDesc(trnPeptide, ajSeqGetDesc(nucleicSeq));
+    ajSeqAssignDescS(trnPeptide, ajSeqGetDescS(nucleicSeq));
 
     ajStrDel(&name);
     ajStrDel(&value);
@@ -977,12 +644,12 @@ const AjPStr ajTrnCodon(const AjPTrn trnObj, const AjPStr codon)
 
     store[1] = '\0';			/* end the char * of store */
 
-    res = ajStrStr(codon);
+    res = ajStrGetPtr(codon);
     store[0] = trnObj->GC[trnconv[(ajint)res[0]]]
 	                 [trnconv[(ajint)res[1]]]
 	                 [trnconv[(ajint)res[2]]];
 
-    ajStrAssC(&trnResidue, store);
+    ajStrAssignC(&trnResidue, store);
 
     return trnResidue;
 }
@@ -1010,12 +677,12 @@ const AjPStr ajTrnRevCodon(const AjPTrn trnObj, const AjPStr codon)
 
     store[1] = '\0';			/* end the char * of store */
 
-    res = ajStrStr(codon);
+    res = ajStrGetPtr(codon);
     store[0] = trnObj->GC[trncomp[(ajint)res[2]]]
 	                 [trncomp[(ajint)res[1]]]
 	                 [trncomp[(ajint)res[0]]];
 
-    ajStrAssC(&trnResidue, store);
+    ajStrAssignC(&trnResidue, store);
 
     return trnResidue;
 }
@@ -1037,7 +704,6 @@ const AjPStr ajTrnRevCodon(const AjPTrn trnObj, const AjPStr codon)
 
 const AjPStr ajTrnCodonC(const AjPTrn trnObj, const char *codon)
 {
-    static AjPStr trnResidue = NULL;
     char store[2];
 
 
@@ -1046,9 +712,9 @@ const AjPStr ajTrnCodonC(const AjPTrn trnObj, const char *codon)
 	                 [trnconv[(ajint)codon[2]]];
     store[1] = '\0';
 
-    ajStrAssC(&trnResidue, store);
+    ajStrAssignC(&trnResidueStr, store);
 
-    return trnResidue;
+    return trnResidueStr;
 }
 
 
@@ -1077,7 +743,7 @@ const AjPStr ajTrnRevCodonC(const AjPTrn trnObj, const char *codon)
 	                 [trncomp[(ajint)codon[0]]];
     store[1] = '\0';
 
-    ajStrAssC(&trnResidue, store);
+    ajStrAssignC(&trnResidue, store);
 
     return trnResidue;
 }
@@ -1160,7 +826,7 @@ void ajTrnC(const AjPTrn trnObj, const char *str, ajint len, AjPStr *pep)
     lenmod3 = len - (len % 3);
 
     for(i=0; i < lenmod3; i+=3)
-	ajStrAppK(pep, trnObj->GC[trnconv[(ajint)str[i]]]
+	ajStrAppendK(pep, trnObj->GC[trnconv[(ajint)str[i]]]
 		                 [trnconv[(ajint)str[i+1]]]
 		                 [trnconv[(ajint)str[i+2]]]);
 
@@ -1198,7 +864,7 @@ void ajTrnRevC(const AjPTrn trnObj, const char *str, ajint len, AjPStr *pep)
     end = (len/3)*3-1;
 
     for(i=end; i>1; i-=3)
-	ajStrAppK(pep, trnObj->GC[trncomp[(ajint)str[i]]]
+	ajStrAppendK(pep, trnObj->GC[trncomp[(ajint)str[i]]]
 		                 [trncomp[(ajint)str[i-1]]]
 		                 [trncomp[(ajint)str[i-2]]]);
 
@@ -1235,7 +901,7 @@ void ajTrnAltRevC(const AjPTrn trnObj, const char *str, ajint len, AjPStr *pep)
     ajint i;
 
     for(i=len-1; i>1; i-=3)
-	ajStrAppK(pep, trnObj->GC[trncomp[(ajint)str[i]]]
+	ajStrAppendK(pep, trnObj->GC[trncomp[(ajint)str[i]]]
 		                 [trncomp[(ajint)str[i-1]]]
 		                 [trncomp[(ajint)str[i-2]]]);
 
@@ -1266,7 +932,7 @@ void ajTrnAltRevC(const AjPTrn trnObj, const char *str, ajint len, AjPStr *pep)
 
 void ajTrnStr(const AjPTrn trnObj, const AjPStr str, AjPStr *pep)
 {
-    ajTrnC(trnObj, ajStrStr(str), ajStrLen(str), pep);
+    ajTrnC(trnObj, ajStrGetPtr(str), ajStrGetLen(str), pep);
 
     return;
 }
@@ -1295,7 +961,7 @@ void ajTrnStr(const AjPTrn trnObj, const AjPStr str, AjPStr *pep)
 
 void ajTrnRevStr(const AjPTrn trnObj, const AjPStr str, AjPStr *pep)
 {
-    ajTrnRevC(trnObj, ajStrStr(str), ajStrLen(str), pep);
+    ajTrnRevC(trnObj, ajStrGetPtr(str), ajStrGetLen(str), pep);
 
     return;
 }
@@ -1326,7 +992,7 @@ void ajTrnRevStr(const AjPTrn trnObj, const AjPStr str, AjPStr *pep)
 
 void ajTrnAltRevStr(const AjPTrn trnObj, const AjPStr str, AjPStr *pep)
 {
-    ajTrnAltRevC(trnObj, ajStrStr(str), ajStrLen(str), pep);
+    ajTrnAltRevC(trnObj, ajStrGetPtr(str), ajStrGetLen(str), pep);
 
     return;
 }
@@ -1355,7 +1021,7 @@ void ajTrnAltRevStr(const AjPTrn trnObj, const AjPStr str, AjPStr *pep)
 
 void ajTrnSeq(const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep)
 {
-    ajTrnC(trnObj, ajSeqChar(seq), ajSeqLen(seq), pep);
+    ajTrnC(trnObj, ajSeqGetSeqC(seq), ajSeqGetLen(seq), pep);
 
     return;
 }
@@ -1385,7 +1051,7 @@ void ajTrnSeq(const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep)
 
 void ajTrnRevSeq(const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep)
 {
-    ajTrnRevC(trnObj, ajSeqChar(seq), ajSeqLen(seq), pep);
+    ajTrnRevC(trnObj, ajSeqGetSeqC(seq), ajSeqGetLen(seq), pep);
 
     return;
 }
@@ -1418,7 +1084,7 @@ void ajTrnRevSeq(const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep)
 
 void ajTrnAltRevSeq(const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep)
 {
-    ajTrnAltRevC(trnObj, ajSeqChar(seq), ajSeqLen(seq), pep);
+    ajTrnAltRevC(trnObj, ajSeqGetSeqC(seq), ajSeqGetLen(seq), pep);
 
     return;
 }
@@ -1527,7 +1193,7 @@ void ajTrnCFrame(const AjPTrn trnObj, const char *seq, ajint len, ajint frame,
 void ajTrnStrFrame(const AjPTrn trnObj, const AjPStr seq, ajint frame,
 		   AjPStr *pep)
 {
-    ajTrnCFrame(trnObj, ajStrStr(seq), ajStrLen(seq), frame, pep);
+    ajTrnCFrame(trnObj, ajStrGetPtr(seq), ajStrGetLen(seq), frame, pep);
 
     return;
 }
@@ -1574,7 +1240,7 @@ void ajTrnStrFrame(const AjPTrn trnObj, const AjPStr seq, ajint frame,
 void ajTrnSeqFrame(const AjPTrn trnObj, const AjPSeq seq, ajint frame,
 		   AjPStr *pep)
 {
-    ajTrnCFrame(trnObj, ajSeqChar(seq), ajSeqLen(seq), frame, pep);
+    ajTrnCFrame(trnObj, ajSeqGetSeqC(seq), ajSeqGetLen(seq), frame, pep);
 
     return;
 }
@@ -1632,7 +1298,7 @@ AjPSeq ajTrnSeqFramePep(const AjPTrn trnObj, const AjPSeq seq, ajint frame)
     trn = ajStrNew();
 
     ajTrnSeqFrame(trnObj, seq, frame, &trn);
-    ajSeqReplace(pep, trn);
+    ajSeqAssignSeqS(pep, trn);
 
     ajStrDel(&trn);
 
@@ -1686,16 +1352,16 @@ ajint ajTrnCDangle(const AjPTrn trnObj, const char *seq, ajint len,
     if(dangle == 2)
     {
 	if(frame >= 1 && frame <= 3)
-	    ajStrAppK(pep, trnObj->GC[trnconv[(ajint)seq[end]]]
+	    ajStrAppendK(pep, trnObj->GC[trnconv[(ajint)seq[end]]]
 		                     [trnconv[(ajint)seq[end+1]]]
 		                     [trnconv[0]]);
 	else	/* reverse sense */
-	    ajStrAppK(pep, trnObj->GC[trncomp[(ajint)seq[1]]]
+	    ajStrAppendK(pep, trnObj->GC[trncomp[(ajint)seq[1]]]
 		                     [trncomp[(ajint)seq[0]]]
 		                     [trncomp[0]]);
     }
     else if(dangle == 1) /* Make up single base translation */
-	ajStrAppK(pep, 'X');
+	ajStrAppendK(pep, 'X');
 
     return dangle;
 }
@@ -1725,7 +1391,7 @@ ajint ajTrnCDangle(const AjPTrn trnObj, const char *seq, ajint len,
 ajint ajTrnStrDangle(const AjPTrn trnObj, const AjPStr seq, ajint frame,
 		     AjPStr *pep)
 {
-  return ajTrnCDangle(trnObj, ajStrStr(seq), ajStrLen(seq), frame, pep);
+  return ajTrnCDangle(trnObj, ajStrGetPtr(seq), ajStrGetLen(seq), frame, pep);
 }
 
 
@@ -1795,9 +1461,9 @@ AjPSeq ajTrnSeqOrig(const AjPTrn trnObj, const AjPSeq seq, ajint frame)
     ** the original DNA sequence
     */
     if(frame > 3)
-	ajStrRev(&trn);
+	ajStrReverse(&trn);
 
-    ajSeqReplace(pep, trn);
+    ajSeqAssignSeqS(pep, trn);
 
     ajStrDel(&trn);
 
@@ -1876,7 +1542,7 @@ ajint ajTrnStartStop(const AjPTrn trnObj, const AjPStr codon, char *aa)
     ajint tc2;
     ajint tc3;
 
-    res = ajStrStr(codon);
+    res = ajStrGetPtr(codon);
 
     tc1 = trnconv[(ajint)res[0]];
     tc2 = trnconv[(ajint)res[1]];
@@ -1971,12 +1637,12 @@ AjPStr ajTrnName(ajint trnFileNameInt)
 
 	while(ajFileReadLine(index, &line))
 	{
-	    ajStrChomp(&line);
-	    if(ajStrChar(line, 0) == '#')
+	    ajStrTrimWhite(&line);
+	    if(ajStrGetCharFirst(line) == '#')
 		continue;
-	    ajStrTokenAss(&handle, line, " ");
-	    ajStrToken(&tok1, &handle, NULL);
-	    ajStrTokenRest(&tok2, &handle);
+	    ajStrTokenAssignC(&handle, line, " ");
+	    ajStrTokenNextParse(&handle, &tok1);
+	    ajStrTokenRestParse(&handle, &tok2);
 	    ajTablePut(trnCodes, tok1, tok2);
 	    tok1 = NULL;
 	    tok2 = NULL;
@@ -1989,10 +1655,190 @@ AjPStr ajTrnName(ajint trnFileNameInt)
 
     ajStrDel(&tok1);
     ajStrDel(&tok2);
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
 
     if(ret)
 	return ret;
 
     return unknown;
+}
+
+/* @funcstatic trnComplete ****************************************************
+**
+** Completes a translation table.
+**
+** Checks all basic codons are defined
+**
+** Sets third base wobble ambiguity codes
+**
+** Sets most ambiguous codon for each amino acid
+**
+** @param [u] thys [AjPTrn] Translation table
+** @return [AjBool] ajTrue if table was valid and could be set
+******************************************************************************/
+
+static AjBool trnComplete(AjPTrn thys)
+{
+    ajint i;
+    ajint j;
+    ajint k;
+    ajint jj;
+    ajint kk;
+    ajint ifirst = 0;
+    ajint jfirst = 0;
+    ajint kfirst = 0;
+    ajint newkfirst;
+    char* bases = "ACGT";
+    char newaa[] = "X";
+    ajint codonval[4];
+    char aa;
+    ajint code[4] = {1, 2, 4, 8};
+    char *nuccodes = "ACGTMRWSYKVHDBN";
+    ajint ambigcodes[] = {1, 2, 4, 8, 3, 5, 6, 9, 10, 12, 7, 11, 13, 14, 15};
+    ajint trncodes[] = {14, 0, 1, 4, 2, 5, 7, 10, 3, 6, 8, 11, 9, 12, 13, 14};
+    char aalist[65] = "";
+
+    for(i=0;i<4;i++)
+    {
+	for(j=0;j<4;j++)
+	{
+	    for(k=0;k<4;k++)
+	    {
+		if(!thys->GC[i][j][k])
+		{
+		    ajWarn("Incomplete genetic code definition: "
+			   "no codon for '%c%c%c",
+			   bases[i], bases[j], bases[k]);
+		    return ajFalse;
+		}
+	    }
+	    kfirst = 0;
+	    while(kfirst < 4)
+	    {
+		codonval[2] = 0;
+		aa = thys->GC[i][j][kfirst];
+		newkfirst = 4;
+		for(k=kfirst;k<4;k++)
+		{
+		    if(thys->GC[i][j][k] == aa)
+		    {
+			codonval[2] |= code[k];
+		    }
+		    else
+		    {
+			if(newkfirst == 4)
+			    newkfirst = k;
+		    }
+		}
+		for(k=4;k<15;k++)
+		{
+		    kk = ambigcodes[k];
+		    if(((kk|codonval[2]) == codonval[2]) &&
+		       (kk & codonval[2]))
+		    {
+			thys->GC[i][j][k] = aa;
+		    }
+		}
+		kfirst = newkfirst;
+	    }
+	}
+    }
+
+    newaa[0] = 'X';
+    ifirst = jfirst = kfirst = 0;
+    jj = kk = 0;
+    while(newaa[0])
+    {
+	newaa[0] = '\0';
+	aa = thys->GC[ifirst][jfirst][kfirst];
+	codonval[0] = codonval[1] = codonval[2] = 0;
+	for(i=ifirst;i<4;i++)
+	{
+	    for(j=jfirst;j<4;j++)
+	    {
+		for(k=kfirst;k<4;k++)
+		{
+		    if(thys->GC[i][j][k] == aa)
+		    {
+			codonval[0] |= code[i];
+			codonval[1] |= code[j];
+			codonval[2] |= code[k];
+			ajDebug("'%c' at %d%d%d codonval: %2d %2d %2d\n",
+				aa, i, j, k,
+				codonval[0], codonval[1], codonval[2]);
+		    }
+		    else
+		    {
+			if(!newaa[0])
+			{
+			    if(!strchr(aalist, thys->GC[i][j][k]))
+			    {
+				newaa[0] = thys->GC[i][j][k];
+				ifirst = i;
+				jj = j;
+				kk = k;
+				strcat(aalist, newaa);
+				ajDebug("newaa '%s' at %d%d%d\n",
+					newaa, i, j, k);
+			    }
+			}
+		    }
+		}
+		kfirst = 0;
+	    }
+	    jfirst = 0;
+	}
+	jfirst = jj;
+	kfirst = kk;
+	ajDebug("ambig aa: %c codonval %2d %2d %2d trn %2d %2d %2d ijk %d%d%d '%s' '%s'\n",
+		aa, codonval[0], codonval[1], codonval[2],
+		trncodes[codonval[0]],
+		trncodes[codonval[1]],
+		trncodes[codonval[2]],
+		ifirst, jfirst, kfirst, newaa, aalist);
+	thys->GC[trncodes[codonval[0]]]
+	    [trncodes[codonval[1]]]
+		[trncodes[codonval[2]]] = aa;
+    }
+
+
+    ajDebug("           ");
+    for (i=0;i<15;i++)
+    {
+	ajDebug(" %c", nuccodes[i]);
+    }
+    ajDebug("\n");
+    for (i=0;i<15;i++)
+    {
+	for (j=0;j<15;j++)
+	{
+	    ajDebug("%2d %2d %c %c :", i, j, nuccodes[i], nuccodes[j]);
+	    for (k=0;k<15;k++)
+	    {
+		ajDebug(" %c", thys->GC[i][j][k]);
+	    }
+	    ajDebug("\n");
+	}
+    }
+
+    return ajTrue;
+}
+
+
+
+
+
+/* @func ajTrnExit ************************************************************
+**
+** Cleans up translation processing internal memory
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajTrnExit(void)
+{
+    ajStrDel(&trnResidueStr);
+
+    return;
 }
