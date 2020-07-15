@@ -25,6 +25,7 @@ Nucleic:Mutation Nucleic acid sequence mutation
 Nucleic:Profiles Nucleic acid profile generation and searching
 Nucleic:Primers Primer prediction
 Nucleic:Repeats Nucleic acid repeat detection
+Nucleic:RNA_folding RNA folding methods and analysis
 Nucleic:Restriction Restriction enzyme sites in nucleotide sequences
 Nucleic:Transcription Transcription factors, promoters and terminator prediction
 Nucleic:Translation Translation of nucleotide sequence to protein sequence
@@ -41,7 +42,7 @@ Protein:3D_structure Protein tertiary structure
 Protein:Composition Composition of protein sequences
 Protein:Motifs Protein motif searches
 Protein:Mutation Protein sequence mutation
-Protein:Profiles Proteni profile generation and searching
+Protein:Profiles Protein profile generation and searching
 Test Testing tools, not for general use.
 Utils:Database_creation Database installation
 Utils:Database_indexing Database indexing
