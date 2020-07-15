@@ -71,7 +71,7 @@ display more random points of similarity (noise) and runs slower.
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>dottup tembl:eclac tembl:eclaci -wordsize=6 -gtitle="eclaci vs eclac" -graph cps </b>
+% <b>dottup tembl:j01636 tembl:v00294 -wordsize=6 -gtitle="v00294 vs j01636" -graph cps </b>
 Displays a wordmatch dotplot of two sequences
 
 Created dottup.ps
@@ -93,10 +93,10 @@ Created dottup.ps
    -wordsize           integer    [10] Word size (Integer 2 or more)
 *  -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png)
+                                  tekt, tek, none, data, xterm, png, gif)
 *  -xygraph            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png)
+                                  tekt, tek, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers (* if not always prompted):
 *  -[no]boxit          boolean    [Y] Draw a box around dotplot
@@ -207,14 +207,14 @@ Created dottup.ps
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
 <tr>
 <td>-xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -257,19 +257,17 @@ Any two sequence USAs of the same type (DNA or protein).
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:eclac' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:j01636' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:eclac</h3>
+<p><h3>Database entry: tembl:j01636</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   ECLAC      standard; DNA; PRO; 7477 BP.
+ID   J01636; SV 1; linear; genomic DNA; STD; PRO; 7477 BP.
 XX
 AC   J01636; J01637; K01483; K01793;
 XX
-SV   J01636.1
-XX
 DT   30-NOV-1990 (Rel. 26, Created)
-DT   04-MAR-2000 (Rel. 63, Last updated, Version 7)
+DT   09-SEP-2004 (Rel. 81, Last updated, Version 8)
 XX
 DE   E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 XX
@@ -279,26 +277,26 @@ KW   lacZ gene; mutagenesis; palindrome; promoter region;
 KW   thiogalactoside acetyltransferase.
 XX
 OS   Escherichia coli
-OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
-OC   Escherichia.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
 RP   1243-1266
-RX   MEDLINE; 74055539.
+RX   PUBMED; 4587255.
 RA   Gilbert W., Maxam A.;
 RT   "The nucleotide sequence of the lac operator";
-RL   Proc. Natl. Acad. Sci. U.S.A. 70:3581-3584(1973).
+RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3581-3584(1973).
 XX
 RN   [2]
 RP   1246-1308
-RX   MEDLINE; 74055540.
+RX   PUBMED; 4587256.
 RA   Maizels N.M.;
 RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
 RT   transcribed from the UV5 promoter mutant of Escherichia coli";
-RL   Proc. Natl. Acad. Sci. U.S.A. 70:3585-3589(1973).
+RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3585-3589(1973).
 XX
 RN   [3]
-RX   MEDLINE; 74174501.
+RX   PUBMED; 4598642.
 RA   Gilbert W., Maizels N., Maxam A.;
 RT   "Sequences of controlling regions of the lactose operon";
 RL   Cold Spring Harb. Symp. Quant. Biol. 38:845-855(1974).
@@ -306,12 +304,14 @@ XX
 RN   [4]
 RA   Gilbert W., Gralla J., Majors A.J., Maxam A.;
 RT   "Lactose operator sequences and the action of lac repressor";
-RL   (in) Sund H., Blauer G. (eds.);
+RL   (in) Sund H., Blauer G. (Eds.);
 RL   PROTEIN-LIGAND INTERACTIONS:193-207;
 RL   Walter de Gruyter, New York (1975)
 XX
 RN   [5]
 RP   1146-1282
+RX   PUBMED; 1088926.
+RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -369,14 +369,12 @@ RP   1146-1282
 //
 </pre>
 </td></tr></table><p>
-<p><h3>Database entry: tembl:eclaci</h3>
+<p><h3>Database entry: tembl:v00294</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   ECLACI     standard; DNA; PRO; 1113 BP.
+ID   V00294; SV 1; linear; genomic DNA; STD; PRO; 1113 BP.
 XX
 AC   V00294;
-XX
-SV   V00294.1
 XX
 DT   09-JUN-1982 (Rel. 01, Created)
 DT   10-FEB-1999 (Rel. 58, Last updated, Version 2)
@@ -386,29 +384,45 @@ XX
 KW   DNA binding protein; repressor.
 XX
 OS   Escherichia coli
-OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
-OC   Escherichia.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
 RP   1-1113
-RX   MEDLINE; 78246991.
+RX   DOI; 10.1038/274765a0.
+RX   PUBMED; 355891.
 RA   Farabaugh P.J.;
 RT   "Sequence of the lacI gene";
-RL   Nature 274:765-769(1978).
-XX
-DR   SWISS-PROT; P03023; LACI_ECOLI.
+RL   Nature 274(5673):765-769(1978).
 XX
 CC   KST ECO.LACI
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..1113
-FT                   /db_xref="taxon:562"
 FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
 FT   CDS             31..1113
-FT                   /db_xref="SWISS-PROT:P03023"
-FT                   /note="reading frame"
 FT                   /transl_table=11
+FT                   /note="reading frame"
+FT                   /db_xref="GOA:P03023"
+FT                   /db_xref="PDB:1CJG"
+FT                   /db_xref="PDB:1EFA"
+FT                   /db_xref="PDB:1JWL"
+FT                   /db_xref="PDB:1JYE"
+FT                   /db_xref="PDB:1JYF"
+FT                   /db_xref="PDB:1L1M"
+FT                   /db_xref="PDB:1LBG"
+FT                   /db_xref="PDB:1LBH"
+FT                   /db_xref="PDB:1LBI"
+FT                   /db_xref="PDB:1LCC"
+FT                   /db_xref="PDB:1LCD"
+FT                   /db_xref="PDB:1LQC"
+FT                   /db_xref="PDB:1LTP"
+FT                   /db_xref="PDB:1TLF"
+FT                   /db_xref="PDB:2BJC"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P03023"
 FT                   /protein_id="CAA23569.1"
 FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAEL
 FT                   NYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGV
