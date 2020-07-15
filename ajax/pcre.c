@@ -250,6 +250,7 @@ compiling for Virtual Pascal, things are done differently (see pcre.in). */
 
 #ifndef VPCOMPAT
 void *(*pcre_malloc)(size_t) = malloc;
+void *(*pcre_calloc)(size_t,size_t) = calloc;
 void  (*pcre_free)(void *) = free;
 int   (*pcre_callout)(pcre_callout_block *) = NULL;
 #endif
@@ -4868,7 +4869,7 @@ length += 2 + LINK_SIZE;    /* For final KET and END */
 externally provided function. */
 
 size = length + sizeof(real_pcre) + name_count * (max_name_size + 3);
-re = (real_pcre *)(pcre_malloc)(size);
+re = (real_pcre *)(pcre_calloc)(1,size);
 
   if (re == NULL)
   {
@@ -5526,7 +5527,7 @@ for (;;)
       else
         {
         new_recursive.offset_save =
-          (int *)(pcre_malloc)(new_recursive.saved_max * sizeof(int));
+          (int *)(pcre_calloc)(1,new_recursive.saved_max * sizeof(int));
         if (new_recursive.offset_save == NULL) return PCRE_ERROR_NOMEMORY;
         }
 
@@ -7561,7 +7562,7 @@ ocount = offsetcount - (offsetcount % 3);
   if (re->top_backref > 0 && re->top_backref >= ocount/3)
   {
   ocount = re->top_backref * 3 + 3;
-  match_block.offset_vector = (int *)(pcre_malloc)(ocount * sizeof(int));
+  match_block.offset_vector = (int *)(pcre_calloc)(1,ocount * sizeof(int));
   if (match_block.offset_vector == NULL) return PCRE_ERROR_NOMEMORY;
   using_temporary_offsets = TRUE;
   DPRINTF(("Got memory to hold back references\n"));
