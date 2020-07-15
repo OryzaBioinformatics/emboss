@@ -1,5 +1,5 @@
 /******************************************************************************
-** @Source AJAX format functions
+** @source AJAX format functions
 **
 ** String formatting routines. Similar to printf, fprintf, vprintf
 ** etc but the set of conversion specifiers is not fixed, and cannot
@@ -48,11 +48,6 @@
 #include <ctype.h>
 #include <math.h>
 #include "ajax.h"
-#include "ajfmt.h"
-#include "ajtime.h"
-#include "ajexcept.h"
-#include "ajstr.h"
-#include "ajfile.h"
 
 
 
@@ -304,7 +299,7 @@ static void cvt_d(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 	m = hval;
 
     do
-	*--p = ajSysItoC(m%10 + '0');
+	*--p = ajSysItoC((ajint)(m%10 + '0'));
     while((m /= 10) > 0);
 
     if(hval < 0)
@@ -318,7 +313,7 @@ static void cvt_d(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 	m = val;
 
     do
-	*--p = ajSysItoC(m%10 + '0');
+	*--p = ajSysItoC((ajint)(m%10 + '0'));
     while((m /= 10) > 0);
 
     if(val < 0)
@@ -686,7 +681,9 @@ static void cvt_f(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 
     if(precision < 0)
     {
-	if(code == 'f') precision = FLT_DIG;
+	if(code == 'f') precision = 6;
+	else if(code == 'g') precision = 6;
+	else if(code == 'e') precision = 6;
 	else precision = DBL_DIG;
     }
 
@@ -700,12 +697,18 @@ static void cvt_f(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 	ajint i = 2;
 
 	assert(precision <= 99);
-	fmt[i++] = ajSysItoC((precision/10)%10 + '0');
+	if(precision > 9)
+	    fmt[i++] = ajSysItoC((precision/10)%10 + '0');
 	fmt[i++] = ajSysItoC(precision%10 + '0');
 	fmt[i++] = ajSysItoC(code);
 	fmt[i]   = '\0';
 
 	sprintf(buf, fmt, va_arg(VA_V(ap), double));
+	if(code == 'g')
+	{
+	    if(width == INT_MIN && precision > strlen(buf))
+		precision = strlen(buf);
+	}
     }
 
     /* now write string and support width */
@@ -1430,7 +1433,7 @@ AjPStr ajFmtStr(const char* fmt, ...)
     ajint len = 32;
     AjPStr fnew;
 
-    fnew = ajStrNewL(len);
+    fnew = ajStrNewRes(len);
     va_start(ap, fmt);
 
 #if defined(__amd64__) || defined(__EM64T__) || \
@@ -1484,7 +1487,7 @@ AjPStr ajFmtPrintS(AjPStr* pthis, const char* fmt, ...)
 
     va_start(ap, fmt);
 
-    ajStrModL(pthis, 32);
+    ajStrSetRes(pthis, 32);
     thys = *pthis;
 
 #if defined(__amd64__) || defined(__EM64T__) || \
@@ -1526,7 +1529,7 @@ AjPStr ajFmtVPrintS(AjPStr* pthis, const char* fmt, va_list ap)
 {
     AjPStr thys;
 
-    ajStrModL(pthis, 32);
+    ajStrSetRes(pthis, 32);
     thys = *pthis;
 
     thys->Len = ajFmtVfmtStrCL(&thys->Ptr, 0, &thys->Res, fmt, ap);
@@ -1567,7 +1570,7 @@ AjPStr ajFmtPrintAppS(AjPStr* pthis, const char* fmt, ...)
 
     va_start(ap, fmt);
 
-    ajStrModL(pthis, 32);
+    ajStrSetRes(pthis, 32);
     thys = *pthis;
 
 #if defined(__amd64__) || defined(__EM64T__) || \
@@ -2003,20 +2006,19 @@ void ajFmtPrintSplit(AjPFile outf, const AjPStr str,
 
     token = ajStrNew();
     tmp   = ajStrNewC("");
-    tmp2  = ajStrNew();
 
-    handle = ajStrTokenInit(str,delim);
+    handle = ajStrTokenNewC(str,delim);
 
-    while(ajStrToken(&token,&handle,NULL))
+    while(ajStrTokenNextParse(&handle,&token))
     {
 	if(!c)
 	    ajFmtPrintF(outf,"%s",prefix);
 
-	if((l=n+ajStrLen(token)) < len)
+	if((l=n+ajStrGetLen(token)) < len)
 	{
 	    if(c++)
-		ajStrAppC(&tmp," ");
-	    ajStrApp(&tmp,token);
+		ajStrAppendC(&tmp," ");
+	    ajStrAppendS(&tmp,token);
 	    if(c!=1)
 		n = ++l;
 	    else
@@ -2025,9 +2027,9 @@ void ajFmtPrintSplit(AjPFile outf, const AjPStr str,
 	else
 	{
 	    ajFmtPrintF(outf,"%S\n",tmp);
-	    ajStrAssS(&tmp,token);
-	    ajStrAppC(&tmp," ");
-	    n = ajStrLen(token) + 1;
+	    ajStrAssignS(&tmp,token);
+	    ajStrAppendC(&tmp," ");
+	    n = ajStrGetLen(token) + 1;
 	    c = 0;
 	}
     }
@@ -2036,16 +2038,16 @@ void ajFmtPrintSplit(AjPFile outf, const AjPStr str,
 	ajFmtPrintF(outf,"%S\n",tmp);
     else
     {
-	n = ajStrLen(tmp);
-	ajStrAssSub(&tmp2,tmp,0,n-2);
+	n = ajStrGetLen(tmp);
+	ajStrAssignSubS(&tmp2,tmp,0,n-2);
 	ajFmtPrintF(outf,"%s%S\n",prefix,tmp2);
+	ajStrDel(&tmp2);
     }
 
 
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
     ajStrDel(&token);
     ajStrDel(&tmp);
-    ajStrDel(&tmp2);
 
     return;
 }
@@ -2053,7 +2055,7 @@ void ajFmtPrintSplit(AjPFile outf, const AjPStr str,
 
 
 
-/* @func ajFmtScanS  **********************************************************
+/* @func ajFmtScanS ***********************************************************
 **
 ** Scan a string according to fmt and load the ... variable pointers
 ** Like C function sscanf.
@@ -2356,7 +2358,7 @@ static void scvt_uS(const char *fmt, char **pos, VALIST ap, ajint width,
 	if(convert)
 	{
 	    val = (AjPStr *) va_arg(VA_V(ap), AjPStr *);
-	    ajStrAssSubC(val,p,0,q-p-1);
+	    ajStrAssignSubC(val,p,0,q-p-1);
 	}
 
 	*pos = q;
@@ -2393,16 +2395,13 @@ static void scvt_d(const char *fmt, char **pos, VALIST ap, ajint width,
     static char *wspace=" \n\t";
     static char *dig="+-0123456789";
     ajint c=0;
-    static AjPStr t = NULL;
+    AjPStr t = NULL;
     long  n   = 0;
     ajlong hn = 0;
     char  flag;
 
     p = *pos;
     flag = *(fmt-1);
-
-    if(!t)
-	t = ajStrNew();
 
     *ok = ajFalse;
 
@@ -2420,21 +2419,23 @@ static void scvt_d(const char *fmt, char **pos, VALIST ap, ajint width,
 		val = (long *) va_arg(VA_V(ap), long *);
 	    else
 		hval = (ajlong *) va_arg(VA_V(ap), ajlong *);
-	    ajStrAssSubC(&t,p,0,q-p-1);
+	    ajStrAssignSubC(&t,p,0,q-p-1);
 	    if(flag!='L')
-		sscanf(ajStrStr(t),"%ld",&n);
+		sscanf(ajStrGetPtr(t),"%ld",&n);
 
 	    else			/* flag == 'L' define hn */
 	    {
 #if defined(HAVE64)
-		hn = sc_long(ajStrStr(t));
+		hn = sc_long(ajStrGetPtr(t));
 #else
 		val = hval;
-		sscanf(ajStrStr(t),"%ld",&n);
+		sscanf(ajStrGetPtr(t),"%ld",&n);
 		hn = n;
 		/*ajDebug("Warning: Use of %%Ld on a 32 bit model");*/
 #endif
 	    }
+	    ajStrDel(&t);
+
 	    if(flag=='h')
 		*(short*)val = (short)n;
 	    else if(flag=='l')
@@ -2448,7 +2449,6 @@ static void scvt_d(const char *fmt, char **pos, VALIST ap, ajint width,
 	*pos = q;
 	*ok = ajTrue;
     }
-
     return;
 }
 
@@ -2479,7 +2479,7 @@ static void scvt_x(const char *fmt, char **pos, VALIST ap, ajint width,
     static char *wspace=" \n\t";
     static char *dig="0123456789abcdefABCDEFx";
     ajint c = 0;
-    static AjPStr t  = NULL;
+    AjPStr t  = NULL;
     unsigned long  n = 0;
     ajulong hn       = 0;
     char  flag;
@@ -2487,8 +2487,6 @@ static void scvt_x(const char *fmt, char **pos, VALIST ap, ajint width,
 
     p = *pos;
     flag=*(fmt-1);
-    if(!t)
-	t = ajStrNew();
 
     *ok = ajFalse;
 
@@ -2506,24 +2504,31 @@ static void scvt_x(const char *fmt, char **pos, VALIST ap, ajint width,
 		val = (unsigned long *) va_arg(VA_V(ap), unsigned long *);
 	    else
 		hval = (ajulong *) va_arg(VA_V(ap), ajulong *);
-	    ajStrAssSubC(&t,p,0,q-p-1);
+	    ajStrAssignSubC(&t,p,0,q-p-1);
 	    if(flag!='L')
 	    {
-		if(sscanf(ajStrStr(t),"%lx",&n)!=1)
+		if(sscanf(ajStrGetPtr(t),"%lx",&n)!=1)
+		{
+		    ajStrDel(&t);
 		    return;
+		}
 	    }
 	    else			/* flag == 'L' define hn */
 	    {
 #if defined(HAVE64)
-		hn = sc_hex(ajStrStr(t));
+		hn = sc_hex(ajStrGetPtr(t));
 #else
-		val = hval;
-		if(sscanf(ajStrStr(t),"%lx",&n)!=1)
+		val = (unsigned long *) hval;
+		if(sscanf(ajStrGetPtr(t),"%lx",&n)!=1)
+		{
+		    ajStrDel(&t);
 		    return;
+		}
 		hn = n;
 		/*ajDebug("Warning: Use of %%Lx on a 32 bit model");*/
 #endif
 	    }
+	    ajStrDel(&t);
 
 	    if(flag=='h')
 		*(unsigned short*)val = (unsigned short)n;
@@ -2569,16 +2574,13 @@ static void scvt_f(const char *fmt, char **pos, VALIST ap, ajint width,
     static char *wspace = " \n\t";
     static char *dig = "+-0123456789.eE";
     ajint c=0;
-    static AjPStr t = NULL;
+    AjPStr t = NULL;
     double  n = (double)0.;
     float   fn = 0.;
     char  flag;
 
     p = *pos;
     flag = *(fmt-1);
-
-    if(!t)
-	t = ajStrNew();
 
     *ok = ajFalse;
 
@@ -2592,21 +2594,28 @@ static void scvt_f(const char *fmt, char **pos, VALIST ap, ajint width,
     {
 	if(convert)
 	{
-	    ajStrAssSubC(&t,p,0,q-p-1);
+	    ajStrAssignSubC(&t,p,0,q-p-1);
 	    if(flag=='l')
 	    {
 		val = (double*) va_arg(VA_V(ap), double *);
-		if(sscanf(ajStrStr(t),"%lf",&n)!=1)
+		if(sscanf(ajStrGetPtr(t),"%lf",&n)!=1)
+		{
+		    ajStrDel(&t);
 		    return;
+		}
 		*(double *)val = n;
 	    }
 	    else
 	    {
 		fval = (float*) va_arg(VA_V(ap), float *);
-		if(sscanf(ajStrStr(t),"%f",&fn)!=1)
+		if(sscanf(ajStrGetPtr(t),"%f",&fn)!=1)
+		{
+		    ajStrDel(&t);
 		    return;
+		}
 		*(float *)fval = fn;
 	    }
+	    ajStrDel(&t);
 	}
 
 	*pos = q;
@@ -2641,12 +2650,9 @@ static void scvt_s(const char *fmt, char **pos, VALIST ap, ajint width,
     char *val = NULL;
     static char *wspace = " \n\t";
     ajint c = 0;
-    static AjPStr t = NULL;
+    AjPStr t = NULL;
 
     p = *pos;
-
-    if(!t)
-	t = ajStrNew();
 
     *ok = ajFalse;
 
@@ -2660,8 +2666,9 @@ static void scvt_s(const char *fmt, char **pos, VALIST ap, ajint width,
 	if(convert)
 	{
 	    val = (char *) va_arg(VA_V(ap), char *);
-	    ajStrAssSubC(&t,p,0,q-p-1);
-	    strcpy(val,ajStrStr(t));
+	    ajStrAssignSubC(&t,p,0,q-p-1);
+	    strcpy(val,ajStrGetPtr(t));
+	    ajStrDel(&t);
 	}
 
 	*pos = q;
@@ -2698,7 +2705,7 @@ static void scvt_o(const char *fmt, char **pos, VALIST ap, ajint width,
     static char *wspace = " \n\t";
     static char *dig = "01234567";
     ajint c = 0;
-    static AjPStr t  = NULL;
+    AjPStr t  = NULL;
     unsigned long  n = 0;
     ajulong hn       = 0;
     char  flag;
@@ -2725,21 +2732,27 @@ static void scvt_o(const char *fmt, char **pos, VALIST ap, ajint width,
 		val = (unsigned long *) va_arg(VA_V(ap), unsigned long *);
 	    else
 		hval = (ajulong *)  va_arg(VA_V(ap), ajulong *);
-	    ajStrAssSubC(&t,p,0,q-p-1);
+	    ajStrAssignSubC(&t,p,0,q-p-1);
 
 	    if(flag!='L')
 	    {
-		if(sscanf(ajStrStr(t),"%lo",&n)!=1)
+		if(sscanf(ajStrGetPtr(t),"%lo",&n)!=1)
+		{
+		    ajStrDel(&t);
 		    return;
+		}
 	    }
 	    else			/* flag == 'L' define hn */
 	    {
 #if defined(HAVE64)
-		hn = sc_octal(ajStrStr(t));
+		hn = sc_octal(ajStrGetPtr(t));
 #else
-		val = hval;
-		if(sscanf(ajStrStr(t),"%lo",&n)!=1)
+		val = (unsigned long *) hval;
+		if(sscanf(ajStrGetPtr(t),"%lo",&n)!=1)
+		{
+		    ajStrDel(&t);
 		    return;
+		}
 		hn = n;
 		/*ajDebug("Warning: Use of %%Lo on a 32 bit model");*/
 #endif
@@ -2758,6 +2771,7 @@ static void scvt_o(const char *fmt, char **pos, VALIST ap, ajint width,
 	*pos = q;
 	*ok = ajTrue;
     }
+    ajStrDel(&t);
 
     return;
 }
@@ -2789,7 +2803,7 @@ static void scvt_u(const char *fmt, char **pos, VALIST ap, ajint width,
     static char *wspace = " \n\t";
     static char *dig = "+0123456789";
     ajint c=0;
-    static AjPStr t = NULL;
+    AjPStr t = NULL;
     unsigned long n = 0;
 
     ajulong hn = 0;
@@ -2817,21 +2831,27 @@ static void scvt_u(const char *fmt, char **pos, VALIST ap, ajint width,
 		val = (unsigned long *) va_arg(VA_V(ap), unsigned long *);
 	    else
 		hval = (ajulong *)  va_arg(VA_V(ap), ajulong *);
-	    ajStrAssSubC(&t,p,0,q-p-1);
+	    ajStrAssignSubC(&t,p,0,q-p-1);
 
 	    if(flag!='L')
 	    {
-		if(sscanf(ajStrStr(t),"%lu",&n)!=1)
+		if(sscanf(ajStrGetPtr(t),"%lu",&n)!=1)
+		{
+		    ajStrDel(&t);
 		    return;
+		}
 	    }
 	    else			/* flag == 'L' define hn */
 	    {
 #if defined(HAVE64)
-		hn = sc_ulong(ajStrStr(t));
+		hn = sc_ulong(ajStrGetPtr(t));
 #else
-		val = hval;
-		if(sscanf(ajStrStr(t),"%lu",&n)!=1)
+		val = (unsigned long *) hval;
+		if(sscanf(ajStrGetPtr(t),"%lu",&n)!=1)
+		{
+		    ajStrDel(&t);
 		    return;
+		}
 		hn = n;
 		/*ajDebug("Warning: Use of %%Lu on a 32 bit model");*/
 #endif
@@ -2851,6 +2871,7 @@ static void scvt_u(const char *fmt, char **pos, VALIST ap, ajint width,
 	*pos = q;
 	*ok = ajTrue;
     }
+    ajStrDel(&t);
 
     return;
 }
@@ -2881,7 +2902,7 @@ static void scvt_p(const char *fmt, char **pos, VALIST ap, ajint width,
     static char *wspace = " \n\t";
     static char *dig = "0123456789abcdefABCDEFx";
     ajint c = 0;
-    static AjPStr t = NULL;
+    AjPStr t = NULL;
     unsigned long n = 0;
 
     p = *pos;
@@ -2902,8 +2923,8 @@ static void scvt_p(const char *fmt, char **pos, VALIST ap, ajint width,
 	if(convert)
 	{
 	    val = (void *) va_arg(VA_V(ap), void *);
-	    ajStrAssSubC(&t,p,0,q-p-1);
-	    if(sscanf(ajStrStr(t),"%lx",&n)!=1)
+	    ajStrAssignSubC(&t,p,0,q-p-1);
+	    if(sscanf(ajStrGetPtr(t),"%lx",&n)!=1)
 		return;
 	    val = (void *)n;
 	}
@@ -2911,6 +2932,7 @@ static void scvt_p(const char *fmt, char **pos, VALIST ap, ajint width,
 	*pos = q;
 	*ok = ajTrue;
     }
+    ajStrDel(&t);
 
     return;
 }
@@ -2943,13 +2965,10 @@ static void scvt_uB(const char *fmt, char **pos, VALIST ap, ajint width,
     static char *tr = "YyTt";
     static char *fa = "NnFf";
     ajint c = 0;
-    static AjPStr t = NULL;
+    AjPStr t = NULL;
     AjBool n = ajFalse;
 
     p = *pos;
-
-    if(!t)
-	t = ajStrNew();
 
     *ok = ajFalse;
 
@@ -3016,12 +3035,13 @@ static void scvt_uB(const char *fmt, char **pos, VALIST ap, ajint width,
 	if(convert)
 	{
 	    val = (AjBool *) va_arg(VA_V(ap), AjBool *);
-	    ajStrAssSubC(&t,p,0,q-p-1);
-	    sscanf(ajStrStr(t),"%d",&n);
+	    ajStrAssignSubC(&t,p,0,q-p-1);
+	    sscanf(ajStrGetPtr(t),"%d",&n);
 	    if(n)
 		*(AjBool*)val = ajTrue;
 	    else
 		*(AjBool*)val = ajFalse;
+	    ajStrDel(&t);
 	}
 
 	*pos = q;
@@ -3161,12 +3181,9 @@ static void scvt_z(const char *fmt, char **pos, VALIST ap, ajint width,
     char **val = NULL;
     static char *wspace = " \n\t";
     ajint c = 0;
-    static AjPStr t = NULL;
+    AjPStr t = NULL;
 
     p = *pos;
-
-    if(!t)
-	t = ajStrNew();
 
     *ok = ajFalse;
 
@@ -3180,10 +3197,11 @@ static void scvt_z(const char *fmt, char **pos, VALIST ap, ajint width,
 	if(convert)
 	{
 	    val = (char **) va_arg(VA_V(ap), char **);
-	    ajStrAssSubC(&t,p,0,q-p-1);
+	    ajStrAssignSubC(&t,p,0,q-p-1);
 	    if(!*val)
-		*val = ajCharNewL(ajStrLen(t)+1);
-	    strcpy(*val,ajStrStr(t));
+		*val = ajCharNewRes(ajStrGetLen(t)+1);
+	    strcpy(*val,ajStrGetPtr(t));
+	    ajStrDel(&t);
 	}
 
 	*pos = q;

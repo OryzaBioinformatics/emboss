@@ -10,6 +10,10 @@ extern "C"
 #include <stdio.h>
 #include "ajexcept.h"
 
+#if defined(__x86_64__) && !defined(__amd64__)
+#define __amd64__
+#endif
+
 #if defined(__amd64__) || defined(__EM64T__) || \
     defined(__PPC__) && defined(_CALL_SYSV)
 #define VALIST va_list
@@ -27,6 +31,13 @@ typedef void (*Fmt_T) (ajint code, VALIST ap,
 
 typedef void (*Fmt_S) (const char *fmt, char **pos, VALIST ap, int width,
 		       AjBool convert, AjBool *ok);
+
+
+
+
+/*
+** Prototype definitions
+*/
 
 void   ajFmtFmt (int put(int c, void *cl), void *cl,
 		 const char *fmt, ...);
@@ -51,8 +62,6 @@ ajint  ajFmtVPrintCL (char *buf, ajint size,
 void   ajFmtPrintSplit(AjPFile outf, const AjPStr str,
 		       const char *prefix, ajint len,
 		       const char *delim);
-ajint  ajFmtVFmtS(char *buf, ajint size,
-		  const char *fmt, va_list ap);
 char*  ajFmtString (const char *fmt, ...);
 char*  ajFmtVString(const char *fmt, va_list ap);
 Fmt_T  ajFmtRegister(ajint code, Fmt_T cvt);
@@ -74,6 +83,11 @@ ajint  ajFmtVfmtStrCL (char** buf, ajint pos, ajint *size,
 ajint  ajFmtScanS (const AjPStr thys, const char* fmt, ...);
 ajint  ajFmtScanC (const char* thys, const char* fmt, ...);
 ajint  ajFmtScanF (AjPFile thys, const char* fmt, ...);
+
+/*
+** End of prototype definitions
+*/
+
 #endif
 
 #ifdef __cplusplus
