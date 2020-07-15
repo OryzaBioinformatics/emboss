@@ -12,6 +12,11 @@
 </tr>
 
 <tr>
+<td><a href="edialign.html">edialign</a></td>
+<td>Local multiple alignment of sequences</td>
+</tr>
+
+<tr>
 <td><a href="emma.html">emma</a></td>
 <td>Multiple alignment program - interface to ClustalW program</td>
 </tr>

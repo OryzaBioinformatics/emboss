@@ -27,7 +27,6 @@
                                   (BLACK) (Any string is accepted)
    -docolour           boolean    [N] Colour residues by table oily, amide
                                   etc.
-   -[no]title          boolean    [Y] Do not display the title
    -shade              string     Set to BPLW for normal shading
                                   (black, pale, light, white)
                                   so for pair = 1.5,1.0,0.5 and shade = BPLW
@@ -59,7 +58,7 @@
    -consensus          boolean    [N] Display the consensus
    -[no]collision      boolean    [Y] Allow collisions in calculating
                                   consensus
-   -alternative        selection  [0] Values are 0:Normal collision check.
+   -alternative        menu       [0] Values are 0:Normal collision check.
                                   (default)
                                   1:Compares identical scores with the max
                                   score found. So if any other residue matches
@@ -71,7 +70,18 @@
                                   3:Checks all those not in the current
                                   consensus.If any of these give a top score
                                   for matching or identical scores then a
-                                  collision has occured.
+                                  collision has occured. (Values: 0 (Normal
+                                  collision check. (default)); 1 (Compares
+                                  identical scores with the max score found.
+                                  So if any other residue matches the
+                                  identical score then a collision has
+                                  occurred.); 2 (If another residue has a
+                                  greater than or equal to matching score and
+                                  these do not match then a collision has
+                                  occurred.); 3 (Checks all those not in the
+                                  current consensus.If any of these give a top
+                                  score for matching or identical scores then
+                                  a collision has occured.))
    -showscore          integer    [-1] Print residue scores (Any integer
                                   value)
    -portrait           boolean    [N] Set page to Portrait
@@ -97,6 +107,7 @@
 
    "-graph" associated qualifiers
    -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
    -gtitle             string     Graph title
    -gsubtitle          string     Graph subtitle
    -gxtitle            string     Graph x axis title

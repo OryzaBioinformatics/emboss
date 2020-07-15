@@ -31,13 +31,12 @@ static AjPGraphPlpData abiview_graphDisplay(AjPGraph graphs,
 					    ajint nstart, ajint nstop,
 					    const AjPShort  basePositions,
 					    ajint base,
-					    ajint colour, AjBool overlay,
+					    ajint colour,
 					    float tmax, ajint* ntrace);
 
 static AjPGraphPlpData abiview_graphTextDisplay(AjPGraph graphs, ajint nstart,
 						ajint nstop,
 						const AjPShort basePositions,
-						AjBool overlay,
 						const AjPStr nseq,
 						float tmax, ajint nt);
 
@@ -107,6 +106,8 @@ int main(int argc, char **argv)
     char res2;
     char res3;
     char res4;
+
+    ajint ti;
 
     /* BYTE[i] is a byte mask for byte i */
     const ajlong BYTE[] = { 0x000000ff };
@@ -185,8 +186,12 @@ int main(int argc, char **argv)
     tmax = 0.;
     for(iloop=0;iloop<numPoints;iloop++)
 	for(ibase=0;ibase<4;ibase++)
-	    if(tmax < (float)ajInt2dGet(trace,ibase,iloop))
-		tmax = (float)ajInt2dGet(trace,ibase,iloop);
+	    if(tmax < ajInt2dGet(trace,ibase,iloop))
+	    {
+		ti = ajInt2dGet(trace,ibase,iloop);
+		tmax = (float) ti;
+	    }
+    
 
 
     /* setup graph parameters */
@@ -224,25 +229,25 @@ int main(int argc, char **argv)
 
 	if(graph1)
 	    gd1 = abiview_graphDisplay(graphs,trace,nstart,nstop,basePositions,
-				       0,abiview_getResColour(res1),overlay,
+				       0,abiview_getResColour(res1),
 				       tmax,&ntrace);
 
 	ntrace = strace;
 	if(graph2)
 	    gd2 = abiview_graphDisplay(graphs,trace,nstart,nstop,basePositions,
-				       1,abiview_getResColour(res2),overlay,
+				       1,abiview_getResColour(res2),
 				       tmax,&ntrace);
 	ntrace = strace;
 
 	if(graph3)
 	    gd3 = abiview_graphDisplay(graphs,trace,nstart,nstop,basePositions,
-				       2,abiview_getResColour(res3),overlay,
+				       2,abiview_getResColour(res3),
 				       tmax,&ntrace);
 	ntrace = strace;
 
 	if(graph4)
 	    gd4 = abiview_graphDisplay(graphs,trace,nstart,nstop,basePositions,
-				       3,abiview_getResColour(res4),overlay,
+				       3,abiview_getResColour(res4),
 				       tmax,&ntrace);
 
 
@@ -251,7 +256,7 @@ int main(int argc, char **argv)
 	{
 	    if(!overlay)
 		gd5 = abiview_graphTextDisplay(graphs,nstart,nstop,
-					       basePositions,overlay,nseq,
+					       basePositions,nseq,
 					       tmax,strace);
 	    else
 		abiview_TextDisplay(graphs,nstart,nstop,nseq,tmax);
@@ -280,7 +285,7 @@ int main(int argc, char **argv)
 	    }
 
 
-	    ajGraphNewPage(ajFalse);	/* display new page  */
+	    ajGraphNewPage(graphs,ajFalse);	/* display new page  */
 	}
 
 	nstart = nstop-1;
@@ -307,15 +312,15 @@ int main(int argc, char **argv)
     ajSeqAssignNameS(seqo,fname);
     ajSeqAssignSeqS(seqo,nseq);
     ajSeqSetRange(seqo,base_start,ajSeqGetEnd(seqo));
-    ajSeqWrite(seqout,seqo);
-    ajSeqWriteClose(seqout);
+    ajSeqoutWriteSeq(seqout,seqo);
+    ajSeqoutClose(seqout);
     ajStrDel(&nseq);
     ajSeqDel(&seqo);
     ajSeqoutDel(&seqout);
     ajStrDel(&fname);
     ajStrDel(&baseN);
 
-    ajExit ();
+    embExit ();
 
     return 0;
 }
@@ -334,7 +339,6 @@ int main(int argc, char **argv)
 ** @param [r] basePositions [const AjPShort] Number of bases
 ** @param [r] base [ajint] Base number
 ** @param [r] colour [ajint] Colour code
-** @param [r] overlay [AjBool] Overlay plot
 ** @param [r] tmax [float] Maximum
 ** @param [w] nt [ajint*] Number of nucleotides
 ** @return [AjPGraphPlpData] graph data object
@@ -346,14 +350,15 @@ static AjPGraphPlpData abiview_graphDisplay(AjPGraph graphs,
 					    ajint nstart, ajint nstop,
 					    const AjPShort  basePositions,
 					    ajint base, ajint colour,
-					    AjBool overlay, float tmax,
+					    float tmax,
 					    ajint* nt)
 {
     ajint i;
     ajshort bP;
     ajshort lastbP;
     ajint bstart;
-
+    ajint ti;
+    
     AjPGraphPlpData gdata;
 
 
@@ -374,15 +379,16 @@ static AjPGraphPlpData abiview_graphDisplay(AjPGraph graphs,
 	{
 	    gdata->x[*nt-bstart] = (float)i + (float)(*nt+1-lastbP)/
 		(float)(bP-lastbP);
-	    gdata->y[*nt-bstart] = (float)ajInt2dGet(trace,base,*nt);
+	    ti = ajInt2dGet(trace,base,*nt);
+	    gdata->y[*nt-bstart] = (float)ti;
 	    *nt = *nt+1;
 	}
 	lastbP = bP;
     }
 
     ajGraphPlpDataSetColour(gdata,colour);
-    ajGraphPlpDataSetMaxMin(gdata,(float)nstart+1.,
-                           (float)nstop,0.,tmax+80.);
+    ajGraphPlpDataSetMaxMin(gdata,(float)nstart+(float)1.,
+                           (float)nstop,(float)0.,tmax+(float)80.);
 
     /* add graph to list in a multiple graph */
     ajGraphDataAdd(graphs,gdata);
@@ -402,7 +408,6 @@ static AjPGraphPlpData abiview_graphDisplay(AjPGraph graphs,
 ** @param [r] nstart [ajint] Start
 ** @param [r] nstop [ajint] Stop
 ** @param [r] basePositions [const AjPShort] Base positions
-** @param [r] overlay [AjBool] Overlay
 ** @param [r] nseq [const AjPStr] Sequence number
 ** @param [r] tmax [float] Maximum
 ** @param [r] nt [ajint] Nt data
@@ -413,7 +418,7 @@ static AjPGraphPlpData abiview_graphDisplay(AjPGraph graphs,
 static AjPGraphPlpData abiview_graphTextDisplay(AjPGraph graphs, ajint nstart,
 					     ajint nstop,
 					     const AjPShort basePositions,
-					     AjBool overlay, const AjPStr nseq,
+					     const AjPStr nseq,
 					     float tmax, ajint nt)
 {
     ajint i;
@@ -431,11 +436,12 @@ static AjPGraphPlpData abiview_graphTextDisplay(AjPGraph graphs, ajint nstart,
     {
 	*res = ajStrGetCharPos(nseq,i);
 	colres = abiview_getResColour(*res);
-	ajGraphPlpDataAddText(gdata,(float)i+1.,tmax+75.,colres,res);
+	ajGraphPlpDataAddText(gdata,(float)i+(float)1.,tmax+(float)75.,colres,
+			      res);
     }
 
     ajGraphPlpDataSetMaxMin(gdata,(float)nstart+1,
-			   (float)nstop,tmax+70.,tmax+80.);
+			   (float)nstop,tmax+(float)70.,tmax+(float)80.);
 
     /* add graph to list in a multiple graph */
     ajGraphDataAdd(graphs,gdata);
@@ -473,7 +479,7 @@ static void abiview_TextDisplay(AjPGraph graphs, ajint nstart, ajint nstop,
     {
 	*res = ajStrGetCharPos(nseq,i);
 	colres = abiview_getResColour(*res);
-	ajGraphAddText(graphs,(float)i+1.,tmax+30.,colres,res);
+	ajGraphAddText(graphs,(float)i+(float)1.,tmax+(float)30.,colres,res);
     }
 
     return;
