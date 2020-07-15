@@ -41,6 +41,7 @@ static void grpGetAcdDirs(AjPList glist, AjPList alpha, char * const env[],
 static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr* keywords,
 		     AjPList groups, AjBool explode, AjBool colon,
 		     AjBool *gui, AjBool* embassy, AjPStr* hasembassyname);
+static void grpParseEmbassy(AjPFile file, AjPStr* embassyname);
 static void grpNoComment(AjPStr* text);
 static AjPStr grpParseValueRB(AjPStrTok* tokenhandle, const char* delim);
 static void grpSplitList(AjPList groups, const AjPStr value, AjBool explode,
@@ -50,6 +51,8 @@ static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
 			       const AjPList groups,
 			       const AjPStr appl, const AjPStr doc,
 			       const AjPStr keywords, const AjPStr package);
+static AjBool grpGetAcdByname(const AjPStr appname, const AjPStr acddir,
+			      AjPStr* embassyname);
 
 static AjPStr grpStr1 = NULL;
 static AjPStr grpStr2 = NULL;
@@ -174,6 +177,154 @@ void embGrpGetProgGroups(AjPList glist, AjPList alpha, char * const env[],
 
 
 
+/* @func embGrpGetEmbassy *****************************************************
+**
+** Optionally constructs a path to the directory of normal EMBOSS or
+** embassy ACD files. Calls grpGetAcdFiles to construct lists of the
+** group, doc and program name information.
+**
+** @param [r] appname [const AjPStr] Application name
+** @param [w] embassyname [AjPStr*] Embassy package attribute value,
+**                                  or an empty string if in the main package
+** @return [AjBool] ajTrue if an ACD file was found
+** @@
+******************************************************************************/
+
+AjBool embGrpGetEmbassy(const AjPStr appname, AjPStr* embassyname)
+{
+
+    AjPStr acdroot     = NULL;
+    AjPStr acdrootdir  = NULL;
+    AjPStr acdrootinst = NULL;
+    AjPStr acdpack     = NULL;
+    AjPFile acdfile     = NULL;
+    AjPStr filename    = NULL;
+    AjBool ok = ajFalse;
+
+    /* look at all EMBOSS ACD files */
+    acdpack     = ajStrNew();
+    acdroot     = ajStrNew();
+    acdrootdir  = ajStrNew();
+    acdrootinst = ajStrNew();
+
+    ajNamRootPack(&acdpack);
+    ajNamRootInstall(&acdrootinst);
+
+    ajStrAssignC(embassyname, "");
+
+    if(ajNamGetValueC("acdroot", &acdroot))
+    {
+	ajFileDirFix(&acdroot);
+	/*ajStrAppendC(&acdroot, "acd/");*/
+    }
+    else
+    {
+	ajFileDirFix(&acdrootinst);
+	ajFmtPrintS(&acdroot, "%Sshare/%S/acd/", acdrootinst, acdpack);
+      
+	if(!ajFileDir(&acdroot))
+	{
+	    ajNamRoot(&acdrootdir);
+	    ajFileDirFix(&acdrootdir);
+	    ajFmtPrintS(&acdroot, "%Sacd/", acdrootdir);
+	}
+    }
+    
+    /* normal EMBOSS ACD */
+    ajFmtPrintS(&filename, "%S%S.acd", acdroot, appname);
+    acdfile = ajFileNewIn(filename);
+    if(acdfile) {
+	grpParseEmbassy(acdfile, embassyname);
+	ajFileClose(&acdfile);
+	ok = ajTrue;
+    }
+
+    if(!ok)
+    {
+      /* look for all source directories */
+      ajNamRoot(&acdrootdir);
+      ajFileDirUp(&acdrootdir);
+      ajFmtPrintS(&acdroot, "%Sembassy/", acdrootdir);
+      /* embassadir ACD files */
+      ok = grpGetAcdByname(appname, acdroot, embassyname);
+    }
+
+    ajStrDel(&acdroot);
+    ajStrDel(&acdrootdir);
+    ajStrDel(&acdrootinst);
+    ajStrDel(&acdpack);
+    ajStrDel(&filename);
+
+    ajDebug("embGrpGetEmbassy ok:%B embassy '%S'\n",
+	    ok, *embassyname);
+    return ok;
+}
+
+
+
+
+/* @funcstatic grpGetAcdByname ************************************************
+**
+** Given a directory from main package or EMBASSY sources, it searches
+** for directories of ACD files and passes processing on to
+** grpGetAcdFiles
+**
+** @param [r] appname [const AjPStr] Application name
+** @param [r] acddir [const AjPStr] Path of directory holding ACD files
+**                                  to read in
+** @param [w] embassyname [AjPStr*] Embassy package name
+**                                  or empty string for main package
+** @return [AjBool] ajTrue if an ACD file was found
+** @@
+******************************************************************************/
+
+static AjBool grpGetAcdByname(const AjPStr appname, const AjPStr acddir,
+			      AjPStr* embassyname)
+{
+    DIR *dirp;
+    DIR *dirpa;
+    struct dirent *dp;
+    AjPStr dirname = NULL;
+    AjPStr filename = NULL;
+    AjPFile acdfile = NULL;
+    AjBool ok = ajFalse;
+
+    /* go through all the directories in this directory */
+    dirp = opendir(ajStrGetPtr(acddir));
+
+    if(!dirp)
+      return ajFalse;		/* could be no embassy installed */
+    ajDebug("grpGetAcdbyName '%S' '%S'\n", acddir, appname);
+
+    for(dp = readdir(dirp); dp != NULL; dp = readdir(dirp))
+    {
+	if(dp->d_name[0] == '.')
+	    continue;			/* don't want hidden files */
+	ajFmtPrintS(&dirname, "%S%s/emboss_acd/", acddir, dp->d_name);
+
+	dirpa = opendir(ajStrGetPtr(dirname));
+	if(dirpa)
+	{
+	    closedir(dirpa);
+	    ajFmtPrintS(&filename, "%S%S.acd", dirname, appname);
+	    acdfile = ajFileNewIn(filename);
+	    if(acdfile) {
+	      grpParseEmbassy(acdfile, embassyname);
+	      ajFileClose(&acdfile);
+	      ok = ajTrue;
+	    }
+	}
+        if(ok)
+	  break;
+    }
+    ajStrDel(&dirname);
+    ajStrDel(&filename);
+    closedir(dirp);
+
+    return ok;
+}
+
+
 
 /* @funcstatic grpGetAcdDirs **************************************************
 **
@@ -293,7 +444,7 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 	    ajStrAppendC(&progpath, dp->d_name);
 
 	    /* does it end with ".acd" ? */
-	    if(ajStrFindlastC(progpath, ".acd") == ajStrGetLen(progpath)-4)
+	    if(ajStrSuffixC(progpath, ".acd"))
 	    {
 		/* see if it is a normal file */
 		if(ajSysIsRegular(ajStrGetPtr(progpath)))
@@ -343,12 +494,10 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 
     closedir(dirp);
     ajStrDel(&applpath);
+    ajStrDel(&keywords);
 
     return;
 }
-
-
-
 
 /* @funcstatic grpParse *******************************************************
 **
@@ -511,6 +660,96 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
 
 
 
+/* @funcstatic grpParseEmbassy ***********************************************
+**
+** parse the acd file to get the EMBASSY application attribute
+**
+** @param [u] file [AjPFile]  ACD file
+** @param [w] embassyname [AjPStr*] EMBASSY package name from
+**                                     embassy attribute
+** @return [void]
+** @@
+******************************************************************************/
+
+static void grpParseEmbassy(AjPFile file, AjPStr* embassyname)
+{
+
+    AjPStr line = NULL;
+    AjPStr text = NULL;
+
+    AjPStrTok tokenhandle;
+    char white[]     = " \t\n\r";
+    char whiteplus[] = " \t\n\r:=";
+    AjPStr tmpstr = NULL;
+    AjPStr token  = NULL;
+    AjPStr value  = NULL;
+    ajint done = 0;
+
+    ajStrAssignC(embassyname, "");
+
+    /* read file into one line, stripping out comment lines and blanks */
+    while(ajFileReadLine(file, &line))
+    {
+	grpNoComment(&line);
+	if(ajStrGetLen(line))
+	{
+	    ajStrAppendS(&text, line);
+	    ajStrAppendC(&text, " ");
+	}
+    }
+
+    tokenhandle = ajStrTokenNewC(text, white);
+
+    /* find appl token */
+    while(ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr))
+	if(ajStrPrefixCaseC(tmpstr, "appl"))
+	    break;
+
+    /* next token is the application name */
+    ajStrTokenNextParseC(&tokenhandle, white, &tmpstr);
+
+    /* if next token is '[' */
+    ajStrTokenNextParseC(&tokenhandle, white, &tmpstr);
+    if(ajStrCmpC(tmpstr, "[") == 0)
+    {
+	token=ajStrNew();
+
+	/* is the next token 'doc' or 'groups' or 'gui' */
+	while(ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr))
+	{
+	    while(!ajStrMatchC(tmpstr, "]"))
+	    {
+		ajStrAssignS(&token, tmpstr);
+		value = grpParseValueRB(&tokenhandle, white);
+		done = ajStrMatchC(value, "]");
+
+		if(!done)
+		{
+		    ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr);
+		    ajStrFmtLower(&tmpstr);
+		    done = ajStrMatchC(tmpstr, "]");
+		}
+
+		if(ajStrPrefixCaseC(token, "embassy"))
+		{
+		    ajStrAssignS(embassyname, value);
+		}
+	    }
+	    if(done)
+		break;
+	}
+    }
+
+    ajStrDel(&tmpstr);
+    ajStrDel(&line);
+    ajStrDel(&text);
+    ajStrTokenDel(&tokenhandle);
+
+    return;
+}
+
+
+
 
 /* @funcstatic grpNoComment ***************************************************
 **
@@ -573,8 +812,8 @@ static AjPStr grpParseValueRB(AjPStrTok* tokenhandle, const char* delim)
     AjBool done   = ajFalse;
     AjBool rightb = ajFalse;
 
-    char *quotes    = "\"'{(<";
-    char *endquotes = "\"'})>";
+    const char *quotes    = "\"'{(<";
+    const char *endquotes = "\"'})>";
 
     if(!ajStrTokenNextParseC(tokenhandle, delim, &grpStr1))
 	return NULL;
@@ -722,12 +961,12 @@ static void grpSplitList(AjPList groups, const AjPStr value, AjBool explode,
 	    if(!colon)
 	    {
 		ajStrExchangeSetCC(&copystr, ":", " ");
-		ajStrRemoveWhite(&copystr);
+		ajStrRemoveWhiteExcess(&copystr);
 	    }
 	    else
 	    {
 		/* tidy up spurious spaces around the colon */
-		ajStrRemoveWhite(&copystr);
+		ajStrRemoveWhiteExcess(&copystr);
 		ajStrExchangeCC(&copystr, " :", ":");
 		ajStrExchangeCC(&copystr, ": ", ":");
 	    }
@@ -738,6 +977,8 @@ static void grpSplitList(AjPList groups, const AjPStr value, AjBool explode,
 
     ajStrTokenDel(&tokenhandle);
     ajStrDel(&tmpstr);
+    ajStrDel(&substr);
+    ajStrDel(&keystr);
 
     return;
 }
@@ -1137,8 +1378,8 @@ void embGrpSortProgsList(AjPList progslist)
 
 ajint embGrpCompareTwoGnodes(const void * a, const void * b)
 {
-    return ajStrCmpCaseS((*(EmbPGroupTop *)a)->name,
-			 (*(EmbPGroupTop *)b)->name);
+    return ajStrCmpCaseS((*(EmbPGroupTop const *)a)->name,
+			 (*(EmbPGroupTop const *)b)->name);
 }
 
 
@@ -1157,8 +1398,8 @@ ajint embGrpCompareTwoGnodes(const void * a, const void * b)
 
 ajint embGrpCompareTwoPnodes(const void * a, const void * b)
 {
-    return ajStrCmpCaseS((*(EmbPGroupProg *)a)->name,
-			 (*(EmbPGroupProg *)b)->name);
+    return ajStrCmpCaseS((*(EmbPGroupProg const *)a)->name,
+			 (*(EmbPGroupProg const *)b)->name);
 }
 
 
@@ -1293,6 +1534,8 @@ void embGrpOutputProgsList(AjPFile outfile, const AjPList progslist,
 
     ajListIterFree(&piter);
 
+    ajStrDel(&keystr);
+
     return;
 }
 
@@ -1351,6 +1594,7 @@ void embGrpProgsListDel(AjPList *progslist)
 	ajStrDel(&(gl->name));
 	ajStrDel(&(gl->doc));
 	ajStrDel(&(gl->package));
+	ajStrDel(&(gl->keywords));
 	embGrpGroupsListDel(&(gl->groups));
 	AJFREE(gl);
     }
@@ -1458,7 +1702,10 @@ void embGrpKeySearchProgs(AjPList newlist,
     embGrpSortGroupsList(newlist);
 
     ajStrDel(&gname);
+    ajStrDel(&name);
+    ajStrDel(&doc);
     ajStrDel(&keystr);
+    ajStrDel(&keywords);
 
     return;
 }
@@ -1612,7 +1859,7 @@ void embGrpProgsMakeUnique(AjPList list)
 
     old = ajStrNewC("");
 
-    iter = ajListIterRead(list);
+    iter = ajListIter(list);
     while((l = ajListIterNext(iter)) != NULL)
     {
 
@@ -1664,7 +1911,7 @@ void embGrpGroupMakeUnique(AjPList list)
 
     old = ajStrNewC("");
 
-    iter = ajListIterRead(list);
+    iter = ajListIter(list);
     while((l = ajListIterNext(iter)) != NULL)
     {
 

@@ -16,14 +16,16 @@ extern "C"
 **
 ** @attr field [char*] field token
 ** @attr entry [char*] entry name
-** @attr nid [ajint] entry number
+** @attr nid [ajuint] entry number
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct EmbSField {
   char* field;
   char* entry;
-  ajint nid;
+  ajuint nid;
+  char Padding[4];
 } EmbOField;
 #define EmbPField EmbOField*
 
@@ -37,22 +39,22 @@ typedef struct EmbSField {
 ** positions for writing to the index files.
 **
 ** @attr entry [char*] entry name
-** @attr filenum [ajint] record in division file
+** @attr filenum [ajuint] record in division file
 ** @attr rpos [ajint] entry offset in data file
 ** @attr spos [ajint] entry offset in sequence file
-** @attr nfields [ajint] number of fields
-** @attr nfield [ajint*] number of tokens for each field
+** @attr nfields [ajuint] number of fields
+** @attr nfield [ajuint*] number of tokens for each field
 ** @attr field [char***] array of tokens for each field
 ** @@
 ******************************************************************************/
 
 typedef struct EmbSEntry {
   char* entry;
-  ajint filenum;
+  ajuint filenum;
   ajint rpos;
   ajint spos;
-  ajint nfields;
-  ajint* nfield;
+  ajuint nfields;
+  ajuint* nfield;
   char*** field;
 } EmbOEntry;
 #define EmbPEntry EmbOEntry*
@@ -69,8 +71,11 @@ ajint     embDbiCmpFieldId (const void* a, const void* b);
 ajint     embDbiCmpFieldField (const void* a, const void* b);
 void      embDbiDateSet (const AjPStr datestr, char date[4]);
 void      embDbiEntryDel(EmbPEntry* Pentry);
-EmbPEntry embDbiEntryNew (ajint nfields);
+void      embDbiEntryDelMap(void** pthys, void* cl);
+EmbPEntry embDbiEntryNew (ajuint nfields);
 void      embDbiExit(void);
+void      embDbiFieldDel(EmbPField* pthys);
+void      embDbiFieldDelMap(void** pthys, void* cl);
 EmbPField embDbiFieldNew (void);
 AjPFile   embDbiFileIn (const AjPStr dbname, const char* extension);
 AjPFile   embDbiFileIndex (const AjPStr indexdir, const AjPStr field,
@@ -81,81 +86,81 @@ AjPList   embDbiFileListExc (const AjPStr dir, const AjPStr wildfile,
 			     const AjPStr exclude);
 AjPFile   embDbiFileOut (const AjPStr dbname, const char* extension);
 AjPFile   embDbiFileSingle (const AjPStr dbname, const char* extension,
-			    ajint num);
+			    ajuint num);
 AjBool    embDbiFlatOpenlib(const AjPStr lname, AjPFile* libr);
-void      embDbiHeader (AjPFile file, ajint filesize,
-			ajint recordcnt, short recordlen,
+void      embDbiHeader (AjPFile file, ajuint filesize,
+			ajuint recordcnt, short recordlen,
 			const AjPStr dbname, const AjPStr release,
 			const char date[4]);
-void      embDbiHeaderSize (AjPFile file, ajint filesize, ajint recordcnt);
+void      embDbiHeaderSize (AjPFile file, ajuint filesize, ajuint recordcnt);
 void      embDbiLogCmdline(AjPFile logfile);
 void      embDbiLogFields(AjPFile logfile, AjPStr const * fields,
-			  ajint nfields);
+			  ajuint nfields);
 void      embDbiLogFile(AjPFile logfile, const AjPStr curfilename,
-			ajint idCountFile, AjPStr const * fields,
-			const ajint* countField,
-			ajint nfields);
-void      embDbiLogFinal(AjPFile logfile, ajint maxlen,
+			ajuint idCountFile, AjPStr const * fields,
+			const ajuint* countField,
+			ajuint nfields);
+void      embDbiLogFinal(AjPFile logfile, ajuint maxlen,
 			 const ajint* maxFieldLen,
-			 AjPStr const * fields, const ajint* fieldTot,
-			 ajint nfields, ajint nfiles,
-			 ajint idDone, ajint idCount);
+			 AjPStr const * fields, const ajuint* fieldTot,
+			 ajuint nfields, ajuint nfiles,
+			 ajuint idDone, ajuint idCount);
 void      embDbiLogHeader(AjPFile logfile, const AjPStr dbname,
 			  const AjPStr release, const AjPStr datestr,
 			  const AjPStr indexdir,
-			  ajint maxindex);
+			  ajuint maxindex);
 void      embDbiLogSource(AjPFile logfile, const AjPStr directory,
 			  const AjPStr filename, const AjPStr exclude,
-			  AjPStr const * inputFiles, ajint nfiles);
+			  AjPStr const * inputFiles, ajuint nfiles);
 void      embDbiMaxlen (AjPStr* token, ajint* maxlen);
 void      embDbiMemEntry (AjPList idlist,
-			  AjPList* fieldList, ajint nfields,
-			  EmbPEntry entry, ajint ifile);
-ajint     embDbiMemWriteEntry (AjPFile entFile, ajint maxidlen,
+			  AjPList* fieldList, ajuint nfields,
+			  EmbPEntry entry, ajuint ifile);
+ajuint     embDbiMemWriteEntry (AjPFile entFile, ajuint maxidlen,
 			       const AjPList idlist, void ***ids);
-ajint     embDbiMemWriteFields (const AjPStr dbname, const AjPStr release,
+ajuint     embDbiMemWriteFields (const AjPStr dbname, const AjPStr release,
 				const char date[4], const AjPStr indexdir,
-				const AjPStr field, ajint maxFieldLen,
+				const AjPStr field, ajuint maxFieldLen,
 				const AjPList fieldList,
 				void** ids);
 void      embDbiRmEntryFile (const AjPStr dbname,  AjBool cleanup);
-void      embDbiRmFile (const AjPStr dbname, const char* ext, ajint nfiles,
+void      embDbiRmFile (const AjPStr dbname, const char* ext, ajuint nfiles,
 			AjBool cleanup);
-void      embDbiRmFileI (const AjPStr dbname, const char* ext, ajint ifile,
+void      embDbiRmFileI (const AjPStr dbname, const char* ext, ajuint ifile,
 			 AjBool cleanup);
 void      embDbiSortClose (AjPFile* elistfile, AjPFile* alistfile,
-			   ajint nfields);
+			   ajuint nfields);
 void      embDbiSortFile (const AjPStr dbname,
 			  const char* ext1, const char* ext2,
-			  ajint nfiles, AjBool cleanup, const AjPStr sortopt);
-AjPFile   embDbiSortOpen (AjPFile* alistfile, ajint ifile,
+			  ajuint nfiles, AjBool cleanup, const AjPStr sortopt);
+AjPFile   embDbiSortOpen (AjPFile* alistfile, ajuint ifile,
 			  const AjPStr dbname, AjPStr const * fields,
-			  ajint nfields);
-ajint     embDbiSortWriteEntry (AjPFile entFile, ajint maxidlen,
-				const AjPStr dbname, ajint nfiles,
+			  ajuint nfields);
+ajuint     embDbiSortWriteEntry (AjPFile entFile, ajuint maxidlen,
+				const AjPStr dbname, ajuint nfiles,
 				AjBool cleanup, const AjPStr sortopt);
-ajint     embDbiSortWriteFields (const AjPStr dbname, const AjPStr release,
+ajuint     embDbiSortWriteFields (const AjPStr dbname, const AjPStr release,
 				 const char date[4], const AjPStr indexdir,
-				 const AjPStr field,  ajint maxFieldLen,
-				 ajint nfiles, ajint nentries,
+				 const AjPStr field,  ajuint maxFieldLen,
+				 ajuint nfiles, ajuint nentries,
 				 AjBool cleanup, const AjPStr sortopt);
 void      embDbiSysCmd (const AjPStr cmdstr);
 void      embDbiWriteDivision (const AjPStr indexdir,
 			       const AjPStr dbname, const AjPStr release,
 			       const char date[4],
-			       ajint maxfilelen, ajint nfiles,
+			       ajuint maxfilelen, ajuint nfiles,
 			       AjPStr const * divfiles,
 			       AjPStr const * seqfiles);
 void      embDbiWriteDivisionRecord (AjPFile file,
-				     ajint maxnamlen, short recnum,
+				     ajuint maxnamlen, short recnum,
 				     const AjPStr datfile,
 				     const AjPStr seqfile);
-void      embDbiWriteEntryRecord (AjPFile file, ajint maxidlen,
+void      embDbiWriteEntryRecord (AjPFile file, ajuint maxidlen,
 				  const AjPStr id,
 				  ajint rpos, ajint spos, short filenum);
-void      embDbiWriteHit (AjPFile file, ajint idnum);
-void      embDbiWriteTrg (AjPFile file, ajint maxfieldlen,
-			  ajint idnum, ajint idcnt, const AjPStr hitstr);
+void      embDbiWriteHit (AjPFile file, ajuint idnum);
+void      embDbiWriteTrg (AjPFile file, ajuint maxfieldlen,
+			  ajuint idnum, ajuint idcnt, const AjPStr hitstr);
 
 /*
 ** End of prototype definitions

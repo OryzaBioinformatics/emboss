@@ -31,7 +31,7 @@
 ** @@
 ******************************************************************************/
 
-void embExit (void)
+__noreturn void embExit (void)
 {
     embDbiExit();
     embGrpExit();
@@ -39,7 +39,6 @@ void embExit (void)
     embWordExit();
 
     ajExit();
-    return;
 }
 
 /* @func embExitBad ***********************************************************
@@ -50,8 +49,7 @@ void embExit (void)
 ** @@
 ******************************************************************************/
 
-void embExitBad (void)
+__noreturn void embExitBad (void)
 {
     ajExitBad();
-    return;
 }

@@ -40,39 +40,40 @@ extern "C"
 ** @attr idirectory [AjPStr] Undocumented
 ** @attr files [AjPList] Undocumented
 ** @attr reffiles [AjPList] Undocumented
-** @attr nfiles [ajint] Undocumented
-** @attr cachesize [ajint] Undocumented
-** @attr pagesize [ajint] Undocumented
-** @attr idlen [ajint] Undocumented
-** @attr aclen [ajint] Undocumented
-** @attr svlen [ajint] Undocumented
-** @attr kwlen [ajint] Undocumented
-** @attr delen [ajint] Undocumented
-** @attr txlen [ajint] Undocumented
-** @attr idorder [ajint] Undocumented
-** @attr idfill [ajint] Undocumented
-** @attr idsecorder [ajint] Undocumented
-** @attr idsecfill [ajint] Undocumented
-** @attr acorder [ajint] Undocumented
-** @attr acfill [ajint] Undocumented
-** @attr acsecorder [ajint] Undocumented
-** @attr acsecfill [ajint] Undocumented
-** @attr svorder [ajint] Undocumented
-** @attr svfill [ajint] Undocumented
-** @attr svsecorder [ajint] Undocumented
-** @attr svsecfill [ajint] Undocumented
-** @attr kworder [ajint] Undocumented
-** @attr kwfill [ajint] Undocumented
-** @attr kwsecorder [ajint] Undocumented
-** @attr kwsecfill [ajint] Undocumented
-** @attr deorder [ajint] Undocumented
-** @attr defill [ajint] Undocumented
-** @attr desecorder [ajint] Undocumented
-** @attr desecfill [ajint] Undocumented
-** @attr txorder [ajint] Undocumented
-** @attr txfill [ajint] Undocumented
-** @attr txsecorder [ajint] Undocumented
-** @attr txsecfill [ajint] Undocumented
+** @attr nfiles [ajuint] Undocumented
+** @attr cachesize [ajuint] Undocumented
+** @attr pagesize [ajuint] Undocumented
+** @attr idlen [ajuint] Undocumented
+** @attr aclen [ajuint] Undocumented
+** @attr svlen [ajuint] Undocumented
+** @attr kwlen [ajuint] Undocumented
+** @attr delen [ajuint] Undocumented
+** @attr txlen [ajuint] Undocumented
+** @attr idorder [ajuint] Undocumented
+** @attr idfill [ajuint] Undocumented
+** @attr idsecorder [ajuint] Undocumented
+** @attr idsecfill [ajuint] Undocumented
+** @attr acorder [ajuint] Undocumented
+** @attr acfill [ajuint] Undocumented
+** @attr acsecorder [ajuint] Undocumented
+** @attr acsecfill [ajuint] Undocumented
+** @attr svorder [ajuint] Undocumented
+** @attr svfill [ajuint] Undocumented
+** @attr svsecorder [ajuint] Undocumented
+** @attr svsecfill [ajuint] Undocumented
+** @attr kworder [ajuint] Undocumented
+** @attr kwfill [ajuint] Undocumented
+** @attr kwsecorder [ajuint] Undocumented
+** @attr kwsecfill [ajuint] Undocumented
+** @attr deorder [ajuint] Undocumented
+** @attr defill [ajuint] Undocumented
+** @attr desecorder [ajuint] Undocumented
+** @attr desecfill [ajuint] Undocumented
+** @attr txorder [ajuint] Undocumented
+** @attr txfill [ajuint] Undocumented
+** @attr txsecorder [ajuint] Undocumented
+** @attr txsecfill [ajuint] Undocumented
+** @attr Padding [ajuint] Padding to alignment boundary
 ** @attr idcache [AjPBtcache] Undocumented
 ** @attr accache [AjPBtcache] Undocumented
 ** @attr svcache [AjPBtcache] Undocumented
@@ -108,43 +109,44 @@ typedef struct EmbSBtreeEntry
 
     AjPList files;
     AjPList reffiles;
-    ajint   nfiles;
-    ajint cachesize;
-    ajint pagesize;
+    ajuint   nfiles;
+    ajuint cachesize;
+    ajuint pagesize;
 
-    ajint idlen;
-    ajint aclen;
-    ajint svlen;
-    ajint kwlen;
-    ajint delen;
-    ajint txlen;
+    ajuint idlen;
+    ajuint aclen;
+    ajuint svlen;
+    ajuint kwlen;
+    ajuint delen;
+    ajuint txlen;
 
-    ajint idorder;
-    ajint idfill;
-    ajint idsecorder;
-    ajint idsecfill;
-    ajint acorder;
-    ajint acfill;
-    ajint acsecorder;
-    ajint acsecfill;
-    ajint svorder;
-    ajint svfill;
-    ajint svsecorder;
-    ajint svsecfill;
+    ajuint idorder;
+    ajuint idfill;
+    ajuint idsecorder;
+    ajuint idsecfill;
+    ajuint acorder;
+    ajuint acfill;
+    ajuint acsecorder;
+    ajuint acsecfill;
+    ajuint svorder;
+    ajuint svfill;
+    ajuint svsecorder;
+    ajuint svsecfill;
 
-    ajint kworder;
-    ajint kwfill;
-    ajint kwsecorder;
-    ajint kwsecfill;
-    ajint deorder;
-    ajint defill;
-    ajint desecorder;
-    ajint desecfill;
-    ajint txorder;
-    ajint txfill;
-    ajint txsecorder;
-    ajint txsecfill;
-
+    ajuint kworder;
+    ajuint kwfill;
+    ajuint kwsecorder;
+    ajuint kwsecfill;
+    ajuint deorder;
+    ajuint defill;
+    ajuint desecorder;
+    ajuint desecfill;
+    ajuint txorder;
+    ajuint txfill;
+    ajuint txsecorder;
+    ajuint txsecfill;
+    ajuint Padding;
+    
     AjPBtcache idcache;
     AjPBtcache accache;
     AjPBtcache svcache;
@@ -172,29 +174,29 @@ typedef struct EmbSBtreeEntry
 */
 
 void   embBtreeEmblAC(const AjPStr acline, AjPList aclist);
-void   embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajint maxlen);
-void   embBtreeEmblDE(const AjPStr deline, AjPList delist, ajint maxlen);
+void   embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen);
+void   embBtreeEmblDE(const AjPStr deline, AjPList delist, ajuint maxlen);
 void   embBtreeEmblSV(const AjPStr idline, AjPList svlist);
-void   embBtreeEmblTX(const AjPStr kwline, AjPList kwlist, ajint maxlen);
+void   embBtreeEmblTX(const AjPStr kwline, AjPList kwlist, ajuint maxlen);
 void   embBtreeGenBankAC(const AjPStr acline, AjPList aclist);
-void   embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajint maxlen);
-void   embBtreeGenBankDE(const AjPStr kwline, AjPList kwlist, ajint maxlen);
-void   embBtreeGenBankTX(const AjPStr kwline, AjPList kwlist, ajint maxlen);
+void   embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen);
+void   embBtreeGenBankDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen);
+void   embBtreeGenBankTX(const AjPStr kwline, AjPList kwlist, ajuint maxlen);
 
-void   embBtreeFastaDE(const AjPStr kwline, AjPList kwlist, ajint maxlen);
+void   embBtreeFastaDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen);
 
 
-ajint  embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
+ajuint  embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
 		       const AjPStr files, const AjPStr exclude);
 EmbPBtreeEntry embBtreeEntryNew(void);
-ajint          embBtreeSetFields(EmbPBtreeEntry entry, AjPStr const * fields);
+ajuint          embBtreeSetFields(EmbPBtreeEntry entry, AjPStr const * fields);
 void           embBtreeEntryDel(EmbPBtreeEntry *thys);
 void           embBtreeSetDbInfo(EmbPBtreeEntry entry, const AjPStr name,
 				 const AjPStr dbrs,
 		                 const AjPStr date, const AjPStr release,
 		                 const AjPStr type, const AjPStr directory,
 		                 const AjPStr idirectory);
-ajint          embBtreeGetFiles(EmbPBtreeEntry entry, const AjPStr fdirectory,
+ajuint          embBtreeGetFiles(EmbPBtreeEntry entry, const AjPStr fdirectory,
 				const AjPStr files, const AjPStr exclude);
 AjBool         embBtreeWriteEntryFile(const EmbPBtreeEntry entry);
 void           embBtreeGetRsInfo(EmbPBtreeEntry entry);

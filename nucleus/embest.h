@@ -92,7 +92,6 @@ enum base_types /* just defines a, c, g, t as 0-3, for indexing purposes. */
 */
 
 EmbPEstAlign embEstAlignNonRecursive ( const AjPSeq est, const AjPSeq genome,
-				       ajint match, ajint mismatch,
 				       ajint gap_penalty, ajint intron_penalty,
 				       ajint splice_penalty,
 				       const AjPSeq splice_sites,
@@ -113,8 +112,7 @@ void         embEstMatInit (ajint match, ajint mismatch, ajint gap,
 			    ajint neutral, char pad_char);
 void         embEstOutBlastStyle ( AjPFile ofile,
 				  const AjPSeq genome, const AjPSeq est,
-				  const EmbPEstAlign ge, ajint match,
-				  ajint mismatch, ajint gap_penalty,
+				  const EmbPEstAlign ge, ajint gap_penalty,
 				  ajint intron_penalty,
 				  ajint splice_penalty,
 				  ajint gapped, ajint reverse  );

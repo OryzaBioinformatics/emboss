@@ -86,9 +86,9 @@ float        embAtomDistance(const AjPAtom atm1, const AjPAtom atm2,
 			     const AjPVdwall vdw);
 AjBool       embPdbResidueIndexI(const AjPPdb pdb, ajint chn, AjPInt *idx);
 AjBool       embPdbResidueIndexC(const AjPPdb pdb, char chn, AjPInt *idx);
-AjBool       embPdbResidueIndexICA(const AjPPdb pdb, ajint chn, AjPInt *idx, 
+AjBool       embPdbResidueIndexICA(const AjPPdb pdb, ajint chn, AjPUint *idx, 
 				ajint *nres);
-AjBool       embPdbResidueIndexCCA(const AjPPdb pdb, char chn, AjPInt *idx, 
+AjBool       embPdbResidueIndexCCA(const AjPPdb pdb, char chn, AjPUint *idx, 
 				ajint *nres);
 AjBool       embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res,
 			 ajint chn);

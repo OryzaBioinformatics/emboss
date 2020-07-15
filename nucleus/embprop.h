@@ -48,6 +48,7 @@ typedef struct EmbSPropFrag	/* Enzyme digestion structure */
     ajint     end;
     double    molwt;
     AjBool    isfrag;
+    char      Padding[4];
 } EmbOPropFrag;
 #define EmbPPropFrag EmbOPropFrag*
 
@@ -60,7 +61,7 @@ typedef struct EmbSPropFrag	/* Enzyme digestion structure */
 
 void    embPropAminoRead (AjPFile fp);
 /* void    embPropAminoRead (void); */
-void 	embPropCalcFragments (const char *s, ajint n, ajint begin,
+void 	embPropCalcFragments (const char *s, ajint n,
 			      AjPList *l, AjPList *pa,
 			      AjBool unfavoured, AjBool overlap,
 			      AjBool allpartials, ajint *ncomp, ajint *npart,
@@ -73,6 +74,7 @@ double  embPropCalcMolwtMod (const char *s, ajint start, ajint end,
 			     double nmass, double cmass);
 const char*   embPropCharToThree (char c);
 void    embPropExit(void);
+void    embPropFixF(float matrix[], float missing);
 const char*   embPropIntToThree (ajint c);
 AjPStr  embPropProtGaps (AjPSeq seq, ajint pad);
 AjPStr  embPropProt1to3 (AjPSeq seq, ajint pad);

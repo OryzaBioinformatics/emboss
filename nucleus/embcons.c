@@ -68,10 +68,9 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
     AjPSeqCvt cvt  = 0;
     AjPFloat score = NULL;
     const char **seqcharptr;
-    char **ptrfree;
     char res;
     char nocon = '-';
-
+    void *freeptr;
 
     matrix  = ajMatrixArray(cmpmatrix);
     cvt     = ajMatrixCvt(cmpmatrix);	/* return conversion table */
@@ -89,7 +88,7 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 	nocon = 'X';
 
     for(i=0;i<nseqs;i++)		/* get sequence as string */
-	seqcharptr[i] =  ajSeqsetSeq(seqset, i);
+	seqcharptr[i] =  ajSeqsetGetseqSeqC(seqset, i);
 
     for(k=0; k< mlen; k++)
     {
@@ -106,17 +105,17 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 
 	for(i=0;i<nseqs;i++)	      /* generate score for columns */
 	{
-	    m1 = ajSeqCvtK(cvt,seqcharptr[i][k]);
+	    m1 = ajSeqcvtGetCodeK(cvt,seqcharptr[i][k]);
 	    if(m1 || gaps)
-		identical[m1] += ajSeqsetWeight(seqset,i);
+		identical[m1] += ajSeqsetGetseqWeight(seqset,i);
 	    for(j=i+1;j<nseqs;j++)
 	    {
-		m2 = ajSeqCvtK(cvt,seqcharptr[j][k]);
+		m2 = ajSeqcvtGetCodeK(cvt,seqcharptr[j][k]);
 		if(m1 && m2)
 		{
-		    contri = (float)matrix[m1][m2]*ajSeqsetWeight(seqset,j)
+		    contri = (float)matrix[m1][m2]*ajSeqsetGetseqWeight(seqset,j)
 			+ajFloatGet(score,i);
-		    contrj = (float)matrix[m1][m2]*ajSeqsetWeight(seqset,i)
+		    contrj = (float)matrix[m1][m2]*ajSeqsetGetseqWeight(seqset,i)
 			+ajFloatGet(score,j);
 
 		    ajFloatPut(&score,i,contri);
@@ -140,23 +139,23 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 
 	for(i=0;i<nseqs;i++)	  /* find +ve matches in the column */
 	{
-	    m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);
+	    m1 = ajSeqcvtGetCodeK(cvt, seqcharptr[i][k]);
 	    if(!matching[m1])
 		for(j=0;j<nseqs;j++)
 		{
 /*
 //		    if( i != j)
 //		    {
-//			m2 = ajSeqCvtK (cvt, seqcharptr[j][k]);
+//			m2 = ajSeqcvtGetCodeK(cvt, seqcharptr[j][k]);
 //			if(m1 && m2 && matrix[m1][m2] > 0)
-//			    matching[m1] += ajSeqsetWeight(seqset, j);
+//			    matching[m1] += ajSeqsetGetseqWeight(seqset, j);
 //		    }
 */
-		    m2 = ajSeqCvtK (cvt, seqcharptr[j][k]);
+		    m2 = ajSeqcvtGetCodeK(cvt, seqcharptr[j][k]);
 		    if(m1 && m2 && matrix[m1][m2] > 0)
-		      matching[m1] += ajSeqsetWeight(seqset, j);
+		      matching[m1] += ajSeqsetGetseqWeight(seqset, j);
 		    if(gaps && !m1 && !m2)
-		      matching[m1] += ajSeqsetWeight(seqset, j);
+		      matching[m1] += ajSeqsetGetseqWeight(seqset, j);
 		}
 	}
 
@@ -165,14 +164,14 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 	identicalmaxindex = 0;
 	for(i=0;i<nseqs;i++)
 	{
-	    m1 = ajSeqCvtK(cvt,seqcharptr[i][k]);
+	    m1 = ajSeqcvtGetCodeK(cvt,seqcharptr[i][k]);
 	    if(identical[m1] > identical[identicalmaxindex])
 		identicalmaxindex = m1;
 	}
 
 	for(i=0;i<nseqs;i++)
 	{
-	    m1 = ajSeqCvtK(cvt,seqcharptr[i][k]);
+	    m1 = ajSeqcvtGetCodeK(cvt,seqcharptr[i][k]);
 	    if(matching[m1] > matching[matchingmaxindex])
 		matchingmaxindex = m1;
 	    else if(matching[m1] ==  matching[matchingmaxindex])
@@ -181,7 +180,7 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 	}
 
 	/* plurality check */
-        m1 = ajSeqCvtK(cvt,seqcharptr[highindex][k]);
+        m1 = ajSeqcvtGetCodeK(cvt,seqcharptr[highindex][k]);
 /*	if(matching[m1] >= fplural
 	   && seqcharptr[highindex][k] != '-')
 	    res = seqcharptr[highindex][k];*/
@@ -195,7 +194,7 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 	{
 	    j = 0;
 	    for(i=0;i<nseqs;i++) {
-		if(matchingmaxindex == ajSeqCvtK(cvt,seqcharptr[i][k]))
+		if(matchingmaxindex == ajSeqcvtGetCodeK(cvt,seqcharptr[i][k]))
 		    j++;
 	    }
 
@@ -206,8 +205,8 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 	ajStrAppendK(cons,res);
     }
 
-    ptrfree = (char **) seqcharptr;
-    AJFREE(ptrfree);
+    freeptr = (void *) seqcharptr;
+    AJFREE(freeptr);
     AJFREE(matching);
     AJFREE(identical);
     ajFloatDel(&score);

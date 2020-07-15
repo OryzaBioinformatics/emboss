@@ -65,45 +65,48 @@
 
 
 static void    showFillRE(const EmbPShow thys, AjPList lines,
-			  EmbPShowRE info, ajint pos);
+			  EmbPShowRE info, ajuint pos,ajuint last);
 static void    showFillREflat(const EmbPShow thys,
 			      AjPList lines, const EmbPShowRE info,
-			      ajint pos);
+			      ajuint pos,ajuint last);
 static void    showFillREupright(const EmbPShow thys, AjPList lines,
-				 EmbPShowRE info, ajint pos);
+				 EmbPShowRE info, ajuint pos,ajuint last);
 static ajint   showFillREuprightSort(const void* a, const void* b);
 static void    showOverPrint(AjPStr *target, ajint start, AjPStr insert);
 static AjBool  showLineIsClear(AjPStr *line, ajint start, ajint end);
-static void    showFillLines(AjPList lines, const EmbPShow thys, ajint pos);
+static void    showFillLines(AjPList lines, const EmbPShow thys,
+			     ajuint pos, ajuint last);
 static void    showPrintLines(AjPFile out, const AjPList lines);
 static void    showMargin(const EmbPShow thys, AjPList lines);
 static void    showMarginNumber(const EmbPShow thys,
 				AjPList lines, ajint number);
 static void    showPad(AjPList lines, ajint number);
-static void    showInsertHTML(AjPStr *target, ajint pos, const AjPStr insert);
+static void    showInsertHTML(AjPStr *target, ajuint pos, const AjPStr insert);
 
 static void    showFillSeq(const EmbPShow thys,
-			   AjPList lines, const EmbPShowSeq info, ajint pos);
+			   AjPList lines, const EmbPShowSeq info,
+			   ajuint pos,ajuint last);
 static void    showFillBlank(const EmbPShow thys,
 			     AjPList lines, const EmbPShowBlank info,
-			     ajint pos);
+			     ajuint pos,ajuint last);
 static void    showFillTicks(const EmbPShow thys,
 			     AjPList lines, const EmbPShowTicks info,
-			     ajint pos);
+			     ajuint pos,ajuint last);
 static void    showFillTicknum(const EmbPShow thys, AjPList lines,
-			       const EmbPShowTicknum info, ajint pos);
+			       const EmbPShowTicknum info,
+			       ajuint pos,ajuint last);
 static void    showFillComp(const EmbPShow thys,
 			    AjPList lines, const EmbPShowComp info,
-			    ajint pos);
+			    ajuint pos,ajuint last);
 static void    showFillTran(const EmbPShow thys,
 			    AjPList lines, EmbPShowTran info,
-			    ajint pos);
+			    ajuint pos,ajuint last);
 static void    showFillFT(const EmbPShow thys,
 			  AjPList lines, const EmbPShowFT info,
-			  ajint pos);
+			  ajuint pos,ajuint last);
 static void    showFillNote(const EmbPShow thys,
 			    AjPList lines, const EmbPShowNote info,
-			    ajint pos);
+			    ajuint pos,ajuint last);
 
 static void showDelSeq(EmbPShowSeq* pinfo);
 static void showDelBlank(EmbPShowBlank* pinfo);
@@ -742,7 +745,8 @@ void embShowAddRE(EmbPShow thys, ajint sense, const AjPList restrictlist,
     info->matches = ajListCopy(restrictlist);
     info->sitelist = NULL;	        /* show we have not yet created this
 					   list */
-    
+    info->plasmid = plasmid;
+
     ajListPushApp(thys->list, showInfoNew(info, SH_RE));
     
     return;
@@ -849,27 +853,33 @@ void embShowAddNote(EmbPShow thys, const AjPRange regions)
 void embShowPrint(AjPFile out, const EmbPShow thys)
 {
     AjPList lines;		    /* list of lines to be printed */
-    ajint pos;		            /* current printing position in sequence */
-    ajint start;
-    ajint end;
+    ajuint pos;		            /* current printing position in sequence */
+    ajuint start;
+    ajuint end;
     AjIList liter;		    /* iterator for lines */
     AjPStr line;
-    ajint count   = 0;		    /* count of newlines in the list */
-    ajint line_no = 0;		    /* line number on page */
+    ajuint count   = 0;		    /* count of newlines in the list */
+    ajuint line_no = 0;		    /* line number on page */
+    ajuint last = 0;
 
     ajDebug("embShowPrint\n");
 
     /* set up the start and end positions to print */
     start = thys->start;
     end = thys->end;
+    last = start-1;
 
     /* run through the whole sequence, line-width by line-width */
     for(pos = start; pos<=end; pos += thys->width)
     {
+	last += thys->width;
+	if(last >= end)
+	    last = end;
+
 	/* make a new list of lines */
 	lines=ajListstrNew();
 	/* put the sequence and any other descriptors in the lines list */
-	showFillLines(lines, thys, pos);
+	showFillLines(lines, thys, pos, last);
 
 	/* throw a formfeed if we would go over the length of the page */
 	count = 0;
@@ -949,12 +959,14 @@ static void showPrintLines(AjPFile out, const AjPList lines)
 **
 ** @param [u] lines [AjPList] Lines list
 ** @param [r] thys [const EmbPShow] Show sequence object
-** @param [r] pos [ajint] position in sequence so far while printing
+** @param [r] pos [ajuint] position in sequence so far while printing
+** @param [r] last [ajuint] final position in sequence so far while printing
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void showFillLines(AjPList lines, const EmbPShow thys, ajint pos)
+static void showFillLines(AjPList lines, const EmbPShow thys,
+			  ajuint pos, ajuint last)
 {
     EmbPShowInfo infostruct;		/* structure of type and descriptor */
     ajint type;				/* descriptor type */
@@ -975,39 +987,39 @@ static void showFillLines(AjPList lines, const EmbPShow thys, ajint pos)
 	switch(type)
 	{
 	case SH_SEQ:
-	    showFillSeq(thys, lines, info, pos);
+	    showFillSeq(thys, lines, info, pos, last);
 	    break;
 
 	case SH_BLANK:
-	    showFillBlank(thys, lines, info, pos);
+	    showFillBlank(thys, lines, info, pos, last);
 	    break;
 
 	case SH_TICK:
-	    showFillTicks(thys, lines, info, pos);
+	    showFillTicks(thys, lines, info, pos, last);
 	    break;
 
 	case SH_TICKNUM:
-	    showFillTicknum(thys, lines, info, pos);
+	    showFillTicknum(thys, lines, info, pos, last);
 	    break;
 
 	case SH_COMP:
-	    showFillComp(thys, lines, info, pos);
+	    showFillComp(thys, lines, info, pos, last);
 	    break;
 
 	case SH_TRAN:
-	    showFillTran(thys, lines, info, pos);
+	    showFillTran(thys, lines, info, pos, last);
 	    break;
 
 	case SH_RE:
-	    showFillRE(thys, lines, info, pos);
+	    showFillRE(thys, lines, info, pos, last);
 	    break;
 
 	case SH_FT:
-	    showFillFT(thys, lines, info, pos);
+	    showFillFT(thys, lines, info, pos, last);
 	    break;
 
 	case SH_NOTE:
-	    showFillNote(thys, lines, info, pos);
+	    showFillNote(thys, lines, info, pos, last);
 	    break;
 
 	default:
@@ -1123,18 +1135,18 @@ static void showPad(AjPList lines, ajint number)
 ** @param [u] line [AjPStr *] line to uppercase if it is in the ranges
 ** @param [r] upperrange [const AjPRange] range of original sequence
 **                                        to uppercase
-** @param [r] pos [ajint] position in sequence that line starts at
+** @param [r] pos [ajuint] position in sequence that line starts at
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void embShowUpperRange(AjPStr * line, const AjPRange upperrange, ajint pos)
+void embShowUpperRange(AjPStr * line, const AjPRange upperrange, ajuint pos)
 {
     ajint nr;
     ajint i;
-    ajint j;
-    ajint start;			/* start of next range */
-    ajint end;				/* end of next range */
+    ajuint j;
+    ajuint start;			/* start of next range */
+    ajuint end;				/* end of next range */
     ajint value;     /* code for type of overlap of range with line */
     char *p;	      /* ptr to start of range in line to uppercase */
 
@@ -1148,6 +1160,9 @@ void embShowUpperRange(AjPStr * line, const AjPRange upperrange, ajint pos)
 	/* get type of overlap */
 	value = ajRangeOverlapSingle(start, end, pos, ajStrGetLen(*line));
 
+
+	ajDebug("embShowUpperRange %d %u..%u pos:%u len:%u value:%d\n",
+		i, start, end, pos, ajStrGetLen(*line), value);
 	/* complete overlap */
 	if(value == 2)
 	{
@@ -1163,10 +1178,21 @@ void embShowUpperRange(AjPStr * line, const AjPRange upperrange, ajint pos)
 	    if(start < pos)
 		start = pos;
 
+	    ajDebug("make uppercase start:%u end:%u pos:%u '%S'\n",
+		    start, end, pos, *line);
 	    p = ajStrGetuniquePtr(line)+start-pos;
 	    for(j=start; *p && j<=end; j++, p++)
-		if(pos-j < ajStrGetLen(*line))
+	    {
+		ajDebug("uppercase test pos:%u j:%u pos-j:%u\n",
+			pos, j, pos-j);
+		if(j-pos < ajStrGetLen(*line))
+		{
+		    ajDebug("uppercase char %u '%c'\n", pos-j, *p);
 		    *p = toupper((ajint) *p);
+		}
+	    }
+	    ajDebug("made uppercase start:%u pos:%u end:%u '%S'\n",
+		    start, end, pos, *line);
 	}
     }
 
@@ -1185,17 +1211,19 @@ void embShowUpperRange(AjPStr * line, const AjPRange upperrange, ajint pos)
 **
 ** @param [u] line [AjPStr *] line to colour if it is in the ranges
 ** @param [r] colour [const AjPRange] range of original sequence to colour
-** @param [r] pos [ajint] position in sequence that line starts at
+** @param [r] pos [ajuint] position in sequence that line starts at
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void embShowColourRange(AjPStr * line, const AjPRange colour, ajint pos)
+void embShowColourRange(AjPStr * line, const AjPRange colour, ajuint pos)
 {
     ajint nr;
     ajint i;
-    ajint start;			/* start of next range */
-    ajint end;				/* end of next range */
+    ajuint start;			/* start of next range */
+    ajuint end;				/* end of next range */
+    ajint istart;
+    ajint iend;
     ajint value;                        /* code for type of overlap of
 					   range with line */
     AjPStr html = NULL;
@@ -1214,23 +1242,20 @@ void embShowColourRange(AjPStr * line, const AjPRange colour, ajint pos)
 	/* partial or complete overlap */
 	if(value)
 	{
-	    start--;
-	    end--;
+	    istart = start - pos - 1;
+	    iend = end - pos - 1;
 
-	    start -= pos;
-	    end -= pos;
+	    if(istart < 0)
+		istart = 0;
 
-	    if(start < 0)
-		start = 0;
-
-	    if(end > ajStrGetLen(*line)-1)
-		end = ajStrGetLen(*line)-1;
+	    if(iend > (ajint)ajStrGetLen(*line)-1)
+		iend = ajStrGetLen(*line)-1;
 
 	    /* start */
 	    ajStrAssignC(&html, "<font color=");
 	    ajRangeText(colour, i, &col);
 
-	    if(col != NULL && ajStrGetLen(col))
+	    if(ajStrGetLen(col))
 		ajStrAppendS(&html, col);
 	    else
 	    {
@@ -1239,16 +1264,16 @@ void embShowColourRange(AjPStr * line, const AjPRange colour, ajint pos)
 	    }
 
 	    ajStrAppendC(&html, ">");
-	    showInsertHTML(line, start, html);
+	    showInsertHTML(line, istart, html);
 
 	    /* end */
 	    ajStrAssignC(&html, "</font>");
 
 	    /* end+1 because want the tag after this position */
-	    showInsertHTML(line, end+1, html);
+	    showInsertHTML(line, iend+1, html);
 	}
     }
-
+    ajStrDel(&col);
     ajStrDel(&html);
 
     return;
@@ -1267,16 +1292,16 @@ void embShowColourRange(AjPStr * line, const AjPRange colour, ajint pos)
 ** If the insert position is past the end of the string, it inserts at the end.
 **
 ** @param [u] target [AjPStr *] HTMLised string to insert into
-** @param [r] pos [ajint] position (ignoreing HTML tags) to insert at
+** @param [r] pos [ajuint] position (ignoring HTML tags) to insert at
 ** @param [r] insert [const AjPStr] string to insert
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void showInsertHTML(AjPStr *target, ajint pos, const AjPStr insert)
+static void showInsertHTML(AjPStr *target, ajuint pos, const AjPStr insert)
 {
-    ajint i;
-    ajint j;
+    ajuint i;
+    ajuint j;
     AjBool tag = ajFalse;
 
     /* find the required position, not including tags */
@@ -1318,14 +1343,15 @@ static void showInsertHTML(AjPStr *target, ajint pos, const AjPStr insert)
 ** @param [r] thys [const EmbPShow] Show sequence object
 ** @param [u] lines [AjPList] list of lines to add to
 ** @param [r] info [const EmbPShowSeq] data on how to display the sequence data
-** @param [r] pos [ajint] current printing position in the sequence
+** @param [r] pos [ajuint] current printing position in the sequence
+** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void showFillSeq(const EmbPShow thys,
 			AjPList lines, const EmbPShowSeq info,
-			ajint pos)
+			ajuint pos, ajuint last)
 {
     AjPStr line;
 
@@ -1334,11 +1360,13 @@ static void showFillSeq(const EmbPShow thys,
     AjPStr line3;
     const char *p;
     const char *p3;
-    ajint count;
+    ajuint count;
+    ajuint width;
 
     ajDebug("showFillSeq\n");
 
     line = ajStrNewRes(81);
+    width = last - pos + 1;
 
     /* variable width margin at left with optional number in it */
     if(info->number)
@@ -1347,7 +1375,7 @@ static void showFillSeq(const EmbPShow thys,
 	showMargin(thys, lines);
 
     /* get the bit of the sequence to display */
-    ajStrAppendSubS(&line, ajSeqGetSeqS(thys->seq), pos, pos+thys->width-1);
+    ajStrAppendSubS(&line, ajSeqGetSeqS(thys->seq), pos, last);
 
     /* change to three-letter code */
     if(!thys->nucleic && info->threeletter)
@@ -1356,7 +1384,9 @@ static void showFillSeq(const EmbPShow thys,
 	line1=ajStrNewRes(81);
 	line2=ajStrNewRes(81);
 	line3=ajStrNewRes(81);
-	for(count=0, p=ajStrGetPtr(line); count < ajStrGetLen(line); count++, p++)
+	for(count=0, p=ajStrGetPtr(line);
+	    count < ajStrGetLen(line);
+	    count++, p++)
 	    if(*p == '*')
 	    {
 		ajStrAppendC(&line1, "*");
@@ -1387,11 +1417,11 @@ static void showFillSeq(const EmbPShow thys,
 	** nucleic or single-letter code 
 	** do uppercase ranges
 	*/
-	if(ajRangeOverlaps(info->upperrange, pos, thys->width))
+	if(ajRangeOverlaps(info->upperrange, pos, width))
 	    embShowUpperRange(&line, info->upperrange, pos);
 
 	/* do colour ranges if we are displaying HTML*/
-	if(thys->html && ajRangeOverlaps(info->highlight, pos, thys->width))
+	if(thys->html && ajRangeOverlaps(info->highlight, pos, width))
 	    embShowColourRange(&line, info->highlight, pos);
 
 	ajListstrPushApp(lines, line);
@@ -1404,7 +1434,7 @@ static void showFillSeq(const EmbPShow thys,
 	** if the sequence has ended we might have to fill out the end
 	** with blanks
 	*/
-	if(pos+thys->width > ajSeqGetLen(thys->seq))
+	if(last >= ajSeqGetLen(thys->seq))
 	{
 	    showPad(lines, thys->width - ajSeqGetLen(thys->seq) + pos);
 	    ajListstrPushApp(lines,
@@ -1414,7 +1444,7 @@ static void showFillSeq(const EmbPShow thys,
 	else
 	    ajListstrPushApp(lines,
 			     ajFmtStr(" %d",
-				      pos+thys->width+thys->offset-1));
+				      pos+width+thys->offset-1));
     }
 
     /* end the output line */
@@ -1444,19 +1474,26 @@ static void showFillSeq(const EmbPShow thys,
 **
 ** @param [r] thys [const EmbPShow] Show sequence object
 ** @param [u] lines [AjPList] list of lines to add to
-** @param [r] info [const EmbPShowBlank] data on how to display the sequence data
-** @param [r] pos [ajint] current printing position in the sequence
+** @param [r] info [const EmbPShowBlank] data on how to display the
+**                                       sequence data
+** @param [r] pos [ajuint] current printing position in the sequence
+** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void showFillBlank(const EmbPShow thys,
 			  AjPList lines, const EmbPShowBlank info,
-			  ajint pos)
+			  ajuint pos,ajuint last)
 {
     AjPStr line;
 
     ajDebug("showFillBlank\n");
+
+    (void) thys;			/* make it used */
+    (void) info;			/* make it used */
+    (void) pos;				/* make it used */
+    (void) last;			/* make it used */
 
     line = ajStrNewRes(2);
 
@@ -1477,25 +1514,28 @@ static void showFillBlank(const EmbPShow thys,
 ** @param [u] lines [AjPList] list of lines to add to
 ** @param [r] info [const EmbPShowTicks] data on how to display the
 **                                      sequence data
-** @param [r] pos [ajint] current printing position in the sequence
+** @param [r] pos [ajuint] current printing position in the sequence
+** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void showFillTicks(const EmbPShow thys,
 			  AjPList lines, const EmbPShowTicks info,
-			  ajint pos)
+			  ajuint pos,ajuint last)
 {
     AjPStr line;
-    ajint i;
-    ajint offset;
-    ajint width;
+    ajuint i;
+    ajuint offset;
+    ajuint width;
 
     ajDebug("showFillTicks\n");
 
+    (void) info;			/* make it used */
+
     line   = ajStrNewRes(81);
     offset = thys->offset;
-    width  = thys->width;
+    width  = last - pos + 1;
 
 
     /* make the ticks line */
@@ -1527,26 +1567,29 @@ static void showFillTicks(const EmbPShow thys,
 ** @param [u] lines [AjPList] list of lines to add to
 ** @param [r] info [const EmbPShowTicknum] data on how to display
 **                 the sequence data
-** @param [r] pos [ajint] current printing position in the sequence
+** @param [r] pos [ajuint] current printing position in the sequence
+** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void showFillTicknum(const EmbPShow thys,
 			    AjPList lines, const EmbPShowTicknum info,
-			    ajint pos)
+			    ajuint pos, ajuint last)
 {
     AjPStr line;
-    ajint i;
-    ajint offset;
-    ajint width;
-    ajint pad;
+    ajuint i;
+    ajuint offset;
+    ajuint width;
+    ajuint pad;
 
     ajDebug("showFillTicknum\n");
 
+    (void) info;			/* make it used */
+
     line   = ajStrNewRes(81);
     offset = thys->offset;
-    width  = thys->width;
+    width  = last - pos + 1;
 
     showMargin(thys, lines);
     pad = 9 - ((pos+offset-1) % 10);
@@ -1575,20 +1618,23 @@ static void showFillTicknum(const EmbPShow thys,
 ** @param [u] lines [AjPList] list of lines to add to
 ** @param [r] info [const EmbPShowComp] data on how to display the
 **                                     sequence data
-** @param [r] pos [ajint] current printing position in the sequence
+** @param [r] pos [ajuint] current printing position in the sequence
+** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void showFillComp(const EmbPShow thys,
 			 AjPList lines, const EmbPShowComp info,
-			 ajint pos)
+			 ajuint pos, ajuint last)
 {
     AjPStr line;
+    ajuint width;
 
     ajDebug("showFillComp\n");
 
     line = ajStrNewRes(81);
+    width = last - pos + 1;
 
     /*
     ** do a quick check that we have a nucleic sequence
@@ -1605,10 +1651,10 @@ static void showFillComp(const EmbPShow thys,
 
 
     /* get the sequence at this position */
-    ajStrAppendSubS(&line, ajSeqGetSeqS(thys->seq), pos, pos+thys->width-1);
+    ajStrAppendSubS(&line, ajSeqGetSeqS(thys->seq), pos, pos+width-1);
 
     /* get the complement */
-    ajSeqstrComplementOnly(&line);
+    ajSeqstrComplement(&line);
     ajListstrPushApp(lines, line);
 
     /* optional number at right */
@@ -1618,7 +1664,7 @@ static void showFillComp(const EmbPShow thys,
 	** if the sequence has ended we might have to fill
 	** out the end with blanks
 	*/
-	if(pos+thys->width > ajSeqGetLen(thys->seq))
+	if(last >= ajSeqGetLen(thys->seq))
 	{
 	    showPad(lines, thys->width - ajSeqGetLen(thys->seq) + pos);
 	    ajListstrPushApp(lines,
@@ -1647,14 +1693,15 @@ static void showFillComp(const EmbPShow thys,
 ** @param [u] lines [AjPList] list of lines to add to
 ** @param [u] info [EmbPShowTran] data on how to display the
 **                          sequence data
-** @param [r] pos [ajint] current printing position in the sequence
+** @param [r] pos [ajuint] current printing position in the sequence
+** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void showFillTran(const EmbPShow thys,
 			 AjPList lines, EmbPShowTran info,
-			 ajint pos)
+			 ajuint pos, ajuint last)
 {
 
     AjPStr line;
@@ -1664,13 +1711,13 @@ static void showFillTran(const EmbPShow thys,
     AjPStr sajb =NULL;	  /* peptide expanded to 3-let code or by 2 spaces */
     AjPStr transeq =NULL; /* sequence copy for editing */
     ajint frame;
-    ajint framepad = 0;	  /* no. of spaces to pad to the correct frame pos */
-    ajint linepos;
-    ajint startpos;	  /* number at start of line */
-    ajint endpos;	  /* number at end of line */
-    ajint i;
+    ajuint framepad = 0; /* no. of spaces to pad to the correct frame pos */
+    ajuint linepos;
+    ajuint startpos;	  /* number at start of line */
+    ajuint endpos;	  /* number at end of line */
+    ajuint i;
     ajint j;
-    ajint last;
+    ajint orflast;
 
     ajDebug("showFillTran\n");
 
@@ -1691,7 +1738,7 @@ static void showFillTran(const EmbPShow thys,
 	if(info->regions && ajRangeNumber(info->regions))
 	{
 	    framepad = 0;
-	    seq = ajSeqNewS(thys->seq);
+	    seq = ajSeqNewSeq(thys->seq);
 	    ajRangeSeqExtract(info->regions, seq);
 	    tran = ajTrnSeqOrig(info->trnTable, seq, 1);
 	    ajSeqDel(&seq);
@@ -1744,23 +1791,23 @@ static void showFillTran(const EmbPShow thys,
 		framepad = 2;
 
 	    /* convert inter-ORF regions to '-'s or put it in lower case*/
-	    last = -1;
+	    orflast = -1;
 
 	    /*
 	       for(i=0; i<ajSeqGetLen(tran); i++)
 	       if(ajStrGetPtr(ajSeqGetSeqS(tran))[i] == '*')
 	       {
-		   if(i-last < info->orfminsize+1)
+		   if(i-orflast < info->orfminsize+1)
 		   {
 		       if(info->lcinterorf)
-			   for(j=last+1; j<i; j++)
+			   for(j=orflast+1; j<i; j++)
 			       ajStrGetPtr(ajSeqGetSeqS(tran))[j] =
 			       tolower((ajint) ajStrGetPtr(ajSeqGetSeqS(tran))[j]);
 		       else
-			   for(j=last+1; j<i; j++)
+			   for(j=orflast+1; j<i; j++)
 			       ajStrGetPtr(ajSeqGetSeqS(tran))[j] = '-';
 		   }
-		   last = i;
+		   orflast = i;
 	       }
 	     */
 
@@ -1771,25 +1818,25 @@ static void showFillTran(const EmbPShow thys,
 		for(i=0; i<ajStrGetLen(transeq); i++)
 		    if(ajStrGetCharPos(transeq,i) == '*')
 		    {
-			if(i-last < info->orfminsize+1)
+			if(i-orflast < info->orfminsize+1)
 			{
-			    if(!(info->firstorf && last == -1))
+			    if(!(info->firstorf && orflast == -1))
 			    {
-				j = last+1;
+				j = orflast+1;
 				if(info->lcinterorf)
 				    ajStrFmtLowerSub(&transeq,j,i-1);
 				else
 				    ajStrPasteCountK(&transeq,j,'-',i-j);
 			    }
 			}
-			last = i;
+			orflast = i;
 		    }
 
 		/* put the last ORF in lower case or convert it to -'s */
 		if(i == ajStrGetLen(transeq) && !(info->lastorf)  
-		   && i-last < info->orfminsize+1)
+		   && i-orflast < info->orfminsize+1)
 		{
-		    j = last+1;
+		    j = orflast+1;
 		    if(info->lcinterorf)
 			ajStrFmtLowerSub(&transeq,j,i-1);
 		    else
@@ -1804,23 +1851,23 @@ static void showFillTran(const EmbPShow thys,
 		for(i=0; i<ajStrGetLen(transeq); i++)
 		    if(ajStrGetCharPos(transeq,i) == '*')
 		    {
-			if(i-last < info->orfminsize+1) 
-			    if(!(info->lastorf && last == -1))
+			if(i-orflast < info->orfminsize+1) 
+			    if(!(info->lastorf && orflast == -1))
 			    {
-				j = last+1;
+				j = orflast+1;
 				if(info->lcinterorf)
 				    ajStrFmtLowerSub(&transeq,j,i-1);
 				else
 				    ajStrPasteCountK(&transeq,j,'-',i-j);
 			    }
-			last = i;
+			orflast = i;
 		    } 
 
 		/* put the first ORF in lower case or convert it to -'s */
 		if(i == ajSeqGetLen(tran) && !(info->firstorf) 
-		   && i-last < info->orfminsize+1)
+		   && i-orflast < info->orfminsize+1)
 		{
-		    j = last+1;
+		    j = orflast+1;
 		    if(info->lcinterorf)
 			ajStrFmtLowerSub(&transeq,j,i-1);
 		    else
@@ -1853,7 +1900,7 @@ static void showFillTran(const EmbPShow thys,
 
     /* get the sequence at this position */
     ajStrAppendSubS(&line, ajSeqGetSeqS(info->transeq),
-		    pos, pos+thys->width-1);
+		    pos, last);
 
     /* get the number of the starting and ending amino-acid on this line */
     startpos = info->tranpos;
@@ -1863,7 +1910,8 @@ static void showFillTran(const EmbPShow thys,
 	**  only count the starting letter of 3-letter codes and don't
 	**  count *'s
 	*/
-	if(ajStrGetPtr(line)[linepos] >= 'A' && ajStrGetPtr(line)[linepos] <= 'Z')
+	if(ajStrGetPtr(line)[linepos] >= 'A' &&
+	   ajStrGetPtr(line)[linepos] <= 'Z')
 	    info->tranpos++;
 
     /* less than width in the line? Add blanks to pad it out */
@@ -1914,14 +1962,15 @@ static void showFillTran(const EmbPShow thys,
 ** @param [r] thys [const EmbPShow] Show sequence object
 ** @param [u] lines [AjPList] list of lines to add to
 ** @param [u] info [EmbPShowRE] data on how to display the RE cut sites
-** @param [r] pos [ajint] current printing position in the sequence
+** @param [r] pos [ajuint] current printing position in the sequence
+** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void showFillRE(const EmbPShow thys,
 		       AjPList lines, EmbPShowRE info,
-		       ajint pos)
+		       ajuint pos, ajuint last)
 {
     ajDebug("showFillRE\n");
 
@@ -1933,9 +1982,9 @@ static void showFillRE(const EmbPShow thys,
 	return;
 
     if(info->flat)
-	showFillREflat(thys, lines, info, pos);
+	showFillREflat(thys, lines, info, pos, last);
     else
-	showFillREupright(thys, lines, info, pos);
+	showFillREupright(thys, lines, info, pos, last);
 
     return;
 }
@@ -1951,20 +2000,21 @@ static void showFillRE(const EmbPShow thys,
 ** @param [r] thys [const EmbPShow] Show sequence object
 ** @param [u] lines [AjPList] list of lines to add to
 ** @param [u] info [EmbPShowRE] data on how to display the RE cut sites
-** @param [r] pos [ajint] current printing position in the sequence
+** @param [r] pos [ajuint] current printing position in the sequence
+** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void showFillREupright(const EmbPShow thys,
 			      AjPList lines, EmbPShowRE info,
-			      ajint pos)
+			      ajuint pos, ajuint last)
 {
     AjPStr line    = NULL;
     AjPStr newline = NULL;
     AjPStr baseline;			/* line holding first set of ticks */
     AjPList linelist;			/* list of lines to fill */
-    ajint cut;				/* the sites to display */
+    ajuint cut;				/* the sites to display */
     AjIList liter;			/* iterator for linelist */
     AjBool freespace;			/* flag: found free space to print */
     EmbPMatMatch m = NULL;		/* restriction enz match structure */
@@ -2029,7 +2079,7 @@ static void showFillREupright(const EmbPShow thys,
 	cut = s->pos;
 
 	/* ignore this match if nothing is to be displayed on this line */
-	if(cut >= pos && cut <= pos+thys->width-1)
+	if(cut >= pos && cut <= last)
 	{
 
 	    /* convert to position in the line */
@@ -2148,12 +2198,13 @@ static ajint showFillREuprightSort(const void* a, const void* b)
 {
     ajint res;
 
-    res = (*(EmbPShowREsite *)b)->pos - (*(EmbPShowREsite *)a)->pos;
+    res = (*(EmbPShowREsite const *)b)->pos -
+	(*(EmbPShowREsite const *)a)->pos;
 
     /* if the cut sites are equal, reverse sort by the length of the name */
     if(!res)
-	res = ajStrGetLen((*(EmbPShowREsite *)b)->name) -
-	    ajStrGetLen((*(EmbPShowREsite *)a)->name);
+	res = ajStrGetLen((*(EmbPShowREsite const *)b)->name) -
+	    ajStrGetLen((*(EmbPShowREsite const *)a)->name);
 
     return res;
 }
@@ -2169,21 +2220,22 @@ static ajint showFillREuprightSort(const void* a, const void* b)
 ** @param [r] thys [const EmbPShow] Show sequence object
 ** @param [u] lines [AjPList] list of lines to add to
 ** @param [r] info [const EmbPShowRE] data on how to display the RE cut sites
-** @param [r] pos [ajint] current printing position in the sequence
+** @param [r] pos [ajuint] current printing position in the sequence
+** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
 ** @@
 ******************************************************************************/
 static void showFillREflat(const EmbPShow thys,
 			   AjPList lines, const EmbPShowRE info,
-			   ajint pos)
+			   ajuint pos, ajuint last)
 {
     AjPStr line  = NULL;
     AjPStr line2 = NULL;
     AjPList linelist = NULL;		/* list of lines to fill */
-    ajint start;
-    ajint end;  			/* start and end position of site */
-    ajint nameend;			/* end position of name */
-    ajint base;				/* base position of binding site */
+    ajuint start;
+    ajuint end;  			/* start and end position of site */
+    ajuint nameend;			/* end position of name */
+    ajuint base;		   /* base position of binding site */
     ajint cut1;
     ajint cut2;
     ajint cut3;
@@ -2191,16 +2243,18 @@ static void showFillREflat(const EmbPShow thys,
     AjIList liter;			/* iterator for linelist */
     AjPStr namestr = NULL;		/* name of RE to insert into line */
     AjPStr sitestr = NULL;		/* binding and cut site to insert */
-    ajint i;
-    char *claimchar = "*";		/* char used to stake a claim to */
-    /* that position in the string */
+    ajuint i;
+    const char *claimchar = "*";        /* char used to stake a claim to */
+					/* that position in the string */
     AjBool freespace;			/* flag for found a free space to
 					   print in */
     EmbPMatMatch m = NULL;		/* restriction enzyme match struct */
     AjIList miter;			/* iterator for matches list */
-    ajint ln;
+    ajuint ln;
     AjPStr sajb = NULL;
+    ajuint width;
 
+    width = last - pos + 1;
 
     linelist = ajListstrNew();
 
@@ -2227,21 +2281,21 @@ static void showFillREflat(const EmbPShow thys,
 	if(info->sense == 1)
 	{				/* forward sense */
 	    if(info->plasmid || !m->circ12)
-		if(cut1 < start)
+		if(cut1 < (ajint)start)
 		    start = cut1;
 
 	    if(info->plasmid || !m->circ34)
-		if(cut3 && cut3 < start)
+		if(cut3 && cut3 < (ajint)start)
 		start = cut3;
 	}
 	else
 	{				/* reverse sense */
 	    if(info->plasmid || !m->circ12)
-		if(cut2 < start)
+		if(cut2 < (ajint)start)
 		    start = cut2;
 
 	    if(info->plasmid || !m->circ34)
-		if(cut4 && cut4 < start)
+		if(cut4 && cut4 < (ajint)start)
 		    start = cut4;
 	}
 
@@ -2256,11 +2310,11 @@ static void showFillREflat(const EmbPShow thys,
 	    ajDebug("showFillRE fwd end: %d cut1:%d cut3:%d\n",
 		    end, cut1, cut3);
 	    if(info->plasmid || !m->circ12)
-		if(cut1 > end)
+		if(cut1 > (ajint)end)
 		    end = cut1;
 
 	    if(info->plasmid || !m->circ34)
-		if(cut3 && cut3 > end)
+		if(cut3 && cut3 > (ajint)end)
 		    end = cut3;
 	    ajDebug("showFillRE fwd set end: %d\n",
 		    end);
@@ -2270,11 +2324,11 @@ static void showFillREflat(const EmbPShow thys,
 	    ajDebug("showFillRE rev end: %d cut2:%d cut4:%d\n",
 		    end, cut2, cut4);
 	    if(info->plasmid || !m->circ12)
-		if(cut2 > end)
+		if(cut2 > (ajint)end)
 		    end = cut2;
 
 	    if(info->plasmid || !m->circ34)
-		if(cut4 && cut4 > end)
+		if(cut4 && cut4 > (ajint)end)
 		    end = cut4;
 	    ajDebug("showFillRE rev set end: %d\n",
 		    end);
@@ -2287,9 +2341,9 @@ static void showFillREflat(const EmbPShow thys,
 	nameend--;
 
 	ajDebug("showFillREFlat start:%d end:%d pos:%d width:%d\n",
-		start, end, pos, thys->width);
+		start, end, pos, width);
 	/* ignore this match if nothing is to be displayed on this line */
-	if(start <= pos+thys->width-1 && end >= pos)
+	if(start <= last && end >= pos)
 	{
 	    ajDebug("showFillREFlat site within range\n");
 
@@ -2383,7 +2437,7 @@ static void showFillREflat(const EmbPShow thys,
 	    /* now chop up the name and site strings to fit in the line */
 
 	    /* is the feature completely within the line */
-	    if(start >= pos && end <= pos+thys->width-1)
+	    if(start >= pos && end <= last)
 	    {
 		/*
 		 *  add on an extra couple of claim chars to make a space
@@ -2393,7 +2447,7 @@ static void showFillREflat(const EmbPShow thys,
 		ajStrAppendC(&sitestr, claimchar);
 
 	    }
-	    else if(start < pos && end <= pos+thys->width-1)
+	    else if(start < pos && end <= last)
 	    {
 		/* starts before the line. cut off the start */
 		ajStrKeepRange(&sitestr, pos-start, ajStrGetLen(sitestr)-1);
@@ -2438,15 +2492,15 @@ static void showFillREflat(const EmbPShow thys,
 
 
 	    }
-	    else if(start >= pos && end > pos+thys->width-1)
+	    else if(start >= pos && end > last)
 	    {
 		/* ends after the line. cut off the end */
-		ajStrKeepRange(&sitestr, 0, pos+thys->width-start-1);
+		ajStrKeepRange(&sitestr, 0, last - start);
 		/*
 		**  if the base position is not displayed, move the name
 		**  to the start
 		*/
-		if(base > pos+thys->width-1)
+		if(base > last)
 		{
 		    ajStrAssignS(&namestr, m->cod);
 		    ajStrAppendC(&namestr, claimchar);
@@ -2464,14 +2518,14 @@ static void showFillREflat(const EmbPShow thys,
 					  ajStrGetLen(namestr)-ajStrGetLen(sitestr));
 		}
 		/* make it display to the end of the line */
-		end = pos+thys->width-1;
+		end = last;
 
 
 	    }
-	    else if(start < pos && end > pos+thys->width-1)
+	    else if(start < pos && end > last)
 	    {
 		/* completely overlaps the line! cut off the start and end */
-		ajStrKeepRange(&sitestr, pos-start, pos+thys->width-start-1);
+		ajStrKeepRange(&sitestr, pos-start, last-start);
 		/*
 		**  if the base position is not displayed, move the name to
 		**  the start
@@ -2501,12 +2555,12 @@ static void showFillREflat(const EmbPShow thys,
 		    */
 		    ajStrKeepRange(&namestr, pos-start,
 				    /* ...or should this be , */
-				    /* pos+thys->width-start-1); */
+				    /* last-start); */
 				    ajStrGetLen(namestr)-1);
 		}
 		/* make it display from the start of the line */
 		start = pos;
-		end   = pos+thys->width-1;
+		end   = last;
 	    }
 	    else
 	    {
@@ -2556,11 +2610,11 @@ static void showFillREflat(const EmbPShow thys,
 		line=ajStrNew();
 
 		/* fill with spaces */
-		ajStrAppendCountK(&line, ' ', thys->width);
+		ajStrAppendCountK(&line, ' ', width);
 		line2=ajStrNew();
 
 		/* fill with spaces */
-		ajStrAppendCountK(&line2, ' ', thys->width);
+		ajStrAppendCountK(&line2, ' ', width);
 
 		showOverPrint(&line, start-pos, sitestr);
 		showOverPrint(&line2, start-pos, namestr);
@@ -2598,11 +2652,7 @@ static void showFillREflat(const EmbPShow thys,
 	**  the cut and recognition sites are widely separated and so many
 	**  claimchars have been appended
 	*/
-	for(i=ajStrGetLen(line)-1; i>=0; i--)
-	    if(*(ajStrGetPtr(line)+i) != ' ')
-		break;
-
-	ajStrTruncateLen(&line, i+1);
+	ajStrTrimEndC(&line, " ");
 
 	showMargin(thys, lines);
 	ajListstrPushApp(lines, line);
@@ -2628,14 +2678,15 @@ static void showFillREflat(const EmbPShow thys,
 ** @param [r] thys [const EmbPShow] Show sequence object
 ** @param [u] lines [AjPList] list of lines to add to
 ** @param [r] info [const EmbPShowFT] data on how to display the features
-** @param [r] pos [ajint] current printing position in the sequence
+** @param [r] pos [ajuint] current printing position in the sequence
+** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void showFillFT(const EmbPShow thys,
 		       AjPList lines, const EmbPShowFT info,
-		       ajint pos)
+		       ajuint pos, ajuint last)
 {
 
 
@@ -2645,22 +2696,23 @@ static void showFillFT(const EmbPShow thys,
     AjPStr line      = NULL;
     AjPStr line2     = NULL;
     AjPList linelist = NULL;	/* list of lines to fill */
-    ajint start;
-    ajint end;
-    ajint namestart;
-    ajint nameend;		/* start and end position of namestr */
+    ajuint start;
+    ajuint end;
+    ajuint namestart;
+    ajuint nameend;		/* start and end position of namestr */
     AjIList liter;		/* iterator for linelist */
     AjPStr namestr = NULL;	/* name of feature to insert into line */
     AjPStr linestr = NULL;	/* line graphics to insert */
-    ajint i;
-    char *claimchar = "*";	/* char used to stake a claim to */
-                                /* that position in the string */
+    const char *claimchar = "*";   /* char used to stake a claim to */
+				   /* that position in the string */
     AjBool freespace;		/* flag for found a free space to
 				   print in */
-    ajint ln;
+    ajuint ln;
     AjPStr sajb = NULL;
 
+    ajuint width;
 
+    width = last - pos + 1;
 
     ajDebug("showFillFT\n");
     linelist = ajListstrNew();
@@ -2716,8 +2768,8 @@ static void showFillFT(const EmbPShow thys,
 	    ** Working in human coordinates here: 1 to SeqLength,
 	    ** not 0 to SeqLength-1)
 	    */
-	    if(pos+1 > ajFeatGetEnd(gf) ||
-	       pos+thys->width < ajFeatGetStart(gf))
+	    if(pos >= ajFeatGetEnd(gf) ||
+	       last <= ajFeatGetStart(gf))
 		continue;
 
 	    /* prepare name string */
@@ -2733,15 +2785,15 @@ static void showFillFT(const EmbPShow thys,
 	    */
 	    start = (ajFeatGetStart(gf)-1<pos) ?
 		pos : ajFeatGetStart(gf)-1;
-	    end   = (ajFeatGetEnd(gf)-1>pos+thys->width-1) ?
-		pos+thys->width-1 : ajFeatGetEnd(gf)-1;
+	    end   = (ajFeatGetEnd(gf)-1>last) ?
+		last : ajFeatGetEnd(gf)-1;
 
 	    /* print the name starting with the line */
 	    namestart = start;
 	    nameend   =  start + ajStrGetLen(namestr)-1;
 
 	    /* shift long namestr back if longer than the line when printed */
-	    if(nameend > pos+thys->width-1+thys->margin)
+	    if(nameend > last+thys->margin)
 	    {
 		if(ajStrGetLen(namestr) > end-pos+1)
 		{
@@ -2789,7 +2841,7 @@ static void showFillFT(const EmbPShow thys,
 	    /* put in end position characters */
 	    if(ajFeatGetStart(gf)-1>=pos)
 		ajStrPasteCountK(&linestr,0, '|', 1);
-	    if(ajFeatGetEnd(gf)-1<=pos+thys->width-1)
+	    if(ajFeatGetEnd(gf)-1<=last)
 		ajStrPasteCountK(&linestr, (end-start), '|', 1);
 
 
@@ -2840,10 +2892,10 @@ static void showFillFT(const EmbPShow thys,
 	    {
 		line=ajStrNew();
 		/* fill with spaces */
-		ajStrAppendCountK(&line, ' ', thys->width);
+		ajStrAppendCountK(&line, ' ', width);
 		line2=ajStrNew();
 		/* fill with spaces */
-		ajStrAppendCountK(&line2, ' ', thys->width);
+		ajStrAppendCountK(&line2, ' ', width);
 
 		showOverPrint(&line, start-pos, linestr);
 		showOverPrint(&line2, namestart-pos, namestr);
@@ -2868,11 +2920,7 @@ static void showFillFT(const EmbPShow thys,
 	ajStrExchangeSetCC(&line, claimchar, " ");
 
 	/* remove trailing spaces - these can be very long */
-	for(i=ajStrGetLen(line)-1; i>=0; i--)
-	    if(*(ajStrGetPtr(line)+i) != ' ')
-		break;
-
-	ajStrTruncateLen(&line, i+1);
+	ajStrTrimEndC(&line, " ");
 
 	/*
 	** output to the lines list
@@ -2908,35 +2956,38 @@ static void showFillFT(const EmbPShow thys,
 ** @param [r] thys [const EmbPShow] Show sequence object
 ** @param [u] lines [AjPList] list of lines to add to
 ** @param [r] info [const EmbPShowNote] data on how to display the annotation
-** @param [r] pos [ajint] current printing position in the sequence
+** @param [r] pos [ajuint] current printing position in the sequence
+** @param [r] last [ajuint] last printing position in the sequence
 ** @return [void]
 ** @@
 ******************************************************************************/
 static void showFillNote(const EmbPShow thys,
 			 AjPList lines, const EmbPShowNote info,
-			  ajint pos)
+			  ajuint pos, ajuint last)
 {
 
     AjPStr line  = NULL;
     AjPStr line2 = NULL;
     AjPList linelist = NULL;	/* list of lines to fill */
-    ajint start;
-    ajint end;			/* start and end position of linestr */
-    ajint namestart;
-    ajint nameend;		/* start and end position of namestr */
+    ajuint start;
+    ajuint end;			/* start and end position of linestr */
+    ajuint namestart;
+    ajuint nameend;		/* start and end position of namestr */
     AjIList liter;		/* iterator for linelist */
     AjPStr namestr = NULL;	/* name of feature to insert into line */
     AjPStr linestr = NULL;	/* line graphics to insert */
-    ajint i;
-    char *claimchar = "*";	/* char used to stake a claim to */
-                                /* that position in the string */
+    const char *claimchar = "*";   /* char used to stake a claim to */
+				   /* that position in the string */
     AjBool freespace;		/* flag for found a free space to print in */
     ajint ln;
     AjPStr sajb = NULL;
 
-    ajint count;		/* count of annotation region */
-    ajint rstart;
-    ajint rend;			/* region start and end */
+    ajuint count;		/* count of annotation region */
+    ajuint rstart;
+    ajuint rend;			/* region start and end */
+    ajuint width;
+
+    width = last - pos + 1;
 
     ajDebug("showFillFT\n");
     linelist = ajListstrNew();
@@ -2951,7 +3002,7 @@ static void showFillNote(const EmbPShow thys,
 	    /*
 	    ** check that the region is within the line to display
 	    */
-	    if(pos+1 > rend || pos+thys->width < rstart)
+	    if(pos >= rend || last <= rstart)
 		continue;
 
 	    /* get annotation string */
@@ -2962,7 +3013,7 @@ static void showFillNote(const EmbPShow thys,
 	    **  graphics
 	    */
 	    start = (rstart-1<pos) ? pos : rstart-1;
-	    end   = (rend-1>pos+thys->width-1) ? pos+thys->width-1 :
+	    end   = (rend-1>last) ? last :
 		rend-1;
 
 	    /* print the name starting with the line */
@@ -2970,7 +3021,7 @@ static void showFillNote(const EmbPShow thys,
 	    nameend   = start + ajStrGetLen(namestr)-1;
 
 	    /* shift long namestr back if longer than the line when printed */
-	    if(nameend > pos+thys->width-1+thys->margin)
+	    if(nameend >last+thys->margin)
 	    {
 		if(ajStrGetLen(namestr) > end-pos+1)
 		{
@@ -2980,10 +3031,10 @@ static void showFillNote(const EmbPShow thys,
 		    **  it is shifted back to the start of the display line
 		    **  is it still longer than the line? truncate it
 		    */
-		    if(nameend > thys->width-1+thys->margin)
+		    if(nameend > width-1+thys->margin)
 		    {
-			ajStrTruncateLen(&namestr, thys->width-1+thys->margin);
-			nameend = pos+thys->width-1+thys->margin;
+			ajStrTruncateLen(&namestr, width-1+thys->margin);
+			nameend = last+thys->margin;
 		    }
 		}
 		else
@@ -3020,7 +3071,7 @@ static void showFillNote(const EmbPShow thys,
 	    /* put in end position characters */
 	    if(rstart-1>=pos)
 		ajStrPasteCountK(&linestr, 0, '|', 1);
-	    if(rend-1<=pos+thys->width-1)
+	    if(rend-1<=last)
 		ajStrPasteCountK(&linestr, (end-start), '|', 1);
 
 	    /* work up list of lines */
@@ -3071,11 +3122,11 @@ static void showFillNote(const EmbPShow thys,
 	    {
 		line=ajStrNew();
 		/* fill with spaces */
-		ajStrAppendCountK(&line, ' ', thys->width);
+		ajStrAppendCountK(&line, ' ', width);
 		line2=ajStrNew();
 
 		/* fill with spaces */
-		ajStrAppendCountK(&line2, ' ', thys->width);
+		ajStrAppendCountK(&line2, ' ', width);
 
 		showOverPrint(&line, start-pos, linestr);
 
@@ -3099,11 +3150,7 @@ static void showFillNote(const EmbPShow thys,
 	ajStrExchangeSetCC(&line, claimchar, " ");
 
 	/* remove trailing spaces - these can be very long */
-	for(i=ajStrGetLen(line)-1; i>=0; i--)
-	    if(*(ajStrGetPtr(line)+i) != ' ')
-		break;
-
-	ajStrTruncateLen(&line, i+1);
+	ajStrTrimEndC(&line, " ");
 
 	/*
 	** output to the lines list 
@@ -3199,7 +3246,7 @@ static AjBool showLineIsClear(AjPStr *line, ajint start, ajint end)
 **
 ** @param [w] tagsout [AjPStr*] tags out string
 ** @param [r] feat [const AjPFeature] Feature to be processed
-** @param [r] values [AjBool] display values of tags
+** @param [r] values [AjBool] display values of tags (currently ignored)
 **
 ** @return [void]
 ** @@
@@ -3215,6 +3262,8 @@ static void showAddTags(AjPStr *tagsout, const AjPFeature feat, AjBool values)
     /*
     ** iterate through the tags and test for match to patterns
     */
+
+    (void) values;			/* make it used */
 
     tagval = ajStrNew();
     tagnam = ajStrNew();

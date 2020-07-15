@@ -30,6 +30,15 @@
 #include <string.h>
 #include <ctype.h>
 
+char dayhoffstr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+float dayhoff[] = {
+    (float) 8.6, (float) 0.0, (float) 2.9, (float) 5.5, (float) 6.0,
+    (float) 3.6, (float) 8.4, (float) 2.0, (float) 4.5, (float) 0.0,
+    (float) 6.6, (float) 7.4, (float) 1.7, (float) 4.3, (float) 0.0,
+    (float) 5.2, (float) 3.9, (float) 4.9, (float) 7.0, (float) 6.1,
+    (float) 0.0, (float) 6.6, (float) 1.3, (float) 0.9, (float) 3.4,
+    (float) 0.0
+};
 
 
 
@@ -75,16 +84,20 @@ void embPropAminoRead(AjPFile mfptr)
     AjPStr  line  = NULL;
     AjPStr  delim = NULL;
 #ifndef WIN32
-    static char *delimstr=" :\t\n";
+    static const char *delimstr=" :\t\n";
 #else
-    static char *delimstr=" :\t\n\r";
+    static const char *delimstr=" :\t\n\r";
 #endif
-    const char *p;
 
+    const char *p;
+    ajuint i;
     ajint cols = 0;
 
     if(propInit)
 	return;
+
+    for(i=0;i<EMBPROPSIZE;i++)
+	EmbPropTable[i] = 0;
 
     line  = ajStrNew();
     delim = ajStrNewC(delimstr);
@@ -99,8 +112,15 @@ void embPropAminoRead(AjPFile mfptr)
 	    ++p;
 
 	cols = ajStrParseCountC(line,ajStrGetPtr(delim));
-	EmbPropTable[ajAZToInt(toupper((ajint)*p))] =
-	    ajArrDoubleLine(line,ajStrGetPtr(delim),cols,2,cols);
+	if(EmbPropTable[ajAZToInt(toupper((ajint)*p))])
+	    ajWarn("Amino acid property table duplicate record for '%c'",
+		   *p);
+	i = ajAZToInt(toupper((ajint)*p));
+	if(i >= EMBPROPSIZE)
+	    ajWarn("Amino acid property table bad code '%c', index %u",
+		   *p, i);
+	EmbPropTable[i] =
+	    ajArrDoubleLine(line,ajStrGetPtr(delim),2,cols);
     }
 
 
@@ -263,7 +283,6 @@ const char* embPropIntToThree(ajint c)
 **
 ** @param [r] s [const char *] sequence
 ** @param [r] n [ajint] "enzyme" number
-** @param [r] begin [ajint] sequence offset
 ** @param [w] l [AjPList *] list to push hits to
 ** @param [w] pa [AjPList *] list to push partial hits to
 ** @param [r] unfavoured [AjBool] allow unfavoured cuts
@@ -281,30 +300,30 @@ const char* embPropIntToThree(ajint c)
 ** @@
 ******************************************************************************/
 
-void embPropCalcFragments(const char *s, ajint n, ajint begin,
+void embPropCalcFragments(const char *s, ajint n,
 			  AjPList *l, AjPList *pa,
 			  AjBool unfavoured, AjBool overlap,
 			  AjBool allpartials, ajint *ncomp, ajint *npart,
 			  AjPStr *rname, AjBool nterm, AjBool cterm,
 			  AjBool dorag)
 {
-    static char *PROPENZReagent[]=
+    static const char *PROPENZReagent[]=
     {
 	"Trypsin","Lys-C","Arg-C","Asp-N","V8-bicarb","V8-phosph",
 	"Chymotrypsin","CNBr"
     };
 
-    static char *PROPENZSite[]=
+    static const char *PROPENZSite[]=
     {
 	"KR","K","R","D","E","DE","FYWLM","M"
     };
 
-    static char *PROPENZAminoCarboxyl[]=
+    static const char *PROPENZAminoCarboxyl[]=
     {
 	"CC","C","C","N","C","CC","CCCCC","C"
     };
 
-    static char *PROPENZUnfavoured[]=
+    static const char *PROPENZUnfavoured[]=
     {
 	"KRIFLP","P","P","","KREP","P","P",""
     };
@@ -567,7 +586,8 @@ void embPropCalcFragments(const char *s, ajint n, ajint begin,
 
 static ajint propFragCompare(const void *a, const void *b)
 {
-    return (ajint)((*(EmbPPropFrag *)b)->molwt - (*(EmbPPropFrag *)a)->molwt);
+    return (ajint)((*(EmbPPropFrag const *)b)->molwt -
+		   (*(EmbPPropFrag const *)a)->molwt);
 }
 
 
@@ -598,7 +618,7 @@ AjPStr embPropProtGaps(AjPSeq seq, ajint pad)
 	ajStrAppendC(&temp, " ");
 
 
-    for(p=ajSeqChar(seq); *p; p++)
+    for(p=ajSeqGetSeqC(seq); *p; p++)
     {
 	ajStrAppendK(&temp, *p);
 	ajStrAppendC(&temp, "  ");
@@ -636,7 +656,7 @@ AjPStr embPropProt1to3(AjPSeq seq, ajint pad)
 	ajStrAppendC(&temp, " ");
 
 
-    for(p=ajSeqChar(seq); *p; p++)
+    for(p=ajSeqGetSeqC(seq); *p; p++)
     {
 	if(*p == '*')
 	    ajStrAppendC(&temp, "***");
@@ -673,7 +693,10 @@ AjPStr embPropProt1to3(AjPSeq seq, ajint pad)
 
 AjBool embPropPurine(char base)
 {
-    return (strchr(propPurines, (ajint)base) != NULL);
+    if(strchr(propPurines, (ajint)base))
+	return ajTrue;
+
+    return ajFalse;
 }
 
 
@@ -691,7 +714,10 @@ AjBool embPropPurine(char base)
 
 AjBool embPropPyrimidine(char base)
 {
-    return (strchr(propPyrimidines, (ajint)base) != NULL);
+    if(strchr(propPyrimidines, (ajint)base))
+	return ajTrue;
+
+    return ajFalse;
 }
 
 
@@ -712,31 +738,31 @@ AjBool embPropPyrimidine(char base)
 
 AjBool embPropTransversion(char base1, char base2)
 {
-    AjBool u1;
-    AjBool u2;
-    AjBool y1;
-    AjBool y2;
+    AjBool bu1;
+    AjBool bu2;
+    AjBool by1;
+    AjBool by2;
 
-    u1 = embPropPurine(base1);
-    u2 = embPropPurine(base2);
+    bu1 = embPropPurine(base1);
+    bu2 = embPropPurine(base2);
 
-    y1 = embPropPyrimidine(base1);
-    y2 = embPropPyrimidine(base2);
+    by1 = embPropPyrimidine(base1);
+    by2 = embPropPyrimidine(base2);
 
-    ajDebug("base1 py = %d, pu = %d", u1, y1);
-    ajDebug("base2 py = %d, pu = %d", u2, y2);
+    ajDebug("base1 py = %b, pu = %b", bu1, by1);
+    ajDebug("base2 py = %b, pu = %b", bu2, by2);
 
 
     /* not a purine or a pyrimidine - ambiguous - return ajFalse */
-    if(!u1 && !y1)
+    if(!bu1 && !by1)
 	return ajFalse;
 
-    if(!u2 && !y2)
+    if(!bu2 && !by2)
 	return ajFalse;
 
-    ajDebug("embPropTransversion result = %d", (u1 != u2));
+    ajDebug("embPropTransversion result = %d", (bu1 != bu2));
 
-    return (u1 != u2);
+    return (bu1 != bu2);
 }
 
 
@@ -757,25 +783,25 @@ AjBool embPropTransversion(char base1, char base2)
 
 AjBool embPropTransition(char base1, char base2)
 {
-    AjBool u1;
-    AjBool u2;
-    AjBool y1;
-    AjBool y2;
+    AjBool bu1;
+    AjBool bu2;
+    AjBool by1;
+    AjBool by2;
 
-    u1 = embPropPurine(base1);
-    u2 = embPropPurine(base2);
+    bu1 = embPropPurine(base1);
+    bu2 = embPropPurine(base2);
 
-    y1 = embPropPyrimidine(base1);
-    y2 = embPropPyrimidine(base2);
+    by1 = embPropPyrimidine(base1);
+    by2 = embPropPyrimidine(base2);
 
-    ajDebug("base1 py = %d, pu = %d", u1, y1);
-    ajDebug("base2 py = %d, pu = %d", u2, y2);
+    ajDebug("base1 py = %b, pu = %b", bu1, by1);
+    ajDebug("base2 py = %b, pu = %b", bu2, by2);
 
     /* not a purine or a pyrimidine - ambiguous - return ajFalse */
-    if(!u1 && !y1)
+    if(!bu1 && !by1)
 	return ajFalse;
 
-    if(!u2 && !y2)
+    if(!bu2 && !by2)
 	return ajFalse;
 
     /* no change - return ajFalse */
@@ -790,23 +816,95 @@ AjBool embPropTransition(char base1, char base2)
 	return ajFalse;
 
     /* C to Y, T to Y, A to R, G to R - ambiguous - not a transition */
-    if(u1 && tolower((int)base2) == 'r')
+    if(bu1 && tolower((int)base2) == 'r')
 	return ajFalse;
 
-    if(u2 && tolower((int)base1) == 'r')
+    if(bu2 && tolower((int)base1) == 'r')
 	return ajFalse;
 
-    if(y1 && tolower((int)base2) == 'y')
+    if(by1 && tolower((int)base2) == 'y')
 	return ajFalse;
 
-    if(y2 && tolower((int)base1) == 'y')
+    if(by2 && tolower((int)base1) == 'y')
 	return ajFalse;
 
-    ajDebug("embPropTransition result = %d", (u1 == u2));
+    ajDebug("embPropTransition result = %b", (bu1 == bu2));
 
-    return (u1 == u2);
+    return (bu1 == bu2);
 }
 
+/* @func embPropFixF *********************************************************
+**
+** Fix for missing properties data in a float array
+**
+** @param [u] matrix [float[]] Matrix
+** @param [r] missing [float] Missing data value
+** @return [void]
+******************************************************************************/
+
+void embPropFixF(float matrix[], float missing)
+{
+    ajint i;
+
+    float mtot = 0.0;
+    float dtot = 0.0;
+
+    for(i=0;i<26;i++)
+    {
+	if(matrix[i] == missing)
+	{
+	    switch (i)
+	    {
+	    case 1:			/* B */
+		matrix[i] = ((matrix[3] * dayhoff[3]) +
+			     (matrix[13] * dayhoff[13])) /
+				 (dayhoff[3] + dayhoff[13]);
+		ajDebug("Missing %d '%c' %f %f => %f\n",
+			i, dayhoffstr[i], matrix[3], matrix[13], matrix[i]);
+		break;
+	    case 9:			/* J */
+		matrix[i] = ((matrix[8] * dayhoff[8]) +
+			     (matrix[11] * dayhoff[11])) /
+				 (dayhoff[8] + dayhoff[11]);
+		ajDebug("Missing %d '%c' %f %f => %f\n",
+			i, dayhoffstr[i], matrix[8], matrix[11], matrix[i]);
+		break;
+	    case 25:			/* Z */
+		matrix[i] = ((matrix[4] * dayhoff[4]) +
+			     (matrix[16] * dayhoff[16])) /
+				 (dayhoff[4] + dayhoff[16]);
+		ajDebug("Missing %d '%c' %f %f => %f\n",
+			i, dayhoffstr[i], matrix[4], matrix[16], matrix[i]);
+		break;
+	    default:
+		ajDebug("Missing %d '%c' unknown\n", i, dayhoffstr[i]);
+		break;
+	    }
+	}
+	else
+	{
+	    if(dayhoff[i] > 0.0)
+	    {
+		dtot += dayhoff[i];
+		mtot += matrix[i] * dayhoff[i];
+	    }
+	}
+    }
+    mtot /= dtot;
+
+    for(i=0;i<26;i++)
+    {
+	if(matrix[i] == missing)
+	{
+	    matrix[i] = mtot;
+	    ajDebug("Missing %d '%c' unknown %f\n",
+		    i, dayhoffstr[i], matrix[i]);
+	}
+    }
+
+
+    return;
+}
 /* @func embPropExit *********************************************************
 **
 ** Cleanup of properties data
@@ -817,9 +915,12 @@ AjBool embPropTransition(char base1, char base2)
 void embPropExit(void)
 {
     ajint i;
-    for(i=0;i<EMBPROPSIZE;i++)
+    if(propInit)
     {
-	AJFREE(EmbPropTable[i]);
+	for(i=0;i<EMBPROPSIZE;i++)
+	{
+	    AJFREE(EmbPropTable[i]);
+	}
     }
 
     return;

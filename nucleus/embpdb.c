@@ -142,7 +142,7 @@
 
 AjBool embPdbidToSp(const AjPStr pdb, AjPStr *spr, const AjPList list)
 {
-    const AjPPdbtosp *arr = NULL;  /* Array derived from list */
+    AjPPdbtosp *arr = NULL;  /* Array derived from list */
     ajint dim = 0;           /* Size of array */
     ajint idx = 0;           /* Index into array for the Pdb code */
 
@@ -192,7 +192,7 @@ AjBool embPdbidToSp(const AjPStr pdb, AjPStr *spr, const AjPList list)
 
 AjBool embPdbidToAcc(const AjPStr pdb, AjPStr *acc, const AjPList list)
 {
-    const AjPPdbtosp *arr = NULL;  /* Array derived from list */
+    AjPPdbtosp *arr = NULL;  /* Array derived from list */
     AjPPdbtosp *arrfree = NULL;
     ajint dim = 0;           /* Size of array */
     ajint idx = 0;           /* Index into array for the Pdb code */
@@ -554,7 +554,7 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
 **                                       array).
 ** @param [w] nhet            [ajint*]   Number of arrays in the list that
 **                                       was written. 
-** @param [u] logf            [AjPFile]  Log file for error messages
+** @param [u] logfile         [AjPFile]  Log file for error messages
 **
 ** @return [AjBool] ajTrue on success
 ** @@ 
@@ -562,7 +562,7 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
 
 AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens, 
 			    AjPInt *siz_heterogens, ajint *nhet, 
-			    AjPFile logf)
+			    AjPFile logfile)
 { 
   /*
   ** NOTE: EVERYTHING IN THE CLEAN PDB FILES IS CURRENTLY CHAIN
@@ -594,7 +594,7 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
   }
   
   if(pdb->Ngp>0)
-      ajFmtPrintF(logf, "\tNGP:%d\n", pdb->Ngp);
+      ajFmtPrintF(logfile, "\tNGP:%d\n", pdb->Ngp);
   
   if(pdb->Nchn>0)
   {      
@@ -782,7 +782,7 @@ AjBool embPdbResidueIndexC(const AjPPdb pdb, char chn, AjPInt *idx)
 
 
 
-/* @func embPdbResidueIndexICA *************************************************
+/* @func embPdbResidueIndexICA ************************************************
 **
 ** Reads a Pdb object and writes an integer array which gives the index into 
 ** the protein sequence for structured residues (residues for which electron
@@ -792,7 +792,7 @@ AjBool embPdbResidueIndexC(const AjPPdb pdb, char chn, AjPInt *idx)
 **
 ** @param [r] pdb  [const AjPPdb]  Pdb object
 ** @param [r] chn  [ajint]   Chain number
-** @param [w] idx  [AjPInt*] Index array
+** @param [w] idx  [AjPUint*] Index array
 ** @param [w] nres [ajint*]  Array length 
 **
 ** @return [AjBool] True on succcess
@@ -800,7 +800,7 @@ AjBool embPdbResidueIndexC(const AjPPdb pdb, char chn, AjPInt *idx)
 ****************************************************************************/
 
 AjBool embPdbResidueIndexICA(const AjPPdb pdb,
-			  ajint chn, AjPInt *idx, ajint *nres)
+			  ajint chn, AjPUint *idx, ajint *nres)
 {
     AjIList iter  = NULL;
     AjPAtom atm   = NULL;
@@ -844,7 +844,7 @@ AjBool embPdbResidueIndexICA(const AjPPdb pdb,
 	this_rn=atm->Idx;
 	if(this_rn!=last_rn && ajStrMatchC(atm->Atm,  "CA"))
 	{
-	    ajIntPut(&(*idx), resn++, atm->Idx);
+	    ajUintPut(&(*idx), resn++, atm->Idx);
 	    last_rn=this_rn;
 	}
     }
@@ -878,14 +878,15 @@ AjBool embPdbResidueIndexICA(const AjPPdb pdb,
 **
 ** @param [r] pdb [const AjPPdb]  Pdb object
 ** @param [r] chn [char]    Chain identifier
-** @param [w] idx [AjPInt*] Index array
+** @param [w] idx [AjPUint*] Index array
 ** @param [w] nres [ajint*] Array length 
 **
 ** @return [AjBool] True on succcess
 ** @@
 ****************************************************************************/
 
-AjBool embPdbResidueIndexCCA(const AjPPdb pdb, char chn, AjPInt *idx, ajint *nres)
+AjBool embPdbResidueIndexCCA(const AjPPdb pdb, char chn,
+			     AjPUint *idx, ajint *nres)
 {
     ajint chnn;
     

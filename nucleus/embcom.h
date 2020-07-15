@@ -49,7 +49,7 @@ void embComComplexity(const char *seq,const char *name,
 		      ajint len, ajint jmin, ajint jmax,
 		      ajint l, ajint step, ajint sim, ajint freq, ajint omnia,
 		      AjPFile fp, AjPFile pf,
-		      ajint print, ajint num_seq, float *MedValue);
+		      ajint print, float *MedValue);
 void embComWriteValueOfSeq(AjPFile fp, ajint n,const char *name, ajint len,
 			   float MedValue);
 void embComWriteFile(AjPFile fp, ajint jmin, ajint jmax, ajint lwin,

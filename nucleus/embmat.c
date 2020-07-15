@@ -145,8 +145,8 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
     AjPStr line;
 
     ajint i;
-    ajint j;
-    ajint m;
+    ajuint j;
+    ajuint m;
     const char *p;
 
     line = ajStrNewC("#");
@@ -174,7 +174,7 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
     ret->acc = ajStrNew();
     ajStrAssignS(&ret->acc,line);
     ajFileReadLine(fp,&line);
-    ajStrToInt(line,&ret->n);
+    ajStrToUint(line,&ret->n);
     ajFileReadLine(fp,&line);
     ret->tit = ajStrNew();
     ajStrAssignS(&ret->tit,line);
@@ -188,11 +188,11 @@ EmbPMatPrints embMatProtReadInt(AjPFile fp)
     for(m=0;m<ret->n;++m)
     {
 	ajFileReadLine(fp,&line);
-	ajStrToInt(line,&ret->len[m]);
+	ajStrToUint(line,&ret->len[m]);
 	ajFileReadLine(fp,&line);
-	ajStrToInt(line,&ret->thresh[m]);
+	ajStrToUint(line,&ret->thresh[m]);
 	ajFileReadLine(fp,&line);
-	ajStrToInt(line,&ret->max[m]);
+	ajStrToUint(line,&ret->max[m]);
 	ajDebug ("m: %d/%d len:%d thresh:%d max:%d\n",
 		 m, ret->n, ret->len[m], ret->thresh[m], ret->max[m]);
 	for(i=0;i<26;++i)
@@ -272,10 +272,10 @@ void embMatProtDelInt(EmbPMatPrints *s)
 ** @param [w] ordered [AjBool *] Set if all elements are in order
 ** @param [r] overlap [AjBool] True if overlaps are allowed
 **
-** @return [ajint] number of hits
+** @return [ajuint] number of hits
 ******************************************************************************/
 
-ajint embMatProtScanInt(const AjPStr s, const AjPStr n, const EmbPMatPrints m,
+ajuint embMatProtScanInt(const AjPStr s, const AjPStr n, const EmbPMatPrints m,
 			AjPList *l,
 			AjBool *all, AjBool *ordered, AjBool overlap)
 {

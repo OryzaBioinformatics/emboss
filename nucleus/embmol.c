@@ -49,10 +49,10 @@ ajint embMolGetFrags(const AjPStr thys, ajint rno, AjPList *l)
 {
     static struct enz
     {
-	char *ename;
-	char *residues;
-	char *type;
-	char *partial;
+	const char *ename;
+	const char *residues;
+	const char *type;
+	const char *partial;
     } zyme[]=
     {
 	{"Trypsin","KR","CC","KRIFL"},
@@ -182,5 +182,6 @@ ajint embMolGetFrags(const AjPStr thys, ajint rno, AjPList *l)
 
 static ajint embMolFragSort(const void* a, const void* b)
 {
-    return (ajint)((*(EmbPMolFrag*)a)->mwt - (*(EmbPMolFrag*)b)->mwt);
+    return (ajint)((*(EmbPMolFrag const *)a)->mwt -
+		   (*(EmbPMolFrag const *)b)->mwt);
 }

@@ -13,8 +13,8 @@ extern "C"
 ** Prototype definitions
 */
 
-void embExit (void);
-void embExitBad (void);
+__noreturn void embExit (void);
+__noreturn void embExitBad (void);
 
 /*
 ** End of prototype definitions

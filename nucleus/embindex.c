@@ -38,13 +38,13 @@ static AjPFile btreeCreateFile(const AjPStr idirectory, const AjPStr dbname,
 **
 ** @param [r] kwline [const AjPStr] keyword line
 ** @param [w] kwlist [AjPList] list of keywords
-** @param [r] maxlen [ajint] max keyword length
+** @param [r] maxlen [ajuint] max keyword length
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajint maxlen)
+void embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 {
     AjPStr line      = NULL;
     AjPStrTok handle = NULL;
@@ -96,13 +96,13 @@ void embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajint maxlen)
 **
 ** @param [r] txline [const AjPStr] taxonomy line
 ** @param [w] txlist [AjPList] list of taxons
-** @param [r] maxlen [ajint] max taxon length
+** @param [r] maxlen [ajuint] max taxon length
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void embBtreeEmblTX(const AjPStr txline, AjPList txlist, ajint maxlen)
+void embBtreeEmblTX(const AjPStr txline, AjPList txlist, ajuint maxlen)
 {
     AjPStr line      = NULL;
     AjPStrTok handle = NULL;
@@ -171,10 +171,10 @@ void embBtreeEmblAC(const AjPStr acline, AjPList aclist)
     AjPStr format    = NULL;
     char *p          = NULL;
     char *q          = NULL;
-    ajint lo = 0;
-    ajint hi = 0;
-    ajint field = 0;
-    ajint i;
+    ajuint lo = 0;
+    ajuint hi = 0;
+    ajuint field = 0;
+    ajuint i;
     
     line   = ajStrNew();
     token  = ajStrNew();
@@ -194,17 +194,17 @@ void embBtreeEmblAC(const AjPStr acline, AjPList aclist)
 	    q = p;
 	    while(isdigit((int)*(--q)));
 	    ++q;
-	    ajStrAssignSubC(&tstr,q,0,(ajint)(p-q-1));
-	    ajStrToInt(tstr,&lo);
-	    field = (ajint) (p-q);
-	    ajFmtPrintS(&format,"%%S%%0%dd",field);
+	    ajStrAssignSubC(&tstr,q,0,(ajuint)(p-q-1));
+	    ajStrToUint(tstr,&lo);
+	    field = (ajuint) (p-q);
+	    ajFmtPrintS(&format,"%%S%%0%uu",field);
 	    
 	    ++p;
 	    q = p;
 	    while(!isdigit((int)*q))
 		++q;
-	    sscanf(q,"%d",&hi);
-	    ajStrAssignSubC(&prefix,p,0,(ajint)(q-p-1));
+	    sscanf(q,"%u",&hi);
+	    ajStrAssignSubC(&prefix,p,0,(ajuint)(q-p-1));
 	    
 	    for(i=lo;i<=hi;++i)
 	    {
@@ -295,13 +295,13 @@ void embBtreeEmblSV(const AjPStr idline, AjPList svlist)
 **
 ** @param [r] deline[const AjPStr] description line
 ** @param [w] delist [AjPList] list of descriptions
-** @param [r] maxlen [ajint] max keyword length
+** @param [r] maxlen [ajuint] max keyword length
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void embBtreeEmblDE(const AjPStr deline, AjPList delist, ajint maxlen)
+void embBtreeEmblDE(const AjPStr deline, AjPList delist, ajuint maxlen)
 {
     AjPStr line      = NULL;
     AjPStrTok handle = NULL;
@@ -369,10 +369,10 @@ void embBtreeGenBankAC(const AjPStr acline, AjPList aclist)
     AjPStr format    = NULL;
     char *p          = NULL;
     char *q          = NULL;
-    ajint lo = 0;
-    ajint hi = 0;
-    ajint field = 0;
-    ajint i;
+    ajuint lo = 0;
+    ajuint hi = 0;
+    ajuint field = 0;
+    ajuint i;
     
     line   = ajStrNew();
     token  = ajStrNew();
@@ -392,17 +392,17 @@ void embBtreeGenBankAC(const AjPStr acline, AjPList aclist)
 	    q = p;
 	    while(isdigit((int)*(--q)));
 	    ++q;
-	    ajStrAssignSubC(&tstr,q,0,(ajint)(p-q-1));
-	    ajStrToInt(tstr,&lo);
-	    field = (ajint) (p-q);
-	    ajFmtPrintS(&format,"%%S%%0%dd",field);
+	    ajStrAssignSubC(&tstr,q,0,(ajuint)(p-q-1));
+	    ajStrToUint(tstr,&lo);
+	    field = (ajuint) (p-q);
+	    ajFmtPrintS(&format,"%%S%%0%uu",field);
 	    
 	    ++p;
 	    q = p;
 	    while(!isdigit((int)*q))
 		++q;
-	    sscanf(q,"%d",&hi);
-	    ajStrAssignSubC(&prefix,p,0,(ajint)(q-p-1));
+	    sscanf(q,"%u",&hi);
+	    ajStrAssignSubC(&prefix,p,0,(ajuint)(q-p-1));
 	    
 	    for(i=lo;i<=hi;++i)
 	    {
@@ -438,13 +438,13 @@ void embBtreeGenBankAC(const AjPStr acline, AjPList aclist)
 **
 ** @param [r] kwline[const AjPStr] keyword line
 ** @param [w] kwlist [AjPList] list of keywords
-** @param [r] maxlen [ajint] max keyword length
+** @param [r] maxlen [ajuint] max keyword length
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajint maxlen)
+void embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 {
     AjPStr line      = NULL;
     AjPStrTok handle = NULL;
@@ -496,13 +496,13 @@ void embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajint maxlen)
 **
 ** @param [r] kwline[const AjPStr] keyword line
 ** @param [w] kwlist [AjPList] list of keywords
-** @param [r] maxlen [ajint] max keyword length
+** @param [r] maxlen [ajuint] max keyword length
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void embBtreeGenBankDE(const AjPStr kwline, AjPList kwlist, ajint maxlen)
+void embBtreeGenBankDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 {
     AjPStr line      = NULL;
     AjPStrTok handle = NULL;
@@ -554,13 +554,13 @@ void embBtreeGenBankDE(const AjPStr kwline, AjPList kwlist, ajint maxlen)
 **
 ** @param [r] kwline[const AjPStr] keyword line
 ** @param [w] kwlist [AjPList] list of keywords
-** @param [r] maxlen [ajint] max keyword length
+** @param [r] maxlen [ajuint] max keyword length
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void embBtreeGenBankTX(const AjPStr kwline, AjPList kwlist, ajint maxlen)
+void embBtreeGenBankTX(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 {
     AjPStr line      = NULL;
     AjPStrTok handle = NULL;
@@ -613,13 +613,13 @@ void embBtreeGenBankTX(const AjPStr kwline, AjPList kwlist, ajint maxlen)
 **
 ** @param [r] kwline[const AjPStr] keyword line
 ** @param [w] kwlist [AjPList] list of keywords
-** @param [r] maxlen [ajint] max keyword length
+** @param [r] maxlen [ajuint] max keyword length
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void embBtreeFastaDE(const AjPStr kwline, AjPList kwlist, ajint maxlen)
+void embBtreeFastaDE(const AjPStr kwline, AjPList kwlist, ajuint maxlen)
 {
     AjPStrTok handle = NULL;
     AjPStr token     = NULL;
@@ -669,20 +669,20 @@ void embBtreeFastaDE(const AjPStr kwline, AjPList kwlist, ajint maxlen)
 ** @param [r] files [const AjPStr] Filename to search for (or NULL)
 ** @param [r] exclude [const AjPStr] list of files to exclude
 **
-** @return [ajint] number of matching files
+** @return [ajuint] number of matching files
 ** @@
 ******************************************************************************/
 
-ajint embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
+ajuint embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
 		      const AjPStr files, const AjPStr exclude)
 {
     AjPList lfiles = NULL;
-    ajint nfiles;
-    ajint nremove;
-    ajint i;
-    ajint j;
+    ajuint nfiles;
+    ajuint nremove;
+    ajuint i;
+    ajuint j;
     AjPStr file    = NULL;
-    AjPStr *remove = NULL;
+    AjPStr *removelist = NULL;
 
     /* ajDebug("In ajBtreeReadDir\n"); */
 
@@ -690,13 +690,13 @@ ajint embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
     nfiles = ajFileScan(fdirectory,files,&lfiles,ajFalse,ajFalse,NULL,NULL,
 			ajFalse,NULL);
 
-    nremove = ajArrCommaList(exclude,&remove);
+    nremove = ajArrCommaList(exclude,&removelist);
     
     for(i=0;i<nfiles;++i)
     {
 	ajListPop(lfiles,(void **)&file);
 	ajSysBasename(&file);
-	for(j=0;j<nremove && ! ajStrMatchWildS(file,remove[j]);++j);
+	for(j=0;j<nremove && ! ajStrMatchWildS(file,removelist[j]);++j);
 	if(j == nremove)
 	    ajListPushApp(lfiles,(void *)file);
     }
@@ -705,8 +705,8 @@ ajint embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
     ajListDel(&lfiles);
 
     for(i=0; i<nremove;++i)
-	ajStrDel(&remove[i]);
-    AJFREE(remove);
+	ajStrDel(&removelist[i]);
+    AJFREE(removelist);
 
     return nfiles;
 }
@@ -755,7 +755,7 @@ static AjPFile btreeCreateFile(const AjPStr idirectory, const AjPStr dbname,
 ** @@
 ******************************************************************************/
 
-EmbPBtreeEntry embBtreeEntryNew()
+EmbPBtreeEntry embBtreeEntryNew(void)
 {
     EmbPBtreeEntry thys;
 
@@ -850,13 +850,13 @@ void embBtreeEntryDel(EmbPBtreeEntry* thys)
 ** @param [w] entry [EmbPBtreeEntry] Database entry information
 ** @param [r] fields [AjPStr const *] user specified fields
 **
-** @return [ajint] number of fields set
+** @return [ajuint] number of fields set
 ** @@
 ******************************************************************************/
 
-ajint embBtreeSetFields(EmbPBtreeEntry entry, AjPStr const *fields)
+ajuint embBtreeSetFields(EmbPBtreeEntry entry, AjPStr const *fields)
 {
-    ajint nfields;
+    ajuint nfields;
 
 
     nfields = 0;
@@ -939,34 +939,34 @@ void embBtreeSetDbInfo(EmbPBtreeEntry entry, const AjPStr name,
 ** @param [r] files [const AjPStr] Filename to search for (or NULL)
 ** @param [r] exclude [const AjPStr] list of files to exclude
 **
-** @return [ajint] number of matching files
+** @return [ajuint] number of matching files
 ** @@
 ******************************************************************************/
 
-ajint embBtreeGetFiles(EmbPBtreeEntry entry, const AjPStr fdirectory,
+ajuint embBtreeGetFiles(EmbPBtreeEntry entry, const AjPStr fdirectory,
 		       const AjPStr files, const AjPStr exclude)
 {
-    ajint nfiles;
-    ajint nremove;
-    ajint i;
-    ajint j;
+    ajuint nfiles;
+    ajuint nremove;
+    ajuint i;
+    ajuint j;
     AjPStr file    = NULL;
-    AjPStr *remove = NULL;
-    ajint count = 0;
+    AjPStr *removelist = NULL;
+    ajuint count = 0;
     
     /* ajDebug("In embBtreeGetFiles\n"); */
 
     nfiles = ajFileScan(fdirectory,files,&entry->files,ajFalse,ajFalse,NULL,
 			NULL,ajFalse,NULL);
 
-    nremove = ajArrCommaList(exclude,&remove);
+    nremove = ajArrCommaList(exclude,&removelist);
 
     count = 0;
     for(i=0;i<nfiles;++i)
     {
 	ajListPop(entry->files,(void **)&file);
 	ajSysBasename(&file);
-	for(j=0;j<nremove && !ajStrMatchWildS(file,remove[j]);++j);
+	for(j=0;j<nremove && !ajStrMatchWildS(file,removelist[j]);++j);
 	if(j == nremove)
 	{
 	    ajListPushApp(entry->files,(void *)file);
@@ -979,8 +979,8 @@ ajint embBtreeGetFiles(EmbPBtreeEntry entry, const AjPStr fdirectory,
     entry->nfiles = count;
 
     for(i=0; i<nremove;++i)
-	ajStrDel(&remove[i]);
-    AJFREE(remove);
+	ajStrDel(&removelist[i]);
+    AJFREE(removelist);
 
     return count;
 }
@@ -1001,7 +1001,7 @@ ajint embBtreeGetFiles(EmbPBtreeEntry entry, const AjPStr fdirectory,
 AjBool embBtreeWriteEntryFile(const EmbPBtreeEntry entry)
 {
     AjPFile entfile = NULL;
-    ajint i;
+    ajuint i;
     AjPStr tmpstr = NULL;
     AjPStr refstr = NULL;
     AjBool do_ref;
@@ -1012,7 +1012,7 @@ AjBool embBtreeWriteEntryFile(const EmbPBtreeEntry entry)
     if(!entfile)
 	return ajFalse;
     
-    ajFmtPrintF(entfile,"# Number of files: %d\n",entry->nfiles);
+    ajFmtPrintF(entfile,"# Number of files: %u\n",entry->nfiles);
     ajFmtPrintF(entfile,"# Release: %S\n",entry->release);
     ajFmtPrintF(entfile,"# Date:    %S\n",entry->date);
 
@@ -1064,7 +1064,7 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 {
     const char *resource;
     AjPStr value = NULL;
-    ajint  n = 0;
+    ajuint  n = 0;
     
     value = ajStrNew();
     
@@ -1081,7 +1081,7 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	entry->idlen = BTREE_DEF_IDLEN;
     else
     {
-	if(ajStrToInt(value,&n))
+	if(ajStrToUint(value,&n))
 	    entry->idlen = n;
 	else
 	{
@@ -1094,7 +1094,7 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	entry->aclen = BTREE_DEF_ACLEN;
     else
     {
-	if(ajStrToInt(value,&n))
+	if(ajStrToUint(value,&n))
 	    entry->aclen = n;
 	else
 	{
@@ -1107,7 +1107,7 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	entry->svlen = BTREE_DEF_SVLEN;
     else
     {
-	if(ajStrToInt(value,&n))
+	if(ajStrToUint(value,&n))
 	    entry->svlen = n;
 	else
 	{
@@ -1120,7 +1120,7 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	entry->kwlen = BTREE_DEF_KWLEN;
     else
     {
-	if(ajStrToInt(value,&n))
+	if(ajStrToUint(value,&n))
 	    entry->kwlen = n;
 	else
 	{
@@ -1133,7 +1133,7 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	entry->delen = BTREE_DEF_DELEN;
     else
     {
-	if(ajStrToInt(value,&n))
+	if(ajStrToUint(value,&n))
 	    entry->delen = n;
 	else
 	{
@@ -1146,7 +1146,7 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	entry->txlen = BTREE_DEF_TXLEN;
     else
     {
-	if(ajStrToInt(value,&n))
+	if(ajStrToUint(value,&n))
 	    entry->txlen = n;
 	else
 	{
@@ -1159,7 +1159,7 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	entry->cachesize = BTREE_DEF_CACHESIZE;
     else
     {
-	if(ajStrToInt(value,&n))
+	if(ajStrToUint(value,&n))
 	    entry->cachesize = n;
 	else
 	{
@@ -1172,7 +1172,7 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	entry->pagesize = BTREE_DEF_PAGESIZE;
     else
     {
-	if(ajStrToInt(value,&n))
+	if(ajStrToUint(value,&n))
 	    entry->pagesize = n;
 	else
 	{
@@ -1235,9 +1235,9 @@ AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
 {
     char *basenam = NULL;
     char *idir    = NULL;
-    ajint level   = 0;
-    ajint slevel  = 0;
-    ajint count   = 0;
+    ajuint level   = 0;
+    ajuint slevel  = 0;
+    ajuint count   = 0;
     
     basenam = entry->dbname->Ptr;
     idir    = entry->idirectory->Ptr;

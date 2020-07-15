@@ -161,6 +161,7 @@ POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 PURIFY_FALSE = @PURIFY_FALSE@
 PURIFY_TRUE = @PURIFY_TRUE@
 RANLIB = @RANLIB@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -229,7 +230,7 @@ NUCLSRC = embaln.c embcom.c embcons.c \
 	   embshow.c embword.c
 
 libnucleus_la_SOURCES = $(NUCLSRC)
-libnucleus_la_LDFLAGS = -version-info 4:0:0
+libnucleus_la_LDFLAGS = -version-info 4:1:0
 include_HEADERS = emboss.h \
 		 embaln.h embcom.h embcons.h \
 		 embdata.h embdbi.h embdmx.h embdomain.h \
