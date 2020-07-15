@@ -60,16 +60,16 @@ extern "C"
 **
 ** @attr FileName [AjPStr] name of file that held the data
 ** @attr Title [AjPStr] title of data read from file
-** @attr GC [char[15][15][15]] genetic codon table
-** @attr Starts [char[15][15][15]] initiation site table
+** @attr GC [char[16][16][16]] genetic codon table
+** @attr Starts [char[16][16][16]] initiation site table
 ** @@
 ******************************************************************************/
 
 typedef struct AjSTrn {
   AjPStr FileName;
   AjPStr Title;
-  char GC[15][15][15];
-  char Starts[15][15][15];
+  char GC[16][16][16];
+  char Starts[16][16][16];
 } AjOTrn;
 #define AjPTrn AjOTrn*
 
@@ -84,16 +84,16 @@ typedef struct AjSTrn {
   14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
   14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, */
 
-/* @  A   B  C   D   E   F  G   H   I   J  K   L  M   N   O*/
+/*   @  A   B  C   D   E   F  G   H   I   J  K   L  M   N   O */
 /*  14, 0, 13, 1, 12, 14, 14, 2, 11, 14, 14, 9, 14, 4, 14, 14,*/
 
-/* P   Q  R  S  T  U   V  W   X  Y   Z   [   \   ]   ^   _ */
-/*  14, 14, 5, 7, 3, 3, 10, 6, 14, 8, 14, 14, 14, 14, 14, 14,*/
+/*   P   Q  R  S  T  U   V  W   X  Y   Z   [   \   ]   ^   _  */
+/*  14, 14, 5, 7, 3, 3, 10, 6, 14, 8, 14, 14, 14, 14, 14, 14, */
 
-/* `  a   b  c   d   e   f  g   h   i   j  k   l  m   n   o */
+/*   `  a   b  c   d   e   f  g   h   i   j  k   l  m   n   o */
 /*  14, 0, 13, 1, 12, 14, 14, 2, 11, 14, 14, 9, 14, 4, 14, 14,*/
 
-/* p   q  r  s  t  u   v  w   x  y   z   {   |   }   ~   del */
+/*   p   q  r  s  t  u   v  w   x  y   z   {   |   }   ~ del  */
 /*  14, 14, 5, 7, 3, 3, 10, 6, 14, 8, 14, 14, 14, 14, 14, 14
 };*/
 
@@ -105,48 +105,58 @@ typedef struct AjSTrn {
 ** Prototype definitions
 */
 
-void   ajTrnDel (AjPTrn* pthis);
-void   ajTrnExit(void);
-AjPTrn ajTrnNew (const AjPStr trnFileName);
-AjPTrn ajTrnNewI (ajint trnFileNameInt);
-AjPTrn ajTrnNewC (const char *trnFileName);
-void   ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile);
-AjPSeq ajTrnNewPep(const AjPSeq nucleicSeq, ajint frame);
+void          ajTrnDel (AjPTrn* pthis);
+void          ajTrnExit(void);
+AjPTrn        ajTrnNew (const AjPStr trnFileName);
+AjPTrn        ajTrnNewI (ajint trnFileNameInt);
+AjPTrn        ajTrnNewC (const char *trnFileName);
+void          ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile);
+AjPSeq        ajTrnNewPep(const AjPSeq nucleicSeq, ajint frame);
 const  AjPStr ajTrnCodon (const AjPTrn trnObj, const AjPStr codon);
 const  AjPStr ajTrnRevCodon (const AjPTrn trnObj, const AjPStr codon);
 const  AjPStr ajTrnCodonC (const AjPTrn trnObj, const char *codon);
 const  AjPStr ajTrnRevCodonC (const AjPTrn trnObj, const char *codon);
-char   ajTrnCodonK (const AjPTrn trnObj, const char *codon);
-char   ajTrnRevCodonK (const AjPTrn trnObj, const char *codon);
-void   ajTrnC (const AjPTrn trnObj, const char *str, ajint len,
-	       AjPStr *pep);
-void   ajTrnRevC (const AjPTrn trnObj, const char *str, ajint len,
-		  AjPStr *pep);
-void   ajTrnAltRevC (const AjPTrn trnObj, const char *str, ajint len,
-		     AjPStr *pep);
-void   ajTrnStr (const AjPTrn trnObj, const AjPStr str, AjPStr *pep);
-void   ajTrnRevStr (const AjPTrn trnObj, const AjPStr str, AjPStr *pep);
-void   ajTrnAltRevStr (const AjPTrn trnObj, const AjPStr str, AjPStr *pep);
-void   ajTrnSeq (const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep);
-void   ajTrnRevSeq (const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep);
-void   ajTrnAltRevSeq (const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep);
-void   ajTrnCFrame (const AjPTrn trnObj, const char *seq, ajint len,
-		    ajint frame, AjPStr *pep);
-AjPStr ajTrnName(ajint trnFileNameInt);
-void   ajTrnStrFrame (const AjPTrn trnObj, const AjPStr seq, ajint frame,
+char          ajTrnCodonK (const AjPTrn trnObj, const char *codon);
+char          ajTrnRevCodonK (const AjPTrn trnObj, const char *codon);
+void          ajTrnC (const AjPTrn trnObj, const char *str, ajint len,
 		      AjPStr *pep);
-void   ajTrnSeqFrame (const AjPTrn trnObj, const AjPSeq seq, ajint frame,
-		      AjPStr *pep);
-AjPSeq ajTrnSeqFramePep (const AjPTrn trnObj, const AjPSeq seq, ajint frame);
-ajint  ajTrnCDangle (const AjPTrn trnObj, const char *seq, ajint len,
-		     ajint frame, AjPStr *pep);
-ajint  ajTrnStrDangle (const AjPTrn trnObj, const AjPStr seq, ajint frame,
-		       AjPStr *pep);
-AjPStr ajTrnGetTitle (const AjPTrn thys);
-AjPStr ajTrnGetFileName (const AjPTrn thys);
-ajint  ajTrnStartStop (const AjPTrn trnObj, const AjPStr codon, char *aa);
-ajint  ajTrnStartStopC (const AjPTrn trnObj, const char *codon, char *aa);
-AjPSeq ajTrnSeqOrig (const AjPTrn trnObj, const AjPSeq seq, ajint frame);
+void          ajTrnRevC (const AjPTrn trnObj, const char *str, ajint len,
+			 AjPStr *pep);
+void          ajTrnAltRevC (const AjPTrn trnObj, const char *str, ajint len,
+			    AjPStr *pep);
+void          ajTrnStr (const AjPTrn trnObj, const AjPStr str,
+			AjPStr *pep);
+void          ajTrnRevStr (const AjPTrn trnObj, const AjPStr str,
+			   AjPStr *pep);
+void          ajTrnAltRevStr (const AjPTrn trnObj, const AjPStr str,
+			      AjPStr *pep);
+void          ajTrnSeq (const AjPTrn trnObj, const AjPSeq seq,
+			AjPStr *pep);
+void          ajTrnRevSeq (const AjPTrn trnObj, const AjPSeq seq,
+			   AjPStr *pep);
+void          ajTrnAltRevSeq (const AjPTrn trnObj, const AjPSeq seq,
+			      AjPStr *pep);
+void          ajTrnCFrame (const AjPTrn trnObj, const char *seq, ajint len,
+			   ajint frame, AjPStr *pep);
+const AjPStr  ajTrnName(ajint trnFileNameInt);
+void          ajTrnStrFrame (const AjPTrn trnObj, const AjPStr seq,
+			     ajint frame, AjPStr *pep);
+void          ajTrnSeqFrame (const AjPTrn trnObj, const AjPSeq seq,
+			     ajint frame, AjPStr *pep);
+AjPSeq        ajTrnSeqFramePep (const AjPTrn trnObj, const AjPSeq seq,
+				ajint frame);
+ajint         ajTrnCDangle (const AjPTrn trnObj, const char *seq, ajint len,
+			    ajint frame, AjPStr *pep);
+ajint         ajTrnStrDangle (const AjPTrn trnObj, const AjPStr seq,
+			      ajint frame, AjPStr *pep);
+AjPStr        ajTrnGetTitle (const AjPTrn thys);
+AjPStr        ajTrnGetFileName (const AjPTrn thys);
+ajint         ajTrnStartStop (const AjPTrn trnObj,
+			      const AjPStr codon, char *aa);
+ajint         ajTrnStartStopC (const AjPTrn trnObj,
+			       const char *codon, char *aa);
+AjPSeq        ajTrnSeqOrig (const AjPTrn trnObj, const AjPSeq seq,
+			    ajint frame);
 
 /*
 ** End of prototype definitions
