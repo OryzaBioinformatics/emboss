@@ -60,17 +60,17 @@ int main(int argc, char **argv)
     ajSeqAssignSeqS (a, back);
     ajSeqSetNuc (a);
 
-    ajSeqWrite(outf,a);
+    ajSeqoutWriteSeq(outf,a);
 
     ajStrDel(&back);
     ajStrDel(&substr);
-    ajSeqWriteClose(outf);
+    ajSeqoutClose(outf);
     ajCodDel(&codon);
 
     ajSeqoutDel(&outf);
     ajSeqDel(&a);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
