@@ -28,16 +28,6 @@
 
 
 
-#ifdef PLD_png
-
-extern int PNGWidth;
-extern int PNGHeight;
-
-#endif
-
-
-
-
 /* @prog syco *****************************************************************
 **
 ** Synonymous codon usage Gribskov statistic plot
@@ -95,20 +85,10 @@ int main(int argc, char **argv)
     ajint end;
     ajint window;
 
-#ifdef PLD_png
-
-    /*
-    PNGWidth = 1280;
-    PNGHeight = 960;
-    */
-
-    PNGWidth = 960;
-    PNGHeight = 960;
-
-#endif
-
     ajGraphInit("syco", argc, argv);
-    
+
+    ajGraphSetPage(960, 960);
+
     a      = ajAcdGetSeq("sequence");
     codon  = ajAcdGetCodon("cfile");
     window = ajAcdGetInt("window");

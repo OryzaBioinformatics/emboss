@@ -36,16 +36,6 @@ static AjBool plotorf_isin(const char *p, AjPStr const *str, ajint n);
 
 
 
-#ifdef PLD_png
-
-extern int PNGWidth;
-extern int PNGHeight;
-
-#endif
-
-
-
-
 /* @prog plotorf **************************************************************
 **
 ** Plot potential open reading frames
@@ -82,19 +72,8 @@ int main(int argc, char **argv)
     };
 
 
-#ifdef PLD_png
-
-    /*
-    PNGWidth = 1280;
-    PNGHeight = 960;
-    */
-
-    PNGWidth = 960;
-    PNGHeight = 960;
-
-#endif
-
     ajGraphInit("plotorf", argc, argv);
+    ajGraphSetPage(960, 960);
 
     seq       = ajAcdGetSeq("sequence");
     graph     = ajAcdGetGraphxy("graph");

@@ -125,7 +125,7 @@ int main(int argc, char **argv)
     for(i=0;i<nfiles;++i)
     {
 	ajListPop(entry->files,(void **)&thysfile);
-	ajListPushApp(entry->files,(void *)thysfile);
+	ajListPushAppend(entry->files,(void *)thysfile);
 	ajFmtPrintS(&tmpstr,"%S%S",entry->directory,thysfile);
 	printf("Processing file %s\n",MAJSTRGETPTR(tmpstr));
 	if(!(inf=ajFileNewIn(tmpstr)))
@@ -461,11 +461,12 @@ static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
 	}
 
 
+    ajStrDel(&de);
     ajStrDel(&ac);
     ajStrDel(&sv);
     ajStrDel(&gi);
     ajStrDel(&db);
-    ajStrDel(&de);
+    ajStrDel(&tmpfd);
 
     return ajTrue;
 }

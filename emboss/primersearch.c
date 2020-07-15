@@ -197,7 +197,7 @@ int main(int argc, char **argv)
     primersearch_read_primers(&primerList,primerFile, mmp);
 
     /* check there are primers to be searched */
-    if(!ajListLength(primerList))
+    if(!ajListGetLength(primerList))
     {
 	ajUser("\nNo suitable primers found - exiting\n");
 	embExitBad();
@@ -215,7 +215,7 @@ int main(int argc, char **argv)
     /* delete all nodes of list, then the list itself */
     ajListMap(primerList, primersearch_free_primer, NULL);
     ajListFree(&primerList);
-    ajListDel(&primerList);
+    ajListFree(&primerList);
 
     ajFileClose(&outf);
 
@@ -330,10 +330,10 @@ static void primersearch_free_primer(void **x, void *cl)
     ajStrDel(&primdata->Name);
 
     /* clean up hitlist */
-    lIter = ajListIterRead(primdata->hitlist);
+    lIter = ajListIterNewread(primdata->hitlist);
     while(!ajListIterDone(lIter))
     {
-	PHit phit = ajListIterNext(lIter);
+	PHit phit = ajListIterGet(lIter);
 	ajStrDel(&phit->forward);
 	ajStrDel(&phit->reverse);
 	ajStrDel(&phit->seqname);
@@ -344,8 +344,8 @@ static void primersearch_free_primer(void **x, void *cl)
     }
 
     ajListFree(&primdata->hitlist);
-    ajListDel(&primdata->hitlist);
-    ajListIterFree(&lIter);
+    ajListFree(&primdata->hitlist);
+    ajListIterDel(&lIter);
 
     AJFREE(primdata);
 
@@ -367,15 +367,15 @@ static void primersearch_clean_hitlist(AjPList* hlist)
 {
     AjIList lIter;
 
-    lIter = ajListIterRead(*hlist);
+    lIter = ajListIterNewread(*hlist);
     while(!ajListIterDone(lIter))
     {
-	EmbPMatMatch fm = ajListIterNext(lIter);
+	EmbPMatMatch fm = ajListIterGet(lIter);
 	embMatMatchDel(&fm);
     }
     ajListFree(hlist);
-    ajListDel(hlist);
-    ajListIterFree(&lIter);
+    ajListFree(hlist);
+    ajListIterDel(&lIter);
 
     return;
 }
@@ -444,7 +444,7 @@ static void primersearch_read_primers(AjPList *primerList, AjPFile primerFile,
 
 	if(primersearch_classify_and_compile(&primdata))
 	{
-	    ajListPushApp (*primerList, primdata);
+	    ajListPushAppend(*primerList, primdata);
 	    nprimers++;
 	}
 	else	/* there was something funny about the primer sequences */
@@ -454,7 +454,7 @@ static void primersearch_read_primers(AjPList *primerList, AjPFile primerFile,
 	    primersearch_free_pguts(&primdata->reverse);
 	    ajStrDel(&primdata->Name);
 	    ajListFree(&primdata->hitlist);
-	    ajListDel(&primdata->hitlist);
+	    ajListFree(&primdata->hitlist);
 	    AJFREE(primdata);
 	}
     }
@@ -544,16 +544,16 @@ static void primersearch_primer_search(const AjPList primerList,
     AjIList listIter;
 
     /* test each list node against this sequence */
-    listIter = ajListIterRead(primerList);
+    listIter = ajListIterNewread(primerList);
     while(!ajListIterDone(listIter))
     {
-	Primer curr_primer = ajListIterNext(listIter);
+	Primer curr_primer = ajListIterGet(listIter);
 
 	primersearch_scan_seq(curr_primer, seq, AJFALSE);
 	primersearch_scan_seq(curr_primer, seq, AJTRUE);
     }
 
-    ajListIterFree(&listIter);
+    ajListIterDel(&listIter);
 
     return;
 }
@@ -724,22 +724,22 @@ static void primersearch_store_hits(const Primer primdata,
 
     PHit primerhit = NULL;
 
-    fi = ajListIterRead(fhits);
+    fi = ajListIterNewread(fhits);
     while(!ajListIterDone(fi))
     {
 	EmbPMatMatch fm = NULL;
 	EmbPMatMatch rm = NULL;
 	amplen = 0;
 
-	fm = ajListIterNext(fi);
-	ri = ajListIterRead(rhits);
+	fm = ajListIterGet(fi);
+	ri = ajListIterNewread(rhits);
 	while(!ajListIterDone(ri))
 	{
 	    ajint seqlen = ajSeqGetLen(seq);
 	    ajint s = (fm->start);
 	    ajint e;
 
-	    rm = ajListIterNext(ri);
+	    rm = ajListIterGet(ri);
 	    e = (rm->start-1);
 	    amplen = seqlen-(s-1)-e;
 
@@ -774,7 +774,7 @@ static void primersearch_store_hits(const Primer primdata,
 		    ajStrAssignS(&primerhit->reverse,
 				 primdata->forward->patstr);
 		}
-		ajListPushApp(primdata->hitlist, primerhit);
+		ajListPushAppend(primdata->hitlist, primerhit);
 
 
 	    }
@@ -783,10 +783,10 @@ static void primersearch_store_hits(const Primer primdata,
 	**  clean up rListIter here as it will be new'ed again next
 	**  time through
 	*/
-	ajListIterFree(&ri);
+	ajListIterDel(&ri);
     }
 
-    ajListIterFree(&fi);
+    ajListIterDel(&fi);
     return;
 }
 
@@ -808,18 +808,18 @@ static void primersearch_print_hits(const AjPList primerList, AjPFile outf)
     AjIList lIter;
 
     ajint count = 1;
-    lIter = ajListIterRead(primerList);
+    lIter = ajListIterNewread(primerList);
     while(!ajListIterDone(lIter))
     {
-	Primer primer = ajListIterNext(lIter);
-	AjIList hIter = ajListIterRead(primer->hitlist);
+	Primer primer = ajListIterGet(lIter);
+	AjIList hIter = ajListIterNewread(primer->hitlist);
 	count = 1;
 
 	ajFmtPrintF(outf, "\nPrimer name %s\n", ajStrGetPtr(primer->Name));
 
 	while(!ajListIterDone(hIter))
 	{
-	    PHit hit = ajListIterNext(hIter);
+	    PHit hit = ajListIterGet(hIter);
 	    ajFmtPrintF(outf, "Amplimer %d\n", count);
 	    ajFmtPrintF(outf, "\tSequence: %s %s \n\t%s\n",
 			ajStrGetPtr(hit->seqname),
@@ -835,9 +835,9 @@ static void primersearch_print_hits(const AjPList primerList, AjPFile outf)
 	    ajFmtPrintF(outf, "\tAmplimer length: %d bp\n", hit->amplen);
 	    count++;
 	}
-	ajListIterFree(&hIter);
+	ajListIterDel(&hIter);
     }
-    ajListIterFree(&lIter);
+    ajListIterDel(&lIter);
 
     return;
 }

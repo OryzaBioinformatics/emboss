@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 	}
 
 	pscan_print_hits(outf, l, nmotifs, begin);
-	ajListDel(&l);
+	ajListFree(&l);
 
 
 	ajStrDel(&strand);
@@ -167,11 +167,11 @@ static void pscan_print_hits(AjPFile outf, AjPList l, ajuint nmotifs,
 	    }
 	    hpm = mm->hpm;
 
-	    ajListPushApp(l,(void *)mm);
+	    ajListPushAppend(l,(void *)mm);
 	    for(j=1;j<hpm;++j)
 	    {
 		ajListPop(l,(void **)&mm);
-		ajListPushApp(l,(void *)mm);
+		ajListPushAppend(l,(void *)mm);
 	    }
 	}
 
@@ -186,12 +186,12 @@ static void pscan_print_hits(AjPFile outf, AjPList l, ajuint nmotifs,
 
 		if(mm->all && mm->ordered && maxelem==mm->n)
 		    break;
-		ajListPushApp(l,(void *)mm);
+		ajListPushAppend(l,(void *)mm);
 
 		for(j=1;j<hpm;++j)
 		{
 		    ajListPop(l,(void **)&mm);
-		    ajListPushApp(l,(void *)mm);
+		    ajListPushAppend(l,(void *)mm);
 		}
 	    }
 
@@ -246,12 +246,12 @@ static void pscan_print_hits(AjPFile outf, AjPList l, ajuint nmotifs,
 		found = ajTrue;
 	    }
 	    hpm = mm->hpm;
-	    ajListPushApp(l,(void *)mm);
+	    ajListPushAppend(l,(void *)mm);
 
 	    for(j=1;j<hpm;++j)
 	    {
 		ajListPop(l,(void **)&mm);
-		ajListPushApp(l,(void *)mm);
+		ajListPushAppend(l,(void *)mm);
 	    }
 	}
 
@@ -265,12 +265,12 @@ static void pscan_print_hits(AjPFile outf, AjPList l, ajuint nmotifs,
 		hpm = mm->hpm;
 		if(mm->all && maxelem==mm->n)
 		    break;
-		ajListPushApp(l,(void *)mm);
+		ajListPushAppend(l,(void *)mm);
 
 		for(j=1;j<hpm;++j)
 		{
 		    ajListPop(l,(void **)&mm);
-		    ajListPushApp(l,(void *)mm);
+		    ajListPushAppend(l,(void *)mm);
 		}
 	    }
 
@@ -327,12 +327,12 @@ static void pscan_print_hits(AjPFile outf, AjPList l, ajuint nmotifs,
 		found  = ajTrue;
 	    }
 	    hpm = mm->hpm;
-	    ajListPushApp(l,(void *)mm);
+	    ajListPushAppend(l,(void *)mm);
 
 	    for(j=1;j<hpm;++j)
 	    {
 		ajListPop(l,(void **)&mm);
-		ajListPushApp(l,(void *)mm);
+		ajListPushAppend(l,(void *)mm);
 	    }
 	}
 
@@ -347,12 +347,12 @@ static void pscan_print_hits(AjPFile outf, AjPList l, ajuint nmotifs,
 
 		if(mm->ordered && maxhpm==mm->hpm)
 		    break;
-		ajListPushApp(l,(void *)mm);
+		ajListPushAppend(l,(void *)mm);
 
 		for(j=1;j<hpm;++j)
 		{
 		    ajListPop(l,(void **)&mm);
-		    ajListPushApp(l,(void *)mm);
+		    ajListPushAppend(l,(void *)mm);
 		}
 	    }
 
@@ -409,11 +409,11 @@ static void pscan_print_hits(AjPFile outf, AjPList l, ajuint nmotifs,
 	    found = ajTrue;
 
 	    hpm = mm->hpm;
-	    ajListPushApp(l,(void *)mm);
+	    ajListPushAppend(l,(void *)mm);
 	    for(j=1;j<hpm;++j)
 	    {
 		ajListPop(l,(void **)&mm);
-		ajListPushApp(l,(void *)mm);
+		ajListPushAppend(l,(void *)mm);
 	    }
 	}
 
@@ -428,12 +428,12 @@ static void pscan_print_hits(AjPFile outf, AjPList l, ajuint nmotifs,
 
 		if(maxhpm==mm->hpm)
 		    break;
-		ajListPushApp(l,(void *)mm);
+		ajListPushAppend(l,(void *)mm);
 
 		for(j=1;j<hpm;++j)
 		{
 		    ajListPop(l,(void **)&mm);
-		    ajListPushApp(l,(void *)mm);
+		    ajListPushAppend(l,(void *)mm);
 		}
 	    }
 

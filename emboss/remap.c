@@ -232,7 +232,7 @@ int main(int argc, char **argv)
 	 */
 	if(single)
 	    maxcuts=mincuts=1;
-	retable = ajStrTableNew(EQUGUESS);
+	retable = ajTablestrNewLen(EQUGUESS);
 	ajFileDataNewC(ENZDATA, &enzfile);
 	if(!enzfile)
 	    ajFatal("Cannot locate enzyme file. Run REBASEEXTRACT");
@@ -274,7 +274,7 @@ int main(int argc, char **argv)
 	** criteria, but save them in hittable for printing out later.
 	** Keep a count of how many hits each enzyme gets in hittable.
 	*/
-        hittable = ajStrTableNewCase(TABLEGUESS);
+        hittable = ajTablestrNewCaseLen(TABLEGUESS);
 	remap_RemoveMinMax(restrictlist, hittable, mincuts, maxcuts);
 
 
@@ -360,7 +360,7 @@ int main(int argc, char **argv)
 
         remap_DelTable(&hittable);
 
-	ajStrTableFree(&retable);
+	ajTablestrFree(&retable);
     }
 
 
@@ -401,7 +401,7 @@ static void remap_DelTable(AjPTable * table)
     ajint i;
     PValue value;
 
-    if(ajTableLength(*table))
+    if(ajTableGetLength(*table))
     {
       ajTableToarray(*table, &keyarray, &valarray);
       for(i = 0; keyarray[i]; i++)
@@ -450,16 +450,16 @@ static void remap_RemoveMinMax(AjPList restrictlist,
     key = ajStrNew();
 
     /* if no hits then ignore much of this routine */
-    if(ajListLength(restrictlist))
+    if(ajListGetLength(restrictlist))
     {
         /* count the enzymes */
-	miter = ajListIterRead(restrictlist);
-	while((m = ajListIterNext(miter)) != NULL)
+	miter = ajListIterNewread(restrictlist);
+	while((m = ajListIterGet(miter)) != NULL)
 	{
 	    ajStrAssignS(&key, m->cod);
 
 	    /* increment the count of key */
-	    value = (PValue) ajTableGet(hittable, (const void *)key);
+	    value = (PValue) ajTableFetch(hittable, (const void *)key);
 	    if(value == NULL)
 	    {
 		AJNEW0(value);
@@ -473,21 +473,21 @@ static void remap_RemoveMinMax(AjPList restrictlist,
 	    else
 		value->count++;
 	}
-	ajListIterFree(&miter);
+	ajListIterDel(&miter);
 
 
 	/* now remove enzymes from restrictlist if <mincuts | >maxcuts */
-	miter = ajListIter(restrictlist);
-	while((m = ajListIterNext(miter)) != NULL)
+	miter = ajListIterNew(restrictlist);
+	while((m = ajListIterGet(miter)) != NULL)
 	{
-	    value = (PValue) ajTableGet(hittable, (const void *)(m->cod));
+	    value = (PValue) ajTableFetch(hittable, (const void *)(m->cod));
             if(value->count < mincuts || value->count > maxcuts)
 	    {
-            	ajListRemove(miter);
+            	ajListIterRemove(miter);
                 embMatMatchDel(&m);
             }
 	}
-	ajListIterFree(&miter);
+	ajListIterDel(&miter);
     }
 
     ajStrDel(&key);
@@ -533,10 +533,10 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
     if(html)
 	ajFmtPrintF(outfile, "</H2>\n");
 
-    if(ajTableLength(hittable))
+    if(ajTableGetLength(hittable))
     {
         ajTableToarray(hittable, &keyarray, &valarray);
-        qsort(keyarray, ajTableLength(hittable), sizeof (*keyarray),
+        qsort(keyarray, ajTableGetLength(hittable), sizeof (*keyarray),
 	      ajStrVcmp);
 
 	/* enzymes that cut the required number of times */
@@ -545,7 +545,7 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
 
 	for(i = 0; keyarray[i]; i++)
 	{
-	    value = ajTableGet(hittable,keyarray[i]);
+	    value = ajTableFetch(hittable,keyarray[i]);
 	    if(value->count >= mincuts && value->count <= maxcuts)
 	    ajFmtPrintF(outfile, "%10S\t    %d\t%S\n",
 		    (AjPStr) keyarray[i], value->count,
@@ -574,7 +574,7 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
     if(html)
 	ajFmtPrintF(outfile, "</H2>\n");
 
-    if(ajTableLength(hittable))
+    if(ajTableGetLength(hittable))
     {
 	/* print out results */
 	if(html)
@@ -582,7 +582,7 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
 
 	for(i = 0; keyarray[i]; i++)
 	{
-	    value = ajTableGet(hittable,keyarray[i]);
+	    value = ajTableFetch(hittable,keyarray[i]);
 	    if(value->count < mincuts)
 	    ajFmtPrintF(outfile, "%10S\t    %d\t%S\n",
 			    (AjPStr) keyarray[i], value->count,
@@ -610,7 +610,7 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
     if(html)
 	ajFmtPrintF(outfile, "</H2>\n");
 
-    if(ajTableLength(hittable))
+    if(ajTableGetLength(hittable))
     {
 	/* print out results */
 	if(html)
@@ -722,7 +722,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
         value = (PValue) valarray[i];
         cutname = ajStrNew();
         ajStrAssignRef(&cutname, keyarray[i]);
-        ajListstrPushApp(cutlist, cutname);
+        ajListstrPushAppend(cutlist, cutname);
 
         /* Add to cutlist all isoschizomers of enzymes that cut */
         ajDebug("Add to cutlist all isoschizomers of enzymes that cut\n");
@@ -733,7 +733,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
         {
             cutname = ajStrNew();
             ajStrAssignS(&cutname, code);
-            ajListstrPushApp(cutlist, cutname);
+            ajListstrPushAppend(cutlist, cutname);
         }
         ajStrTokenDel(&tok);
     }
@@ -856,7 +856,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
 
         code = ajStrNew();
 	ajStrAssignS(&code, enz->cod);
-	ajListstrPushApp(nocutlist, code);
+	ajListstrPushAppend(nocutlist, code);
     }
     embPatRestrictDel(&enz);
     ajFileClose(&enzfile);
@@ -881,9 +881,9 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
     {
         newlist = ajListstrNew();
         remap_RenamePreferred(nocutlist, retable, newlist);
-        ajListstrFree(&nocutlist);
+        ajListstrFreeData(&nocutlist);
         nocutlist = newlist;
-        ajListUnique(nocutlist, remap_cmpcase, remap_strdel);
+        ajListSortUnique(nocutlist, remap_cmpcase, remap_strdel);
     }
 
 
@@ -905,16 +905,16 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
     ajListSort(nocutlist, remap_cmpcase);
     ajListSort(cutlist, remap_cmpcase);
 
-    citer = ajListIterRead(cutlist);
-    niter = ajListIter(nocutlist);
+    citer = ajListIterNewread(cutlist);
+    niter = ajListIterNew(nocutlist);
 
     /*
-       while((cutname = (AjPStr)ajListIterNext(citer)) != NULL)
+       while((cutname = (AjPStr)ajListIterGet(citer)) != NULL)
        ajDebug("dbg cutname = %S\n", cutname);
        */
 
-    nocutname = (AjPStr)ajListIterNext(niter);
-    cutname   = (AjPStr)ajListIterNext(citer);
+    nocutname = (AjPStr)ajListIterGet(niter);
+    cutname   = (AjPStr)ajListIterGet(citer);
 
     ajDebug("initial cutname, nocutname: '%S' '%S'\n", cutname, nocutname);
 
@@ -927,27 +927,27 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
 	{
 	    /* match - so remove from nocutlist */
 	    ajDebug("ajListstrRemove %S\n", nocutname);
-	    ajListstrRemove(niter);
-	    nocutname = (AjPStr)ajListIterNext(niter);
+	    ajListstrIterRemove(niter);
+	    nocutname = (AjPStr)ajListIterGet(niter);
 	     /* 
 	     ** Don't increment the cutname list pointer here
 	     ** - there may be more than one entry in the nocutname
 	     ** list with the same name because we have converted 
 	     ** isoschizomers to their preferred name
 	     */
-	    /* cutname = (AjPStr)ajListIterNext(citer); */
+	    /* cutname = (AjPStr)ajListIterGet(citer); */
 	}
 	else if(i == -1)
 	    /* cutlist name sorts before nocutlist name */
-	    cutname = (AjPStr)ajListIterNext(citer);
+	    cutname = (AjPStr)ajListIterGet(citer);
 	else if(i == 1)
 	    /* nocutlist name sorts before cutlist name */
-	    nocutname = (AjPStr)ajListIterNext(niter);
+	    nocutname = (AjPStr)ajListIterGet(niter);
     }
 
-    ajListIterFree(&citer);
-    ajListIterFree(&niter);
-    ajListstrFree(&cutlist);
+    ajListIterDel(&citer);
+    ajListIterDel(&niter);
+    ajListstrFreeData(&cutlist);
 
 
      /* Print the resulting list of those that do not cut*/
@@ -966,9 +966,9 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
 	ajFmtPrintF(outfile, "<PRE>");
 
     /*  ajListSort(nocutlist, ajStrVcmp);*/
-    niter = ajListIterRead(nocutlist);
+    niter = ajListIterNewread(nocutlist);
     i = 0;
-    while((nocutname = (AjPStr)ajListIterNext(niter)) != NULL)
+    while((nocutname = (AjPStr)ajListIterGet(niter)) != NULL)
     {
 	ajFmtPrintF(outfile, "%-10S", nocutname);
 	/* new line after every 7 names printed */
@@ -978,7 +978,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
 	    i = 0;
 	}
     }
-    ajListIterFree(&niter);
+    ajListIterDel(&niter);
 
 
     /* end the output */
@@ -1003,8 +1003,8 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
     ajFmtPrintF(outfile, "%d\n", rejected_count);
 
     ajDebug("Tidy up\n");
-    ajListstrFree(&nocutlist);
-    ajListstrFree(&cutlist);
+    ajListstrFreeData(&nocutlist);
+    ajListstrFreeData(&cutlist);
 
     return;
 }
@@ -1040,9 +1040,9 @@ static void remap_read_equiv(AjPFile *equfile, AjPTable *table,
 
         if(!*p || *p=='#' || *p=='!')
             continue;
-        p = ajSysStrtok(p," \t\n");
+        p = ajSysFuncStrtok(p," \t\n");
         key = ajStrNewC(p);
-        p = ajSysStrtok(NULL," \t\n");
+        p = ajSysFuncStrtok(NULL," \t\n");
         value = ajStrNewC(p);
 	if(!commercial)
 	    ajStrTrimEndC(&value,"*");
@@ -1189,15 +1189,15 @@ static void remap_RenamePreferred(const AjPList list, const AjPTable table,
     AjPStr value = NULL;
     AjPStr name  = NULL;
 
-    iter = ajListIterRead(list);
+    iter = ajListIterNewread(list);
                
-    while((key = (AjPStr)ajListIterNext(iter)))
+    while((key = (AjPStr)ajListIterGet(iter)))
     {
         /* 
         ** If a key-value entry found, write the new value to the new list
         ** else write the old key name to the new list
         */
-        value = ajTableGet(table, key);
+        value = ajTableFetch(table, key);
         name = ajStrNew();
         if(value)
 	{
@@ -1209,10 +1209,10 @@ static void remap_RenamePreferred(const AjPList list, const AjPTable table,
 	    ajDebug("Rename: %S not found\n", key);
 	    ajStrAssignS(&name, key);
 	}
-        ajListstrPushApp(newlist, name);
+        ajListstrPushAppend(newlist, name);
     }
                       
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
 
     return; 
 }
@@ -1250,14 +1250,14 @@ static void remap_RestrictPreferred(const AjPList l, const AjPTable t)
     char tokens[] = " ,";
     AjPStr code = NULL;
 
-    iter = ajListIterRead(l);
+    iter = ajListIterNewread(l);
     
-    while((m = (EmbPMatMatch)ajListIterNext(iter)))
+    while((m = (EmbPMatMatch)ajListIterGet(iter)))
     {
 	found = ajFalse;
 	
     	/* get prototype name */
-    	value = ajTableGet(t, m->cod);
+    	value = ajTableFetch(t, m->cod);
     	if(value) 
     	{
     	    ajStrAssignC(&newiso, "");
@@ -1301,7 +1301,7 @@ static void remap_RestrictPreferred(const AjPList l, const AjPTable t)
     	}
     }
     
-    ajListIterFree(&iter);     
+    ajListIterDel(&iter);     
     ajStrDel(&newiso);
     ajStrDel(&code);
     ajStrTokenDel(&tok);

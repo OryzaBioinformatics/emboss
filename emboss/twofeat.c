@@ -370,10 +370,10 @@ static void twofeat_rippledown(const AjPFeattable tabA,
     if(ajFeattableSize(tabA))
     {
         /* For all features in tabA ... */
-    	iterA = ajListIterRead(tabA->Features);
-    	while(ajListIterMore(iterA))
+    	iterA = ajListIterNewread(tabA->Features);
+    	while(!ajListIterDone(iterA))
     	{
-    	    gfA = ajListIterNext(iterA);
+    	    gfA = ajListIterGet(iterA);
             ajDebug("In rippledown gfA=%S %d..%d\n",
 		    ajFeatGetType(gfA), ajFeatGetStart(gfA),
 		    ajFeatGetEnd(gfA));
@@ -381,10 +381,10 @@ static void twofeat_rippledown(const AjPFeattable tabA,
             /* For all features in tabB ... */
             if(ajFeattableSize(tabB)) 
             {
-   	        iterB = ajListIterRead(tabB->Features);
-                while(ajListIterMore(iterB))
+   	        iterB = ajListIterNewread(tabB->Features);
+                while(!ajListIterDone(iterB))
                 {
-                    gfB = ajListIterNext(iterB);
+                    gfB = ajListIterGet(iterB);
                     ajDebug("In rippledown gfB=%S %d..%d\n",
 			    ajFeatGetType(gfB), ajFeatGetStart(gfB),
 			    ajFeatGetEnd(gfB));
@@ -399,10 +399,10 @@ static void twofeat_rippledown(const AjPFeattable tabA,
                         /* push details on hitlist */
                         ajListPush(hitlist, detail);
                 }
-                ajListIterFree(&iterB);
+                ajListIterDel(&iterB);
             }
 	}
-	ajListIterFree(&iterA);
+	ajListIterDel(&iterA);
     }
 
     /* Put hits in outtab */
@@ -452,10 +452,10 @@ static void twofeat_report_hits(const AjPList hitlist, AjBool twoout,
     ajStrAssignS(&type, typeout);
 
 
-    iter = ajListIterRead(hitlist);
-    while(ajListIterMore(iter))
+    iter = ajListIterNewread(hitlist);
+    while(!ajListIterDone(iter))
     {
-        detail = ajListIterNext(iter);
+        detail = ajListIterGet(iter);
 
         if(twoout)
 	{
@@ -496,7 +496,7 @@ static void twofeat_report_hits(const AjPList hitlist, AjBool twoout,
         /* delete hit */
         twofeat_HitsDel(&detail);
     }
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
 
     ajStrDel(&source);
     ajStrDel(&type);
@@ -547,10 +547,10 @@ static void twofeat_find_features(const AjPSeq seq, AjPFeattable tab,
     /* For all features... */
     if(ajFeattableSize(seqtab)) 
     {
-    	iter = ajListIterRead(seqtab->Features);
-    	while(ajListIterMore(iter))
+    	iter = ajListIterNewread(seqtab->Features);
+    	while(!ajListIterDone(iter))
     	{
-    	    gf = ajListIterNext(iter);
+    	    gf = ajListIterGet(iter);
 
             /* is this feature local and in the sequence range? */
             if(! ajFeatIsLocalRange(gf, begin, end))
@@ -575,7 +575,7 @@ static void twofeat_find_features(const AjPSeq seq, AjPFeattable tab,
 		/* ajFeatTrace(gfcopy); */
 	    }
 	}
-	ajListIterFree(&iter);
+	ajListIterDel(&iter);
     }
 
     ajDebug("(In twofeat_find_features) No of hits in tab: %d\n",
@@ -708,7 +708,7 @@ static AjBool twofeat_MatchPatternTags(const AjPFeature feat,
             break;
         }
     }
-    ajListIterFree(&titer);
+    ajListIterDel(&titer);
     
     return val;
 }

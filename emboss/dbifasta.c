@@ -203,7 +203,7 @@ int main(int argc, char **argv)
     }
 
     if(ajStrMatchC(datestr, "00/00/00"))
-	ajFmtPrintS(&datestr, "%D", ajTimeTodayRefF("dbindex"));
+	ajFmtPrintS(&datestr, "%D", ajTimeRefTodayFmt("dbindex"));
 
     ajStrRemoveWhite(&dbname);		/* used for temp filenames */
     embDbiDateSet(datestr, date);
@@ -216,7 +216,7 @@ int main(int argc, char **argv)
 
     listInputFiles = embDbiFileListExc(directory, filename, exclude);
     ajListSort(listInputFiles, ajStrVcmp);
-    nfiles = ajListToArray(listInputFiles, &inputFiles);
+    nfiles = ajListToarray(listInputFiles, &inputFiles);
     if(!nfiles)
 	ajFatal("No files selected");
 
@@ -393,8 +393,8 @@ int main(int argc, char **argv)
     }
 
     ajListMap(idlist, embDbiEntryDelMap, NULL);
-    ajListDel(&idlist);
-    ajListstrFree(&listInputFiles);
+    ajListFree(&idlist);
+    ajListstrFreeData(&listInputFiles);
     AJFREE(entryIds);
     ajRegFree(&dbifastaWrdexp);
     ajRegFree(&regIdExp);
@@ -486,7 +486,7 @@ static EmbPEntry dbifasta_NextFlatEntry(AjPFile libr, ajint ifile,
 	/* field tokens as list, then move to ret->field */
 	for(ifield=0; ifield < nfields; ifield++)
 	{
-	    dbifastaEntry->nfield[ifield] = ajListLength(fdl[ifield]);
+	    dbifastaEntry->nfield[ifield] = ajListGetLength(fdl[ifield]);
 
 	    if(dbifastaEntry->nfield[ifield])
 	    {
@@ -756,21 +756,21 @@ static AjBool dbifasta_ParseFasta(AjPFile libr, ajint* dpos,
 	if(accfield >= 0 && ajStrGetLen(dbifastaTmpAc))
 	{
 	    fd = ajCharNewS(dbifastaTmpAc);
-	    ajListPushApp(fdl[accfield],fd);
+	    ajListPushAppend(fdl[accfield],fd);
 	    countfield[accfield]++;
 	}
 
 	if(svnfield >= 0 && ajStrGetLen(dbifastaTmpSv))
 	{
 	    fd = ajCharNewS(dbifastaTmpSv);
-	    ajListPushApp(fdl[svnfield], fd);
+	    ajListPushAppend(fdl[svnfield], fd);
 	    countfield[svnfield]++;
 	}
 
 	if(svnfield >= 0 && ajStrGetLen(dbifastaTmpGi))
 	{
 	    fd = ajCharNewS(dbifastaTmpGi);
-	    ajListPushApp(fdl[svnfield], fd);
+	    ajListPushAppend(fdl[svnfield], fd);
 	    countfield[svnfield]++;
 	}
 
@@ -783,7 +783,7 @@ static AjBool dbifasta_ParseFasta(AjPFile libr, ajint* dpos,
 		ajDebug("++des '%S' tmpdes: '%S'\n",
 			dbifastaTmpFd, dbifastaTmpDes);
 		fd = ajCharNewS(dbifastaTmpFd);
-		ajListPushApp(fdl[desfield], fd);
+		ajListPushAppend(fdl[desfield], fd);
 		countfield[desfield]++;
 		ajRegPost(dbifastaWrdexp, &dbifastaTmpDes);
 	    }

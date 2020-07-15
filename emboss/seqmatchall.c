@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 		    {
 			matchlist = embWordBuildMatchTable(seq1MatchTable,
 							   seq2, ajTrue);
-			if (ajListLength(matchlist))
+			if (ajListGetLength(matchlist))
 			{
 			    seqmatchall_listPrint(align, matchlist);
 			    ajAlignWrite(align);
@@ -170,7 +170,7 @@ static void seqmatchall_matchListPrint(void *x,void *cl)
 
 static void seqmatchall_listPrint(AjPAlign align, const AjPList list)
 {
-    ajListMapRead(list,seqmatchall_matchListPrint, align);
+    ajListMapread(list,seqmatchall_matchListPrint, align);
 
     return;
 }

@@ -28,7 +28,7 @@
 
 /* @prog nthseq ***************************************************************
 **
-** Writes one sequence from a multiple set of sequences
+** Writes only one sequence from a multiple set of sequences
 **
 ******************************************************************************/
 

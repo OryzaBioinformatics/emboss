@@ -65,7 +65,8 @@ int main(int argc, char **argv)
     float *curve;
     float *bend;
     const char *ptr;
-    ajuint i;
+    ajint i;
+    ajuint ii;
     ajint k;
     ajint j;
     char residue[2];
@@ -127,16 +128,16 @@ int main(int argc, char **argv)
 
     ptr= ajStrGetPtr(sstr);
 
-    for(i=0;i<ajStrGetLen(sstr);i++)
+    for(ii=0;ii<ajStrGetLen(sstr);ii++)
     {
 	if(*ptr=='A' || *ptr=='a')
-	    iseq[i+1] = 0;
+	    iseq[ii+1] = 0;
 	else if(*ptr=='T' || *ptr=='t')
-	    iseq[i+1] = 1;
+	    iseq[ii+1] = 1;
 	else if(*ptr=='G' || *ptr=='g')
-	    iseq[i+1] = 2;
+	    iseq[ii+1] = 2;
 	else if(*ptr=='C' || *ptr=='c')
-	    iseq[i+1] = 3;
+	    iseq[ii+1] = 3;
 	else
 	    ajErr("%c is not an ATCG hence not valid",*ptr);
 
@@ -152,38 +153,38 @@ int main(int argc, char **argv)
     ajFileGets(file,&buffer);
 
     for(k=0;k<4;k++)
-	for(i=0;i<4;i++)
+	for(ii=0;ii<4;ii++)
 	{
 	    if(ajFileGets(file,&buffer))
 	    {
 		sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",
-		       &twist[i][0][k],&twist[i][1][k],&twist[i][2][k],
-		       &twist[i][3][k]);
+		       &twist[ii][0][k],&twist[ii][1][k],&twist[ii][2][k],
+		       &twist[ii][3][k]);
 	    }
 	    else
 		ajErr("Error reading angle file");
 
 	    for(j=0;j<4;j++)
-		twist[i][j][k] *= pifac;
+		twist[ii][j][k] *= pifac;
 	}
 
 
     for(k=0;k<4;k++)
-	for(i=0;i<4;i++)
+	for(ii=0;ii<4;ii++)
 	    if(ajFileGets(file,&buffer))
 	    {
-		sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",&roll[i][0][k],
-		       &roll[i][1][k],&roll[i][2][k],&roll[i][3][k]);
+		sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",&roll[ii][0][k],
+		       &roll[ii][1][k],&roll[ii][2][k],&roll[ii][3][k]);
 	    }
 	    else
 		ajErr("Error reading angle file");
 
 
     for(k=0;k<4;k++)
-	for(i=0;i<4;i++)
+	for(ii=0;ii<4;ii++)
 	    if(ajFileGets(file,&buffer))
-		sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",&tilt[i][0][k],
-		       &tilt[i][1][k],&tilt[i][2][k],&tilt[i][3][k]);
+		sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",&tilt[ii][0][k],
+		       &tilt[ii][1][k],&tilt[ii][2][k],&tilt[ii][3][k]);
 	    else
 		ajErr("Error reading angle file");
 
@@ -198,38 +199,38 @@ int main(int argc, char **argv)
     ajStrDel(&buffer);
 
 
-    for(i=1;i<ajStrGetLen(sstr)-1;i++)
+    for(ii=1;ii<ajStrGetLen(sstr)-1;ii++)
     {
-	twistsum += twist[iseq[i]][iseq[i+1]][iseq[i+2]];
-	dx = (roll[iseq[i]][iseq[i+1]][iseq[i+2]]*sinfban(twistsum)) +
-	    (tilt[iseq[i]][iseq[i+1]][iseq[i+2]]*sinfban(twistsum-pi2));
-	dy = roll[iseq[i]][iseq[i+1]][iseq[i+2]]*cosfban(twistsum) +
-	    tilt[iseq[i]][iseq[i+1]][iseq[i+2]]*cosfban(twistsum-pi2);
+	twistsum += twist[iseq[ii]][iseq[ii+1]][iseq[ii+2]];
+	dx = (roll[iseq[ii]][iseq[ii+1]][iseq[ii+2]]*sinfban(twistsum)) +
+	    (tilt[iseq[ii]][iseq[ii+1]][iseq[ii+2]]*sinfban(twistsum-pi2));
+	dy = roll[iseq[ii]][iseq[ii+1]][iseq[ii+2]]*cosfban(twistsum) +
+	    tilt[iseq[ii]][iseq[ii+1]][iseq[ii+2]]*cosfban(twistsum-pi2);
 
-	x[i+1] = x[i]+dx;
-	y[i+1] = y[i]+dy;
+	x[ii+1] = x[ii]+dx;
+	y[ii+1] = y[ii]+dy;
 
     }
 
-    for(i=6;i<ajStrGetLen(sstr)-6;i++)
+    for(ii=6;ii<ajStrGetLen(sstr)-6;ii++)
     {
 	rxsum = 0.0;
 	rysum = 0.0;
 	for(k=-4;k<=4;k++)
 	{
-	    rxsum+=x[i+k];
-	    rysum+=y[i+k];
+	    rxsum+=x[ii+k];
+	    rysum+=y[ii+k];
 	}
-	rxsum+=(x[i+5]*(float)0.5);
-	rysum+=(y[i+5]*(float)0.5);
-	rxsum+=(x[i-5]*(float)0.5);
-	rysum+=(y[i-5]*(float)0.5);
+	rxsum+=(x[ii+5]*(float)0.5);
+	rysum+=(y[ii+5]*(float)0.5);
+	rxsum+=(x[ii-5]*(float)0.5);
+	rysum+=(y[ii-5]*(float)0.5);
 
-	xave[i] = rxsum*(float)0.1;
-	yave[i] = rysum*(float)0.1;
+	xave[ii] = rxsum*(float)0.1;
+	yave[ii] = rysum*(float)0.1;
     }
 
-    for(i=(ajint)rbend+1;i<=ajStrGetLen(sstr)-(ajint)rbend-1;i++)
+    for(i=(ajint)rbend+1;i<=ilen-(ajint)rbend-1;i++)
     {
 	td = sqrt(((x[i+(ajint)rbend]-x[i-(ajint)rbend])*
 		   (x[i+(ajint)rbend]-x[i-(ajint)rbend])) +
@@ -239,7 +240,7 @@ int main(int argc, char **argv)
 	bend[i]*=bendscale;
     }
 
-    for(i=(ajint)rcurve+6;i<=ajStrGetLen(sstr)-(ajint)rcurve-6;i++)
+    for(i=(ajint)rcurve+6;i<=ilen-(ajint)rcurve-6;i++)
     {
 	td = sqrt(((xave[i+(ajint)rcurve]-
 		    xave[i-(ajint)rcurve])*(xave[i+(ajint)rcurve]-
@@ -254,9 +255,10 @@ int main(int argc, char **argv)
     {
 	ajFmtPrintF(outf,"Base   Bend      Curve\n");
 	ptr = ajStrGetPtr(sstr);
-	for(i=1;i<=ajStrGetLen(sstr);i++)
+	for(ii=1;ii<=ajStrGetLen(sstr);ii++)
 	{
-	    ajFmtPrintF(outf,"%c    %6.1f   %6.1f\n",*ptr, bend[i], curve[i]);
+	    ajFmtPrintF(outf,"%c    %6.1f   %6.1f\n",
+			*ptr, bend[ii], curve[ii]);
 	    ptr++;
 	}
 	ajFileClose(&outf);
@@ -266,16 +268,16 @@ int main(int argc, char **argv)
     {
 	maxbend  = minbend  = 0.0;
 	maxcurve = mincurve = 0.0;
-	for(i=1;i<=ajStrGetLen(sstr);i++)
+	for(ii=1;ii<=ajStrGetLen(sstr);ii++)
 	{
-	    if(bend[i] > maxbend)
-		maxbend = bend[i];
-	    if(bend[i] < minbend)
-		minbend = bend[i];
-	    if(curve[i] > maxcurve)
-		maxcurve = curve[i];
-	    if(curve[i] < mincurve)
-		mincurve = curve[i];
+	    if(bend[ii] > maxbend)
+		maxbend = bend[ii];
+	    if(bend[ii] < minbend)
+		minbend = bend[ii];
+	    if(curve[ii] > maxcurve)
+		maxcurve = curve[ii];
+	    if(curve[ii] < mincurve)
+		mincurve = curve[ii];
 	}
 
 	ystart = 75.0;
@@ -284,9 +286,6 @@ int main(int argc, char **argv)
 
 	ajGraphOpenWin(graph,(float)-1.0, (float)numres+(float)10.0,
 		       (float)0.0, ystart+(float)5.0);
-
-/*	ajGraphTextMid((numres+10.0)/2.0, ystart+2.5,
-		       ajGraphGetTitleC(graph));*/
 
 	ajGraphGetOut(&fxp,&fyp,&ixlen,&iylen,&ixoff,&iyoff);
 
@@ -335,7 +334,7 @@ int main(int argc, char **argv)
 	ptr = ajStrGetPtr(sstr);
 
 	yy1 = yy1-(yincr*((float)5.0));
-	for(i=1;i<=ajStrGetLen(sstr);i++)
+	for(ii=1;ii<=ajStrGetLen(sstr);ii++)
 	{
 	    if(count > numres)
 	    {
@@ -356,10 +355,10 @@ int main(int argc, char **argv)
 
 	    ajGraphTextEnd((float)(count)+(float)2.0,yy1,residue);
 
-	    if(i>1 && i < ajStrGetLen(sstr))
+	    if(ii>1 && ii < ajStrGetLen(sstr))
 	    {
-		yp1 = yy1+yincr + (bend[i]*bendfactor);
-		yp2 = yy1+yincr + (bend[i+1]*bendfactor);
+		yp1 = yy1+yincr + (bend[ii]*bendfactor);
+		yp2 = yy1+yincr + (bend[ii+1]*bendfactor);
 		ajGraphLine((float)count+(float)1.5,yp1,
 			    (float)(count)+(float)2.5,yp2);
 	    }
@@ -368,10 +367,10 @@ int main(int argc, char **argv)
 	    if(ipos < 0)
 		ipos = 0;
 
-	    if(i>(ajuint)rcurve+5 && i< (ajuint) ipos)
+	    if(ii>(ajuint)rcurve+5 && ii< (ajuint) ipos)
 	    {
-		yp1 = yy1+yincr + (curve[i]*curvefactor);
-		yp2 = yy1+yincr + (curve[i+1]*curvefactor);
+		yp1 = yy1+yincr + (curve[ii]*curvefactor);
+		yp2 = yy1+yincr + (curve[ii+1]*curvefactor);
 		ajGraphLine((float)count+(float)1.7,yp1,
 			    (float)(count)+(float)2.3,yp2);
 	    }

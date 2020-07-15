@@ -115,7 +115,7 @@ static AjBool jembossctl_GetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq);
 #define _XOPEN_SOURCE
 #endif
 
-#if !defined(__ppc__) && !defined(__FreeBSD__)
+#if !defined(__ppc__) && !defined(__APPLE__) && !defined(__FreeBSD__)
 #include <crypt.h>
 #endif
 
@@ -130,7 +130,7 @@ static AjBool jembossctl_GetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq);
 #endif
 
 #ifdef PAM
-#if defined(__ppc__)
+#if defined(__ppc__) || defined(__APPLE__)
 #include <pam/pam_appl.h>
 #else
 #include <security/pam_appl.h>
@@ -1054,7 +1054,7 @@ static AjBool jembossctl_do_batch(char *buf, int uid, int gid)
     argp = jembossctl_make_array(cl);
     envp = jembossctl_make_array(enviro);
 
-    if(!ajSysWhichEnv(&prog,envp))
+    if(!ajSysFileWhichEnv(&prog,envp))
     {
 	jembossctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
 	return ajFalse;
@@ -1444,7 +1444,7 @@ static AjBool jembossctl_do_fork(char *buf, int uid, int gid)
     argp = jembossctl_make_array(cl);
     envp = jembossctl_make_array(enviro);
 
-    if(!ajSysWhichEnv(&prog,envp))
+    if(!ajSysFileWhichEnv(&prog,envp))
     {
 	jembossctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
 	return ajFalse;
@@ -1706,7 +1706,7 @@ static char** jembossctl_make_array(const AjPStr str)
     int n;
     char **ptr = NULL;
     AjPStr buf;
-    char *save = NULL;
+    const char *save = NULL;
 
     buf = ajStrNew();
 
@@ -1718,11 +1718,11 @@ static char** jembossctl_make_array(const AjPStr str)
 
     n = 0;
 
-    if(!ajSysStrtokR(ajStrGetPtr(str)," \t\n",&save,&buf))
+    if(!ajSysFuncStrtokR(ajStrGetPtr(str)," \t\n",&save,&buf))
 	return ptr;
     ptr[n++] = ajCharNewS(buf);
 
-    while(ajSysStrtokR(NULL," \t\n",&save,&buf))
+    while(ajSysFuncStrtokR(NULL," \t\n",&save,&buf))
 	ptr[n++] = ajCharNewS(buf);
 
     ajStrDel(&buf);
@@ -2051,8 +2051,8 @@ static AjBool jembossctl_do_seqset(char *buf, int uid, int gid)
 
     ok = jembossctl_GetSeqsetFromUsa(usa,&seq);
     if(ok)
-	fprintf(stdout,"%d %f %d",(int)ajSeqsetLen(seq),
-		ajSeqsetTotweight(seq),(int)ajSeqsetIsNuc(seq));
+	fprintf(stdout,"%d %f %d",(int)ajSeqsetGetLen(seq),
+		ajSeqsetGetTotweight(seq),(int)ajSeqsetIsNuc(seq));
     else
 	fprintf(stdout,"0 0.0 0");
     fflush(stdout);
@@ -2237,7 +2237,7 @@ static AjBool jembossctl_do_deletedir(char *buf, int uid, int gid)
     }
 
 #else
-    ajSystem(cmnd);
+    ajSysSystem(cmnd);
 #endif
 
     ajStrDel(&cmnd);
@@ -2414,7 +2414,7 @@ static AjBool jembossctl_do_listfiles(char *buf, int uid, int gid,
     }
 
 
-    ajListDel(&list);
+    ajListFree(&list);
 
     ajStrDel(&full);
     ajStrDel(&dir);
@@ -2598,7 +2598,7 @@ static AjBool jembossctl_do_listdirs(char *buf, int uid, int gid,
     }
 
 
-    if(ajListLength(list) > 1)
+    if(ajListGetLength(list) > 1)
     {
 	ajListPop(list,(void **)&tstr);
 	ajListPush(list,(void *)tstr);
@@ -2618,7 +2618,7 @@ static AjBool jembossctl_do_listdirs(char *buf, int uid, int gid,
 	ajStrDel(&tstr);
     }
 
-    ajListDel(&list);
+    ajListFree(&list);
 
     ajStrDel(&full);
     ajStrDel(&dir);

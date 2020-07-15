@@ -88,6 +88,7 @@ int main(int argc, char **argv)
     ajSeqoutDel(&seqout);
     ajStrDel(&name);
     ajStrDel(&desc);
+    ajStrDel(&temp);
 
     embExit();
 

@@ -127,7 +127,7 @@ int main(int argc, char **argv)
     for(count=begin-1,r=0;count<end;count+=231)
     {
 	if (count > begin)
-	    ajGraphNewPage(graph, 1);
+	    ajGraphNewPage(graph, ajFalse);
 	pstart=count;
 	pstop = AJMIN(end-1, count+230);
 

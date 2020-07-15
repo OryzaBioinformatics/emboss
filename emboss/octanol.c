@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     float total2 = 0;
     const char *s1;
     float midpoint;
-    AjBool interface;
+    AjBool iface;
     AjBool octanol;
     AjBool difference;
     float xmin1 = 64000.;
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
     mult = ajAcdGetGraphxy("graph");
     datafile  = ajAcdGetDatafile("datafile");
     llen = ajAcdGetInt("width");
-    interface  = ajAcdGetBool("interfaceplot");
+    iface  = ajAcdGetBool("interfaceplot");
     octanol = ajAcdGetBool("octanolplot");
     difference = ajAcdGetBool("differenceplot");
 
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     graphdata = ajGraphPlpDataNewI(ilen-llen);
     ajGraphPlpDataSetColour(graphdata,GREEN);
 
-    if(interface)
+    if(iface)
     {
 	ajGraphDataAdd(mult,graphdata);
 	ajGraphPlpDataSetYTitleC(graphdata,"interface");
@@ -203,7 +203,7 @@ int main(int argc, char **argv)
     ajSeqDel(&seq);
     ajGraphxyDel(&mult);
 
-    if(!interface)
+    if(!iface)
 	ajGraphPlpDataDel(&graphdata);
 
     if(!octanol)

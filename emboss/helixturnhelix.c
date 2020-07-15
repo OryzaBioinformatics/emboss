@@ -207,13 +207,19 @@ int main(int argc, char **argv)
     
     ajSeqDel(&seq);
     ajStrDel(&substr);
-    ajListDel(&ajb);
+    ajListFree(&ajb);
     
     if(outf)
 	ajFileClose(&outf);
     
     ajReportClose(report);
-    
+
+    ajReportDel(&report);
+    ajSeqallDel(&seqall);
+    ajFeattableDel(&TabRpt);
+    ajStrDel(&strand);
+    ajStrDel(&tmpStr);
+
     embExit();
 
     return 0;
@@ -308,9 +314,9 @@ static ajint helixturnhelix_readNab(AjPInt2d *matrix,AjBool eightyseven)
 
 	q = ajStrGetPtr(line);
 	c = 0;
-	q = ajSysStrtok(q,ajStrGetPtr(delim));
+	q = ajSysFuncStrtok(q,ajStrGetPtr(delim));
 
-	while((q=ajSysStrtok(NULL,ajStrGetPtr(delim))))
+	while((q=ajSysFuncStrtok(NULL,ajStrGetPtr(delim))))
 	{
 	    sscanf(q,"%d",&v);
 	    ajInt2dPut(matrix,d1,c++,v);
@@ -496,7 +502,7 @@ static void helixturnhelix_report_hits(AjPList ajb,
     AjPFeature gf = NULL;
 
     AjPStr tmpStr = NULL;
-    static AjPStr fthit = NULL;
+    AjPStr fthit = NULL;
     struct DNAB *dnab;
 
     if(!fthit)
@@ -505,7 +511,7 @@ static void helixturnhelix_report_hits(AjPList ajb,
     hp  = ajUintNew();
     hsd = ajFloatNew();
 
-    n = ajListToArray(ajb, (void***) &lp);
+    n = ajListToarray(ajb, (void***) &lp);
 
     if(!n)
     {
@@ -545,6 +551,9 @@ static void helixturnhelix_report_hits(AjPList ajb,
 
     AJFREE(lp);
     ajUintDel(&hp);
+
+    ajStrDel(&fthit);
+    ajStrDel(&tmpStr);
 
     return;
 }

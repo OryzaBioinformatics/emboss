@@ -53,16 +53,6 @@ static ajint seq_end;
 static ajint win_mid;
 static ajint seq_begin;
 
-#ifdef PLD_png
-
-extern int PNGWidth;
-extern int PNGHeight;
-
-#endif
-
-
-
-
 /* @prog pepinfo **************************************************************
 **
 ** Plots simple amino acid properties in parallel
@@ -129,14 +119,8 @@ int main(int argc, char **argv)
 	"Consensus parameters (Eisenberg et al)"
     };
 
-#ifdef PLD_png
-
-    PNGWidth = 960;
-    PNGHeight = 960;
-
-#endif
-
     ajGraphInit("pepinfo", argc, argv);
+    ajGraphSetPage(960, 960);
 
     aj_hist_mark=NOY;
 
@@ -184,7 +168,7 @@ int main(int argc, char **argv)
 	embDataListRead(aa_props, aa_properties);
 
 	/* Get first table from properties list of tables */
-	listIter = ajListIterRead(aa_props);
+	listIter = ajListIterNewread(aa_props);
 
 	/* calculate plot */
 	for(i = 0; i < 9; i++)
@@ -194,11 +178,11 @@ int main(int argc, char **argv)
 		/* ajalloc new ajint array for storing results */
 		AJCNEW(ival,(seq_end-seq_start));
 		iv[i] = ival;
-		table = ajListIterNext(listIter);
+		table = ajListIterGet(listIter);
 		for(j = seq_start; j < seq_end; j++)
 		{
 		    ajStrAssignSubS(&key, ajSeqGetSeqS(inseq), j, j);
-		    value = ajTableGet(table, key);
+		    value = ajTableFetch(table, key);
 		    if(value != NULL)
 		    {
 			if(ajStrToInt(value, ival))
@@ -225,7 +209,7 @@ int main(int argc, char **argv)
 	    }
 	}
 
-	ajListIterFree(&listIter);
+	ajListIterDel(&listIter);
 
 	/* print out results */
 
@@ -288,7 +272,7 @@ int main(int argc, char **argv)
 	embDataListRead(aa_hydro, aa_hydropathy);
 
 	/* Get first table from properties list */
-	listIter = ajListIterRead(aa_hydro);
+	listIter = ajListIterNewread(aa_hydro);
 
 	/* calculate plot */
 	for(i=0; i < 3; i++)
@@ -301,7 +285,7 @@ int main(int argc, char **argv)
 	    }
 
 	    /* Get next table of parameters */
-	    table = ajListIterNext(listIter);
+	    table = ajListIterGet(listIter);
 
 	    win_mid = (hwindow / 2);
 
@@ -320,7 +304,7 @@ int main(int argc, char **argv)
 		for(k=0; k < hwindow; k++)
 		{
 		    ajStrAssignSubS(&key, ajSeqGetSeqS(inseq), (j+k), (j+k));
-		    value = ajTableGet(table, key);
+		    value = ajTableFetch(table, key);
 		    if(value == NULL)
 		    {
 			ajErr("At position %d in seq, couldn't find key %s",
@@ -345,7 +329,7 @@ int main(int argc, char **argv)
 		pfloat[cnt++] = 0.00;
 	}
 
-	ajListIterFree(&listIter);
+	ajListIterDel(&listIter);
 
 	/* Print out results */
 

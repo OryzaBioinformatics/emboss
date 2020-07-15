@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     ajAcdPrintQual(outf, full);
     ajAcdPrintAppl(outf, full);
     ajSeqPrintInFormat(outf, full);
-    ajSeqPrintOutFormat(outf, full);
+    ajSeqoutPrintFormat(outf, full);
     ajSeqPrintType(outf, full);
     ajSeqPrintAccess(outf, full);
     ajNamPrintDbAttr(outf, full);

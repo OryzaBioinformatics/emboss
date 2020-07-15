@@ -78,12 +78,12 @@ int main(int argc, char **argv)
     {
 	while(ajListPop(lists[i],(void **)&ptr))
 	    AJFREE(ptr);
-	ajListDel(&lists[i]);
+	ajListFree(&lists[i]);
     }
 
     AJFREE(lists);
 
-    ajListDel(&files);
+    ajListFree(&files);
     ajFileClose(&outf);
 
     embExit();
@@ -115,7 +115,7 @@ static void mwcontam_readdata(AjPList files, AjPList **lists,
     double  val = 0.;
     char    c;
 
-    nfiles = *n = ajListLength(files);
+    nfiles = *n = ajListGetLength(files);
 
     if(!nfiles)
 	ajFatal("No input files were specified");
@@ -144,7 +144,7 @@ static void mwcontam_readdata(AjPList files, AjPList **lists,
 		continue;
 	    AJNEW(ptr);
 	    *ptr = val;
-	    ajListPushApp((*lists)[i],(void *)ptr);
+	    ajListPushAppend((*lists)[i],(void *)ptr);
 	}
 	ajFileClose(&inf);
 	ajStrDel(&thysf);
@@ -189,14 +189,14 @@ static void mwcontam_complists(AjPList one, AjPList *two, float tolerance)
     result = ajListNew();
 
 
-    len1 = ajListLength(one);
-    len2 = ajListLength(*two);
+    len1 = ajListGetLength(one);
+    len2 = ajListGetLength(*two);
 
     for(i=0;i<len1;++i)
     {
 	ajListPop(one,(void **)&ptr);
 	oval = *ptr;
-	ajListPushApp(one,(void *)ptr);
+	ajListPushAppend(one,(void *)ptr);
 
 	ppmval = oval * tol / MILLION;
 	mwmin  = oval - ppmval;
@@ -206,7 +206,7 @@ static void mwcontam_complists(AjPList one, AjPList *two, float tolerance)
 	{
 	    ajListPop(*two,(void **)&ptr);
 	    tval = *ptr;
-	    ajListPushApp(*two,(void *)ptr);
+	    ajListPushAppend(*two,(void *)ptr);
 
 	    if(tval>=mwmin && tval<=mwmax)
 	    {
@@ -220,7 +220,7 @@ static void mwcontam_complists(AjPList one, AjPList *two, float tolerance)
 
     while(ajListPop(*two,(void **)&ptr))
 	AJFREE(ptr);
-    ajListDel(two);
+    ajListFree(two);
     *two = result;
 
     return;

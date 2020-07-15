@@ -45,10 +45,10 @@ int main(int argc, char **argv)
 
     while (ajSeqallNext(seqall, &seq))
     {
-	ajSeqAllWrite(seqout, seq);
+	ajSeqoutWriteSeq(seqout, seq);
 	ajSeqTrace(seq);
     }
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
 
     ajFeatTest();
 

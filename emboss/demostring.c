@@ -94,18 +94,25 @@ int main(int argc, char **argv)
     ajUser ("second token '%S'", token);
     ajStrTokenDel(&handle);
 
-    today = ajTimeTodayF("yyyy-mm-dd");
+    today = ajTimeNewTodayFmt("yyyy-mm-dd");
     ajTimeTrace (today);
     ajUser("yyyy-mm-dd Today is '%D'", today);
-    today = ajTimeTodayF("dd Mon yyyy");
+    ajTimeDel(&today);
+
+    today = ajTimeNewTodayFmt("dd Mon yyyy");
     ajTimeTrace (today);
     ajUser("dd Mon yyyy Today is '%D'", today);
-    today = ajTimeTodayF("fred");
+    ajTimeDel(&today);
+
+    today = ajTimeNewTodayFmt("fred");
     ajTimeTrace (today);
     ajUser("fred Today is '%D'", today);
-    today = ajTimeTodayF("gff");
+    ajTimeDel(&today);
+
+    today = ajTimeNewTodayFmt("gff");
     ajTimeTrace (today);
     ajUser("gff Today is '%D'", today);
+    ajTimeDel(&today);
 
     ajStrAssignC(&maskstr, "abcdefghijklmnopqrstuvwxyz");
     ajStrAssignS(&masktest, maskstr);
@@ -180,6 +187,13 @@ int main(int argc, char **argv)
     maskend=-2;
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
+
+
+    ajStrDel(&instr);
+    ajStrDel(&nustr);
+    ajStrDel(&token);
+    ajStrDel(&maskstr);
+    ajStrDel(&masktest);
 
     embExit();
     return 0;

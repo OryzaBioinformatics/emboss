@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     /* get the minimal set of overlapping matches */
        embWordMatchMin(matchlist);
 
-    if(ajListLength(matchlist))
+    if(ajListGetLength(matchlist))
     {
 	/* make the output file */
 	megamerger_Merge(matchlist, seq1, seq2, seqout, outfile, prefer);
@@ -145,10 +145,10 @@ static void megamerger_Merge(const AjPList matchlist,
     ajFmtPrintF(outfile, "# Report of megamerger of: %s and %s\n\n",
 		ajSeqGetNameC(seq1), ajSeqGetNameC(seq2));
 
-    iter = ajListIterRead(matchlist);
-    while(ajListIterMore(iter))
+    iter = ajListIterNewread(matchlist);
+    while(!ajListIterDone(iter))
     {
-	p = (EmbPWordMatch) ajListIterNext(iter);
+	p = (EmbPWordMatch) ajListIterGet(iter);
 	/* first match? */
 	if(!count++)
 	{
@@ -356,7 +356,7 @@ static void megamerger_Merge(const AjPList matchlist,
     ajStrDel(&s2);
     ajStrDel(&tmp);
     ajStrDel(&seqstr);
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
 
     return;
 }

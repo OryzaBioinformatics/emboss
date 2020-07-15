@@ -461,10 +461,10 @@ static ajint sirna_begin(const AjPSeq seq, AjPReport report, AjBool poliii,
     /* are there any features - find the first CDS feature */
     if(ajFeattableSize(featab))
     {
-	iter = ajListIterRead(featab->Features);
-	while(ajListIterMore(iter))
+	iter = ajListIterNewread(featab->Features);
+	while(!ajListIterDone(iter))
 	{
-	    gf = ajListIterNext(iter);
+	    gf = ajListIterGet(iter);
 	    if(ajStrMatchS(type, ajFeatGetType(gf)))
 	    {
 		/* is the feature 'CDS'? */
@@ -476,7 +476,7 @@ static ajint sirna_begin(const AjPSeq seq, AjPReport report, AjBool poliii,
 		break;
 	    }
 	}
-	ajListIterFree(&iter);
+	ajListIterDel(&iter);
     }
 
     /* if didn't find a CDS, assume -sbegin is the CDS */
@@ -544,7 +544,7 @@ static void sirna_new_value(AjPList list, ajint pos, ajint score,
     value->GCcount = GCcount;
     value->score   = score;
 
-    ajListPushApp(list, value);
+    ajListPushAppend(list, value);
 
     return;
 }
@@ -629,10 +629,10 @@ static void sirna_output(const AjPList list,
     seq23 = ajSeqNewRes(24);   /* 23-base target sequence */
 
     /* if no hits then ignore much of this routine */
-    if(ajListLength(list))
+    if(ajListGetLength(list))
     {
-	iter = ajListIterRead(list);
-	while((value = ajListIterNext(iter)) != NULL)
+	iter = ajListIterNewread(list);
+	while((value = ajListIterGet(iter)) != NULL)
 	{
 	    /* ajDebug("(%d) %d %d\n", value->pos+1, value->score,
 	       value->GCcount); */
@@ -706,7 +706,7 @@ static void sirna_output(const AjPList list,
 	    /* prepare sequence string for re-use */
 	    ajStrSetClear(&subseq);
 	}
-	ajListIterFree(&iter);
+	ajListIterDel(&iter);
     }
   
     ajStrDel(&tmpStr);

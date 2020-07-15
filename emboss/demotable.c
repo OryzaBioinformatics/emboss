@@ -25,9 +25,10 @@
 
 static AjPStr demotable_getsubfromstring(const AjPStr line, ajint which);
 static void demotable_typePrint (const void* key, void** value, void* cl);
-static void demotable_freetype (const void** key, void** value, void* cl);
+static void demotable_freetype (void** key, void** value, void* cl);
 
 
+static AjPRegexp gffexp = NULL;
 
 
 /* @prog demotable ************************************************************
@@ -43,6 +44,12 @@ int main(int argc, char **argv)
     AjPStr  line = NULL;
     AjPTable type;
     ajint *intptr;
+    AjPList list;
+    AjPStr savetemp = NULL;
+    AjPStr tmpkey = NULL;
+    ajint* tmpval;
+    AjPStr trukey = NULL;
+    AjIList iter;
 
     embInit("demotable", argc, argv);
 
@@ -55,8 +62,8 @@ int main(int argc, char **argv)
     **  and ajStrTableHashCase as the hash function. Initial size of 50
     **  is used
     */
-    type   = ajTableNew(50, ajStrTableCmpCase, ajStrTableHashCase);
-
+    type   = ajTableNewFunctionLen(50, ajStrTableCmpCase, ajStrTableHashCase);
+    list = ajListstrNew();
     while(ajFileReadLine(gfffile, &line))
     {
 	temp = demotable_getsubfromstring(line,3); /* get the string to test */
@@ -64,13 +71,17 @@ int main(int argc, char **argv)
 	if(temp)
 	{
 	    /* does the key "temp" already exist in the table */
-	    intptr = ajTableGet(type, temp);
+	    intptr = ajTableFetch(type, temp);
 
 	    if(!intptr)
 	    {				/* if not i.e. no key returned */
 		AJNEW(intptr);
 		*intptr = 1;
+		savetemp = ajStrNewS(temp);
 		ajTablePut(type, temp, intptr); /* add it*/
+		ajListPush(list, savetemp);
+		temp = NULL;
+		savetemp = NULL;
 	    }
 	    else
 	    {
@@ -79,14 +90,36 @@ int main(int argc, char **argv)
 	    }
 	}
     }
-    ajUser("%d types found",ajTableLength(type));
+    ajUser("%d types found",ajTableGetLength(type));
 
     /* use the map function to print out the results */
     ajTableMap(type, demotable_typePrint, NULL);
 
-    /* use the map function to free all memory */
+
+    /* clean up the table using a list of known keys */
+
+    iter = ajListIterNewread(list);
+    while (!ajListIterDone(iter))
+    {
+	tmpkey = (AjPStr) ajListIterGet(iter);
+	tmpval = ajTableRemoveKey(type, tmpkey, (void**)&trukey);
+	if(tmpval) {
+	    ajUser("Deleting '%S' %d", trukey, *tmpval);
+	    ajStrDel(&trukey);
+	    AJFREE(tmpval);
+	}
+    }
+
+    /* Backup plan - use the map function to free all memory */
+    /* not needed here because the loop above already removed the entries */
     ajTableMapDel(type, demotable_freetype, NULL);
     ajTableFree(&type);
+
+    ajFileClose(&gfffile);
+    ajStrDel(&line);
+    ajRegFree(&gffexp);
+    ajListIterDel(&iter);
+    ajListstrFreeData(&list);
 
     embExit();
     return 0;
@@ -107,7 +140,6 @@ int main(int argc, char **argv)
 
 static AjPStr demotable_getsubfromstring(const AjPStr line, ajint which)
 {
-    static AjPRegexp gffexp = NULL;
     AjPStr temp = NULL;
 
     if(!gffexp)
@@ -135,10 +167,12 @@ static AjPStr demotable_getsubfromstring(const AjPStr line, ajint which)
 
 static void demotable_typePrint(const void* key, void** value, void* cl)
 {
-    AjPStr keystr;
+    const AjPStr keystr;
     ajint *valptr;
 
-    keystr = (AjPStr) key;
+    (void) cl;
+
+    keystr = (const AjPStr) key;
     valptr = (ajint *) *value;
 
     ajUser("type '%S' found %d times", keystr, *valptr);
@@ -153,17 +187,19 @@ static void demotable_typePrint(const void* key, void** value, void* cl)
 **
 ** Undocumented.
 **
-** @param [r] key [const void**] Undocumented
+** @param [r] key [void**] Undocumented
 ** @param [r] value [void**] Undocumented
 ** @param [r] cl [void*] Undocumented
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void demotable_freetype(const void** key, void** value, void* cl)
+static void demotable_freetype(void** key, void** value, void* cl)
 {
     AjPStr keystr;
     ajint *valptr;
+
+    (void) cl;
 
     keystr = (AjPStr) *key;
     valptr = (ajint *) *value;

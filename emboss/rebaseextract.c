@@ -109,7 +109,7 @@ int main(int argc, char **argv)
     equ1 = ajListNew();
     equ2 = ajListNew();
 
-    hassuptable = ajStrTableNew(SUPGUESS);
+    hassuptable = ajTablestrNewLen(SUPGUESS);
     
 
     pfname = ajStrNewC(DATANAME);
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
     {
 	ajStrAssignC(&pfname,DATANAME4);
 	ajFileDataNewWrite(pfname,&oute);
-	ptable = ajStrTableNew(EQUGUESS);
+	ptable = ajTablestrNewLen(EQUGUESS);
 	isostr = ajStrNew();
     }
     ajStrDel(&pfname);
@@ -254,15 +254,15 @@ int main(int argc, char **argv)
 		handle = ajStrTokenNewC(isostr,"\t\n>,");
 	        ajStrTokenNextParse(&handle, &token);
 
-		if((value=ajTableGet(ptable,(const void *)token)))
+		if((value=ajTableFetch(ptable,(const void *)token)))
 		    if(ajStrMatchS(value,pattern))
 		    {
 			equstr1 = ajStrNew();
 			equstr2 = ajStrNew();
 			ajStrAssignS(&equstr1,code);
 			ajStrAssignS(&equstr2, token);
-			ajListPushApp(equ1,(void *) equstr1);
-			ajListPushApp(equ2,(void *) equstr2);
+			ajListPushAppend(equ1,(void *) equstr1);
+			ajListPushAppend(equ2,(void *) equstr2);
 		    }		
 		ajStrTokenDel(&handle);
 	    }
@@ -368,7 +368,7 @@ int main(int argc, char **argv)
 	{
 	    ajListPop(equ2,(void **)&equstr2);
 
-	    if(!(hstr2=ajTableGet(hassuptable,(const void *)equstr2)))
+	    if(!(hstr2=ajTableFetch(hassuptable,(const void *)equstr2)))
 		ajFatal("Expected supplier value not found for '%S' (enzyme '%S')",
 			equstr1,equstr2);
 	    if(ajStrMatchC(hstr2,"N"))
@@ -381,10 +381,10 @@ int main(int argc, char **argv)
 
 	ajStrDel(&isostr);
 	ajFileClose(&oute);
-	ajStrTableFree(&ptable);
+	ajTablestrFree(&ptable);
     }
 
-    ajStrTableFree(&hassuptable);
+    ajTablestrFree(&hassuptable);
     ajFileClose(&inf);
     ajFileClose(&infp);
     ajFileClose(&outf);
@@ -402,8 +402,8 @@ int main(int argc, char **argv)
     ajStrDel(&pattern);
     ajStrDel(&code);
 
-    ajListDel(&equ1);
-    ajListDel(&equ2);
+    ajListFree(&equ1);
+    ajListFree(&equ2);
 
     embExit();
 

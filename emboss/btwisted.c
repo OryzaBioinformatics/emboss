@@ -89,12 +89,12 @@ int main(int argc, char **argv)
     for(i=begin-1; i<end-1; ++i)
     {
 	ajStrAssignSubC(&nucs,dinuc,i,i+1);
-	if(!(valstr = ajTableGet(angletable,(const void *)nucs)))
+	if(!(valstr = ajTableFetch(angletable,(const void *)nucs)))
 	    ajFatal("Incomplete table");
 
 	ajStrToFloat(valstr,&val);
 	anglesum += val;
-	if(!(valstr = ajTableGet(energytable,(const void *)nucs)))
+	if(!(valstr = ajTableFetch(energytable,(const void *)nucs)))
 	    ajFatal("Incomplete table");
 
 	ajStrToFloat(valstr,&val);
@@ -115,8 +115,8 @@ int main(int argc, char **argv)
     ajFmtPrintF(result,"Average stacking energy per dinucleotide: %.2f\n",
 		energyperbase);
 
-    ajStrTableFree(&angletable);
-    ajStrTableFree(&energytable);
+    ajTablestrFree(&angletable);
+    ajTablestrFree(&energytable);
 
     ajStrDel(&nucs);
     ajFileClose(&result);
@@ -150,7 +150,7 @@ static AjPTable btwisted_getdinucdata(AjPFile inf)
     valstr = ajStrNew();
     line = ajStrNew();
 
-    table = ajStrTableNewCase(20);
+    table = ajTablestrNewCaseLen(20);
 
     while(ajFileReadLine(inf,&line))
     {

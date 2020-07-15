@@ -358,7 +358,7 @@ int main(int argc, char **argv)
 
 	program = ajStrNew();
 	ajStrAssignC(&program, "primer3_core");
-	if (ajSysWhich(&program)) {
+	if (ajSysFileWhich(&program)) {
 	    execlp( "primer3_core", "primer3_core", NULL );
 	    ajFatal("There was a problem while executing primer3");
 	} else {
@@ -866,7 +866,7 @@ static void primers_report (AjPFile outfile,
 
       if (ajStrCmpLenC(line, "PRIMER_SEQUENCE_ID=", 19) == 0) {
         gotsequenceid = AJTRUE;
-        table = ajStrTableNew(TABLEGUESS);
+        table = ajTablestrNewLen(TABLEGUESS);
 
       } else {
         continue;
@@ -882,7 +882,7 @@ static void primers_report (AjPFile outfile,
       if (ajStrCmpC(line, "=") == 0) {
         gotsequenceid = AJFALSE;
         primers_output_report(outfile, table, numreturn);
-        ajStrTableFree(&table);
+        ajTablestrFree(&table);
         continue;
       }
     }
@@ -910,7 +910,7 @@ resulting primer are interleaved */
 /* tidy up */
   ajStrDel(&line);
   (void) ajStrTokenDel(&linetokenhandle);
-  ajStrTableFree(&table);
+  ajTablestrFree(&table);
 
   return;
 }
@@ -973,45 +973,45 @@ PRIMER_PRODUCT_SIZE=137
 
 /* check for errors */
   ajStrAssignC(&key, "PRIMER_ERROR");
-  error = (AjPStr)ajTableGet(table, (const void*)key);
+  error = (AjPStr)ajTableFetch(table, (const void*)key);
   if (error != NULL) {
     ajErr("%S", error);
   }
   ajStrAssignC(&key, "PRIMER_WARNING");
-  error = (AjPStr)ajTableGet(table, (const void*)key);
+  error = (AjPStr)ajTableFetch(table, (const void*)key);
   if (error != NULL) {
     ajWarn("%S", error);
   }
 
 /* get the sequence id */
   ajStrAssignC(&key, "PRIMER_SEQUENCE_ID");
-  seqid = (AjPStr)ajTableGet(table, (const void*)key);
+  seqid = (AjPStr)ajTableFetch(table, (const void*)key);
   (void) ajFmtPrintF(outfile, "\n# PRIMER3 RESULTS FOR %S\n\n", seqid);
 
 /* get information on the analysis */
   ajStrAssignC(&key, "PRIMER_LEFT_EXPLAIN");
-  explain = (AjPStr)ajTableGet(table, (const void*)key);
+  explain = (AjPStr)ajTableFetch(table, (const void*)key);
   if (explain != NULL) {
     ajStrExchangeCC(&explain, ",", "\n#");
     (void) ajFmtPrintF(outfile, "# FORWARD PRIMER STATISTICS:\n# %S\n\n",
 		       explain);
   }
   ajStrAssignC(&key, "PRIMER_RIGHT_EXPLAIN");
-  explain = (AjPStr)ajTableGet(table, (const void*)key);
+  explain = (AjPStr)ajTableFetch(table, (const void*)key);
   if (explain != NULL) {
     ajStrExchangeCC(&explain, ",", "\n#");
     (void) ajFmtPrintF(outfile, "# REVERSE PRIMER STATISTICS:\n# %S\n\n",
 		       explain);
   }
   ajStrAssignC(&key, "PRIMER_PAIR_EXPLAIN");
-  explain = (AjPStr)ajTableGet(table, (const void*)key);
+  explain = (AjPStr)ajTableFetch(table, (const void*)key);
   if (explain != NULL) {
     ajStrExchangeCC(&explain, ",", "\n#");
     (void) ajFmtPrintF(outfile, "# PRIMER PAIR STATISTICS:\n# %S\n\n",
 		       explain);
   }
   ajStrAssignC(&key, "PRIMER_INTERNAL_OLIGO_EXPLAIN");
-  explain = (AjPStr)ajTableGet(table, (const void*)key);
+  explain = (AjPStr)ajTableFetch(table, (const void*)key);
   if (explain != NULL) {
     ajStrExchangeCC(&explain, ",", "\n#");
    (void) ajFmtPrintF(outfile, "# INTERNAL OLIGO STATISTICS:\n# %S\n\n",
@@ -1097,7 +1097,7 @@ static AjPStr primers_tableget(const char *key1, ajint number,
   }
   ajStrAppendC(&fullkey, key2);
   ajDebug("Constructed key=%S\n", fullkey);
-  value = (AjPStr)ajTableGet(table, (const void*)fullkey);
+  value = (AjPStr)ajTableFetch(table, (const void*)fullkey);
 
 /* tidy up */
   ajStrDel(&fullkey);

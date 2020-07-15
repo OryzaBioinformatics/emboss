@@ -121,7 +121,7 @@ int main(int argc, char **argv)
     if(single)
 	max = min = 1;
 
-    table = ajStrTableNew(EQUGUESS);
+    table = ajTablestrNewLen(EQUGUESS);
     l = ajListNew();
 
     if(threeprime)
@@ -167,7 +167,7 @@ int main(int argc, char **argv)
 	hits = embPatRestrictMatch(seq,begin,end,enzfile,enzymes,sitelen,
 				   plasmid,ambiguity,min,max,blunt,sticky,
 				   commercial,l);
-	ajDebug("hits:%d listlen:%u\n", hits, ajListLength(l));
+	ajDebug("hits:%d listlen:%u\n", hits, ajListGetLength(l));
 	if(hits)
 	{
 	    name = ajStrNewC(ajSeqGetNameC(seq));
@@ -182,7 +182,7 @@ int main(int argc, char **argv)
     }
 
 
-    ajListDel(&l);
+    ajListFree(&l);
     ajSeqDel(&seq);
     ajFileClose(&enzfile);
     ajFileClose(&outf);
@@ -195,7 +195,7 @@ int main(int argc, char **argv)
     ajStrDel(&enzymes);
     ajStrDel(&name);
 
-    ajStrTableFree(&table);
+    ajTablestrFree(&table);
 
     embExit();
 
@@ -326,7 +326,7 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 
 	if(limit)
 	{
-	    value=ajTableGet(table,m->cod);
+	    value=ajTableFetch(table,m->cod);
 	    if(value)
 		ajStrAssignS(&m->cod,value);
 	}
@@ -479,9 +479,9 @@ static void restover_read_equiv(AjPFile equfile, AjPTable table)
 	p=ajStrGetPtr(line);
 	if(!*p || *p=='#' || *p=='!')
 	    continue;
-	p=ajSysStrtok(p," \t\n");
+	p=ajSysFuncStrtok(p," \t\n");
 	key=ajStrNewC(p);
-	p=ajSysStrtok(NULL," \t\n");
+	p=ajSysFuncStrtok(NULL," \t\n");
 	value=ajStrNewC(p);
 	ajTablePut(table,(void *)key, (void *)value);
     }

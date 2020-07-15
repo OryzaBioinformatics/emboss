@@ -330,23 +330,23 @@ static void supermatcher_matchListOrder(void **x,void *cl)
     offset = (*p).seq1start-(*p).seq2start;
 
     /* iterate through ordered list to find if it exists already*/
-    listIter = ajListIterRead(ordered);
+    listIter = ajListIterNewread(ordered);
 
     while(!ajListIterDone( listIter))
     {
-	con = ajListIterNext(listIter);
+	con = ajListIterGet(listIter);
 	if(con->offset == offset)
 	{
 	    /* found so add count and set offset to the new value */
 	    con->offset = offset;
 	    con->total+= (*p).length;
 	    con->count++;
-	    ajListPushApp(con->list,p);
-	    ajListIterFree(&listIter);
+	    ajListPushAppend(con->list,p);
+	    ajListIterDel(&listIter);
 	    return;
 	}
     }
-    ajListIterFree(&listIter);
+    ajListIterDel(&listIter);
 
     /* not found so add it */
     AJNEW(c);
@@ -354,8 +354,8 @@ static void supermatcher_matchListOrder(void **x,void *cl)
     c->total  = (*p).length;
     c->count  = 1;
     c->list   = ajListNew();
-    ajListPushApp(c->list,p);
-    ajListPushApp(ordered, c);
+    ajListPushAppend(c->list,p);
+    ajListPushAppend(ordered, c);
 
     return;
 }
@@ -501,7 +501,7 @@ static ajint supermatcher_findstartpoints(AjPTable seq1MatchTable,
 
     ajDebug("findstart conmax off:%d count:%d total:%d\n",
 	    conmax->offset, conmax->count, conmax->total,
-	    ajListLength(conmax->list));
+	    ajListGetLength(conmax->list));
     offset = conmax->offset;
 
     ajListMap(ordered,supermatcher_removelists, NULL);

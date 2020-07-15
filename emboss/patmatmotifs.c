@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 	p=ajStrGetPtr(regexp);
 	if(*p && *p!=' ' && *p!='^')
 	{
-	    p=ajSysStrtok(p," ");
+	    p=ajSysFuncStrtok(p," ");
 	    ajStrAssignC(&name,p);
 	    if(prune)
 		if(ajStrMatchCaseC(name,"myristyl") ||
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 			ajFileReadLine(inf, &regexp);
 		    continue;
 		}
-	    p=ajSysStrtok(NULL," ");
+	    p=ajSysFuncStrtok(NULL," ");
 	    ajStrAssignC(&accession,p);
 	}
 

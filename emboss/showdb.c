@@ -173,7 +173,7 @@ int main(int argc, char **argv)
 	ajListSort(dbnames, showdbDBSortDefined);
 
 	/* iterate through the dbnames list */
-	iter = ajListIterRead(dbnames);
+	iter = ajListIterNewread(dbnames);
 
 	maxname = 14;
 	maxmethod = 6;
@@ -182,7 +182,7 @@ int main(int argc, char **argv)
 	maxrelease = 7;
 
 	/* find the field widths */
-	while((nextdbname = ajListIterNext(iter)) != NULL)
+	while((nextdbname = ajListIterGet(iter)) != NULL)
 	{
 	    if(ajNamDbDetails(nextdbname, &type, &id, &qry, &all, &comment,
 			      &release, &methods, &defined))
@@ -199,13 +199,13 @@ int main(int argc, char **argv)
 			  maxname, maxtype, maxmethod, maxfield,
 			  maxdefined, maxrelease);
     
-	ajListIterFree(&iter);
+	ajListIterDel(&iter);
 
 	/* iterate through the dbnames list */
-	iter = ajListIterRead(dbnames);
+	iter = ajListIterNewread(dbnames);
 
 	/* write out protein databases */
-	while((nextdbname = ajListIterNext(iter)) != NULL)
+	while((nextdbname = ajListIterGet(iter)) != NULL)
 	    if(ajNamDbDetails(nextdbname, &type, &id, &qry, &all, &comment,
 			      &release, &methods, &defined))
 	    {
@@ -224,11 +224,11 @@ int main(int argc, char **argv)
 
 
 	/* reset the iterator */
-	ajListIterFree(&iter);
-	iter = ajListIterRead(dbnames);
+	ajListIterDel(&iter);
+	iter = ajListIterNewread(dbnames);
 
 	/* now write out nucleic databases */
-	while((nextdbname = ajListIterNext(iter)) != NULL)
+	while((nextdbname = ajListIterGet(iter)) != NULL)
 	{
 	    if(ajNamDbDetails(nextdbname, &type, &id, &qry, &all, &comment,
 			      &release, &methods, &defined))
@@ -248,8 +248,8 @@ int main(int argc, char **argv)
 		ajFatal("The database '%S' does not exist", nextdbname);
 	}
 
-	ajListIterFree(&iter);
-	ajListDel(&dbnames);
+	ajListIterDel(&iter);
+	ajListFree(&dbnames);
     }
     
     /* end the HTML table */

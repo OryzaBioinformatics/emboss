@@ -96,7 +96,13 @@ int main(int argc, char **argv)
     }
     ajFileClose (&inf);
 
+    ajStrDel(&id);
     ajStrDel(&line);
+    ajStrDel(&outdir);
+    ajStrDel(&outfname);
+
+    ajRegFree(&idexp);
+    ajRegFree(&endexp);
 
     embExit();
 

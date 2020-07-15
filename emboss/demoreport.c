@@ -41,9 +41,13 @@ int main(int argc, char **argv)
     report = ajAcdGetReport("outfile");
     seq    = ajAcdGetSeq("sequence");
 
-    ftab = ajSeqGetFeat(seq);
+    ftab = ajSeqGetFeatCopy(seq);
 
     ajReportWrite(report, ftab, seq);
+
+    ajReportDel(&report);
+    ajSeqDel(&seq);
+    ajFeattableDel(&ftab);
 
     embExit();
 

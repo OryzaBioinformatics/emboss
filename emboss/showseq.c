@@ -290,7 +290,7 @@ int main(int argc, char **argv)
 	{
 	    if(single)
 		maxcuts = mincuts = 1;
-	    retable = ajStrTableNew(EQUGUESS);
+	    retable = ajTablestrNewLen(EQUGUESS);
 	    ajFileDataNewC(ENZDATA, &enzfile);
 
 	    if(!enzfile)
@@ -347,7 +347,7 @@ int main(int argc, char **argv)
 
 	embShowDel(&ss);
 
-	ajListDel(&restrictlist);
+	ajListFree(&restrictlist);
 	ajFeattableDel(&newfeattab);
 	ajFeattableDel(&feattab);
 
@@ -515,9 +515,9 @@ static void showseq_read_equiv(AjPFile equfile, AjPTable table)
         if(!*p || *p=='#' || *p=='!')
             continue;
 
-        p = ajSysStrtok(p," \t\n");
+        p = ajSysFuncStrtok(p," \t\n");
         key = ajStrNewC(p);
-        p = ajSysStrtok(NULL," \t\n");
+        p = ajSysFuncStrtok(NULL," \t\n");
         value = ajStrNewC(p);
         ajTablePut(table,(void *)key, (void *)value);
     }
@@ -615,10 +615,10 @@ static void showseq_FeatureFilter(const AjPFeattable featab,
     /* foreach feature in the feature table */
     if(featab)
     {
-	iter = ajListIterRead(featab->Features);
-	while(ajListIterMore(iter))
+	iter = ajListIterNewread(featab->Features);
+	while(!ajListIterDone(iter))
 	{
-	    gf = (AjPFeature)ajListIterNext(iter);
+	    gf = (AjPFeature)ajListIterGet(iter);
             newgf = showseq_FeatCopy(gf); /* copy of gf that we can add */
 	    /* required tags to */
 	    if(showseq_MatchFeature(gf, newgf, matchsource, matchtype,
@@ -633,7 +633,7 @@ static void showseq_FeatureFilter(const AjPFeattable featab,
 	    else
 	    	ajFeatDel(&newgf);
 	}
-	ajListIterFree(&iter);
+	ajListIterDel(&iter);
     }
 
     return;
@@ -741,7 +741,7 @@ static AjBool showseq_MatchPatternTags(const AjPFeature gf,
     **  If there are no tags to match, but the patterns are
     **  both '*', then allow this as a match
     */
-    if(ajListLength(gf->Tags) == 0 && 
+    if(ajListGetLength(gf->Tags) == 0 && 
         !ajStrCmpC(tpattern, "*") &&
         !ajStrCmpC(vpattern, "*"))
         return ajTrue;
@@ -790,7 +790,7 @@ static AjBool showseq_MatchPatternTags(const AjPFeature gf,
         if(!stricttags)
             ajFeatTagAdd(newgf, tagnam, tagval);
     }
-    ajListIterFree(&titer);
+    ajListIterDel(&titer);
 
     ajStrDel(&tagnam);
     ajStrDel(&tagval);

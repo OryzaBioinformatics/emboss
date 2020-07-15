@@ -183,14 +183,14 @@ int main(int argc, char **argv)
 	name = ajStrNewC("no_name");
 
 	v = vectorstrip_initialise_vector(name, fiveprime, threeprime);
-	ajListPushApp(vectorlist, v);
+	ajListPushAppend(vectorlist, v);
 	ajStrDel(&name);
     }
 
     threshold = ajAcdGetInt("mismatch");
 
     /* check there are vectors to be searched */
-    if(!ajListLength(vectorlist))
+    if(!ajListGetLength(vectorlist))
     {
 	ajUser("\nNo suitable vectors found - exiting\n");
 	embExitBad();
@@ -200,14 +200,14 @@ int main(int argc, char **argv)
     /* search each sequence for the vectors */
     while(ajSeqallNext(seqall,&seq))
     {
-	AjIList iter=ajListIterRead(vectorlist);
+	AjIList iter=ajListIterNewread(vectorlist);
 	while(!ajListIterDone(iter))
 	{
-	    vvec = ajListIterNext(iter);
+	    vvec = ajListIterGet(iter);
 	    vectorstrip_scan_sequence(vvec, seqout, outf, seq, threshold,
 				      besthits, allsequences);
 	}
-	ajListIterFree(&iter);
+	ajListIterDel(&iter);
     }
 
 
@@ -251,7 +251,7 @@ static void vectorstrip_vlistdel(AjPList* vlist)
 	ajStrDel(&v->threeprime);
 	AJFREE(v);
     }
-    ajListDel(vlist);
+    ajListFree(vlist);
 }
 
 
@@ -358,7 +358,7 @@ static void vectorstrip_read_vector_data(AjPFile vectorfile,
 	if(ajStrGetLen(five) || ajStrGetLen(three))
 	{
 	    vector = vectorstrip_initialise_vector(name, five, three);
-	    ajListPushApp(vectorlist, vector);
+	    ajListPushAppend(vectorlist, vector);
 	}
 	ajStrDel(&name);
 	ajStrDel(&five);
@@ -387,15 +387,15 @@ static void vectorstrip_free_list(AjPList *list)
 {
     AjIList iter;
 
-    iter = ajListIterRead(*list);
+    iter = ajListIterNewread(*list);
     while(!ajListIterDone(iter))
     {
-	EmbPMatMatch fm = ajListIterNext(iter);
+	EmbPMatMatch fm = ajListIterGet(iter);
 	embMatMatchDel(&fm);
     }
     ajListFree(list);
-    ajListDel(list);
-    ajListIterFree(&iter);
+    ajListFree(list);
+    ajListIterDel(&iter);
 
     return;
 }
@@ -539,29 +539,29 @@ static void vectorstrip_process_hits(const AjPList fivelist,
     five  = ajIntNew();	/* start positions for hits with 5' pattern */
     three = ajIntNew();	/* start positions for hits with 3' pattern */
 
-    iter = ajListIterRead(fivelist);
+    iter = ajListIterNewread(fivelist);
 
     /* populate five and three with start positions */
     while(!ajListIterDone(iter))
     {
-	m = ajListIterNext(iter);
+	m = ajListIterGet(iter);
 	ajIntPut(&five, i, ((m->len) + (m->start)));
 	i++;
     }
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
 
-    iter = ajListIterRead(threelist);
+    iter = ajListIterNewread(threelist);
     while(!ajListIterDone(iter))
     {
-	m = ajListIterNext(iter);
+	m = ajListIterGet(iter);
 	ajIntPut(&three, j, (m->start -1));
 	j++;
     }
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
 
     /* classify the hits */
-    if((ajListLength(fivelist) == 1 &&
-	ajListLength(threelist) == 1)
+    if((ajListGetLength(fivelist) == 1 &&
+	ajListGetLength(threelist) == 1)
        && ((ajIntGet(three, 0) + (ajint)m->len + 1) == ajIntGet(five, 0)))
 	/* the patterns are identical and only match once in the sequence */
 	type = 1;
@@ -718,7 +718,7 @@ static void vectorstrip_scan_sequence(const Vector vector, AjPSeqout seqout,
 	vectorstrip_process_pattern(vector->threeprime, threelist, seqname,
 				    text, mis_per, begin, besthits);
 
-    if(!(ajListLength(fivelist) || ajListLength(threelist)))
+    if(!(ajListGetLength(fivelist) || ajListGetLength(threelist)))
     {
 	ajFmtPrintF(outf, "\nSequence: %s \t Vector: %s\tNo match\n",
 		    ajStrGetPtr(seqname), ajStrGetPtr(vector->name));
@@ -970,11 +970,11 @@ static void vectorstrip_print_hits(AjPList hitlist, AjPFile outf,
     s=ajStrNew();
 
     ajListReverse(hitlist);
-    iter = ajListIterRead(hitlist);
+    iter = ajListIterNewread(hitlist);
 
     while(!ajListIterDone(iter))
     {
-	m = ajListIterNext(iter);
+	m = ajListIterGet(iter);
 	ajStrAssignSubC(&s,ajStrGetPtr(seq),m->start-begin,m->end-begin);
 
 	ajFmtPrintF(outf,"\tFrom %d to %d with %d mismatches\n",m->start,
@@ -982,7 +982,7 @@ static void vectorstrip_print_hits(AjPList hitlist, AjPFile outf,
 
     }
 
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
     ajStrDel(&s);
 
     return;

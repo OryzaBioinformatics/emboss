@@ -201,7 +201,7 @@ int main(int argc, char **argv)
 
         /* delete difflist */
         ajListMap(difflist, diffseq_PosPDiffDel, NULL);
-        ajListDel(&difflist);
+        ajListFree(&difflist);
 
     }
 
@@ -313,18 +313,14 @@ static void diffseq_Diff(const AjPList difflist,
         ajFmtPrintAppS(&tmpstr, "%S overlap starts at %d\n\n",
 			   ajReportSeqName(report, seq2),
 			   over2start);
-        ajFmtPrintAppS(&tmpstr, "(%S) start end length sequence\n"
-			   "(%S) start end length sequence\n\n",
-			   ajReportSeqName(report, seq1),
-			   ajReportSeqName(report, seq2));
     }
     ajReportSetHeader(report, tmpstr);
 
 
-    iter = ajListIterRead(difflist);
-    while(ajListIterMore(iter))
+    iter = ajListIterNewread(difflist);
+    while(!ajListIterDone(iter))
     {
-	diff = (PosPDiff) ajListIterNext(iter) ;
+	diff = (PosPDiff) ajListIterGet(iter) ;
 
         /* seq 1 details */
         if(diff->Len1 > 0)
@@ -380,7 +376,7 @@ static void diffseq_Diff(const AjPList difflist,
 
     }
     
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
     
     /* create report tail */
     if(over1start != -1)
@@ -468,10 +464,10 @@ static void diffseq_WordMatchListConvDiffToFeat(const AjPList list,
     ajStrAssignC(&replace,"replace");
     score = 1.0;
 
-    iter = ajListIterRead(list);
-    while(ajListIterMore(iter))
+    iter = ajListIterNewread(list);
+    while(!ajListIterDone(iter))
     {
-        PosPDiff diff = (PosPDiff) ajListIterNext(iter) ;
+        PosPDiff diff = (PosPDiff) ajListIterGet(iter) ;
 
         if(diff->Len1)
         {        /* is there a gap between the matches? */
@@ -555,7 +551,7 @@ static void diffseq_WordMatchListConvDiffToFeat(const AjPList list,
 
     }
 
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
     ajStrDel(&source);
     ajStrDel(&type);
     ajStrDel(&note);
@@ -598,10 +594,10 @@ static void diffseq_Features(const char* typefeat, AjPFeature rf,
 
     if(feat->Features)
     {
-        iter = ajListIterRead(feat->Features);
-        while(ajListIterMore(iter))
+        iter = ajListIterNewread(feat->Features);
+        while(!ajListIterDone(iter))
         {
-            gf = ajListIterNext(iter);
+            gf = ajListIterGet(iter);
 
 
             /* check that the feature is within the range for display */
@@ -620,7 +616,7 @@ static void diffseq_Features(const char* typefeat, AjPFeature rf,
             ajFeatTagAdd(rf, NULL,  tmp);
 
         }
-        ajListIterFree(&iter) ;
+        ajListIterDel(&iter) ;
     }
 
 
@@ -665,7 +661,7 @@ static void diffseq_AddTags(AjPStr* strval,
                 ajFmtPrintAppS(strval, " %S", tagnam);
         }
 
-    ajListIterFree(&titer);
+    ajListIterDel(&titer);
     ajStrDel(&tagnam);
     ajStrDel(&tagval);
 
@@ -719,10 +715,10 @@ static void diffseq_DiffList(const AjPList matchlist, AjPList difflist,
 
     *over1start = -1;                        /* flag for no matches found */
 
-    iter = ajListIterRead(matchlist);
-    while(ajListIterMore(iter))
+    iter = ajListIterNewread(matchlist);
+    while(!ajListIterDone(iter))
     {
-        EmbPWordMatch p =(EmbPWordMatch) ajListIterNext(iter) ;
+        EmbPWordMatch p =(EmbPWordMatch) ajListIterGet(iter) ;
 
         misend1 = p->seq1start;
         misend2 = p->seq2start;
@@ -768,7 +764,7 @@ static void diffseq_DiffList(const AjPList matchlist, AjPList difflist,
                 }
                
                 /* add node to the end of the list */
-                ajListPushApp(difflist, diff);
+                ajListPushAppend(difflist, diff);
             }
         }
         else    /* this is a mismatch between two matches */
@@ -782,7 +778,7 @@ static void diffseq_DiffList(const AjPList matchlist, AjPList difflist,
             diff->Len2 = diff->End2 - diff->Start2 + 1;
 
             /* add node to the end of the list */
-            ajListPushApp(difflist, diff);
+            ajListPushAppend(difflist, diff);
         }
 
         /* note the start position of the next mismatch */
@@ -824,10 +820,10 @@ static void diffseq_DiffList(const AjPList matchlist, AjPList difflist,
             diff->End2--;        
         }
         /* add node to the end of the list */
-        ajListPushApp(difflist, diff);
+        ajListPushAppend(difflist, diff);
     }
 
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
 
     return;
 }
@@ -922,10 +918,10 @@ static void diffseq_FeatSetCDSFrame(AjPFeattable ftab)
     if(!ftab->Features)
         return;
         
-    iter = ajListIterRead(ftab->Features);
-    while(ajListIterMore(iter))
+    iter = ajListIterNewread(ftab->Features);
+    while(!ajListIterDone(iter))
     {
-        gf = ajListIterNext(iter);
+        gf = ajListIterGet(iter);
 
         /* is this a CDS feature? */
         if (ajStrCmpC(ajFeatGetType(gf), "CDS"))
@@ -965,7 +961,7 @@ static void diffseq_FeatSetCDSFrame(AjPFeattable ftab)
                     phase--;
                     unsure = ajFalse;
                 }
-            ajListIterFree(&titer);
+            ajListIterDel(&titer);
 
 
             /* If we are sure, set the Frame field in the feature
@@ -989,7 +985,7 @@ static void diffseq_FeatSetCDSFrame(AjPFeattable ftab)
         prevend = ajFeatGetEnd(gf);
     }
 
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
 
     /* 
     ** Go back up through list filling in the frame of the reverse sense
@@ -997,10 +993,10 @@ static void diffseq_FeatSetCDSFrame(AjPFeattable ftab)
     */
     unsure = ajFalse;
     prevparent = ajTrue;
-    iter = ajListIterBack(ftab->Features);
-    while(ajListIterBackMore(iter))
+    iter = ajListIterNewBack(ftab->Features);
+    while(!ajListIterDoneBack(iter))
     {
-        gf = ajListIterBackNext(iter);
+        gf = ajListIterGetBack(iter);
 
         /* is this a CDS feature? */
         if (ajStrCmpC(ajFeatGetType(gf), "CDS"))
@@ -1036,7 +1032,7 @@ static void diffseq_FeatSetCDSFrame(AjPFeattable ftab)
                     phase--;
                     unsure = ajFalse;
                 }
-            ajListIterFree(&titer);
+            ajListIterDel(&titer);
 
             /* 
             ** If we are sure, set the Frame field in the feature
@@ -1063,8 +1059,8 @@ static void diffseq_FeatSetCDSFrame(AjPFeattable ftab)
         prevend = ajFeatGetEnd(gf);
     }
 
-    ajListIterFree(&iter);
-    ajListIterFree(&titer);
+    ajListIterDel(&iter);
+    ajListIterDel(&titer);
     ajStrDel(&tagnam);
     ajStrDel(&tagval);
 

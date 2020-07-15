@@ -19,7 +19,7 @@ int main (int argc, char **argv)
     ajint frame   = 0;
     AjBool sortbytype;
     AjBool sortbystart;
-    AjPFeature feature;
+    AjPFeature feature = NULL;
     AjPFeattabOut output = NULL;
     ajint i;
     float score = 0.0;
@@ -57,8 +57,11 @@ int main (int argc, char **argv)
 
     ajFeatWrite(output, feattable);
 
+    ajStrDel(&source);
     ajStrDel(&name);
     ajStrDel(&type);
+    ajFeattableDel(&feattable);
+    ajFeattabOutDel(&output);
 
     embExit();
 

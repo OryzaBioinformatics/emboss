@@ -261,12 +261,12 @@ int main(int argc, char **argv)
 
 	if(hits8 || hits8rev)
 	{
-	    ajListPushList(l8, &l8rev);
+	    ajListPushlist(l8, &l8rev);
 	    ajListSort(l8, embPatRestrictStartCompare);
 	}
 	if((hits16 || hits16rev))
 	{
-	    ajListPushList(l16, &l16rev);
+	    ajListPushlist(l16, &l16rev);
 	    ajListSort(l16, embPatRestrictStartCompare);
 	}
 
@@ -293,11 +293,11 @@ int main(int argc, char **argv)
 	**  ajListPushList)
 	**  but not if the routine was never called.
 	*/
-	ajListDel(&l16);
-	ajListDel(&l8);
+	ajListFree(&l16);
+	ajListFree(&l8);
 
-	ajListDel(&l16rev);
-	ajListDel(&l8rev);
+	ajListFree(&l16rev);
+	ajListFree(&l8rev);
 
     }
 

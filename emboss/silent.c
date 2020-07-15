@@ -237,10 +237,10 @@ int main(int argc, char **argv)
     ajStrDel(&revcomp);
     ajStrDel(&enzymes);
 
-    ajListDel(&results1);
-    ajListDel(&results2);
-    ajListDel(&shits);
-    ajListDel(&nshits);
+    ajListFree(&results1);
+    ajListFree(&results2);
+    ajListFree(&shits);
+    ajListFree(&nshits);
 
     ajReportClose(report);
     ajReportDel(&report);
@@ -248,6 +248,7 @@ int main(int argc, char **argv)
     ajStrDel(&sstr);
 
     silent_relistdel(&relist);
+    ajStrDel(&tailstr);
 
     embExit();
 
@@ -277,7 +278,7 @@ static void silent_relistdel(AjPList* relist)
 	ajStrDel(&rlp->site);
 	AJFREE(rlp);
     }
-    ajListDel(relist);
+    ajListFree(relist);
 }
 
 
@@ -357,7 +358,7 @@ static AjPList silent_mismatch(const AjPStr sstr, AjPList relist,
         /* ignore unknown cut sites and zero cutters */
        	if(*ajStrGetPtr(rlp->site)=='?'||!rlp->ncuts)
         {
-	    ajListPushApp(relist,(void*)rlp);
+	    ajListPushAppend(relist,(void*)rlp);
 	    continue;
 	}
 	ajStrFmtUpper(&rlp->site);   /* convert all RS to upper case */
@@ -389,14 +390,14 @@ static AjPList silent_mismatch(const AjPStr sstr, AjPList relist,
 		    res = silent_checktrans(sstr,match,rlp,begin,radj,
 					    rev,end);
 		    if (res)
-			ajListPushApp(results,(void *)res);
+			ajListPushAppend(results,(void *)res);
 		    embMatMatchDel(&match);
          	}
    	}
 
-        ajListPushApp(relist,(void *)rlp);
+        ajListPushAppend(relist,(void *)rlp);
 
-	ajListDel(&patlist);
+	ajListFree(&patlist);
     }
     
     ajStrDel(&str);
@@ -789,11 +790,11 @@ static void silent_split_hits(AjPList *hits, AjPList *silents,
     {
 	if(res->issilent)
 	{
-           	ajListPushApp(*silents,(void *)res);
+           	ajListPushAppend(*silents,(void *)res);
 	   	continue;
 	}
 	if(allmut)
-           	ajListPushApp(*nonsilents,(void *)res);
+           	ajListPushAppend(*nonsilents,(void *)res);
 	else
 	{
 	    ajStrDel(&res->code);

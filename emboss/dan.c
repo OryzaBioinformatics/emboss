@@ -545,7 +545,7 @@ static void dan_plotit(const AjPSeq seq, const float *xa, const float *ta,
     ajGraphxySetXLabel(graphs,ajTrue);
     ajGraphxySetYLabel(graphs,ajTrue);
 
-    ajGraphSetTitleC(graphs,ajSeqGetNameC(seq));
+    ajGraphSetTitlePlus(graphs, ajSeqGetUsaS(seq));
     ajGraphSetXTitleC(graphs,"Base number");
     ajGraphSetYTitleC(graphs,"Melt temp (C)");
 

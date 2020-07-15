@@ -112,7 +112,7 @@ int main(int argc, char **argv)
     } */
 
     /* array allows fast creation of a sequences */
-    scmax = ajListstrToArray(list,&seqr);
+    scmax = ajListstrToarray(list,&seqr);
     if (!scmax)
 	ajFatal ("No strings in list. No characters to make the sequence.");
 
@@ -139,7 +139,7 @@ int main(int argc, char **argv)
 
     ajSeqoutClose(outseq);
     ajSeqoutDel(&outseq);
-    ajListstrFree(&list);
+    ajListstrFreeData(&list);
     ajStrDel(&insert);
     AJFREE(seqr);
 
@@ -197,7 +197,7 @@ static void makeprotseq_default_chars (AjPList* list)
     {
 	tmp = ajStrNew();
 	tmp = ajFmtStr ("%c",chars[i]);
-	ajListstrPushApp (*list,tmp);
+	ajListstrPushAppend(*list,tmp);
     }
 
     return;

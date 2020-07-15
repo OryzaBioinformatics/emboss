@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 		    embPatMatchGetLen(results,j));
 	/* get a copy of the string */
 	new = ajStrNewRes(results->len[j]);
-	ajStrAssignSubS(&new,ajSeqStr(seq),embPatMatchGetStart(results,j),
+	ajStrAssignSubS(&new,ajSeqGetSeqS(seq),embPatMatchGetStart(results,j),
 		    embPatMatchGetEnd(results,j));
 	ajFmtPrintF(outf,"%S\n",new);
 	ajStrDel(&new);
@@ -105,6 +105,8 @@ int main(int argc, char **argv)
     embPatMatchDel(&results);
     ajStrDel(&cutseq);
     ajSeqDel(&seq);
+
+    ajFileClose(&outf);
 
     embExit();
 

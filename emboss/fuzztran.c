@@ -241,10 +241,10 @@ static void fuzztran_SourceFeature(const AjPFeattable thys, const AjPSeq pseq,
 
     if(thys->Features)
     {
-	iter = ajListIter(thys->Features) ;
-	while(ajListIterMore(iter))
+	iter = ajListIterNew(thys->Features) ;
+	while(!ajListIterDone(iter))
 	{
-	    protfeature = (AjPFeature)ajListIterNext (iter);
+	    protfeature = (AjPFeature)ajListIterGet(iter);
 	    if(rev)
 	    {
 		begin = start - framenum
@@ -288,7 +288,7 @@ static void fuzztran_SourceFeature(const AjPFeattable thys, const AjPSeq pseq,
 	    ajFeatTagAdd(sourcefeature, NULL, s);
 
 	}
-	ajListIterFree(&iter) ;
+	ajListIterDel(&iter) ;
     }
 
     ajStrDel(&fthit);

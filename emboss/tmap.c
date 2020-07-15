@@ -1230,6 +1230,8 @@ static void tmap_weights(char **sw, ajint poss, ajint nr,
     for(i=0; i<=nr; i++)
 	norm_sk[i] = norm_sk[i]/summa;
 
+    AJFREE(skillnad);
+
     return;
 }
 

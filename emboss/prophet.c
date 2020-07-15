@@ -130,11 +130,11 @@ int main(int argc, char **argv)
 	if(!ajFileReadLine(inf,&line))
 	    ajFatal("Missing matrix line");
 	p = ajStrGetPtr(line);
-	p = ajSysStrtok(p," \t");
+	p = ajSysFuncStrtok(p," \t");
 	for(j=0;j<AZ;++j)
 	{
 	    sscanf(p,"%f",&fmatrix[i][j]);
-	    p = ajSysStrtok(NULL," \t");
+	    p = ajSysFuncStrtok(NULL," \t");
 	}
     }
 
@@ -285,8 +285,8 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     if(strncmp(p,"Name",4))
 	ajFatal("Incorrect profile/matrix file format");
 
-    p = ajSysStrtok(p," \t");
-    p = ajSysStrtok(NULL," \t");
+    p = ajSysFuncStrtok(p," \t");
+    p = ajSysFuncStrtok(NULL," \t");
     ajStrAssignC(name,p);
 
     if(!ajFileReadLine(inf,&line))
@@ -295,8 +295,8 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     p = ajStrGetPtr(line);
     if(strncmp(p,"Matrix",6))
 	ajFatal("Incorrect profile/matrix file format");
-    p = ajSysStrtok(p," \t");
-    p = ajSysStrtok(NULL," \t");
+    p = ajSysFuncStrtok(p," \t");
+    p = ajSysFuncStrtok(NULL," \t");
     ajStrAssignC(mname,p);
 
 
@@ -347,8 +347,8 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 
     if(strncmp(p,"Consensus",9))
 	ajFatal("Incorrect profile/matrix file format");
-    p = ajSysStrtok(p," \t\n");
-    p = ajSysStrtok(NULL," \t\n");
+    p = ajSysFuncStrtok(p," \t\n");
+    p = ajSysFuncStrtok(NULL," \t\n");
     ajStrAssignC(cons,p);
 
     ajStrDel(&line);

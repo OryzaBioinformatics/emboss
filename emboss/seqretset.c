@@ -41,9 +41,9 @@ int main(int argc, char **argv)
     seqset = ajAcdGetSeqset("sequence1");
     seqout = ajAcdGetSeqoutset("outseq2");
 
-    ajSeqsetWrite(seqout, seqset);
+    ajSeqoutWriteSet(seqout, seqset);
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
 
     ajSeqsetDel(&seqset);
     ajSeqoutDel(&seqout);

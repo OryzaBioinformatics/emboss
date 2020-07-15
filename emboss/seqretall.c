@@ -44,9 +44,9 @@ int main(int argc, char **argv)
     seqall = ajAcdGetSeqall("sequence1");
 
     while(ajSeqallNext(seqall, &seq))
-	ajSeqAllWrite(seqout, seq);
+	ajSeqoutWriteSeq(seqout, seq);
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
 
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);

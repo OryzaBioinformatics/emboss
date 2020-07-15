@@ -90,15 +90,15 @@ int main(int argc, char **argv)
 	    gid  = ajTrue;
 	    done = ajFalse;
 	    fp = oout;
-	    p = ajSysStrtok(p," \t\n");
-	    p = ajSysStrtok(NULL," \t\n");
+	    p = ajSysFuncStrtok(p," \t\n");
+	    p = ajSysFuncStrtok(NULL," \t\n");
 	    ajStrAssignC(&id,p);
 	}
 
 	if(ajStrPrefixC(line,"AC"))
 	{
-	    p = ajSysStrtok(p," \t\n");
-	    p = ajSysStrtok(NULL," \t\n");
+	    p = ajSysFuncStrtok(p," \t\n");
+	    p = ajSysFuncStrtok(NULL," \t\n");
 	    ajStrAssignC(&acc,p);
 	}
 
@@ -113,8 +113,8 @@ int main(int argc, char **argv)
 
 	if(ajStrPrefixC(line,"SQ") || ajStrPrefixC(line,"SE"))
 	{
-	    p = ajSysStrtok(p," .\t\n");
-	    p = ajSysStrtok(NULL," .\t\n");
+	    p = ajSysFuncStrtok(p," .\t\n");
+	    p = ajSysFuncStrtok(NULL," .\t\n");
 	    if(!p)
 		ajStrAssignC(&pattern,"");
 	    else

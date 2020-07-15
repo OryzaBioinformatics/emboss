@@ -172,7 +172,7 @@ int main(int argc, char **argv)
 	    **  to it
 	    */
 	    embNmerInt2prot(&dispseq, word, count, ignorebz);
-	    ajb=ajTableGet(exptable, dispseq);
+	    ajb=ajTableFetch(exptable, dispseq);
 
 	    if(ajb)
 		ajStrToLong( ajb, &exp_freq);
@@ -324,7 +324,7 @@ int main(int argc, char **argv)
 
     AJFREE(bigarray);
 
-    ajStrTableFree(&exptable);
+    ajTablestrFree(&exptable);
 
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);
@@ -366,7 +366,7 @@ static ajint oddcomp_readexpfreq(AjPTable *exptable, AjPFile compdata,
 
     /* initialise the hash table - use case-insensitive comparison */
 
-    *exptable = ajStrTableNewCase(350);
+    *exptable = ajTablestrNewCaseLen(350);
 
 
 

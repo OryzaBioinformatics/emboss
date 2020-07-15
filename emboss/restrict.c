@@ -134,7 +134,7 @@ int main(int argc, char **argv)
     if(single)
 	max = min = 1;
 
-    table = ajStrTableNew(EQUGUESS);
+    table = ajTablestrNewLen(EQUGUESS);
 
 
     /* read the local file of enzymes names */
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
     }
 
 
-    ajListDel(&l);
+    ajListFree(&l);
     ajSeqDel(&seq);
     ajFileClose(&enzfile);
     ajFileClose(&outf);
@@ -219,7 +219,7 @@ int main(int argc, char **argv)
     ajSeqallDel(&seqall);
     ajStrDel(&enzymes);
 
-    ajStrTableFree(&table);
+    ajTablestrFree(&table);
 
     embExit();
 
@@ -311,15 +311,15 @@ static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
 	for(i=0;i<hits;++i)
 	{
 	    ajListPop(l,(void **)&m);
-	    value = ajTableGet(table,m->cod);
+	    value = ajTableFetch(table,m->cod);
 	    if(value)
 		ajStrAssignS(&m->cod,value);
-	    ajListPushApp(l,(void *)m);
+	    ajListPushAppend(l,(void *)m);
 	}
 
     
     if(alpha && limit)
-	ajListSort2(l,embPatRestrictNameCompare, embPatRestrictStartCompare);
+	ajListSortTwo(l,embPatRestrictNameCompare, embPatRestrictStartCompare);
 
 
     if(frags)
@@ -343,7 +343,7 @@ static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
 
 	if(limit)
 	{
-	    value = ajTableGet(table,m->cod);
+	    value = ajTableFetch(table,m->cod);
 
 	    if(value)
 		ajStrAssignS(&m->cod,value);
@@ -533,20 +533,20 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 	for(i=0;i<hits;++i)
 	{
 	    ajListPop(l,(void **)&m);
-	    value = ajTableGet(table,m->cod);
+	    value = ajTableFetch(table,m->cod);
 	    if(value)
 		ajStrAssignS(&m->cod,value);
-	    ajListPushApp(l,(void *)m);
+	    ajListPushAppend(l,(void *)m);
 	}
 
     
     if(alpha && limit)
-	ajListSort2(l,embPatRestrictNameCompare, embPatRestrictStartCompare);
+	ajListSortTwo(l,embPatRestrictNameCompare, embPatRestrictStartCompare);
 
     for(i=0;i<hits;++i)
     {
 	ajListPop(l,(void **)&m);
-	ajListPushApp(l,(void *)m);	/* Might need for ifrag display */
+	ajListPushAppend(l,(void *)m);	/* Might need for ifrag display */
 	if(!plasmid && m->circ12)
 	    continue;
 
@@ -644,7 +644,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 	for(i=0;i<hits;++i)
 	{
 	    ajListPop(l,(void **)&m);
-	    ajListPushApp(l,(void *)m);
+	    ajListPushAppend(l,(void *)m);
 
 	    if(!plasmid && m->circ12)
 		continue;
@@ -652,7 +652,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 
 	    if(limit)
 	    {
-		value = ajTableGet(table,m->cod);
+		value = ajTableFetch(table,m->cod);
 
 		if(value)
 		    ajStrAssignS(&m->cod,value);
@@ -826,9 +826,9 @@ static void restrict_read_equiv(AjPFile equfile, AjPTable table,
 	if(!*p || *p=='#' || *p=='!')
 	    continue;
 
-	p     = ajSysStrtok(p," \t\n");
+	p     = ajSysFuncStrtok(p," \t\n");
 	key   = ajStrNewC(p);
-	p     = ajSysStrtok(NULL," \t\n");
+	p     = ajSysFuncStrtok(NULL," \t\n");
 	value = ajStrNewC(p);
 	if(!commercial)
 	    ajStrTrimEndC(&value,"*");

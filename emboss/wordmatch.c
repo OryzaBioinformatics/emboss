@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 	matchlist = embWordBuildMatchTable(seq1MatchTable, seq2, ajTrue);
 
     if(matchlist && outf)
-	ajFmtPrintF(outf, "FINALLY length = %d\n",ajListLength(matchlist));
+	ajFmtPrintF(outf, "FINALLY length = %d\n",ajListGetLength(matchlist));
 
     embWordFreeTable(&seq1MatchTable);	/* free table of words */
 
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 	if(outf)
 	    embWordMatchListPrint(outf, matchlist);
 
-	iter = ajListIterRead(matchlist) ;
+	iter = ajListIterNewread(matchlist) ;
 	while(embWordMatchIter(iter, &start1, &start2, &len))
 	{
 	    ajAlignDefineSS(align, seq1, seq2);
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 			       start2, 1, len,
 			       ajSeqIsReversed(seq2), ajSeqGetLen(seq2));
 	}
-	ajListIterFree(&iter) ;
+	ajListIterDel(&iter) ;
 
 	embWordMatchListConvToFeat(matchlist,&Tab1,&Tab2,seq1, seq2);
 

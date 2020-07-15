@@ -65,7 +65,7 @@ static void ajtest_kim (const AjPStr seqout_name, const AjPSeq subseq)
 
     ajStrAssignC(&format_str, "embl");
 
-    ajSeqOutSetFormat(named_seqout, format_str);
+    ajSeqoutSetFormatS(named_seqout, format_str);
 
     ajSeqoutWriteSeq(named_seqout, subseq);
 

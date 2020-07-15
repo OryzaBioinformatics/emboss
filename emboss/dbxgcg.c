@@ -194,8 +194,8 @@ int main(int argc, char **argv)
 	ajStrAssignS(&refname,seqname);
 	ajFileNameExtC(&seqname,"seq");
 	ajFileNameExtC(&refname,"ref");
-	ajListPushApp(entry->files,(void *)seqname);
-	ajListPushApp(entry->reffiles,(void *)refname);
+	ajListPushAppend(entry->files,(void *)seqname);
+	ajListPushAppend(entry->reffiles,(void *)refname);
     }
     
 
@@ -208,14 +208,14 @@ int main(int argc, char **argv)
     for(i=0;i<nfiles;++i)
     {
 	ajListPop(entry->files,(void **)&thysfile);
-	ajListPushApp(entry->files,(void *)thysfile);
+	ajListPushAppend(entry->files,(void *)thysfile);
 	ajFmtPrintS(&tmpstr,"%S%S",entry->directory,thysfile);
 	printf("Processing file %s\n",MAJSTRGETPTR(tmpstr));
 	if(!(infs=ajFileNewIn(tmpstr)))
 	    ajFatal("Cannot open input file %S\n",tmpstr);
 
 	ajListPop(entry->reffiles,(void **)&thysfile);
-	ajListPushApp(entry->files,(void *)thysfile);
+	ajListPushAppend(entry->files,(void *)thysfile);
 	ajFmtPrintS(&tmpstr,"%S%S",entry->directory,thysfile);
 	if(!(infr=ajFileNewIn(tmpstr)))
 	    ajFatal("Cannot open input file %S\n",tmpstr);

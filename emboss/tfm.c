@@ -174,7 +174,7 @@ static void tfm_FindAppDocRoot(const AjPStr program,
 	{
 	    ajFileDirFix(&docrootinst);
 	    ajFmtPrintS(&tmpstr,"%Sdoc",docrootinst);
-	    if(!ajSysIsDirectory(ajStrGetPtr(tmpstr)))
+	    if(!ajFileDir(&tmpstr))
 	    {
 		ajFileDirUp(&docrootinst);
 		ajFileDirUp(&docrootinst);
@@ -194,9 +194,15 @@ static void tfm_FindAppDocRoot(const AjPStr program,
 			docrootinst,SLASH_STRING,SLASH_STRING,
 			embassy, SLASH_STRING);
 	  else
-	    ajFmtPrintS(docroot,"%Shtml%semboss%sapps%s",
-			docrootinst,SLASH_STRING,SLASH_STRING,
-			SLASH_STRING);
+	  {
+	      if(is_windows)
+		  ajFmtPrintS(docroot,"%Sprograms%shtml%s",
+			      docrootinst,SLASH_STRING,SLASH_STRING);
+	      else
+		  ajFmtPrintS(docroot,"%Shtml%semboss%sapps%s",
+			      docrootinst,SLASH_STRING,SLASH_STRING,
+			      SLASH_STRING);
+          }
 	}
 	else
 	    ajFmtPrintS(docroot,"%Sprograms%stext%s",docrootinst,SLASH_STRING,

@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 
     RStotal=recoder_readRE(&relist,enzymes);      /* read in RE info */
 
-    ajDebug("readRE read %d listlen:%d\n", RStotal, ajListLength(relist));
+    ajDebug("readRE read %d listlen:%d\n", RStotal, ajListGetLength(relist));
 
     begin = ajSeqGetBegin(seq);              /* seq start posn, or 1     */
     end   = ajSeqGetEnd(seq);                /* seq end posn, or seq len */
@@ -230,18 +230,20 @@ int main(int argc, char **argv)
 	ajStrDel(&re->site);
 	AJFREE(re);
     }
-    ajListDel(&relist);
+    ajListFree(&relist);
 
     ajSeqDel(&seq);
     ajStrDel(&revcomp);
     ajStrDel(&enzymes);
     ajStrDel(&sstr);
+    ajStrDel(&tailstr);
 
-    ajListDel(&muts);
-    ajListDel(&nmuts);
+    ajListFree(&muts);
+    ajListFree(&nmuts);
 
     ajReportClose(report);
     ajReportDel(&report);
+    ajTrnDel(&recoderTable);
 
     embExit();
 
@@ -333,7 +335,7 @@ static AjPList recoder_rematch(const AjPStr sstr, AjPList relist,
         /* ignore unknown cut sites & zero cutters */
        	if(*ajStrGetPtr(rlp->site)=='?'||!rlp->ncuts)
         {
-       	     ajListPushApp(relist,(void*)rlp);
+       	     ajListPushAppend(relist,(void*)rlp);
        	     continue;
         }
         ajStrFmtUpper(&rlp->site);          /* RS to upper case */
@@ -353,7 +355,7 @@ static AjPList recoder_rematch(const AjPStr sstr, AjPList relist,
 				patlist,begin+1,mm,sname);
 
 	ajDebug("Pattern '%S' pats: %d list: %u\n",
-		str, pats, ajListLength(patlist));
+		str, pats, ajListGetLength(patlist));
 	if(pats)
         {
             while(ajListPop(patlist,(void**)&match))
@@ -368,9 +370,9 @@ static AjPList recoder_rematch(const AjPStr sstr, AjPList relist,
                     res = recoder_checkTrans(sstr,match,rlp,begin,
 					     radj,rev,end,pos,&empty);
                     if(empty)
-                        ajListDel(&res);
+                        ajListFree(&res);
                     else
-                        ajListPushList(results,&res);
+                        ajListPushlist(results,&res);
                   }
               }
               embMatMatchDel(&match);
@@ -378,8 +380,8 @@ static AjPList recoder_rematch(const AjPStr sstr, AjPList relist,
         }
 
         /* push RE info back to top of the list */
-        ajListPushApp(relist,(void *)rlp);
-	ajListDel(&patlist);
+        ajListPushAppend(relist,(void *)rlp);
+	ajListFree(&patlist);
     }
 
     ajStrDel(&str);
@@ -466,7 +468,7 @@ static ajint recoder_readRE(AjPList *relist, const AjPStr enzymes)
 	ajListPush(*relist,(void *)rinfo);
 	RStotal++;
 	ajDebug("Creating RStotal:%d listsize:%u '%S' '%S'\n",
-		RStotal, ajListLength(*relist), rptr->cod, rptr->pat);
+		RStotal, ajListGetLength(*relist), rptr->cod, rptr->pat);
     }
 
     for(i=0;i<ne;++i)
@@ -645,7 +647,7 @@ static AjPList recoder_checkTrans(const AjPStr dna, const EmbPMatMatch match,
             tresult->match = rmpos;
             tresult->base  = rmpos+match->len-1-pos;
           }
-          ajListPushApp(res,(void *)tresult);
+          ajListPushAppend(res,(void *)tresult);
           *empty = ajFalse;
       }
       ajStrDel(&s2);

@@ -135,7 +135,7 @@ int main(int argc, char **argv)
     fname  = ajStrNew();
 
 
-    table = ajStrTableNew(TABLE_ESTIMATE);
+    table = ajTablestrNewLen(TABLE_ESTIMATE);
 
 
     flist = ajAcdGetDirlist("directory");
@@ -177,7 +177,7 @@ int main(int argc, char **argv)
 		ajStrAssignC(&tmpkey,entryname);
 
 	    /* See if organism is already in the table */
-	    value = ajTableGet(table,tmpkey);
+	    value = ajTableFetch(table,tmpkey);
 	    if(!value)			/* Initialise */
 	    {
 		key = ajStrNewS(tmpkey);
@@ -282,7 +282,7 @@ int main(int argc, char **argv)
     AJFREE(valarray);
 
     ajTableFree(&table);
-    ajListDel(&flist);
+    ajListFree(&flist);
     ajStrDel(&wild);
     ajStrDel(&release);
     ajStrDel(&wildspecies);
@@ -299,8 +299,6 @@ int main(int argc, char **argv)
     ajStrDel(&docstr);
     ajStrDel(&division);
     ajStrDel(&baseentry);
-
-    ajStrTableFree(&table);
 
     embExit();
 
@@ -420,6 +418,7 @@ static char* cutgextract_next(AjPFile inf, const AjPStr wildspecies,
 	}
 
 	ajStrTokenDel(&handle);
+	ajStrDel(&token);
 	if(!done)
 	    if(!ajFileReadLine(inf,&cutgextractLine))
 		return NULL;
@@ -437,6 +436,7 @@ static char* cutgextract_next(AjPFile inf, const AjPStr wildspecies,
     if(p[strlen(p)-1]=='_')
 	p[strlen(p)-1]='\0';
     ajStrDel(&token);
+    ajStrTokenDel(&handle);
 
     return p;
 }

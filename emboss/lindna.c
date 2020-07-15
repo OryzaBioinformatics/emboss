@@ -506,6 +506,7 @@ int main(int argc, char **argv)
     ajFileClose(&infile);
     ajStrDel(&line);
     ajStrDel(&BlockType);
+    ajStrDel(&InterSymbol);
 
     ajGraphCloseWin();
     ajGraphxyDel(&graph);

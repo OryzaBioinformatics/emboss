@@ -129,8 +129,8 @@ int main(int argc, char **argv)
 	ajStrFmtUpper(&substr);
 
 	l=ajListNew();
-	atable = ajStrTableNew(1000);
-	btable = ajStrTableNew(1000);
+	atable = ajTablestrNewLen(1000);
+	btable = ajTablestrNewLen(1000);
 	
 	sum=0;
 	while(ajFileReadLine(inf,&line))
@@ -173,9 +173,9 @@ int main(int argc, char **argv)
 			      btable);
 
 	ajFileSeek(inf,0L,0);
-	ajListDel(&l);
-	ajStrTableFree(&atable);
-	ajStrTableFree(&btable);
+	ajListFree(&l);
+	ajTablestrFree(&atable);
+	ajTablestrFree(&btable);
 	ajStrDel(&strand);
     }
 
@@ -242,14 +242,14 @@ static void tfscan_print_hits(const AjPStr name, AjPList *l,
     for(i=0;i<hits;++i)
     {
 	ajListPop(*l,(void **)&m);
-	acc = ajTableGet(t,(const void *)m->seqname);
+	acc = ajTableFetch(t,(const void *)m->seqname);
 
 
 
 	if((ajStrCmpS(m->seqname,lastnam)) && ajStrGetLen(lastnam)
 	   && ajStrGetLen(s) >= minlength)
 	{
-	    bf  = ajTableGet(btable,(const void *)lastnam);
+	    bf  = ajTableFetch(btable,(const void *)lastnam);
 	    if(ajStrGetLen(bf))
 		ajFmtPrintF(outf,"                     %S\n",bf);
 	}

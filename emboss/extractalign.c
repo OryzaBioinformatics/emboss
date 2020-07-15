@@ -75,6 +75,9 @@ int main(int argc, char **argv)
     ajRangeDel(&regions);
     ajStrDel(&newstr);
 
+    ajSeqsetDel(&seqset);
+    ajSeqDel(&newseq);
+
     embExit();
 
     return 0;

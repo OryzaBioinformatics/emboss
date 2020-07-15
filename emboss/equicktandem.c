@@ -246,8 +246,8 @@ static void equicktandem_report(AjPFeattable tab, ajint begin)
     static char* cp;
 
     AjPFeature gf;
-    static AjPStr rpthit = NULL;
-    static AjPStr s = NULL;
+    AjPStr rpthit = NULL;
+    AjPStr s = NULL;
 
     if(!rpthit)
 	ajStrAssignC(&rpthit, "repeat_region");
@@ -272,6 +272,9 @@ static void equicktandem_report(AjPFeattable tab, ajint begin)
 
     for(cp = maxback; cp <= maxfront; ++cp)
 	*cp = 'Z';
+
+    ajStrDel(&rpthit);
+    ajStrDel(&s);
 
     return;
 }

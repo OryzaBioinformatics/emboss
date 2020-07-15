@@ -312,11 +312,11 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
             join = ajTrue;
 	/* else - no sort */
 
-	iter = ajListIterRead(feat->Features) ;
+	iter = ajListIterNewread(feat->Features) ;
 
-	while(ajListIterMore(iter))
+	while(!ajListIterDone(iter))
 	{
-	    gf = ajListIterNext(iter);
+	    gf = ajListIterGet(iter);
 
             /* see if its a child of a multiple join */
 	    child = ajFalse;
@@ -481,7 +481,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
             ajStrDel(&ann_text);
         }
 
-	ajListIterFree(&iter) ;
+	ajListIterDel(&iter) ;
 
     }
 
@@ -841,7 +841,7 @@ static AjBool showfeat_MatchPatternTags(const AjPFeature feat,
      **  both '*', then allow this as a match.
      **  There are no tags to add to tagstmp, so just return now.
      */
-    if(ajListLength(feat->Tags) == 0 && 
+    if(ajListGetLength(feat->Tags) == 0 && 
        !ajStrCmpC(tpattern, "*") && 
        !ajStrCmpC(vpattern, "*")) 
         val = ajTrue;
@@ -919,7 +919,7 @@ static AjBool showfeat_MatchPatternTags(const AjPFeature feat,
             }	
         }
     }
-    ajListIterFree(&titer);
+    ajListIterDel(&titer);
 
      /*
      ** If no match, then clear the tagstmp string

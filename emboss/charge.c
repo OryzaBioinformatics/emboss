@@ -32,7 +32,7 @@
 
 static void  charge_addgraph(AjPGraph graph, ajint limit, const float *x,
 			     const float *y, float ymax, float ymin,
-			     ajint window, const char *sname);
+			     ajint window);
 static AjPFloat charge_read_amino(AjPFile fp);
 
 
@@ -98,6 +98,7 @@ int main(int argc, char **argv)
 
     str = ajStrNew();
 
+    ajGraphSetTitlePlus(graph, ajSeqallGetUsa(seqall));
     while(ajSeqallNext(seqall, &seq))
     {
 	beg = ajSeqallGetseqBegin(seqall);
@@ -157,7 +158,7 @@ int main(int argc, char **argv)
 	    ajGraphxySetOverLap(graph,ajFalse);
 	    ajGraphSetXTitleC(graph,"Position");
 	    ajGraphSetYTitleC(graph,"Charge");
-	    charge_addgraph(graph,limit,x,y,ymax,ymin,window,sname);
+	    charge_addgraph(graph,limit,x,y,ymax,ymin,window);
 	    if(limit > 1)
 		ajGraphxyDisplay(graph,ajFalse);
 	}
@@ -200,13 +201,12 @@ int main(int argc, char **argv)
 ** @param [r] ymax [float] max y value
 ** @param [r] ymin [float] max x value
 ** @param [r] window [ajint] window
-** @param [r] sname [const char*] sequence name
 ** @@
 ******************************************************************************/
 
 static void charge_addgraph(AjPGraph graph, ajint limit, const float *x,
 			    const float *y, float ymax, float ymin,
-			    ajint window, const char *sname)
+			    ajint window)
 {
     ajint i;
 
@@ -231,9 +231,8 @@ static void charge_addgraph(AjPGraph graph, ajint limit, const float *x,
     ajGraphPlpDataSetMaxMin(data,x[0],x[limit-1],ymin,ymax);
     ajGraphPlpDataSetMaxima(data,x[0],x[limit-1],ymin,ymax);
 
-    ajFmtPrintS(&st,"CHARGE of %s. Window:%d",sname,window);
-    ajGraphPlpDataSetTitle(data,st);
-    ajGraphSetTitleC(graph,ajStrGetPtr(st));
+    ajFmtPrintS(&st,"Window:%d",window);
+    ajGraphPlpDataSetSubTitle(data,st);
 
     ajGraphPlpDataSetTypeC(data,"2D Plot Float");
     ajFmtPrintS(&st,"Charge");

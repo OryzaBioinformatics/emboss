@@ -144,7 +144,7 @@ int main(int argc, char **argv)
     ajDoubleDel(&darray);
 
 
-    ajListDel(&dlist);
+    ajListFree(&dlist);
 
     ajFileClose(&inf);
     ajFileClose(&outf);
@@ -313,7 +313,7 @@ static void mwfilter_noisedel(AjPDouble exparray, ajint expn,
 		    AJNEW(delwt);
 		    delwt->exp = mwexp;
 		    delwt->data = n;
-		    ajListPushApp(dlist,(void *)delwt);
+		    ajListPushAppend(dlist,(void *)delwt);
 		}
 	    }
 	}

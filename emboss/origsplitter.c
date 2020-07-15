@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 
     }
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
     ajSeqoutDel(&seqout);
     ajSeqDel(&subseq);
     ajStrDel(&str);
@@ -155,7 +155,7 @@ static void origsplitter_write(AjPSeqout seqout, AjPSeq subseq, ajint start,
     /* set the type of the subsequence */
     ajSeqType(subseq);
 
-    ajSeqAllWrite(seqout, subseq);
+    ajSeqoutWriteSeq(seqout, subseq);
 
 
     ajStrDel(&name);

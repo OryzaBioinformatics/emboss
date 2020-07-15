@@ -219,7 +219,7 @@ int main(int argc, char **argv)
     identity          = ajAcdGetInt("identity");
     boxit             = ajAcdGetBool("box");
 
-    ajtime = ajTimeTodayF("daytime");
+    ajtime = ajTimeNewTodayFmt("daytime");
 
     ajSeqsetTrim(seqset);
     /* offset = ajSeqsetGetOffset(seqset); Unused */

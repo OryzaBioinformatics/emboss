@@ -208,7 +208,7 @@ int main(int argc, char **argv, char **env)
 	embExitBad();
 
     /* Set output format to fasta */
-    ajSeqOutSetFormat( fil_file, tmp);
+    ajSeqoutSetFormatS( fil_file, tmp);
 
     while(ajSeqallNext(seqall, &seq))
     {
@@ -387,7 +387,7 @@ int main(int argc, char **argv, char **env)
 /*    ajFmtError("..%s..\n\n", ajStrGetPtr( cmd)); */
     ajDebug("Executing '%S'\n", cmd);
 #ifndef WIN32
-    ajSystemEnv(cmd, env);
+    ajSysSystemEnv(cmd, env);
 #else
     if(system(ajStrGetPtr(cmd)) == -1)
 	ajFatal("clustalw execution failure");
@@ -431,14 +431,14 @@ int main(int argc, char **argv, char **env)
 	    ajFmtPrintF(dend_outfile, "%s\n", ajStrGetPtr( line));
 
 	ajFileClose(&tmp_dendfile);
-	ajSysUnlink(tmp_dendfilename);
+	ajSysFileUnlink(tmp_dendfilename);
     }
 
 
-    ajSysUnlink( tmpFilename);
+    ajSysFileUnlink( tmpFilename);
 
     if(!only_dend)
-	ajSysUnlink(tmp_aln_outfile);
+	ajSysFileUnlink(tmp_aln_outfile);
 
     ajStrDel(&pw_matrix);
     ajStrDel(&matrix);

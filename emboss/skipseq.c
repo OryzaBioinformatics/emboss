@@ -56,6 +56,10 @@ int main(int argc, char **argv)
 
     ajSeqoutClose(seqout);
 
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
+
     embExit();
 
     return 0;

@@ -357,7 +357,7 @@ int main(int argc, char **argv)
 	    temppos++;
 	    comp = !comp;
 	}	    
-	ajListstrDel(&listseq);
+	ajListstrFree(&listseq);
 	ajIntDel(&liststart);
 	ajIntDel(&listend);
 	
@@ -551,8 +551,8 @@ static void einverted_report(ajint max, ajint imax, const AjPSeq seq,
 	}
     /* JISON new block */
     ajStrReverse(&regionB);
-    ajListstrPushApp(*listseq, regionA);
-    ajListstrPushApp(*listseq, regionB);
+    ajListstrPushAppend(*listseq, regionA);
+    ajListstrPushAppend(*listseq, regionB);
     
     if(rev)
 	ajFmtPrintF(outfile, " %-8d\n", ioffset + length + 1 - *(ip-1) -1);

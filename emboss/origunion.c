@@ -59,8 +59,8 @@ int main(int argc, char **argv)
     }
 
     ajSeqAssignSeqS(uniseq, unistr);
-    ajSeqWrite(seqout, uniseq);
-    ajSeqWriteClose(seqout);
+    ajSeqoutWriteSeq(seqout, uniseq);
+    ajSeqoutClose(seqout);
 
     embExit();
 

@@ -279,7 +279,7 @@ int main(int argc, char **argv)
     }
 
     if(ajStrMatchC(datestr, "00/00/00"))
-	ajFmtPrintS(&datestr, "%D", ajTimeTodayRefF("dbindex"));
+	ajFmtPrintS(&datestr, "%D", ajTimeRefTodayFmt("dbindex"));
 
     ajStrRemoveWhite(&dbname);		/* used for temp filenames */
     embDbiDateSet(datestr, date);
@@ -290,7 +290,7 @@ int main(int argc, char **argv)
 
     listInputFiles = embDbiFileListExc(directory, filename, exclude);
     ajListSort(listInputFiles, ajStrVcmp);
-    nfiles = ajListToArray(listInputFiles, &inputFiles);
+    nfiles = ajListToarray(listInputFiles, &inputFiles);
     if(!nfiles)
 	ajFatal("No files selected");
 
@@ -496,8 +496,8 @@ int main(int argc, char **argv)
     }
 
     ajListMap(idlist, embDbiEntryDelMap, NULL);
-    ajListDel(&idlist);
-    ajListstrFree(&listInputFiles);
+    ajListFree(&idlist);
+    ajListstrFreeData(&listInputFiles);
     AJFREE(entryIds);
     ajStrDel(&curfilename);
 
@@ -602,7 +602,7 @@ static EmbPEntry dbigcg_nextentry(AjPFile libr, AjPFile libs,
 	/* field tokens as list, then move to dbigcgEntry->field */
 	for(ifield=0; ifield < nfields; ifield++)
 	{
-	    dbigcgEntry->nfield[ifield] = ajListLength(fdl[ifield]);
+	    dbigcgEntry->nfield[ifield] = ajListGetLength(fdl[ifield]);
 
 	    if(dbigcgEntry->nfield[ifield])
 	    {
@@ -1217,7 +1217,7 @@ static AjBool dbigcg_ParseEmbl(AjPFile libr,
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[accfield], fd);
+		    ajListPushAppend(fdl[accfield], fd);
 		}
 		ajRegPost(dbigcg_embl_wrdexp, &tmpline);
 	    }
@@ -1238,7 +1238,7 @@ static AjBool dbigcg_ParseEmbl(AjPFile libr,
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[desfield], fd);
+		    ajListPushAppend(fdl[desfield], fd);
 		}
 		ajRegPost(dbigcg_embl_wrdexp, &tmpline);
 	    }
@@ -1259,7 +1259,7 @@ static AjBool dbigcg_ParseEmbl(AjPFile libr,
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[svnfield], fd);
+		    ajListPushAppend(fdl[svnfield], fd);
 		}
 		ajRegPost(dbigcg_embl_verexp, &tmpline);
 	    }
@@ -1284,7 +1284,7 @@ static AjBool dbigcg_ParseEmbl(AjPFile libr,
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[keyfield], fd);
+		    ajListPushAppend(fdl[keyfield], fd);
 		}
 	    }
 	    continue;
@@ -1308,7 +1308,7 @@ static AjBool dbigcg_ParseEmbl(AjPFile libr,
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[taxfield], fd);
+		    ajListPushAppend(fdl[taxfield], fd);
 		}
 	    }
 	    continue;
@@ -1478,7 +1478,7 @@ static AjBool dbigcg_ParseGenbank(AjPFile libr,
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[accfield], fd);
+		    ajListPushAppend(fdl[accfield], fd);
 		}
 		ajRegPost(wrdexp, &tmpline);
 	    }
@@ -1500,7 +1500,7 @@ static AjBool dbigcg_ParseGenbank(AjPFile libr,
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[desfield], fd);
+		    ajListPushAppend(fdl[desfield], fd);
 		}
 		ajRegPost(wrdexp, &tmpline);
 	    }
@@ -1526,7 +1526,7 @@ static AjBool dbigcg_ParseGenbank(AjPFile libr,
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[keyfield], fd);
+		    ajListPushAppend(fdl[keyfield], fd);
 		}
 	    }
 	    continue;
@@ -1551,7 +1551,7 @@ static AjBool dbigcg_ParseGenbank(AjPFile libr,
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[taxfield], fd);
+		    ajListPushAppend(fdl[taxfield], fd);
 		}
 	    }
 	    continue;
@@ -1571,7 +1571,7 @@ static AjBool dbigcg_ParseGenbank(AjPFile libr,
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[svnfield], fd);
+		    ajListPushAppend(fdl[svnfield], fd);
 		}
 		ajRegSubI(verexp, 3, &tmpfd);
 		if(!ajStrGetLen(tmpfd))
@@ -1585,7 +1585,7 @@ static AjBool dbigcg_ParseGenbank(AjPFile libr,
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[svnfield], fd);
+		    ajListPushAppend(fdl[svnfield], fd);
 		}
 	    }
 	    continue;
@@ -1718,7 +1718,7 @@ static AjBool dbigcg_ParsePir(AjPFile libr,
 	    else
 	    {
 		fd = ajCharNewS(tmpfd);
-		ajListPushApp(fdl[desfield], fd);
+		ajListPushAppend(fdl[desfield], fd);
 	    }
 	    ajRegPost(dbigcg_pir_wrdexp, &rline);
 	}
@@ -1745,7 +1745,7 @@ static AjBool dbigcg_ParsePir(AjPFile libr,
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[accfield], fd);
+		    ajListPushAppend(fdl[accfield], fd);
 		}
 		ajRegPost(dbigcg_pir_ac2exp, &tmpline);
 	    }
@@ -1771,7 +1771,7 @@ static AjBool dbigcg_ParsePir(AjPFile libr,
 		    else
 		    {
 			fd = ajCharNewS(tmpfd);
-			ajListPushApp(fdl[keyfield], fd);
+			ajListPushAppend(fdl[keyfield], fd);
 		    }
 		    ajRegPost(dbigcg_pir_phrexp, &tmpline);
 		}
@@ -1797,7 +1797,7 @@ static AjBool dbigcg_ParsePir(AjPFile libr,
 		    else
 		    {
 			fd = ajCharNewS(tmpfd);
-			ajListPushApp(fdl[taxfield], fd);
+			ajListPushAppend(fdl[taxfield], fd);
 		    }
 		    ajRegPost(dbigcg_pir_tax2exp, &tmpline);
 		}

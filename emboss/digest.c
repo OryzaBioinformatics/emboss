@@ -203,8 +203,8 @@ int main(int argc, char **argv)
 
     ajStrDel(&rname);
     ajStrDel(&substr);
-    ajListDel(&pa);
-    ajListDel(&l);
+    ajListFree(&pa);
+    ajListFree(&l);
     ajStrDel(&menu);
     ajStrDel(&rag);
 

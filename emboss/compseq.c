@@ -322,7 +322,7 @@ int main(int argc, char **argv)
 
 	if(have_exp_freq)
 	{
-	    if((tmpstr=ajTableGet(exptable,dispseq)))
+	    if((tmpstr=ajTableFetch(exptable,dispseq)))
 	    {
 		ajStrToDouble(tmpstr, &exp_freq);
 		tmpstr = NULL;
@@ -374,7 +374,7 @@ int main(int argc, char **argv)
     if(have_exp_freq)
     {
 	ajStrAssignC(&strother, "Other");
-	ajStrToDouble(ajTableGet(exptable, strother), &exp_freq);
+	ajStrToDouble(ajTableFetch(exptable, strother), &exp_freq);
     }
     else 
     {
@@ -414,7 +414,7 @@ int main(int argc, char **argv)
     ajStrDel(&strother);
 
     if(have_exp_freq)
-	ajStrTableFree(&exptable);
+	ajTablestrFree(&exptable);
  
 
     embExit();
@@ -474,7 +474,7 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
     AjPStr value;
 
     /* initialise the hash table - use case-insensitive comparison */
-    *exptable = ajStrTableNewCase(350);
+    *exptable = ajTablestrNewCaseLen(350);
 
 
     /* read the file */

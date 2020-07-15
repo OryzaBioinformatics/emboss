@@ -363,10 +363,10 @@ static void pepcoil_readcoildat(AjPFloat2d *rdat)
 	if(*p=='#' || *p=='!' || !*p) continue;
 	ajCharFmtUpper(p);
 	q=p;
-	q=ajSysStrtok(q," \t");
+	q=ajSysFuncStrtok(q," \t");
 	n=ajAZToInt(*q);
 	c = 0;
-	while((q=ajSysStrtok(NULL,delim)))
+	while((q=ajSysFuncStrtok(NULL,delim)))
 	{
 	    sscanf(q,"%f",&v);
 	    ajFloat2dPut(rdat,n,c++,v);

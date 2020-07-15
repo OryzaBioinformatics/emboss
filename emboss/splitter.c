@@ -91,11 +91,11 @@ int main(int argc, char **argv)
         if (source)
 	{
             old_feattable = ajSeqGetFeatCopy(seq);
-            iter = ajListIterRead(old_feattable->Features);
+            iter = ajListIterNewread(old_feattable->Features);
 
-            while(ajListIterMore(iter))
+            while(!ajListIterDone(iter))
 	    {
-		gf = ajListIterNext (iter);
+		gf = ajListIterGet(iter);
 		type = ajFeatGetType(gf);
 		origid = ajStrNewC("origid");
 
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 		}
 	    }
 	    ajFeattableDel(&old_feattable);
-            ajListIterFree(&iter);
+            ajListIterDel(&iter);
 	}
         else
 	{
@@ -279,10 +279,10 @@ static void splitter_AddSubSeqFeat(AjPFeattable ftable, ajuint start,
   AjIList iter = NULL;
 
   old_feattable = ajSeqGetFeatCopy(oldseq);
-  iter = ajListIterRead(old_feattable->Features);
+  iter = ajListIterNewread(old_feattable->Features);
 
-  while(ajListIterMore(iter)) {
-    AjPFeature gf = ajListIterNext (iter);
+  while(!ajListIterDone(iter)) {
+    AjPFeature gf = ajListIterGet(iter);
 
     AjPFeature copy = NULL;
 
@@ -309,5 +309,5 @@ static void splitter_AddSubSeqFeat(AjPFeattable ftable, ajuint start,
     ajFeattableAdd(ftable, copy);
   }
   ajFeattableDel(&old_feattable);
-  ajListIterFree(&iter);
+  ajListIterDel(&iter);
 }

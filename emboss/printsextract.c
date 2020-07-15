@@ -107,9 +107,17 @@ int main(int argc, char **argv)
 	AJFREE (cnts);
 	ajFmtPrintF(outf,"//\n");
     }
+
+    ajFileClose(&inf);
+    ajFileClose(&outf);
+
+    ajStrDel(&pfname);
+
     ajStrDel(&line);
     ajStrDel(&acc);
     ajStrDel(&code);
+
+
     embExit();
 
     return 0;

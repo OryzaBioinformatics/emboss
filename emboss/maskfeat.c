@@ -126,10 +126,10 @@ static void maskfeat_FeatSeqMask(AjPSeq seq, const AjPStr type,
 
     if(feat && ajFeattableSize(feat))
     {
-	iter = ajListIterRead(feat->Features) ;
-	while(ajListIterMore(iter))
+	iter = ajListIterNewread(feat->Features) ;
+	while(!ajListIterDone(iter))
 	{
-	    gf = ajListIterNext(iter) ;
+	    gf = ajListIterGet(iter) ;
 	    tokens = ajStrTokenNewC(type, whiteSpace);
 	    while(ajStrTokenNextParse( &tokens, &key))
 		if(ajStrMatchWildS(ajFeatGetType(gf), key))
@@ -146,7 +146,7 @@ static void maskfeat_FeatSeqMask(AjPSeq seq, const AjPStr type,
 	    ajStrTokenDel( &tokens);
 	    ajStrDel(&key);
 	}
-	ajListIterFree(&iter);
+	ajListIterDel(&iter);
     }
 
     ajSeqAssignSeqS(seq, str);

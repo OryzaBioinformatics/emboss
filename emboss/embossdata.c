@@ -203,12 +203,15 @@ int main(int argc, char **argv)
 	ajFileScan(path,NULL,NULL,ajTrue,ajFalse,NULL,rlist,recurs,outf);
     }
 
-    ajListDel(&flocs);
+    ajListFree(&flocs);
     while(ajListPop(rlist,(void **)&t))
 	ajStrDel(&t);
-    ajListDel(&rlist);
+    ajListFree(&rlist);
     ajStrDel(&path);
+    ajStrDel(&hdir);
     ajStrDel(&ddir);
+    ajStrDel(&directory);
+    ajStrDel(&cmd);
     ajStrDel(&filename);
     ajFileClose(&outf);
 
@@ -235,10 +238,15 @@ int main(int argc, char **argv)
 
 static void embossdata_check_dir(const AjPStr d, AjPFile outf)
 {
-    if(ajSysIsDirectory(ajStrGetPtr(d)))
+    AjPStr tmpstr;
+    tmpstr = ajStrNewS(d);
+
+    if(ajFileDir(&tmpstr))
 	ajFmtPrintF(outf,"%-60.60S Exists\n",d);
     else
 	ajFmtPrintF(outf,"%-60.60S Does not exist\n",d);
+
+    ajStrDel(&tmpstr);
 
     return;
 }
@@ -266,7 +274,7 @@ static void embossdata_check_file(const AjPStr d, const AjPStr file,
     ajStrAssignS(&s,d);
     ajStrAppendC(&s,"/");
     ajStrAppendS(&s,file);
-    if(ajSysIsRegular(ajStrGetPtr(s)))
+    if(ajFileNameValid(s))
 	ajFmtPrintF(outf,"File %-60.60S Exists\n",s);
     else
 	ajFmtPrintF(outf,"File %-60.60S Does not exist\n",s);

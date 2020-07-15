@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 	    ajSeqDel(&newseq);
 	}
 
-	ajListstrFree(&strlist);
+	ajListstrFreeData(&strlist);
 
     }
     else
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 
     ajRangeDel(&regions);
     ajStrDel(&newstr);
-    ajListstrFree(&strlist);
+    ajListstrFreeData(&strlist);
 
     embExit();
 

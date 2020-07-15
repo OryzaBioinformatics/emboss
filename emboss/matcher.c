@@ -552,7 +552,7 @@ static void matcher_Sim(AjPAlign align,
     AJFREE(YY);
     AJFREE(S);
 
-    for(i=1; i<ajSeqGetLen(seq);i++)
+    for(i=0; i<=ajSeqGetLen(seq);i++)
     {
 	pairptr this;
 	pairptr next;

@@ -140,8 +140,8 @@ int main(ajint argc, char **argv)
     while(ajSeqallNext(seqall, &ajseq))
     {
 
-	seqdes = ajSeqGetDesc(ajseq);
-	newcoils_pred_coils(outf,ajSeqChar(ajseq),ajSeqName(ajseq),
+	seqdes = ajSeqGetDescS(ajseq);
+	newcoils_pred_coils(outf,ajSeqGetSeqC(ajseq),ajSeqGetNameC(ajseq),
 			    seqdes,h,window,
 			    which,weighted,mode,min_P,&t,&tc,min_seg); 
 

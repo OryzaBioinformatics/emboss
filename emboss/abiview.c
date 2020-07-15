@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 
     nstop  = window+1+nstart;
 
-    ajGraphSetTitle(graphs,fname);
+    ajGraphSetTitlePlus(graphs,fname);
     ajGraphSetYTitleC(graphs,"Signal");
     if(yticks)
     {

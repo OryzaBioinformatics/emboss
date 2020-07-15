@@ -337,16 +337,16 @@ int main(int argc, char **argv)
             program = ajStrNew();
             ajStrAssignC(&program, "primer3_core");
     
-            if(ajSysWhich(&program))
+            if(ajSysFileWhich(&program))
             {
     	        execlp( "primer3_core", "primer3_core", NULL );
     	        ajDie("There was a problem while executing primer3");
             }
             else
     	        ajDie("The program 'primer3_core' must be on the path.\n"
-		      "It is part of the 'primer3' package, version 0.9,\n"
+		      "It is part of the 'primer3' package, version 1.1,\n"
 		      "available from the Whitehead Institute.\n"
-		      "See: http://www-genome.wi.mit.edu/");
+		      "See: http://primer3.sourceforge.net/");
     
             ajStrDel(&program);
 
@@ -656,7 +656,23 @@ int main(int argc, char **argv)
     ajStrDel(&substr);
     ajFileClose(&outfile);
     ajStrDel(&taskstr);
-    
+    ajStrDelarray(&task);
+
+    ajSeqallDel(&sequence);
+    ajSeqDel(&seq);
+
+    ajRangeDel(&included_region);
+    ajRangeDel(&target);
+    ajRangeDel(&excluded_region);
+    ajRangeDel(&product_size_range);
+    ajRangeDel(&internal_oligo_excluded_region);
+
+    ajStrDel(&left_input);
+    ajStrDel(&right_input);
+    ajStrDel(&internal_oligo_input);
+
+    ajFileClose(&mispriming_library);
+
     embExit();
 
     return 0;
@@ -1070,7 +1086,7 @@ static void eprimer3_report(AjPFile outfile, const AjPStr output,
             if(ajStrCmpLenC(line, "PRIMER_SEQUENCE_ID=", 19) == 0)
             {
                 gotsequenceid = AJTRUE;
-                table = ajStrTableNew(TABLEGUESS);
+                table = ajTablestrNewLen(TABLEGUESS);
 
             }
             else
@@ -1086,7 +1102,7 @@ static void eprimer3_report(AjPFile outfile, const AjPStr output,
             {
                 gotsequenceid = AJFALSE;
                 eprimer3_output_report(outfile, table, numreturn, begin);
-                ajStrTableFree(&table);
+                ajTablestrFree(&table);
                 continue;
             }
         }
@@ -1116,7 +1132,7 @@ static void eprimer3_report(AjPFile outfile, const AjPStr output,
 
     ajStrDel(&line);
     ajStrTokenDel(&linetokenhandle);
-    ajStrTableFree(&table);
+    ajTablestrFree(&table);
 
     return;
 }
@@ -1140,7 +1156,7 @@ static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
                                    ajint numreturn, ajint begin)
 {
     AjPStr key   = NULL;
-    AjPStr error = NULL;
+    AjPStr error = NULL;		/*  value from table - do not delete */
     AjPStr explain    = NULL;
     AjPStr explainstr = NULL;
     AjPStr seqid      = NULL;
@@ -1185,24 +1201,24 @@ static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
   
     /* check for errors */
     ajStrAssignC(&key, "PRIMER_ERROR");
-    error =(AjPStr)ajTableGet(table,(const void*)key);
+    error =(AjPStr)ajTableFetch(table,(const void*)key);
     if(error != NULL)
         ajErr("%S", error);
 
     ajStrAssignC(&key, "PRIMER_WARNING");
-    error = (AjPStr)ajTableGet(table,(const void*)key);
+    error = (AjPStr)ajTableFetch(table,(const void*)key);
     if(error != NULL)
         ajWarn("%S", error);
 
   
     /* get the sequence id */
     ajStrAssignC(&key, "PRIMER_SEQUENCE_ID");
-    seqid = (AjPStr)ajTableGet(table,(const void*)key);
+    seqid = (AjPStr)ajTableFetch(table,(const void*)key);
     ajFmtPrintF(outfile, "\n# EPRIMER3 RESULTS FOR %S\n\n", seqid);
   
     /* get information on the analysis */
     ajStrAssignC(&key, "PRIMER_LEFT_EXPLAIN");
-    explain = (AjPStr)ajTableGet(table,(const void*)key);
+    explain = (AjPStr)ajTableFetch(table,(const void*)key);
 
     if(explain != NULL)
     {
@@ -1212,7 +1228,7 @@ static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
                     explainstr);
     }
     ajStrAssignC(&key, "PRIMER_RIGHT_EXPLAIN");
-    explain = (AjPStr)ajTableGet(table,(const void*)key);
+    explain = (AjPStr)ajTableFetch(table,(const void*)key);
 
     if(explain != NULL)
     {
@@ -1222,7 +1238,7 @@ static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
                     explainstr);
     }
     ajStrAssignC(&key, "PRIMER_PAIR_EXPLAIN");
-    explain = (AjPStr)ajTableGet(table,(const void*)key);
+    explain = (AjPStr)ajTableFetch(table,(const void*)key);
 
     if(explain != NULL)
     {
@@ -1232,7 +1248,7 @@ static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
                     explainstr);
     }
     ajStrAssignC(&key, "PRIMER_INTERNAL_OLIGO_EXPLAIN");
-    explain = (AjPStr)ajTableGet(table,(const void*)key);
+    explain = (AjPStr)ajTableFetch(table,(const void*)key);
 
     if(explain != NULL)
     {
@@ -1289,7 +1305,8 @@ static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
   
 
     ajStrDel(&key);
-
+    ajStrDel(&explainstr);
+ 
     return;
 }
 
@@ -1331,7 +1348,7 @@ static AjPStr eprimer3_tableget(const char *key1, ajint number,
 
     ajStrAppendC(&fullkey, key2);
     ajDebug("Constructed key=%S\n", fullkey);
-    value =(AjPStr)ajTableGet(table,(const void*)fullkey);
+    value =(AjPStr)ajTableFetch(table,(const void*)fullkey);
 
 
     ajStrDel(&fullkey);

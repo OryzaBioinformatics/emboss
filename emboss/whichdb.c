@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 	    seqout = ajSeqoutNew();
 	    if(!ajSeqoutOpenFilename(seqout,snam))
 		ajFatal("Cannot open output file [%S]",snam);
-	    ajSeqOutSetFormatC(seqout,"FASTA");
+	    ajSeqoutSetFormatC(seqout,"FASTA");
 	    ajUser("Writing %S",snam);
 	    ajSeqoutWriteSeq(seqout,seq);
 	    ajSeqoutClose(seqout);
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
     
     
     
-    ajListDel(&dblist);
+    ajListFree(&dblist);
     ajStrDel(&type);
     ajStrDel(&comm);
     ajStrDel(&meth);

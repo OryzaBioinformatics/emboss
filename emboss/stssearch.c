@@ -60,6 +60,7 @@ ajint ntests   = 0;
 
 
 
+static void stssearch_primDel(void **x,  void *cl);
 static void stssearch_primTest(void **x,void *cl);
 
 
@@ -119,7 +120,7 @@ int main(int argc, char **argv)
 	if(!nprimers)
 	    primList = ajListNew();
 
-	ajListPushApp(primList, primdata);
+	ajListPushAppend(primList, primdata);
 	nprimers++;
     }
 
@@ -141,12 +142,51 @@ int main(int argc, char **argv)
 
     ajFileClose(&out);
 
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajFileClose(&out);
+    ajStrDel(&revstr);
+    ajStrDel(&seqstr);
+    ajFileClose(&primfile);
+    ajListMap(primList, stssearch_primDel, NULL);
+    ajListFree(&primList);
+    ajStrDel(&rdline);
+
+
     embExit();
 
     return 0;
 }
 
 
+/* @funcstatic stssearch_primDel **********************************************
+**
+** Undocumented.
+**
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
+
+static void stssearch_primDel(void **x,  void *cl)
+{
+    Primer* p;
+    Primer primdata;
+
+   (void) cl;				/* make it used */
+
+    p = (Primer*) x;
+    primdata = *p;
+
+    ajStrDel(&primdata->Name);
+    ajRegFree(&primdata->Prima);
+    ajRegFree(&primdata->Primb);
+    ajStrDel(&primdata->Oligoa);
+    ajStrDel(&primdata->Oligob);
+    AJFREE(*p);
+}
 
 
 /* @funcstatic stssearch_primTest *********************************************

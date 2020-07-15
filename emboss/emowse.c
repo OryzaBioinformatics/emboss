@@ -201,7 +201,7 @@ int main(int argc, char **argv)
 		     (double)partials,
 		     smw,rno,freqs);
 
-	ajListDel(&flist);
+	ajListFree(&flist);
     }
 
 
@@ -213,7 +213,7 @@ int main(int argc, char **argv)
     }
     AJFREE(data);
 
-    ajListDel(&hlist);
+    ajListFree(&hlist);
 
     ajFileClose(&mfptr);
 
@@ -223,7 +223,7 @@ int main(int argc, char **argv)
     ajStrDel(&enzyme);
 
     ajDoubleDel(&freqs);
-    ajListDel(&flist);
+    ajListFree(&flist);
 
     embExit();
 
@@ -333,8 +333,8 @@ static ajint emowse_read_data(AjPFile inf, EmbPMdata** data)
 	}
 
     ajListSort(l,emowse_sort_data);
-    n = ajListToArray(l,(void ***)data);
-    ajListDel(&l);
+    n = ajListToarray(l,(void ***)data);
+    ajListFree(&l);
     ajStrDel(&str);
     ajStrTokenDel(&token);
 
@@ -442,7 +442,7 @@ static void emowse_match(EmbPMdata const * data, ajint dno, AjPList flist,
 
 
     ajListReverse(flist);
-    ajListToArray(flist,(void ***)&frags);
+    ajListToarray(flist,(void ***)&frags);
 
 
     sumf = (double)1.;
@@ -1214,21 +1214,21 @@ static void emowse_print_hits(AjPFile outf, AjPList hlist, ajint dno,
 
     ajFmtPrintF(outf,"\n");
 
-    iter = ajListIterRead(hlist);
+    iter = ajListIterNewread(hlist);
     c    = 0;
-    while(ajListIterMore(iter))
+    while(!ajListIterDone(iter))
     {
-	hits = (PHits) ajListIterNext(iter);
+	hits = (PHits) ajListIterGet(iter);
 	ajFmtPrintF(outf,"%-3d %-13S%-62.62S\n",++c,hits->name,hits->desc);
     }
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
 
 
-    iter = ajListIterRead(hlist);
+    iter = ajListIterNewread(hlist);
     c    = 0;
-    while(ajListIterMore(iter))
+    while(!ajListIterDone(iter))
     {
-	hits = (PHits) ajListIterNext(iter);
+	hits = (PHits) ajListIterGet(iter);
 
 	for(i=pvt=0;i<dno;++i)
 	    if(ajIntGet(hits->found,i) > -1)
@@ -1303,7 +1303,7 @@ static void emowse_print_hits(AjPFile outf, AjPList hlist, ajint dno,
 	AJFREE(hits);
     }
 
-    ajListIterFree(&iter);
+    ajListIterDel(&iter);
     ajStrDel(&substr);
     ajFloatDel(&nmarray);
 

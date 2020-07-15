@@ -411,11 +411,11 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 		ajFatal("Asymmetric table");
 
 	q = ajStrGetPtr(line);
-	q = ajSysStrtok(q,ajStrGetPtr(delim));
+	q = ajSysFuncStrtok(q,ajStrGetPtr(delim));
 
 	d1 = ajAZToInt((char)toupper((ajint)*p));
 	c  = 0;
-	while((q=ajSysStrtok(NULL,ajStrGetPtr(delim))))
+	while((q=ajSysFuncStrtok(NULL,ajStrGetPtr(delim))))
 	{
 	    sscanf(q,"%f",&v);
 	    ajFloat2dPut(matrix,d1,c++,v);

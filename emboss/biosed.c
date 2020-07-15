@@ -93,6 +93,13 @@ int main(int argc, char **argv)
     ajStrDel(&str);
     ajSeqoutClose(outseq);
 
+    ajSeqoutDel(&outseq);
+
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajStrDel(&replace);
+    ajStrDel(&target);
+
     embExit();
 
     return 0;

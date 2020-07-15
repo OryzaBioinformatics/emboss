@@ -272,16 +272,6 @@ static ajint pestfind_compare_score(const void *one, const void *two)
 
 
 
-#ifdef PLD_png
-
-extern int PNGWidth;
-extern int PNGHeight;
-
-#endif
-
-
-
-
 /* @prog epestfind ***************************************************
 ** Finds PEST motifs as potential proteolytic cleavage sites.
 ********************************************************************/
@@ -351,20 +341,11 @@ int main(int argc, char **argv)
     float  ymax   = +60.0; /* Maximum PEST-find score (graphics y-axis) */
     float  ymin   = -60.0; /* Minimum PEST-find score (graphics y-axis) */
     
-#ifdef PLD_png
-    
-    /*
-       PNGWidth = 1280;
-       PNGHeight = 960;
-       */
-    
-    PNGWidth = 960;
-    PNGHeight = 960;
-    
-#endif
 
     ajGraphInit("epestfind", argc, argv);
-    
+
+    ajGraphSetPage(960, 960);
+
     seq    = ajAcdGetSeq("sequence");
     win    = ajAcdGetInt("window");
     dsppot = ajAcdGetBool("potential");
@@ -462,7 +443,7 @@ int main(int argc, char **argv)
 			    (pstdat->Begin)  = posbeg;
 			    (pstdat->End)    = posend;
 			    (pstdat->Length) = sublen;
-			    ajListPushApp(reslst, (PestfindPData) pstdat);
+			    ajListPushAppend(reslst, (PestfindPData) pstdat);
 			}
 			break;
 		    }
@@ -504,7 +485,7 @@ int main(int argc, char **argv)
 			    (pstdat->Pscore) = pscore;
 			    (pstdat->Hydind) = hydind;
 			    (pstdat->Pstpct) = pstpct;
-			    ajListPushApp(reslst, (PestfindPData) pstdat);
+			    ajListPushAppend(reslst, (PestfindPData) pstdat);
 			}
 			break;
 		    }
@@ -522,7 +503,7 @@ int main(int argc, char **argv)
 			    (pstdat->Pscore) = pscore;
 			    (pstdat->Hydind) = hydind;
 			    (pstdat->Pstpct) = pstpct;
-			    ajListPushApp(reslst, (PestfindPData) pstdat);
+			    ajListPushAppend(reslst, (PestfindPData) pstdat);
 			}
 			break;
 		    }
@@ -553,29 +534,29 @@ int main(int argc, char **argv)
     ajFmtPrintF(outf, "PEST-find: Finds PEST motifs as potential "
 		"proteolytic cleavage sites.\n\n");
     
-    if(ajListLength(reslst) == 0)
+    if(ajListGetLength(reslst) == 0)
 	ajFmtPrintF(outf, "    No PEST motif was identified in %s from "
 		    "%d to %d.\n\n",
 		    ajSeqGetNameC(seq), begin, end);
 
     
-    if(ajListLength(reslst) == 1)
+    if(ajListGetLength(reslst) == 1)
 	ajFmtPrintF(outf, "     1 PEST motif was identified in %s from "
 		    "%d to %d.\n\n",
 		    ajSeqGetNameC(seq), begin, end);
 
     
-    if(ajListLength(reslst) > 1)
+    if(ajListGetLength(reslst) > 1)
     {
 	ajFmtPrintF(outf, "%6d PEST motifs were identified in %s\n",
-		    ajListLength(reslst), ajSeqGetNameC(seq));
+		    ajListGetLength(reslst), ajSeqGetNameC(seq));
 	ajFmtPrintF(outf, "       from positions %d to %d and sorted by "
 		    "%S.\n\n", begin, end, sorder);
     }
-    itrlst = ajListIterRead(reslst);
-    while(ajListIterMore(itrlst))
+    itrlst = ajListIterNewread(reslst);
+    while(!ajListIterDone(itrlst))
     {
-	pstdat = (PestfindPData) ajListIterNext(itrlst);
+	pstdat = (PestfindPData) ajListIterGet(itrlst);
 
 	if((pstdat->Type) == PSTPOT)
 	    ajFmtPrintF(outf, "Potential ");
@@ -616,7 +597,7 @@ int main(int argc, char **argv)
 	if((pstdat->Type) == PSTINV)
 	    ajFmtPrintF(outf, "\n");
     }
-    ajListIterFree(&itrlst);
+    ajListIterDel(&itrlst);
 
     /* Display map. */
     if(dspmap)
@@ -627,13 +608,13 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf, "---------+---------+");
 	ajFmtPrintF(outf, "\n\n");
 	ajListSort(reslst, pestfind_compare_position);
-	itrlst = ajListIterRead(reslst);
+	itrlst = ajListIterNewread(reslst);
 	i = 0;
 	while(i <= seqlen)
 	{
-	    while(ajListIterMore(itrlst))
+	    while(!ajListIterDone(itrlst))
 	    {
-		pstdat = (PestfindPData) ajListIterNext(itrlst);
+		pstdat = (PestfindPData) ajListIterGet(itrlst);
 		while(i <= (pstdat->Begin))
 		{
 		    ajStrAppendK(&map, ' ');
@@ -689,7 +670,7 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(outf, "\n");
     }
     ajFileClose(&outf);			/* Close the output file. */
-    ajListIterFree(&itrlst);
+    ajListIterDel(&itrlst);
     
     /* Display graphics. */
     plot = ajGraphPlpDataNew();
@@ -709,10 +690,10 @@ int main(int argc, char **argv)
     ajGraphPlpDataAddText(plot, (float) 0 + 2, (float) trshld + 2,
 			  AQUAMARINE, ajStrGetPtr(map));
     ajListSort(reslst, pestfind_compare_position);
-    itrlst = ajListIterRead(reslst);
-    while(ajListIterMore(itrlst))
+    itrlst = ajListIterNewread(reslst);
+    while(!ajListIterDone(itrlst))
     {
-	pstdat = (PestfindPData) ajListIterNext(itrlst);
+	pstdat = (PestfindPData) ajListIterGet(itrlst);
 	if((pstdat->Type) == PSTPOT)
 	{
 	    ajGraphPlpDataAddLine(plot, (float) (pstdat->Begin),
@@ -748,7 +729,7 @@ int main(int argc, char **argv)
 				  "inv.");
 	}
     }
-    ajListIterFree(&itrlst);
+    ajListIterDel(&itrlst);
 
     ajGraphDataAdd(graph, plot);
     ajGraphSetCharScale(0.50);
@@ -758,10 +739,10 @@ int main(int argc, char **argv)
     ajGraphxyDel(&graph);
     
     /* clean-up and destruction */
-    itrlst = ajListIterRead(reslst);
-    while(ajListIterMore(itrlst))
+    itrlst = ajListIterNewread(reslst);
+    while(!ajListIterDone(itrlst))
     {
-	pstdat = (PestfindPData) ajListIterNext(itrlst);
+	pstdat = (PestfindPData) ajListIterGet(itrlst);
 	AJFREE(pstdat);
     }
     
@@ -772,7 +753,7 @@ int main(int argc, char **argv)
     ajStrDel(&str);		/* Delete the sequence string. */
     ajStrDel(&substr);		/* Delete the sequence sub-string. */
     ajStrDel(&sorder);		/* Delete the sort order string. */
-    ajListIterFree(&itrlst);	/* Delete the result list iterator. */
+    ajListIterDel(&itrlst);	/* Delete the result list iterator. */
     ajStrIterDel(&itrbeg); 	/* Delete the iterator of the outer loop. */
     ajStrIterDel(&itrend); 	/* Delete the iterator of the inner loop. */
 

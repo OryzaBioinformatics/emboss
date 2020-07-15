@@ -103,8 +103,8 @@ int main(int argc, char **argv)
 		haspattern = ajTrue;
 		/*save id*/
 		p = ajStrGetPtr(line);
-		p = ajSysStrtok(p," \t;");
-		p = ajSysStrtok(NULL," \t;");
+		p = ajSysFuncStrtok(p," \t;");
+		p = ajSysFuncStrtok(NULL," \t;");
 		ajStrAssignC(&id,p);
 		ajFmtPrintF(outf, "%S ", id);
 		continue;
@@ -123,8 +123,8 @@ int main(int argc, char **argv)
 	if(ajStrPrefixC(line, "AC") )
 	{
 	    p = ajStrGetPtr(line);
-	    p = ajSysStrtok(p, " \t;");
-	    p = ajSysStrtok(NULL, " \t;");
+	    p = ajSysFuncStrtok(p, " \t;");
+	    p = ajSysFuncStrtok(NULL, " \t;");
 	    ajStrAssignC(&ac,p);
 	    ajFmtPrintF(outf, "%S\n ", ac);
 	    continue;
@@ -133,8 +133,8 @@ int main(int argc, char **argv)
     	if(ajStrPrefixC(line, "DE") )
 	{
 	    p = ajStrGetPtr(line);
-	    p = ajSysStrtok(p, " \t.");
-	    p = ajSysStrtok(NULL, " \t.");
+	    p = ajSysFuncStrtok(p, " \t.");
+	    p = ajSysFuncStrtok(NULL, " \t.");
 	    ajStrAssignC(&de,p);
 	    ajFmtPrintF(outf, "%S\n ", de);
 	    continue;
@@ -148,8 +148,8 @@ int main(int argc, char **argv)
 	    while(ajStrPrefixC(line,"PA"))
 	    {
 		p = ajStrGetPtr(line);
-		p = ajSysStrtok(p, " \t.");
-		p = ajSysStrtok(NULL, " \t.");
+		p = ajSysFuncStrtok(p, " \t.");
+		p = ajSysFuncStrtok(NULL, " \t.");
 		ajStrAppendC(&pa,p);
 		ajFileReadLine(infdat, &line);
 	    }
@@ -191,7 +191,7 @@ int main(int argc, char **argv)
 	    storepos = ajFileTell(infdoc);
 	    /* save out the documentation text to acc numbered outfiles . */
 	    p = ajStrGetPtr(text)+1;
-	    p = ajSysStrtok(p, ";");
+	    p = ajSysFuncStrtok(p, ";");
 	    ajStrAssignS(&filename, fname);
 	    ajStrAppendC(&filename, p);
 

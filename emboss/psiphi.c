@@ -188,7 +188,7 @@ int main( int argc , char **argv )
 
     /* obtain iterator for list of atoms in chain */
     atomlist = 
-	ajListIterRead(pdb->Chains[myindex]->Atoms);
+	ajListIterNewread(pdb->Chains[myindex]->Atoms);
 
     ajDebug("psiphi pdb Pdb '%S' chain %d Id '%c'\n",
 	    pdb->Pdb, myindex, pdb->Chains[myindex]->Id);
@@ -211,7 +211,7 @@ int main( int argc , char **argv )
     do
     {
 	/* do nothing until you reach the start residue */
-	inlist = ajListIterNext(atomlist);
+	inlist = ajListIterGet(atomlist);
 	resnum = inlist->Idx;
     }
     while(resnum < firstres);
@@ -270,7 +270,7 @@ int main( int argc , char **argv )
 	}
 	else
 	    break;
-    }while((inlist = ajListIterNext(atomlist)));
+    }while((inlist = ajListIterGet(atomlist)));
 
     /* analyse first residue */
     if(psiphi_phi_calculable(known))
@@ -321,7 +321,7 @@ int main( int argc , char **argv )
 	    break;
 	prevres = resnum;
     }
-    while((inlist = ajListIterNext(atomlist)));
+    while((inlist = ajListIterGet(atomlist)));
 
     /* conditional is kludge for bad residue numbers at chain termini */
     if( resnum > 1 )
@@ -370,27 +370,18 @@ int main( int argc , char **argv )
 		  angles,
 		  seq);
 
-    /* clear up windows */
     AJFREE(atoms);
     AJFREE(known);
 
-    /* clear up report objects */
     ajFeattableDel(&angles);
-
-    /* delete the atom list */
-    ajListIterFree(&atomlist);
-
-    /* close the input file */
+    ajListIterDel(&atomlist);
     ajFileClose(&pdbfile);
-
-    /* close the report file */
     ajReportDel(&report);
-
-    /* clear up the structure */
-    /* JISON */ ajPdbDel(&pdb);
+    ajPdbDel(&pdb);
     ajSeqDel(&seq);
 
-    /*  tidy up everything else... */
+    ajStrDel(&header);
+
     embExit();
 
     return 0;

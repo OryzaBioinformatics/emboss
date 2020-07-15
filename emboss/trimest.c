@@ -124,6 +124,11 @@ int main(int argc, char **argv)
     ajSeqoutClose(seqout);
 
     ajStrDel(&str);
+    ajStrDel(&desc);
+
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
 
     embExit();
 
@@ -240,4 +245,5 @@ static void trimest_tolower(AjPStr *strng, ajint start, ajint end)
     ajStrInsertS(strng, start, substr);
     ajStrDel(&substr);
 
+    return;
 }
