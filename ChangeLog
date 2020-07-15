@@ -1,3 +1,70 @@
+Fixes post-release for Version 5.0.0
+
+The following fixes were already applied in the distribution used to
+make this stage of the code history. They are included in previous
+commits:
+
+The files in this directory are bugfix replacements for files in
+the EMBOSS-5.0.0 distribution. Just drop the replacement files in
+the location shown and redo the 'make install.'
+
+Fix 1. EMBOSS-5.0.0/emboss/psiphi.c
+
+27 Jul 2007: Fixes a problem with reading more recent CCF files.
+             Error traps cases where chains have no atom information.
+
+Fix 2. EMBOSS-5.0.0/ajax/ajindex.c
+
+9 Jan 2008: Fixes rare secondary index problem with input files over 2Gb.
+
+Fix 3. EMBOSS-5.0.0/nucleus/embindex.c
+
+18 Jan 2008: Order and fill fixes to sort out potential problems
+             with kw/de/tx indexes.
+
+Fix 4. EMBOSS-5.0.0/ajax/ajseqdb.c
+
+19 Feb 2008: Fixes changed ID format in GCG databases.
+             Fixes reading from PIR databases
+
+Fix 5. EMBOSS-5.0.0/ajax/ajseqtype.c
+
+19 Feb 2008: Fixes a problem with O in protein sequences for pyrrolysine.
+             Lower case o worked, but upper case O was excluded as a
+             gap character in early versions of PHYLIP. 'O' is no
+             longer a gap character in EMBOSS.
+
+Fix 6. EMBOSS-5.0.0/ajax/ajseqwrite.c
+
+19 Feb 2008: Fixes a problem in GENBANK output format for mulitple
+             lines of ACCESSION or KEYWORD records in an entry.
+
+Fix 7. EMBOSS-5.0.0/ajax/ajseqread.c
+
+19 Feb 2008: Fixes a problem in reading protein sequences from the
+             Staden "spin" interface. The partial EMBL/SwissProt
+             format was set to "nucleotide". All incomplete
+             EMBL/SwissProt entries are now tested for amino acid
+             characters and set to protein if any non-nucleotide
+             characters are found.
+
+
+Fix 8. EMBOSS-5.0.0/emboss/dbxfasta.c
+
+19 Feb 2008: Fixes tokens that are longer than the maximum length in
+             the resource definition.
+             For IDs issues a warning when any ID is truncated.
+
+
+Fix 9. EMBOSS-5.0.0/nucleus/embindex.c
+       EMBOSS-5.0.0/ajax/ajindex.c
+       EMBOSS-5.0.0/ajax/ajindex.h
+
+6 Mar 2008: Fixes failure on some databases if the PAGESIZE was set large
+            and the CACHESIZE was set small. Platform-independence
+            modifications added.
+
+
 Version 5.0.0
 	The MRS server in Nijmegen changed its syntax just before our
 	release. A new database access method "MRS3" supports the main
