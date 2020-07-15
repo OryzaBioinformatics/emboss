@@ -43,7 +43,6 @@
 ** @alias EtandemSCons
 ** @alias EtandemOCons
 **
-** @attr phase [ajint] Undocumented
 ** @attr tab [ajint*] Undocumented
 ** @attr max [ajint*] Undocumented
 ** @attr start [ajint] Undocumented
@@ -51,6 +50,7 @@
 ** @attr bestScore [ajint] Undocumented
 ** @attr ibest [ajint] Undocumented
 ** @attr bestMax [ajint*] Undocumented
+** @attr phase [ajint] Undocumented
 ** @attr repeat [ajint] Undocumented
 ** @attr next [struct EtandemSCons*] Next node in linked list
 ** @@
@@ -58,7 +58,6 @@
 
 typedef struct EtandemSCons
 {
-    ajint phase ;
     ajint* tab ;
     ajint* max ;
     ajint start ;
@@ -66,6 +65,7 @@ typedef struct EtandemSCons
     ajint bestScore ;
     ajint ibest ;
     ajint* bestMax ;
+    ajint phase ;
     ajint repeat ;
     struct EtandemSCons* next ;
 } EtandemOCons, *EtandemPCons ;
@@ -187,7 +187,8 @@ static void etandem_basicReport(AjPFeattable tab, AjPFile outfile,
       ajStrAssignC(&rpthit, "repeat_region");
 
     copies = (a->ibest - a->start + 1) / n;
-    perc = 100.0 * (a->bestScore + n * (copies + 1)) / (2.0 * n * copies);
+    perc = (float)100.0 * (a->bestScore + n * (copies + 1)) /
+	((float)2.0 * n * copies);
     if(outfile)
       ajFmtPrintF(outfile, "%6d %10d %10d %2d %3d %5.1f ",
 		  a->bestScore, a->start+1, a->ibest+1,
@@ -226,6 +227,10 @@ static void etandem_basicReport(AjPFeattable tab, AjPFile outfile,
 
     if(outfile)
       ajFmtPrintF(outfile, "%S\n", constr);
+
+    ajStrDel(&rpthit);
+    ajStrDel(&s);
+    ajStrDel(&constr);
 
     return;
 }
@@ -370,8 +375,8 @@ int main(int argc, char **argv)
     ajFmtPrintAppS(&tmpstr, "Uniform: %B\n", uniform);
     ajReportSetHeader(report, tmpstr);
 
-    cvt = ajSeqCvtNewZero("ACGTN");
-    ajSeqNum(sequence, cvt, &nseq);
+    cvt = ajSeqcvtNewC("ACGTN");
+    ajSeqConvertNum(sequence, cvt, &nseq);
 
     AJCNEW(ring, nbase);
 
@@ -517,12 +522,12 @@ int main(int argc, char **argv)
     ajSeqDel(&sequence);
     ajFileClose(&outfile);
 
-    ajSeqCvtDel(&cvt);
+    ajSeqcvtDel(&cvt);
     ajStrDel(&nseq);
     ajStrDel(&tmpstr);
     AJFREE(ring);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

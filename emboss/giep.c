@@ -232,6 +232,6 @@ int main(int argc, char **argv)
     ajStrDel(&substr);
     ajFileClose(&outf);
 
-    ajExit();
+    embExit();
     return 0;
 }

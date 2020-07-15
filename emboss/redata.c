@@ -95,7 +95,7 @@ int main(int argc, char **argv)
     suppliers     = ajAcdGetBool("suppliers");
 
 
-    ajStrRemoveWhiteExcess(&enzyme);
+    ajStrRemoveWhite(&enzyme);
 
     line    = ajStrNew();
     enzline = ajStrNew();
@@ -261,7 +261,7 @@ int main(int argc, char **argv)
     ajFileClose(&reffile);
     ajFileClose(&outf);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -311,7 +311,7 @@ static AjPTable redata_supply_table(AjPFile inf)
 	while((c=*q)==' ' || c=='\t' || c=='\n')
 	    ++q;
 	value=ajStrNewC(q);
-	ajTablePut(t,(const void *)key, (void *)value);
+	ajTablePut(t,(void *)key, (void *)value);
     }
 
     ajStrDel(&line);

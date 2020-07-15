@@ -17,10 +17,13 @@ int main(int argc, char **argv)
     seqout = ajAcdGetSeqout("outseq");
     seq = ajAcdGetSeq("sequence");
 
-    ajSeqWrite(seqout, seq);
-    ajSeqWriteClose(seqout);
+    ajSeqoutWriteSeq(seqout, seq);
+    ajSeqoutClose(seqout);
 
-    ajExit ();
+    ajSeqoutDel(&seqout);
+    ajSeqDel(&seq);
+
+    embExit();
 
     return 0;
 }

@@ -60,7 +60,6 @@ int main(int argc, char **argv)
     AjPStr octags   = NULL;
     AjBool wheel;
     AjBool amphipathic;
-    AjPStr txt = NULL;
     AjPGraph  graph=0;
     AjBool first;
     AjBool startloop;
@@ -77,15 +76,15 @@ int main(int argc, char **argv)
     ajint j;
     ajint k;
 
-    float xmin = -1.0;
-    float xmax =  1.0;
-    float ymin = -0.75;
-    float ymax =  0.75;
+    float xmin = (float) -1.0;
+    float xmax = (float)  1.0;
+    float ymin = (float) -0.75;
+    float ymax = (float)  0.75;
 
-    float minresplot = 36.0;
-    float resgap =     0.0533;
-    float wheelgap =   0.00;
-    float nresgap =    0.08;
+    float minresplot = (float) 36.0;
+    float resgap =     (float) 0.0533;
+    float wheelgap =   (float) 0.00;
+    float nresgap =    (float) 0.08;
 
 
 
@@ -95,10 +94,10 @@ int main(int argc, char **argv)
     float ang;
     float radius;
     float wradius;
-    float x1;
-    float x2;
-    float y1;
-    float y2;
+    float xx1;
+    float xx2;
+    float yy1;
+    float yy2;
 
 
     ajGraphInit("pepwheel", argc, argv);
@@ -127,8 +126,6 @@ int main(int argc, char **argv)
 
 
     substr = ajStrNew();
-    txt    = ajStrNew();
-
 
     begin = ajSeqGetBegin(seq);
     end   = ajSeqGetEnd(seq);
@@ -139,22 +136,20 @@ int main(int argc, char **argv)
     ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
     len = ajStrGetLen(substr);
 
-    ajFmtPrintS(&txt,"PEPWHEEL of %s from %d to %d",ajSeqGetNameC(seq),
-		begin,end);
+    ajGraphSetTitlePlus(graph, ajSeqGetUsaS(seq));
 
     ajGraphOpenWin(graph,xmin,xmax,ymin,ymax);
 
     ajGraphSetFore(AJB_BLACK);
-    ajGraphText(0.0,0.64,ajStrGetPtr(txt),0.5);
 
-    ajGraphSetFore(AJB_BLACK);
-
-    ang = (360.0 / (float)steps) * (float)turns;
+    ang = ((float)360.0 / (float)steps) * (float)turns;
 
     first = ajTrue;
-    angle = 90.0 + ang;
-    if(end-begin > (ajint)minresplot) wradius = 0.2;
-    else                            wradius = 0.40;
+    angle = (float) 90.0 + ang;
+    if(end-begin > (ajint)minresplot)
+	wradius = (float) 0.2;
+    else
+	wradius = (float) 0.40;
 
     for(i=0,lc=0,radius=wradius+wheelgap;i<len;i+=steps)
     {
@@ -173,18 +168,18 @@ int main(int argc, char **argv)
 		{
 		    if(wheel)
 		    {
-			ajPolToRec(wradius-wheelgap,oldangle,&x1,&y1);
-			ajPolToRec(wradius,angle,&x2,&y2);
-			ajGraphLine(x1,y1,x2,y2);
+			ajPolToRec(wradius-wheelgap,oldangle,&xx1,&yy1);
+			ajPolToRec(wradius,angle,&xx2,&yy2);
+			ajGraphLine(xx1,yy1,xx2,yy2);
 		    }
 		    startloop=ajFalse;
 		}
 		else
 		    if(wheel)
 		    {
-			ajPolToRec(wradius,oldangle,&x1,&y1);
-			ajPolToRec(wradius,angle,&x2,&y2);
-			ajGraphLine(x1,y1,x2,y2);
+			ajPolToRec(wradius,oldangle,&xx1,&yy1);
+			ajPolToRec(wradius,angle,&xx2,&yy2);
+			ajGraphLine(xx1,yy1,xx2,yy2);
 		    }
 	    }
 	    pepwheel_plotresidue(*(ajStrGetPtr(substr)+lc),radius+resgap,angle,
@@ -204,7 +199,6 @@ int main(int argc, char **argv)
 
     ajStrDel(&strand);
     ajStrDel(&substr);
-    ajStrDel(&txt);
 
     ajSeqDel(&seq);
 
@@ -234,12 +228,14 @@ static void pepwheel_drawocta(float x, float y, float size)
 {
     static float polyx[]=
     {
-	-0.05, 0.05, 0.1, 0.1, 0.05, -0.05, -0.1, -0.1, -0.05
+	(float)-0.05, (float)0.05, (float)0.1, (float)0.1, (float)0.05,
+	(float)-0.05, (float)-0.1, (float)-0.1, (float)-0.05
     }
     ;
     static float polyy[]=
     {
-	0.1, 0.1, 0.05, -0.05, -0.1, -0.1, -0.05, 0.05, 0.1
+	(float)0.1, (float)0.1, (float)0.05, (float)-0.05, (float)-0.1,
+	(float)-0.1, (float)-0.05, (float)0.05, (float)0.1
     }
     ;
     ajint i;
@@ -296,19 +292,19 @@ static void pepwheel_plotresidue(char c, float r, float a, const char *squares,
     if(strstr(squares,cs))
     {
 	ajGraphSetFore(AJB_BLUE);
-	ajGraphBox(x-0.025,y-0.022,0.05);
+	ajGraphBox(x-(float)0.025,y-(float)0.022,(float)0.05);
     }
 
     if(strstr(octags,cs))
     {
 	ajGraphSetFore(AJB_BLACK);
-	pepwheel_drawocta(x,y+0.003,0.28);
+	pepwheel_drawocta(x,y+(float)0.003,(float)0.28);
     }
 
     if(strstr(diamonds,cs))
     {
 	ajGraphSetFore(AJB_RED);
-	ajGraphDia(x-0.042,y-0.04,0.085);
+	ajGraphDia(x-(float)0.042,y-(float)0.04,(float)0.085);
     }
 
     ajGraphText(x,y,cs,0.5);

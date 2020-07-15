@@ -45,7 +45,8 @@ int main(int argc, char **argv)
     ajint end;
 
     float Nc;
-
+    double td;
+    
 
     embInit("chips", argc, argv);
 
@@ -60,17 +61,18 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	beg = ajSeqallBegin(seqall);
-	end = ajSeqallEnd(seqall);
-	ajStrAssignSubS(&substr,ajSeqStr(seq),beg-1,end-1);
+	beg = ajSeqallGetseqBegin(seqall);
+	end = ajSeqallGetseqEnd(seqall);
+	ajStrAssignSubS(&substr,ajSeqGetSeqS(seq),beg-1,end-1);
 	ajStrFmtUpper(&substr);
 	ajCodCountTriplets(codon,substr,&ccnt);
 	if(!sum)
 	{
 	    ajCodCalculateUsage(codon,ccnt);
-	    Nc = ajCodCalcNc(codon);
+	    td = ajCodCalcNc(codon);
+	    Nc = (float) td;
 	    
-	    ajFmtPrintF(outf,"%-20s Nc = %.3f\n",ajSeqName(seq),Nc);
+	    ajFmtPrintF(outf,"%-20s Nc = %.3f\n",ajSeqGetNameC(seq),Nc);
 	    ajCodClearData(codon);
 	}
     }
@@ -78,7 +80,8 @@ int main(int argc, char **argv)
     if(sum)
     {
 	ajCodCalculateUsage(codon,ccnt);
-	Nc = ajCodCalcNc(codon);
+	td = ajCodCalcNc(codon);
+	Nc = (float) td;
 	
 	ajFmtPrintF(outf,"# CHIPS codon usage statistics\n\n");
 	ajFmtPrintF(outf,"Nc = %.3f\n",Nc);
@@ -90,7 +93,7 @@ int main(int argc, char **argv)
     ajSeqDel(&seq);
     ajStrDel(&substr);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

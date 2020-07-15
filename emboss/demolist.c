@@ -130,7 +130,7 @@ int main(int argc, char **argv)
     /* free the objects in the list */
     ajListMap(list,demolist_freegff,NULL);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

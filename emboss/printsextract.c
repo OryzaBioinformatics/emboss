@@ -110,7 +110,7 @@ int main(int argc, char **argv)
     ajStrDel(&line);
     ajStrDel(&acc);
     ajStrDel(&code);
-    ajExit();
+    embExit();
 
     return 0;
 }

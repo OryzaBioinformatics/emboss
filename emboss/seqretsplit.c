@@ -57,13 +57,13 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
     {
 	name = seqretsplit_Name(table, seq);
-	ajSeqAllWrite(seqout, seq);
+	ajSeqoutWriteSeq(seqout, seq);
 
 	if(firstonly)
 	    break;
     }
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
     ajStrTableFree(&table);
 
     ajSeqallDel(&seqall);

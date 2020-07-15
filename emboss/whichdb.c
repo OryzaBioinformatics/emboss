@@ -114,12 +114,12 @@ int main(int argc, char **argv)
 	{
 	    ajFmtPrintS(&snam,"%S.%S",entry,name);
 	    seqout = ajSeqoutNew();
-	    if(!ajSeqFileNewOut(seqout,snam))
+	    if(!ajSeqoutOpenFilename(seqout,snam))
 		ajFatal("Cannot open output file [%S]",snam);
 	    ajSeqOutSetFormatC(seqout,"FASTA");
 	    ajUser("Writing %S",snam);
-	    ajSeqWrite(seqout,seq);
-	    ajSeqWriteClose(seqout);
+	    ajSeqoutWriteSeq(seqout,seq);
+	    ajSeqoutClose(seqout);
 	    ajSeqoutDel(&seqout);
 	}
 	else

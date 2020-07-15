@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     const AjPSeq pseq;		/* next protein sequence use in alignment */
     AjPTrn trnTable;
     AjPSeq pep;			/* translation of nseq */
-    AjPStr *tablelist;
+    AjPStr tablelist;
     ajint table;
     AjPSeqset outseqset;	/* set of aligned nucleic sequences */
     ajint proteinseqcount = 0;
@@ -64,21 +64,21 @@ int main(int argc, char **argv)
 
     nucseq    = ajAcdGetSeqall("asequence");
     protseq   = ajAcdGetSeqset("bsequence");
-    tablelist = ajAcdGetList("table");
+    tablelist = ajAcdGetListSingle("table");
     seqout    = ajAcdGetSeqoutset("outseq");
 
     outseqset = ajSeqsetNew();
     degapstr  = ajStrNew();
 
     /* initialise the translation table */
-    ajStrToInt(tablelist[0], &table);
+    ajStrToInt(tablelist, &table);
     trnTable = ajTrnNewI(table);
 
     ajSeqsetFill(protseq);
 
     while(ajSeqallNext(nucseq, &nseq))
     {
-    	if((pseq = ajSeqsetGetSeq(protseq, proteinseqcount++)) == NULL)
+    	if((pseq = ajSeqsetGetseqSeq(protseq, proteinseqcount++)) == NULL)
     	    ajErr("No guide protein sequence available for "
 		  "nucleic sequence %S",
 		  ajSeqGetNameS(nseq));
@@ -158,17 +158,24 @@ int main(int argc, char **argv)
             ajSeqDel(&newseq);
         }
 
-        ajStrRemoveWhite(&degapstr);
+        ajStrRemoveWhiteExcess(&degapstr);
     }
 
-    ajSeqsetWrite(seqout, outseqset);
-    ajSeqWriteClose(seqout);
+    ajSeqoutWriteSet(seqout, outseqset);
+    ajSeqoutClose(seqout);
 
     ajTrnDel(&trnTable);
     ajSeqsetDel(&outseqset);
     ajStrDel(&degapstr);
+    ajStrDel(&degapstr2);
 
-    ajExit();
+    ajSeqallDel(&nucseq);
+    ajSeqDel(&nseq);
+    ajSeqoutDel(&seqout);
+    ajSeqsetDel(&protseq);
+    ajStrDel(&tablelist);
+
+    embExit();
 
     return 0;
 }
@@ -195,7 +202,7 @@ static void tranalign_AddGaps(AjPSeq newseq,
 {
 
     AjPStr newstr = NULL;
-    ajint ppos = 0;
+    ajuint ppos = 0;
 
     newstr = ajStrNew();
 

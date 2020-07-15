@@ -78,8 +78,8 @@ int main(int argc, char **argv)
     float weight;
     float maxweight;
 
-    AjPInt hi = NULL;
-    AjPInt hp = NULL;
+    AjPUint hi = NULL;
+    AjPUint hp = NULL;
     AjPFloat hwt = NULL;
 
     const char *p;
@@ -113,8 +113,8 @@ int main(int argc, char **argv)
 
     matrix = ajFloat2dNew();
     hwt    = ajFloatNew();
-    hi     = ajIntNew();
-    hp     = ajIntNew();
+    hi     = ajUintNew();
+    hp     = ajUintNew();
 
     substr = ajStrNew();
     stmp   = ajStrNew();
@@ -127,13 +127,13 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin = ajSeqallBegin(seqall);
-	end   = ajSeqallEnd(seqall);
+	begin = ajSeqallGetseqBegin(seqall);
+	end   = ajSeqallGetseqEnd(seqall);
 	pval  = opval;
 
 	TabRpt = ajFeattableNewSeq(seq);
 
-	ajStrAssignS(&strand, ajSeqStr(seq));
+	ajStrAssignS(&strand, ajSeqGetSeqS(seq));
 	ajStrFmtUpper(&strand);
         ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
         ajStrAssignSubC(&sstr,ajStrGetPtr(strand),begin-1,end-1);
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
 	        if(j>=0 && j<len)
 		{
 	            ajDebug("j: %d ic: %d aa: '%c'\n",
-			     j, ic, ajStrGetCharPos(ajSeqStr(seq), j));
+			     j, ic, ajStrGetCharPos(ajSeqGetSeqS(seq), j));
 		    weight += ajFloat2dGet(matrix,(ajint)*(p+j),ic);
 	        }
 		++ic;
@@ -180,8 +180,8 @@ int main(int argc, char **argv)
 	    if(weight>minweight)
 	    {
 		ajFloatPut(&hwt,n,weight);;
-		ajIntPut(&hp,n,i);
-		ajIntPut(&hi,n,n);
+		ajUintPut(&hp,n,i);
+		ajUintPut(&hi,n,n);
 		ajDebug("hit[%d] at weight: %.3f i: %d\n", n, weight, i);
 		++n;
 	    }
@@ -194,7 +194,7 @@ int main(int argc, char **argv)
 
 	if(outf)
 	    ajFmtPrintF(outf,"\n\nSIGCLEAVE of %s from %d to %d\n\n",
-		      ajSeqName(seq),begin,end);
+		      ajSeqGetNameC(seq),begin,end);
 	if(outf)
 	    ajFmtPrintF(outf,"\nReporting scores over %.2f\n",minweight);
 
@@ -243,7 +243,7 @@ int main(int argc, char **argv)
 		ajFmtPrintF(outf,
 			    "%13d             %d\n",maxsite+pval+begin,
 			    maxsite+begin);
-	    ajSortFloatDecI(ajFloatFloat(hwt),ajIntInt(hi),n);
+	    ajSortFloatDecI(ajFloatFloat(hwt),ajUintUint(hi),n);
 	    if(n <= 1)
 	    {
 		if(outf)
@@ -257,12 +257,12 @@ int main(int argc, char **argv)
 				minweight);
 		for(i=0;i<n;++i)
 		{
-		    isite=ajIntGet(hp,ajIntGet(hi,i));
+		    isite=ajUintGet(hp,ajUintGet(hi,i));
 		    if(isite != maxsite)
 		    {
 			if(isite+pval<0) /*pval = -isite*/ continue;
 
-			xweight=ajFloatGet(hwt,ajIntGet(hi,i));
+			xweight=ajFloatGet(hwt,ajUintGet(hi,i));
 			if(outf)
 			    ajFmtPrintF(outf,"\n\nScore %.1f at residue "
 					"%d\n\n", xweight,isite+begin);
@@ -313,8 +313,8 @@ int main(int argc, char **argv)
 
     ajFloat2dDel(&matrix);
     ajFloatDel(&hwt);
-    ajIntDel(&hi);
-    ajIntDel(&hp);
+    ajUintDel(&hi);
+    ajUintDel(&hp);
 
     if(outf)
 	ajFileClose(&outf);
@@ -362,12 +362,13 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
     float sample;
     float expected;
 
-    ajint i;
-    ajint j;
+    ajuint i;
+    ajuint j;
     ajint c;
 
-    ajint d1;
-    ajint d2;
+    ajuint d1;
+    ajuint d2;
+    ajuint jmax;
 
     if(prokaryote)
 	ajFileDataNewC(PROFILE,&mfptr);
@@ -431,8 +432,11 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 
 	for(i=0;i<d1;++i)
 	    rt += mat[i][j];
-
-	if(j==cols-2)
+	if(cols > 1)
+	    jmax = cols-2;
+	else
+	    jmax=0;
+	if(j==jmax)
 	{
 	    if(fabs((double)(sample-rt)) > 0.9)
 		ajFatal("Error in 'Expected' column");
@@ -452,12 +456,12 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 		if(j==10 || j==12)
 		{
 		    if(!(ajint)mat[i][j])
-			mat[i][j] = 1.0e-10;
+			mat[i][j] = (float) 1.0e-10;
 		}
 		else
 		{
 		    if(!(ajint)mat[i][j])
-			mat[i][j] = 1.0;
+			mat[i][j] = (float) 1.0;
 		}
 
 		mat[i][j] = (float)(log((double)(mat[i][j]/expected)));

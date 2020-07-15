@@ -80,12 +80,12 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
     {
 	if (!feattable)
-	    feattable = ajFeattableNewDna(ajSeqGetName(seq));
+	    feattable = ajFeattableNewDna(ajSeqGetNameS(seq));
 
-	begin = ajSeqallBegin(seqall);
-	end   = ajSeqallEnd(seqall);
+	begin = ajSeqallGetseqBegin(seqall);
+	end   = ajSeqallGetseqEnd(seqall);
 
-	strand = ajSeqStrCopy(seq);
+	strand = ajSeqGetSeqCopyS(seq);
 	ajStrFmtUpper(&strand);
 
 	ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
@@ -93,11 +93,11 @@ int main(int argc, char **argv)
 	len=ajStrGetLen(substr);
 
 	ajFmtPrintF(outf,"\n\nCPGREPORT of %s from %d to %d\n\n",
-		    ajSeqName(seq),begin,begin+len-1);
+		    ajSeqGetNameC(seq),begin,begin+len-1);
 	ajFmtPrintF(outf,"Sequence              Begin    End Score");
 	ajFmtPrintF(outf,"        CpG   %%CG  CG/GC\n");
 
-	cpgreport_cpgsearch(outf,0,len,ajStrGetPtr(substr),ajSeqName(seq),
+	cpgreport_cpgsearch(outf,0,len,ajStrGetPtr(substr),ajSeqGetNameC(seq),
 			    begin,score,feattable);
 	ajStrDel(&strand);
     }
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
     ajStrDel(&cpgreportSource);
     ajStrDel(&cpgreportType);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

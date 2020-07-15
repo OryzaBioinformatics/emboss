@@ -52,7 +52,7 @@ int main(int argc, char **argv)
     ajint  mismatches;
     AjBool reverse;
     AjBool fiveprime;
-    AjBool tolower;
+    AjBool cvttolower;
 
     embInit("trimest", argc, argv);
 
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     mismatches 	= ajAcdGetInt("mismatches");
     reverse	= ajAcdGetBool("reverse");
     fiveprime	= ajAcdGetBool("fiveprime");
-    tolower     = ajAcdGetToggle("tolower");
+    cvttolower  = ajAcdGetToggle("tolower");
     
 
     str = ajStrNew();
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 	{
 	    /* if 5' poly-T tail, then reverse the sequence */
 	    ajDebug("Tail=%d\n", tail5);
-            if(tolower)
+            if(cvttolower)
                 trimest_tolower(&str, 0, tail5-1);
             else
 	        ajStrKeepRange(&str, tail5, ajSeqGetLen(seq)-1);
@@ -96,8 +96,9 @@ int main(int argc, char **argv)
 	{
 	    /* remove 3' poly-A tail */
 	    ajDebug("Tail=%d\n", tail3);
-            if(tolower)
-                trimest_tolower(&str, ajSeqGetLen(seq)-tail3, ajSeqGetLen(seq));
+            if(cvttolower)
+                trimest_tolower(&str, ajSeqGetLen(seq)-tail3,
+				ajSeqGetLen(seq));
             else
 	        ajStrKeepRange(&str, 0, ajSeqGetLen(seq)-tail3-1);
             ajStrAppendC(&desc, " [poly-A tail removed]");
@@ -117,14 +118,14 @@ int main(int argc, char **argv)
         /* set description */
         ajSeqAssignDescS(seq, desc);
 
-	ajSeqAllWrite(seqout, seq);
+	ajSeqoutWriteSeq(seqout, seq);
     }
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
 
     ajStrDel(&str);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

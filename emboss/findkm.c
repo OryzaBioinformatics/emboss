@@ -132,15 +132,15 @@ int main(int argc, char **argv)
 
 
     /* find the max and min values for the graph parameters*/
-    xmin = 0.5*findkm_findmin(xdata, N);
-    xmax = 1.5*findkm_findmax(xdata, N);
-    ymin = 0.5*findkm_findmin(ydata, N);
-    ymax = 1.5*findkm_findmax(ydata, N);
+    xmin = (float)0.5*findkm_findmin(xdata, N);
+    xmax = (float)1.5*findkm_findmax(xdata, N);
+    ymin = (float)0.5*findkm_findmin(ydata, N);
+    ymax = (float)1.5*findkm_findmax(ydata, N);
 
-    xmin2 = 0.5*findkm_findmin(S, N);
-    xmax2 = 1.5*findkm_findmax(S, N);
-    ymin2 = 0.5*findkm_findmin(V, N);
-    ymax2 = 1.5*findkm_findmax(V, N);
+    xmin2 = (float)0.5*findkm_findmin(S, N);
+    xmax2 = (float)1.5*findkm_findmax(S, N);
+    ymin2 = (float)0.5*findkm_findmin(V, N);
+    ymax2 = (float)1.5*findkm_findmax(V, N);
 
 
 
@@ -288,7 +288,7 @@ int main(int argc, char **argv)
     ajGraphxyDel(&graphLB);
     ajStrDel(&line);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

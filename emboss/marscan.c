@@ -34,7 +34,7 @@ static AjBool marscan_getpos(AjPList l, ajint *thisprev, ajint otherprev,
 
 static void marscan_stepdown(AjPList l16, AjPList l8, AjPFeattable *tab);
 
-static void marscan_output_stored_match(AjBool stored_match, ajint stored_dist,
+static void marscan_output_stored_match(AjBool stored_match,
 					ajint s8, ajint s16,
 					AjPFeattable *tab);
 
@@ -64,9 +64,9 @@ int main(int argc, char **argv)
     AjPStr opattern16 = NULL;
     AjBool amino16    = ajFalse;
     AjBool carboxyl16 = ajFalse;
-    ajint  type16 = 0;
-    ajint  m16    = 0;
-    ajint  plen16 = 0;
+    ajuint  type16 = 0;
+    ajuint  m16    = 0;
+    ajuint  plen16 = 0;
     ajint  *buf16 = NULL;
 
     EmbOPatBYPNode off16[AJALPHA];
@@ -74,19 +74,19 @@ int main(int argc, char **argv)
     ajuint *sotable16 = NULL;
     ajuint solimit16  = 0;
     AjPStr regexp16   = NULL;
-    ajint  **skipm16  = NULL;
-    ajint  mismatch16 = 1;		/* allow a single mismatch */
+    ajuint  **skipm16  = NULL;
+    ajuint  mismatch16 = 1;		/* allow a single mismatch */
     AjPList l16;
-    ajint  hits16  = 0;
-    void   *tidy16 = NULL;
+    ajuint  hits16  = 0;
+    const void   *tidy16 = NULL;
 
     AjPStr pattern16rev;
     AjPStr opattern16rev = NULL;
     AjBool amino16rev    = ajFalse;
     AjBool carboxyl16rev = ajFalse;
-    ajint  type16rev = 0;
-    ajint  m16rev    = 0;
-    ajint  plen16rev = 0;
+    ajuint  type16rev = 0;
+    ajuint  m16rev    = 0;
+    ajuint  plen16rev = 0;
     ajint  *buf16rev = NULL;
 
     EmbOPatBYPNode off16rev[AJALPHA];
@@ -94,19 +94,19 @@ int main(int argc, char **argv)
     ajuint   *sotable16rev = NULL;
     ajuint   solimit16rev  = 0;
     AjPStr   regexp16rev   = NULL;
-    ajint    **skipm16rev  = NULL;
-    ajint    mismatch16rev = 1;		/* allow a single mismatch */
+    ajuint    **skipm16rev  = NULL;
+    ajuint    mismatch16rev = 1;		/* allow a single mismatch */
     AjPList  l16rev;
-    ajint    hits16rev  = 0;
-    void     *tidy16rev = NULL;
+    ajuint    hits16rev  = 0;
+    const void     *tidy16rev = NULL;
 
     AjPStr pattern8;
     AjPStr opattern8 = NULL;
     AjBool amino8    = ajFalse;
     AjBool carboxyl8 = ajFalse;
-    ajint  type8 = 0;
-    ajint  m8    = 0;
-    ajint  plen8 = 0;
+    ajuint  type8 = 0;
+    ajuint  m8    = 0;
+    ajuint  plen8 = 0;
     ajint  *buf8 = NULL;
 
     EmbOPatBYPNode off8[AJALPHA];
@@ -114,19 +114,19 @@ int main(int argc, char **argv)
     ajuint   *sotable8 = NULL;
     ajuint   solimit8  = 0;
     AjPStr   regexp8   = NULL;
-    ajint    **skipm8  = NULL;
-    ajint    mismatch8 = 0;
+    ajuint    **skipm8  = NULL;
+    ajuint    mismatch8 = 0;
     AjPList  l8;
-    ajint    hits8  = 0;
-    void     *tidy8 = NULL;
+    ajuint    hits8  = 0;
+    const void     *tidy8 = NULL;
 
     AjPStr pattern8rev;
     AjPStr opattern8rev = NULL;
     AjBool amino8rev    = ajFalse;
     AjBool carboxyl8rev = ajFalse;
-    ajint  type8rev = 0;
-    ajint  m8rev    = 0;
-    ajint  plen8rev = 0;
+    ajuint  type8rev = 0;
+    ajuint  m8rev    = 0;
+    ajuint  plen8rev = 0;
     ajint  *buf8rev = NULL;
 
     EmbOPatBYPNode off8rev[AJALPHA];
@@ -134,19 +134,18 @@ int main(int argc, char **argv)
     ajuint   *sotable8rev = NULL;
     ajuint   solimit8rev  = 0;
     AjPStr   regexp8rev   = NULL;
-    ajint    **skipm8rev  = NULL;
-    ajint    mismatch8rev = 0;
+    ajuint    **skipm8rev  = NULL;
+    ajuint    mismatch8rev = 0;
     AjPList  l8rev;
-    ajint    hits8rev  = 0;
-    void     *tidy8rev = NULL;
+    ajuint    hits8rev  = 0;
+    const void     *tidy8rev = NULL;
 
     AjPStr seqname = NULL;
     AjPStr text = NULL;
 
-    ajint    i;
+    ajuint    i;
     ajint    begin;
     ajint    end;
-    ajint    adj;
 
     EmbPMatMatch aptr = NULL;
 
@@ -221,12 +220,11 @@ int main(int argc, char **argv)
 	l8     = ajListNew();
 	l8rev  = ajListNew();
 
-	ajStrAssignC(&seqname, ajSeqName(seq));
-	begin = ajSeqallBegin(seqall);
-	end   = ajSeqallEnd(seqall);
-	ajStrAssignSubC(&text, ajSeqChar(seq), begin-1, end-1);
+	ajStrAssignC(&seqname, ajSeqGetNameC(seq));
+	begin = ajSeqallGetseqBegin(seqall);
+	end   = ajSeqallGetseqEnd(seqall);
+	ajStrAssignSubC(&text, ajSeqGetSeqC(seq), begin-1, end-1);
 	ajStrFmtUpper(&text);
-	adj = begin+end+1;
 
 	embPatFuzzSearch(type16, begin, pattern16, seqname,
 			 text, l16, plen16, mismatch16, amino16, carboxyl16,
@@ -303,21 +301,40 @@ int main(int argc, char **argv)
 
     }
 
-    if(type16==6)
+    if(skipm16)
+    {
 	for(i=0;i<m16;++i)
 	    AJFREE(skipm16[i]);
+	AJFREE(skipm16);
+    }
 
-    if(type16rev==6)
-	for(i=0;i<m16rev;++i) AJFREE(skipm16rev[i]);
+    if(skipm16rev)
+    {
+	for(i=0;i<m16rev;++i)
+	    AJFREE(skipm16rev[i]);
+	AJFREE(skipm16rev);
+    }
 
-    if(type8==6)
+    if(skipm8)
+    {
 	for(i=0;i<m8;++i)
 	    AJFREE(skipm8[i]);
+	AJFREE(skipm8);
+    }
 
-    if(type8rev==6)
+    if(skipm8rev)
+    {
 	for(i=0;i<m8rev;++i)
 	    AJFREE(skipm8rev[i]);
+	AJFREE(skipm8rev);
+    }
 
+    AJFREE(sotable16);
+    AJFREE(sotable16rev);
+    AJFREE(sotable8);
+    AJFREE(sotable8rev);
+ 
+/*
     if(tidy16)
 	AJFREE(tidy16);
 
@@ -329,6 +346,7 @@ int main(int argc, char **argv)
 
     if(tidy8rev)
 	AJFREE(tidy8rev);
+*/
 
     ajStrDel(&pattern16);
     ajStrDel(&pattern16rev);
@@ -436,7 +454,7 @@ static void marscan_stepdown(AjPList l16, AjPList l8, AjPFeattable *tab)
 
     if(stored_8_pos - end_of_last_output_match > MAXDIST ||
 	stored_16_pos - end_of_last_output_match > MAXDIST)
-	marscan_output_stored_match(stored_match, stored_dist, stored_8_pos,
+	marscan_output_stored_match(stored_match, stored_8_pos,
 				    stored_16_pos, tab);
 
     return;
@@ -577,7 +595,7 @@ static AjBool marscan_getpos(AjPList l, ajint *thisprev, ajint otherprev,
 		}
 		else
 		{
-		    marscan_output_stored_match(*stored_match, *stored_dist,
+		    marscan_output_stored_match(*stored_match,
 						*stored_8_pos, *stored_16_pos,
 						tab);
 		    *stored_match = ajFalse;
@@ -610,7 +628,7 @@ static AjBool marscan_getpos(AjPList l, ajint *thisprev, ajint otherprev,
 	{
 	    if(*stored_match)
 	    {
-		marscan_output_stored_match(*stored_match, *stored_dist,
+		marscan_output_stored_match(*stored_match,
 					    *stored_8_pos, *stored_16_pos,
 					    tab);
 		*stored_match = ajFalse;
@@ -630,8 +648,6 @@ static AjBool marscan_getpos(AjPList l, ajint *thisprev, ajint otherprev,
 ** Outputs the results of finding a match of the two patterns
 **
 ** @param [r] stored_match [AjBool] flag set to ajtrue if have stored match
-** @param [r] stored_dist [ajint] distance between the patterns in the
-**                                stored match
 ** @param [r] s8 [ajint]  position of 8bp pattern match in stored match
 ** @param [r] s16 [ajint] position of 16bp pattern match in stored match
 ** @param [u] tab [AjPFeattable*] feature table
@@ -639,7 +655,7 @@ static AjBool marscan_getpos(AjPList l, ajint *thisprev, ajint otherprev,
 ** @@
 ******************************************************************************/
 
-static void marscan_output_stored_match(AjBool stored_match, ajint stored_dist,
+static void marscan_output_stored_match(AjBool stored_match,
 					ajint s8, ajint s16, AjPFeattable *tab)
 {
     /*
@@ -705,6 +721,10 @@ static void marscan_output_stored_match(AjBool stored_match, ajint stored_dist,
 
     ajFmtPrintS(&tmp, "*end16bp %d", e16);
     ajFeatTagAdd(feature, NULL, tmp);
+
+    ajStrDel(&source);
+    ajStrDel(&type);
+    ajStrDel(&tmp);
 
     return;
 }

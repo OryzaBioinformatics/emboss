@@ -27,15 +27,21 @@ int main(int argc, char **argv)
     dir = ajAcdGetOutdirName("outdir");
 
     ajUser("Directory '%S'", dir);
-    ajUser("Set of %d", ajSeqsetSize(seqset));
+    ajUser("Set of %d", ajSeqsetGetSize(seqset));
     while(ajSeqallNext (seqall, &seq))
     {
-	ajUser ("%3d <%S>", i++, ajSeqGetUsa(seq));
+	ajUser ("%3d <%S>", i++, ajSeqGetUsaS(seq));
 	ajFmtPrintS(&kimout, "kim%d.out", i);
 	ajtest_kim (kimout, seq);
     }
 
-    ajExit();
+    ajSeqDel(&seq);
+    ajSeqallDel(&seqall);
+    ajSeqsetDel(&seqset);
+    ajStrDel(&kimout);
+    ajStrDel(&dir);
+
+    embExit();
 
     return 0;
 }
@@ -53,13 +59,19 @@ int main(int argc, char **argv)
 static void ajtest_kim (const AjPStr seqout_name, const AjPSeq subseq)
 {
     AjPFile seqout_file = ajFileNewOut(seqout_name);
-    AjPSeqout named_seqout = ajSeqoutNewF(seqout_file);
+    AjPSeqout named_seqout = ajSeqoutNewFile(seqout_file);
 
     AjPStr format_str = ajStrNew();
+
     ajStrAssignC(&format_str, "embl");
 
     ajSeqOutSetFormat(named_seqout, format_str);
 
-    ajSeqWrite(named_seqout, subseq);
+    ajSeqoutWriteSeq(named_seqout, subseq);
 
+    ajSeqoutDel(&named_seqout);
+    ajFileClose(&seqout_file);
+    ajStrDel(&format_str);
+
+    return;
 }

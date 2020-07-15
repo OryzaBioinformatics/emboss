@@ -56,12 +56,12 @@ int main(int argc, char **argv)
     ** Different ticks as they need to be different for x and y due to
     ** length of string being important on x
     */
-    ajint acceptableticksx[]=
+    ajuint acceptableticksx[]=
     {
 	1,10,50,100,500,1000,1500,10000,
 	500000,1000000,5000000
     };
-    ajint acceptableticks[]=
+    ajuint acceptableticks[]=
     {
 	1,10,50,100,200,500,1000,2000,5000,10000,15000,
 	500000,1000000,5000000
@@ -80,8 +80,13 @@ int main(int argc, char **argv)
     ajint begin2;
     ajint end1;
     ajint end2;
+    ajuint len1;
+    ajuint len2;
+    float flen1;
+    float flen2;
     AjBool stretch;
-
+    ajuint tui;
+    
     ajGraphInit("dottup", argc, argv);
 
     wordlen = ajAcdGetInt("wordsize");
@@ -96,7 +101,14 @@ int main(int argc, char **argv)
     begin2 = ajSeqGetBegin(seq2);
     end1   = ajSeqGetEnd(seq1);
     end2   = ajSeqGetEnd(seq2);
+    len1   = ajSeqGetLen(seq1);
+    len2   = ajSeqGetLen(seq2);
 
+    tui    = ajSeqGetLen(seq1);
+    flen1  = (float) tui;
+    tui    = ajSeqGetLen(seq2);
+    flen2 = (float) tui;
+    
     ajSeqTrim(seq1);
     ajSeqTrim(seq2);
 
@@ -117,89 +129,89 @@ int main(int argc, char **argv)
 
     /* only get here if stretch is false */
 
-    max= ajSeqGetLen(seq1);
-    if(ajSeqGetLen(seq2) > max)
-	max = ajSeqGetLen(seq2);
+    max= flen1;
+    if(flen2 > max)
+	max = flen2;
 
-    xmargin = ymargin = max *0.15;
+    xmargin = ymargin = max * (float)0.15;
 
-    ajGraphOpenWin(graph, 0.0-ymargin,(max*1.35)+ymargin,
-		   0.0-xmargin,(float)max+xmargin);
+    ajGraphOpenWin(graph, (float)0.0-ymargin,(max*(float)1.35)+ymargin,
+		   (float)0.0-xmargin,(float)max+xmargin);
 
-    ajGraphTextMid(max*0.5,(ajSeqGetLen(seq2))+(xmargin*0.5),
+    ajGraphTextMid(max*(float)0.5,flen2+(xmargin*(float)0.5),
 		   ajGraphGetTitleC(graph));
-    ajGraphSetCharSize(0.5);
+    ajGraphSetCharScale(0.5);
 
     if(matchlist)
 	dottup_plotMatches(matchlist);
 
     if(boxit)
     {
-	ajGraphRect(0.0,0.0,(float)ajSeqGetLen(seq1),(float)ajSeqGetLen(seq2));
+	ajGraphRect(0.0,0.0,flen1,flen2);
 	i = 0;
-	while(acceptableticksx[i]*numbofticks < ajSeqGetLen(seq1))
+	while(acceptableticksx[i]*numbofticks < len1)
 	    i++;
 
 	if(i<=13)
-	    tickgap = acceptableticksx[i];
+	    tickgap = (float) acceptableticksx[i];
 	else
-	    tickgap = acceptableticksx[10];
+	    tickgap = (float) acceptableticksx[10];
 
-	ticklen = xmargin*0.1;
-	onefifth  = xmargin*0.2;
-	ajGraphTextMid((ajSeqGetLen(seq1))*0.5,0.0-(onefifth*3),
+	ticklen = xmargin*(float)0.1;
+	onefifth  = xmargin*(float)0.2;
+	ajGraphTextMid(flen1*(float)0.5,(float)0.0-(onefifth*(float)3.),
 			ajGraphGetYTitleC(graph));
 
-	if(ajSeqGetLen(seq2)/ajSeqGetLen(seq1) > 10 )
+	if(len2/len1 > 10 )
 	{
 	    /* a lot smaller then just label start and end */
-	    ajGraphLine(0.0,0.0,0.0,0.0-ticklen);
+	    ajGraphLine((float)0.0,(float)0.0,(float)0.0,(float)0.0-ticklen);
 	    sprintf(ptr,"%d",ajSeqGetOffset(seq1));
-	    ajGraphTextMid( 0.0,0.0-(onefifth),ptr);
+	    ajGraphTextMid((float)0.0,(float)0.0-(onefifth),ptr);
 
-	    ajGraphLine((float)(ajSeqGetLen(seq1)),0.0,
-			(float)ajSeqGetLen(seq1),0.0-ticklen);
-	    sprintf(ptr,"%d",ajSeqGetLen(seq1)+ajSeqGetOffset(seq1));
-	    ajGraphTextMid((float)ajSeqGetLen(seq1),0.0-(onefifth),ptr);
+	    ajGraphLine(flen1,(float)0.0,
+			flen1,(float)0.0-ticklen);
+	    sprintf(ptr,"%d",len1+ajSeqGetOffset(seq1));
+	    ajGraphTextMid(flen1,(float)0.0-(onefifth),ptr);
 	    
 	}
 	else
-	    for(k=0.0;k<ajSeqGetLen(seq1);k+=tickgap)
+	    for(k=0.0;k<len1;k+=tickgap)
 	    {
-		ajGraphLine(k,0.0,k,0.0-ticklen);
+		ajGraphLine(k,(float)0.0,k,(float)0.0-ticklen);
 		sprintf(ptr,"%d",(ajint)k+ajSeqGetOffset(seq1));
-		ajGraphTextMid( k,0.0-(onefifth),ptr);
+		ajGraphTextMid( k,(float)0.0-(onefifth),ptr);
 	    }
 
 	i = 0;
-	while(acceptableticks[i]*numbofticks < ajSeqGetLen(seq2))
+	while(acceptableticks[i]*numbofticks < len2)
 	    i++;
 
-	tickgap   = acceptableticks[i];
-	ticklen   = ymargin*0.1;
-	onefifth  = ymargin*0.2;
-	ajGraphTextLine(0.0-(onefifth*4),(ajSeqGetLen(seq2))*0.5,
-			0.0-(onefifth*4),(float)ajSeqGetLen(seq2),
+	tickgap   = (float) acceptableticks[i];
+	ticklen   = ymargin*(float)0.1;
+	onefifth  = ymargin*(float)0.2;
+	ajGraphTextLine((float)0.0-(onefifth*(float)4.),flen2*(float)0.5,
+			(float)0.0-(onefifth*(float)4.),flen2,
 			ajGraphGetXTitleC(graph),0.5);
 
-	if(ajSeqGetLen(seq1)/ajSeqGetLen(seq2) > 10 )
+	if(len1/len2 > 10 )
 	{
 	    /* a lot smaller then just label start and end */
-	    ajGraphLine(0.0,0.0,0.0-ticklen,0.0);
+	    ajGraphLine((float)0.0,(float)0.0,(float)0.0-ticklen,(float)0.0);
 	    sprintf(ptr,"%d",ajSeqGetOffset(seq2));
-	    ajGraphTextEnd( 0.0-(onefifth),0.0,ptr);
+	    ajGraphTextEnd((float)0.0-(onefifth),(float)0.0,ptr);
 
-	    ajGraphLine(0.0,(float)ajSeqGetLen(seq2),0.0-ticklen,
-			(float)ajSeqGetLen(seq2));
-	    sprintf(ptr,"%d",ajSeqGetLen(seq2)+ajSeqGetOffset(seq2));
-	    ajGraphTextEnd( 0.0-(onefifth),(float)ajSeqGetLen(seq2),ptr);
+	    ajGraphLine((float)0.0,flen2,(float)0.0-ticklen,
+			flen2);
+	    sprintf(ptr,"%d",len2+ajSeqGetOffset(seq2));
+	    ajGraphTextEnd((float)0.0-(onefifth),flen2,ptr);
 	}
 	else
-	    for(k=0.0;k<ajSeqGetLen(seq2);k+=tickgap)
+	    for(k=0.0;k<len2;k+=tickgap)
 	    {
-		ajGraphLine(0.0,k,0.0-ticklen,k);
+		ajGraphLine((float)0.0,k,(float)0.0-ticklen,k);
 		sprintf(ptr,"%d",(ajint)k+ajSeqGetOffset(seq2));
-		ajGraphTextEnd( 0.0-(onefifth),k,ptr);
+		ajGraphTextEnd((float)0.0-(onefifth),k,ptr);
 	    }
     }
 
@@ -241,6 +253,8 @@ static void dottup_drawPlotlines(void *x, void *cl)
     PLFLT y1;
     PLFLT x2;
     PLFLT y2;
+
+    (void) cl;				/* make it used */
 
     p  = (EmbPWordMatch)x;
 

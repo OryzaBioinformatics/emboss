@@ -33,7 +33,6 @@
 
 static void checktrans_findorfs(AjPSeqout outseq, AjPFile outf, ajint s,
 				ajint len, const char *seq, const char *name,
-				ajint begin,
 				ajint orfml, AjBool addedasterisk);
 
 static void checktrans_ajbseq(AjPSeqout outseq, const char *seq,
@@ -42,7 +41,6 @@ static void checktrans_ajbseq(AjPSeqout outseq, const char *seq,
 
 static void checktrans_dumptofeat(AjPFeattabOut featout, ajint from, ajint to,
 				  const char *p, const char *seqname,
-				  ajint begin,
 				  ajint min_orflength);
 
 
@@ -105,25 +103,26 @@ int main(int argc, char **argv)
         len=ajStrGetLen(substr);
 
 	ajFmtPrintF(outf,"\n\nCHECKTRANS of %s from %d to %d\n\n",
-		    ajSeqName(seq),begin,begin+len-1);
+		    ajSeqGetNameC(seq),begin,begin+len-1);
 
         checktrans_findorfs(outseq, outf, 0, len, ajStrGetPtr(substr),
-			    ajSeqName(seq), begin, orfml, addedasterisk);
+			    ajSeqGetNameC(seq), orfml, addedasterisk);
 
-	checktrans_dumptofeat(featout,0,len,ajStrGetPtr(substr),ajSeqName(seq),
-			      begin,orfml);
+	checktrans_dumptofeat(featout,0,len,ajStrGetPtr(substr),
+			      ajSeqGetNameC(seq),
+			      orfml);
     }
 
     ajSeqallDel(&seqall);
     ajFileClose(&outf);
-    ajSeqWriteClose(outseq);
+    ajSeqoutClose(outseq);
     ajSeqoutDel(&outseq);
     ajFeattabOutDel(&featout);
 
     ajSeqDel(&seq);
     ajStrDel(&substr);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -141,7 +140,6 @@ int main(int argc, char **argv)
 ** @param [r] to [ajint] Undocumented
 ** @param [r] p [const char*] Undocumented
 ** @param [r] name [const char*] Undocumented
-** @param [r] begin [ajint] Undocumented
 ** @param [r] min_orflength [ajint] Undocumented
 ** @param [r] addedasterisk [AjBool] True if an asterisk was added at the end
 ** @@
@@ -149,7 +147,6 @@ int main(int argc, char **argv)
 
 static void checktrans_findorfs (AjPSeqout outseq, AjPFile outf, ajint from,
 				 ajint to, const char *p, const char *name,
-				 ajint begin,
 				 ajint min_orflength, AjBool addedasterisk)
 
 {
@@ -226,7 +223,7 @@ static void checktrans_ajbseq(AjPSeqout outseq, const char *seq,
     ajFmtPrintS(&nm,"%s_%d",name,count);
     ajSeqAssignNameS(sq,nm);
 
-    ajSeqWrite(outseq, sq);
+    ajSeqoutWriteSeq(outseq, sq);
 
     ajStrDel(&nm);
     ajStrDel(&str);
@@ -247,14 +244,12 @@ static void checktrans_ajbseq(AjPSeqout outseq, const char *seq,
 ** @param [r] to [ajint] Undocumented
 ** @param [r] p [const char*] Undocumented
 ** @param [r] seqname [const char*] Undocumented
-** @param [r] begin [ajint] Undocumented
 ** @param [r] min_orflength [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 static void checktrans_dumptofeat(AjPFeattabOut featout, ajint from, ajint to,
 				  const char *p, const char *seqname,
-				  ajint begin,
 				  ajint min_orflength)
 {
     ajint i;

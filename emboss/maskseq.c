@@ -68,8 +68,8 @@ int main(int argc, char **argv)
         ajRangeStrMask(regions, maskchar, &str);
     
     ajSeqAssignSeqS(seq, str);
-    ajSeqWrite(seqout, seq);
-    ajSeqWriteClose(seqout);
+    ajSeqoutWriteSeq(seqout, seq);
+    ajSeqoutClose(seqout);
 
     ajSeqDel(&seq);
     ajSeqoutDel(&seqout);

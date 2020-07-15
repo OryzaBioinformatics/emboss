@@ -41,10 +41,10 @@ int main(int argc, char **argv)
     seq  = ajAcdGetSeq("sequence");
     outf = ajAcdGetOutfile("outfile");
 
-    ajFmtPrintF(outf, "%S\n", ajSeqGetUsa(seq));
+    ajFmtPrintF(outf, "%S\n", ajSeqGetUsaS(seq));
     ajFileClose(&outf);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

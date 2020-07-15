@@ -43,7 +43,10 @@ int main(int argc, char **argv)
 
     ajCodWriteOut(cod, codout);
 
-    ajExit();
+    ajCodDel(&cod);
+    ajOutfileClose(&codout);
+
+    embExit();
 
     return 0;
 }

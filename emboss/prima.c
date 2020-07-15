@@ -529,9 +529,6 @@ int main(int argc, char **argv)
 			ajAnneal(pair->r->primerTm,pair->f->prodTm));
 	}
 
-
-
-
 	prima_PrimerDel(&pair->f);
 	prima_PrimerDel(&pair->r);
 	AJFREE(pair);
@@ -547,7 +544,7 @@ int main(int argc, char **argv)
 
     ajListDel(&forlist);
     ajListDel(&revlist);
-    ajListDel(&pairlist);
+    ajListFree(&pairlist);
 
     ajFileClose(&outf);
     ajSeqDel(&sequence);
@@ -1642,6 +1639,7 @@ static void prima_check_overlap(AjPList pairlist, ajint *npair, ajint overlap)
 	    {
 		prima_PrimerDel(&pair->f);
 		prima_PrimerDel(&pair->r);
+		AJFREE(pair);
 		--count;
 	    }
 	    else

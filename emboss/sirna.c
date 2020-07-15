@@ -102,10 +102,13 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
 	sirna_report(report, seq, poliii, aa, tt, polybase, context, seqout);
 
+    ajSeqallDel(&seqall);
     ajSeqDel(&seq);
     ajReportClose(report);
+    ajSeqoutDel(&seqout);
+    ajReportDel(&report);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -139,8 +142,6 @@ static void sirna_report(AjPReport report, const AjPSeq seq, AjBool poliii,
     ajint position;
     ajint i;
     ajint j;
-    ajint window_start;
-    ajint window_end;
     ajint window_len = 23; /* the length of the required siRNA region */
     ajint shift = 1;	       /* want to evaluate at each position */
     ajint count_gc;	     /* number of G + C bases in the window */
@@ -214,9 +215,6 @@ static void sirna_report(AjPReport report, const AjPSeq seq, AjBool poliii,
     e = (ajSeqGetEnd(seq) - window_len); /* last position a window can start */
     for(position=CDS_begin; position < e; position+=shift)
     {
-	window_start = position;
-	window_end   = position + window_len -1;
-
 	/* initialise score */
 	score = 0;
 
@@ -390,9 +388,9 @@ static void sirna_report(AjPReport report, const AjPSeq seq, AjBool poliii,
     /* now pop off the positive scores and write them to the report object */
     sirna_output(scorelist, TabRpt, seq, context, seqout);
     ajReportWrite(report, TabRpt, seq);
-    ajSeqWriteClose(seqout);
 
-    ajListFree(&scorelist);
+    ajSeqoutClose(seqout);
+    ajListFreeData(&scorelist);
     ajFeattableDel(&TabRpt);
     ajStrDel(&newstr);
 
@@ -568,11 +566,11 @@ static void sirna_new_value(AjPList list, ajint pos, ajint score,
 
 static int sirna_compare_score(const void* v1, const void* v2)
 {
-    PValue s1;
-    PValue s2;
+    const PValue s1;
+    const PValue s2;
 
-    s1 = *(PValue *)v1;
-    s2 = *(PValue *)v2;
+    s1 = *(PValue const *)v1;
+    s2 = *(PValue const *)v2;
 
 	
     if(s1->score > s2->score)
@@ -640,7 +638,7 @@ static void sirna_output(const AjPList list,
 	       value->GCcount); */
 
 	    gf = ajFeatNew(TabRpt, source, type, value->pos+1,
-			   value->pos+23, value->score, '+', 0);
+			   value->pos+23, (float)value->score, '+', 0);
 
 	    ajFmtPrintS(&tmpStr, "*gc %4.1f",
 			((float)value->GCcount*100.0)/20.0);
@@ -703,7 +701,7 @@ static void sirna_output(const AjPList list,
 	    ajSeqAssignDescS(seq23, desc);
 
 	    ajDebug("Write seq23\n");
-	    ajSeqAllWrite(seqout, seq23);
+	    ajSeqoutWriteSeq(seqout, seq23);
 
 	    /* prepare sequence string for re-use */
 	    ajStrSetClear(&subseq);

@@ -35,7 +35,7 @@ static void getorf_AppORF(ajint find, AjPStr *str,
 			  char aa);
 
 static void getorf_FindORFs(const AjPSeq seq, ajint len, const AjPTrn trnTable,
-			    ajint minsize, ajint maxsize, AjPSeqout seqout, 
+			    ajuint minsize, ajuint maxsize, AjPSeqout seqout, 
 			    AjBool sense, AjBool circular, ajint find, 
 			    ajint *orf_no, AjBool methionine, ajint around);
 
@@ -71,8 +71,8 @@ int main(int argc, char **argv)
     AjPSeqout seqout;
     AjPStr tablestr;
     ajint table;
-    ajint minsize;
-    ajint maxsize;
+    ajuint minsize;
+    ajuint maxsize;
     AjPStr findstr;
     ajint find;
     AjBool methionine;
@@ -158,7 +158,7 @@ int main(int argc, char **argv)
 	}
     }
     
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
     ajTrnDel(&trnTable);
 
     ajSeqallDel(&seqall);
@@ -183,8 +183,8 @@ int main(int argc, char **argv)
 ** @param [r] seq [const AjPSeq] Undocumented
 ** @param [r] len [ajint] Undocumented
 ** @param [r] trnTable [const AjPTrn] Undocumented
-** @param [r] minsize [ajint] Minimum size ORF to find
-** @param [r] maxsize [ajint] Maximum size ORF to find
+** @param [r] minsize [ajuint] Minimum size ORF to find
+** @param [r] maxsize [ajuint] Maximum size ORF to find
 ** @param [u] seqout [AjPSeqout] Undocumented
 ** @param [r] sense [AjBool] Undocumented
 ** @param [r] circular [AjBool] Undocumented
@@ -196,7 +196,7 @@ int main(int argc, char **argv)
 ******************************************************************************/
 
 static void getorf_FindORFs(const AjPSeq seq, ajint len, const AjPTrn trnTable,
-			    ajint minsize, ajint maxsize, AjPSeqout seqout, 
+			    ajuint minsize, ajuint maxsize, AjPSeqout seqout, 
 			    AjBool sense, AjBool circular, ajint find, 
 			    ajint *orf_no, AjBool methionine, ajint around)
 {
@@ -661,7 +661,7 @@ static void getorf_WriteORF(const AjPSeq seq,
 	/* sequence to be 50 bases around the codon */
 	ajSeqAssignSeqS(new, aroundstr);
 
-    ajSeqAllWrite(seqout, new);
+    ajSeqoutWriteSeq(seqout, new);
 
     ajSeqDel(&new);
     ajStrDel(&value);

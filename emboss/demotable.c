@@ -88,7 +88,7 @@ int main(int argc, char **argv)
     ajTableMapDel(type, demotable_freetype, NULL);
     ajTableFree(&type);
 
-    ajExit();
+    embExit();
     return 0;
 }
 

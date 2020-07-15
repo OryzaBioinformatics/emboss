@@ -69,7 +69,7 @@ static char base[] = "acgt-" ;
 
 static const char *sq ;
 static ajint *revmatch[5] ;
-static ajint length ;
+static ajint seqlength ;
 static AjPInt2d matrix=NULL;
 
 
@@ -111,6 +111,9 @@ int main(int argc, char **argv)
     AjPSeqall seqall = NULL;
     AjPSeq sequence = NULL;
     AjPStr nseq = NULL;
+    AjBool rev = ajFalse;
+    AjBool comp = ajFalse;
+    ajint ioffset = 0;
 
     /* JISON new variables */
     AjPList listseq = NULL;
@@ -138,7 +141,7 @@ int main(int argc, char **argv)
     seqout    = ajAcdGetSeqout("outseq");
     
 
-    cvt    = ajSeqCvtNew("ACGT");
+    cvt    = ajSeqcvtNewEndC("ACGT");
 
     while(ajSeqallNext(seqall, &sequence))
     {
@@ -147,22 +150,28 @@ int main(int argc, char **argv)
 	liststart = ajIntNew();
 	listend   = ajIntNew();
 	
-	length = ajSeqGetLen(sequence);
-	ajSeqNum(sequence, cvt, &nseq);
+	ajSeqTrim(sequence);
+	seqlength = ajSeqGetLen(sequence);
+	ajSeqConvertNum(sequence, cvt, &nseq);
 	sq = ajStrGetPtr(nseq);
-	
-	ajDebug("sequence length: %d\n", length);
-	
+	rev = ajSeqIsReversed(sequence);
+	if(rev)
+	    ioffset = ajSeqGetOffend(sequence);
+	else
+	    ioffset = ajSeqGetOffset(sequence);
+
+	ajDebug("sequence length: %d\n", seqlength);
+
 	/*
 	 ** build revmatch etc. to be a,t,g,c matched to reverse sequence
 	 ** ending in MAXSAVE ROGUE values
 	 */
 	for(i = 5; i--;)
 	{
-	    AJCNEW(revmatch[i],(length+maxsave));
+	    AJCNEW(revmatch[i],(seqlength+maxsave));
 	    ip = revmatch[i];
 
-	    for(j = length; j--; )
+	    for(j = seqlength; j--; )
 		*ip++ = mismatch;
 
 	    for(j = maxsave; j--;)
@@ -170,7 +179,7 @@ int main(int argc, char **argv)
 	}
 	
 	cp = ajStrGetPtr(nseq);
-	for(j = length; j--;)		/* reverse order important here */
+	for(j = seqlength; j--;)		/* reverse order important here */
 	    switch(*cp++)
 	    {
 	    case 0:
@@ -201,7 +210,7 @@ int main(int argc, char **argv)
 	}
 	
 	
-	for(i = 0; i < length+maxsave; ++i) /* +MAXSAVE to report at end */
+	for(i = 0; i < seqlength+maxsave; ++i) /* +MAXSAVE to report at end */
 	{
 	    irel = i % maxsave;
 
@@ -229,7 +238,7 @@ int main(int argc, char **argv)
 		}
 	    }
 
-	    if(i >= length)		/* report only */
+	    if(i >= seqlength)		/* report only */
 		continue;
 
 	    if(i == 0)
@@ -238,7 +247,7 @@ int main(int argc, char **argv)
 		t0 = (matrix->Ptr[(i-1)%maxsave]->Ptr) - 1; /* NB offset by 1 */
 
 	    t1 = (matrix->Ptr[irel]->Ptr);
-	    memcpy(t1, &revmatch[(ajint)sq[i]][length-i],
+	    memcpy(t1, &revmatch[(ajint)sq[i]][seqlength-i],
 		   (maxsave-1)*sizeof(ajint));
 	    t1[maxsave-2] = t1[maxsave-1] = rogue;
 
@@ -250,7 +259,7 @@ int main(int argc, char **argv)
 #ifdef TEST
 	    ajDebug("\n%2d %c: ", i, base[(ajint)sq[i]]);
 
-	    for(j = length-i; --j;)
+	    for(j = seqlength-i; --j;)
 		ajDebug("      ");
 	    ajDebug(" ");
 
@@ -305,7 +314,7 @@ int main(int argc, char **argv)
 		    if(c >= rogue)
 			goto done;
 		    max = c;
-		    jmax = t1 - t1Base;
+		    jmax = (ajint) (t1 - t1Base);
 		}
 	    }
 #endif
@@ -327,18 +336,26 @@ int main(int argc, char **argv)
 
 	/* JISON new block */
 	temppos=0;
+	comp = rev;
 	while(ajListstrPop(listseq, &tempstr))
 	{
-	    ajFmtPrintS(&tempname, "%S_%d_%d",
-			ajSeqGetNameS(sequence),
-			ajIntGet(liststart, temppos),
-			ajIntGet(listend, temppos));
+	    if(rev)
+		ajFmtPrintS(&tempname, "%S_%d_%d_rev",
+			    ajSeqGetNameS(sequence),
+			    ioffset + seqlength + 1 - ajIntGet(listend, temppos),
+			    ioffset + seqlength + 1 - ajIntGet(liststart, temppos));
+	    else
+		ajFmtPrintS(&tempname, "%S_%d_%d",
+			    ajSeqGetNameS(sequence),
+			    ioffset+ajIntGet(liststart, temppos),
+			    ioffset+ajIntGet(listend, temppos));
 	    ajSeqAssignNameS(tempseq, tempname);
 	    ajSeqAssignSeqS(tempseq, tempstr);
 	    if(seqout)
-		ajSeqWrite(seqout, tempseq);
+		ajSeqoutWriteSeq(seqout, tempseq);
 	    ajStrDel(&tempstr);
 	    temppos++;
+	    comp = !comp;
 	}	    
 	ajListstrDel(&listseq);
 	ajIntDel(&liststart);
@@ -354,7 +371,7 @@ int main(int argc, char **argv)
     }
     /* JISON new block */
     if(seqout)
-	ajSeqWriteClose(seqout);
+	ajSeqoutClose(seqout);
 
     ajSeqDel(&tempseq);
     ajSeqoutDel(&seqout);
@@ -363,7 +380,7 @@ int main(int argc, char **argv)
     ajSeqallDel(&seqall);
     ajSeqDel(&sequence);
     ajFileClose(&outfile);
-    ajSeqCvtDel(&cvt);
+    ajSeqcvtDel(&cvt);
     
     ajStrDel(&nseq);
     ajStrDel(&tempname);
@@ -410,12 +427,22 @@ static void einverted_report(ajint max, ajint imax, const AjPSeq seq,
     /* JISON new variables */
     AjPStr regionA=NULL;
     AjPStr regionB=NULL;
+    AjBool rev = ajFalse;
+    ajint ioffset = 0;
+    ajint length = 0;
     
 
     AJCNEW(align1,2*maxsave);
     AJCNEW(align2,2*maxsave);
 
     ajDebug("report (%d %d)\n", max, imax);
+
+    rev = ajSeqIsReversed(seq);
+    if(rev)
+    ioffset = ajSeqGetOffend(seq);
+    else
+	ioffset = ajSeqGetOffset(seq);
+    length = ajSeqGetLen(seq);
 
     /* reconstruct maximum path */
     t1 = (matrix->Ptr[imax % maxsave]->Ptr);
@@ -475,8 +502,10 @@ static void einverted_report(ajint max, ajint imax, const AjPSeq seq,
     regionB = ajStrNew();
     ajIntPut(liststart, *pos, *align2);
     
-
-    ajFmtPrintF(outfile, "%8d ", *align2); /* NB *jp is 1+coord */
+    if(rev)				/* NB *jp is 1+coord */
+	ajFmtPrintF(outfile, "%8d ", ioffset + length + 1 - *align2);
+    else
+	ajFmtPrintF(outfile, "%8d ", ioffset + *align2);/* NB *jp is 1+coord */
     for(jp = align2; *jp; ++jp)
 	if(*jp == *(jp+1))
 	    ajFmtPrintF(outfile, "-");
@@ -486,7 +515,10 @@ static void einverted_report(ajint max, ajint imax, const AjPSeq seq,
 	    ajStrAppendK(&regionA, base[(ajint)sq[*jp-1]]); /* JISON */
 	}
     
-    ajFmtPrintF(outfile, " %-8d\n", *(jp-1));
+    if(rev)
+	ajFmtPrintF(outfile, " %-8d\n", ioffset + length + 1 - *(jp-1));
+    else
+	ajFmtPrintF(outfile, " %-8d\n", ioffset+*(jp-1));
 
     /* JISON new block */
     ajIntPut(listend, *pos, *(jp-1)); 
@@ -505,7 +537,10 @@ static void einverted_report(ajint max, ajint imax, const AjPSeq seq,
 
     ajIntPut(listend, *pos, *align1 + 1); /* JISON */
 
-    ajFmtPrintF(outfile, "%8d ", *align1 + 1);
+    if(rev)
+	ajFmtPrintF(outfile, "%8d ", ioffset + length + 1 - *align1 - 1);
+    else
+	ajFmtPrintF(outfile, "%8d ", ioffset + *align1 + 1);
     for(ip = align1; *ip; ++ip)
 	if(*ip == *(ip+1))
 	    ajFmtPrintF(outfile, "-");
@@ -519,7 +554,10 @@ static void einverted_report(ajint max, ajint imax, const AjPSeq seq,
     ajListstrPushApp(*listseq, regionA);
     ajListstrPushApp(*listseq, regionB);
     
-    ajFmtPrintF(outfile, " %-8d\n", *(ip-1)+1);
+    if(rev)
+	ajFmtPrintF(outfile, " %-8d\n", ioffset + length + 1 - *(ip-1) -1);
+    else
+	ajFmtPrintF(outfile, " %-8d\n", ioffset + *(ip-1)+1);
 
     /* JISON new block */
     ajIntPut(liststart, *pos, *(ip-1)+1);  

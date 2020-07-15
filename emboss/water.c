@@ -42,8 +42,8 @@ int main(int argc, char **argv)
 
     AjBool  show = ajFalse;
 
-    ajint lena;
-    ajint lenb;
+    ajuint lena;
+    ajuint lenb;
 
     const char *p;
     const char *q;
@@ -62,8 +62,8 @@ int main(int argc, char **argv)
     float gapopen;
     float gapextend;
 
-    ajint maxarr = 1000;
-    ajint len;
+    ajulong maxarr = 1000;
+    ajulong len;
 
     float score;
     ajint begina;
@@ -77,6 +77,7 @@ int main(int argc, char **argv)
     float idx  = 0.;
     float simx = 0.;
 
+    size_t stlen;
 
     embInit("water", argc, argv);
     
@@ -114,17 +115,18 @@ int main(int argc, char **argv)
 	ajSeqTrim(b);
 	lenb = ajSeqGetLen(b);
 
-	len = lena*lenb;
+	if(lenb > (ULONG_MAX/(ajulong)(lena+1)))
+	   ajFatal("Sequences too big. Try 'matcher' or 'supermatcher'");
 
-	if(len < 0)
-	    ajFatal("Sequences too big. Try 'matcher' or 'supermatcher'");
+	len = lena*lenb;
 
 	if(len>maxarr)
 	{
-	    AJCRESIZE(path,len);
+	    stlen = (size_t) len;
+	    AJCRESIZE(path,stlen);
 	    if(!path)
 		ajFatal("Sequences too big. Try 'matcher' or 'supermatcher'");
-	    AJCRESIZE(compass,len);
+	    AJCRESIZE(compass,stlen);
 	    if(!compass)
 		ajFatal("Sequences too big. Try 'matcher' or 'supermatcher'");
 	    maxarr=len;

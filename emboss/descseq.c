@@ -81,15 +81,15 @@ int main(int argc, char **argv)
 	    ajSeqAssignDescS(seq, desc);
     }
 
-    ajSeqWrite(seqout, seq);
-    ajSeqWriteClose(seqout);
+    ajSeqoutWriteSeq(seqout, seq);
+    ajSeqoutClose(seqout);
 
     ajSeqDel(&seq);
     ajSeqoutDel(&seqout);
     ajStrDel(&name);
     ajStrDel(&desc);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

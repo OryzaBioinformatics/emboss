@@ -96,10 +96,10 @@ int main(int argc, char **argv)
 
 	ajStrKeepRange(&str, start, end);
 	ajSeqAssignSeqS(seq, str);
-	ajSeqAllWrite(seqout, seq);
+	ajSeqoutWriteSeq(seqout, seq);
     }
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
 
     ajStrDel(&str);
     ajSeqallDel(&seqall);
@@ -226,7 +226,7 @@ static ajint trimseq_trim(const AjPSeq seq,
 	}
 
 	/* what is the percentage of bad characters in this window */
-	pc = 100.0 * (float)count/(float)window;
+	pc = (float)100.0 * (float)count/(float)window;
 	/* Need to trim this window? */
 	if(pc < percent)
 	    break;

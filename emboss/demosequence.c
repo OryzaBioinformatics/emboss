@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
     /* in progress ... */
 
-    ajExit();
+    embExit();
 
     return 0;
 }

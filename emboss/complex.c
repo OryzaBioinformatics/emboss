@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 
 	while(ajSeqallNext(seqall, &seq))
 	{
-	    ajSeqAllWrite(seqout,seq);
+	    ajSeqoutWriteSeq(seqout,seq);
 	    len = ajSeqGetLen(seq);
 	    name = ajSeqGetNameC(seq);
 
@@ -88,11 +88,11 @@ int main(int argc, char **argv)
 		Num_seq++;
 		embComComplexity(charseq,name,len,jmin,jmax,lwin,
 				 step,sim,freq,omnia,
-				 outfile,pfile,print,Num_seq,&MedValue);
+				 outfile,pfile,print,&MedValue);
 		embComWriteValueOfSeq(outfile,Num_seq,name,len,MedValue);
 	    }
 	}
-	ajSeqWriteClose(seqout);
+	ajSeqoutClose(seqout);
     }
     else
     {
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 	    Num_seq ++;
 	    embComComplexity(charseq,name,len,jmin,jmax,lwin,
 			     step,sim,freq,omnia,
-			     outfile, pfile,print,Num_seq,&MedValue);
+			     outfile, pfile,print,&MedValue);
 	}
     }
 
@@ -113,7 +113,11 @@ int main(int argc, char **argv)
     ajFileClose(&pfile);
     ajFileClose(&outfile);
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqoutDel(&seqout);
+    ajSeqDel(&seq);
+
+    embExit();
 
     return 0;
 }

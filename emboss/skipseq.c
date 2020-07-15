@@ -51,12 +51,12 @@ int main(int argc, char **argv)
         skipcnt++;
 
 	if(skipcnt > skip)
-	    ajSeqAllWrite(seqout, seq);
+	    ajSeqoutWriteSeq(seqout, seq);
     }
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

@@ -40,8 +40,8 @@ int main(int argc, char **argv)
     AjPStr n;
     AjPStr ss;
 
-    ajint    lena;
-    ajint    lenb;
+    ajuint    lena;
+    ajuint    lenb;
 
     const char   *p;
     const char   *q;
@@ -58,12 +58,10 @@ int main(int argc, char **argv)
 
     float gapopen;
     float gapextend;
-    ajint maxarr = 1000; 	/* arbitrary. realloc'd if needed */
-    ajint len;			
+    ajulong maxarr = 1000; 	/* arbitrary. realloc'd if needed */
+    ajulong len;			
 
     float score;
-    ajint begina;
-    ajint beginb;
 
     AjBool dobrief = ajTrue;
 
@@ -73,6 +71,8 @@ int main(int argc, char **argv)
     float simx = 0.;
 
     AjPStr tmpstr = NULL;
+
+    size_t stlen;
 
     embInit("needle", argc, argv);
 
@@ -99,30 +99,30 @@ int main(int argc, char **argv)
     sub = ajMatrixfArray(matrix);
     cvt = ajMatrixfCvt(matrix);
 
-    begina = ajSeqGetBegin(a)+ajSeqGetOffset(a);
     lena = ajSeqGetLen(a);
 
     while(ajSeqallNext(seqall,&b))
     {
 	ajSeqTrim(b);
 	lenb = ajSeqGetLen(b);
-	len = lena*lenb;
 
-	if(len < 0)
-	    ajFatal("Sequences too big. Try 'stretcher' or 'supermatcher'");
+	if(lenb > (ULONG_MAX/(ajulong)(lena+1)))
+	   ajFatal("Sequences too big. Try 'stretcher' or 'supermatcher'");
+
+	len = lena*lenb;
 
 	if(len>maxarr)
 	{
-	    AJCRESIZETRY(path,len);
+	    stlen = (size_t) len;
+	    AJCRESIZETRY(path,stlen);
 	    if(!path)
 		ajDie("Sequences too big. Try 'stretcher'");
-	    AJCRESIZETRY(compass,len);
+	    AJCRESIZETRY(compass,stlen);
 	    if(!compass)
 		ajDie("Sequences too big. Try 'stretcher'");
 	    maxarr=len;
 	}
 
-	beginb=ajSeqGetBegin(b)+ajSeqGetOffset(b);
 
 	p = ajSeqGetSeqC(a);
 	q = ajSeqGetSeqC(b);

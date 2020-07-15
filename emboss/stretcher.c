@@ -43,9 +43,7 @@
 static ajint stretcher_Ealign(const char *A, const char *B,
 			      const AjPSeq seq0, const AjPSeq seq1, ajint G,
 			      ajint H,ajint *S, ajint* NC);
-static ajint stretcher_Calcons(const char *aa0, ajint n0,
-			       const char *aa1, ajint n1,
-			       const ajint* res);
+static ajint stretcher_Calcons(ajint n0, ajint n1, const ajint* res);
 static ajint stretcher_Align(const char *A, const char *B,
 			     ajint M, ajint N, ajint tb,
 			     ajint te);
@@ -112,16 +110,16 @@ static ajint m;					/* g = G, hh = H, m = g+h */
 #define STRETCHERREP { last = *sapp++ = 0; } /* Append "Replace" op */
 
 
-static AjPSeq seq0;
-static AjPSeq seq1;
+static AjPSeq glseq0;
+static AjPSeq glseq1;
 
 static ajint *CC, *DD;			/* Forward cost-only vectors */
 static ajint *RR, *SS;		        /* Reverse cost-only vectors */
 
 static ajint nd;
-static ajint *res;
+static ajint *glres;
 static ajint nres;
-static ajint nc;
+static ajint glnc;
 
 static AjPMatrix matrix = NULL;
 
@@ -148,22 +146,23 @@ int main(int argc, char **argv)
     const char *s2;
     ajint gdelval;
     ajint ggapval;
-    ajint i;
+    ajuint i;
     ajint gscore;
-    float percent;
+    /* float percent; */
     AjPAlign align   = NULL;
     AjPSeqset seqset = NULL;
 
     AjPSeq res0 = NULL;
     AjPSeq res1 = NULL;
+    /*
     ajint beg0;
     ajint beg1;
-
+    */
 
     embInit("stretcher", argc, argv);
 
-    seq0    = ajAcdGetSeq("asequence");
-    seq1    = ajAcdGetSeq("bsequence");
+    glseq0    = ajAcdGetSeq("asequence");
+    glseq1    = ajAcdGetSeq("bsequence");
     matrix  = ajAcdGetMatrix("datafile");
     gdelval = ajAcdGetInt("gapopen");
     ggapval = ajAcdGetInt("gapextend");
@@ -177,52 +176,53 @@ int main(int argc, char **argv)
     ** each residue in the sequence
     */
 
-    ajSeqTrim(seq0);
-    ajSeqTrim(seq1);
-    beg0 = 1 + ajSeqGetOffset(seq0);
-    beg1 = 1 + ajSeqGetOffset(seq1);
+    ajSeqTrim(glseq0);
+    ajSeqTrim(glseq1);
+    /*
+    beg0 = 1 + ajSeqGetOffset(glseq0);
+    beg1 = 1 + ajSeqGetOffset(glseq1);
+    */
 
-    ajSeqFmtUpper(seq0);
-    ajSeqFmtUpper(seq1);
+    ajSeqFmtUpper(glseq0);
+    ajSeqFmtUpper(glseq1);
 
-    s1 = ajStrGetPtr(ajSeqGetSeqS(seq0));
-    s2 = ajStrGetPtr(ajSeqGetSeqS(seq1));
+    s1 = ajStrGetPtr(ajSeqGetSeqS(glseq0));
+    s2 = ajStrGetPtr(ajSeqGetSeqS(glseq1));
 
     sub = ajMatrixArray(matrix);
     cvt = ajMatrixCvt(matrix);
 
     /*
-    ** ajMatrixSeqNum(matrix, seq0,  &aa0str);
-    ** ajMatrixSeqNum(matrix, seq1, &aa1str);
+    ** ajMatrixSeqNum(matrix, glseq0,  &aa0str);
+    ** ajMatrixSeqNum(matrix, glseq1, &aa1str);
     */
 
-    aa0str = ajStrNewRes(2+ajSeqGetLen(seq0)); /* length + blank + trailing null */
-    aa1str = ajStrNewRes(2+ajSeqGetLen(seq1));
+    aa0str = ajStrNewRes(2+ajSeqGetLen(glseq0)); /* length + blank + trailing null */
+    aa1str = ajStrNewRes(2+ajSeqGetLen(glseq1));
     ajStrAppendK(&aa0str,' ');
     ajStrAppendK(&aa1str,' ');
 
-    for(i=0;i<ajSeqGetLen(seq0);i++)
-	ajStrAppendK(&aa0str,(char)ajSeqCvtK(cvt, *s1++));
+    for(i=0;i<ajSeqGetLen(glseq0);i++)
+	ajStrAppendK(&aa0str,(char)ajSeqcvtGetCodeK(cvt, *s1++));
 
-    for(i=0;i<ajSeqGetLen(seq1);i++)
-	ajStrAppendK(&aa1str,ajSeqCvtK(cvt, *s2++));
+    for(i=0;i<ajSeqGetLen(glseq1);i++)
+	ajStrAppendK(&aa1str,ajSeqcvtGetCodeK(cvt, *s2++));
 
-    AJCNEW(res,   ajSeqGetLen(seq0)+ajSeqGetLen(seq1));
-    AJCNEW(seqc0, ajSeqGetLen(seq0)+ajSeqGetLen(seq1));
-    AJCNEW(seqc1, ajSeqGetLen(seq0)+ajSeqGetLen(seq1));
+    AJCNEW(glres,   ajSeqGetLen(glseq0)+ajSeqGetLen(glseq1));
+    AJCNEW(seqc0, ajSeqGetLen(glseq0)+ajSeqGetLen(glseq1));
+    AJCNEW(seqc1, ajSeqGetLen(glseq0)+ajSeqGetLen(glseq1));
 
     gscore = stretcher_Ealign(ajStrGetPtr(aa0str),ajStrGetPtr(aa1str),
-			      seq0, seq1,
-			      (gdelval-ggapval),ggapval,res,&nres);
+			      glseq0, glseq1,
+			      (gdelval-ggapval),ggapval,glres,&nres);
 
-    nc = stretcher_Calcons(ajStrGetPtr(aa0str),ajSeqGetLen(seq0),ajStrGetPtr(aa1str),
-			   ajSeqGetLen(seq1),res);
-    percent = (double)nd*100.0/(double)nc;
+    glnc = stretcher_Calcons(ajSeqGetLen(glseq0),ajSeqGetLen(glseq1),glres);
+    /* percent = (double)nd*100.0/(double)glnc; */
 
 /*
     seqset = ajSeqsetNew();
-    res0   = ajSeqNewSeq(seq0);
-    res1   = ajSeqNewSeq(seq1);
+    res0   = ajSeqNewSeq(glseq0);
+    res1   = ajSeqNewSeq(glseq1);
     ajSeqAssignSeqC(res0, seqc0);
     ajSeqAssignSeqC(res1, seqc1);
     ajSeqsetFromPair(seqset, res0, res1);
@@ -231,29 +231,29 @@ int main(int argc, char **argv)
 
     ajAlignSetGapI(align, gdelval, ggapval);
     ajAlignSetMatrixInt(align, matrix);
-    ajAlignSetRange(align, beg0, beg0+ajSeqGetLen(seq0),
-		    ajSeqGetLen(seq), ajSeqGetOffset(seq0),
+    ajAlignSetRange(align, beg0, beg0+ajSeqGetLen(glseq0),
+		    ajSeqGetLen(glseq0), ajSeqGetOffset(glseq0),
 		    beg1, beg1+ajSeqGetLen(seq1),
-		    ajSeqGetLen(seq2), ajSeqGetOffset(seq1));
+		    ajSeqGetLen(glseq1), ajSeqGetOffset(glseq1));
     ajAlignSetScoreI(align, gscore);
 */
 
-    res0 =  ajSeqNewRangeC(seqc0, ajSeqGetOffset(seq0), ajSeqGetOffend(seq0),
-			       ajSeqIsReversed(seq0));
-    ajSeqAssignUsaS(res0, ajSeqGetUsaS(seq0));
-    ajSeqAssignNameS(res0, ajSeqGetNameS(seq0));
+    res0 =  ajSeqNewRangeC(seqc0, ajSeqGetOffset(glseq0), ajSeqGetOffend(glseq0),
+			       ajSeqIsReversed(glseq0));
+    ajSeqAssignUsaS(res0, ajSeqGetUsaS(glseq0));
+    ajSeqAssignNameS(res0, ajSeqGetNameS(glseq0));
 
-    res1 =  ajSeqNewRangeC(seqc1, ajSeqGetOffset(seq1), ajSeqGetOffend(seq1),
-			       ajSeqIsReversed(seq1));
-    ajSeqAssignUsaS(res1, ajSeqGetUsaS(seq1));
-    ajSeqAssignNameS(res1, ajSeqGetNameS(seq1));
+    res1 =  ajSeqNewRangeC(seqc1, ajSeqGetOffset(glseq1), ajSeqGetOffend(glseq1),
+			       ajSeqIsReversed(glseq1));
+    ajSeqAssignUsaS(res1, ajSeqGetUsaS(glseq1));
+    ajSeqAssignNameS(res1, ajSeqGetNameS(glseq1));
 
     ajAlignDefineSS(align, res0, res1);
 
     ajAlignSetGapI(align, gdelval, ggapval);
     ajAlignSetScoreI(align, gscore);
     ajAlignSetMatrixInt(align, matrix);
-    ajAlignSetStats(align, -1, nc, nd, -1, -1, NULL);
+    ajAlignSetStats(align, -1, glnc, nd, -1, -1, NULL);
 
     ajAlignWrite(align);
 
@@ -262,7 +262,7 @@ int main(int argc, char **argv)
     ajAlignDel(&align);
     ajSeqsetDel(&seqset);
 
-    AJFREE(res);
+    AJFREE(glres);
     AJFREE(seqc0);
     AJFREE(seqc1);
     AJFREE(CC);
@@ -277,8 +277,8 @@ int main(int argc, char **argv)
     ajSeqsetDel(&seqset);
     ajSeqDel(&res0);
     ajSeqDel(&res1);
-    ajSeqDel(&seq0);
-    ajSeqDel(&seq1);
+    ajSeqDel(&glseq0);
+    ajSeqDel(&glseq1);
     /* ajMatrixDel(&matrix);*/ /* owned by align, deleted by ajAlignDel */
 
     embExit();
@@ -294,7 +294,7 @@ int main(int argc, char **argv)
 static ajint nmax=0;
 
 /* @funcstatic stretcher_Ealign ***********************************************
-**s
+**
 ** Undocumented
 **
 ** @param [r] A [const char*] Sequence A with trailing blank
@@ -347,11 +347,11 @@ static ajint stretcher_Ealign(const char *A,const char *B,
     if(CC==NULL || DD==NULL || RR==NULL || SS==NULL)
     {
 	ajErr(" cannot allocate llmax arrays\n");
-	exit(1);
+	embExitBad();
     }
 
     c  = stretcher_Align(A,B,M,N,-g,-g);	/* OK, do it */
-    ck = stretcher_CheckScore((unsigned char *)A,(unsigned char *)B,
+    ck = stretcher_CheckScore((unsigned const char *)A,(unsigned const char *)B,
                               seq0, seq1,S,NC);
 
     if(c != ck)
@@ -570,16 +570,14 @@ static ajint stretcher_Align(const char *A,const char *B,
 **
 ** Undocumented
 **
-** @param [r] aa0 [const char*] Undocumented
 ** @param [r] n0 [ajint] Undocumented
-** @param [r] aa1 [const char*] Undocumented
 ** @param [r] n1 [ajint] Undocumented
 ** @param [r] res [const ajint*] Undocumented
 ** @return [ajint] Undocumented
 ******************************************************************************/
 
-static ajint stretcher_Calcons(const char *aa0,ajint n0,
-			       const char *aa1,ajint n1,
+static ajint stretcher_Calcons(ajint n0,
+			       ajint n1,
 			       const ajint *res)
 {
     ajint i0;
@@ -603,8 +601,8 @@ static ajint stretcher_Calcons(const char *aa0,ajint n0,
     nc = nd = i0 = i1 = op = 0;
     min0 = min1 = 0;
 
-    sq1 = ajStrGetPtr(ajSeqGetSeqS(seq0));
-    sq2 = ajStrGetPtr(ajSeqGetSeqS(seq1));
+    sq1 = ajStrGetPtr(ajSeqGetSeqS(glseq0));
+    sq2 = ajStrGetPtr(ajSeqGetSeqS(glseq1));
 
     while(i0 < n0 || i1 < n1)
     {
@@ -668,8 +666,8 @@ static ajint stretcher_CheckScore(const unsigned char *A,
 				  const AjPSeq seq0, const AjPSeq seq1,
                                   ajint *S,ajint *NC)
 {
-    register ajint i;
-    register ajint j;
+    register ajuint i;
+    register ajuint j;
     register ajint op;
     register ajint nc1;
     ajint score;

@@ -31,15 +31,14 @@
 
 
 
-static void pepinfo_plotHistInt2(AjPHist hist, const AjPSeq seq,
+static void pepinfo_plotHistInt2(AjPHist hist,
 				 const ajint * results, ajint hist_num,
 				 const char* header,
 				 const char* xtext, const char * ytext);
-static void pepinfo_plotGraph2Float(AjPGraph graphs, const AjPSeq seq,
+static void pepinfo_plotGraph2Float(AjPGraph graphs,
 				    const float * results,
 				    const char* title_text,
-				    const char * xtext, const char * ytext,
-				    ajint plotcolour);
+				    const char * xtext, const char * ytext);
 static void pepinfo_printFloatResults(AjPFile outfile, const AjPSeq seq,
 				      const float * results,
 				      const char* header);
@@ -73,11 +72,11 @@ extern int PNGHeight;
 int main(int argc, char **argv)
 {
 
-    AjPSeq inseq;
-    AjPFile outfile;
+    AjPSeq inseq = NULL;
+    AjPFile outfile = NULL;
     ajint hwindow;
-    AjPFile aa_properties;
-    AjPFile aa_hydropathy;
+    AjPFile aa_properties = NULL;
+    AjPFile aa_hydropathy = NULL;
 
     AjBool do_seq;
     AjBool do_general;
@@ -107,10 +106,10 @@ int main(int argc, char **argv)
     ajint numGraphs = 0;
 
     /*   Data_table aa_props, aa_hydro, aa_acc;*/
-    AjPList aa_props;
-    AjPList aa_hydro;
+    AjPList aa_props = NULL;
+    AjPList aa_hydro = NULL;
 
-    char * propertyTitles[] =
+    const char * propertyTitles[] =
     {
 	"Tiny",
 	"Small",
@@ -123,7 +122,7 @@ int main(int argc, char **argv)
 	"Negative"
     };
 
-    char * hydroTitles[] =
+    const char * hydroTitles[] =
     {
 	"Kyte & Doolittle hydropathy parameters",
 	"OHM  Hydropathy parameters (Sweet & Eisenberg)",
@@ -140,9 +139,6 @@ int main(int argc, char **argv)
     ajGraphInit("pepinfo", argc, argv);
 
     aj_hist_mark=NOY;
-
-    aa_props = ajListNew();
-    aa_hydro = ajListNew();
 
     /* Get parameters */
     inseq         = ajAcdGetSeq("sequence");
@@ -211,23 +207,25 @@ int main(int argc, char **argv)
 			{
 			    ajErr("value is not integer ..%s..\n",
 				  ajStrGetPtr(value));
-			    ajExit();
+			    embExit();
 			}
 		    }
 		    else
 		    {
 			ajErr("At position %d in seq, couldn't find key "
 			      "%s in table", j, ajStrGetPtr(key));
-			ajExit();
+			embExit();
 		    }
 		}
 	    }
 	    else
 	    {
 		ajErr("No more tables in list\n");
-		ajExit();
+		embExit();
 	    }
 	}
+
+	ajListIterFree(&listIter);
 
 	/* print out results */
 
@@ -244,8 +242,8 @@ int main(int argc, char **argv)
 	hist = ajHistNewG(9, (seq_end - seq_begin+1), graphs);
 	hist->bins = seq_end - seq_begin +1;
 
-	hist->xmin = seq_begin;
-	hist->xmax = seq_end;
+	hist->xmin = (float) seq_begin;
+	hist->xmax = (float) seq_end;
 
 	hist->displaytype=HIST_SEPARATE;
 
@@ -262,7 +260,7 @@ int main(int argc, char **argv)
 			propertyTitles[i], ajSeqGetNameC(inseq), seq_begin,
 			seq_end);
 	    ajFmtPrintS(&tmpb,  "%s residues", propertyTitles[i]);
-	    pepinfo_plotHistInt2(hist, inseq, iv[i], i,
+	    pepinfo_plotHistInt2(hist, iv[i], i,
 				 ajStrGetPtr(tmpa), ajStrGetPtr(tmpb), "");
 	}
 
@@ -272,10 +270,6 @@ int main(int argc, char **argv)
 
 	for(i = 0; i < 9; i++)
 	    AJFREE(iv[i]);
-
-
-	/* Delete Data tables*/
-	embDataListDel(&aa_props);
 
 	/*delete hist object*/
 	ajHistDelete(&hist);
@@ -303,7 +297,7 @@ int main(int argc, char **argv)
 	    if(ajListIterDone(listIter))
 	    {
 		ajErr("No more tables in list\n");
-		ajExit();
+		embExit();
 	    }
 
 	    /* Get next table of parameters */
@@ -331,14 +325,14 @@ int main(int argc, char **argv)
 		    {
 			ajErr("At position %d in seq, couldn't find key %s",
 			       k, ajStrGetPtr(key));
-			ajExit();
+			embExit();
 		    }
 
 		    if(!ajStrIsFloat(value))
 		    {
 			ajErr("value is not float ..%s..",
 			      ajStrGetPtr(value));
-			ajExit();
+		       embExit();
 		    }
 		    ajStrToFloat(value, &num);
 		    total +=num;
@@ -351,12 +345,15 @@ int main(int argc, char **argv)
 		pfloat[cnt++] = 0.00;
 	}
 
+	ajListIterFree(&listIter);
+
 	/* Print out results */
 
 	for(i=0; i<3; i++)
 	{
 	    ajFmtPrintS(&tmpa,  "Results from %s", hydroTitles[i]);
-	    pepinfo_printFloatResults(outfile, inseq, pf[i], ajStrGetPtr(tmpa));
+	    pepinfo_printFloatResults(outfile, inseq, pf[i],
+				      ajStrGetPtr(tmpa));
 	}
 
 	/*Plot results*/
@@ -366,9 +363,8 @@ int main(int argc, char **argv)
 			"Hydropathy plot of residues %d to %d of sequence "
 			"%s using %s",seq_begin, seq_end, ajSeqGetNameC(inseq),
 			hydroTitles[i]);
-	    pepinfo_plotGraph2Float(graphs, inseq, pf[i], ajStrGetPtr(tmpa),
-				    "Residue Number", "Hydropathy value",
-				    BLACK);
+	    pepinfo_plotGraph2Float(graphs, pf[i], ajStrGetPtr(tmpa),
+				    "Residue Number", "Hydropathy value");
 	}
 
 	for(i=0; i<3; i++)
@@ -378,21 +374,33 @@ int main(int argc, char **argv)
     if(numGraphs)
     {
 	if(do_general || do_seq)
-	    ajGraphNewPage(ajFalse);
+	    ajGraphNewPage(graphs, ajFalse);
 
-	ajGraphSetCharSize(0.50);
+	ajGraphSetCharScale(0.50);
 	ajGraphSetTitleC(graphs,"Pepinfo");
 
 	ajGraphxyDisplay(graphs,AJTRUE);
     }
 
     if(do_plot)
-    {
 	ajGraphCloseWin();
-	ajGraphxyDel(&graphs);
-    }
 
-    ajExit();
+    ajSeqDel(&inseq);
+    ajFileClose(&outfile);
+    ajFileClose(&aa_properties);
+    ajFileClose(&aa_hydropathy);
+    ajGraphxyDel(&graphs);
+    ajHistDelete(&hist);
+
+    /* Delete Data tables*/
+    embDataListDel(&aa_props);
+    embDataListDel(&aa_hydro);
+
+    ajStrDel(&tmpa);
+    ajStrDel(&tmpb);
+    ajStrDel(&key);
+
+    embExit();
 
     return 0;
 }
@@ -484,21 +492,18 @@ static void pepinfo_printFloatResults(AjPFile outfile, const AjPSeq seq,
 ** Create and add graph from set of results to graph set.
 **
 ** @param [u] graphs [AjPGraph] Graphs set to add new graph to.
-** @param [r] seq     [const AjPSeq]  Sequence
 ** @param [r] results [const float*]  array of results.
 ** @param [r] title_text [const char*] title for graph
 ** @param [r] xtext      [const char*] x label.
 ** @param [r] ytext      [const char*] y label.
-** @param [r] plotcolour [ajint]   Pen colour to plot the graph in.
 ** @return [void]
 **
 ******************************************************************************/
 
-static void pepinfo_plotGraph2Float(AjPGraph graphs, const AjPSeq seq,
+static void pepinfo_plotGraph2Float(AjPGraph graphs,
 				    const float * results,
 				    const  char * title_text,
-				    const char * xtext, const char * ytext,
-				    ajint plotcolour)
+				    const char * xtext, const char * ytext)
 {
 
     AjPGraphPlpData plot;
@@ -526,7 +531,7 @@ static void pepinfo_plotGraph2Float(AjPGraph graphs, const AjPSeq seq,
     ajGraphPlpDataSetMaxima(plot,(float)1,(float)npts,ymin,ymax);
     ajGraphPlpDataSetTypeC(plot,"2D Plot");
 
-    ajGraphPlpDataCalcXY(plot, npts, seq_begin, 1.0, results);
+    ajGraphPlpDataCalcXY(plot, npts, (float)seq_begin, 1.0, results);
     ajGraphDataAdd(graphs, plot);
 
     return;
@@ -540,7 +545,6 @@ static void pepinfo_plotGraph2Float(AjPGraph graphs, const AjPSeq seq,
 ** Add a histogram data to the set set.
 **
 ** @param [u] hist   [AjPHist] Histogram set to add new set to.
-** @param [r] seq     [const AjPSeq]  Sequence
 ** @param [r] results [const ajint*]  array of results.
 ** @param [r] hist_num [ajint] the number of the histogram set.
 ** @param [r] header  [const char*] title.
@@ -551,7 +555,7 @@ static void pepinfo_plotGraph2Float(AjPGraph graphs, const AjPSeq seq,
 ******************************************************************************/
 
 static void pepinfo_plotHistInt2(AjPHist hist,
-				 const AjPSeq seq, const ajint * results,
+				 const ajint * results,
 				 ajint hist_num, const char * header,
 				 const char * xtext, const char * ytext)
 {
@@ -564,7 +568,7 @@ static void pepinfo_plotHistInt2(AjPHist hist,
 
     AJCNEW(farray, npts);
     for(i=0; i<npts; i++)
-	farray[i] = results[i];
+	farray[i] = (float) results[i];
 
     ajHistCopyData(hist, hist_num, farray);
 

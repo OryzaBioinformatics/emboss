@@ -75,7 +75,7 @@ static void eprimer3_write_primer(AjPFile outfile, const char *tag,
 **
 ******************************************************************************/
 
-int main(int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     /* Global details */
     AjBool explain_flag;
@@ -375,7 +375,7 @@ int main(int argc, char **argv, char **env)
 		saAttr.bInheritHandle = TRUE;
 		saAttr.lpSecurityDescriptor = NULL;
 		
-	  // The steps for redirecting child process's STDOUT:
+	  // The steps for redirecting child process STDOUT:
 	  //     1. Save current STDOUT, to be restored later. 
 	  //     2. Create anonymous pipe to be STDOUT for child process. 
 	  //     3. Set STDOUT of the parent process to be write handle to 
@@ -398,7 +398,7 @@ int main(int argc, char **argv, char **env)
 		     ajFatal("DuplicateHandle failed");
 		 CloseHandle(hChildStdoutRd);
 
-	    // The steps for redirecting child process's STDIN: 
+	    // The steps for redirecting child process STDIN: 
 	    //     1.  Save current STDIN, to be restored later. 
 	    //     2.  Create anonymous pipe to be STDIN for child process. 
 	    //     3.  Set STDIN of the parent to be the read handle to the 
@@ -589,10 +589,10 @@ int main(int argc, char **argv, char **env)
             ** Start sequence-specific stuff 
             */
 
-            begin = ajSeqallBegin(sequence) - 1;
-            end   = ajSeqallEnd(sequence) - 1;
+            begin = ajSeqallGetseqBegin(sequence) - 1;
+            end   = ajSeqallGetseqEnd(sequence) - 1;
 
-            strand = ajSeqStrCopy(seq);
+            strand = ajSeqGetSeqCopyS(seq);
 
             ajStrFmtUpper(&strand);
             ajStrAssignSubC(&substr,ajStrGetPtr(strand), begin, end);
@@ -607,12 +607,12 @@ int main(int argc, char **argv, char **env)
             eprimer3_send_string(stream, "SEQUENCE", substr);
 
             /* if no ID name, use the USA */
-            if(ajStrMatchC(ajSeqGetName(seq),""))
+            if(ajStrMatchC(ajSeqGetNameS(seq),""))
                 eprimer3_send_string(stream, "PRIMER_SEQUENCE_ID",
-                                     ajSeqGetUsa(seq));
+                                     ajSeqGetUsaS(seq));
             else
                 eprimer3_send_string(stream, "PRIMER_SEQUENCE_ID",
-                                     ajSeqGetName(seq));
+                                     ajSeqGetNameS(seq));
 
             eprimer3_send_range(stream, "INCLUDED_REGION", included_region,
                                 begin);
@@ -657,7 +657,7 @@ int main(int argc, char **argv, char **env)
     ajFileClose(&outfile);
     ajStrDel(&taskstr);
     
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -736,9 +736,9 @@ static void eprimer3_send_range(FILE * stream, const char * tag,
                                 ajint begin)
 {
     AjPStr str;
-    ajint n;
-    ajint start;
-    ajint end;
+    ajuint n;
+    ajuint start;
+    ajuint end;
 
     str = ajStrNew();
 
@@ -785,9 +785,9 @@ static void eprimer3_send_range2(FILE * stream, const char * tag,
 				 const AjPRange value)
 {
     AjPStr str;
-    ajint n;
-    ajint start;
-    ajint end;
+    ajuint n;
+    ajuint start;
+    ajuint end;
 
     str=ajStrNew();
 
@@ -1109,7 +1109,7 @@ static void eprimer3_report(AjPFile outfile, const AjPStr output,
 
         ajDebug("key=%S\tvalue=%S\n", key, value);
 
-        ajTablePut(table,(const void *)key, (void *)value);
+        ajTablePut(table,(void *)key, (void *)value);
 
         ajStrTokenDel(&keytokenhandle);
     }

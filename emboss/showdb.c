@@ -25,30 +25,32 @@
 
 
 static void showdbDBWidth (const AjPStr dbname, const AjPStr type,
-			    const AjPStr methods, 
-			    const AjPStr defined, const AjPStr release,
-			    ajint *maxname, ajint *maxtype, ajint *maxmethod,
-			    ajint *maxfield, ajint* maxdefined,
-			    ajint *maxrelease);
+			   const AjPStr methods, 
+			   const AjPStr defined, const AjPStr release,
+			   ajuint *maxname, ajuint *maxtype,
+			   ajuint *maxmethod, ajuint *maxfield,
+			   ajuint* maxdefined, ajuint *maxrelease);
 static void showdbDBHead (AjPFile outfile, AjBool html, AjBool dotype,
-			   AjBool doid, AjBool doqry, AjBool doall,
-			   AjBool domethod, AjBool dofields, AjBool dodefined,
-			   AjBool docomment, AjBool dorelease,
-			   ajint maxname, ajint maxtype, ajint maxmethod, 
-			   ajint maxfield, ajint maxdefined, ajint maxrelease);
+			  AjBool doid, AjBool doqry, AjBool doall,
+			  AjBool domethod, AjBool dofields, AjBool dodefined,
+			  AjBool docomment, AjBool dorelease,
+			  ajuint maxname, ajuint maxtype,
+			  ajuint maxmethod, 
+			  ajuint maxfield,
+			  ajuint maxdefined, ajuint maxrelease);
 
 static void   showdbDBOut(AjPFile outfile,
-			   const AjPStr dbname, const AjPStr type,
-			   AjBool id, AjBool qry, AjBool all,
-			   const AjPStr methods, const AjPStr defined,
-			   const AjPStr comment, const AjPStr release,
-			   AjBool html, AjBool dotype,
-			   AjBool doid, AjBool doqry, AjBool doall,
-			   AjBool domethod, AjBool dofields, AjBool dodefined,
-			   AjBool docomment, AjBool dorelease,
-			   ajint maxname, ajint maxtype, ajint maxmethod,
-			   ajint maxfield, ajint maxdefined,
-			   ajint maxrelease);
+			  const AjPStr dbname, const AjPStr type,
+			  AjBool id, AjBool qry, AjBool all,
+			  const AjPStr methods, const AjPStr defined,
+			  const AjPStr comment, const AjPStr release,
+			  AjBool html, AjBool dotype,
+			  AjBool doid, AjBool doqry, AjBool doall,
+			  AjBool domethod, AjBool dofields, AjBool dodefined,
+			  AjBool docomment, AjBool dorelease,
+			  ajuint maxname, ajuint maxtype, ajuint maxmethod,
+			  ajuint maxfield, ajuint maxdefined,
+			  ajuint maxrelease);
 
 static void   showdbGetFields(const AjPStr dbname, AjPStr* fields);
 static int    showdbDBSortDefined(const void* str1, const void* str2);
@@ -77,7 +79,6 @@ int main(int argc, char **argv)
     AjBool dodefined;
     AjBool dorelease;
     AjBool docomment;
-    AjBool only;
 
     AjPFile outfile = NULL;
     AjPStr onedbname   = NULL;		/* user-specified single database */
@@ -94,12 +95,12 @@ int main(int argc, char **argv)
     AjPList dbnames;
     AjIList iter = NULL;
 
-    ajint maxname = 14;
-    ajint maxmethod = 6;
-    ajint maxfield = 6;
-    ajint maxtype = 4;
-    ajint maxdefined = 7;
-    ajint maxrelease = 7;
+    ajuint maxname = 14;
+    ajuint maxmethod = 6;
+    ajuint maxfield = 6;
+    ajuint maxtype = 4;
+    ajuint maxdefined = 7;
+    ajuint maxrelease = 7;
 
     ajNamSetControl("namvalid");	/* validate database/resource defs */
 
@@ -122,7 +123,6 @@ int main(int argc, char **argv)
     domethod  = ajAcdGetBool("methods");
     docomment = ajAcdGetBool("comment");
     dorelease = ajAcdGetBool("release");
-    only      = ajAcdGetBool("only");
     
     dbnames = ajListstrNew();
     
@@ -280,23 +280,23 @@ int main(int argc, char **argv)
 ** @param [r] methods [const AjPStr] database access method(s)
 ** @param [r] defined [const AjPStr] database definition file short name
 ** @param [r] release [const AjPStr] database release number
-** @param [u] maxname [ajint*] Maximum width for name
-** @param [u] maxtype [ajint*] Maximum width for type
-** @param [u] maxmethod [ajint*] Maximum width for list of access methods
-** @param [u] maxfield [ajint*] Maximum width for list of fields
-** @param [u] maxdefined [ajint*] Maximum width for definition file
-** @param [u] maxrelease [ajint*] Maximum width for release number
+** @param [u] maxname [ajuint*] Maximum width for name
+** @param [u] maxtype [ajuint*] Maximum width for type
+** @param [u] maxmethod [ajuint*] Maximum width for list of access methods
+** @param [u] maxfield [ajuint*] Maximum width for list of fields
+** @param [u] maxdefined [ajuint*] Maximum width for definition file
+** @param [u] maxrelease [ajuint*] Maximum width for release number
 ******************************************************************************/
 
 static void showdbDBWidth (const AjPStr dbname,
 			   const AjPStr type, const AjPStr methods,
 			   const AjPStr defined, const AjPStr release,
-			   ajint *maxname, ajint* maxtype, ajint *maxmethod,
-			   ajint *maxfield, ajint* maxdefined,
-			   ajint *maxrelease)
+			   ajuint *maxname, ajuint* maxtype, ajuint *maxmethod,
+			   ajuint *maxfield, ajuint* maxdefined,
+			   ajuint *maxrelease)
 {
     AjPStr fields = NULL;
-    ajint i;
+    ajuint i;
 
     if (ajStrGetLen(dbname) > *maxname)
 	*maxname = ajStrGetLen(dbname);
@@ -337,20 +337,21 @@ static void showdbDBWidth (const AjPStr dbname,
 ** @param [r] dodefined [AjBool] show definition file
 ** @param [r] docomment [AjBool] show comment
 ** @param [r] dorelease [AjBool] show release
-** @param [r] maxname [ajint] Maximum width for name
-** @param [r] maxtype [ajint] Maximum width for type
-** @param [r] maxmethod [ajint] Maximum width for access method
-** @param [r] maxfield [ajint] Maximum width for list of fields
-** @param [r] maxdefined [ajint] Maximum width for definition file
-** @param [r] maxrelease [ajint] Maximum width for release number
+** @param [r] maxname [ajuint] Maximum width for name
+** @param [r] maxtype [ajuint] Maximum width for type
+** @param [r] maxmethod [ajuint] Maximum width for access method
+** @param [r] maxfield [ajuint] Maximum width for list of fields
+** @param [r] maxdefined [ajuint] Maximum width for definition file
+** @param [r] maxrelease [ajuint] Maximum width for release number
 ******************************************************************************/
 
 static void showdbDBHead (AjPFile outfile, AjBool html, AjBool dotype,
 			  AjBool doid, AjBool doqry, AjBool doall,
 			  AjBool domethod, AjBool dofields, AjBool dodefined,
 			  AjBool docomment, AjBool dorelease,
-			  ajint maxname, ajint maxtype, ajint maxmethod,
-			  ajint maxfield, ajint maxdefined, ajint maxrelease)
+			  ajuint maxname, ajuint maxtype, ajuint maxmethod,
+			  ajuint maxfield, ajuint maxdefined,
+			  ajuint maxrelease)
 {
 
     if(html)
@@ -501,12 +502,12 @@ static void showdbDBHead (AjPFile outfile, AjBool html, AjBool dotype,
 ** @param [r] dodefined [AjBool] show access method(s)
 ** @param [r] docomment [AjBool] show comment
 ** @param [r] dorelease [AjBool] show release
-** @param [r] maxname [ajint] Maximum width for name
-** @param [r] maxtype [ajint] Maximum width for type
-** @param [r] maxmethod [ajint] Maximum width for list of access methods
-** @param [r] maxfield [ajint] Maximum width for list of fields
-** @param [r] maxdefined [ajint] Maximum width for definition file
-** @param [r] maxrelease [ajint] Maximum width for release number
+** @param [r] maxname [ajuint] Maximum width for name
+** @param [r] maxtype [ajuint] Maximum width for type
+** @param [r] maxmethod [ajuint] Maximum width for list of access methods
+** @param [r] maxfield [ajuint] Maximum width for list of fields
+** @param [r] maxdefined [ajuint] Maximum width for definition file
+** @param [r] maxrelease [ajuint] Maximum width for release number
 ** @@
 ******************************************************************************/
 
@@ -519,8 +520,8 @@ static void showdbDBOut(AjPFile outfile,
 			AjBool doid, AjBool doqry, AjBool doall,
 			AjBool domethod, AjBool dofields, AjBool dodefined,
 			AjBool docomment, AjBool dorelease,
-			ajint maxname, ajint maxtype, ajint maxmethod,
-			ajint maxfield, ajint maxdefined, ajint maxrelease)
+			ajuint maxname, ajuint maxtype, ajuint maxmethod,
+			ajuint maxfield, ajuint maxdefined, ajuint maxrelease)
 {
     AjPStr fields = NULL;
 
@@ -705,8 +706,8 @@ static void showdbGetFields(const AjPStr dbname, AjPStr* fields)
 
 static int showdbDBSortDefined(const void* str1, const void* str2)
 {
-    AjPStr db1 = *(AjPStr*) str1;
-    AjPStr db2 = *(AjPStr*) str2;
+    const AjPStr db1 = *(AjPStr const *) str1;
+    const AjPStr db2 = *(AjPStr const *) str2;
 
     AjPStr methods = NULL;
     AjPStr release = NULL;

@@ -3973,7 +3973,7 @@ static AjBool jembossctl_GetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq)
 /* @header main ***************************************************************
 **
 ******************************************************************************/
-int main()
+int main(void)
 {
     return 0;
 }

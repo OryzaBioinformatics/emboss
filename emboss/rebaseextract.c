@@ -30,9 +30,9 @@
 #define DATANAME  "REBASE/embossre.enz"
 #define DATANAME2 "REBASE/embossre.ref"
 #define DATANAME3 "REBASE/embossre.sup"
-#define DATANAME4 "embossre.equ"
+#define DATANAME4 "REBASE/embossre.equ"
 #define EQUGUESS  5000
-
+#define SUPGUESS  10000
 
 
 
@@ -78,24 +78,38 @@ int main(int argc, char **argv)
     ajint  i;
 
     AjBool    doequ;
-    AjPFile   oute   = NULL;
-    AjPStr    isostr = NULL;
-    AjPTable  ptable = NULL;
-    AjPStr    key    = NULL;
-    AjPStr    value  = NULL;
-    AjPStrTok handle = NULL;
-    AjPStr    token  = NULL;
-    AjPStr    line2  = NULL;
+    AjPFile   oute    = NULL;
+    AjPStr    isostr  = NULL;
+    AjPTable  ptable  = NULL;
+    AjPStr    key     = NULL;
+    AjPStr    value   = NULL;
+    AjPStrTok handle  = NULL;
+    AjPStr    token   = NULL;
+    AjPStr    line2   = NULL;
+    AjPList   equ1    = NULL;
+    AjPList   equ2    = NULL;
+    AjPStr    equstr1 = NULL;
+    AjPStr    equstr2 = NULL;
+    AjPStr    hstr1   = NULL;
+    AjPStr    hstr2   = NULL;
     
     AjBool isproto = ajFalse;
     char c;
     const char *sptr = NULL;
+
+    AjPTable hassuptable = NULL;
+    
     
     embInit("rebaseextract",argc,argv);
 
     inf   = ajAcdGetInfile("infile");
     infp  = ajAcdGetInfile("protofile");
     doequ = ajAcdGetBool("equivalences");
+
+    equ1 = ajListNew();
+    equ2 = ajListNew();
+
+    hassuptable = ajStrTableNew(SUPGUESS);
     
 
     pfname = ajStrNewC(DATANAME);
@@ -185,9 +199,9 @@ int main(int argc, char **argv)
 	    
 	    key   = ajStrNew();
 	    value = ajStrNewC(sptr);
-	    ajStrRemoveWhiteExcess(&value);
+	    ajStrRemoveWhite(&value);
 	    ajFmtScanS(line,"%S",&key);
-	    ajTablePut(ptable,(const void *)key, (void *)value);
+	    ajTablePut(ptable,(void *)key, (void *)value);
 	}
     }
     
@@ -199,7 +213,7 @@ int main(int argc, char **argv)
 
     while(ajStrGetLen(line))
     {
-	ajStrRemoveWhite(&line);
+	ajStrRemoveWhiteExcess(&line);
 	ajFmtPrintF(outf3,"%s\n",ajStrGetPtr(line));
 	if(!ajFileReadLine(inf,&line))
 	    ajFatal("Unexpected EOF");
@@ -242,7 +256,14 @@ int main(int argc, char **argv)
 
 		if((value=ajTableGet(ptable,(const void *)token)))
 		    if(ajStrMatchS(value,pattern))
-			ajFmtPrintF(oute,"%S %S\n",code,token);
+		    {
+			equstr1 = ajStrNew();
+			equstr2 = ajStrNew();
+			ajStrAssignS(&equstr1,code);
+			ajStrAssignS(&equstr2, token);
+			ajListPushApp(equ1,(void *) equstr1);
+			ajListPushApp(equ2,(void *) equstr2);
+		    }		
 		ajStrTokenDel(&handle);
 	    }
 	}
@@ -280,14 +301,24 @@ int main(int argc, char **argv)
 	if(!ajFileReadLine(inf,&line))
 	    ajFatal("Unexpected EOF");
 
+	hstr1 = ajStrNew();
+	hstr2 = ajStrNew();
+
 	hassup=ajFalse;
 	if(ajStrGetLen(line)>3)
 	{
 	    hassup = ajTrue;
 	    ajStrAssignC(&comm,ajStrGetPtr(line)+3);
+	    ajStrAssignC(&hstr2,"Y");
 	}
 	else
+	{
 	    ajStrAssignC(&comm,"");
+	    ajStrAssignC(&hstr2,"N");
+	}
+
+	ajStrAssignS(&hstr1,code);
+	ajTablePut(hassuptable,(void *)hstr1, (void *)hstr2);
 
 	ajFmtPrintF(outf2,"%s\n",ajStrGetPtr(code));
 	ajFmtPrintF(outf2,"%s\n",ajStrGetPtr(tit));
@@ -333,11 +364,27 @@ int main(int argc, char **argv)
 
     if(doequ)
     {
+	while(ajListPop(equ1,(void **)&equstr1))
+	{
+	    ajListPop(equ2,(void **)&equstr2);
+
+	    if(!(hstr2=ajTableGet(hassuptable,(const void *)equstr2)))
+		ajFatal("Expected supplier value not found for '%S' (enzyme '%S')",
+			equstr1,equstr2);
+	    if(ajStrMatchC(hstr2,"N"))
+		ajStrAppendC(&equstr2,"*");
+
+	    ajFmtPrintF(oute,"%S %S\n",equstr1,equstr2);
+	    ajStrDel(&equstr1);
+	    ajStrDel(&equstr2);
+	}
+
 	ajStrDel(&isostr);
 	ajFileClose(&oute);
 	ajStrTableFree(&ptable);
     }
 
+    ajStrTableFree(&hassuptable);
     ajFileClose(&inf);
     ajFileClose(&infp);
     ajFileClose(&outf);
@@ -355,7 +402,10 @@ int main(int argc, char **argv)
     ajStrDel(&pattern);
     ajStrDel(&code);
 
-    ajExit();
+    ajListDel(&equ1);
+    ajListDel(&equ2);
+
+    embExit();
 
     return 0;
 }

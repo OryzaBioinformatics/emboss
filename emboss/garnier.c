@@ -345,12 +345,11 @@ ajint pamh1[MAXSQ];		/* used for kfact replacement */
 
 
 static void garnier_report(AjPReport report, AjPFeattable TabRpt,
-			   const AjPSeq seqobj,
 			   ajint from, ajint to, char *seq,
 			   ajint begin, ajint Idc);
 static void garnier_do(AjPFile outf, ajint s, ajint len,
 		       char *seq, const char *name,
-		       ajint begin, ajint Idc);
+		       ajint Idc);
 static void garnier_makemap (const char *input, ajint *map, ajint n);
 
 
@@ -389,24 +388,24 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin = ajSeqallBegin(seqall);
-	end   = ajSeqallEnd(seqall);
+	begin = ajSeqallGetseqBegin(seqall);
+	end   = ajSeqallGetseqEnd(seqall);
 
 	TabRpt = ajFeattableNewSeq(seq);
 
-	strand = ajSeqStrCopy(seq);
+	strand = ajSeqGetSeqCopyS(seq);
 	ajStrFmtUpper(&strand);
 
 	ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
 	len = ajStrGetLen(substr);
 
-	garnier_report(report, TabRpt, seq, 1, len,
+	garnier_report(report, TabRpt, 1, len,
 		       ajStrGetuniquePtr(&substr),begin-1,Idc);
 	if(outf)
 	{
 	    ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
 	    garnier_do(outf,0,len,
-		       ajStrGetuniquePtr(&substr),ajSeqName(seq),begin-1,Idc);
+		       ajStrGetuniquePtr(&substr),ajSeqGetNameC(seq),Idc);
 	}
 	ajStrDel(&strand);
 
@@ -442,17 +441,17 @@ int main(int argc, char **argv)
 ** @param [r] to [ajint] Undocumented
 ** @param [u] seq [char*] Undocumented
 ** @param [r] name [const char*] Undocumented
-** @param [r] begin [ajint] Undocumented
 ** @param [r] Idc [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 
 static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
-		       const char *name, ajint begin, ajint Idc)
+		       const char *name, ajint Idc)
 {
-    char *refstr="\n Please cite:\n Garnier, Osguthorpe and Robson (1978)"
-      " J. Mol. Biol. 120:97-120\n";
+    const char *refstr="\n Please cite:\n"
+	" Garnier, Osguthorpe and Robson (1978)"
+	    " J. Mol. Biol. 120:97-120\n";
 
     ajint i;
     ajint end;
@@ -594,7 +593,7 @@ static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
     ajFmtPrintF(outf," Residue totals: H:%3d   E:%3d   T:%3d   C:%3d\n",
 		iarr[0],iarr[1],iarr[2],iarr[3]);
 
-    fn0 = (float)(n0-16)/100.0;
+    fn0 = (float)(n0-16)/(float)100.0;
     ajFmtPrintF(outf,"        percent: H: %4.1f E: %4.1f T: %4.1f C: %4.1f\n",
 		(float)iarr[0]/fn0,(float)iarr[1]/fn0,(float)iarr[2]/fn0,
 		(float)iarr[3]/fn0);
@@ -615,7 +614,6 @@ static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
 **
 ** @param [u] report [AjPReport] Undocumented
 ** @param [u] TabRpt [AjPFeattable] Undocumented
-** @param [r] seqobj [const AjPSeq] Undocumented
 ** @param [r] from [ajint] Undocumented
 ** @param [r] to [ajint] Undocumented
 ** @param [w] seq [char*] Undocumented
@@ -625,12 +623,12 @@ static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
 ******************************************************************************/
 
 static void garnier_report(AjPReport report, AjPFeattable TabRpt,
-			   const AjPSeq seqobj,
 			   ajint from, ajint to, char *seq,
 			   ajint begin, ajint Idc)
 {
-    char *refstr="\n Please cite:\n Garnier, Osguthorpe and Robson (1978)"
-      " J. Mol. Biol. 120:97-120\n";
+    const char *refstr="\n Please cite:\n"
+	" Garnier, Osguthorpe and Robson (1978)"
+	    " J. Mol. Biol. 120:97-120\n";
 
     ajint i;
     ajint end;
@@ -654,7 +652,6 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
     ajint j;
     ajint k;
     ajint l0;
-    ajint l1;
     ajint idc;
     ajint dcs;
     ajint dch;
@@ -766,7 +763,6 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
     
     testch = ' ';
     l0 = begin+1;
-    l1 = 0;
     
     for(i=0; i<=n0; i++)
 	if(i==n0 || type[i] != testch)
@@ -814,7 +810,7 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
     ajFmtPrintAppS(&tmpStr,
 		   " Residue totals: H:%3d   E:%3d   T:%3d   C:%3d\n",
 		   iarr[0],iarr[1],iarr[2],iarr[3]);
-    fn0 = (float)(n0-16)/100.0;
+    fn0 = (float)(n0-16)/(float)100.0;
     ajFmtPrintAppS(&tmpStr,
 		   "        percent: H: %4.1f E: %4.1f T: %4.1f C: %4.1f\n",
 		   (float)iarr[0]/fn0,(float)iarr[1]/fn0,(float)iarr[2]/fn0,

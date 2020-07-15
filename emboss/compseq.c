@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 
     AjPSeqall seqall;
     AjPSeq seq;
-    ajint word;
+    ajuint word;
     AjBool zerocount;
     AjBool ignorebz;
     ajint frame;
@@ -59,7 +59,8 @@ int main(int argc, char **argv)
     AjBool reverse;
     AjBool calcfreq;
 
-    ajint pos;
+    ajuint pos;
+    ajuint endpos;
     const char *s;
     ajulong result;
     ajulong *bigarray;
@@ -202,7 +203,11 @@ int main(int argc, char **argv)
 	**  if frame is specified. Stop when less than a word-length from
 	**  the end of the sequence.
 	*/
-	for(pos=frame; pos <= ajSeqGetLen(seq)-word; pos += increment)
+	if(ajSeqGetLen(seq) > word)
+	    endpos = ajSeqGetLen(seq)-word;
+	else
+	    endpos = 1;
+	for(pos=frame; pos <= endpos; pos += increment)
 	{
 	    if(seqisnuc)
 		result = embNmerNuc2int(s, word, pos, &otherflag);
@@ -406,12 +411,13 @@ int main(int argc, char **argv)
 
     AJFREE(bigarray);
     ajStrDel(&dispseq);
+    ajStrDel(&strother);
 
     if(have_exp_freq)
-	ajTableFree(&exptable);
+	ajStrTableFree(&exptable);
  
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -546,11 +552,12 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 	ajStrTokenNextParse(&tokens, &value);
 
 	ajTablePut(*exptable, key, value);
-
+	ajStrTokenDel(&tokens);
     }
 
 
     ajStrDel(&line);
+    ajStrDel(&sizestr);
     ajStrTokenDel(&tokens);
 
     return;
@@ -630,6 +637,7 @@ static double compseq_getexpfreqprot(const AjPStr dispseq, ajint word,
     ajint offset = 0;
     const char *s;
     AjBool otherflag;
+    ajulong tul;
     
     result = 1.0;
 
@@ -638,7 +646,8 @@ static double compseq_getexpfreqprot(const AjPStr dispseq, ajint word,
     for(i=0; i<word; i++)
     {
         /* get the value of the next residue in dispseq */
-        offset = embNmerProt2int(s, 1, i, &otherflag, ignorebz);
+        tul = embNmerProt2int(s, 1, i, &otherflag, ignorebz);
+	offset = (ajint) tul;
         result *= (double)calcfreq_array[offset]/(double)calcfreq_total;
     }
     return result;

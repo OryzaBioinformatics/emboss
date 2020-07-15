@@ -91,7 +91,7 @@ int main(int argc, char **argv)
     ajCodDel(&first);
     ajCodDel(&second);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

@@ -80,85 +80,91 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
     {
 
-      ajStrAssignC(&source_str, "union");
-      ajStrAssignC(&type_str, "source");
+	ajStrAssignC(&source_str, "union");
+	ajStrAssignC(&type_str, "source");
 
-      if (first) {
-	uniseq = ajSeqNewSeq(seq);
+	if(first)
+	{
+	    uniseq = ajSeqNewSeq(seq);
 
-        if (feature) {
-          new_feattable = ajFeattableNewSeq(seq);
-          uniseq->Fttable = new_feattable;
-        }
-      }
+	    if(feature)
+	    {
+		new_feattable = ajFeattableNewSeq(seq);
+		uniseq->Fttable = new_feattable;
+	    }
+	}
 
-      ajSeqTrim(seq);
+	ajSeqTrim(seq);
 
-      if (findoverlap) {
-        if (!first) {
-          overlap_base_count = union_GetOverlap (prev_seq, seq);
-        }
+	if(findoverlap)
+	{
+	    if(!first)
+		overlap_base_count = union_GetOverlap (prev_seq, seq);
 
-        if (overlap_file) {
-          ajFmtPrintF (overlap_file, "%Ld\n", overlap_base_count);
-        }
-      }
+	    if(overlap_file)
+		ajFmtPrintF (overlap_file, "%Ld\n", overlap_base_count);
+	}
 
-      if (feature) {
-        old_feattable = ajSeqGetFeatCopy(seq);
-        source_feature = NULL;
+	if(feature)
+	{
+	    old_feattable = ajSeqGetFeatCopy(seq);
+	    source_feature = NULL;
 
-        if (source) {
-          source_feature = ajFeatNew(new_feattable, source_str, type_str,
-                                     ajStrGetLen(unistr) -
-                                     overlap_base_count + 1,
-                                     ajStrGetLen(unistr) + ajSeqGetLen(seq) -
-                                     overlap_base_count,
-                                     score, strand, frame);
-          ajFeatTagAddCC (source_feature, "origid", ajStrGetPtr(seq->Name));
-          /* FIXME */
-          source_feature->Group = source_group++;
-        }
+	    if(source)
+	    {
+		source_feature = ajFeatNew(new_feattable, source_str, type_str,
+					   ajStrGetLen(unistr) -
+					   (ajint)overlap_base_count + 1,
+					   ajStrGetLen(unistr) +
+					   ajSeqGetLen(seq) -
+					   (ajint)overlap_base_count,
+					   score, strand, frame);
+		ajFeatTagAddCC(source_feature, "origid",
+			       ajStrGetPtr(seq->Name));
+		/* FIXME */
+		source_feature->Group = source_group++;
+	    }
 
-        if (old_feattable) {
-          union_CopyFeatures(old_feattable, new_feattable,
-                             offset - overlap_base_count, source_feature);
-        }
+	    if(old_feattable)
+		union_CopyFeatures(old_feattable, new_feattable,
+				   offset - overlap_base_count,
+				   source_feature);
 
-        offset += ajSeqGetLen(seq) - overlap_base_count;
-      }
+	    offset += ajSeqGetLen(seq) - overlap_base_count;
+	}
 
-      ajStrAppendSubS(&unistr, ajSeqGetSeqS(seq), overlap_base_count,
-                  ajSeqGetLen(seq) - 1);
+	ajStrAppendSubS(&unistr, ajSeqGetSeqS(seq), (ajint) overlap_base_count,
+			ajSeqGetLen(seq) - 1);
 
-      if (!first) {
-        ajSeqDel (&prev_seq);
-      }
+	if(!first)
+	    ajSeqDel (&prev_seq);
 
-      first = ajFalse;
+	first = ajFalse;
 
-      prev_seq = ajSeqNewSeq(seq);
+	prev_seq = ajSeqNewSeq(seq);
 
-      ajStrDel(&source_str);
-      ajStrDel(&type_str);
+	ajStrDel(&source_str);
+	ajStrDel(&type_str);
     }
 
     ajSeqAssignSeqS(uniseq, unistr);
-/*
-    if (feature)
-	seqout->Features = AJTRUE;
-*/
-    ajSeqWrite (seqout, uniseq);
-    ajSeqWriteClose (seqout);
+    /*
+       if(feature)
+       seqout->Features = AJTRUE;
+       */
+    ajSeqoutWriteSeq(seqout, uniseq);
+    ajSeqoutClose(seqout);
 
-    if (overlap_file) {
-      ajFileClose (&overlap_file);
-    }
+    if (overlap_file)
+	ajFileClose (&overlap_file);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
+
+
+
 
 /* @funcstatic union_GetOverlap ***********************************************
 **
@@ -174,26 +180,25 @@ int main(int argc, char **argv)
 static ajulong union_GetOverlap (const AjPSeq first_seq,
 				 const AjPSeq second_seq)
 {
-  const AjPStr first_seq_str = ajSeqGetSeqS(first_seq);
-  const AjPStr second_seq_str = ajSeqGetSeqS(second_seq);
+    const AjPStr first_seq_str = ajSeqGetSeqS(first_seq);
+    const AjPStr second_seq_str = ajSeqGetSeqS(second_seq);
 
-  int i = ajSeqGetLen(first_seq);
+    ajint i = ajSeqGetLen(first_seq);
 
-  const char * first_str = ajStrGetPtr(first_seq_str);
-  const char * second_str = ajStrGetPtr(second_seq_str);
+    const char * first_str = ajStrGetPtr(first_seq_str);
+    const char * second_str = ajStrGetPtr(second_seq_str);
 
-  if (i > ajStrGetLen(second_seq_str)) {
-    i = ajStrGetLen(second_seq_str);
-  }
+    if (i > (ajint)ajStrGetLen(second_seq_str))
+	i = ajStrGetLen(second_seq_str);
 
-  for (; i >= 0 ; --i) {
-    if (memcmp(&first_str[ajStrGetLen(first_seq_str)-i], second_str, i) == 0) {
-      return i;
-    }
-  }
+    for (; i >= 0 ; --i)
+	if(memcmp(&first_str[ajStrGetLen(first_seq_str)-i],second_str,i) == 0)
+	    return i;
 
-  return 0;
+    return 0;
 }
+
+
 
 
 /* @funcstatic union_CopyFeatures  ********************************************
@@ -207,53 +212,62 @@ static ajulong union_GetOverlap (const AjPSeq first_seq,
 ** @return [void]
 ** @@
 ******************************************************************************/
+
 static void union_CopyFeatures (const AjPFeattable old_feattable,
                                 AjPFeattable new_feattable,
                                 ajulong offset,
                                 const AjPFeature source_feature)
 {
-  AjPStr outseq_name = ajStrNew();
-  AjPFeature gf = NULL;
-  const AjPStr type = NULL;
-  AjPFeature copy = NULL;
-  const AjPStr source_feature_type = NULL;
+    AjPStr outseq_name;
+    AjPFeature gf = NULL;
+    const AjPStr type = NULL;
+    AjPFeature copy = NULL;
+    const AjPStr source_feature_type = NULL;
 
-  ajulong new_length;
-  AjIList iter;
+    ajulong new_length;
+    AjIList iter;
 
-  new_length = ajListLength(new_feattable->Features);
-  iter = ajListIterRead(old_feattable->Features);
+    outseq_name = ajStrNew();
 
-  while(ajListIterMore(iter)) {
-     gf = ajListIterNext (iter);
-     type = ajFeatGetType(gf);
+    new_length = ajListLength(new_feattable->Features);
+    iter = ajListIterRead(old_feattable->Features);
 
-     copy = ajFeatCopy (gf);
+    while(ajListIterMore(iter))
+    {
+	gf = ajListIterNext (iter);
+	type = ajFeatGetType(gf);
+
+	copy = ajFeatCopy (gf);
     
-    /* FIXME */
-     copy->Start += offset;
-     copy->End += offset;
-     copy->Start2 += offset;
-     copy->End2 += offset;
+	/* FIXME */
+	copy->Start += (ajuint) offset;
+	copy->End += (ajuint) offset;
+	copy->Start2 += (ajuint) offset;
+	copy->End2 += (ajuint) offset;
     
-    if (source_feature != NULL) {
-      source_feature_type = ajFeatGetType(source_feature);
+	if (source_feature != NULL)
+	{
+	    source_feature_type = ajFeatGetType(source_feature);
 
-      if (ajStrMatchS(type, source_feature_type) &&
-          ajFeatGetStart(copy) == ajFeatGetStart (source_feature) &&
-          ajFeatGetEnd(copy) == ajFeatGetEnd (source_feature)) {
+	    if (ajStrMatchS(type, source_feature_type) &&
+		ajFeatGetStart(copy) == ajFeatGetStart (source_feature) &&
+		ajFeatGetEnd(copy) == ajFeatGetEnd (source_feature))
+	    {
 
-        AjPStr origid = ajStrNewC("origid");
+		AjPStr origid = ajStrNewC("origid");
 
-        if (ajFeatGetTag(gf,origid,1,&outseq_name)) {
-          /* don't duplicate source features if there is one already */
-          continue;
-        }
-      }
+		if (ajFeatGetTag(gf,origid,1,&outseq_name))
+		{
+		    /* don't duplicate src features if there's one already */
+		    continue;
+		}
+	    }
+	}
+    
+	/* FIXME */
+	copy->Group += (ajuint) new_length;
+	ajFeattableAdd(new_feattable, copy);
     }
-    
-    /* FIXME */
-    copy->Group += new_length;
-    ajFeattableAdd(new_feattable, copy);
-  }
+
+    return;
 }

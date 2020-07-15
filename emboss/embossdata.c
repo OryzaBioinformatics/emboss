@@ -214,7 +214,7 @@ int main(int argc, char **argv)
 
     AJFREE(rstrs);			/* individual strings freed on list */
 
-    ajExit();
+    embExit();
 
     return 0;
 }

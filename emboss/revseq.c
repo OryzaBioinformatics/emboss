@@ -60,15 +60,15 @@ int main(int argc, char **argv)
 	else if(reverse)
 	    ajSeqReverseOnly(seq);
 	else if(complement)
-	    ajSeqComplementOnly(seq);
+	    ajSeqComplement(seq);
 	else
 	  ajDebug("No action was specified\n");
 
-	ajSeqAllWrite(seqout, seq);
+	ajSeqoutWriteSeq(seqout, seq);
 
     }
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
 
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);

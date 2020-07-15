@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 
     ajStrDel(&line);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

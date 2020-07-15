@@ -135,7 +135,7 @@ int main(int argc, char **argv)
     ajHistDelete(&hist);
 
 
-    ajExit();
+    embExit();
 
     return 0;
 }

@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 
     ajFileClose(&outfile);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

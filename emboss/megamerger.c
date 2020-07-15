@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
 
     /* get the minimal set of overlapping matches */
-       embWordMatchMin(matchlist, ajSeqGetLen(seq1), ajSeqGetLen(seq2));
+       embWordMatchMin(matchlist);
 
     if(ajListLength(matchlist))
     {
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     embWordMatchListDelete(&matchlist); /* free the match structures */
     embWordFreeTable(&seq1MatchTable);
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
     ajFileClose(&outfile);
 
     ajSeqDel(&seq1);
@@ -125,10 +125,10 @@ static void megamerger_Merge(const AjPList matchlist,
     AjPStr seqstr;			/* merged sequence string */
     AjPStr s1;			/* string of seq1 */
     AjPStr s2;			/* string of seq2 */
-    ajint prev1end = 0;
-    ajint prev2end = 0;		/* end positions (+1) of previous match */
-    ajint mid1;
-    ajint mid2;			/* middle of a mismatch region */
+    ajuint prev1end = 0;
+    ajuint prev2end = 0;       /* end positions (+1) of previous match */
+    ajuint mid1;
+    ajuint mid2;			/* middle of a mismatch region */
     AjPStr tmp;			/* holds sequence string while uppercasing */
     AjPSeq seq = NULL;
 
@@ -300,15 +300,16 @@ static void megamerger_Merge(const AjPList matchlist,
     ajFmtPrintF(outfile, "%s overlap ends at %d\n\n", ajSeqGetNameC(seq2),
 		p->seq2start+p->length);
 
-    /* is seq1 only longer that the matched regions? */
-    if(prev2end >= ajSeqGetLen(seq2) && prev1end < ajSeqGetLen(seq1))
+    /* is seq1 only longer than the matched regions? */
+    if(prev2end >= ajSeqGetLen(seq2) &&
+       prev1end < ajSeqGetLen(seq1))
     {
 	ajFmtPrintF(outfile, "Using %s %d-%d as the final "
 		    "sequence\n\n", ajSeqGetNameC(seq1), prev1end+1,
 		    ajSeqGetLen(seq1));
 	ajStrAppendSubS(&seqstr, s1, prev1end, ajSeqGetLen(seq1)-1);
 
-	/* is seq2 only longer that the matched regions? */
+	/* is seq2 only longer than the matched regions? */
     }
     else if(prev1end >= ajSeqGetLen(seq1) && prev2end < ajSeqGetLen(seq2))
     {
@@ -348,7 +349,7 @@ static void megamerger_Merge(const AjPList matchlist,
     /* write out sequence at end */
     seq = ajSeqNewSeq(seq1);
     ajSeqAssignSeqS(seq, seqstr);
-    ajSeqWrite(seqout, seq);
+    ajSeqoutWriteSeq(seqout, seq);
 
     ajSeqDel(&seq);
     ajStrDel(&s1);

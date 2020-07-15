@@ -39,11 +39,12 @@ int main(int argc, char **argv)
 
     ajAcdSetControl("acdhelp");
     ajAcdSetControl("acdtable");
+    ajAcdSetControl("acdnocommandline");
     ajGraphInit(argv[1], argc-1, &argv[1]);
 
     ajAcdExit(ajTrue);		/* turn off the 'never used' ACD warnings */
 
-    ajExit();
+    embExit();
 
     return 0;
 }

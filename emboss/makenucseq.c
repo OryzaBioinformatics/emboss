@@ -112,9 +112,6 @@ int main(int argc, char **argv)
     if (!scmax)
 	ajFatal ("No strings in list. No characters to make the sequence.");
 
-    ajDebug ("Distribution array done.\nscmax '%d', extra '%d', first '%S'\n",
-	     scmax,extra,seqr[0]);
-
     ajRandomSeed();
 
     while (amount-- > 0)
@@ -127,21 +124,24 @@ int main(int argc, char **argv)
 
 	ajStrExchangeSetCC(&seqstr,"u","t");
 	if (extra < 0)
-	    ajStrCutStart(&seqstr,extra);
+	    ajStrCutEnd(&seqstr,-extra);
 	ajSeqAssignSeqS(seq, seqstr);
 	ajSeqSetNuc (seq);
 
-	ajSeqAllWrite (outseq, seq);
+	ajSeqoutWriteSeq (outseq, seq);
 	ajSeqDel (&seq);
 	ajStrDel (&seqstr);
     }
 
-    ajSeqWriteClose(outseq);
+    ajSeqoutClose(outseq);
+    ajSeqoutDel(&outseq);
     ajListstrFree(&list);
     ajStrDel(&insert);
-    // need to free AjPStr* seqr still, how?
+ 
+    ajCodDel(&codondata);
+    AJFREE(seqr);
 
-    ajExit();
+    embExit();
     return 0;
 }
 

@@ -59,7 +59,7 @@ int main(int argc, char **argv)
     AjPGraph graph = NULL;
     AjPGraphPlpData this = NULL;
 
-    char *frames[]=
+    const char *frames[]=
     {
 	"Frame 1","Frame 2","Frame 3"
     };
@@ -116,11 +116,11 @@ int main(int argc, char **argv)
     outf   = ajAcdGetOutfile("outfile");
     show   = ajAcdGetBool("uncommon");
     min    = ajAcdGetFloat("minimum");
+    graph = ajAcdGetGraphxy("graph");
     
     if(plot)
     {
-        graph = ajAcdGetGraphxy("graph");
-	ajGraphSetCharSize(0.60);
+	ajGraphSetCharScale((float)0.60);
     }
     
     
@@ -154,14 +154,14 @@ int main(int argc, char **argv)
     }
     else
     {
-	ajFmtPrintF(outf,"Insufficient data points\n");
+	ajErr("Insufficient data points\n");
 	ajExitBad();
 	return 0;
     }
     
     
     
-    if(!plot)
+    if(outf)
 	ajFmtPrintF(outf,"SYCO of %s from %d to %d\n",ajSeqGetNameC(a),beg,
 		    end);
     
@@ -182,7 +182,7 @@ int main(int argc, char **argv)
 	    for(j=0;j<w;j+=3)
 	    {
 		idx = ajCodIndexC(&p[pos+j]);
-		sum += cdup->tcount[idx];
+		sum += (float)(cdup->tcount[idx]);
 	    }
 	    xarr[base][i] = (float)(beg+startp);
 	    farr[base][i] = (float)exp((double)((double)sum/(double)w));
@@ -224,17 +224,17 @@ int main(int argc, char **argv)
 		for(i=0;i<count;++i)
 		    if(unc[base][i])
 			ajGraphPlpDataAddLine(this,xarr[base][i],1.,
-					      xarr[base][i],1.005,3);
+					      xarr[base][i],(float)1.005,3);
 	    }
 
 
 	    ajGraphPlpDataSetYTitleC(this,"Gribskov value");
 	    ajGraphPlpDataSetXTitleC(this,"Sequence position");
-	    ajGraphPlpDataSetTitleC(this,frames[base]);
+	    ajGraphPlpDataSetSubTitleC(this,frames[base]);
 	    ajGraphPlpDataAddLine(this,(float)beg,1.0,(float)end,
 				  1.0,4);
 	}
-	else
+	if(outf)
 	{
 	    ajFmtPrintF(outf,"\n\n%s\n",frames[base]);
 	    ajFmtPrintF(outf,"Mid base\tGribskov value\n");
@@ -250,7 +250,8 @@ int main(int argc, char **argv)
 	ajGraphxySetMaxMin(graph,(float)beg,(float)end,miny,maxy);
 	ajGraphxySetYStart(graph,0.0);
 	ajGraphxySetYEnd(graph,2.0);
-	ajGraphSetTitleC(graph,"Gribskov Codon Plot");
+	/* ajGraphSetTitleC(graph,"Gribskov Codon Plot"); */
+	ajGraphSetTitlePlus(graph, ajSeqGetUsaS(a));
 	ajGraphxyDisplay(graph,ajTrue);
     }
     

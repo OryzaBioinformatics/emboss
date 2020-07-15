@@ -141,7 +141,7 @@ int main(int argc, char **argv)
 
     ajFileClose(&out);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -165,13 +165,13 @@ static void stssearch_primTest(void **x,void *cl)
     Primer* p;
     Primer primdata;
 
-    static ajint calls = 0;
-
     AjBool testa;
     AjBool testb;
     AjBool testc;
     AjBool testd;
     ajint ioff;
+
+    (void) cl;				/* make it used */
 
     p = (Primer*) x;
     primdata = *p;
@@ -180,8 +180,6 @@ static void stssearch_primTest(void **x,void *cl)
 
     if(!(ntests % 1000))
 	ajDebug("completed tests: %d\n", ntests);
-
-    calls = 1;
 
     testa = ajRegExec(primdata->Prima, seqstr);
 

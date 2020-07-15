@@ -80,7 +80,9 @@ int main(int argc, char **argv)
     }
 
     ajGraphCloseWin();
-    ajExit();
+    ajGraphxyDel(&graph);
+
+    embExit();
 
     return 0;
 }

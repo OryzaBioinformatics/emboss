@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     char    *p;
     ajint iline=0;
 
-    AjPStr system = NULL;
+    AjPStr osystem = NULL;
     AjBool pcoutput = ajFalse;
     AjBool macoutput = ajFalse;
 
@@ -49,10 +49,10 @@ int main(int argc, char **argv)
 
     inf  = ajAcdGetInfile("infile");
     outf = ajAcdGetOutfile("outfile");
-    system = ajAcdGetListSingle("system");
-    if(ajStrMatchC(system, "pc"))
+    osystem = ajAcdGetListSingle("system");
+    if(ajStrMatchC(osystem, "pc"))
 	pcoutput = ajTrue;
-    if(ajStrMatchC(system, "mac"))
+    if(ajStrMatchC(osystem, "mac"))
 	macoutput = ajTrue;
 
     line = ajStrNew();
@@ -106,11 +106,11 @@ int main(int argc, char **argv)
     }
     
     ajStrDel(&line);
-    ajStrDel(&system);
+    ajStrDel(&osystem);
     ajFileClose(&inf);
     ajFileClose(&outf);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

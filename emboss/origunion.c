@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     ajSeqWrite(seqout, uniseq);
     ajSeqWriteClose(seqout);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

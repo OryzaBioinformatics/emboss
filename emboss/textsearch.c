@@ -103,23 +103,23 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
     {
 	ajSeqTrace(seq);
-	name = ajSeqGetName(seq);
-	desc = ajSeqGetDesc(seq);
+	name = ajSeqGetNameS(seq);
+	desc = ajSeqGetDescS(seq);
 
 	if(ajStrGetLen(desc) && ajRegExec(exp, desc))
 	{
 	    /* get the usa ('-' if unknown) */
-	    usa = ajSeqGetUsa(seq);
+	    usa = ajSeqGetUsaS(seq);
 	    if(ajStrGetLen(usa) == 0)
 		usa = altusa;
 
 	    /* get the name ('-' if unknown) */
-	    name = ajSeqGetName(seq);
+	    name = ajSeqGetNameS(seq);
 	    if(ajStrGetLen(name) == 0)
 		name = altname;
 
 	    /* get the accession number ('-' if unknown) */
-	    acc = ajSeqGetAcc(seq);
+	    acc = ajSeqGetAccS(seq);
 	    if(ajStrGetLen(acc) == 0)
 		acc = altacc;
 

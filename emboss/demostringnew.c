@@ -377,7 +377,7 @@ AjBool     ajStrReverse(AjPStr* Pstr);
     */
 
 
-    ajExit();
+    embExit();
     return 0;
 }
 

@@ -41,6 +41,7 @@
 ** @attr cut2 [ajint] Undocumented
 ** @attr cut3 [ajint] Undocumented
 ** @attr cut4 [ajint] Undocumented
+** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct AjSRinfo
@@ -52,6 +53,7 @@ typedef struct AjSRinfo
     ajint cut2;
     ajint cut3;
     ajint cut4;
+    char Padding[4];
 } AjORinfo;
 #define AjPRinfo AjORinfo*
 
@@ -74,6 +76,7 @@ typedef struct AjSRinfo
 ** @attr issilent [AjBool] Undocumented
 ** @attr obase [char] Undocumented
 ** @attr nbase [char] Undocumented
+** @attr Padding [char[2]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct AjSSilent
@@ -87,6 +90,7 @@ typedef struct AjSSilent
     AjBool issilent;
     char   obase;
     char   nbase;
+    char Padding[2];
 } AjOSilent;
 #define AjPSilent AjOSilent*
 
@@ -443,7 +447,7 @@ static ajint silent_restr_read(AjPList *relist,const AjPStr enzymes)
     {
 	ne = ajArrCommaList(enzymes,&ea);
         for(i=0;i<ne;++i)
-	    ajStrRemoveWhiteExcess(&ea[i]);
+	    ajStrRemoveWhite(&ea[i]);
 
         if(ajStrMatchCaseC(ea[0],"all"))
             isall = ajTrue;
@@ -818,5 +822,5 @@ static void silent_split_hits(AjPList *hits, AjPList *silents,
 
 static ajint silent_basecompare(const void *a, const void *b)
 {
-    return((*(AjPSilent *)a)->base)-((*(AjPSilent *)b)->base);
+    return((*(AjPSilent const *)a)->base)-((*(AjPSilent const *)b)->base);
 }

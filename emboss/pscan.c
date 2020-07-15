@@ -24,8 +24,8 @@
 
 
 
-static void pscan_print_hits(AjPFile outf, AjPList l, ajint nmotifs,
-			     ajint begin, ajint end);
+static void pscan_print_hits(AjPFile outf, AjPList l, ajuint nmotifs,
+			     ajuint begin);
 
 
 
@@ -43,8 +43,8 @@ int main(int argc, char **argv)
     AjPFile outf = NULL;
     ajint begin;
     ajint end;
-    ajint emin;
-    ajint emax;
+    ajuint emin;
+    ajuint emax;
 
     AjPFile mfile = NULL;
     EmbPMatPrints s = NULL;
@@ -75,16 +75,16 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin = ajSeqallBegin(seqall);
-	end   = ajSeqallEnd(seqall);
+	begin = ajSeqallGetseqBegin(seqall);
+	end   = ajSeqallGetseqEnd(seqall);
 
-	ajStrAssignC(&name,ajSeqName(seq));
-	strand = ajSeqStrCopy(seq);
+	ajStrAssignC(&name,ajSeqGetNameC(seq));
+	strand = ajSeqGetSeqCopyS(seq);
 
 	ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
 
 	nmotifs = 0;
-	ajDebug("pscan sequence '%S'\n", ajSeqGetName(seq));
+	ajDebug("pscan sequence '%S'\n", ajSeqGetNameS(seq));
 	embMatPrintsInit(&mfile);
 	ajDebug("pscan prints file '%F'\n", mfile);
 	l = ajListNew();
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 	    embMatProtDelInt(&s);
 	}
 
-	pscan_print_hits(outf, l, nmotifs, begin, end);
+	pscan_print_hits(outf, l, nmotifs, begin);
 	ajListDel(&l);
 
 
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
     ajSeqDel(&seq);
     ajFileClose(&outf);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -127,23 +127,22 @@ int main(int argc, char **argv)
 **
 ** @param [u] outf [AjPFile] outfile
 ** @param [u] l [AjPList] hits
-** @param [r] nmotifs [ajint] number of hits
-** @param [r] begin [ajint] start position
-** @param [r] end [ajint] end position
+** @param [r] nmotifs [ajuint] number of hits
+** @param [r] begin [ajuint] start position
 ** @@
 ******************************************************************************/
 
-static void pscan_print_hits(AjPFile outf, AjPList l, ajint nmotifs,
-			     ajint begin, ajint end)
+static void pscan_print_hits(AjPFile outf, AjPList l, ajuint nmotifs,
+			     ajuint begin)
 {
     EmbPMatMatch mm;
-    ajint i;
-    ajint j;
+    ajuint i;
+    ajuint j;
     AjBool found;
-    ajint nleft;
-    ajint maxelem = 0;
-    ajint maxhpm;
-    ajint hpm = 0;
+    ajuint nleft;
+    ajuint maxelem = 0;
+    ajuint maxhpm;
+    ajuint hpm = 0;
 
     nleft = nmotifs;
 

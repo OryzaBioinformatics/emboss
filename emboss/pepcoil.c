@@ -129,10 +129,10 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin = ajSeqallBegin(seqall);
-	end   = ajSeqallEnd(seqall);
+	begin = ajSeqallGetseqBegin(seqall);
+	end   = ajSeqallGetseqEnd(seqall);
 
-	strand = ajSeqStrCopy(seq);
+	strand = ajSeqGetSeqCopyS(seq);
 	ajStrFmtUpper(&strand);
 
 	ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
@@ -189,7 +189,7 @@ int main(int argc, char **argv)
 
 	for(i=0;i<len;++i) ajIntPut(&parray,i,i);
 
-	ajFmtPrintF(outf,"PEPCOIL of %s\n",ajSeqName(seq));
+	ajFmtPrintF(outf,"PEPCOIL of %s\n",ajSeqGetNameC(seq));
 	ajFmtPrintF(outf,"   using a window of %d residues\n\n",window);
 	iscoil = (ajFloatGet(probs,0) >= 0.5);
 	startcoil = 0;
@@ -395,11 +395,14 @@ static float pepcoil_probcoil(float score)
 {
     float gcc;
     float gg;
+    double td;
+    
+    td = ajGaussProb((float)1.63,(float)0.24,score);
+    gcc = (float) td;
+    td  = ajGaussProb((float)0.77,(float)0.20,score);
+    gg  = (float) td;
 
-    gcc = ajGaussProb(1.63,0.24,score);
-    gg  = ajGaussProb(0.77,0.20,score);
-
-    return gcc/(30.0*gg + gcc);
+    return gcc/((float)30.0*gg + gcc);
 }
 
 

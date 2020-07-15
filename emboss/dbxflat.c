@@ -42,14 +42,14 @@ int global = 0;
 ** @alias DbxflatSParser
 ** @alias DbxflatOParser
 **
-** @attr Name [char*] Parser name
+** @attr Name [const char*] Parser name
 ** @attr Parser [(AjBool*)] Parser function
 ** @@
 ******************************************************************************/
 
 typedef struct DbxflatSParser
 {
-    char* Name;
+    const char* Name;
     AjBool (*Parser) (EmbPBtreeEntry entry, AjPFile inf);
 } DbxflatOParser;
 #define DbxflatPParser DbxflatOParser*
@@ -244,7 +244,15 @@ int main(int argc, char **argv)
 
     embBtreeEntryDel(&entry);
     ajStrDel(&tmpstr);
-    
+    ajStrDel(&filename);
+    ajStrDel(&exclude);
+    ajStrDel(&dbname);
+    ajStrDel(&dbrs);
+    ajStrDel(&release);
+    ajStrDel(&datestr);
+    ajStrDel(&directory);
+    ajStrDel(&indexdir);
+    ajStrDel(&dbtype);    
 
     nfields = 0;
     while(fieldarray[nfields])
@@ -255,8 +263,9 @@ int main(int argc, char **argv)
     ajBtreeIdDel(&idobj);
     ajBtreePriDel(&priobj);
     ajBtreeHybDel(&hyb);
-    
-    ajExit();
+
+
+    embExit();
 
     return 0;
 }
@@ -389,7 +398,7 @@ static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf)
 		    ajStrAppendS(&sumline,line);
 		    ret = ajFileReadLine(inf,&line);
 		}
-		ajStrRemoveWhite(&sumline);
+		ajStrRemoveWhiteExcess(&sumline);
 		embBtreeGenBankKW(sumline,entry->kw,entry->kwlen);
 		continue;
 	    }
@@ -404,7 +413,7 @@ static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf)
 		    ajStrAppendS(&sumline,line);
 		    ret = ajFileReadLine(inf,&line);
 		}
-		ajStrRemoveWhite(&sumline);
+		ajStrRemoveWhiteExcess(&sumline);
 		embBtreeGenBankDE(sumline,entry->de,entry->delen);
 		continue;
 	    }
@@ -420,7 +429,7 @@ static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf)
 		    ajStrAppendS(&sumline,line);
 		    ret = ajFileReadLine(inf,&line);
 		}
-		ajStrRemoveWhite(&sumline);
+		ajStrRemoveWhiteExcess(&sumline);
 		embBtreeGenBankTX(sumline,entry->tx,entry->txlen);
 		continue;
 	    }
@@ -431,7 +440,9 @@ static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf)
 	if(!ajFileReadLine(inf,&line))
 	    ret = ajFalse;
     }
-    
+
+    ajStrDel(&line);
+    ajStrDel(&sumline);
     
     return ret;
 }

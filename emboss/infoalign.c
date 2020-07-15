@@ -33,7 +33,7 @@ static void infoalign_OutputFloat(AjPFile outfile, float num, AjBool html,
 static void infoalign_OutputInt(AjPFile outfile, ajint num, AjBool html,
 				 AjBool after);
 static void infoalign_OutputStr(AjPFile outfile, const AjPStr str, AjBool html,
-				 AjBool after, ajint minlength);
+				 AjBool after, ajuint minlength);
 static void infoalign_Compare(const AjPSeq ref, const AjPSeq seq,
 			      ajint *const *sub,
 			      const AjPSeqCvt cvt, ajint *seqlength,
@@ -42,7 +42,7 @@ static void infoalign_Compare(const AjPSeq ref, const AjPSeq seq,
 			      ajint *simcount, ajint *difcount, float *change);
 
 
-#define NOLIMIT -1
+#define NOLIMIT 0
 
 
 /* @prog infoalign ************************************************************
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 
     const AjPSeq ref;
     const AjPSeq seq;
-    ajint i;
+    ajuint i;
 
     AjBool html;
     AjBool doheader;
@@ -149,16 +149,16 @@ int main(int argc, char **argv)
     nrefseq = infoalign_Getrefseq(refseq, seqset);
 
     /* change the % plurality to the fraction of absolute total weight */
-    fplural = ajSeqsetTotweight(seqset) * fplural / 100;
+    fplural = ajSeqsetGetTotweight(seqset) * fplural / 100;
 
     /*
     ** change the % identity to the number of identical sequences at a
     ** position required for consensus
     */
-    ident = ajSeqsetSize(seqset) * identity / 100;
+    ident = ajSeqsetGetSize(seqset) * (ajint)identity / 100;
 
     /* get the consensus sequence */
-    embConsCalc(seqset, matrix, ajSeqsetSize(seqset), ajSeqsetLen(seqset),
+    embConsCalc(seqset, matrix, ajSeqsetGetSize(seqset), ajSeqsetGetLen(seqset),
 		 fplural, 0.0, ident, ajFalse, &cons);
     ajSeqAssignSeqS(consensus, cons);
 
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
     if(nrefseq == -1)
 	ref = consensus;
     else
-	ref = ajSeqsetGetSeq(seqset, nrefseq);
+	ref = ajSeqsetGetseqSeq(seqset, nrefseq);
 
 
     /* start the HTML table */
@@ -290,9 +290,9 @@ int main(int argc, char **argv)
     }
 
 
-    for(i=0; i<ajSeqsetSize(seqset); i++)
+    for(i=0; i<ajSeqsetGetSize(seqset); i++)
     {
-    	seq = ajSeqsetGetSeq(seqset, i);
+    	seq = ajSeqsetGetseqSeq(seqset, i);
 
 	/* get the usa ('-' if unknown) */
 	usa = ajSeqGetUsaS(seq);
@@ -370,7 +370,7 @@ int main(int argc, char **argv)
 	    infoalign_OutputFloat(outfile, change, html, (dodesc || dowt) );
 	
         if(dowt)
-            infoalign_OutputFloat(outfile, ajSeqsetWeight(seqset,i), html, 
+            infoalign_OutputFloat(outfile, ajSeqsetGetseqWeight(seqset,i), html, 
             	dodesc);
 
 	if(dodesc)
@@ -495,14 +495,14 @@ static void infoalign_OutputInt(AjPFile outfile, ajint num, AjBool html,
 **                          data item
 ** @param [r] after [AjBool] True if we want to output more columns
 **                           after this one
-** @param [r] minlength [ajint] minimum length of field to print the
-**                              string in (-1 (NOLIMIT) = no limit)
+** @param [r] minlength [ajuint] minimum length of field to print the
+**                              string in (0 (NOLIMIT) = no limit)
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void infoalign_OutputStr(AjPFile outfile, const AjPStr str, AjBool html,
-				 AjBool after, ajint minlength)
+				 AjBool after, ajuint minlength)
 {
     AjPStr marginfmt;
 
@@ -556,9 +556,9 @@ static int infoalign_Getrefseq(const AjPStr refseq, const AjPSeqset seqset)
     ajint i;
     const AjPSeq seq;
 
-    for(i=0; i<ajSeqsetSize(seqset); i++)
+    for(i=0; i<(ajint)ajSeqsetGetSize(seqset); i++)
     {
-	seq = ajSeqsetGetSeq(seqset, i);
+	seq = ajSeqsetGetseqSeq(seqset, i);
 	if(!ajStrCmpS(ajSeqGetNameS(seq), refseq))
 	    return i;
     }
@@ -568,7 +568,7 @@ static int infoalign_Getrefseq(const AjPStr refseq, const AjPSeqset seqset)
 	ajFatal("Reference sequence is not a sequence ID or a number: %S",
 		refseq);
 
-    if(i < 0 || i > ajSeqsetSize(seqset))
+    if(i < 0 || i > (ajint) ajSeqsetGetSize(seqset))
 	ajFatal("Reference sequence number < 0 or > number "
 		"of input sequences: %d", i);
 
@@ -664,7 +664,7 @@ static void infoalign_Compare(const AjPSeq ref, const AjPSeq seq,
 	        if((toupper((int)r[i]) == toupper((int)s[i])))
 		    (*idcount)++;
 	        /* similarity */
-	        else if(sub[ajSeqCvtK(cvt, r[i])][ajSeqCvtK(cvt, s[i])] > 0)
+	        else if(sub[ajSeqcvtGetCodeK(cvt, r[i])][ajSeqcvtGetCodeK(cvt, s[i])] > 0)
 		    (*simcount)++;
 	        /* difference */
 	        else
@@ -676,7 +676,8 @@ static void infoalign_Compare(const AjPSeq ref, const AjPSeq seq,
     *seqlength   = *idcount + *simcount + *difcount;
     *alignlength = end-begin+1;
 
-    *change = (float)(*alignlength - *idcount)*100.0/(float)(*alignlength);
+    *change = (float)(*alignlength - *idcount)*(float)100.0/
+	(float)(*alignlength);
 
     return;
 }

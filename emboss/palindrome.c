@@ -121,8 +121,8 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &sequence))
     {
-	beginPos = ajSeqallBegin(seqall);
-	endPos = ajSeqallEnd(seqall);
+	beginPos = ajSeqallGetseqBegin(seqall);
+	endPos = ajSeqallGetseqEnd(seqall);
 
 	/* set to NULL to indicate that we have no first palindrome find yet */
 	pfirstpal = NULL;
@@ -166,11 +166,11 @@ int main(int argc, char **argv)
 		ic = current;
 		ir = rev;
 		if(ajStrGetCharPos(seqstr, ic) ==
-		   ajSeqBaseComp(ajStrGetCharPos(seqstr, ir)))
+		   ajBaseComp(ajStrGetCharPos(seqstr, ir)))
 		    while(mismatches <= maxmismatches && ic < ir)
 		    {
 			if(ajStrGetCharPos(seqstr, ic++) ==
-			   ajSeqBaseComp(ajStrGetCharPos(seqstr, ir--)))
+			   ajBaseComp(ajStrGetCharPos(seqstr, ir--)))
 			{
 			    mismatchAtEnd = 0;
 			    if(ajStrGetCharPos(seqstr, ic-1) != 'n')
@@ -466,7 +466,7 @@ static void palindrome_Print(AjPFile outfile,
 
     for(i = pal->forwardStart,
 	j=pal->revStart; i < pal->forwardEnd; i++)
-	if(ajStrGetCharPos(seq, i) == ajSeqBaseComp(ajStrGetCharPos(seq, j--)))
+	if(ajStrGetCharPos(seq, i) == ajBaseComp(ajStrGetCharPos(seq, j--)))
 	    ajFmtPrintF(outfile, "|");
 	else
 	    ajFmtPrintF(outfile, " ");

@@ -147,7 +147,7 @@ int main(int argc, char **argv)
 
     ajGraphxyDisplay(mult,AJTRUE);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

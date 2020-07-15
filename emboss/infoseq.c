@@ -70,12 +70,12 @@ int main(int argc, char **argv)
     AjBool    type      = ajTrue; /* ajTrue if Protein */
     float     pgc       = 0.0;
     AjBool    firsttime = ajTrue;
-    AjPStr usa       = NULL;
-    AjPStr name      = NULL;
-    AjPStr acc       = NULL;
-    AjPStr gi        = NULL;
-    AjPStr sv        = NULL;
-    AjPStr desc      = NULL;
+    const AjPStr usa       = NULL;
+    const AjPStr name      = NULL;
+    const AjPStr acc       = NULL;
+    const AjPStr gi        = NULL;
+    const AjPStr sv        = NULL;
+    const AjPStr desc      = NULL;
     AjBool columns   = ajFalse;   
     AjPStr delimiter = NULL;      
     AjPStr tempstr   = NULL;      
@@ -203,27 +203,27 @@ int main(int argc, char **argv)
 	
 	/* GET SEQUENCE ATTRIBUTES (strings set to '-' if unknown) */ 
 	/* usa */
-	usa = (AjPStr) ajSeqGetUsaS(seq);
+	usa = ajSeqGetUsaS(seq);
 	if(ajStrGetLen(usa) == 0)
 	    usa = altusa;
 
 	/* name */
-	name = (AjPStr)ajSeqGetNameS(seq);
+	name = ajSeqGetNameS(seq);
 	if(ajStrGetLen(name) == 0)
 	    name = altname;
 
 	/* accession number */
-	acc = (AjPStr)ajSeqGetAccS(seq);
+	acc = ajSeqGetAccS(seq);
 	if(ajStrGetLen(acc) == 0)
 	    acc = altacc;
 
 	/* GI number */
-	gi = (AjPStr) ajSeqGetGiS(seq);
+	gi = ajSeqGetGiS(seq);
 	if(ajStrGetLen(gi) == 0)
 	    gi = altgi;
 
 	/* version number */
-	sv = (AjPStr) ajSeqGetSvS(seq);
+	sv = ajSeqGetSvS(seq);
 	if(ajStrGetLen(sv) == 0)
 	    sv = altsv;
 
@@ -236,7 +236,7 @@ int main(int argc, char **argv)
 	}
 	
 	/* description */
-	desc = (AjPStr) ajSeqGetDescS(seq);
+	desc = ajSeqGetDescS(seq);
 
 
 	/* start table line */

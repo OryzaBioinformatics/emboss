@@ -63,8 +63,8 @@ int main(int argc, char **argv)
 
     ajSeqAssignSeqS(seq, sequence);
 
-    ajSeqWrite(seqout, seq);
-    ajSeqWriteClose(seqout);
+    ajSeqoutWriteSeq(seqout, seq);
+    ajSeqoutClose(seqout);
 
     ajSeqDel(&seq);
     ajSeqoutDel(&seqout);
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     ajStrDel(&type);
     ajStrDel(&sequence);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

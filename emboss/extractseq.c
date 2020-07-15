@@ -45,8 +45,8 @@ int main(int argc, char **argv)
     AjPList strlist = NULL;
     ajint nr;
     ajint i;
-    ajint st;
-    ajint en;
+    ajuint st;
+    ajuint en;
     AjPStr str;
     AjPStr name   = NULL;		/* new name of the sequence */
     AjPStr value  = NULL;  /* string value of start or end position */
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 		ajSeqSetProt(newseq);
 
 	    /* write this region of the sequence */
-	    ajSeqAllWrite(seqout, newseq);
+	    ajSeqoutWriteSeq(seqout, newseq);
 
 	    ajStrDel(&name);
 	    ajStrDel(&value);
@@ -117,11 +117,11 @@ int main(int argc, char **argv)
 	ajRangeStrExtract(regions, ajSeqGetSeqS(seq), &newstr);
 	ajSeqAssignSeqS(seq, newstr);
 	ajStrSetClear(&newstr);
-	ajSeqAllWrite(seqout, seq);
+	ajSeqoutWriteSeq(seqout, seq);
     }
 
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
 
     ajSeqDel(&seq);
     ajSeqoutDel(&seqout);
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
     ajStrDel(&newstr);
     ajListstrFree(&strlist);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

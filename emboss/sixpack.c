@@ -249,7 +249,7 @@ int main(int argc, char **argv)
     ajFmtPrintF(outfile, "##############################\n\n");
     
     ajTrnDel(&trnTable);
-    ajSeqWriteClose(outseq);
+    ajSeqoutClose(outseq);
     ajSeqoutDel(&outseq);
     ajSeqDel(&seq);
     ajSeqDel(&pep);
@@ -412,7 +412,7 @@ static void sixpackPrintseq(AjPSeqout outseq,
 		name,count,origname,frame,count,min_orflength,orflength);
     ajSeqAssignNameS(sq,nm);
 
-    ajSeqWrite(outseq, sq);
+    ajSeqoutWriteSeq(outseq, sq);
 
     ajStrDel(&nm);
     ajStrDel(&str);

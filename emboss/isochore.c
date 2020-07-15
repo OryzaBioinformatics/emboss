@@ -35,14 +35,16 @@
 ** @alias AjSIntarr
 ** @alias AjPIntarr
 **
-** @attr Size [ajint] Size
 ** @attr Array [ajint*] Integer array
+** @attr Size [ajint] Size
+** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct AjSIntarr
 {
-    ajint Size;
     ajint* Array;
+    ajint Size;
+    char Padding[4];
 } AjOIntarr;
 #define AjPIntarr AjOIntarr*
 
@@ -56,14 +58,16 @@ typedef struct AjSIntarr
 ** @alias IsochoreSFltarr
 ** @alias IsochorePFltarr
 **
-** @attr Size [ajint] Size
 ** @attr Array [float*] Float array
+** @attr Size [ajint] Size
+** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct IsochoreSFltarr
 {
-    ajint Size;
     float* Array;
+    ajint Size;
+    char Padding[4];
 } IsochoreOFltarr;
 #define IsochorePFltarr IsochoreOFltarr*
 
@@ -252,7 +256,7 @@ static IsochorePFltarr isochore_FltarrNew0(size_t size)
     IsochorePFltarr ret;
 
     AJNEW(ret);
-    ret->Size = size;
+    ret->Size = (ajint) size;
     AJCNEW(ret->Array,size);
 
     return ret;

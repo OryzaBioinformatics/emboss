@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 
     ajReportWrite(report, ftab, seq);
 
-    ajExit ();
+    embExit();
 
     return 0;
 }

@@ -36,8 +36,8 @@
 ** @alias AjOTestcode
 **
 ** @attr positions [AjPFloat] Undocumented
-** @attr npositions [ajint] Undocumented
 ** @attr content [AjPFloat] Undocumented
+** @attr npositions [ajint] Undocumented
 ** @attr ncontent [ajint] Undocumented
 ** @attr pprobA [AjPFloat] Undocumented
 ** @attr pprobC [AjPFloat] Undocumented
@@ -54,8 +54,8 @@
 typedef struct AjSTestcode 
 {
     AjPFloat positions;
-    ajint    npositions;
     AjPFloat content;
+    ajint    npositions;
     ajint    ncontent;
     AjPFloat pprobA;
     AjPFloat pprobC;
@@ -135,8 +135,7 @@ int main(int argc, char **argv)
     plot     = ajAcdGetToggle("plot");
     step     = ajAcdGetInt("step");
     
-    if(plot)
-        graph = ajAcdGetGraphxy("graph");
+    graph = ajAcdGetGraphxy("graph");
 
 
     testcodes = ajFloatNew();
@@ -200,21 +199,21 @@ int main(int argc, char **argv)
 		this->y[i] = ajFloatGet(testcodes,i);
 	    }
 	    ajGraphPlpDataSetMaxima(this,this->x[0],this->x[npoints-1],
-				   0.,1.37);
+				   (float)0.,(float)1.37);
 
 
 
 	    ajGraphSetTitleDo(graph, ajTrue);
 	    ajGraphPlpDataSetYTitleC(this,"TESTCODE value");
 	    ajGraphPlpDataSetXTitleC(this,"Sequence mid position");
+	    ajGraphSetTitlePlus(graph, ajSeqGetUsaS(seq));
 
-	    
-	    ajGraphSetTitleC(graph,"Fickett TESTCODE plot");
-
-	    ajGraphPlpDataAddLine(this,this->x[0],0.74,this->x[npoints-1],
-				  0.74,1);
-	    ajGraphPlpDataAddLine(this,this->x[0],0.95,this->x[npoints-1],
-				  0.95,3);
+	    ajGraphPlpDataAddLine(this,this->x[0],(float)0.74,
+				  this->x[npoints-1],
+				  (float)0.74,(float)1);
+	    ajGraphPlpDataAddLine(this,this->x[0],(float)0.95,
+				  this->x[npoints-1],
+				  (float)0.95,(float)3);
 
 	    ajGraphDataAdd(graph,this);
 	    ajGraphxyDisplay(graph,ajTrue);
@@ -223,14 +222,24 @@ int main(int argc, char **argv)
 	ajFeattableClear(ftable);
     }
 
+    tcode_del(&table1);
 
     ajFloatDel(&testcodes);
     ajIntDel(&from);
     ajIntDel(&to);
-    tcode_del(&table1);
     ajStrDel(&substr);
-    
-    ajExit();
+
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    if(!plot)
+	ajReportClose(report);
+    ajReportDel(&report);
+    ajFileClose(&datafile);
+    ajFeattableDel(&ftable);
+    ajGraphxyDel(&graph);
+
+    embExit();
+
     return 0;
 }
 

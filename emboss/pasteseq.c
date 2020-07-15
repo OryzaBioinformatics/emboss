@@ -75,8 +75,8 @@ int main(int argc, char **argv)
     ajSeqType(newseq);
 
     /* output the sequence */
-    ajSeqWrite(seqout, newseq);
-    ajSeqWriteClose(seqout);
+    ajSeqoutWriteSeq(seqout, newseq);
+    ajSeqoutClose(seqout);
 
     ajSeqDel(&seq);
     ajSeqDel(&insertseq);

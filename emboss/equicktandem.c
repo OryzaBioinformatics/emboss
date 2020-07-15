@@ -111,8 +111,8 @@ int main(int argc, char **argv)
     ajStrAssignSubS(&substr,str,begin,end);
     ajSeqAssignSeqS(sequence,substr);
 
-    cvt = ajSeqCvtNewText("ACGTN");
-    ajSeqNum(sequence, cvt, &tseq);
+    cvt = ajSeqcvtNewNumberC("ACGTN");
+    ajSeqConvertNum(sequence, cvt, &tseq);
     sq = ajStrGetuniquePtr(&tseq);
 
     /* careful - sequence can be shorter than the maximum repeat length */
@@ -186,14 +186,14 @@ int main(int argc, char **argv)
     ajFeattableDel(&tab);
     ajSeqDel(&sequence);
     ajSeqDel(&saveseq);
-    ajSeqCvtDel(&cvt);
+    ajSeqcvtDel(&cvt);
 
     ajStrDel(&str);
     ajStrDel(&substr);
     ajStrDel(&tseq);
     ajStrDel(&tmpstr);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -206,7 +206,7 @@ int main(int argc, char **argv)
 ** Prints the original output format, but simply returns if the
 ** output file is NULL.
 **
-** Sets the printed region to 'Z' to exlucde it from further analysis.
+** Sets the printed region to 'Z' to exclude it from further analysis.
 **
 ** @param [u] outf [AjPFile] Undocumented
 ** @param [r] begin [ajint] Undocumented
@@ -260,7 +260,8 @@ static void equicktandem_report(AjPFeattable tab, ajint begin)
 
 
     gf = ajFeatNew(tab, NULL, rpthit,
-		   1+maxback-sq+begin, 1+maxfront-sq+begin,
+		   1+(ajint)(maxback-sq)+begin,
+		   1+(ajint)(maxfront-sq)+begin,
 		   (float) max, '+', 0);
 
     ajFeatTagAddCC(gf, "rpt_type", "TANDEM");

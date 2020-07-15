@@ -32,6 +32,7 @@
 #define FASTATYPE_ACCID     7
 #define FASTATYPE_GCGACCID  8
 
+static AjPRegexp dbxfasta_wrdexp = NULL;
 
 
 static AjBool dbxfasta_NextEntry(EmbPBtreeEntry entry, AjPFile inf,
@@ -189,6 +190,15 @@ int main(int argc, char **argv)
 
     embBtreeEntryDel(&entry);
     ajStrDel(&tmpstr);
+    ajStrDel(&filename);
+    ajStrDel(&exclude);
+    ajStrDel(&dbname);
+    ajStrDel(&dbrs);
+    ajStrDel(&release);
+    ajStrDel(&datestr);
+    ajStrDel(&directory);
+    ajStrDel(&indexdir);
+    ajStrDel(&dbtype);
     
 
     nfields = 0;
@@ -200,8 +210,11 @@ int main(int argc, char **argv)
     ajBtreeIdDel(&idobj);
     ajBtreePriDel(&priobj);
     ajBtreeHybDel(&hyb);
-    
-    ajExit();
+
+    ajRegFree(&dbxfasta_wrdexp);
+    ajRegFree(&typeexp);
+
+    embExit();
 
     return 0;
 }
@@ -226,7 +239,7 @@ static AjBool dbxfasta_NextEntry(EmbPBtreeEntry entry, AjPFile inf,
 				 AjPRegexp typeexp, ajint idtype)
 {
     static AjBool init = AJFALSE;
-    static AjPStr line = NULL;
+    AjPStr line = NULL;
     
     if(!init)
     {
@@ -240,11 +253,16 @@ static AjBool dbxfasta_NextEntry(EmbPBtreeEntry entry, AjPFile inf,
     {
 	entry->fpos = ajFileTell(inf);
 	if(!ajFileReadLine(inf,&line))
-	    return ajFalse;
+	{
+	  ajStrDel(&line);
+	  return ajFalse;
+	}
     }
 
 
     dbxfasta_ParseFasta(entry, typeexp, idtype, line);
+
+    ajStrDel(&line);
 
     return ajTrue;
 }
@@ -274,7 +292,7 @@ static AjPRegexp dbxfasta_getExpr(const AjPStr idformat, ajint *type)
     else if(ajStrMatchC(idformat,"idacc"))
     {
 	*type = FASTATYPE_IDACC;
-	exp   = ajRegCompC("^>([.A-Za-z0-9_-]+)+[ \t]+([A-Za-z0-9_-]+)");
+	exp   = ajRegCompC("^>([.A-Za-z0-9_-]+)+[ \t]+\\(?([A-Za-z0-9_-]+)\\)?");
     }
     else if(ajStrMatchC(idformat,"accid"))
     {
@@ -332,25 +350,25 @@ static AjPRegexp dbxfasta_getExpr(const AjPStr idformat, ajint *type)
 static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
 				  ajint idtype, const AjPStr line)
 {
-    static AjPRegexp wrdexp = NULL;
-    static AjPStr ac  = NULL;
-    static AjPStr sv  = NULL;
-    static AjPStr gi  = NULL;
-    static AjPStr de  = NULL;
+    AjPStr ac  = NULL;
+    AjPStr sv  = NULL;
+    AjPStr gi  = NULL;
+    AjPStr db  = NULL;
+    AjPStr de  = NULL;
 
-    static AjPStr tmpfd  = NULL;
+    AjPStr tmpfd  = NULL;
 
     AjPStr str = NULL;
     
 
 
-    if(!wrdexp)
-	wrdexp = ajRegCompC("([A-Za-z0-9]+)");
+    if(!dbxfasta_wrdexp)
+	dbxfasta_wrdexp = ajRegCompC("([A-Za-z0-9]+)");
 
 
     if(!ajRegExec(typeexp,line))
     {
-	ajStrDelStatic(&ac);
+	ajStrDel(&ac);
 	ajDebug("Invalid ID line [%S]",line);
 	return ajFalse;
     }
@@ -362,6 +380,7 @@ static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
     
     ajStrAssignC(&sv, "");
     ajStrAssignC(&gi, "");
+    ajStrAssignC(&db, "");
     ajStrAssignC(&de, "");
     ajStrAssignC(&ac, "");
     ajStrAssignC(&entry->id, "");
@@ -384,7 +403,7 @@ static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
 	ajRegPost(typeexp, &de);
 	break;
     case FASTATYPE_NCBI:
-	if(!ajSeqParseNcbi(line,&entry->id,&ac,&sv,&gi,
+	if(!ajSeqParseNcbi(line,&entry->id,&ac,&sv,&gi,&db,
 			   &de))
 	    return ajFalse;
 	break;
@@ -432,20 +451,21 @@ static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
     }
     
     if(entry->do_description && ajStrGetLen(de))
-	while(ajRegExec(wrdexp,de))
+	while(ajRegExec(dbxfasta_wrdexp,de))
 	{
-	    ajRegSubI(wrdexp, 1, &tmpfd);
+	    ajRegSubI(dbxfasta_wrdexp, 1, &tmpfd);
 	    str = ajStrNew();
 	    ajStrAssignS(&str,tmpfd);
 	    ajListPush(entry->de,(void *)str);
-	    ajRegPost(wrdexp, &de);
+	    ajRegPost(dbxfasta_wrdexp, &de);
 	}
 
 
-    ajStrDelStatic(&ac);
-    ajStrDelStatic(&sv);
-    ajStrDelStatic(&gi);
-    ajStrDelStatic(&de);
+    ajStrDel(&ac);
+    ajStrDel(&sv);
+    ajStrDel(&gi);
+    ajStrDel(&db);
+    ajStrDel(&de);
 
     return ajTrue;
 }

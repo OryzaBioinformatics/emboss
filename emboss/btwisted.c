@@ -76,12 +76,15 @@ int main(int argc, char **argv)
     angletable  = btwisted_getdinucdata(angles);
     energytable = btwisted_getdinucdata(energies);
 
+    ajFileClose(&angles);
+    ajFileClose(&energies);
+
     begin = ajSeqGetBegin(seq);
     end   = ajSeqGetEnd(seq);
 
     len   = end-begin+1;
 
-    dinuc = ajSeqChar(seq);
+    dinuc = ajSeqGetSeqC(seq);
 
     for(i=begin-1; i<end-1; ++i)
     {
@@ -98,13 +101,13 @@ int main(int argc, char **argv)
 	energysum += val;
     }
 
-    twists        = anglesum / 360.0 ;
-    basesperturn  = (float) len * 360.0 /anglesum;
+    twists        = anglesum / (float)360.0 ;
+    basesperturn  = (float) len * (float)360.0 /anglesum;
     energyperbase = energysum/(float) (len-1);
 
     ajFmtPrintF(result, "# Output from BTWISTED\n");
     ajFmtPrintF(result, "# Twisting calculated from %d to %d of %s\n",
-		begin, end, ajSeqName(seq));
+		begin, end, ajSeqGetNameC(seq));
     ajFmtPrintF(result,"Total twist (degrees): %.1f\n", anglesum);
     ajFmtPrintF(result,"Total turns : %.2f\n", twists);
     ajFmtPrintF(result,"Average bases per turn: %.2f\n", basesperturn);
@@ -112,15 +115,14 @@ int main(int argc, char **argv)
     ajFmtPrintF(result,"Average stacking energy per dinucleotide: %.2f\n",
 		energyperbase);
 
-    ajFileClose(&angles);
-    ajFileClose(&result);
-
     ajStrTableFree(&angletable);
     ajStrTableFree(&energytable);
 
     ajStrDel(&nucs);
+    ajFileClose(&result);
+    ajSeqDel(&seq);
 
-    ajExit ();
+    embExit ();
 
     return 0;
 }
@@ -132,8 +134,8 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [u] inf [AjPFile] Undocumented
-** @return [AjPTable] Undocumented
+** @param [u] inf [AjPFile] Data file
+** @return [AjPTable] Data values table
 ** @@
 ******************************************************************************/
 
@@ -159,7 +161,7 @@ static AjPTable btwisted_getdinucdata(AjPFile inf)
 	ajStrTokenNextParseC(&token," \n\t\r",&key);
 	valstr = ajStrNew();
 	ajStrTokenNextParseC(&token," \n\t\r",&valstr);
-	ajTablePut(table,(const void *)key,(void *) valstr);
+	ajTablePut(table,(void *)key,(void *) valstr);
 	ajStrTokenDel(&token);
     }
 

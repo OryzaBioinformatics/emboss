@@ -86,7 +86,7 @@ int main(int argc, char **argv)
     ajListDel(&files);
     ajFileClose(&outf);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -147,6 +147,7 @@ static void mwcontam_readdata(AjPList files, AjPList **lists,
 	    ajListPushApp((*lists)[i],(void *)ptr);
 	}
 	ajFileClose(&inf);
+	ajStrDel(&thysf);
     }
 
     ajStrDel(&line);

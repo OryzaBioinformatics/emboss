@@ -36,11 +36,11 @@
 static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 			       AjPFile outf, AjPList l,
 			       const AjPStr name, ajint hits, ajint begin,
-			       ajint end, AjBool ambiguity, ajint mincut,
-			       ajint maxcut, AjBool plasmid, AjBool blunt,
-			       AjBool sticky, ajint sitelen, AjBool limit,
+			       ajint end, ajint mincut,
+			       ajint maxcut, AjBool plasmid,
+			       ajint sitelen, AjBool limit,
 			       const AjPTable table, AjBool alpha,
-			       AjBool frags, AjBool nameit, AjBool html);
+			       AjBool frags, AjBool html);
 static void restover_read_equiv(AjPFile equfile, AjPTable table);
 static void restover_read_file_of_enzyme_names(AjPStr *enzymes);
 
@@ -68,12 +68,11 @@ int main(int argc, char **argv)
     AjBool alpha;
     AjBool single;
     AjBool blunt;
-    AjBool sticky;
     AjBool ambiguity;
+    AjBool sticky;
     AjBool plasmid;
     AjBool threeprime;
     AjBool commercial;
-    AjBool nameit;
     AjBool html;
     AjBool limit;
     AjBool frags;
@@ -117,7 +116,6 @@ int main(int argc, char **argv)
     commercial = ajAcdGetBool("commercial");
     limit      = ajAcdGetBool("limit");
     frags      = ajAcdGetBool("fragments");
-    nameit     = ajAcdGetBool("name");
     dfile      = ajAcdGetDatafile("datafile");
 
     if(single)
@@ -161,21 +159,21 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin = ajSeqallBegin(seqall);
-	end   = ajSeqallEnd(seqall);
+	begin = ajSeqallGetseqBegin(seqall);
+	end   = ajSeqallGetseqEnd(seqall);
 	ajFileSeek(enzfile,0L,0);
 	ajSeqFmtUpper(seq);
 
 	hits = embPatRestrictMatch(seq,begin,end,enzfile,enzymes,sitelen,
 				   plasmid,ambiguity,min,max,blunt,sticky,
 				   commercial,l);
-
+	ajDebug("hits:%d listlen:%u\n", hits, ajListLength(l));
 	if(hits)
 	{
 	    name = ajStrNewC(ajSeqGetNameC(seq));
 	    restover_printHits(seq, seqcmp, outf,l,name,hits,begin,end,
-			       ambiguity,min,max,plasmid,blunt,sticky,
-			       sitelen,limit,table,alpha,frags,nameit,
+			       min,max,plasmid,
+			       sitelen,limit,table,alpha,frags,
 			       html);
 	    ajStrDel(&name);
 	}
@@ -219,18 +217,14 @@ int main(int argc, char **argv)
 ** @param [r] hits [ajint] number of hits
 ** @param [r] begin [ajint] start position
 ** @param [r] end [ajint] end position
-** @param [r] ambiguity [AjBool] allow ambiguities
 ** @param [r] mincut [ajint] minimum cuts
 ** @param [r] maxcut [ajint] maximum cuts
 ** @param [r] plasmid [AjBool] circular
-** @param [r] blunt [AjBool] allow blunt cutters
-** @param [r] sticky [AjBool] allow sticky cutters
 ** @param [r] sitelen [ajint] length of cut site
 ** @param [r] limit [AjBool] limit count
 ** @param [r] table [const AjPTable] supplier table
 ** @param [r] alpha [AjBool] alphabetic sort
 ** @param [r] frags [AjBool] show fragment lengths
-** @param [r] nameit [AjBool] show name
 ** @param [r] html [AjBool] show html
 ** @@
 ******************************************************************************/
@@ -238,11 +232,11 @@ int main(int argc, char **argv)
 static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 			       AjPFile outf,
 			       AjPList l, const AjPStr name, ajint hits,
-			       ajint begin, ajint end, AjBool ambiguity,
+			       ajint begin, ajint end,
 			       ajint mincut, ajint maxcut, AjBool plasmid,
-			       AjBool blunt, AjBool sticky, ajint sitelen,
+			       ajint sitelen,
 			       AjBool limit, const AjPTable table,
-			       AjBool alpha, AjBool frags,AjBool nameit,
+			       AjBool alpha, AjBool frags,
 			       AjBool html)
 {
     EmbPMatMatch m = NULL;
@@ -259,6 +253,10 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 
     ajint i;
     ajint c = 0;
+
+    ajint hang1;
+    ajint hang2;
+
 
     ps = ajStrNew();
     fn = 0;
@@ -317,8 +315,10 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 	ajDebug("hit %d start:%d cut1:%d cut2:%d\n",
 		i, m->start, m->cut1, m->cut2);
 
+	hang1 = (ajint)m->cut1 - (ajint)m->start;
+	hang2 = (ajint)m->cut2 - (ajint)m->start;
 
-	if(!plasmid && (m->cut1-m->start>100 || m->cut2-m->start>100))
+	if(!plasmid && (hang1>100 || hang2>100))
 	{
 	    embMatMatchDel(&m);
 	    continue;
@@ -364,10 +364,12 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 	if(m->cut3 || m->cut4)
 	{
 	    if(m->cut4 >= m->cut3)
-		ajStrAssignSubS(&overhead, ajSeqGetSeqS( seq), m->cut3, m->cut4-1);
+		ajStrAssignSubS(&overhead, ajSeqGetSeqS( seq),
+				m->cut3, m->cut4-1);
 	    else
 	    {
-		ajStrAssignSubS(&overhead, ajSeqGetSeqS( seq), m->cut4, m->cut3-1);
+		ajStrAssignSubS(&overhead, ajSeqGetSeqS( seq),
+				m->cut4, m->cut3-1);
 		ajStrReverse(&overhead);
 	    }
 
@@ -378,16 +380,19 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 				"<tr><td>%-d</td><td>%-16s</td><td>%-16s"
 				"</td><td></td><td></td><td>%d</td><td>%d"
 				"</td></tr>\n",
-				m->start,ajStrGetPtr(m->cod),ajStrGetPtr(m->pat),
+				m->start,ajStrGetPtr(m->cod),
+				ajStrGetPtr(m->pat),
 				m->cut1,m->cut2);
 		else
 		    ajFmtPrintF(outf,"\t%-d\t%-16s%-16s\t\t%d\t%d\t\n",
-				m->start,ajStrGetPtr(m->cod),ajStrGetPtr(m->pat),
+				m->start,ajStrGetPtr(m->cod),
+				ajStrGetPtr(m->pat),
 				m->cut1,m->cut2);
 	    }
 	}
 
 	/* I am not sure what fragments are doing so I left it in ...*/
+	/* used in the report tail in restrict - restover does much the same */
 	if(m->cut3 || m->cut4)
 	{
 	    if(frags)
@@ -478,7 +483,7 @@ static void restover_read_equiv(AjPFile equfile, AjPTable table)
 	key=ajStrNewC(p);
 	p=ajSysStrtok(NULL," \t\n");
 	value=ajStrNewC(p);
-	ajTablePut(table,(const void *)key, (void *)value);
+	ajTablePut(table,(void *)key, (void *)value);
     }
 
     ajStrDel(&line);

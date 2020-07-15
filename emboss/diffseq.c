@@ -35,13 +35,14 @@
 ** @attr Start [ajint] Start of CDS (always less than End)
 ** @attr End [ajint] End of CDS (always greater than Start)
 ** @attr Phase [ajint] Phase of translation (0,1 or 2)
-** @attr Sense [char] Sense '+' or '-'
 ** @attr Parent [AjBool] ajTrue is this CDS is a parent of a forward sense join
 **			or the last CDS of a reverse sense join
 ** @attr Single [AjBool] ajTrue is this CDS is a not member of a join()
 ** @attr ReverseParent [AjBool] ajTrue is this CDS is a parent of rev sense join
 **			or the last CDS in a forward sense join
 ** @attr Local [AjBool] ajTrue is this CDS is local
+** @attr Sense [char] Sense '+' or '-'
+** @attr Padding [char[3]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -50,11 +51,12 @@ typedef struct CdsSval
     ajint  Start;
     ajint  End;
     ajint  Phase;
-    char   Sense;
     AjBool Parent;
     AjBool Single;
     AjBool ReverseParent;
     AjBool Local;
+    char   Sense;
+    char Padding[3];
 } CdsOval;
 #define CdsPval CdsOval*
 
@@ -103,7 +105,7 @@ static void diffseq_WordMatchListConvDiffToFeat(const AjPList list,
 
 static void diffseq_Features(const char* typefeat, AjPFeature rf,
 				const AjPFeattable feat,
-				ajint start, ajint end);
+				ajuint start, ajuint end);
 
 static void diffseq_AddTags(AjPStr* strval, const AjPFeature feat,
 			       AjBool values);
@@ -175,7 +177,7 @@ int main(int argc, char **argv)
 
     /* get the minimal set of overlapping matches */
     if(matchlist)
-	embWordMatchMin(matchlist, ajSeqGetLen(seq1), ajSeqGetLen(seq2));
+	embWordMatchMin(matchlist);
 
 
     if(matchlist)
@@ -577,15 +579,15 @@ static void diffseq_WordMatchListConvDiffToFeat(const AjPList list,
 ** @param [r] typefeat [const char*] Report feature tag type
 ** @param [u] rf [AjPFeature] Report feature to store results in
 ** @param [r] feat [const AjPFeattable] Feature table to search
-** @param [r] start [ajint] Start position of region (in human coordinates)
-** @param [r] end [ajint] End position of region (in human coordinates)
+** @param [r] start [ajuint] Start position of region (in human coordinates)
+** @param [r] end [ajuint] End position of region (in human coordinates)
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void diffseq_Features(const char* typefeat, AjPFeature rf,
                                 const AjPFeattable feat,
-                                ajint start, ajint end)
+                                ajuint start, ajuint end)
 {
     AjIList iter  = NULL;
     AjPFeature gf = NULL;
@@ -794,8 +796,8 @@ static void diffseq_DiffList(const AjPList matchlist, AjPList difflist,
 
     /* add difference at the end, if required */
     if(global &&                        /* we want the global differences */
-      (misstart1 <= ajSeqGetLen(seq1) ||        /* no match at the end */
-       misstart2 <= ajSeqGetLen(seq2)))
+      (misstart1 <= (ajint) ajSeqGetLen(seq1) ||   /* no match at the end */
+       misstart2 <= (ajint) ajSeqGetLen(seq2)))
     {
         diff = diffseq_PosPDiffNew();
         diff->Start1 = misstart1;
@@ -864,6 +866,8 @@ static void diffseq_PosPDiffDel(void **x, void *cl)
 {
     PosPDiff thys;
     thys = (PosPDiff)*x;
+
+    (void) cl;				/* make it used */
 
     AJFREE(thys);
                 

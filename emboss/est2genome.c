@@ -69,8 +69,7 @@ ajint debug;
 
 static void  est2genome_make_output(AjPFile ofile,
 				    const AjPSeq genome, const AjPSeq est,
-				    const EmbPEstAlign ge, ajint match,
-				    ajint mismatch, ajint gap_penalty,
+				    const EmbPEstAlign ge, ajint gap_penalty,
 				    ajint intron_penalty,
 				    ajint splice_penalty, ajint minscore,
 				    ajint align, ajint width, ajint reverse);
@@ -230,7 +229,7 @@ int main(int argc, char **argv)
     {
 	ajWarn("increasing space from %.3f to %.3f Mb\n",
 	       megabytes, 1.5e-6*ajSeqGetLen(genome));
-	megabytes = 1.5e-6*ajSeqGetLen(genome);
+	megabytes = (float)1.5e-6*ajSeqGetLen(genome);
     }
 
     /* find the GT/AG splice sites */
@@ -271,7 +270,7 @@ int main(int argc, char **argv)
 	    {
 		embEstShuffleSeq(shuffled_est, 1, &seed);
 		sge = embEstAlignNonRecursive(shuffled_est,
-					      genome, match, mismatch,
+					      genome,
 					      gap_penalty,
 					      intron_penalty,
 					      splice_penalty,
@@ -343,14 +342,13 @@ int main(int argc, char **argv)
 				"est and forward genome, but splice "
 				"sites imply REVERSED GENE\n");
 		    est2genome_make_output(outfile, genome, est, bge,
-					   match, mismatch, gap_penalty,
+					   gap_penalty,
 					   intron_penalty, splice_penalty,
 					   minscore, align, width,
 					   reverse);
 
 		    if(best == 0)	/* print substandard alignment too */
 			est2genome_make_output(outfile, genome, est, fge,
-					       match, mismatch,
 					       gap_penalty, intron_penalty,
 					       splice_penalty, minscore,
 					       align, width, reverse);
@@ -362,13 +360,11 @@ int main(int argc, char **argv)
 				"est and forward genome, and splice "
 				"sites imply forward gene\n");
 		    est2genome_make_output(outfile, genome, est, fge,
-					   match, mismatch,
 					   gap_penalty, intron_penalty,
 					   splice_penalty, minscore,
 					   align, width, reverse);
 		    if(best == 0)
 			est2genome_make_output(outfile, genome, est, bge,
-					       match, mismatch,
 					       gap_penalty, intron_penalty,
 					       splice_penalty, minscore,
 					       align, width, reverse);
@@ -392,14 +388,12 @@ int main(int argc, char **argv)
 				"reversed est and forward genome, but "
 				"splice sites imply REVERSED GENE\n");
 		    est2genome_make_output(outfile, genome, reversed_est,
-					   bge, match, mismatch,
-					   gap_penalty, intron_penalty,
+					   bge, gap_penalty, intron_penalty,
 					   splice_penalty, minscore,
 					   align, width, isreverse);
 		    if(best == 0)	/* print substandard alignment too */
 			est2genome_make_output(outfile, genome,
-					       reversed_est, rge, match,
-					       mismatch, gap_penalty,
+					       reversed_est, rge, gap_penalty,
 					       intron_penalty,
 					       splice_penalty, minscore,
 					       align, width, isreverse);
@@ -411,16 +405,14 @@ int main(int argc, char **argv)
 				"est and forward genome, and splice "
 				"sites imply forward gene\n");
 		    est2genome_make_output(outfile, genome, reversed_est,
-					   rge, match, mismatch,
-					   gap_penalty, intron_penalty,
+					   rge, gap_penalty, intron_penalty,
 					   splice_penalty, minscore,
 					   align, width, isreverse);
 
 		    if(best == 0)
 			est2genome_make_output(outfile, genome,
-					       reversed_est, bge, match,
-					       mismatch, gap_penalty,
-					       intron_penalty,
+					       reversed_est, bge,
+					       gap_penalty, intron_penalty,
 					       splice_penalty, minscore,
 					       align, width, isreverse);
 		}
@@ -431,13 +423,11 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(outfile,
 			"Note requested forward est and forward genome\n");
 	    est2genome_make_output(outfile, genome, est, fge,
-				   match, mismatch,
 				   gap_penalty, intron_penalty,
 				   splice_penalty, minscore,
 				   align, width, reverse);
 		if(best == 0)
 		    est2genome_make_output(outfile, genome, est, bge,
-					   match, mismatch,
 					   gap_penalty, intron_penalty,
 					   splice_penalty, minscore,
 					   align, width, reverse);
@@ -448,14 +438,12 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(outfile,"Note requested reversed est and "
 			"forward genome\n");
 	    est2genome_make_output(outfile, genome, reversed_est,
-				   rge, match, mismatch,
-				   gap_penalty, intron_penalty,
+				   rge, gap_penalty, intron_penalty,
 				   splice_penalty, minscore,
 				   align, width, isreverse);
 	    if( best == 0 )
 		est2genome_make_output(outfile, genome,
-				       reversed_est, bge, match,
-				       mismatch, gap_penalty,
+				       reversed_est, bge, gap_penalty,
 				       intron_penalty,
 				       splice_penalty, minscore,
 				       align, width, isreverse);
@@ -495,8 +483,6 @@ int main(int argc, char **argv)
 ** @param [r] genome [const AjPSeq] Undocumented
 ** @param [r] est [const AjPSeq] Undocumented
 ** @param [r] ge [const EmbPEstAlign] Undocumented
-** @param [r] match [ajint] Undocumented
-** @param [r] mismatch [ajint] Undocumented
 ** @param [r] gap_penalty [ajint] Undocumented
 ** @param [r] intron_penalty [ajint] Undocumented
 ** @param [r] splice_penalty [ajint] Undocumented
@@ -509,8 +495,7 @@ int main(int argc, char **argv)
 
 static void est2genome_make_output(AjPFile ofile,
 				   const AjPSeq genome, const AjPSeq est,
-				   const EmbPEstAlign ge, ajint match,
-				   ajint mismatch, ajint gap_penalty,
+				   const EmbPEstAlign ge, ajint gap_penalty,
 				   ajint intron_penalty, ajint splice_penalty,
 				   ajint minscore, ajint align, ajint width,
 				   ajint reverse)
@@ -519,11 +504,11 @@ static void est2genome_make_output(AjPFile ofile,
     if(ge->score >= minscore)
     {
 	embEstOutBlastStyle(ofile, genome, est, ge,
-			    match, mismatch, gap_penalty,
+			    gap_penalty,
 			    intron_penalty, splice_penalty, 1, reverse );
 	ajFmtPrintF( ofile, "\n");
 	embEstOutBlastStyle(ofile, genome, est, ge,
-			    match, mismatch, gap_penalty,
+			    gap_penalty,
 			    intron_penalty, splice_penalty, 0, reverse);
 
 	if(align)

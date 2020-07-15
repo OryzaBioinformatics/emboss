@@ -117,11 +117,12 @@ int main(int argc, char **argv)
     expn = ajDoubleLen(exparray);
 
     /* Delete keratin noise etc */
-    mwfilter_noisedel(exparray,expn,rmarray,rmn,tolerance,showdel,dlist);
+    mwfilter_noisedel(exparray,expn,rmarray,rmn,(ajint)tolerance,showdel,
+		      dlist);
     mwfilter_arraytidy(exparray,&expn);
 
     /* Delete oxymet & sodium noise etc */
-    mwfilter_moddel(exparray,expn,darray,dn,tolerance);
+    mwfilter_moddel(exparray,expn,darray,dn,(ajint)tolerance);
     mwfilter_arraytidy(exparray,&expn);
 
     for(i=0;i<expn;++i)
@@ -145,10 +146,10 @@ int main(int argc, char **argv)
 
     ajListDel(&dlist);
 
-
+    ajFileClose(&inf);
     ajFileClose(&outf);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

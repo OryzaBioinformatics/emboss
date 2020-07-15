@@ -63,7 +63,7 @@ static void primers_write_primer(AjPFile outfile,
 **
 ******************************************************************************/
 
-int main(int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
 
 /* Global details */
@@ -486,10 +486,10 @@ int main(int argc, char **argv, char **env)
 
 	while(ajSeqallNext(sequence, &seq))
 	{
-            begin = ajSeqallBegin(sequence);
-            end   = ajSeqallEnd(sequence);
+            begin = ajSeqallGetseqBegin(sequence);
+            end   = ajSeqallGetseqEnd(sequence);
 
-            strand = ajSeqStrCopy(seq);
+            strand = ajSeqGetSeqCopyS(seq);
 
             ajStrFmtUpper(&strand);
             ajStrAssignSubC(&substr,ajStrGetPtr(strand), begin-1, end-1);
@@ -497,7 +497,7 @@ int main(int argc, char **argv, char **env)
 /* send primer3 Primer "Sequence" parameters */
             primers_send_string(stream, "SEQUENCE", substr);
             primers_send_string(stream, "PRIMER_SEQUENCE_ID",
-				ajSeqGetName(seq));
+				ajSeqGetNameS(seq));
 /*
  *             primers_send_range(stream, "INCLUDED_REGION", included_region);
  */
@@ -534,13 +534,15 @@ int main(int argc, char **argv, char **env)
 
 /* tidy up */
     ajStrDel(&result);
+    ajSeqallDel(&sequence);
     ajSeqDel(&seq);
     ajStrDel(&strand);
     ajStrDel(&substr);
     ajFileClose(&outfile);
     ajStrDel(&taskstr);
+    ajRangeDel(&target);
 
-    ajExit();
+    embExit();
     return 0;
 }
 
@@ -606,8 +608,8 @@ static void primers_send_range(FILE * stream,
 {
 
   AjPStr str=ajStrNew();
-  ajint n;
-  ajint start, end;
+  ajuint n;
+  ajuint start, end;
 
   if (ajRangeNumber(value)) {
       (void) ajFmtPrintS(&str, "%s=", tag);
@@ -615,7 +617,7 @@ static void primers_send_range(FILE * stream,
       ajStrSetClear(&str);
       for (n=0; n < ajRangeNumber(value); n++) {
           ajRangeValues(value, n, &start, &end);
-          (void) ajFmtPrintS(&str, "%d,%d ", start, end-start+1);
+          (void) ajFmtPrintS(&str, "%u,%u ", start, end-start+1);
           primers_write(str, stream);
 	  ajStrSetClear(&str);
       }
@@ -848,7 +850,7 @@ static void primers_report (AjPFile outfile,
   AjPStr key = NULL;
   AjPStr value = NULL;
   AjBool gotsequenceid = AJFALSE;
-  AjPTable table;
+  AjPTable table = NULL;
 
 /* set up tokeniser for lines */
   linetokenhandle = ajStrTokenNewC(output, eol);
@@ -900,7 +902,7 @@ resulting primer are interleaved */
 /* debug */
     (void) ajDebug("key=%S\tvalue=%S\n", key, value);
 
-    ajTablePut(table, (const void *)key, (void *)value);
+    ajTablePut(table, (void *)key, (void *)value);
 
     (void) ajStrTokenDel(&keytokenhandle);
   }
@@ -909,9 +911,8 @@ resulting primer are interleaved */
   ajStrDel(&line);
   (void) ajStrTokenDel(&linetokenhandle);
   ajStrTableFree(&table);
-  ajStrDel(&key);
-  ajStrDel(&value);
 
+  return;
 }
 
 /* @funcstatic primers_output_report ******************************************

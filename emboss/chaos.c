@@ -2,10 +2,6 @@
 ** @author Ian Longden
 ** @@
 ** Chaos produces a chaos plot.
-** The original application is part of the ACEDB genome database
-** package, written by ** Richard Durbin (MRC LMB, UK)
-** rd@mrc-lmba.cam.ac.uk, and Jean Thierry-Mieg (CRBM du CNRS,
-** France) mieg@crbm1.cnusc.fr
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -59,7 +55,9 @@ int main(int argc, char **argv)
     sequence = ajAcdGetSeq("sequence");
     graph = ajAcdGetGraph("graph");
 
-    ajGraphOpenWin(graph,-0.1,1.4,-0.1,1.1);
+    ajGraphSetTitlePlus(graph, ajSeqGetUsaS(sequence));
+
+    ajGraphOpenWin(graph,(float)-0.1,(float)1.4,(float)-0.1,(float)1.1);
 
     str = ajStrNew();
 
@@ -84,19 +82,19 @@ int main(int argc, char **argv)
 	}
 	else if(*ptr=='g')
 	{
-	    x = (x+ 1.0)*0.5;
-	    y = (y+ 1.0)*0.5;
+	    x = (x+ (float)1.0)*(float)0.5;
+	    y = (y+ (float)1.0)*(float)0.5;
 	    g++;
 	}
 	else if(*ptr=='c')
 	{
 	    x *= 0.5;
-	    y = (y+1.0 )*0.5;
+	    y = (y+(float)1.0 )*(float)0.5;
 	    c++;
 	}
 	else if(*ptr=='t')
 	{
-	    x = (x+1.0 )*0.5;
+	    x = (x+(float)1.0 )*(float)0.5;
 	    y *= 0.5;
 	    t++;
 	}
@@ -106,7 +104,7 @@ int main(int argc, char **argv)
 	    y = 0.5;
 	    n++;
 	}
-	x2 = x + 0.0001;
+	x2 = x + (float) 0.0001;
 	ajGraphLines(&x,&y,&x2,&y,1);
 	ptr++;
     }
@@ -117,34 +115,34 @@ int main(int argc, char **argv)
     ajGraphTextStart(1.0,1.0,"G");
 
 
-    ajGraphSetCharSize(0.5);
+    ajGraphSetCharScale(0.5);
     sprintf(line,"A %d",a);
-    ajGraphTextStart(1.1,0.75,line);
+    ajGraphTextStart((float)1.1,(float)0.75,line);
     sprintf(line,"C %d",c);
-    ajGraphTextStart(1.1,0.70,line);
+    ajGraphTextStart((float)1.1,(float)0.70,line);
     sprintf(line,"T %d",t);
-    ajGraphTextStart(1.1,0.65,line);
+    ajGraphTextStart((float)1.1,(float)0.65,line);
     sprintf(line,"G %d",t);
-    ajGraphTextStart(1.1,0.60,line);
+    ajGraphTextStart((float)1.1,(float)0.60,line);
     sprintf(line,"N %d",n);
-    ajGraphTextStart(1.1,0.55,line);
+    ajGraphTextStart((float)1.1,(float)0.55,line);
 
 
     sprintf(line,"%cA %3.2f",'%',((float)a/(float)len)*
 	    100.0);
-    ajGraphTextStart(1.1,0.45,line);
+    ajGraphTextStart((float)1.1,(float)0.45,line);
     sprintf(line,"%cC %3.2f",'%',((float)c/(float)len)*
 	    100.0);
-    ajGraphTextStart(1.1,0.40,line);
+    ajGraphTextStart((float)1.1,(float)0.40,line);
     sprintf(line,"%cT %3.2f",'%',((float)t/(float)len)*
 	    100.0);
-    ajGraphTextStart(1.1,0.35,line);
+    ajGraphTextStart((float)1.1,(float)0.35,line);
     sprintf(line,"%cG %3.2f",'%',((float)g/(float)len)*
 	    100.0);
-    ajGraphTextStart(1.1,0.30,line);
+    ajGraphTextStart((float)1.1,(float)0.30,line);
     sprintf(line,"%cN %3.2f",'%',((float)n/(float)len)*
 	    100.0);
-    ajGraphTextStart(1.1,0.25,line);
+    ajGraphTextStart((float)1.1,(float)0.25,line);
 
 
     ajGraphCloseWin();
@@ -152,7 +150,7 @@ int main(int argc, char **argv)
     ajGraphxyDel(&graph);
     ajStrDel(&str);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

@@ -54,13 +54,13 @@ int main(int argc, char **argv)
 
     if(count != n)
     {
-	ajSeqWriteClose(seqout);
+	ajSeqoutClose(seqout);
 	ajFatal("No such sequence - only %d sequences were input.", count);
-	return 1;
+	embExitBad();
     }
 
-    ajSeqWrite(seqout, seq);
-    ajSeqWriteClose(seqout);
+    ajSeqoutWriteSeq(seqout, seq);
+    ajSeqoutClose(seqout);
 
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);

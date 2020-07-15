@@ -34,7 +34,7 @@ static void seqmatchall_listPrint(AjPAlign align, const AjPList list);
 static const AjPSeq seq2;
 static const AjPSeq seq1;
 
-ajint statwordlen;
+ajuint statwordlen;
 
 
 
@@ -52,8 +52,8 @@ int main(int argc, char **argv)
     AjPSeqset seqset;
     AjPAlign align = NULL;
 
-    ajint i;
-    ajint j;
+    ajuint i;
+    ajuint j;
 
 
     embInit("seqmatchall", argc, argv);
@@ -65,17 +65,17 @@ int main(int argc, char **argv)
     /* ajAlignSetExternal(align, ajTrue); */
     embWordLength(statwordlen);
 
-    for(i=0;i<ajSeqsetSize(seqset);i++)
+    for(i=0;i<ajSeqsetGetSize(seqset);i++)
     {
-	seq1 = ajSeqsetGetSeq(seqset,i);
+	seq1 = ajSeqsetGetseqSeq(seqset,i);
 	seq1MatchTable = 0;
 	if(ajSeqGetLen(seq1) > statwordlen)
 	{
 	    if(embWordGetTable(&seq1MatchTable, seq1)) /* get table of words */
 	    {
-		for(j=i+1;j<ajSeqsetSize(seqset);j++)
+		for(j=i+1;j<ajSeqsetGetSize(seqset);j++)
 		{
-		    seq2 = ajSeqsetGetSeq(seqset,j);
+		    seq2 = ajSeqsetGetseqSeq(seqset,j);
 		    if(ajSeqGetLen(seq2) > statwordlen)
 		    {
 			matchlist = embWordBuildMatchTable(seq1MatchTable,

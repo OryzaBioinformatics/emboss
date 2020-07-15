@@ -134,10 +134,10 @@ static void prophecy_simple_matrix(const AjPSeqset seqset, AjPFile outf,
 				   ajint thresh)
 {
     const char *p;
-    ajint nseqs;
-    ajint mlen;
+    ajuint nseqs;
+    ajuint mlen;
     ajint len;
-    ajint i;
+    ajuint i;
     ajint j;
     ajint x;
     ajint px;
@@ -146,17 +146,18 @@ static void prophecy_simple_matrix(const AjPSeqset seqset, AjPFile outf,
     ajint score;
     ajint *matrix[AZ+2];
     AjPStr cons = NULL;
-
-    nseqs = ajSeqsetSize(seqset);
+    size_t stlen;
+    
+    nseqs = ajSeqsetGetSize(seqset);
     if(nseqs<2)
 	ajFatal("Insufficient sequences (%d) to create a matrix",nseqs);
 
-    mlen = ajSeqsetLen(seqset);
+    mlen = ajSeqsetGetLen(seqset);
 
     /* Check sequences are the same length. Warn if not */
     for(i=0;i<nseqs;++i)
     {
-	p = ajSeqsetSeq(seqset,i);
+	p = ajSeqsetGetseqSeqC(seqset,i);
 	if(strlen(p)!=mlen)
 	    ajWarn("Sequence lengths are not equal!");
     }
@@ -167,8 +168,9 @@ static void prophecy_simple_matrix(const AjPSeqset seqset, AjPFile outf,
     /* Load matrix */
     for(i=0;i<nseqs;++i)
     {
-	p = ajSeqsetSeq(seqset,i);
-	len = strlen(p);
+	p = ajSeqsetGetseqSeqC(seqset,i);
+	stlen = strlen(p);
+	len = (ajint) stlen;
 
 	for(j=0;j<len;++j)
 	{
@@ -256,11 +258,11 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset,
     float **sub = NULL;
 
     float **mat;
-    ajint nseqs;
-    ajint mlen;
-    ajint i;
-    ajint j;
-    static char *valid="ACDEFGHIKLMNPQRSTVWY";
+    ajuint nseqs;
+    ajuint mlen;
+    ajuint i;
+    ajuint j;
+    static const char *valid="ACDEFGHIKLMNPQRSTVWY";
     const char *p;
     const char *q;
     float score;
@@ -283,8 +285,8 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset,
     ajMatrixfRead(&imtx,mname);
     ajStrDel(&mname);
 
-    nseqs = ajSeqsetSize(seqset);
-    mlen  = ajSeqsetLen(seqset);
+    nseqs = ajSeqsetGetSize(seqset);
+    mlen  = ajSeqsetGetLen(seqset);
 
     sub = ajMatrixfArray(imtx);
     cvt = ajMatrixfCvt(imtx);
@@ -301,7 +303,7 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset,
 	gsum = 0;
 	for(j=0;j<nseqs;++j)
 	{
-	    p=ajSeqsetSeq(seqset,j);
+	    p=ajSeqsetGetseqSeqC(seqset,j);
 	    if(i>=strlen(p))
 		continue;
 
@@ -309,17 +311,21 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset,
 		continue;
 	    pos = i;
 
-	    while(pos>-1 && ajAZToInt(p[pos])==27)
+	    while(pos>=0 && ajAZToInt(p[pos])==27)
 		--pos;
 	    start = ++pos;
 	    pos = i;
 
-	    while(pos<mlen && ajAZToInt(p[pos])==27)
+	    while(pos<(ajint)mlen && ajAZToInt(p[pos])==27)
 		++pos;
 	    end  = pos-1;
 	    gsum = AJMAX(gsum,(end-start)+1);
+	    ajDebug("Gribskov gaps pos:%d seq:%d %d..%d (%d)\n",
+		    j, i, start, end, gsum);
 	}
 	gaps[i] = gsum;
+	ajDebug("Gribskov gaps[%d] %d\n",
+		    i, gsum);
     }
 
 
@@ -331,8 +337,8 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset,
 	q = valid;
 	while(*q)
 	{
-	    mmax=(mmax>sub[ajSeqCvtK(cvt,*p)][ajSeqCvtK(cvt,*q)]) ? mmax :
-		sub[ajSeqCvtK(cvt,*p)][ajSeqCvtK(cvt,*q)];
+	    mmax=(mmax>sub[ajSeqcvtGetCodeK(cvt,*p)][ajSeqcvtGetCodeK(cvt,*q)]) ? mmax :
+		sub[ajSeqcvtGetCodeK(cvt,*p)][ajSeqcvtGetCodeK(cvt,*q)];
 	    ++q;
 	}
 	++p;
@@ -351,10 +357,10 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset,
     for(i=0;i<mlen;++i)
 	for(j=0;j<nseqs;++j)
 	{
-	    p = ajSeqsetSeq(seqset,j);
+	    p = ajSeqsetGetseqSeqC(seqset,j);
 	    if(i>=strlen(p))
 		continue;
-	    weights[i][ajAZToInt(p[i])] += ajSeqsetWeight(seqset,j);
+	    weights[i][ajAZToInt(p[i])] += ajSeqsetGetseqWeight(seqset,j);
 	}
 
 
@@ -393,7 +399,7 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset,
 	    while(*q)
 	    {
 		score = weights[i][ajAZToInt(*q)];
-		score *= (float)(sub[ajSeqCvtK(cvt,*p)][ajSeqCvtK(cvt,*q)]);
+		score *= (float)(sub[ajSeqcvtGetCodeK(cvt,*p)][ajSeqcvtGetCodeK(cvt,*q)]);
 		sum += score;
 		++q;
 	    }
@@ -413,6 +419,9 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset,
 	for(j=0;j<AZ;++j)
 	    pmax=(pmax>mat[i][j]) ? pmax : mat[i][j];
 	psum += pmax;
+
+	ajDebug("matrix score [%d] %.3f psum: %.3f\n",
+		i, pmax, psum);
     }
 
     /* Print matrix */
@@ -483,11 +492,11 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
 {
     float **sub = NULL;
     float **mat;
-    ajint nseqs;
-    ajint mlen;
-    ajint i;
-    ajint j;
-    static char *valid="ACDEFGHIKLMNPQRSTVWY";
+    ajuint nseqs;
+    ajuint mlen;
+    ajuint i;
+    ajuint j;
+    static const char *valid="ACDEFGHIKLMNPQRSTVWY";
     const char *p;
     const char *q;
     float score;
@@ -508,8 +517,8 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
     ajint px;
 
 
-    nseqs = ajSeqsetSize(seqset);
-    mlen  = ajSeqsetLen(seqset);
+    nseqs = ajSeqsetGetSize(seqset);
+    mlen  = ajSeqsetGetLen(seqset);
 
     sub = ajMatrixfArray(imtx);
     cvt = ajMatrixfCvt(imtx);
@@ -525,7 +534,7 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
 	gsum = 0;
 	for(j=0;j<nseqs;++j)
 	{
-	    p=ajSeqsetSeq(seqset,j);
+	    p=ajSeqsetGetseqSeqC(seqset,j);
 	    if(i>=strlen(p))
 		continue;
 
@@ -533,12 +542,12 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
 		continue; /* if not a gap */
 
 	    pos = i;
-	    while(pos>-1 && ajAZToInt(p[pos])==27)
+	    while(pos>=0 && ajAZToInt(p[pos])==27)
 		--pos;
 	    start = ++pos;
 
 	    pos = i;
-	    while(pos<mlen && ajAZToInt(p[pos])==27)
+	    while(pos<(ajint)mlen && ajAZToInt(p[pos])==27)
 		++pos;
 	    end = pos-1;
 	    gsum = AJMAX(gsum,(end-start)+1);
@@ -554,8 +563,8 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
 	q=valid;
 	while(*q)
 	{
-	    mmax = (mmax>sub[ajSeqCvtK(cvt,*p)][ajSeqCvtK(cvt,*q)]) ? mmax :
-		sub[ajSeqCvtK(cvt,*p)][ajSeqCvtK(cvt,*q)];
+	    mmax = (mmax>sub[ajSeqcvtGetCodeK(cvt,*p)][ajSeqcvtGetCodeK(cvt,*q)]) ? mmax :
+		(ajint)sub[ajSeqcvtGetCodeK(cvt,*p)][ajSeqcvtGetCodeK(cvt,*q)];
 	    ++q;
 	}
 	++p;
@@ -574,10 +583,10 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
     for(i=0;i<mlen;++i)
 	for(j=0;j<nseqs;++j)
 	{
-	    p = ajSeqsetSeq(seqset,j);
+	    p = ajSeqsetGetseqSeqC(seqset,j);
 	    if(i>=strlen(p))
 		continue;
-	    weights[i][ajAZToInt(p[i])] += ajSeqsetWeight(seqset,j);
+	    weights[i][ajAZToInt(p[i])] += ajSeqsetGetseqWeight(seqset,j);
 	}
 
     px = -INT_MAX;
@@ -608,7 +617,7 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
     for(i=0;i<mlen;++i)
 	for(j=0;j<HENIKOFF_LENGTH-1;++j)
 	    if(weights[i][j])
-		weights[i][j] = 1.0/(weights[i][j]*(float)pcnt[i]);
+		weights[i][j] = (float)1.0/(weights[i][j]*(float)pcnt[i]);
 
 
     /* Create the profile matrix n*HENIKOFF_LENGTH */
@@ -625,7 +634,7 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
 	    while(*q)
 	    {
 		score = weights[i][ajAZToInt(*q)];
-		score *= sub[ajSeqCvtK(cvt,*p)][ajSeqCvtK(cvt,*q)];
+		score *= sub[ajSeqcvtGetCodeK(cvt,*p)][ajSeqcvtGetCodeK(cvt,*q)];
 		sum += score;
 		++q;
 	    }

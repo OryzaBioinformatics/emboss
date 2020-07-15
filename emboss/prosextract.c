@@ -241,7 +241,7 @@ int main(int argc, char **argv)
     ajFileClose(&infdoc);
     ajFileClose(&outf);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

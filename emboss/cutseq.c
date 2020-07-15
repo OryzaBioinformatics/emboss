@@ -59,13 +59,13 @@ int main(int argc, char **argv)
 
     ajSeqAssignSeqS(seq, str);
 
-    ajSeqWrite(seqout, seq);
-    ajSeqWriteClose(seqout);
+    ajSeqoutWriteSeq(seqout, seq);
+    ajSeqoutClose(seqout);
 
     ajStrDel(&str);
     ajSeqDel(&seq);
     ajSeqoutDel(&seqout);
 
-    ajExit();
+    embExit();
     return 0;
 }

@@ -34,6 +34,8 @@
 
 int main(int argc, char **argv)
 {
+    ajAcdSetControl("acdnocommandline");
+
     if(argc < 2)
 	ajFatal("Error - must specify an application to compile\n");
     else
@@ -41,7 +43,7 @@ int main(int argc, char **argv)
 
     ajAcdExit(ajTrue);		/* turn off the 'never used' ACD warnings */
 
-    ajExit();
+    embExit();
 
     return 0;
 }

@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     trnTable = ajTrnNewI(table);
 
     /* shift values of translate region to match -sbegin=n parameter */
-    /*  ajRangeBegin(regions, ajSeqallBegin(seqall));*/
+    /*  ajRangeBegin(regions, ajSeqallGetseqBegin(seqall));*/
 
 
     while(ajSeqallNext(seqall, &seq))
@@ -113,14 +113,14 @@ int main(int argc, char **argv)
                 if(clean)
                     transeq_Clean(pep); /* clean after the trim */
 
-	        ajSeqAllWrite(seqout, pep);
+	        ajSeqoutWriteSeq(seqout, pep);
 	        ajSeqDel(&pep);
 	    }
 	}
 	ajRangeDel(&seqregions);
     }
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
 
     ajTrnDel(&trnTable);
     ajSeqallDel(&seqall);

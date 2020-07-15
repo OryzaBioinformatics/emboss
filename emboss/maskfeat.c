@@ -26,7 +26,7 @@
 
 
 static void maskfeat_FeatSeqMask(AjPSeq seq, const AjPStr type, 
-				 const AjPStr maskchar, AjBool tolower);
+				 const AjPStr maskchar, AjBool cvttolower);
 
 static void maskfeat_StrToLower(AjPStr *str, ajint begin, ajint end);
 
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     AjPSeqout seqout = NULL;
     AjPStr type;
     AjPStr maskchar;
-    AjBool tolower;
+    AjBool cvttolower;
 
     embInit("maskfeat", argc, argv);
 
@@ -55,17 +55,17 @@ int main(int argc, char **argv)
     seqout   = ajAcdGetSeqout("outseq");
     type     = ajAcdGetString("type");
     maskchar = ajAcdGetString("maskchar");
-    tolower  = ajAcdGetToggle("tolower");
+    cvttolower  = ajAcdGetToggle("tolower");
 
     while(ajSeqallNext(seqall, &seq))
     {
 	/* mask the regions */
-	maskfeat_FeatSeqMask(seq, type, maskchar, tolower);
+	maskfeat_FeatSeqMask(seq, type, maskchar, cvttolower);
 
-	ajSeqAllWrite(seqout, seq);
+	ajSeqoutWriteSeq(seqout, seq);
     }
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
 
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);
@@ -89,14 +89,14 @@ int main(int argc, char **argv)
 ** @param [r] type [const AjPStr] types of features to mask as
 **                                wildcarded string
 ** @param [r] maskchar [const AjPStr] character to mask with
-** @param [r] tolower [AjBool] if True then 'mask' by changing to lower-case
+** @param [r] cvttolower [AjBool] if True then 'mask' by changing to lower-case
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 
 static void maskfeat_FeatSeqMask(AjPSeq seq, const AjPStr type, 
-				 const AjPStr maskchar, AjBool tolower)
+				 const AjPStr maskchar, AjBool cvttolower)
 {
     AjIList    iter = NULL ;
     AjPFeature gf   = NULL ;
@@ -109,10 +109,10 @@ static void maskfeat_FeatSeqMask(AjPSeq seq, const AjPStr type,
 
 
     /*
-    ** want lower-case if 'tolower' or 'maskchar' is null
+    ** want lower-case if 'cvttolower' or 'maskchar' is null
     ** or it is the SPACE character
     */
-    lower = (tolower ||
+    lower = (cvttolower ||
 	     ajStrGetLen(maskchar) == 0 ||
 	     ajStrMatchC(maskchar, " "));
 

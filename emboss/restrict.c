@@ -1,4 +1,4 @@
- /* @source restrict application
+/* @source restrict application
  **
  ** Reports restriction enzyme cleavage sites
  ** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
@@ -41,7 +41,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 				ajint sitelen, AjBool limit,
 				const AjPTable table,
 				AjBool alpha, AjBool frags,
-				AjBool nameit, AjBool ifrag);
+				AjBool ifrag);
 static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
 			       ajint hits, ajint begin, ajint end,
 			       AjBool ambiguity, ajint mincut, ajint maxcut,
@@ -50,7 +50,8 @@ static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
 			       const AjPTable table,
 			       AjBool alpha, AjBool frags,
 			       AjBool nameit);
-static void restrict_read_equiv(AjPFile equfile, AjPTable table);
+static void restrict_read_equiv(AjPFile equfile, AjPTable table,
+				AjBool commercial);
 static void restrict_read_file_of_enzyme_names(AjPStr *enzymes);
 static ajint restrict_enzcompare(const void *a, const void *b);
 
@@ -153,7 +154,7 @@ int main(int argc, char **argv)
 	    limit = ajFalse;
 	else
 	{
-	    restrict_read_equiv(equfile,table);
+	    restrict_read_equiv(equfile,table,commercial);
 	    ajFileClose(&equfile);
 	}
     }
@@ -162,11 +163,16 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin = ajSeqallBegin(seqall);
-	end   = ajSeqallEnd(seqall);
+	begin = ajSeqallGetseqBegin(seqall);
+	end   = ajSeqallGetseqEnd(seqall);
 	ajFileSeek(enzfile,0L,0);
 
 	TabRpt = ajFeattableNewSeq(seq);
+
+	if(frags)
+	  ajReportSetTailC(report, "Fragment lengths:\n");
+	else
+	  ajReportSetTailC(report, "");
 
 	l = ajListNew();
 	hits = embPatRestrictMatch(seq,begin,end,enzfile,enzymes,sitelen,
@@ -183,7 +189,7 @@ int main(int argc, char **argv)
 				ambiguity,min,max,
 				plasmid,blunt,sticky,sitelen,
 				limit,table,
-				alpha,frags,nameit,ifrag);
+				alpha,frags,ifrag);
 	    if(outf)
 		restrict_printHits(outf,l,name,hits,begin,end,
 				   ambiguity,min,max,
@@ -192,7 +198,9 @@ int main(int argc, char **argv)
 				   alpha,frags,nameit);
 	    ajStrDel(&name);
 	}
-
+	else
+	    ajReportSetTailC(report,"");
+	
 	ajReportWrite(report, TabRpt, seq);
 	ajFeattableDel(&TabRpt);
 
@@ -435,7 +443,6 @@ static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
 ** @param [r] table [const AjPTable] supplier table
 ** @param [r] alpha [AjBool] alphabetic sort
 ** @param [r] frags [AjBool] show fragment lengths
-** @param [r] nameit [AjBool] show name
 ** @param [r] ifrag [AjBool] show fragments for individual REs
 ** @@
 ******************************************************************************/
@@ -448,7 +455,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 				ajint sitelen, AjBool limit,
 				const AjPTable table,
 				AjBool alpha, AjBool frags,
-				AjBool nameit, AjBool ifrag)
+				AjBool ifrag)
 {
     AjPFeature gf  = NULL;
     EmbPMatMatch m = NULL;
@@ -531,6 +538,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 		ajStrAssignS(&m->cod,value);
 	    ajListPushApp(l,(void *)m);
 	}
+
     
     if(alpha && limit)
 	ajListSort2(l,embPatRestrictNameCompare, embPatRestrictStartCompare);
@@ -543,13 +551,18 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 	    continue;
 
 	if(m->forward)
+	{
 	    cend = m->start + ajStrGetLen(m->pat) - 1;
-	else
-	    cend = m->start - ajStrGetLen(m->pat) + 1;
-	
-
-	gf = ajFeatNewII (TabRpt,
+	    gf = ajFeatNewII (TabRpt,
 			   m->start, cend);
+	}
+	else
+	{
+	    cend = m->start - ajStrGetLen(m->pat) + 1;
+	    gf = ajFeatNewIIRev(TabRpt,
+			   m->start, cend);
+	}
+
 	ajFmtPrintS(&tmpStr, "*enzyme %S", m->cod);
 	ajFeatTagAdd(gf,  NULL, tmpStr);
 	ajFmtPrintS(&tmpStr, "*site %S", m->pat);
@@ -577,14 +590,13 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
     }
 
 
+    /* reuse for report tail */
     ajStrAssignC(&tmpStr, "");
 
 
     if(frags)
     {
-        ajStrAssignC(&tmpStr, "");
 	ajSortIntInc(fa,fn);
-	ajFmtPrintAppS(&tmpStr,"Fragment lengths:\n");
 
 	if(!fn || (fn==1 && plasmid))
 	    ajFmtPrintAppS(&tmpStr,"    %d\n",end-begin+1);
@@ -761,8 +773,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
     if(ifrag)
 	ajStrAppendS(&tmpStr,fragStr);
     
-    ajReportSetTail (report, tmpStr);
-
+    ajReportAppendTail (report, tmpStr);
     
 
     for(i=0;i<hits;++i)
@@ -791,11 +802,14 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 **
 ** @param [u] equfile [AjPFile] equivalent name file
 ** @param [w] table [AjPTable]  equivalent names
+** @param [r] commercial [AjBool] only commercial suppliers (for asterisk
+**                                removal
 ** @@
 ******************************************************************************/
 
 
-static void restrict_read_equiv(AjPFile equfile, AjPTable table)
+static void restrict_read_equiv(AjPFile equfile, AjPTable table,
+				AjBool commercial)
 {
     AjPStr line;
     AjPStr key;
@@ -816,7 +830,9 @@ static void restrict_read_equiv(AjPFile equfile, AjPTable table)
 	key   = ajStrNewC(p);
 	p     = ajSysStrtok(NULL," \t\n");
 	value = ajStrNewC(p);
-	ajTablePut(table,(const void *)key, (void *)value);
+	if(!commercial)
+	    ajStrTrimEndC(&value,"*");
+	ajTablePut(table,(void *)key, (void *)value);
     }
 
     ajStrDel(&line);
@@ -887,6 +903,6 @@ static void restrict_read_file_of_enzyme_names(AjPStr *enzymes)
 
 static ajint restrict_enzcompare(const void *a, const void *b)
 {
-    return strcmp((*(EmbPMatMatch*)a)->cod->Ptr,
-		  (*(EmbPMatMatch*)b)->cod->Ptr);
+    return strcmp((*(EmbPMatMatch const *)a)->cod->Ptr,
+		  (*(EmbPMatMatch const *)b)->cod->Ptr);
 }

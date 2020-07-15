@@ -34,11 +34,11 @@
 
 
 
-static void newcpgreport_findbases(const AjPStr substr, ajint begin, ajint len,
+static void newcpgreport_findbases(const AjPStr substr, ajint len,
 				   ajint window, ajint shift, float *obsexp,
 				   float *xypc, const AjPStr bases,
 				   float *obsexpmax, ajint *plstart,
-				   ajint *plend);
+				   ajint *plotend);
 static void newcpgreport_countbases(const char *seq, const char *bases,
 				    ajint window,
 				    ajint *cx, ajint *cy, ajint *cxpy);
@@ -85,8 +85,8 @@ int main(int argc, char **argv)
 
     ajint window;
     ajint shift;
-    ajint plstart;
-    ajint plend;
+    ajint plotstart;
+    ajint plotend;
 
     float  *xypc   = NULL;
     float  *obsexp = NULL;
@@ -113,9 +113,9 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin = ajSeqallBegin(seqall);
-	end   = ajSeqallEnd(seqall);
-	strand = ajSeqStrCopy(seq);
+	begin = ajSeqallGetseqBegin(seqall);
+	end   = ajSeqallGetseqEnd(seqall);
+	strand = ajSeqGetSeqCopyS(seq);
 	ajStrFmtUpper(&strand);
 
 	ajStrAssignSubC(&substr,ajStrGetPtr(strand),--begin,--end);
@@ -132,11 +132,11 @@ int main(int argc, char **argv)
 	    obsexp[i]=xypc[i]=0.0;
 
 
-	newcpgreport_findbases(substr, begin, len, window, shift, obsexp,
-			       xypc, bases, &obsexpmax, &plstart, &plend);
+	newcpgreport_findbases(substr, len, window, shift, obsexp,
+			       xypc, bases, &obsexpmax, &plotstart, &plotend);
 
 	newcpgreport_identify(outf, obsexp, xypc, thresh, 0, len, shift,
-			      ajStrGetPtr(bases), ajSeqName(seq), minlen,
+			      ajStrGetPtr(bases), ajSeqGetNameC(seq), minlen,
 			      minobsexp, minpc, ajStrGetPtr(strand));
 
 	ajStrDel(&strand);
@@ -167,7 +167,6 @@ int main(int argc, char **argv)
 ** Undocumented.
 **
 ** @param [r] substr [const AjPStr] sequence
-** @param [r] begin [ajint] start in sequence
 ** @param [r] len [ajint] length
 ** @param [r] window [ajint] window
 ** @param [r] shift [ajint] shift
@@ -175,17 +174,17 @@ int main(int argc, char **argv)
 ** @param [w] xypc [float*] CG content
 ** @param [r] bases [const AjPStr] bases to look for
 ** @param [w] obsexpmax [float*] maximum obsexp
-** @param [w] plstart [ajint*] start
-** @param [w] plend [ajint*] end
+** @param [w] plotstart [ajint*] start
+** @param [w] plotend [ajint*] end
 ** @@
 ******************************************************************************/
 
 
-static void newcpgreport_findbases(const AjPStr substr, ajint begin, ajint len,
+static void newcpgreport_findbases(const AjPStr substr, ajint len,
 				   ajint window, ajint shift, float *obsexp,
 				   float *xypc, const AjPStr bases,
-				   float *obsexpmax, ajint *plstart,
-				   ajint *plend)
+				   float *obsexpmax, ajint *plotstart,
+				   ajint *plotend)
 {
     ajint cxpy;
     ajint cx;
@@ -196,7 +195,7 @@ static void newcpgreport_findbases(const AjPStr substr, ajint begin, ajint len,
 
 
     float obs;
-    float exp;
+    float expect;
     ajint i;
     ajint j = 0;
     ajint offset;
@@ -207,7 +206,7 @@ static void newcpgreport_findbases(const AjPStr substr, ajint begin, ajint len,
     windowf = (float)window;
     *obsexpmax = 0.0;
     offset     = window/2;
-    *plstart   = offset;
+    *plotstart   = offset;
     q = ajStrGetPtr(bases);
 
     for(i=0; i<(len-window+1);i+=shift)
@@ -216,20 +215,20 @@ static void newcpgreport_findbases(const AjPStr substr, ajint begin, ajint len,
 	p = ajStrGetPtr(substr) + i;
 	newcpgreport_countbases(p, q, window, &cx, &cy, &cxpy);
 	obs = (float) cxpy;
-	exp = (float)(cx*cy)/windowf;
+	expect = (float)(cx*cy)/windowf;
 	cxf = (float)cx;
 	cyf = (float)cy;
-	if(!exp)
+	if(!expect)
 	    obsexp[j] = 0.0;
 	else
 	{
-	    obsexp[j]  = obs/exp;
+	    obsexp[j]  = obs/expect;
 	    *obsexpmax = (*obsexpmax > obsexp[j]) ? *obsexpmax : obsexp[j];
 	}
-	xypc[j] = (cxf/windowf)*100.0 + (cyf/windowf)*100.0;
+	xypc[j] = (cxf/windowf)*(float)100.0 + (cyf/windowf)*(float)100.0;
     }
 
-    *plend = j;
+    *plotend = j;
     return;
 }
 
@@ -331,7 +330,6 @@ static void newcpgreport_identify(AjPFile outf, const float *obsexp,
 
     ajint i;
     ajint pos;
-    ajint posmin;
 
     ajint sumlen;
     ajint first;
@@ -341,7 +339,7 @@ static void newcpgreport_identify(AjPFile outf, const float *obsexp,
 	thresh[i] = ajFalse;
 
     sumlen=0;
-    posmin = begin;
+
     for(pos=0,first=0;pos<(len-avwindow*shift);pos+=shift)
     {
 	sumpc = sumobsexp = 0.0;
@@ -533,7 +531,7 @@ static void newcpgreport_compisl(AjPFile outf, const char *p, ajint begin1,
     }
 
     sumcg = C + G;
-    pcg   = ((float)sumcg/(float)len) * 100.;
+    pcg   = ((float)sumcg/(float)len) * (float)100.;
     oe    = (float)(CG * len)/(float)(C * G);
 
     ajFmtPrintF(outf,"FT                    /Sum C+G=%d\n",sumcg);

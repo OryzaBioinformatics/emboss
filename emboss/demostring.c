@@ -181,6 +181,6 @@ int main(int argc, char **argv)
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
-    ajExit();
+    embExit();
     return 0;
 }

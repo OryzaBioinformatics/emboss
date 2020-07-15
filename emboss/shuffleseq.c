@@ -53,11 +53,11 @@ int main(int argc, char **argv)
 	    seq_str = ajSeqGetSeqCopyS(seq);
 	    ajStrRandom(&seq_str);
 	    ajSeqAssignSeqS(seq, seq_str);
-	    ajSeqAllWrite(seqout, seq);
+	    ajSeqoutWriteSeq(seqout, seq);
 	    ajStrDel(&seq_str);
 	}
 
-    ajSeqWriteClose(seqout);
+    ajSeqoutClose(seqout);
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);
     ajSeqoutDel(&seqout);

@@ -45,7 +45,7 @@
 int main(int argc, char **argv)
 {
     ajint   nseqs;
-    ajint   mlen;
+    ajuint   mlen;
     ajint   i;
     ajint   identity;
     float fplural;
@@ -69,22 +69,23 @@ int main(int argc, char **argv)
     seqout    = ajAcdGetSeqout("outseq");
     name      = ajAcdGetString ("name");
 
-    nseqs = ajSeqsetSize(seqset);
+    nseqs = ajSeqsetGetSize(seqset);
     if(nseqs<2)
 	ajFatal("Insufficient sequences (%d) to create a matrix",nseqs);
 
-    mlen = ajSeqsetLen(seqset);
+    mlen = ajSeqsetGetLen(seqset);
     for(i=0;i<nseqs;++i)	/* check sequences are same length */
     {
-	p = ajSeqsetSeq(seqset,i);
+	p = ajSeqsetGetseqSeqC(seqset,i);
 	if(strlen(p)!=mlen)
 	{
-	    ajWarn("Sequence lengths are not equal!");
+	    ajWarn("Sequence lengths are not equal: expect %d '%S' is %d",
+		   mlen, ajSeqsetGetseqNameS(seqset, i), p);
 	    break;
 	}
     }
 
-    ajSeqsetToUpper(seqset);
+    ajSeqsetFmtUpper(seqset);
 
     cons = ajStrNew();
     embConsCalc (seqset, cmpmatrix, nseqs, mlen,
@@ -100,12 +101,12 @@ int main(int argc, char **argv)
       ajSeqSetProt(seqo);
 
     if(name == NULL)
-	ajSeqAssignNameS(seqo,ajSeqsetGetName(seqset));
+	ajSeqAssignNameS(seqo,ajSeqsetGetNameS(seqset));
     else
 	ajSeqAssignNameS(seqo,name);
 
-    ajSeqWrite(seqout,seqo);
-    ajSeqWriteClose(seqout);
+    ajSeqoutWriteSeq(seqout,seqo);
+    ajSeqoutClose(seqout);
 
     ajStrDel(&cons);
     ajSeqDel(&seqo);
@@ -114,7 +115,7 @@ int main(int argc, char **argv)
     ajSeqoutDel(&seqout);
     ajStrDel(&name);
 
-    ajExit ();
+    embExit();
 
     return 0;
 }

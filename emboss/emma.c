@@ -35,10 +35,10 @@ static AjPStr emma_getUniqueFileName(void);
 int main(int argc, char **argv, char **env)
 {
 
-    AjPSeqall seqall;
-    AjPFile dend_outfile;
+    AjPSeqall seqall = NULL;
+    AjPFile dend_outfile = NULL;
     AjPStr tmp_dendfilename = NULL;
-    AjPFile tmp_dendfile;
+    AjPFile tmp_dendfile = NULL;
 
     AjPStr tmp_aln_outfile = NULL;
     AjPSeqset seqset = NULL;
@@ -58,8 +58,8 @@ int main(int argc, char **argv, char **env)
     ajint window;
     AjBool nopercent;
 
-    AjPStr *pw_matrix;
-    AjPStr *pw_dna_matrix ;
+    AjPStr pw_matrix = NULL;
+    AjPStr pw_dna_matrix  = NULL;
     AjPFile pairwise_matrix = NULL;
     float pw_gapc;
     float pw_gapv;
@@ -71,12 +71,11 @@ int main(int argc, char **argv, char **env)
 
     AjPStr m1str = NULL;
     AjPStr m2str = NULL;
-    AjPStr m3str = NULL;
     char   m1c   = '\0';
     char   m2c   = '\0';
 
-    AjPStr *matrix;
-    AjPStr *dna_matrix;
+    AjPStr matrix = NULL;
+    AjPStr dna_matrix = NULL;
     AjPFile ma_matrix = NULL;
     float gapc;
     float gapv;
@@ -89,11 +88,11 @@ int main(int argc, char **argv, char **env)
 
 
     AjPSeqout fil_file = NULL;
-    AjPSeq seq;
+    AjPSeq seq = NULL;
 
-    char* prog_default = "clustalw";
+    const char* prog_default = "clustalw";
     AjPStr cmd = NULL;
-    AjPStr tmp;
+    AjPStr tmp = NULL;
     AjPStr tmpFilename;
     AjPStr line = NULL;
     ajint nb = 0;
@@ -107,7 +106,6 @@ int main(int argc, char **argv, char **env)
     pwdstr = ajStrNew();
     m1str  = ajStrNew();
     m2str  = ajStrNew();
-    m3str  = ajStrNew();
 
 
     seqall = ajAcdGetSeqall("sequence");
@@ -130,8 +128,8 @@ int main(int argc, char **argv, char **env)
     window    = ajAcdGetInt("window");
     nopercent = ajAcdGetBool("nopercent");
 
-    pw_matrix = ajAcdGetList("pwmatrix");
-    pwmc = *ajStrGetPtr(*pw_matrix);
+    pw_matrix = ajAcdGetListSingle("pwmatrix");
+    pwmc = ajStrGetCharFirst(pw_matrix);
 
     if(pwmc=='b')
 	ajStrAssignC(&pwmstr,"blosum");
@@ -145,8 +143,8 @@ int main(int argc, char **argv, char **env)
 	ajStrAssignC(&pwmstr,"own");
 
 
-    pw_dna_matrix = ajAcdGetList("pwdnamatrix");
-    pwdc = *ajStrGetPtr(*pw_dna_matrix);
+    pw_dna_matrix = ajAcdGetListSingle("pwdnamatrix");
+    pwdc = ajStrGetCharFirst(pw_dna_matrix);
 
     if(pwdc=='i')
 	ajStrAssignC(&pwdstr,"iub");
@@ -160,8 +158,8 @@ int main(int argc, char **argv, char **env)
     pw_gapc = ajAcdGetFloat( "pwgapopen");
     pw_gapv = ajAcdGetFloat( "pwgapextend");
 
-    matrix = ajAcdGetList( "matrix");
-    m1c = *ajStrGetPtr(*matrix);
+    matrix = ajAcdGetListSingle( "matrix");
+    m1c = ajStrGetCharFirst(matrix);
 
     if(m1c=='b')
 	ajStrAssignC(&m1str,"blosum");
@@ -175,8 +173,8 @@ int main(int argc, char **argv, char **env)
 	ajStrAssignC(&m1str,"own");
 
 
-    dna_matrix = ajAcdGetList( "dnamatrix");
-    m2c = *ajStrGetPtr(*dna_matrix);
+    dna_matrix = ajAcdGetListSingle( "dnamatrix");
+    m2c = ajStrGetCharFirst(dna_matrix);
 
     if(m2c=='b')
 	ajStrAssignC(&m2str,"iub");
@@ -205,9 +203,9 @@ int main(int argc, char **argv, char **env)
 
 
     fil_file = ajSeqoutNew();
-    tmpFilename = ajStrNewRef( emma_getUniqueFileName());
-    if(!ajSeqFileNewOut( fil_file, tmpFilename))
-	ajExit();
+    tmpFilename = emma_getUniqueFileName();
+    if(!ajSeqoutOpenFilename( fil_file, tmpFilename))
+	embExitBad();
 
     /* Set output format to fasta */
     ajSeqOutSetFormat( fil_file, tmp);
@@ -221,10 +219,10 @@ int main(int argc, char **argv, char **env)
         */
 	if (!nb)
 	    are_prot  = ajSeqIsProt(seq);
-        ajSeqWrite(fil_file, seq);
+        ajSeqoutWriteSeq(fil_file, seq);
 	++nb;
     }
-    ajSeqWriteClose(fil_file);
+    ajSeqoutClose(fil_file);
 
     if(nb < 2)
 	ajFatal("Multiple alignments need at least two sequences");
@@ -238,7 +236,7 @@ int main(int argc, char **argv, char **env)
     ajStrAppendC(&cmd, ajStrGetPtr( tmpFilename));
 
     /* add out file name */
-    tmp_aln_outfile = ajStrNewRef(emma_getUniqueFileName());
+    tmp_aln_outfile = emma_getUniqueFileName();
     ajStrAppendC(&cmd, " -outfile=");
     ajStrAppendS( &cmd, tmp_aln_outfile);
 
@@ -331,7 +329,7 @@ int main(int argc, char **argv, char **env)
     else
     {
 	/* use tmp file to hold dend file, will read back in later */
-	tmp_dendfilename = ajStrNewRef(emma_getUniqueFileName());
+	tmp_dendfilename = emma_getUniqueFileName();
         ajStrAppendC(&cmd, " -newtree=");
         ajStrAppendS(&cmd, tmp_dendfilename);
     }
@@ -410,10 +408,10 @@ int main(int argc, char **argv, char **env)
 	seqset = ajSeqsetNew();
 	if(ajSeqsetRead(seqset, seqin))
 	{
-	    ajSeqsetWrite(seqout, seqset);
+	    ajSeqoutWriteSet(seqout, seqset);
 
 
-	    ajSeqWriteClose(seqout);
+	    ajSeqoutClose(seqout);
 	    ajSeqinDel(&seqin);
 
 	    /* remove the Usa from the start of the string */
@@ -442,7 +440,37 @@ int main(int argc, char **argv, char **env)
     if(!only_dend)
 	ajSysUnlink(tmp_aln_outfile);
 
-    ajExit();
+    ajStrDel(&pw_matrix);
+    ajStrDel(&matrix);
+    ajStrDel(&pw_dna_matrix);
+    ajStrDel(&dna_matrix);
+    ajStrDel(&tmp_dendfilename);
+    ajStrDel(&dend_filename);
+    ajStrDel(&tmp_aln_outfile);
+    ajStrDel(&pwmstr);
+    ajStrDel(&pwdstr);
+    ajStrDel(&m1str);
+    ajStrDel(&m2str);
+    ajStrDel(&hgapres);
+    ajStrDel(&cmd);
+    ajStrDel(&tmp);
+    ajStrDel(&tmpFilename);
+    ajStrDel(&line);
+
+    ajFileClose(&dend_outfile);
+    ajFileClose(&tmp_dendfile);
+    ajFileClose(&dend_file);
+    ajFileClose(&pairwise_matrix);
+    ajFileClose(&ma_matrix);
+
+    ajSeqallDel(&seqall);
+    ajSeqsetDel(&seqset);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
+    ajSeqoutDel(&fil_file);
+    ajSeqinDel(&seqin);
+
+    embExit();
 
     return 0;
 }
@@ -459,7 +487,7 @@ int main(int argc, char **argv, char **env)
 ** @@
 ******************************************************************************/
 
-static AjPStr emma_getUniqueFileName()
+static AjPStr emma_getUniqueFileName(void)
 {
     static char ext[2] = "A";
     AjPStr filename    = NULL;

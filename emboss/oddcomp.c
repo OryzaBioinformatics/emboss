@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     ajint     word        = 2;
     AjPFile   outfile     = NULL;
     AjPFile   compdata    = NULL;
-    ajint     window      = 0;
+    ajuint     window      = 0;
     ajint     pos         = 0;
     const     char *s     = NULL;
     ajlong    result      = 0;
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     AjPTable  exptable    = NULL;	/* table of expected frequencies */
     ajlong    exp_freq    = 0;
     AjBool    fullwindow  = ajFalse;    /* JISON */
-    
+    ajulong   tul;
 
     embInit("oddcomp", argc, argv);
 
@@ -201,7 +201,9 @@ int main(int argc, char **argv)
 	    ajDebug("loop b pos:%d ringsize:%d increment:%d\n",
 		    pos, ringsize, increment);
 
-	    result = embNmerProt2int(s, word, pos-1, &otherflag,ignorebz);
+	    tul = embNmerProt2int(s, word, pos-1, &otherflag,ignorebz);
+	    result = (ajlong) tul;
+
 	    if(otherflag)
 		windowbuffer[pos%ringsize] = -1;
 	    else
@@ -250,7 +252,9 @@ int main(int argc, char **argv)
 	else {
 	    steps--;
 
-	    for(pos=ringsize+1; pos <= ajSeqGetLen(seq)-word+1; pos += increment)
+	    for(pos=ringsize+1;
+		pos <= (ajint)ajSeqGetLen(seq)-word+1;
+		pos += increment)
 	    {
 		ajDebug("loop d pos:%d steps:%Ld\n",
 			pos, steps);
@@ -260,7 +264,8 @@ int main(int argc, char **argv)
 			ajDebug("bigarray[%Ld]:%Ld\n",
 				count, bigarray[count]);
 
-		result = embNmerProt2int(s, word, pos-1, &otherflag,ignorebz);
+		tul = embNmerProt2int(s, word, pos-1, &otherflag,ignorebz);
+		result = (ajlong) tul;
 
 		/* uncount the word just leaving the window if it wasn't 'other'*/
 		if(windowbuffer[pos%ringsize] >=0)

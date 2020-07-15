@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     ajint i;
     ajint j;
 
-    char *ftit[6]=
+    const char *ftit[6]=
     {
 	"F1","F2","F3","R1","R2","R3"
     };
@@ -208,11 +208,12 @@ static void plotorf_norfs(const char *seq, const char *rev,
     AjBool inframe;
     ajint po;
     const char *p;
+    size_t stlen;
 
-
-
-    len = strlen(seq);
-
+    
+    stlen = strlen(seq);
+    len   = (ajint) stlen;
+    
     if(n<3)
     {
 	p  = seq;

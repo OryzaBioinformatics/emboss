@@ -41,40 +41,43 @@
 **
 ** @attr patstr [AjPStr] Undocumented
 ** @attr origpat [AjPStr] Undocumented
-** @attr type [ajint] Undocumented
-** @attr len [ajint] Undocumented
-** @attr real_len [ajint] Undocumented
+** @attr type [ajuint] Undocumented
+** @attr len [ajuint] Undocumented
+** @attr real_len [ajuint] Undocumented
 ** @attr amino [AjBool] Undocumented
 ** @attr carboxyl [AjBool] Undocumented
-** @attr mm [ajint] Undocumented
+** @attr mm [ajuint] Undocumented
 ** @attr buf [ajint*] Undocumented
 ** @attr sotable [ajuint*] Undocumented
-** @attr solimit [ajuint] Undocumented
 ** @attr off [EmbOPatBYPNode[AJALPHA]] Undocumented
 ** @attr re [AjPStr] Undocumented
-** @attr skipm [ajint**] Undocumented
-** @attr tidy [void*] Undocumented
+** @attr skipm [ajuint**] Undocumented
+** @attr tidy [const void*] Undocumented
+** @attr solimit [ajuint] Undocumented
+** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct primerguts
 {
     AjPStr patstr;
     AjPStr origpat;
-    ajint type;
-    ajint len;
-    ajint real_len;
+    ajuint type;
+    ajuint len;
+    ajuint real_len;
     AjBool amino;
     AjBool carboxyl;
 
-    ajint mm;
+    ajuint mm;
 
     ajint* buf;
     ajuint* sotable;
-    ajuint solimit;
+
     EmbOPatBYPNode off[AJALPHA];
     AjPStr re;
-    ajint** skipm;
-    void* tidy;
+    ajuint** skipm;
+    const void* tidy;
+    ajuint solimit;
+    char Padding[4];
 } *PGuts;
 
 
@@ -91,11 +94,12 @@ typedef struct primerguts
 ** @attr acc [AjPStr] Undocumented
 ** @attr forward [AjPStr] pattern that hits forward strand 
 ** @attr reverse [AjPStr] pattern that hits reverse strand 
-** @attr forward_pos [ajint] Undocumented
-** @attr reverse_pos [ajint] Undocumented
-** @attr amplen [ajint] Undocumented
-** @attr forward_mismatch [ajint] Undocumented
-** @attr reverse_mismatch [ajint] Undocumented
+** @attr forward_pos [ajuint] Undocumented
+** @attr reverse_pos [ajuint] Undocumented
+** @attr amplen [ajuint] Undocumented
+** @attr forward_mismatch [ajuint] Undocumented
+** @attr reverse_mismatch [ajuint] Undocumented
+** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct primerhit
@@ -105,11 +109,12 @@ typedef struct primerhit
     AjPStr acc;
     AjPStr forward;
     AjPStr reverse;
-    ajint forward_pos;
-    ajint reverse_pos;
-    ajint amplen;
-    ajint forward_mismatch;
-    ajint reverse_mismatch;
+    ajuint forward_pos;
+    ajuint reverse_pos;
+    ajuint amplen;
+    ajuint forward_mismatch;
+    ajuint reverse_mismatch;
+    char Padding[4];
 } *PHit;
 
 
@@ -151,11 +156,9 @@ static void primersearch_read_primers(AjPList* primerList, AjPFile primerFile,
 				 ajint mmp);
 static AjBool primersearch_classify_and_compile(Primer* primdata);
 static void primersearch_primer_search(const AjPList primerList,
-				       const AjPSeq seq,
-				       AjPFile outf);
+				       const AjPSeq seq);
 static void primersearch_scan_seq(const Primer primdata,
-			     const AjPSeq seq, AjBool reverse,
-			     AjPFile outf);
+			     const AjPSeq seq, AjBool reverse);
 static void primersearch_store_hits(const Primer primdata, AjPList fhits_list,
 			       AjPList rhits_list, const AjPSeq seq,
 			       AjBool reverse);
@@ -204,7 +207,7 @@ int main(int argc, char **argv)
 
     /* query sequences one by one */
     while(ajSeqallNext(seqall,&seq))
-	primersearch_primer_search(primerList, seq, outf);
+	primersearch_primer_search(primerList, seq);
 
     /* output the results */
     primersearch_print_hits(primerList, outf);
@@ -279,7 +282,7 @@ static void primersearch_initialise_pguts(PGuts* primer)
 
 static void primersearch_free_pguts(PGuts* primer)
 {
-    ajint i = 0;
+    ajuint i = 0;
 
     ajStrDel(&(*primer)->patstr);
     ajStrDel(&(*primer)->origpat);
@@ -316,6 +319,8 @@ static void primersearch_free_primer(void **x, void *cl)
     Primer* p;
     Primer primdata;
     AjIList lIter;
+
+    (void) cl;				/* make it used */
 
     p = (Primer*) x;
     primdata = *p;
@@ -530,13 +535,11 @@ static AjBool primersearch_classify_and_compile(Primer* primdata)
 **
 ** @param [r] primerList [const AjPList] primer list
 ** @param [r] seq [const AjPSeq] sequence
-** @param [w] outf [AjPFile] outfile
 ** @@
 ******************************************************************************/
 
 static void primersearch_primer_search(const AjPList primerList,
-				       const AjPSeq seq,
-				       AjPFile outf)
+				       const AjPSeq seq)
 {
     AjIList listIter;
 
@@ -546,8 +549,8 @@ static void primersearch_primer_search(const AjPList primerList,
     {
 	Primer curr_primer = ajListIterNext(listIter);
 
-	primersearch_scan_seq(curr_primer, seq, AJFALSE, outf);
-	primersearch_scan_seq(curr_primer, seq, AJTRUE, outf);
+	primersearch_scan_seq(curr_primer, seq, AJFALSE);
+	primersearch_scan_seq(curr_primer, seq, AJTRUE);
     }
 
     ajListIterFree(&listIter);
@@ -567,19 +570,17 @@ static void primersearch_primer_search(const AjPList primerList,
 ** @param [r] primdata [const Primer] primer data
 ** @param [r] seq [const AjPSeq] sequence
 ** @param [r] reverse [AjBool] do reverse
-** @param [w] outf [AjPFile] outfile
 ** @@
 ******************************************************************************/
 
 static void primersearch_scan_seq(const Primer primdata,
-			     const AjPSeq seq, AjBool reverse,
-			     AjPFile outf)
+			     const AjPSeq seq, AjBool reverse)
 {
     AjPStr seqstr = NULL;
     AjPStr revstr = NULL;
     AjPStr seqname = NULL;
-    ajint fhits = 0;
-    ajint rhits = 0;
+    ajuint fhits = 0;
+    ajuint rhits = 0;
     AjPList fhits_list = NULL;
     AjPList rhits_list = NULL;
 

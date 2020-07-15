@@ -34,11 +34,11 @@ static ajint psiphi_chain_index(ajint selected,
 			 ajint lowest);
 
 static ajint psiphi_first_residue_number(const AjPPdb pdb,
-				  ajint index,
+				  ajint myindex,
 				  ajint startres);
 
 static ajint psiphi_last_residue_number(const AjPPdb pdb,
-				 ajint index,
+				 ajint myindex,
 				 ajint startres,
 				 ajint finishres);
 
@@ -117,7 +117,7 @@ int main( int argc , char **argv )
     ajint lastres     = 0;
 
     /* ...for chains */
-    ajint index             = 0; /* ...into structure object */
+    ajint myindex             = 0; /* ...into structure object */
     ajint lowest      = 0; /* ...in structure file     */
     ajint highest     = 0; /* ...in structure file     */
 
@@ -145,7 +145,6 @@ int main( int argc , char **argv )
     /* output report file for torsion angles */
     AjPReport report    = NULL;
     AjPFeattable angles = NULL;
-    AjPFeature curft    = NULL;
 
     embInit( "psiphi", argc ,argv );
 
@@ -165,17 +164,17 @@ int main( int argc , char **argv )
     
     /* check and set number of chain to be analysed */
     highest = pdb->Nchn;
-    index = psiphi_chain_index(selected,
+    myindex = psiphi_chain_index(selected,
 			       highest,
 			       lowest);
 
     /* check and set range of residues to be analysed */
     firstres = 
 	psiphi_first_residue_number(pdb,
-				    index,
+				    myindex,
 				    startres);    
     lastres = psiphi_last_residue_number(pdb,
-					 index,
+					 myindex,
 					 startres,
 					 finishres);
     secondres = firstres+1;
@@ -189,11 +188,14 @@ int main( int argc , char **argv )
 
     /* obtain iterator for list of atoms in chain */
     atomlist = 
-	ajListIterRead(pdb->Chains[index]->Atoms);
+	ajListIterRead(pdb->Chains[myindex]->Atoms);
+
+    ajDebug("psiphi pdb Pdb '%S' chain %d Id '%c'\n",
+	    pdb->Pdb, myindex, pdb->Chains[myindex]->Id);
 
     /* obtain sequence from residues in chain */
     seq =
-	ajSeqNewStr(pdb->Chains[index]->Seq);
+	ajSeqNewNameS(pdb->Chains[myindex]->Seq, pdb->Pdb);
 
     resnum = 0;
 
@@ -201,7 +203,7 @@ int main( int argc , char **argv )
     angles = ajFeattableNewSeq(seq);    
 
     /* chain info for head of report */
-    ajFmtPrintS(&header, "Chain: %d", (index+1));
+    ajFmtPrintS(&header, "Chain: %d", (myindex+1));
     ajReportSetHeader(report, header);
 
     /* BEGIN ANALYSIS OF CHAIN HERE */
@@ -279,10 +281,7 @@ int main( int argc , char **argv )
 	psi = psiphi_psival(atoms);
     else
 	psi = FUnavailableAngle;
-    curft = psiphi_write_psi_phi(angles,
-				 cpos,
-				 phi,
-				 psi);
+    psiphi_write_psi_phi(angles,cpos,phi,psi);
 
     /* loop through list until last residue to be analysed */
     prevres = resnum;
@@ -304,10 +303,7 @@ int main( int argc , char **argv )
 		psi = psiphi_psival(atoms);
 	    else
 		psi = FUnavailableAngle;
-	    curft = psiphi_write_psi_phi(angles,
-					 cpos,
-					 phi,
-					 psi);
+	    psiphi_write_psi_phi(angles,cpos,phi,psi);
 
 	    psiphi_shift_residues(atoms, known);
 	}
@@ -344,10 +340,10 @@ int main( int argc , char **argv )
 	else
 	    psi = FUnavailableAngle;
 
-	curft = psiphi_write_psi_phi(angles,
-				     cpos,
-				     phi,
-				     psi);
+	psiphi_write_psi_phi(angles,
+			     cpos,
+			     phi,
+			     psi);
 	cpos++;
 	psiphi_shift_residues(atoms,
 			      known);
@@ -358,10 +354,10 @@ int main( int argc , char **argv )
     {
 	phi = psiphi_phival(atoms);
 	psi = FUnavailableAngle;
-	curft   = psiphi_write_psi_phi(angles,
-				       cpos,
-				       phi,
-				       psi);
+	psiphi_write_psi_phi(angles,
+			     cpos,
+			     phi,
+			     psi);
     }
     /* END ANALYSIS OF CHAIN HERE */
 
@@ -395,7 +391,7 @@ int main( int argc , char **argv )
     ajSeqDel(&seq);
 
     /*  tidy up everything else... */
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -438,7 +434,7 @@ static ajint psiphi_chain_index(ajint selected,
 ** check selected lower residue within chain's range and return 1st window res
 **
 ** @param [r] pdb [const AjPPdb] cleaned AjPPdb structure
-** @param [r] index [ajint] number of user-selected chain in
+** @param [r] myindex [ajint] number of user-selected chain in
 **                                    structure
 ** @param [r] startres [ajint] user-selected lower residue
 **                                            number
@@ -446,7 +442,7 @@ static ajint psiphi_chain_index(ajint selected,
 ** @@
 ******************************************************************************/
 static ajint psiphi_first_residue_number (const AjPPdb pdb,
-				   ajint index,
+				   ajint myindex,
 				   ajint startres)
 {
     ajint firstres  = 0;
@@ -455,7 +451,7 @@ static ajint psiphi_first_residue_number (const AjPPdb pdb,
     AjPAtom inlist   = NULL;
     
     /* read first atom in list into memory, but keep it on list */
-    ajListPeek(pdb->Chains[index]->Atoms,
+    ajListPeek(pdb->Chains[myindex]->Atoms,
 	       (void**)&inlist);
 
     /* get number of lowest residue available in chain */
@@ -465,7 +461,7 @@ static ajint psiphi_first_residue_number (const AjPPdb pdb,
     if(startres < lowestres)
     {	
 	ajWarn("No residue %d---number of lowest residue in chain %d is %d.",
-	       startres, index,
+	       startres, myindex,
 	       lowestres );
     }
 
@@ -490,7 +486,7 @@ static ajint psiphi_first_residue_number (const AjPPdb pdb,
 ** check selected upper protein residue within chain's range and return limit
 **
 ** @param [r] pdb [const AjPPdb] cleaned AjPPdb structure
-** @param [r] index [ajint] number of user-selected chain in
+** @param [r] myindex [ajint] number of user-selected chain in
 **                                    structure
 ** @param [r] startres [ajint] user-selected lower residue
 **                                             number
@@ -500,7 +496,7 @@ static ajint psiphi_first_residue_number (const AjPPdb pdb,
 ** @@
 ******************************************************************************/
 static ajint psiphi_last_residue_number(const AjPPdb pdb,
-					ajint index,
+					ajint myindex,
 					ajint startres,
 					ajint finishres)
 {
@@ -509,7 +505,7 @@ static ajint psiphi_last_residue_number(const AjPPdb pdb,
 
     /* get number of highest residue available in chain */
     highres = 
-	pdb->Chains[index]->Nres;
+	pdb->Chains[myindex]->Nres;
 
     /* last residue defaults to end of chain... */
     if(finishres == 1)
@@ -524,7 +520,7 @@ static ajint psiphi_last_residue_number(const AjPPdb pdb,
     else
 	/* ERROR: finish residue too high */ 
 	ajDie("No residue %d---number of highest residue in chain %d is %d.",
-	      finishres, index,
+	      finishres, myindex,
 	      highres );
     
     return lastres;
@@ -632,7 +628,7 @@ static float psiphi_phival (AjPAtom const * atoms)
 			    atoms[ECPrimeCurr]->Y,
 			    atoms[ECPrimeCurr]->Z);
 		
-    phi = -1.0 *
+    phi = (float) -1.0 *
 	aj3dVectorDihedralAngle(vec1To2,
 				vec3To2,
 				vec3To4);
@@ -693,7 +689,7 @@ static float psiphi_psival (AjPAtom const * atoms)
 			    atoms[ENNext]->X,
 			    atoms[ENNext]->Y,
 			    atoms[ENNext]->Z);
-    psi = -1.0 *
+    psi = (float) -1.0 *
 	aj3dVectorDihedralAngle(vec1To2,
 				vec3To2,
 				vec3To4);

@@ -85,10 +85,10 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	pos = ajSeqallBegin(seqall);
-	end = ajSeqallEnd(seqall);
+	pos = ajSeqallGetseqBegin(seqall);
+	end = ajSeqallGetseqEnd(seqall);
 
-	str = ajSeqStrCopy(seq);
+	str = ajSeqGetSeqCopyS(seq);
 	ajStrFmtUpper(&str);
 	p = ajStrGetPtr(str);
 
@@ -127,14 +127,14 @@ int main(int argc, char **argv)
 	if(!plot && c)
 	{
 	    ajFmtPrintF(outf,"FREAK of %s from %d to %d Window %d Step %d\n\n",
-			ajSeqName(seq),pos+1,end+1,window,step);
+			ajSeqGetNameC(seq),pos+1,end+1,window,step);
 	    for(i=0;i<c;++i)
 		ajFmtPrintF(outf,"%-10d %f\n",(ajint)x[i],y[i]);
 	}
 	else if(plot && c)
 	{
 	    fgraph = ajGraphPlpDataNewI(c);
-	    ajGraphSetTitle(graph,ajSeqGetName(seq));
+	    ajGraphSetTitle(graph,ajSeqGetNameS(seq));
 	    ajFmtPrintS(&st,"From %d to %d. Residues:%s Window:%d Step:%d",
 			pos+1,end+1,ajStrGetPtr(bases),window,step);
 	    ajGraphSetSubTitle(graph,st);
@@ -144,8 +144,8 @@ int main(int argc, char **argv)
 	    ajGraphxySetXEnd(graph,x[c-1]);
 	    ajGraphxySetYStart(graph,0.);
 	    ajGraphxySetYEnd(graph,y[c-1]);
-	    ajGraphxySetXRangeII(graph,x[0],x[c-1]);
-	    ajGraphxySetYRangeII(graph,0.,y[c-1]);
+	    ajGraphxySetXRangeII(graph,(ajint)x[0],(ajint)x[c-1]);
+	    ajGraphxySetYRangeII(graph,0,(ajint)y[c-1]);
 	    ajGraphPlpDataSetMaxMin(fgraph,x[0],x[c-1],0.,1.0);
 	    ajGraphArrayMaxMin(y,c,&min,&max);
 	    ajGraphPlpDataSetMaxima(fgraph,x[0],x[c-1],min,max);
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
     ajStrDel(&bases);
     ajStrDel(&st);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

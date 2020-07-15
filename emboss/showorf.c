@@ -32,10 +32,9 @@
 
 static void showorf_SixTranslate(const AjPStr substr, const AjPStr revstr,
 				 ajint len,
-				 AjPStr *pseqs, ajint begin,
-				 const AjPCod codon);
+				 AjPStr *pseqs, const AjPCod codon);
 static void showorf_DoTrans(const AjPStr s, const AjPStr r, ajint n, ajint len,
-			    AjPStr *pseqs, const AjPCod codon, ajint begin);
+			    AjPStr *pseqs, const AjPCod codon);
 static void showorf_MakeRuler(ajint len, ajint begin, char *ruler,
 			      ajint *npos);
 static void showorf_CalcProteinPos(ajint **ppos, AjPStr const *pseqs,
@@ -49,9 +48,8 @@ static void showorf_showTrans(ajint *const *ppos, const ajint *npos,
 			      ajint width, const char *name);
 static void showorf_showTransb(ajint * const *ppos, const ajint *npos,
 			       AjPStr const *pseqs,
-			       const AjPStr substr, ajint len,
-			       const ajint *mark,
-			       const char *ruler, ajint begin, AjPFile outf,
+			       const AjPStr substr, const ajint *mark,
+			       const char *ruler, AjPFile outf,
 			       AjBool isrule, AjBool isp, AjBool isn,
 			       ajint start, ajint end);
 
@@ -148,7 +146,7 @@ int main(int argc, char **argv)
     AJCNEW (ruler, len);
     AJCNEW (npos, len);
 
-    showorf_SixTranslate(substr,revstr,len,pseqs,beg,codon);
+    showorf_SixTranslate(substr,revstr,len,pseqs,codon);
     showorf_MakeRuler(len,beg,ruler,npos);
     showorf_CalcProteinPos(ppos,pseqs,len);
     showorf_showTrans(ppos,npos,pseqs,substr,len,mark,ruler,beg,
@@ -188,21 +186,20 @@ int main(int argc, char **argv)
 ** @param [r] revstr [const AjPStr] reverse sequence
 ** @param [r] len [ajint] sequence length
 ** @param [w] pseqs [AjPStr*] translated sequences
-** @param [r] begin [ajint] start position
 ** @param [r] codon [const AjPCod] codon usage
 ** @@
 ******************************************************************************/
 
 static void showorf_SixTranslate(const AjPStr substr, const AjPStr revstr,
 				 ajint len,
-				 AjPStr *pseqs, ajint begin,
+				 AjPStr *pseqs,
 				 const AjPCod codon)
 {
     ajint i;
 
     for(i=0;i<6;++i)
     {
-	showorf_DoTrans(substr, revstr, i, len, pseqs, codon, begin);
+	showorf_DoTrans(substr, revstr, i, len, pseqs, codon);
 	if(i>2)
 	    ajStrReverse(&pseqs[i]);
     }
@@ -223,13 +220,12 @@ static void showorf_SixTranslate(const AjPStr substr, const AjPStr revstr,
 ** @param [r] len [ajint] sequence length
 ** @param [w] pseqs [AjPStr*] translations
 ** @param [r] codon [const AjPCod] codon usage
-** @param [r] begin [ajint] start point
 ** @@
 ******************************************************************************/
 
 
 static void showorf_DoTrans(const AjPStr s, const AjPStr r, ajint n, ajint len,
-			    AjPStr *pseqs, const AjPCod codon, ajint begin)
+			    AjPStr *pseqs, const AjPCod codon)
 {
     const char *p;
     char *q;
@@ -475,12 +471,12 @@ static void showorf_showTrans(ajint * const *ppos, const ajint *npos,
     {
 	if(pos+width<len)
 	{
-	    showorf_showTransb(ppos,npos,pseqs,substr,len,mark,ruler,begin,
+	    showorf_showTransb(ppos,npos,pseqs,substr,mark,ruler,
 			       outf,isrule,isp,isn,pos,pos+width-1);
 	    pos += width;
 	    continue;
 	}
-	showorf_showTransb(ppos,npos,pseqs,substr,len,mark,ruler,begin,
+	showorf_showTransb(ppos,npos,pseqs,substr,mark,ruler,
 			   outf,isrule,isp,isn,pos,len-1);
 	break;
     }
@@ -499,10 +495,8 @@ static void showorf_showTrans(ajint * const *ppos, const ajint *npos,
 ** @param [r] npos [const ajint*] lengths
 ** @param [r] pseqs [AjPStr const *] protein sequences
 ** @param [r] substr [const AjPStr] mRNA sequence
-** @param [r] len [ajint] mRNA length
 ** @param [r] mark [const ajint*] Undocumented
 ** @param [r] ruler [const char*] ruler
-** @param [r] begin [ajint] start pos in mRNA
 ** @param [u] outf [AjPFile] outfile
 ** @param [r] isrule [AjBool] show ruler
 ** @param [r] isp [AjBool] protein
@@ -515,14 +509,14 @@ static void showorf_showTrans(ajint * const *ppos, const ajint *npos,
 
 static void showorf_showTransb(ajint * const *ppos, const ajint *npos,
 			       AjPStr const *pseqs,
-			       const AjPStr substr, ajint len,
+			       const AjPStr substr,
 			       const ajint *mark,
-			       const char *ruler, ajint begin, AjPFile outf,
+			       const char *ruler, AjPFile outf,
 			       AjBool isrule, AjBool isp, AjBool isn,
 			       ajint start, ajint end)
 {
     AjPStr s;
-    static char *fr[]=
+    static const char *fr[]=
     {
 	"F1","F2","F3","R1","R2","R3"
     };

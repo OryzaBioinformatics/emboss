@@ -22,7 +22,7 @@
 
 
 
-static char *testset[] =
+static const char *testset[] =
 {
     "GAN","GAATTC","CCSGG","GANTC","GABNNNNNVTC","GA", "GANN","TC"
 };
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
     ajStrDel(&cutseq);
     ajSeqDel(&seq);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

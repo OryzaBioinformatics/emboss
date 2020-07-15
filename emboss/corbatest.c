@@ -112,7 +112,7 @@ int main(int argc, char **argv)
 
     ajCorbafeatDel(&feat);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

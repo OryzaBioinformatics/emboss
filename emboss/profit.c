@@ -189,11 +189,11 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin = ajSeqallBegin(seqall);
-	end   = ajSeqallEnd(seqall);
+	begin = ajSeqallGetseqBegin(seqall);
+	end   = ajSeqallGetseqEnd(seqall);
 
-	ajStrAssignC(&pname,ajSeqName(seq));
-	strand = ajSeqStrCopy(seq);
+	ajStrAssignC(&pname,ajSeqGetNameC(seq));
+	strand = ajSeqGetSeqCopyS(seq);
 
 	ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
 
@@ -577,7 +577,7 @@ static void profit_scan_profile (const AjPStr substr,
 	sum=0.0;
 	for(j=0;j<mlen;++j)
 	    sum += fmatrix[j][ajAZToInt(*(p+i+j))];
-	score = sum * 100. / maxs;
+	score = sum * (float)100. / maxs;
 	if((ajint)score >= thresh)
 	    profit_printHits(pname,i,(ajint)score,outf);
     }
