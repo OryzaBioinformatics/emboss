@@ -1,3 +1,3 @@
 #!/bin/csh
 
-../../scripts/qatest.pl
+../../scripts/qatest.pl -without=srs
