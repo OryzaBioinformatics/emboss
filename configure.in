@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 4.0.0)
+AM_INIT_AUTOMAKE(EMBOSS, 4.1.0)
 
 
 AC_PROG_AWK
@@ -32,7 +32,7 @@ fi
 
 
 AC_ARG_ENABLE(64,
-[ --enable-64   64 ])
+[  --enable-64             64 bit systems])
 if test "${enable_64}" = "yes" ; then
 AC_MSG_CHECKING(for 64bit compilation support)
 
@@ -131,6 +131,10 @@ if test "`uname`" = "FreeBSD"; then
 CFLAGS="$CFLAGS -O2"
 fi
 
+
+
+else
+
 dnl Intel MacOSX requires reduced optimisation for PCRE code
 if test "`uname -a | grep Darwin`"; then
   if test "`uname -a | grep i386`"; then
@@ -138,11 +142,10 @@ if test "`uname -a | grep Darwin`"; then
   else
     CFLAGS="$CFLAGS -O2"
   fi
-fi
-
-
 else
 CFLAGS="$CFLAGS -O2"
+fi
+
 fi
 dnl End of Optimisation tests
 
@@ -259,7 +262,7 @@ AC_SUBST(POSIX_MALLOC_THRESHOLD)
 
 #dnl Test if --enable-corba is given
 #AC_ARG_ENABLE(corba,
-#[ --enable-corba	   corba (need glib and orbit)])
+#[  --enable-corba	   corba (need glib and orbit)])
 #if test "${enable_corba}" = "yes" ; then
 #AC_MSG_CHECKING(for ORBit and glib)
 #CPPFLAGS="$CPPFLAGS -I/usr/lib/glib/include -I/usr/local/lib/glib/include"
@@ -296,7 +299,7 @@ fi
 
 
 AC_ARG_ENABLE(large,
-[ --enable-large   large ])
+[  --enable-large          large file support (over 2Gbyte)])
 if test "${enable_large}" = "yes" ; then
 AC_MSG_CHECKING(for large file support)
 
@@ -363,9 +366,9 @@ dnl Test if purify exists and if --enable-purify given if so
 dnl set "-g"
 
 AC_MSG_CHECKING(for purify)
-#if(purify -version) < /dev/null > /dev/null 2>&1; then
+dnl if(purify -version) < /dev/null > /dev/null 2>&1; then
    AC_ARG_ENABLE(purify,
-   [  --enable-purify          purify ])
+   [  --enable-purify         purify ])
 if test "${enable_purify}" = "yes" ; then
      CC="purify --chain-length="20" -best-effort -windows=yes gcc -g"
      LIBTOOL="$LIBTOOL --tag=CC"
@@ -373,12 +376,22 @@ if test "${enable_purify}" = "yes" ; then
 else
    AC_MSG_RESULT(no)
 fi          
-#fi
+dnl fi
 
 
-dnl Test if --enable-debug given
+dnl Test if --enable-gccprofile given if so
+dnl set "-pg"
+
+if test "${with_gccprofile}" = "yes" ; then
+     CFLAGS="$CFLAGS -pg"
+     LDFLAGS="$LDFLAGS -pg"
+fi          
+
+
+
+dnl Test if --enable-warnings given
 AC_ARG_ENABLE(warnings,
-[  --enable-warnings          warnings (-Wall option on gcc compiler)])
+[  --enable-warnings       warnings (-Wall option on gcc compiler)])
 if test "${enable_warnings}" = "yes" ; then
 if test "$CC" = "gcc"; then
   CFLAGS="$CFLAGS -Wall -fno-strict-aliasing"
@@ -393,7 +406,59 @@ if test "$CC" = "cc"; then
 fi
 AM_CONDITIONAL(PURIFY, test "${enable_purify}" = "yes")
 
+dnl Test if --enable-devwarnings given
+AC_ARG_ENABLE(devwarnings,
+[  --enable-devwarnings    strict warnings (gcc compiler only) for developers])
+if test "${enable_devwarnings}" = "yes" ; then
+if test "$CC" = "gcc"; then
 
+dnl more warnings beyond what -Wall provides
+  CFLAGS="$CFLAGS -Wextra"
+
+dnl prototype warnings. prototypes required for all functions
+  CFLAGS="$CFLAGS -Wstrict-prototypes -Wmissing-prototypes"
+  CFLAGS="$CFLAGS -Wold-style-definition -Wmissing-declarations"
+
+  CFLAGS="$CFLAGS -Wwrite-strings"
+
+dnl catches things like index as a variable name
+  CFLAGS="$CFLAGS -Wshadow"
+
+  CFLAGS="$CFLAGS -Wdeclaration-after-statement -Wundef"
+  CFLAGS="$CFLAGS -Wpointer-arith"
+  CFLAGS="$CFLAGS -Wcast-qual -Wcast-align"
+
+dnl casts of function results that can lose data e.g. double to int
+  CFLAGS="$CFLAGS -Wbad-function-cast"
+
+dnl comparing signed and unsigned values
+  CFLAGS="$CFLAGS -Wsign-compare"
+
+  CFLAGS="$CFLAGS -Wmissing-field-initializers"
+  CFLAGS="$CFLAGS -Wmissing-noreturn -Wnested-externs"
+dnl useful messages
+  CFLAGS="$CFLAGS -Wredundant-decls"
+dnl -Wpadded means moving char to end of structs - but also flags end of struct
+dnl  so need to add padding at end
+  CFLAGS="$CFLAGS -Wpadded"
+
+dnl -Wunsafe-loop-optimizations objects to loops with increments more than 1
+dnl because if the end is at INT_MAX it could run forever ... rarely
+dnl  CFLAGS="$CFLAGS -Wunsafe-loop-optimizations"
+
+dnl -Wconversion is brain-damaged - complains about char arguments every time
+dnl  CFLAGS="$CFLAGS -Wconversion"
+
+dnl -Wtraditional gives #elif and #error msgs
+dnl  CFLAGS="$CFLAGS -Wtraditional"
+
+dnl -Wwrite-strings upsets struct initialisation
+dnl  CFLAGS="$CFLAGS -Wwrite-strings"
+
+dnl -Wfloat-equal will not allow tests for values still 0.0
+dnl CFLAGS="$CFLAGS -Wfloat-equal"
+fi
+fi          
 
 dnl test for cygwin to set AM_LDFLAGS in library & apps Makefile.ams
 AJOSNAME=`uname`
