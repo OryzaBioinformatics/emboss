@@ -18,6 +18,7 @@ extern "C"
 ** @output ajAlignWrite Master alignment output routine
 ** @output ajAlignWriteHeader Master header output routine
 ** @output ajAlignWriteTail Master footer output routine
+** @cast ajAlignGetFormat Returns the format of an alignment
 **
 ** @other AjPSeqout Sequence output
 ** @other AjPFeatout Feature output
@@ -85,6 +86,13 @@ typedef struct AjSAlign {
 
 #define AjPAlign AjOAlign*
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 void         ajAlignClose (AjPAlign thys);
 AjBool       ajAlignConsStats(const AjPSeqset thys, AjPMatrix mymatrix,
 			      AjPStr *cons, ajint* retident, 
@@ -97,10 +105,13 @@ AjBool       ajAlignDefineCC (AjPAlign pthys,
 			      const char* seqa, const char* seqb,
 			      const char* namea,const  char* nameb);
 void         ajAlignDel (AjPAlign* pthys);
-AjBool       ajAlignOpen (AjPAlign thys, const AjPStr name);
+void         ajAlignExit(void);
 AjBool       ajAlignFindFormat (const AjPStr format, ajint* iformat);
 AjBool       ajAlignFormatDefault (AjPStr* pformat);
+const char*  ajAlignGetFilename(const AjPAlign thys);
+const AjPStr ajAlignGetFormat(const AjPAlign thys);
 AjPAlign     ajAlignNew (void);
+AjBool       ajAlignOpen (AjPAlign thys, const AjPStr name);
 void         ajAlignPrintFormat (AjPFile outf, AjBool full);
 void         ajAlignReset (AjPAlign thys);
 void         ajAlignSetExternal (AjPAlign thys, AjBool external);
@@ -119,11 +130,8 @@ AjBool       ajAlignSetRange (AjPAlign thys,
 			      ajint start2, ajint end2,
 			      ajint len2, ajint off2);
 void         ajAlignSetScoreI (AjPAlign thys, ajint score);
+void         ajAlignSetScoreL (AjPAlign thys, ajlong score);
 void         ajAlignSetScoreR (AjPAlign thys, float score);
-void         ajAlignSetSubHeader (AjPAlign thys, const AjPStr subheader);
-void         ajAlignSetSubHeaderApp (AjPAlign thys, const AjPStr subheader);
-void         ajAlignSetSubHeaderC (AjPAlign thys, const char* subheader);
-void         ajAlignSetSubHeaderPre (AjPAlign thys, const AjPStr subheader);
 void         ajAlignSetStats (AjPAlign thys, ajint iali, ajint len,
 				    ajint ident, ajint sim, ajint gaps,
 				    const AjPStr score);
@@ -132,7 +140,14 @@ AjBool       ajAlignSetSubRange (AjPAlign thys,
 				 ajint end1, AjBool rev1, ajint len1,
 				 ajint substart2, ajint start2,
 				 ajint end2, AjBool rev2, ajint len2);
+void         ajAlignSetSubHeader (AjPAlign thys, const AjPStr subheader);
+void         ajAlignSetSubHeaderApp (AjPAlign thys, const AjPStr subheader);
+void         ajAlignSetSubHeaderC (AjPAlign thys, const char* subheader);
+void         ajAlignSetSubHeaderPre (AjPAlign thys, const AjPStr subheader);
 void         ajAlignSetSubStandard (AjPAlign thys, ajint iali);
+void         ajAlignSetSubTail(AjPAlign thys, const AjPStr tail);
+void         ajAlignSetSubTailC(AjPAlign thys, const char* tail);
+void         ajAlignSetSubTailApp(AjPAlign thys, const AjPStr tail);
 void         ajAlignSetTail (AjPAlign thys, const AjPStr tail);
 void         ajAlignSetTailApp (AjPAlign thys, const AjPStr tail);
 void         ajAlignSetTailC (AjPAlign thys, const char* tail);
@@ -141,9 +156,12 @@ void         ajAlignTrace (const AjPAlign thys);
 void         ajAlignTraceT (const AjPAlign thys, const char* title);
 AjBool       ajAlignValid (AjPAlign thys);
 void         ajAlignWrite (AjPAlign thys);
-void         ajAlignWriteClose (AjPAlign thys);
 void         ajAlignWriteHeader (AjPAlign thys);
 void         ajAlignWriteTail (AjPAlign thys);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 
