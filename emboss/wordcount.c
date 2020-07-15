@@ -2,7 +2,7 @@
 **
 ** Counts words of a specified size in a DNA sequence
 **
-** @author:
+** @author
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -34,36 +34,43 @@
 
 int main(int argc, char **argv)
 {
+    AjPSeqall seqall;
     AjPSeq seq;
     AjPTable table = 0;
     AjPFile outf;
     ajint wordsize;
+    ajint mincount;
 
     embInit("wordcount", argc, argv);
 
-    seq = ajAcdGetSeq("sequence1");
+    seqall = ajAcdGetSeqall("sequence1");
 
     wordsize = ajAcdGetInt("wordsize");
     outf     = ajAcdGetOutfile("outfile");
+    mincount = ajAcdGetInt("mincount");
 
     embWordLength(wordsize);
 
-    if(embWordGetTable(&table, seq))		/* get table of words   */
+    while (ajSeqallNext(seqall, &seq))
     {
-	embWordPrintTableF(table, outf); 	/* print table of words */
-	/*
-        **  test if table can be added to
-        **  if(getWordTable(&table, seq, wordcount)) ?? get table of words ??
-	**  {
-	**       printWordTable(table);              ?? print table of words ??
-	**  }
-	*/
-	embWordFreeTable(&table);	/* free table of words */
+	embWordGetTable(&table, seq);		/* get table of words   */
     }
-    else
-	ajFatal("ERROR generating word table");
 
-    ajExit();
+    embWordPrintTableFI(table, mincount, outf); /* print table of words */
+    /*
+     **  test if table can be added to
+     **  if(getWordTable(&table, seq, wordcount)) ?? get table of words ??
+     **  {
+     **       printWordTable(table);              ?? print table of words ??
+     **  }
+     */
+    embWordFreeTable(&table);	/* free table of words */
+
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajFileClose(&outf);
+
+    embExit();
 
     return 0;
 }
