@@ -746,7 +746,7 @@ Output file [paamir.showseq]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.showseq</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -917,7 +917,7 @@ pax* | 10</td>
 
 <tr>
 <td>-flatreformat</td>
-<td>This changes the output format to one where the recognition site is indicated by a row of '===' characters and the cut site is pointed to by a '>' character in the forward sense, or a '<' in the reverse sense strand.</td>
+<td>This changes the output format to one where the recognition site is indicated by a row of '===' characters and the cut site is pointed to by a '&gt;' character in the forward sense, or a '&lt;' in the reverse sense strand.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
@@ -1384,11 +1384,11 @@ regulation
           |
           misc_feature note="last base of an XhoI site"
 
-                   70        80        90        100       110       120       
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+                   70        80        90        100       
+          ----:----|----:----|----:----|----:----|
+          ctacctggcgagcctggagcacgagcgggttcgcttcgta
               |===============|
-              promoter note="proposed rpoN-dependent promoter"
+          promoter note="proposed rpoN-dependent promoter"
 
 </pre>
 </td></tr></table><p>
@@ -1419,7 +1419,7 @@ regulation
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
           ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
-          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+          ctacctggcgagcctggagcacgagcgggttcgcttcgta
 
 </pre>
 </td></tr></table><p>
@@ -1444,8 +1444,8 @@ RS24_FUGRU
           rhlhlllyhhlhleayseesylyyslryirelrilehlyyyherylrylrysreyyarlh
           grneyyysrryeatlrpruprassnuossguagsyueusssrrgsngsugsngtsslgyr
 
-                   130       140       150       160       170       180       
-          ----:----|----:----|----:----|----:----|----:----|----:----|
+                   130       
+          ----:----|--
           LLASVGASLLLA
           yylealleyyys
           ssarlyarsssp
@@ -1462,7 +1462,7 @@ PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
         1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 60
-       61 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac 120
+       61 ctacctggcgagcctggagcacgagcgggttcgcttcgta 100
 
 </pre>
 </td></tr></table><p>
@@ -1476,7 +1476,7 @@ PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
       123 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 182
-      183 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac 242
+      183 ctacctggcgagcctggagcacgagcgggttcgcttcgta 222
 
 </pre>
 </td></tr></table><p>
@@ -1490,7 +1490,7 @@ PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
           ggtaccgctggccgagcatctgctCGATCACCACCAGCCGGGCGAcgggaactgcacgat
-          ctacctggcgagcctggagcacgagcgggttcgcttcgtaCGGCGCTGAGCGACAGTCAC
+          ctacctggcgagcctggagcacgagcgggttcgcttcgta
 
 </pre>
 </td></tr></table><p>

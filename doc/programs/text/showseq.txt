@@ -896,11 +896,11 @@ regulation
           |
           misc_feature note="last base of an XhoI site"
 
-                   70        80        90        100       110       120
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+                   70        80        90        100
+          ----:----|----:----|----:----|----:----|
+          ctacctggcgagcctggagcacgagcgggttcgcttcgta
               |===============|
-              promoter note="proposed rpoN-dependent promoter"
+          promoter note="proposed rpoN-dependent promoter"
 
   Output files for usage example 2
 
@@ -923,7 +923,7 @@ regulation
   File: paamir.showseq
 
           ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
-          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+          ctacctggcgagcctggagcacgagcgggttcgcttcgta
 
   Output files for usage example 4
 
@@ -944,8 +944,8 @@ RS24_FUGRU
           rhlhlllyhhlhleayseesylyyslryirelrilehlyyyherylrylrysreyyarlh
           grneyyysrryeatlrpruprassnuossguagsyueusssrrgsngsugsngtsslgyr
 
-                   130       140       150       160       170       180
-          ----:----|----:----|----:----|----:----|----:----|----:----|
+                   130
+          ----:----|--
           LLASVGASLLLA
           yylealleyyys
           ssarlyarsssp
@@ -958,7 +958,7 @@ PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
         1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 60
-       61 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac 120
+       61 ctacctggcgagcctggagcacgagcgggttcgcttcgta 100
 
   Output files for usage example 6
 
@@ -968,7 +968,7 @@ PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
       123 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 182
-      183 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac 242
+      183 ctacctggcgagcctggagcacgagcgggttcgcttcgta 222
 
   Output files for usage example 7
 
@@ -978,7 +978,7 @@ PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
           ggtaccgctggccgagcatctgctCGATCACCACCAGCCGGGCGAcgggaactgcacgat
-          ctacctggcgagcctggagcacgagcgggttcgcttcgtaCGGCGCTGAGCGACAGTCAC
+          ctacctggcgagcctggagcacgagcgggttcgcttcgta
 
   Output files for usage example 8
 

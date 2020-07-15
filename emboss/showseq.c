@@ -309,7 +309,8 @@ int main(int argc, char **argv)
 	    }
 
 	    ajFileSeek(enzfile, 0L, 0);
-	    hits = embPatRestrictMatch(seq, 1, ajSeqGetLen(seq), enzfile, enzymes,
+	    hits = embPatRestrictMatch(seq, 1, ajSeqGetLen(seq),
+				       enzfile, enzymes,
 				       sitelen, plasmid, ambiguity, mincuts,
 				       maxcuts, blunt, sticky, commercial,
 				       restrictlist);
@@ -518,7 +519,7 @@ static void showseq_read_equiv(AjPFile equfile, AjPTable table)
         key = ajStrNewC(p);
         p = ajSysStrtok(NULL," \t\n");
         value = ajStrNewC(p);
-        ajTablePut(table,(const void *)key, (void *)value);
+        ajTablePut(table,(void *)key, (void *)value);
     }
 
     return;
