@@ -30,17 +30,19 @@ extern "C"
 **
 ** @attr pcre [real_pcre*] PCRE compiled expression
 ** @attr extra [pcre_extra*] PCRE study data (if available, else NULL)
-** @attr ovecsize [int] Output vector size
 ** @attr ovector [int*] Output vector offsets
 ** @attr orig [const char*] Original string
+** @attr ovecsize [int] Output vector size
+** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct AjSRegexp {
     real_pcre *pcre;
     pcre_extra *extra;
-    int ovecsize;
     int *ovector;
     const char* orig;
+    int ovecsize;
+    char Padding[4];
 } AjORegexp;
 
 #define AjPRegexp AjORegexp*
@@ -63,7 +65,6 @@ AjPRegexp ajRegCompCaseC (const char* exp);
 /* execute expression match */
 
 AjBool ajRegExec (AjPRegexp prog, const AjPStr str);
-AjBool ajRegExecB (AjPRegexp prog, const AjPStr str);
 AjBool ajRegExecC (AjPRegexp prog, const char* str);
 
 /* test substrings */

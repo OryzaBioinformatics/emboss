@@ -15,6 +15,7 @@ struct AjMelt
     float enthalpy;
     float entropy;
     float energy;
+    char Padding[4];
 };
 
 

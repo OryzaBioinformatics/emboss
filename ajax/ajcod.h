@@ -26,13 +26,14 @@ extern "C"
 ** @attr Desc [AjPStr] Description
 ** @attr CdsCount [ajint] Number of coding sequences used
 ** @attr CodonCount [ajint] Number of individual codons used
-** @attr GeneticCode [ajint] Genetic code NCBI number to match
-**                           amino acids to codons.
 ** @attr aa [ajint*] Amino acid represented by codon
 ** @attr num [ajint*] Number of codons
 ** @attr tcount [double*] Codons per thousand
 ** @attr fraction [double*] Fraction of amino acids of this type
 ** @attr back [ajint*] Index of favoured amino acid for backtranslation
+** @attr GeneticCode [ajint] Genetic code NCBI number to match
+**                           amino acids to codons.
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -45,12 +46,13 @@ typedef struct AjSCod
     AjPStr Desc;
     ajint CdsCount;
     ajint CodonCount;
-    ajint GeneticCode;
     ajint *aa;
     ajint *num;
     double *tcount;
     double *fraction;
     ajint *back;
+    ajint GeneticCode;
+    char Padding[4];
 } AjOCod;
 #define AjPCod AjOCod*
 

@@ -495,13 +495,13 @@ float ajMeltEnergy2(const char *strand, ajint pos, ajint len, AjBool isDNA,
 
     ajMeltInit(isDNA,len);
 
-    line = ajStrNew();
+    line = ajStrNewC("AA");
 
     for(i=0;i<limit;++i)
     {
+	ajStrAssignSubC(&line,strand,i,i+1);
 	for(j=0;j<16;++j)
 	{
-	    ajStrAssignSubC(&line,strand+i,0,1);
 	    ident = ajProbScore(meltTable[j].pair,line,2);
 	    if(ident>.9)
 	    {

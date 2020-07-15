@@ -53,7 +53,8 @@ static ajint treeIterDelCnt = 0;
 
 
 static AjPTree treeNew(AjEnum type);
-static void treeTraceNode (const AjPTree thys, ajint margin);
+static void treeTraceNode (const AjPTree thys, ajint num);
+static void treestrTraceNode (const AjPTree thys, ajint num);
 
 
 /* @func ajTreeNew ************************************************************
@@ -169,21 +170,24 @@ AjPTree ajTreeCopy(const AjPTree thys)
 ** get the number of nodes in the linked tree.
 **
 ** @param [r] thys [const AjPTree] Tree
-** @return [ajint] Number of nodes in tree.
+** @return [ajuint] Number of nodes in tree.
 ** @category cast [AjPTree] get the number of nodes in a linked tree.
 ** @@
 ******************************************************************************/
 
-ajint ajTreeLength(const AjPTree thys)
+ajuint ajTreeLength(const AjPTree thys)
 {
-    ajint icnt = 0;
-    if(!thys)
-	return 0;
+    AjPTree tree;
+    ajint inode=0;
 
-    /* trace tree  - as in ajTreeTrace */
-    /* return number of nodes */
+    tree = ajTreeFollow(NULL, thys);
+    while(tree)
+    {
+	if(tree->Data) inode++;
+	tree = ajTreeFollow(tree, thys);
+    }
 
-    return icnt;
+    return inode;
 }
 
 
@@ -194,12 +198,12 @@ ajint ajTreeLength(const AjPTree thys)
 ** get the number of nodes in the linked tree.
 **
 ** @param [r] thys [const AjPTree] Tree
-** @return [ajint] Number of nodes in tree.
+** @return [ajuint] Number of nodes in tree.
 ** @category cast [AjPTree] get the number of nodes in an AjPStr linked tree.
 ** @@
 ******************************************************************************/
 
-ajint ajTreestrLength(const AjPTree thys)
+ajuint ajTreestrLength(const AjPTree thys)
 {
     return ajTreeLength(thys);
 }
@@ -223,7 +227,10 @@ ajint ajTreestrLength(const AjPTree thys)
 
 void ajTreeFree(AjPTree* pthis)
 {
-    AjPTree thys;
+    AjPTree topnode = NULL;
+    AjPTree next    = NULL;
+    AjPTree tree    = NULL;
+    AjPTree parent  = NULL;
 
     if(!pthis)
 	return;
@@ -231,10 +238,55 @@ void ajTreeFree(AjPTree* pthis)
     if(!*pthis)
 	return;
 
-   treeDelCnt++;
+    treeDelCnt++;
 
-    thys = *pthis;
+    topnode = *pthis;
 
+    tree = ajTreeDown(topnode);
+
+    while(tree && tree != topnode)
+    {
+	/* if we can go down, simply do so */
+	next = ajTreeDown(tree);
+	if(next)
+	{
+	    tree = next;
+	    continue;
+	}
+
+	/* if we can go right, remove the node we left */
+	next = ajTreeNext(tree);
+	if(next)
+	{
+	    AJFREE(tree->Data);
+	    AJFREE(tree);
+	    tree = next;
+	    continue;
+	}
+
+	/* if we can go up, remove the node we left */
+	/* if not, we are at the top of the whole tree */
+	next = ajTreeUp(tree);
+	AJFREE(tree->Data);
+	AJFREE(tree);
+	tree = next;
+    }
+
+    /* remove the top (sub) node */
+    if(tree)
+    {
+	parent = tree->Up;
+	if(parent)
+	{
+	    if(parent->Down == tree)
+		parent->Down = tree->Right;
+	    if(tree->Left)
+		tree->Left->Right = tree->Right;
+	}
+	AJFREE(tree->Data);
+	AJFREE(tree);
+    }
+    AJFREE(*pthis);
 
     return;
 }
@@ -256,7 +308,10 @@ void ajTreeFree(AjPTree* pthis)
 
 void ajTreestrFree(AjPTree* pthis)
 {
-    AjPTree thys;
+    AjPTree topnode = NULL;
+    AjPTree next    = NULL;
+    AjPTree tree    = NULL;
+    AjPTree parent  = NULL;
 
     if(!pthis)
 	return;
@@ -266,7 +321,52 @@ void ajTreestrFree(AjPTree* pthis)
 
     treeDelCnt++;
 
-    thys = *pthis;
+    topnode = *pthis;
+
+    tree = ajTreeDown(topnode);
+
+    while(tree && tree != topnode)
+    {
+	/* if we can go down, simply do so */
+	next = ajTreeDown(tree);
+	if(next)
+	{
+	    tree = next;
+	    continue;
+	}
+
+	/* if we can go right, remove the node we left */
+	next = ajTreeNext(tree);
+	if(next)
+	{
+	    ajStrDel((AjPStr*)&tree->Data);
+	    AJFREE(tree);
+	    tree = next;
+	    continue;
+	}
+
+	/* if we can go up, remove the node we left */
+	/* if not, we are at the top of the whole tree */
+	next = ajTreeUp(tree);
+	ajStrDel((AjPStr*)&tree->Data);
+	AJFREE(tree);
+	tree = next;
+    }
+
+    /* remove the top (sub) node */
+    if(tree)
+    {
+	parent = tree->Up;
+	if(parent)
+	{
+	    if(parent->Down == tree)
+		parent->Down = tree->Right;
+	    if(tree->Left)
+		tree->Left->Right = tree->Right;
+	}
+	ajStrDel((AjPStr*)&tree->Data);
+	AJFREE(tree);
+    }
     AJFREE(*pthis);
 
     return;
@@ -291,17 +391,62 @@ void ajTreestrFree(AjPTree* pthis)
 
 void ajTreeDel(AjPTree* pthis)
 {
-    AjPTree tree;
+    AjPTree topnode = NULL;
+    AjPTree next    = NULL;
+    AjPTree tree    = NULL;
+    AjPTree parent  = NULL;
 
     if(!pthis)
 	return;
+
     if(!*pthis)
 	return;
 
     treeDelCnt++;
 
-    tree = *pthis;
+    topnode = *pthis;
 
+    tree = ajTreeDown(topnode);
+
+    while(tree && tree != topnode)
+    {
+	/* if we can go down, simply do so */
+	next = ajTreeDown(tree);
+	if(next)
+	{
+	    tree = next;
+	    continue;
+	}
+
+	/* if we can go right, remove the node we left */
+	next = ajTreeNext(tree);
+	if(next)
+	{
+	    AJFREE(tree);
+	    tree = next;
+	    continue;
+	}
+
+	/* if we can go up, remove the node we left */
+	/* if not, we are at the top of the whole tree */
+	next = ajTreeUp(tree);
+	AJFREE(tree);
+	tree = next;
+    }
+
+    /* remove the top (sub) node */
+    if(tree)
+    {
+	parent = tree->Up;
+	if(parent)
+	{
+	    if(parent->Down == tree)
+		parent->Down = tree->Right;
+	    if(tree->Left)
+		tree->Left->Right = tree->Right;
+	}
+	AJFREE(tree);
+    }
     AJFREE(*pthis);
 
     return;
@@ -337,7 +482,7 @@ void ajTreestrDel(AjPTree* pthis)
 
 /* @func ajTreeMap ************************************************************
 **
-** For each node in the tree call function apply.
+** For each data node in the tree call function apply.
 **
 ** @param [u] thys [AjPTree] Tree.
 ** @param [f] apply [void function] Function to call for each tree item.
@@ -349,9 +494,17 @@ void ajTreestrDel(AjPTree* pthis)
 
 void ajTreeMap(AjPTree thys, void apply(void** x, void* cl), void* cl)
 {
+    AjPTree tree;
 
     assert(apply);
 
+    tree = ajTreeFollow(NULL, thys);
+    while(tree)
+    {
+	if(tree->Data)
+	    apply((void**) &tree->Data, cl);
+	tree = ajTreeFollow(tree, thys);
+    }
     return;
 }
 
@@ -374,8 +527,17 @@ void ajTreeMap(AjPTree thys, void apply(void** x, void* cl), void* cl)
 void ajTreestrMap(AjPTree thys, void apply(AjPStr* x, void* cl), void* cl)
 {
 
+    AjPTree tree;
+
     assert(apply);
 
+    tree = ajTreeFollow(NULL, thys);
+    while(tree)
+    {
+	if(tree->Data)
+	    apply((AjPStr*) &tree->Data, cl);
+	tree = ajTreeFollow(tree, thys);
+    }
 
     return;
 }
@@ -389,15 +551,39 @@ void ajTreestrMap(AjPTree thys, void apply(AjPStr* x, void* cl), void* cl)
 **
 ** @param [r] thys [const AjPTree] Tree
 ** @param [w] array [void***] Array of pointers to tree items.
-** @return [ajint] Size of array of pointers.
+** @return [ajuint] Size of array of pointers.
 ** @category cast [AjPTree] Create an array of the pointers to the data.
 ** @@
 ******************************************************************************/
 
-ajint ajTreeToArray(const AjPTree thys, void*** array)
+ajuint ajTreeToArray(const AjPTree thys, void*** array)
 {
-    ajint n = 0;
+    ajuint i = 0;
+    ajuint n;
+    AjPTree tree;
+
+    n = ajTreeLength(thys);
  
+    if(!n)
+    {
+	*array = NULL;
+	return 0;
+    }
+
+    if (*array)
+	AJFREE(*array);
+
+    *array = AJALLOC((n+1)*sizeof(array));
+
+    tree = ajTreeFollow(NULL, thys);
+    while(tree)
+    {
+	if(tree->Data)
+	    (*array)[i++] = tree->Data;
+	tree = ajTreeFollow(tree, thys);
+    }
+    (*array)[n] = NULL;
+
     return n;
 }
 
@@ -406,19 +592,43 @@ ajint ajTreeToArray(const AjPTree thys, void*** array)
 
 /* @func ajTreestrToArray *****************************************************
 **
-** create an array of the pointers to the data.
+** Create an array of the pointers to the data.
 **
 ** @param [r] thys [const AjPTree] Tree
 ** @param [w] array [AjPStr**] Array of Strings.
 **
-** @return [ajint] Size of array of pointers.
+** @return [ajuint] Size of array of pointers.
 ** @category cast [AjPTree] Create an array of the pointers to the data.
 ** @@
 ******************************************************************************/
 
-ajint ajTreestrToArray(const AjPTree thys, AjPStr** array)
+ajuint ajTreestrToArray(const AjPTree thys, AjPStr** array)
 {
-    ajint n = 0;
+    ajuint i = 0;
+    ajuint n;
+    AjPTree tree;
+
+    n = ajTreeLength(thys);
+ 
+    if(!n)
+    {
+	*array = NULL;
+	return 0;
+    }
+
+    if (*array)
+	AJFREE(*array);
+
+    *array = AJALLOC((n+1)*sizeof(array));
+
+    tree = ajTreeFollow(NULL, thys);
+    while(tree)
+    {
+	if(tree->Data)
+	    (*array)[i++] = (AjPStr) tree->Data;
+	tree = ajTreeFollow(tree, thys);
+    }
+    (*array)[n] = NULL;
 
     return n;
 }
@@ -450,18 +660,48 @@ void ajTreeDummyFunction(void)
 ** Sets the data value in a terminal tree node.
 **
 ** @param [u] thys [AjPTree] Terminal tree node. Must have no descendants
-** @param [r] data [void*] Data value
+** @param [o] data [void*] Data value
 ** @return [AjBool] ajTrue on success
 ******************************************************************************/
 
 AjBool ajTreeAddData(AjPTree thys, void* data)
 {
     if (thys->Down) {
-	ajErr("tried to define data value for non-terminal tree node\n");
+	ajErr("tried to define data value for non-terminal tree node");
+	return ajFalse;
+    }
+
+    if (thys->Data) {
+	ajErr("tried to define data value for node with data");
 	return ajFalse;
     }
 
     thys->Data = data;
+    return ajTrue;
+}
+
+/* @func ajTreestrAddData *****************************************************
+**
+** Sets the data value in a terminal string tree node.
+**
+** @param [u] thys [AjPTree] Terminal tree node. Must have no descendants
+** @param [o] data [AjPStr] Data value
+** @return [AjBool] ajTrue on success
+******************************************************************************/
+
+AjBool ajTreestrAddData(AjPTree thys, AjPStr data)
+{
+    if (thys->Down) {
+	ajErr("tried to define string data value for non-terminal tree node");
+	return ajFalse;
+    }
+
+    if (thys->Data) {
+	ajErr("tried to define string data value for tree node with data");
+	return ajFalse;
+    }
+
+    thys->Data = (void*) data;
     return ajTrue;
 }
 
@@ -472,12 +712,18 @@ AjBool ajTreeAddData(AjPTree thys, void* data)
 ** @param [u] thys [AjPTree] Parent tree node
 ** @return [AjPTree] New tree node created. It has no data value so far,
 **                   so ajTreeAddNode or ajTreeAddData should be called to
-**                  define data or further nodes.
+**                   define data or further nodes.
 ******************************************************************************/
 
 AjPTree ajTreeAddNode(AjPTree thys)
 {
     AjPTree ret;
+
+    if(thys->Data)
+    {
+	ajErr("tried to add child to node with data value");
+	return NULL;
+    }
 
     AJNEW0(ret);
     ret->Up = thys;
@@ -521,65 +767,261 @@ AjPTree ajTreeAddSubNode(AjPTree thys)
 
 void ajTreeTrace(const AjPTree thys)
 {
-    treeTraceNode(thys, 0);
+    AjPTree tree;
+    ajint inode=0;
+
+    tree = ajTreeFollow(NULL, thys);
+    while(tree)
+    {
+	treeTraceNode(tree, inode++);
+	tree = ajTreeFollow(tree, thys);
+    }
 
     return;
 }
 
-/* @funcstatic treeTraceNode  *************************************************
-** **
+/* @func ajTreestrTrace *******************************************************
+**
+** Prints a trace of a string tree to debug output
+**
+** @param [r] thys [const AjPTree] Tree object
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajTreestrTrace(const AjPTree thys)
+{
+    AjPTree tree;
+    ajint inode=0;
+
+    tree = ajTreeFollow(NULL, thys);
+    while(tree)
+    {
+	treestrTraceNode(tree, inode++);
+	tree = ajTreeFollow(tree, thys);
+    }
+
+    return;
+}
+
+/* @funcstatic treeTraceNode **************************************************
+**
 ** Write information about a tee to debug output
 **
 ** @param [r] thys [const AjPTree] Tree node
-** @param [r] margin [ajint] Left margin
+** @param [r] num [ajint] Node number
 ** @return [void]
 ******************************************************************************/
 
-static void treeTraceNode (const AjPTree thys, ajint margin)
+static void treeTraceNode (const AjPTree thys, ajint num)
 {
-    ajint i;
     ajint ileft = 0;
     ajint iright = 0;
+    ajint iup = 0;
+    ajint idown = 0;
     const AjPTree p;
 
-    for (i=0; i < margin; i++)
-	ajDebug(" ");
-    ajDebug("node:%x", thys);
+    ajDebug("node %d:%x", num, thys);
 
-    for (i=0; i < margin; i++)
-	ajDebug(" ");
+    for (p=thys;p->Up; p=p->Up)
+	iup++;
+    for (p=thys;p->Down; p=p->Down)
+	idown++;
+    for (p=thys;p->Left; p=p->Left)
+	ileft++;
+    for (p=thys;p->Right; p=p->Right)
+	ileft++;
+
+    ajDebug("  Up: %x %d\n", thys->Up, iup);
+    ajDebug("  Down: %x %d\n", thys->Down, idown);
+    ajDebug("  Right: %x %d\n", thys->Right, iright);
+    ajDebug("  Left: %x %d\n", thys->Left, ileft);
+
     if (thys->Data)
     {
 	if (thys->Down)
 	    ajDebug(" Data and down link: ** broken node %x **\n", thys);
 	else
 	    ajDebug(" End node data: %x\n", thys->Data);
-	return;
     }
     else if (!thys->Down)
     {
 	ajDebug(" No data, no down link: ** broken node %x **\n", thys);
-	return;
     }
 
+    return;
+ }
+
+
+
+/* @funcstatic treestrTraceNode  **********************************************
+**
+** Write information about a tree node to debug output
+**
+** @param [r] thys [const AjPTree] Tree node
+** @param [r] num [ajint] Node number
+** @return [void]
+******************************************************************************/
+
+static void treestrTraceNode (const AjPTree thys, ajint num)
+{
+    ajint ileft = 0;
+    ajint iright = 0;
+    ajint iup = 0;
+    ajint idown = 0;
+    const AjPTree p;
+
+    ajDebug("node %d:%x", num, thys);
+
+    if (thys->Data)
+    {
+	if (thys->Down)
+	    ajDebug(" Data and down link: ** broken node %x **\n", thys);
+	else
+	    ajDebug(" End node string: '%S'\n", (AjPStr) thys->Data);
+    }
+    else if (!thys->Down)
+    {
+	ajDebug(" No data, no down link: ** broken node %x **\n", thys);
+    }
+
+    for (p=thys;p->Up; p=p->Up)
+	iup++;
+    for (p=thys;p->Down; p=p->Down)
+	idown++;
     for (p=thys;p->Left; p=p->Left)
 	ileft++;
     for (p=thys;p->Right; p=p->Right)
-	ileft++;
-    for (i=0; i < margin; i++)
-	ajDebug(" ");
-    ajDebug("Left: %d Right: %d\n", ileft, iright);
+	iright++;
 
-    if (thys->Down)
-	treeTraceNode(thys->Down, margin+2);
-    else if (thys->Up)
-	treeTraceNode(thys->Right, margin);
-    else if (!thys->Right)
-	return;
+    ajDebug("  Up: %x %d\n", thys->Up, iup);
+    ajDebug("  Down: %x %d\n", thys->Down, idown);
+    ajDebug("  Right: %x %d\n", thys->Right, iright);
+    ajDebug("  Left: %x %d\n", thys->Left, ileft);
 
-    treeTraceNode(thys->Right, margin);
+    if (thys->Data)
+    {
+	if (thys->Down)
+	    ajDebug(" Data and down link: ** broken node %x **\n", thys);
+	else
+	    ajDebug(" End node string: '%S'\n", (AjPStr) thys->Data);
+    }
+    else if (!thys->Down)
+    {
+	ajDebug(" No data, no down link: ** broken node %x **\n", thys);
+    }
+
     return;
  }
+
+
+
+/* @func ajTreeFollow *****************************************************
+**
+** Returns the next node through the tree.
+**
+** Step down to children, and follow siblings to the right.
+**
+** When done at any level, go up and right.
+**
+** Stop when back up at the original parent node.
+**
+** @param [r] thys [const AjPTree] Currentree node
+** @param [r] parent [const AjPTree] Parent tree node
+** @return [AjPTree] New tree node created. It has no data value so far,
+**                   so ajTreeAddNode or ajTreeAddData should be called to
+**                  define data or further nodes.
+******************************************************************************/
+
+AjPTree ajTreeFollow(const AjPTree thys, const AjPTree parent)
+{
+    AjPTree ret;
+
+    if(!thys)
+	thys = parent;
+
+    ret = ajTreeDown(thys);
+    if(ret)
+	return ret;
+
+    ret = ajTreeNext(thys);
+    if(ret)
+	return ret;
+
+    ret = ajTreeUp(thys);
+    if(ret == parent)
+	return NULL;
+
+    ret = ajTreeNext(thys);
+    return ret;
+}
+
+
+/* @func ajTreeNext *****************************************************
+**
+** Returns the next node at the same level
+**
+** @param [r] thys [const AjPTree] Parent tree node
+** @return [AjPTree] New tree node created. It has no data value so far,
+**                   so ajTreeAddNode or ajTreeAddData should be called to
+**                  define data or further nodes.
+******************************************************************************/
+
+AjPTree ajTreeNext(const AjPTree thys)
+{
+    return thys->Right;
+}
+
+
+/* @func ajTreePrev *****************************************************
+**
+** Returns the previous node at the same level
+**
+** @param [r] thys [const AjPTree] Parent tree node
+** @return [AjPTree] New tree node created. It has no data value so far,
+**                   so ajTreeAddNode or ajTreeAddData should be called to
+**                  define data or further nodes.
+******************************************************************************/
+
+AjPTree ajTreePrev(const AjPTree thys)
+{
+    return thys->Left;
+}
+
+
+/* @func ajTreeDown *****************************************************
+**
+** Returns the next node down 1 level
+**
+** @param [r] thys [const AjPTree] Parent tree node
+** @return [AjPTree] New tree node created. It has no data value so far,
+**                   so ajTreeAddNode or ajTreeAddData should be called to
+**                  define data or further nodes.
+******************************************************************************/
+
+AjPTree ajTreeDown(const AjPTree thys)
+{
+    return thys->Down;
+}
+
+
+/* @func ajTreeUp *****************************************************
+**
+** Returns the parent of the present node
+**
+** @param [r] thys [const AjPTree] Child tree node
+** @return [AjPTree] New tree node created. It has no data value so far,
+**                   so ajTreeAddNode or ajTreeAddData should be called to
+**                  define data or further nodes.
+******************************************************************************/
+
+AjPTree ajTreeUp(const AjPTree thys)
+{
+    return thys->Up;
+}
+
+
+
 
 /* @func ajTreeExit ***********************************************************
 **

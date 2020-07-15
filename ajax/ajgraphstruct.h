@@ -13,10 +13,10 @@
 ** @attr type [ajint] Object type in AjEGraphObjectTypes
 ** @attr colour [ajint] See AjEGraphColour for plplot colours
 ** @attr text [AjPStr] Text to plot
-** @attr x1 [float] x start
-** @attr x2 [float] x end
-** @attr y1 [float] y start
-** @attr y2 [float] y end
+** @attr xx1 [float] x start
+** @attr xx2 [float] x end
+** @attr yy1 [float] y start
+** @attr yy2 [float] y end
 ** @attr next [struct AjSGraphPlpObj*] link to next object in the list
 ** @@
 ******************************************************************************/
@@ -25,10 +25,10 @@ typedef struct AjSGraphPlpObj {
   ajint type;
   ajint colour;
   AjPStr text;
-  float x1;
-  float x2;
-  float y1;
-  float y2;
+  float xx1;
+  float xx2;
+  float yy1;
+  float yy2;
   struct AjSGraphPlpObj *next;
 } AjOGraphPlpObj;
 #define AjPGraphPlpObj AjOGraphPlpObj*
@@ -38,8 +38,8 @@ typedef struct AjSGraphPlpObj {
 ** Graph data object. Substructure of AjPGraphPlp.
 **
 ** @attr x [float*] x coordinates
-** @attr xcalc [AjBool] if x calculated then delete after
 ** @attr y [float*] y coordinates
+** @attr xcalc [AjBool] if x calculated then delete after
 ** @attr ycalc [AjBool] as with x. So we do not delete data if it was
 **                      passed as a ptr
 ** @attr numofpoints [ajint] Number of points in x and y
@@ -65,8 +65,8 @@ typedef struct AjSGraphPlpObj {
 
 typedef struct AjSGraphPlpData {
   float *x;
-  AjBool xcalc;
   float *y;
+  AjBool xcalc;
   AjBool ycalc;
   ajint numofpoints;
   ajint numofobjects;
@@ -109,6 +109,7 @@ typedef struct AjSGraphPlpData {
 ** @attr minmaxcalc [AjBool] Set true when (xy)start/end are set
 ** @attr isdata [AjBool] True for a data type graph
 ** @attr displaytype [ajint] Displaytype index to graphType
+** @attr desc [AjPStr] Plot description, used to set default title
 ** @attr title [AjPStr] Plot title
 ** @attr subtitle [AjPStr] Plot subtitle
 ** @attr xaxis [AjPStr] Plot x axis title
@@ -136,6 +137,7 @@ typedef struct AjSGraphPlp {
   AjBool minmaxcalc;
   AjBool isdata;
   ajint displaytype;
+  AjPStr desc;
   AjPStr title;
   AjPStr subtitle;
   AjPStr xaxis;
@@ -150,16 +152,19 @@ typedef struct AjSGraphPlp {
 **
 ** Graph object.
 **
-** @attr numsets [ajint] Number of sets in a multiple graph
 ** @attr plplot [AjPGraphPlp] PlPlot graph object
 ** @attr xml [AjPGraphXml] XML graph object
+** @attr numsets [ajint] Number of sets in a multiple graph
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSGraph {
-    ajint numsets;
+
     AjPGraphPlp plplot;
     AjPGraphXml xml;
+    ajint numsets;
+    char Padding[4];
 } AjOGraph;
 #define AjPGraph AjOGraph*
 
@@ -168,6 +173,6 @@ enum AjEGraphColours {BLACK, RED, YELLOW, GREEN, AQUAMARINE,
 		      CYAN, TURQUOISE, MAGENTA, SALMON, WHITE};
 
 
-#define NCOLS 16
+#define MAXCOL 15
 
 #endif /* ajgraphstruct_h */

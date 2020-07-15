@@ -11,7 +11,7 @@ extern "C"
 
 struct binding {
 	struct binding *link;
-	const void *key;
+	void *key;
         void *value;
 };
 
@@ -43,22 +43,24 @@ struct binding {
 ** @cast ajTableLength Returns the number of keys in a table.
 ** @output ajTableTrace Writes debug messages to trace the contents of a table.
 **
-** @attr size [ajint] Size - number of hash buckets
 ** @attr cmp [(ajint*)] Compare function (0 for match, -1 or +1 if not matched)
 ** @attr hash [(unsigned*)] Hash function
 ** @attr length [ajint] Number of entries
 ** @attr timestamp [unsigned] Time stamp
 ** @attr buckets [struct binding**] Buckets
+** @attr size [ajint] Size - number of hash buckets
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSTable {
-  ajint size;
   ajint (*cmp)(const void *x, const void *y);
   unsigned (*hash)(const void *key, unsigned hashsize);
   ajint length;
   unsigned timestamp;
   struct binding **buckets;
+  ajint size;
+  char Padding[4];
 } AjOTable;
 
 #define AjPTable AjOTable*
@@ -79,18 +81,19 @@ AjPTable   ajTableNewL (ajint size,
 			unsigned hash(const void *key, unsigned hashsize));
 void       ajTableFree (AjPTable* table);
 void*      ajTableGet  (const AjPTable table, const void *key);
-void*      ajTableKey  (const AjPTable table, const void *key);
+const void* ajTableKey  (const AjPTable table, const void *key);
 ajint      ajTableLength (const AjPTable table);
 void       ajTableMap    (AjPTable table,
 			  void apply(const void *key, void **value, void *cl),
 			  void *cl);
 void       ajTableMapDel (AjPTable table,
-			  void apply(const void **key, void **value, void *cl),
+			  void apply(void **key, void **value, void *cl),
 			  void *cl);
-void*      ajTablePut   (AjPTable table, const void *key,
+void*      ajTablePut   (AjPTable table, void *key,
 			 void *value);
 void*      ajTableRemove (AjPTable table, const void *key);
-void**     ajTableToarray (const AjPTable table, void *end);
+ajuint     ajTableToarray (const AjPTable table,
+			   void*** keyarray, void*** valarray);
 void       ajTableTrace   (const AjPTable table);
 
 ajint      ajStrTableCmp      (const void *x, const void *y);

@@ -200,6 +200,7 @@ static void messDump(const char *message);
 ** @attr progname [char*] Name of executable reporting error
 ** @attr filename [char*] Filename where error was reported
 ** @attr line_num [ajint] line number of file where error was reported.
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -208,11 +209,12 @@ typedef struct MessSErrorInfo
     char* progname;
     char* filename;
     ajint line_num;
+    char Padding[4];
 } MessOErrorInfo;
 
 #define MessPErrorInfo MessOErrorInfo*
 
-static MessOErrorInfo messageG = {NULL, NULL, 0};
+static MessOErrorInfo messageG = {NULL, NULL, 0, ""};
 
 static ajint messGetErrorLine(void);
 static char *messGetErrorFile(void);
@@ -582,8 +584,8 @@ ajint ajMessErrorCount(void)
 
 void ajErr(const char *format, ...)
 {
-    char *prefix   = ERROR_PREFIX;
-    char *mesg_buf = NULL;
+    const char *prefix   = ERROR_PREFIX;
+    const char *mesg_buf = NULL;
     va_list args;
 
     ++errorCount;
@@ -623,8 +625,8 @@ void ajErr(const char *format, ...)
 
 void ajVErr(const char *format, va_list args)
 {
-    char *prefix   = ERROR_PREFIX;
-    char *mesg_buf = NULL;
+    const char *prefix   = ERROR_PREFIX;
+    const char *mesg_buf = NULL;
 
     ++errorCount;
 
@@ -660,7 +662,7 @@ void ajVErr(const char *format, va_list args)
 ** @@
 ******************************************************************************/
 
-void ajDie(const char *format, ...)
+__noreturn void  ajDie(const char *format, ...)
 {
     const char *prefix   = DIE_PREFIX;
     const char *mesg_buf = NULL;
@@ -684,8 +686,6 @@ void ajDie(const char *format, ...)
 
 
     exit(EXIT_FAILURE);
-
-    return;
 }
 
 
@@ -707,8 +707,8 @@ void ajDie(const char *format, ...)
 
 void ajVDie(const char *format, va_list args)
 {
-    char *prefix   = DIE_PREFIX;
-    char *mesg_buf = NULL;
+    const char *prefix   = DIE_PREFIX;
+    const char *mesg_buf = NULL;
 
     ++errorCount;
 
@@ -742,8 +742,8 @@ void ajVDie(const char *format, va_list args)
 
 void ajWarn(const char *format, ...)
 {
-    char *prefix   = WARNING_PREFIX;
-    char *mesg_buf = NULL;
+    const char *prefix   = WARNING_PREFIX;
+    const char *mesg_buf = NULL;
     va_list args;
 
     if(AjErrorLevel.warning)
@@ -779,8 +779,8 @@ void ajWarn(const char *format, ...)
 
 void ajVWarn(const char *format, va_list args)
 {
-    char *prefix   = WARNING_PREFIX;
-    char *mesg_buf = NULL;
+    const char *prefix   = WARNING_PREFIX;
+    const char *mesg_buf = NULL;
 
     AJAXVFORMATSTRING(args, format, mesg_buf, prefix);
 
@@ -818,10 +818,10 @@ void ajVWarn(const char *format, va_list args)
 ** @@
 ******************************************************************************/
 
-void ajMessExitmsg(const char *format, ...)
+__noreturn void  ajMessExitmsg(const char *format, ...)
 {
-    char *prefix   = EXIT_PREFIX;
-    char *mesg_buf = NULL;
+    const char *prefix   = EXIT_PREFIX;
+    const char *mesg_buf = NULL;
     va_list args;
 
     AJAXFORMATSTRING(args, format, mesg_buf, prefix);
@@ -834,8 +834,6 @@ void ajMessExitmsg(const char *format, ...)
 	fprintf(stderr, "%s\n", mesg_buf);
 
     exit(EXIT_FAILURE);
-
-    return;
 }
 
 
@@ -855,13 +853,13 @@ void ajMessExitmsg(const char *format, ...)
 ** @@
 ******************************************************************************/
 
-void ajMessCrashFL(const char *format, ...)
+__noreturn void  ajMessCrashFL(const char *format, ...)
 {
     enum {MAXERRORS = 1};
     static ajint internalErrors = 0;
     static char prefix[1024];
     ajint rc;
-    char *mesg_buf = NULL;
+    const char *mesg_buf = NULL;
     va_list args;
 
 
@@ -898,8 +896,6 @@ void ajMessCrashFL(const char *format, ...)
 
 
     exit(EXIT_FAILURE);
-
-    return;
 }
 
 
@@ -919,7 +915,7 @@ void ajMessCrashFL(const char *format, ...)
 ** @@
 ******************************************************************************/
 
-void ajMessVCrashFL(const char *format, va_list args)
+__noreturn void  ajMessVCrashFL(const char *format, va_list args)
 {
     enum {MAXERRORS = 1};
     static ajint internalErrors = 0;
@@ -957,8 +953,6 @@ void ajMessVCrashFL(const char *format, va_list args)
     ajMessInvokeDebugger();
     
     exit(EXIT_FAILURE);
-
-    return;
 }
 
 
@@ -1467,7 +1461,7 @@ void ajMessErrorCode(const char *code)
 ** @@
 ******************************************************************************/
 
-void ajMessCrashCodeFL(const char *code)
+__noreturn void  ajMessCrashCodeFL(const char *code)
 {
     char *mess = 0;
 
@@ -1494,8 +1488,6 @@ void ajMessCrashCodeFL(const char *code)
 			  "hence no reference to %s",
 			  code);
     }
-
-    return;
 }
 
 
@@ -1511,20 +1503,22 @@ void ajMessCrashCodeFL(const char *code)
 
 void ajMessCodesDelete(void)
 {
-    void **array;
+    void **keyarray = NULL;
+    void **valarray = NULL;
     ajint i;
 
     if(!errorTable)
 	return;
 
-    array =  ajTableToarray(errorTable, NULL);
+    ajTableToarray(errorTable, &keyarray, &valarray);
 
-    for(i = 0; array[i]; i += 2)
+    for(i = 0; keyarray[i]; i++)
     {
-	AJFREE(array[i+1]);
-	AJFREE(array[i]);
+	AJFREE(keyarray[i]);
+	AJFREE(valarray[i]);
     }
-    AJFREE(array);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     ajTableFree(&errorTable);
     errorTable = 0;
@@ -1661,8 +1655,8 @@ ajint ajUserGet(AjPStr* pthis, const char* fmt, ...)
     ipos  = 0;
     
 
-    ajDebug("ajUserGet buffer len: %d res: %d ptr: %x\n",
-	     ajStrGetLen(thys), ajStrGetRes(thys), thys->Ptr);
+    /*ajDebug("ajUserGet buffer len: %d res: %d ptr: %x\n",
+	     ajStrGetLen(thys), ajStrGetRes(thys), thys->Ptr);*/
 
     if(feof(stdin))
 	ajFatal("END-OF-FILE reading from user\n");
@@ -1700,14 +1694,14 @@ ajint ajUserGet(AjPStr* pthis, const char* fmt, ...)
 	{
 	    ajStrSetRes(pthis, ajStrGetRes(thys)+fileBuffSize);
 	    thys = *pthis;
-	    ajDebug("more to do: jlen: %d ipos: %d isize: %d ilen: %d "
+	    /*ajDebug("more to do: jlen: %d ipos: %d isize: %d ilen: %d "
 		    "Size: %d\n",
-		    jlen, ipos, isize, ilen, ajStrGetRes(thys));
+		    jlen, ipos, isize, ilen, ajStrGetRes(thys));*/
 	    ipos += jlen;
 	    buff = ajStrGetuniquePtr(pthis);
 	    isize = ajStrGetRes(thys) - ipos;
-	    ajDebug("expand to: ipos: %d isize: %d Size: %d\n",
-		    ipos, isize, ajStrGetRes(thys));
+	    /* ajDebug("expand to: ipos: %d isize: %d Size: %d\n",
+		    ipos, isize, ajStrGetRes(thys)); */
 
 	}
 	else

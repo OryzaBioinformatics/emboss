@@ -45,7 +45,7 @@ AjBool        ajSysUnlink(const AjPStr s);
 AjBool        ajSysWhich(AjPStr *exefile);
 AjBool        ajSysWhichEnv(AjPStr *exefile, char * const env[]);
 char         *ajSysStrtok(const char *s, const char *t);
-char         *ajSysStrtokR(const char *s, const char *t, char **ptrptr,
+char         *ajSysStrtokR(char *s, const char *t, char **ptrptr,
 			    AjPStr *buf);
 char         *ajSysFgets(char *buf, int size, FILE *fp);
 FILE         *ajSysFopen(const char *name, const char *flags);

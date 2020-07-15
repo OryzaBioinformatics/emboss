@@ -39,10 +39,10 @@
 static ajint tableNewCnt = 0;
 static ajint tableDelCnt = 0;
 static ajint tableMaxNum = 0;
-static ajint tableMaxMem = 0;
+static size_t tableMaxMem = 0;
 
 
-static void tableStrDel(const void** key, void** value, void* cl);
+static void tableStrDel(void** key, void** value, void* cl);
 
 
 
@@ -231,15 +231,15 @@ void * ajTableGet(const AjPTable table, const void *key)
 **
 ** @param [r] table [const AjPTable] table to search
 ** @param [r] key   [const void*] key to find.
-** @return [void*] key value as stored in the table
+** @return [const void*] key value as stored in the table
 ** @error NULL if key not found in table.
 ** @@
 ******************************************************************************/
 
-void * ajTableKey(const AjPTable table, const void *key)
+const void * ajTableKey(const AjPTable table, const void *key)
 {
     ajint i;
-    struct binding *p;
+    const struct binding *p;
 
     if (!table)
 	return NULL;
@@ -251,7 +251,7 @@ void * ajTableKey(const AjPTable table, const void *key)
 	if((*table->cmp)(key, p->key) == 0)
 	    break;
 
-    return p ? (void*)p->key : NULL;
+    return p ? (const void*)p->key : NULL;
 }
 
 
@@ -335,7 +335,7 @@ void ajStrTableTrace(const AjPTable table)
 	    for(p = table->buckets[i]; p; p = p->link)
 	    {
 		ajDebug("   '%S' => '%S'\n",
-			(AjPStr) p->key, (AjPStr) p->value);
+			(const AjPStr) p->key, (AjPStr) p->value);
 		j++;
 	    }
 	    k += j;
@@ -356,7 +356,7 @@ void ajStrTableTrace(const AjPTable table)
 ** and returns null.
 **
 ** @param [u] table [AjPTable] Table to add to
-** @param [r] key [const void*] key
+** @param [o] key [void*] key
 ** @param [u] value [void*] value of key
 ** @return [void*] previous value if key exists, NULL if not.
 ** @category modify [AjPTable] Adds or updates a value for a given
@@ -364,7 +364,7 @@ void ajStrTableTrace(const AjPTable table)
 ** @@
 ******************************************************************************/
 
-void * ajTablePut(AjPTable table, const void *key, void *value)
+void * ajTablePut(AjPTable table, void *key, void *value)
 {
     ajint i;
     struct binding *p;
@@ -477,7 +477,7 @@ void ajTableMap(AjPTable table,
 ** in an unspecified order.
 **
 ** Keys in the table can be deleted - for example a function to delete
-** a table entry. See ajTableMapfor a function that is read-only
+** a table entry. See ajTableMap for a function that is read-only
 **
 ** @param [u] table [AjPTable] Table.
 ** @param [f] apply [void function] function to be applied
@@ -489,7 +489,7 @@ void ajTableMap(AjPTable table,
 ******************************************************************************/
 
 void ajTableMapDel(AjPTable table,
-		void apply(const void **key, void **value, void *cl),
+		void apply(void **key, void **value, void *cl),
 		void *cl)
 {
     ajint i;
@@ -566,36 +566,45 @@ void * ajTableRemove(AjPTable table, const void *key)
 ** odd-numbered elements; element 2N is end.
 **
 ** @param [r] table [const AjPTable] Table
-** @param [u] end  [void*] end terminator, usually NULL
-** @return [void**] pointer to first element in array.
+** @param [w] keyarray [void***] NULL terminated array of keys.
+** @param [w] valarray [void***] NULL terminated array of s.
+** @return [ajuint] size of arrays returned
 ** @category cast [AjPTable] Creates an array to hold each key
 **                value pair in pairs of array elements. The last
 **                element is null.
 ** @@
 ******************************************************************************/
 
-void ** ajTableToarray(const AjPTable table, void *end)
+ajuint ajTableToarray(const AjPTable table,
+		      void*** keyarray, void*** valarray)
 {
     ajint i;
     ajint j = 0;
-    void **array;
     struct binding *p;
 
+    if (*keyarray)
+	AJFREE(*keyarray);
+
+    if (*valarray)
+	AJFREE(*valarray);
+
     if(!table)
-	return NULL;
+	return 0;
  
-    array = AJALLOC((2*table->length + 1)*sizeof(*array));
+    *keyarray = AJALLOC((table->length + 1)*sizeof(keyarray));
+    *valarray = AJALLOC((table->length + 1)*sizeof(valarray));
 
     for(i = 0; i < table->size; i++)
 	for(p = table->buckets[i]; p; p = p->link)
 	{
-	    array[j++] = (void *)p->key;
-	    array[j++] = p->value;
+	    (*keyarray)[j] = p->key;
+	    (*valarray)[j++] = p->value;
 	}
 
-    array[j] = end;
+    (*keyarray)[j] = NULL;
+    (*valarray)[j] = NULL;
 
-    return array;
+    return table->length;
 }
 
 
@@ -731,9 +740,9 @@ AjPTable ajStrTableNew(ajint hint)
 ajuint ajStrTableHashCaseC(const void* key, ajuint hashsize)
 {
     ajuint hash;
-    char* s;
+    const char* s;
 
-    s = (char*) key;
+    s = (const char*) key;
 
     for(hash = 0; *s; s++)
 	hash = (hash * 127 + toupper((ajint)*s)) % hashsize;
@@ -757,11 +766,11 @@ ajuint ajStrTableHashCaseC(const void* key, ajuint hashsize)
 
 ajuint ajStrTableHashCase(const void* key, ajuint hashsize)
 {
-    AjPStr str;
+    const AjPStr str;
     const char* s;
     ajuint hash;
 
-    str = (AjPStr) key;
+    str = (const AjPStr) key;
     s   = ajStrGetPtr(str);
 
     for(hash = 0; *s; s++)
@@ -811,11 +820,11 @@ ajuint ajStrTableHashC(const void* key, ajuint hashsize)
 
 ajuint ajStrTableHash(const void* key, ajuint hashsize)
 {
-    AjPStr str;
+    const AjPStr str;
     const char* s;
     ajuint hash;
 
-    str = (AjPStr) key;
+    str = (const AjPStr) key;
     s   = ajStrGetPtr(str);
 
     for(hash = 0; *s; s++)
@@ -867,11 +876,11 @@ ajint ajStrTableCmpCaseC(const void* x, const void* y)
 
 ajint ajStrTableCmpCase(const void* x, const void* y)
 {
-    AjPStr sx;
-    AjPStr sy;
+    const AjPStr sx;
+    const AjPStr sy;
 
-    sx = (AjPStr) x;
-    sy = (AjPStr) y;
+    sx = (const AjPStr) x;
+    sy = (const AjPStr) y;
 
     return (ajint)ajStrCmpCaseS(sx, sy);
 }
@@ -892,11 +901,11 @@ ajint ajStrTableCmpCase(const void* x, const void* y)
 
 ajint ajStrTableCmpC(const void* x, const void* y)
 {
-    char* sx;
-    char* sy;
+    const char* sx;
+    const char* sy;
 
-    sx = (char*) x;
-    sy = (char*) y;
+    sx = (const char*) x;
+    sy = (const char*) y;
 
     return (ajint)strcmp(sx, sy);
 }
@@ -917,11 +926,11 @@ ajint ajStrTableCmpC(const void* x, const void* y)
 
 ajint ajStrTableCmp(const void* x, const void* y)
 {
-    AjPStr sx;
-    AjPStr sy;
+    const AjPStr sx;
+    const AjPStr sy;
 
-    sx = (AjPStr) x;
-    sy = (AjPStr) y;
+    sx = (const AjPStr) x;
+    sy = (const AjPStr) y;
 
     return (ajint)ajStrCmpS(sx, sy);
 }
@@ -948,7 +957,8 @@ void ajStrTablePrint(const AjPTable table)
     for(i = 0; i < table->size; i++)
 	for(p = table->buckets[i]; p; p = p->link)
 	{
-	    ajUser("key '%S' value '%S'", (AjPStr) p->key, (AjPStr) p->value);
+	    ajUser("key '%S' value '%S'",
+		   (const AjPStr) p->key, (AjPStr) p->value);
 	}
 
     return;
@@ -977,7 +987,8 @@ void ajStrTablePrintC(const AjPTable table)
     for(i = 0; i < table->size; i++)
 	for(p = table->buckets[i]; p; p = p->link)
 	{
-	    ajUser("key '%s' value '%s'", (char*) p->key, (char*) p->value);
+	    ajUser("key '%s' value '%s'",
+		   (const char*) p->key, (char*) p->value);
 	}
 
     return;
@@ -1016,14 +1027,14 @@ void ajStrTableFree(AjPTable* ptable)
 **
 ** Delete an entry in a string table.
 **
-** @param [d] key [const void**] Standard argument. Table key.
+** @param [d] key [void**] Standard argument. Table key.
 ** @param [d] value [void**] Standard argument. Table item.
 ** @param [u] cl [void*] Standard argument. Usually NULL.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void tableStrDel(const void** key, void** value, void* cl)
+static void tableStrDel(void** key, void** value, void* cl)
 {
     AjPStr p;
     AjPStr q;
@@ -1036,6 +1047,9 @@ static void tableStrDel(const void** key, void** value, void* cl)
 
     *key = NULL;
     *value = NULL;
+
+    if(!cl)
+	return;
 
     return;
 }

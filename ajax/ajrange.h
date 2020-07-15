@@ -34,20 +34,22 @@ extern "C"
 ** @use ajRangeOrdered Test if ranges are in ascending non-overlapping order
 ** @use ajRangeDefault Test if the default range has been set
 **
-** @attr n [ajint] Number of ranges
-** @attr start [ajint*] From positions
-** @attr end [ajint*] End positions
+** @attr start [ajuint*] From positions
+** @attr end [ajuint*] End positions
 ** @attr text [AjPStr*] Associated text for each range
+** @attr n [ajuint] Number of ranges
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 
 typedef struct AjSRange
 {
-    ajint n;
-    ajint *start;
-    ajint *end;
+    ajuint *start;
+    ajuint *end;
     AjPStr *text;
+    ajuint n;
+    char Padding[4];
 } AjORange;
 #define AjPRange AjORange*
 
@@ -58,23 +60,24 @@ typedef struct AjSRange
 ** Prototype definitions
 */
 
-AjBool    ajRangeBegin (AjPRange thys, ajint begin);
-AjBool    ajRangeChange(AjPRange thys, ajint element, ajint start, ajint end);
+AjBool    ajRangeBegin (AjPRange thys, ajuint begin);
+AjBool    ajRangeChange(AjPRange thys, ajuint element,
+			ajuint start, ajuint end);
 AjPRange  ajRangeCopy(const AjPRange src);
 AjBool    ajRangeDefault(const AjPRange thys, const AjPSeq s);
 void      ajRangeDel(AjPRange *thys);
 AjPRange  ajRangeFile(const AjPStr name);
-AjPRange  ajRangeFileLimits(const AjPStr name, ajint imin, ajint imax,
-			   ajint minsize, ajint size);
+AjPRange  ajRangeFileLimits(const AjPStr name, ajuint imin, ajuint imax,
+			   ajuint minsize, ajuint size);
 AjPRange  ajRangeGet(const AjPStr s);
-AjPRange  ajRangeGetLimits(const AjPStr str, ajint imin, ajint imax,
-			   ajint minsize, ajint size);
-AjPRange  ajRangeNewI(ajint n);
-ajint     ajRangeNumber(const AjPRange thys);
+AjPRange  ajRangeGetLimits(const AjPStr str, ajuint imin, ajuint imax,
+			   ajuint minsize, ajuint size);
+AjPRange  ajRangeNewI(ajuint n);
+ajuint    ajRangeNumber(const AjPRange thys);
 AjBool    ajRangeOrdered (const AjPRange thys);
-ajint	  ajRangeOverlaps (const AjPRange thys, ajint pos, ajint length);
-ajint	  ajRangeOverlapSingle (ajint start, ajint end,
-				ajint pos, ajint length);
+ajuint	  ajRangeOverlaps (const AjPRange thys, ajuint pos, ajuint length);
+ajuint	  ajRangeOverlapSingle (ajuint start, ajuint end,
+				ajuint pos, ajuint length);
 AjBool    ajRangeSeqExtract (const AjPRange thys, AjPSeq seq);
 AjBool    ajRangeSeqExtractList (const AjPRange thys,
 				 const AjPSeq seq, AjPList outliststr);
@@ -91,9 +94,9 @@ AjBool    ajRangeStrMask (const AjPRange thys,
 AjBool    ajRangeStrStuff (const AjPRange thys,
 			   const AjPStr instr, AjPStr *outstr);
 AjBool    ajRangeStrToLower (const AjPRange thys, AjPStr *str);
-AjBool    ajRangeText(const AjPRange thys, ajint element, AjPStr * text);
-AjBool    ajRangeValues(const AjPRange thys, ajint element,
-			ajint *start, ajint *end);
+AjBool    ajRangeText(const AjPRange thys, ajuint element, AjPStr * text);
+AjBool    ajRangeValues(const AjPRange thys, ajuint element,
+			ajuint *start, ajuint *end);
 
 /*
 ** End of prototype definitions

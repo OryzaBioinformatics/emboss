@@ -105,8 +105,6 @@ void              ajMessExit (void);
 void              ajMessExitmsg(const char *format, ...) ;  /* error message,
 							       write to log
 							       file & exit */
-void              ajMessSetErr (const char *filename, ajint line_num);
-
 void              ajDebug (const char *fmt, ...);
 FILE*             ajDebugFile (void);
 void              ajDie (const char *format, ...);

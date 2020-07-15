@@ -148,8 +148,9 @@ typedef struct pcre_extra {
 ** @attr start_match [int] Offset to start of this match attempt
 ** @attr current_position [int] Where we currently are
 ** @attr capture_top [int] Max current capture
-** @attr capture_last [int] Most recently closed capture
 ** @attr callout_data [void*] Data passed in with the call
+** @attr capture_last [int] Most recently closed capture
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -162,8 +163,9 @@ typedef struct pcre_callout_block {
   int          start_match;
   int          current_position;
   int          capture_top;
-  int          capture_last;
   void        *callout_data;
+  int          capture_last;
+  char         Padding[4];
 } pcre_callout_block;
 
 

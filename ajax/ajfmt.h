@@ -25,13 +25,6 @@ extern "C"
 #define VA_V(x) (*x)
 #endif
 
-typedef void (*Fmt_T) (ajint code, VALIST ap,
-		       int put(int c, void *cl), void *cl,
-		       const ajuint* flags, ajint width, ajint precision);
-
-typedef void (*Fmt_S) (const char *fmt, char **pos, VALIST ap, int width,
-		       AjBool convert, AjBool *ok);
-
 
 
 
@@ -64,7 +57,6 @@ void   ajFmtPrintSplit(AjPFile outf, const AjPStr str,
 		       const char *delim);
 char*  ajFmtString (const char *fmt, ...);
 char*  ajFmtVString(const char *fmt, va_list ap);
-Fmt_T  ajFmtRegister(ajint code, Fmt_T cvt);
 void   ajFmtPutd (const char *str, ajint len,
 		  int put(int c, void *cl), void *cl,
 		  const ajuint* flags, ajint width, ajint precision);
@@ -77,7 +69,7 @@ AjPStr ajFmtVPrintS (AjPStr *pthis, const char *fmt, va_list ap) ;
 AjPStr ajFmtPrintAppS (AjPStr *pthis, const char *fmt, ...) ;
 ajint  ajFmtVfmtCL (char* buf, ajint size, const char* fmt,
 		    va_list ap);
-ajint  ajFmtVfmtStrCL (char** buf, ajint pos, ajint *size,
+ajint  ajFmtVfmtStrCL (char** buf, ajint pos, ajuint *size,
 		       const char* fmt, va_list ap);
 
 ajint  ajFmtScanS (const AjPStr thys, const char* fmt, ...);

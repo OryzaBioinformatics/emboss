@@ -14,17 +14,17 @@ extern "C"
 ** @alias AjPDate
 **
 ** @attr time [struct tm] Time in C standard structure
-** @attr format [char*] Format string if specified
+** @attr format [const char*] Format string if specified
 ** @@
 ******************************************************************************/
 
 typedef struct AjSTime {
   struct tm time;
-  char *format;
+  const char *format;
 } AjOTime, AjODate;
 
 #define AjPTime AjOTime*
-#define AjPDate AjODate*a
+#define AjPDate AjODate*
 
 
 
@@ -45,6 +45,7 @@ AjPTime       ajTimeSet(const char *timefmt,
 AjBool        ajTimeSetS(AjPTime thys, const char* timestr);
 AjPTime       ajTimeNew(void);
 void          ajTimeDel(AjPTime *thys);
+time_t        ajTimeMake(const AjPTime thys);
 
 /*
 ** End of prototype definitions

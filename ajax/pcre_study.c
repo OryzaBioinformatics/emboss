@@ -366,7 +366,7 @@ uschar start_bits[32];
 pcre_extra *extra;
 pcre_study_data *study;
 const real_pcre *re = (const real_pcre *)external_re;
-uschar *code = (uschar *)re + sizeof(real_pcre) +
+const uschar *code = (const uschar *)re + sizeof(real_pcre) +
   (re->name_count * re->name_entry_size);
 compile_data compile_block;
 

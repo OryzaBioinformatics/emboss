@@ -104,7 +104,7 @@ typedef struct AjSScopcla
 
 /* @datastatic AjPScopdes *****************************************************
 **
-** Nucleus Scopdes object.
+** AJAX Scopdes object.
 **
 ** Holds SCOP database data from raw file (dir.des.scop.txt from SCOP authors)
 **
@@ -117,25 +117,28 @@ typedef struct AjSScopcla
 **
 **
 **
-** @attr Sunid [ajint]  SCOP sunid for node.
 ** @attr Type [AjPStr]  Type of node, either 'px' (domain data), 'cl' (class),
 **                      'cf' (fold), 'sf' (superfamily), 'fa' (family), 'dm' 
 **                      (domain) or 'sp' (species).
 ** @attr Sccs [AjPStr]  Scop compact classification string.
 ** @attr Entry [AjPStr] Domain identifer code (or '-' if Type!='px').
 ** @attr Desc [AjPStr]  Description in english of the node.
+** @attr Sunid [ajint]  SCOP sunid for node.
+** @attr Padding [char[4]]  Padding to alignment boundary
 **
 ** @@
 ****************************************************************************/
 
 typedef struct AjSScopdes
 {
-    ajint  Sunid;
     AjPStr Type;
     AjPStr Sccs;
     AjPStr Entry;
     AjPStr Desc;
-} AjOScopdes,*AjPScopdes;
+    ajint  Sunid;
+    char Padding[4];
+} AjOScopdes;
+#define AjPScopdes AjOScopdes*
 
 
 
@@ -143,7 +146,7 @@ typedef struct AjSScopdes
 
 /* @datastatic AjPCathDom *****************************************************
 **
-** Nucleus CathDom object
+** AJAX CathDom object
 **
 ** Holds CATH database data from domlist.v2.4. This file only contains
 ** domain information for proteins that have 2 or more domains. 
@@ -161,6 +164,7 @@ typedef struct AjSScopdes
 ** @attr Start [AjPStr*]   PDB residue number of first residue in segment
 ** @attr End [AjPStr*]      PDB residue number of last residue in segment
 ** @attr NSegment [ajint]  No. of chain segments domain is comprised of
+** @attr Padding [char[4]]  Padding to alignment boundary
 **
 **  @@
 ****************************************************************************/
@@ -171,7 +175,9 @@ typedef struct AjSCathDom
    AjPStr *Start;
    AjPStr *End;          
    ajint  NSegment;
-} AjOCathDom, *AjPCathDom;
+   char Padding[4];
+} AjOCathDom;
+#define AjPCathDom AjOCathDom*
 
 
 
@@ -179,7 +185,7 @@ typedef struct AjSCathDom
 
 /* @datastatic AjPCathName ****************************************************
 **
-** Nucleus CathName object
+** AJAX CathName object
 **
 ** Holds CATH database data from CAT.names.all.v2.4. This file contains
 ** a description of each level in the CATH hierarchy. 
@@ -203,7 +209,8 @@ typedef struct AjSCathName
 {
     AjPStr Id;
     AjPStr Desc;          
-} AjOCathName, *AjPCathName;
+} AjOCathName;
+#define AjPCathName AjOCathName*
 
 
 
@@ -222,17 +229,17 @@ static AjPScopdes    domainScopdesNew(void);
 static void          domainScopdesDel(AjPScopdes *ptr);
 static AjPScopdes    domainScopdesRead(AjPFile inf, const AjPStr entry);
 static AjPScopdes    domainScopdesReadC(AjPFile inf, const char *entry);
-static ajint         domainScopdesBinSearch(ajint id, const AjPScopdes *arr,
+static ajint         domainScopdesBinSearch(ajint id, AjPScopdes const *arr,
 					    ajint siz);
 
 static ajint         domainScopdesCompSunid(const void *scop1,
 					    const void *scop2);
 
 static ajint         domainCathNameBinSearch(const AjPStr id,
-					     const AjPCathName *arr,
+					     AjPCathName const *arr,
 					     ajint siz);
 static ajint         domainCathDomBinSearch(const AjPStr id,
-					    const AjPCathDom *arr,
+					    AjPCathDom const *arr,
 					    ajint siz);
 static ajint         domainSortDomainID(const void *DomID1,
 					const void *DomID2);
@@ -444,7 +451,7 @@ static AjPScopdes domainScopdesReadC(AjPFile inf, const char *entry)
     ajRegSubI(rexp,3,&tmp);
     ajRegSubI(rexp,4,&tmp);
     ajRegPost(rexp,&ret->Desc);
-    ajStrRemoveWhite(&ret->Desc);
+    ajStrRemoveWhiteExcess(&ret->Desc);
 
     return ret;
 }
@@ -673,7 +680,7 @@ static void domainScopclaDel(AjPScopcla *thys)
 ** domainScopdesCompSunid).
 **
 ** @param [r] id  [ajint]        Search value of Sunid
-** @param [r] arr [const AjPScopdes*] Array of Scopdes objects
+** @param [r] arr [AjPScopdes const *] Array of Scopdes objects
 ** @param [r] siz [ajint]        Size of array
 **
 ** @return [ajint] Index of first Scopdes object found with a Sunid 
@@ -681,7 +688,7 @@ static void domainScopclaDel(AjPScopcla *thys)
 ** @@
 ****************************************************************************/
 
-static ajint domainScopdesBinSearch(ajint id, const AjPScopdes *arr, ajint siz)
+static ajint domainScopdesBinSearch(ajint id, AjPScopdes const *arr, ajint siz)
 {
     int l;
     int m;
@@ -763,11 +770,11 @@ static void domainScopdesDel(AjPScopdes *ptr)
 
 static ajint domainScopdesCompSunid(const void *scop1, const void *scop2)
 {
-    AjPScopdes p = NULL;
-    AjPScopdes q = NULL;
+    const AjPScopdes p = NULL;
+    const AjPScopdes q = NULL;
 
-    p = (*  (AjPScopdes*)scop1);
-    q = (*  (AjPScopdes*)scop2);
+    p = (*  (AjPScopdes const *)scop1);
+    q = (*  (AjPScopdes const *)scop2);
     
     if(p->Sunid < q->Sunid)
 	return -1;
@@ -786,14 +793,14 @@ static ajint domainScopdesCompSunid(const void *scop1, const void *scop2)
 ** case-insensitive search.
 **
 ** @param [r] id  [const AjPStr]       Search term
-** @param [r] arr [const AjPCathName*] Array of CathName objects
+** @param [r] arr [AjPCathName const *] Array of CathName objects
 ** @param [r] siz [ajint]        Size of array
 **
 ** @return [ajint] Index of first CathName object found with an CATH Id code
 ** matching id, or -1 if id is not found.
 ** @@
 ****************************************************************************/
-static ajint domainCathNameBinSearch(const AjPStr id, const AjPCathName *arr,
+static ajint domainCathNameBinSearch(const AjPStr id, AjPCathName const *arr,
 				     ajint siz)
 {
     int l;
@@ -828,14 +835,14 @@ static ajint domainCathNameBinSearch(const AjPStr id, const AjPCathName *arr,
 ** case-insensitive search.
 **
 ** @param [r] id  [const AjPStr]       Search term
-** @param [r] arr [const AjPCathDom*] Array of AjPCathDom objects
+** @param [r] arr [AjPCathDom const *] Array of AjPCathDom objects
 ** @param [r] siz [ajint]        Size of array
 **
 ** @return [ajint] Index of first AjPCathDom object found with an domain code
 ** matching id, or -1 if id is not found.
 ** @@
 ****************************************************************************/
-static ajint domainCathDomBinSearch(const AjPStr id, const AjPCathDom *arr,
+static ajint domainCathDomBinSearch(const AjPStr id, AjPCathDom const *arr,
 				    ajint siz)
 {
     int l;
@@ -1019,11 +1026,11 @@ static void domainCathNameDel(AjPCathName *ptr)
 ****************************************************************************/
 static ajint domainSortNameId(const void *cath1, const void *cath2)
 {
-    AjPCathName p  = NULL;
-    AjPCathName q  = NULL;
+    const AjPCathName p = NULL;
+    const AjPCathName q = NULL;
 
-    p = (*(AjPCathName*)cath1);
-    q = (*(AjPCathName*)cath2);
+    p = (*(AjPCathName const *)cath1);
+    q = (*(AjPCathName const *)cath2);
     
     return ajStrCmpS(p->Id, q->Id);
 }
@@ -1045,11 +1052,11 @@ static ajint domainSortNameId(const void *cath1, const void *cath2)
 ****************************************************************************/
 static ajint domainSortDomainID(const void *DomID1, const void *DomID2)
 {
-    AjPCathDom p  = NULL;
-    AjPCathDom q  = NULL;
+    const AjPCathDom p = NULL;
+    const AjPCathDom q = NULL;
 
-    p = (*(AjPCathDom*)DomID1);
-    q = (*(AjPCathDom*)DomID2);
+    p = (*(AjPCathDom const *)DomID1);
+    q = (*(AjPCathDom const *)DomID2);
     
     return ajStrCmpS(p->DomainID, q->DomainID);
 
@@ -1418,7 +1425,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	/* Binary search of Search_DomainIDPtr over array of 
 	   CathDom objects */
 	idxCathDom = domainCathDomBinSearch(Search_DomainIDPtr, 
-					 CathDomArray, dimCathDom); 
+					    CathDomArray, dimCathDom); 
 	/* sorted by AjPStr Id */
 	if(idxCathDom != -1		/*match found*/)
 	{
@@ -1821,7 +1828,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 		    break;
 		ajStrAppendC(&architecture,ajStrGetPtr(line)+3);
 	    }
-	    ajStrRemoveWhite(&architecture);
+	    ajStrRemoveWhiteExcess(&architecture);
 	}
 	else if(ajStrPrefixC(line,"TP"))
 	{
@@ -1832,7 +1839,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 		    break;
 		ajStrAppendC(&topology,ajStrGetPtr(line)+3);
 	    }
-	    ajStrRemoveWhite(&topology);
+	    ajStrRemoveWhiteExcess(&topology);
 	}
 	else if(ajStrPrefixC(line,"SF"))
 	{
@@ -1843,7 +1850,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 		    break;
 		ajStrAppendC(&superfamily,ajStrGetPtr(line)+3);
 	    }
-	    ajStrRemoveWhite(&superfamily);
+	    ajStrRemoveWhiteExcess(&superfamily);
 	}
 	else if(ajStrPrefixC(line,"NR"))  
 	{
@@ -1885,7 +1892,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	{
 	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&SeqPdb,ajStrGetPtr(line));
-	    ajStrRemoveWhiteExcess(&SeqPdb);
+	    ajStrRemoveWhite(&SeqPdb);
 	    continue;
 	}
 	/* Sequence from swissprot */
@@ -1893,7 +1900,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	{
 	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&SeqSpr,ajStrGetPtr(line));
-	    ajStrRemoveWhiteExcess(&SeqSpr);
+	    ajStrRemoveWhite(&SeqSpr);
 	    continue;
 	}
 	
@@ -2608,7 +2615,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 		    break;
 		ajStrAppendC(&fold,ajStrGetPtr(line)+3);
 	    }
-	    ajStrRemoveWhite(&fold);
+	    ajStrRemoveWhiteExcess(&fold);
 	}
 	else if(ajStrPrefixC(line,"SF"))
 	{
@@ -2619,7 +2626,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 		    break;
 		ajStrAppendC(&super,ajStrGetPtr(line)+3);
 	    }
-	    ajStrRemoveWhite(&super);
+	    ajStrRemoveWhiteExcess(&super);
 	}
 	else if(ajStrPrefixC(line,"FA"))
 	{
@@ -2630,7 +2637,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 		    break;
 		ajStrAppendC(&family,ajStrGetPtr(line)+3);
 	    }
-	    ajStrRemoveWhite(&family);
+	    ajStrRemoveWhiteExcess(&family);
 	}
 	else if(ajStrPrefixC(line,"DO"))
 	{
@@ -2641,7 +2648,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 		    break;
 		ajStrAppendC(&domain,ajStrGetPtr(line)+3);
 	    }
-	    ajStrRemoveWhite(&domain);
+	    ajStrRemoveWhiteExcess(&domain);
 	}
 	else if(ajStrPrefixC(line,"NC"))
 	{
@@ -2694,7 +2701,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	{
 	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&SeqPdb,ajStrGetPtr(line));
-	    ajStrRemoveWhiteExcess(&SeqPdb);
+	    ajStrRemoveWhite(&SeqPdb);
 	    continue;
 	}
 	/* Sequence from swissprot */
@@ -2702,7 +2709,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	{
 	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&SeqSpr,ajStrGetPtr(line));
-	    ajStrRemoveWhiteExcess(&SeqSpr);
+	    ajStrRemoveWhite(&SeqSpr);
 	    continue;
 	}
 	
@@ -2723,7 +2730,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	{
 	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
 		ajStrAppendC(&sss,ajStrGetPtr(line));
-	    ajStrRemoveWhiteExcess(&sss);
+	    ajStrRemoveWhite(&sss);
 	    continue;
 	}
 
@@ -3146,11 +3153,11 @@ AjBool ajScopCopy(AjPScop *to, const AjPScop from)
 ****************************************************************************/
 ajint ajScopMatchSunid(const void *entry1, const void *entry2)
 {
-    AjPScop p = NULL;
-    AjPScop q = NULL;
+    const AjPScop p = NULL;
+    const AjPScop q = NULL;
 
-    p = (*(AjPScop*)entry1);
-    q = (*(AjPScop*)entry2);
+    p = (*(AjPScop const *)entry1);
+    q = (*(AjPScop const *)entry2);
    
 
     if(p->Sunid_Family < q->Sunid_Family)
@@ -3180,11 +3187,11 @@ ajint ajScopMatchSunid(const void *entry1, const void *entry2)
 
 ajint ajScopMatchScopid(const void *hit1, const void *hit2)
 {
-    AjPScop p = NULL;
-    AjPScop q = NULL;
+    const AjPScop p = NULL;
+    const AjPScop q = NULL;
 
-    p = (*(AjPScop*)hit1);
-    q = (*(AjPScop*)hit2);
+    p = (*(AjPScop const *)hit1);
+    q = (*(AjPScop const *)hit2);
     
     return ajStrCmpS(p->Entry, q->Entry);
 }
@@ -3208,11 +3215,11 @@ ajint ajScopMatchScopid(const void *hit1, const void *hit2)
 
 ajint ajScopMatchPdbId(const void *hit1, const void *hit2)
 {
-    AjPScop p = NULL;
-    AjPScop q = NULL;
+    const AjPScop p = NULL;
+    const AjPScop q = NULL;
 
-    p = (*(AjPScop*)hit1);
-    q = (*(AjPScop*)hit2);
+    p = (*(AjPScop const *)hit1);
+    q = (*(AjPScop const *)hit2);
     
     return ajStrCmpS(p->Pdb, q->Pdb);
 }
@@ -3236,11 +3243,11 @@ ajint ajScopMatchPdbId(const void *hit1, const void *hit2)
 
 ajint ajCathMatchPdbId(const void *hit1, const void *hit2)
 {
-    AjPCath p = NULL;
-    AjPCath q = NULL;
+    const AjPCath p = NULL;
+    const AjPCath q = NULL;
 
-    p = (*(AjPCath*)hit1);
-    q = (*(AjPCath*)hit2);
+    p = (*(AjPCath const *)hit1);
+    q = (*(AjPCath const *)hit2);
     
     return ajStrCmpS(p->Pdb, q->Pdb);
 }

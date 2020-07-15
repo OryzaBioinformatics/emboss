@@ -262,7 +262,7 @@ AjBool ajSysWhichEnv(AjPStr *s, char * const env[])
 
     /*ajDebug("tmp '%S' save '%S' buf '%S'\n", tmp, save, buf);*/
  
-    p = ajSysStrtokR(ajStrGetPtr(tmp),PATH_SEPARATOR,&save,&buf);
+    p = ajSysStrtokR(ajStrGetuniquePtr(&tmp),PATH_SEPARATOR,&save,&buf);
 
     if(p==NULL)
     {
@@ -575,7 +575,7 @@ AjBool ajSysArglist(const AjPStr cmdline, char** pgm, char*** arglist)
 	    if(ajRegLenI(argexp, i))
 	    {
 		ajRegSubI(argexp, i, &argstr);
-		ajDebug("parsed [%d] '%S'\n", i, argstr);
+		/*ajDebug("parsed [%d] '%S'\n", i, argstr);*/
 		break;
 	    }
 	}
@@ -645,7 +645,7 @@ void ajSysArgListFree(char*** arglist)
 
 FILE* ajSysFdopen(ajint filedes, const char *mode)
 {
-    return fdopen(filedes,(char *)mode);
+    return fdopen(filedes,mode);
 }
 
 
@@ -790,7 +790,7 @@ char* ajSysStrtok(const char *s, const char *t)
 ** Reentrant strtok that doesn't corrupt the source string.
 ** This function uses a string buffer provided by the caller.
 **
-** @param [r] s [const char *] source string
+** @param [u] s  [char *] source string
 ** @param [r] t [const char *] delimiter string
 ** @param [u] ptrptr [char **] ptr save
 ** @param [w] buf [AjPStr *] result buffer
@@ -799,9 +799,10 @@ char* ajSysStrtok(const char *s, const char *t)
 ** @@
 ******************************************************************************/
 
-char* ajSysStrtokR(const char *s, const char *t, char **ptrptr, AjPStr *buf)
+char* ajSysStrtokR(char *s, const char *t,  char **ptrptr,
+			 AjPStr *buf)
 {
-    const char *p;
+    char *p;
     ajint len;
 
     if(!*buf)
@@ -824,7 +825,7 @@ char* ajSysStrtokR(const char *s, const char *t, char **ptrptr, AjPStr *buf)
     ajStrAssignSubC(buf,p,0,len-1);
     p += len;			       /* skip to first delimiter */
 
-    *ptrptr = (char *) p;
+    *ptrptr = p;
 
     return ajStrGetuniquePtr(buf);
 }
@@ -847,7 +848,7 @@ char* ajSysStrtokR(const char *s, const char *t, char **ptrptr, AjPStr *buf)
 char* ajSysFgets(char *buf, int size, FILE *fp)
 {
 #ifdef __ppc__
-    int c;
+    int c = 0;
     char *p;
     int cnt;
 

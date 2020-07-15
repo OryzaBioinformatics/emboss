@@ -65,7 +65,7 @@ enum {
 **
 ** @attr re_pcre [void*] Undocumented
 ** @attr re_nsub [size_t] Undocumented
-** @attr re_erroffset [size_t] Undocumented
+** @attr re_erroffset [size_t*] Undocumented
 ** @attr orig [const char*] Undocumented
 ** @attr startp [char*[NSUBEXP]] Undocumented
 ** @attr endp [char*[NSUBEXP]] Undocumented
@@ -75,7 +75,7 @@ enum {
 typedef struct {
   void *re_pcre;
   size_t re_nsub;
-  size_t re_erroffset;
+  size_t *re_erroffset;
   const char* orig;
   char *startp[NSUBEXP];
   char *endp[NSUBEXP];

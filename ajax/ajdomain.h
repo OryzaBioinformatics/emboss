@@ -60,8 +60,6 @@ extern "C"
 ** @attr Family             [AjPStr]  SCOP family name as an AjPStr.
 ** @attr Domain             [AjPStr]  SCOP domain name as an AjPStr.
 ** @attr Source             [AjPStr]  SCOP source (species) as an AjPStr.
-** @attr N                  [ajint]   No. chains from which this domain is 
-**                                    comprised.
 ** @attr Chain              [char*]   Chain identifiers.
 ** @attr Start              [AjPStr*] PDB residue number of first residue in 
 **                                    domain.
@@ -69,6 +67,8 @@ extern "C"
 **                                    domain.
 ** @attr Sse                [AjPStr]  Secondary structure element map
 ** @attr Sss                [AjPStr]  Secondary structure element string
+** @attr N                  [ajint]   No. chains from which this domain is 
+**                                    comprised.
 ** @attr Sunid_Class        [ajint]   SCOP sunid for class.
 ** @attr Sunid_Fold         [ajint]   SCOP sunid for fold.
 ** @attr Sunid_Superfamily  [ajint]   SCOP sunid for superfamily.
@@ -86,6 +86,7 @@ extern "C"
 ** @attr Endd               [ajint]   End of sequence relative to full length 
 **                                    swissprot sequence.
 ** @attr Score              [float]   Used by misc. algorithms for scoring the domain.
+** @attr Padding            [char[4]] Padding to alignment boundary
 **
 **
 **
@@ -132,13 +133,15 @@ typedef struct AjSScop
     AjPStr Domain;        
     AjPStr Source;        
 
-    ajint    N;           
+
     char   *Chain;        
     AjPStr *Start;        
     AjPStr *End;          
 
     AjPStr Sse;
     AjPStr Sss; 
+
+    ajint    N;
 
     ajint  Sunid_Class;       
     ajint  Sunid_Fold;        
@@ -156,6 +159,7 @@ typedef struct AjSScop
     ajint  Endd;        
 
     float  Score;
+    char   Padding[4];
 } AjOScop;
 #define AjPScop AjOScop*
 
@@ -185,7 +189,6 @@ typedef struct AjSScop
 ** @attr Topology       [AjPStr]  CATH topology name as an AjPStr
 ** @attr Superfamily    [AjPStr]  CATH homologous superfamily name as an AjPStr
 ** @attr Length         [ajint]   No. of residues in domain
-** @attr Chain          [char]    Chain identifier
 ** @attr NSegment       [ajint]   No. of chain segments domain is comprised of
 ** @attr Start          [AjPStr*] PDB residue number of 1st residue in segment 
 ** @attr End            [AjPStr*] PDB residue number of last residue in segment
@@ -195,17 +198,19 @@ typedef struct AjSScop
 ** @attr Superfamily_Id [ajint]   CATH superfamily no. as an ajint
 ** @attr Family_Id      [ajint]   CATH family no. as an ajint 
 ** @attr NIFamily_Id    [ajint]   CATH near identical family no. as an ajint 
-** @attr IFamily_Id     [ajint]   CATH identical family no. as an ajint 
-**
 **
 ** @attr Acc                [AjPStr]  Accession number of sequence entry.
 ** @attr Spr                [AjPStr]  Swissprot code of sequence entry.
 ** @attr SeqPdb	            [AjPStr]  Sequence (from PDB) as string.
 ** @attr SeqSpr	            [AjPStr]  Sequence (from swissprot) as string.
+** @attr IFamily_Id     [ajint]   CATH identical family no. as an ajint 
+**
 ** @attr Startd             [ajint]   Start of sequence relative to full 
 **                                    length swissprot sequence.
 ** @attr Endd               [ajint]   End of sequence relative to full length 
 **                                    swissprot sequence.
+** @attr Chain              [char]    Chain identifier
+** @attr Padding            [char[3]] Padding to alignment boundary
 **
 ** 
 ** @new    ajCathNew Default Cath constructor
@@ -235,7 +240,6 @@ typedef struct AjSCath
     AjPStr  Superfamily;    
     
     ajint   Length;         
-    char    Chain;          
     
     ajint   NSegment;       
     AjPStr *Start;      
@@ -247,14 +251,16 @@ typedef struct AjSCath
     ajint   Superfamily_Id;  
     ajint   Family_Id;      
     ajint   NIFamily_Id;     
-    ajint   IFamily_Id;     
 
     AjPStr Acc;        
     AjPStr Spr;        
     AjPStr SeqPdb;	
     AjPStr SeqSpr;	
+    ajint  IFamily_Id;     
     ajint  Startd;      
     ajint  Endd;   
+    char   Chain;
+    char   Padding[3];
 } AjOCath;
 #define AjPCath AjOCath*
 
@@ -277,9 +283,11 @@ typedef struct AjSCath
 **
 **
 **
-** @attr Type    [ajint]   Type, either ajSCOP (1) or ajCATH (2).
+
 ** @attr Scop    [AjPScop] Scop object pointer.
 ** @attr Cath    [AjPCath] Cath object pointer.
+** @attr Type    [ajint]   Type, either ajSCOP (1) or ajCATH (2).
+** @attr Padding [char[4]] Padding to alignment boundary
 **
 **
 **
@@ -313,9 +321,11 @@ typedef struct AjSCath
 ****************************************************************************/
 typedef struct AjSDomain
 {
-    ajint   Type;
+
     AjPScop Scop;
     AjPCath Cath;
+    ajint   Type;
+    char    Padding[4];
 } AjODomain;
 #define AjPDomain AjODomain*
 

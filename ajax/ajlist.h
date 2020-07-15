@@ -82,7 +82,7 @@ typedef struct AjSListNode {
 **
 ** @attr First [AjPListNode] first node
 ** @attr Last [AjPListNode] dummy last node
-** @attr Count [ajint] Number of nodes
+** @attr Count [ajuint] Number of nodes
 ** @attr Type [AjEnum] List type (any, string, etc.)
 ** @@
 ******************************************************************************/
@@ -90,7 +90,7 @@ typedef struct AjSListNode {
 typedef struct AjSList {
   AjPListNode First;
   AjPListNode Last;
-  ajint Count;
+  ajuint Count;
   AjEnum Type;
 } AjOList;
 
@@ -101,17 +101,19 @@ typedef struct AjSList {
 ** AJAX list iterator data structure
 **
 **
-** @attr Head [AjPList] Head of list
+** @attr Head [AjPList] Head of modifiable list
+** @attr ReadHead [const AjPList] Head of read-only list
 ** @attr Here [AjPListNode] Current list node
 ** @attr Orig [AjPListNode] First list node
-** @attr Dir [AjBool] Direction of last iterative move
+** @attr Back [AjBool] Direction of last iterative move, true if reading back
 ** @attr Modify [AjBool] Allows iterator to modify the sequence
 **
 ** @new ajListIter Default constructor
 ** @new ajListIterRead Default constructor for a read-only list iterator
 ** @cast ajListIterDone Tests whether an iterator is finished.
 ** @delete ajListIterFree Deletes a list iterator.
-** @modify ajListIterNext Returns next item using iterator, or steps off the end.
+** @modify ajListIterNext Returns next item using iterator,
+**                        or steps off the end.
 ** @modify ajListRemove Removes an item at the current iterator.
 ** @modify ajListstrRemove Removes an AjPStr item at the current iterator.
 ** @modify ajListInsert Inserts an item at the current iterator.
@@ -124,9 +126,10 @@ typedef struct AjSList {
 
 typedef struct AjSIList {
   AjPList Head ;
+  const AjPList ReadHead ;
   AjPListNode Here;
   AjPListNode Orig;
-  AjBool Dir;
+  AjBool Back;
   AjBool Modify;
 } AjOIList;
 
@@ -143,8 +146,9 @@ void        ajListDel   (AjPList *list);
 void        ajListExit (void);
 AjBool      ajListFirst (const AjPList thys, void** x);
 void        ajListFree   (AjPList *list);
+void        ajListFreeData   (AjPList *list);
 void        ajListGarbageCollect (AjPList list,
-				  void (*destruct)(const void **),
+				  void (*destruct)(void **),
 				  AjBool (*compar)(const void *));
 void        ajListInsert (AjIList iter, void* x);
 
@@ -162,7 +166,7 @@ AjBool      ajListIterDone (const AjIList iter);
 void        ajListIterTrace (const AjIList iter);
 
 AjBool      ajListLast (const AjPList thys, void** x);
-ajint       ajListLength (const AjPList list);
+ajuint      ajListLength (const AjPList list);
 void        ajListMap    (AjPList list,
 			  void apply(void **x, void *cl), void *cl);
 void        ajListMapRead(const AjPList list,
@@ -170,7 +174,7 @@ void        ajListMapRead(const AjPList list,
 AjPList     ajListNew (void);          /* return header */
 AjPList     ajListNewArgs   (void* x, ...);  /* new header returned */
 AjPListNode ajListNodesNew (void *x, ...);  /* same as NewArgs but no header */
-AjBool      ajListNth (const AjPList thys, ajint n, void** x);
+AjBool      ajListNth (const AjPList thys, ajuint n, void** x);
 AjBool      ajListPeek    (const AjPList list, void** x);
 AjBool      ajListPop    (AjPList list, void** x);
 AjBool      ajListPopEnd (AjPList thys, void** x);
@@ -182,7 +186,7 @@ AjPList     ajListstrCopy   (const AjPList list);
 void        ajListstrDel   (AjPList *list);
 void        ajListstrFree   (AjPList *list);
 void        ajListstrIterTrace (const AjIList iter);
-ajint       ajListstrLength (const AjPList list);
+ajuint      ajListstrLength (const AjPList list);
 void        ajListstrMap (AjPList thys,
 			  void apply(AjPStr* x, void* cl), void* cl);
 void        ajListstrMapRead (const AjPList thys,
@@ -195,11 +199,11 @@ AjBool      ajListstrPopEnd (AjPList thys, AjPStr *x);
 void        ajListstrPush (AjPList list, AjPStr x);
 void        ajListstrPushApp (AjPList list, AjPStr x);
 void        ajListstrReverse (AjPList list);
-ajint       ajListstrToArray (const AjPList list, AjPStr** array);
-ajint       ajListstrToArrayApp (const AjPList list, AjPStr** array);
+ajuint      ajListstrToArray (const AjPList list, AjPStr** array);
+ajuint      ajListstrToArrayApp (const AjPList list, AjPStr** array);
 void        ajListstrTrace   (const AjPList list);
 
-ajint       ajListToArray (const AjPList list, void*** array);
+ajuint      ajListToArray (const AjPList list, void*** array);
 void        ajListTrace   (const AjPList list);
 
 AjBool      ajListFind (const AjPList listhead,
@@ -210,7 +214,7 @@ AjBool      ajListstrFind (const AjPList listhead,
 void        ajListPushList (AjPList list, AjPList* pmore);
 void        ajListstrPushList (AjPList list, AjPList* pmore);
 void        ajListRemove (AjIList iter);
-ajint       ajListstrClone (const AjPList thys, AjPList newlist);
+ajuint      ajListstrClone (const AjPList thys, AjPList newlist);
 void        ajListstrInsert (AjIList iter, AjPStr x);
 void        ajListstrRemove (AjIList iter);
 void        ajListSort (AjPList thys,

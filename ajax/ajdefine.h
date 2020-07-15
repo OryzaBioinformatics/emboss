@@ -23,9 +23,6 @@ extern "C"
 #endif
 
 
-#define NPOS (size_t) (-1)
-/* const size_t NPOS = (size_t) (-1);*/ /* maximum size_t value */
-
 typedef void fvoid_t(void);		/* void function type */
 
 enum capacity {default_size, reserve};

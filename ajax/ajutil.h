@@ -13,9 +13,9 @@ extern "C"
 ** Prototype definitions
 */
 
-void   ajExit (void);
-ajint  ajExitAbort (void);
-ajint  ajExitBad (void);
+__noreturn void   ajExit (void);
+__noreturn void   ajExitAbort (void);
+__noreturn void   ajExitBad (void);
 void   ajLogInfo (void);
 AjBool ajUtilBigendian (void);
 void   ajUtilCatch (void);
@@ -25,6 +25,8 @@ void   ajUtilRev8 (ajlong* i);
 void   ajUtilRevInt(ajint* sval);
 void   ajUtilRevShort(short* ival);
 void   ajUtilRevLong(ajlong* lval);
+void   ajUtilRevUint(ajuint* ival);
+
 AjBool ajUtilUid (AjPStr* dest);
 
 /*

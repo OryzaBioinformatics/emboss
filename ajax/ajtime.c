@@ -35,20 +35,21 @@
 ** @alias TimeSFormat
 ** @alias TimeOFormat
 **
-** @attr Name [char*] format name
-** @attr Format [char*] C run time library time format string
+** @attr Name [const char*] format name
+** @attr Format [const char*] C run time library time format string
 ** @@
 ******************************************************************************/
 
 typedef struct TimeSFormat
 {
-    char* Name;
-    char* Format;
+    const char* Name;
+    const char* Format;
 } TimeOFormat;
 #define TimePFormat TimeOFormat*
 
 
 static AjPTime timeTodayData = NULL;
+static AjPTime timeTodaySaved = NULL;
 
 
 static TimeOFormat timeFormat[] =  /* formats for strftime */
@@ -60,13 +61,17 @@ static TimeOFormat timeFormat[] =  /* formats for strftime */
     {"time", "%H:%M:%S"},
     {"daytime", "%d-%b-%Y %H:%M"},
     {"log", "%a %b %d %H:%M:%S %Y"},
-    {"report", "%a %b %d %Y %H:%M:%S"},
+#ifndef WIN32
+    {"report", "%a %e %b %Y %H:%M:%S"},
+#else
+    {"report", "%a %#d %b %Y %H:%M:%S"},
+#endif
     {"dbindex", "%d/%m/%y"},
     { NULL, NULL}
 };
 
 
-
+static const char* TimeFormat(const char *timefmt);
 
 /* @func ajTimeTodayRef *******************************************************
 **
@@ -78,20 +83,19 @@ static TimeOFormat timeFormat[] =  /* formats for strftime */
 
 const AjPTime ajTimeTodayRef(void)
 {
-    static AjPTime thys = NULL;
     time_t tim;
     
     tim = time(0);
 
-    if(!thys)
-	AJNEW0(thys);
+    if(!timeTodaySaved)
+	AJNEW0(timeTodaySaved);
 
-    if(!ajTimeLocal(tim,thys))
+    if(!ajTimeLocal(tim,timeTodaySaved))
         return NULL;
 
-    thys->format = NULL;
+    timeTodaySaved->format = NULL;
 
-    return thys;
+    return timeTodaySaved;
 }
 
 
@@ -131,15 +135,15 @@ AjPTime ajTimeToday(void)
 ** AJAX function to return the ANSI C format for an AJAX time string
 **
 ** @param [r] timefmt [const char*] AJAX time format
-** @return [char*] ANSI C time format, or NULL if none found
+** @return [const char*] ANSI C time format, or NULL if none found
 ** @@
 ******************************************************************************/
 
-static char* TimeFormat(const char *timefmt)
+static const char* TimeFormat(const char *timefmt)
 {
     ajint i;
     AjBool ok    = ajFalse;
-    char *format = NULL ;
+    const char *format = NULL ;
 
     for(i=0; timeFormat[i].Name; i++)
 	if(ajCharMatchCaseC(timefmt, timeFormat[i].Name))
@@ -417,7 +421,21 @@ void ajTimeDel(AjPTime *thys)
 }
 
 
+/* @func ajTimeMake ***********************************************************
+**
+** An AjPTime object version of the mktime function that returns
+** a standard time_t value
+**
+** @param [r] thys [const AjPTime] Time object
+** @return [time_t] Standard time value
+** @@
+******************************************************************************/
 
+time_t ajTimeMake(const AjPTime thys)
+{
+    struct tm tm = thys->time;		/* mktime resets wday and yday */
+    return mktime(&tm);
+}
 
 
 /* @func ajTimeExit ***********************************************************
@@ -431,6 +449,7 @@ void ajTimeDel(AjPTime *thys)
 void ajTimeExit(void)
 {
     ajTimeDel(&timeTodayData);
+    ajTimeDel(&timeTodaySaved);
 
     return;
 }

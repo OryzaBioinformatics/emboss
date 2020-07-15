@@ -27,7 +27,6 @@ extern "C"
 **
 ** @attr Type [AjPStr] "P" Protein or "N" Nucleotide
 ** @attr Formatstr [AjPStr] Report format (-aformat qualifier)
-** @attr Format [AjEnum] Report format (index number)
 ** @attr File [AjPFile] Output file object
 ** @attr Header [AjPStr] Text to add to header with newlines
 ** @attr SubHeader [AjPStr] Text to add to align subheader with newlines
@@ -39,12 +38,12 @@ extern "C"
 **                        or only seqname if ajFalse
 ** @attr Multi [AjBool] if true, assume >1 alignment
 ** @attr Global [AjBool] if true, show full sequence beyond match
+** @attr Format [AjEnum] Report format (index number)
 ** @attr Data [AjPList] Alignment specific data - see ajalign.c
 ** @attr Nseqs [ajint] Number of sequences in all alignments
 ** @attr Nmin [ajint] Minimum number of sequences e.g. 2
 ** @attr Nmax [ajint] Maximum number of sequences e.g. 2
 ** @attr Width [ajint] Output width (minimum 10)
-** @attr Count [ajint] Use count
 ** @attr IMatrix [AjPMatrix] Integer matrix (see also FMatrix)
 ** @attr FMatrix [AjPMatrixf] Floating Pt matrix (see also IMatrix)
 ** @attr Matrix [AjPStr] Matrix name
@@ -52,13 +51,14 @@ extern "C"
 ** @attr ExtPen [AjPStr] Gap extend penalty (converted to string)
 ** @attr SeqOnly [AjBool] Sequence output only, no head or tail
 ** @attr SeqExternal [AjBool] Sequence is non-local, do not delete
+** @attr Count [ajint] Use count
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSAlign {
   AjPStr Type;
   AjPStr Formatstr;
-  AjEnum Format;
   AjPFile File;
   AjPStr Header;
   AjPStr SubHeader;
@@ -69,12 +69,12 @@ typedef struct AjSAlign {
   AjBool Showusa;
   AjBool Multi;
   AjBool Global;
+  AjEnum Format;
   AjPList Data;
   ajint Nseqs;
   ajint Nmin;
   ajint Nmax;
   ajint Width;
-  ajint Count;
   AjPMatrix  IMatrix;
   AjPMatrixf FMatrix;
   AjPStr Matrix;
@@ -82,6 +82,8 @@ typedef struct AjSAlign {
   AjPStr ExtPen;
   AjBool SeqOnly;
   AjBool SeqExternal;
+  ajint Count;
+  char Padding[4];
 } AjOAlign;
 
 #define AjPAlign AjOAlign*
@@ -108,6 +110,7 @@ void         ajAlignDel (AjPAlign* pthys);
 void         ajAlignExit(void);
 AjBool       ajAlignFindFormat (const AjPStr format, ajint* iformat);
 AjBool       ajAlignFormatDefault (AjPStr* pformat);
+ajint        ajAlignGetLen(const AjPAlign thys);
 const char*  ajAlignGetFilename(const AjPAlign thys);
 const AjPStr ajAlignGetFormat(const AjPAlign thys);
 AjPAlign     ajAlignNew (void);
@@ -122,8 +125,8 @@ void         ajAlignSetGapI (AjPAlign thys, ajint gappen, ajint extpen);
 void         ajAlignSetGapR (AjPAlign thys, float gappen, float extpen);
 void         ajAlignSetMatrixName (AjPAlign thys, const AjPStr matrix);
 void         ajAlignSetMatrixNameC (AjPAlign thys, const char* matrix);
-void         ajAlignSetMatrixInt (AjPAlign thys, const AjPMatrix matrix);
-void         ajAlignSetMatrixFloat (AjPAlign thys, const AjPMatrixf matrix);
+void         ajAlignSetMatrixInt (AjPAlign thys, AjPMatrix matrix);
+void         ajAlignSetMatrixFloat (AjPAlign thys, AjPMatrixf matrix);
 AjBool       ajAlignSetRange (AjPAlign thys,
 			      ajint start1, ajint end1,
 			      ajint len1, ajint off1,

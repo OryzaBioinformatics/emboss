@@ -556,6 +556,7 @@ typedef unsigned char uschar;
 ** @attr req_byte [unsigned short int] Undocumented
 ** @attr name_entry_size [unsigned short int] Size of any name items; 0 => none
 ** @attr name_count [unsigned short int] Number of name items
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -570,6 +571,7 @@ typedef struct real_pcre {
   unsigned short int req_byte;
   unsigned short int name_entry_size;
   unsigned short int name_count;
+  char Padding[4];
 } real_pcre;
 
 /* @data pcre_study_data ******************************************************
@@ -579,6 +581,7 @@ typedef struct real_pcre {
 ** @attr size [size_t] Total that was malloced
 ** @attr options [uschar] Undocumented
 ** @attr start_bits [uschar[32]] Undocumented
+** @attr Padding [uschar[7]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -586,6 +589,7 @@ typedef struct pcre_study_data {
   size_t size;
   uschar options;
   uschar start_bits[32];
+  uschar Padding[7];
 } pcre_study_data;
 
 /* @data compile_data *********************************************************
@@ -604,6 +608,7 @@ typedef struct pcre_study_data {
 ** @attr top_backref [int] Maximum back reference
 ** @attr backref_map [unsigned int] Bitmap of low back refs
 ** @attr req_varyopt [int] "After variable item" flag for reqbyte
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -619,6 +624,7 @@ typedef struct compile_data {
   int  top_backref;
   unsigned int backref_map;
   int  req_varyopt;
+  char Padding[4];
 } compile_data;
 
 /* @data branch_chain *********************************************************
@@ -642,21 +648,21 @@ typedef struct branch_chain {
 ** call within the pattern.
 **
 ** @attr prev [struct recursion_info*] Previous recursion record (or NULL)
-** @attr group_num [int] Number of group that was called
 ** @attr after_call [const uschar*] "Return value":
 **                                  points after the call in the expr
 ** @attr save_start [const uschar*] Old value of md->start_match
 ** @attr offset_save [int*] Pointer to start of saved offsets
+** @attr group_num [int] Number of group that was called
 ** @attr saved_max [int] Number of saved offsets
 ** @@
 ******************************************************************************/
 
 typedef struct recursion_info {
   struct recursion_info *prev;
-  int group_num;
   const uschar *after_call;
   const uschar *save_start;
   int *offset_save;
+  int group_num;
   int saved_max;
 } recursion_info;
 
@@ -684,10 +690,11 @@ typedef struct recursion_info {
 ** @attr start_match [const uschar*] Start of this match attempt
 ** @attr end_match_ptr [const uschar*] Subject position at end match
 ** @attr end_offset_top [int] Highwater mark at end of match
-** @attr capture_last [int] Most recent capture number
 ** @attr start_offset [int] The start offset value
 ** @attr recursive [recursion_info*] Linked list of recursion data
 ** @attr callout_data [void*] To pass back to callouts
+** @attr capture_last [int] Most recent capture number
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -711,10 +718,11 @@ typedef struct match_data {
   const uschar *start_match;
   const uschar *end_match_ptr;
   int    end_offset_top;
-  int    capture_last;
   int    start_offset;
   recursion_info *recursive;
   void  *callout_data;
+  int    capture_last;
+  char   Padding[4];
 } match_data;
 
 /* Bit definitions for entries in the pcre_ctypes table. */

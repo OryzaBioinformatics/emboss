@@ -20,14 +20,16 @@ extern "C"
 **
 ** @delete nexusTaxaDel Default destructor
 **
-** @attr Ntax [ajint] Number of taxons
 ** @attr TaxLabels [AjPStr*] Taxon names
+** @attr Ntax [ajuint] Number of taxons
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSNexusTaxa {
-    ajint Ntax;
     AjPStr* TaxLabels;
+    ajuint  Ntax;
+    char    Padding[4];
 } AjONexusTaxa;
 #define AjPNexusTaxa AjONexusTaxa*
 
@@ -45,53 +47,56 @@ typedef struct AjSNexusTaxa {
 ** @delete nexusCharactersDel Default destructor
 **
 ** @attr NewTaxa [AjBool] New taxa read from data block
-** @attr Ntax [ajint] Number of taxons
-** @attr Nchar [ajint] Number of characters
-** @attr DataType [AjPStr] Data type
+** @attr Ntax [ajuint] Number of taxons
+** @attr Nchar [ajuint] Number of characters
 ** @attr RespectCase [AjBool] Respect case if true
-** @attr Missing [char] Missing character in input data
-** @attr Gap [char] Gap character in input data
+** @attr DataType [AjPStr] Data type
 ** @attr Symbols [AjPStr] Character symbols
 ** @attr Equate [AjPStr] Character equivalent names
-** @attr MatchChar [char] Matching charater in input
 ** @attr Labels [AjBool] Labels if true
 ** @attr Transpose [AjBool] Transpose data if true
 ** @attr Interleave [AjBool] Interleaved input if true
+** @attr Tokens [AjBool] If true, tokens set
 ** @attr Items [AjPStr] Character items
 ** @attr StatesFormat [AjPStr] Statesformat string
-** @attr Tokens [AjBool] If true, tokens set
 ** @attr Eliminate [AjPStr] Elimioate string
 ** @attr CharStateLabels [AjPStr*] Character and state labels
 ** @attr CharLabels [AjPStr*] Character labels
 ** @attr StateLabels [AjPStr*] State labels
 ** @attr Matrix [AjPStr*] Matrix data
 ** @attr Sequences [AjPStr*] Sequence data
+** @attr Missing [char] Missing character in input data
+** @attr Gap [char] Gap character in input data
+** @attr MatchChar [char] Matching charater in input
+** @attr Padding [char[5]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSNexusCharacters {
     AjBool NewTaxa;
-    ajint Ntax;
-    ajint Nchar;
-    AjPStr DataType;
+    ajuint Ntax;
+    ajuint Nchar;
     AjBool RespectCase;
-    char Missing;
-    char Gap;
+    AjPStr DataType;
+
     AjPStr Symbols;
     AjPStr Equate;
-    char MatchChar;
     AjBool Labels;
     AjBool Transpose;
     AjBool Interleave;
+    AjBool Tokens;
     AjPStr Items;
     AjPStr StatesFormat;
-    AjBool Tokens;
     AjPStr Eliminate;
     AjPStr* CharStateLabels;
     AjPStr* CharLabels;
     AjPStr* StateLabels;
     AjPStr* Matrix;
     AjPStr* Sequences;
+    char Missing;
+    char Gap;
+    char MatchChar;
+    char Padding[5];
 } AjONexusCharacters;
 #define AjPNexusCharacters AjONexusCharacters*
 
@@ -112,27 +117,29 @@ typedef struct AjSNexusCharacters {
 ** @delete nexusUnalignedDel Default destructor
 **
 ** @attr NewTaxa [AjBool] New taxa read from data block
-** @attr Ntax [ajint] Number of taxons
+** @attr Ntax [ajuint] Number of taxons
 ** @attr DataType [AjPStr] Data type
 ** @attr RespectCase [AjBool] Respect case if true
-** @attr Missing [char] Missing character in input data
+** @attr Labels [AjBool] Labels if true
 ** @attr Symbols [AjPStr] Character symbols
 ** @attr Equate [AjPStr] Character equivalent names
-** @attr Labels [AjBool] Labels if true
 ** @attr Matrix [AjPStr*] Matrix data
+** @attr Missing [char] Missing character in input data
+** @attr Padding [char[7]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSNexusUnaligned {
     AjBool NewTaxa;
-    ajint Ntax;
+    ajuint Ntax;
     AjPStr DataType;
     AjBool RespectCase;
-    char Missing;
+    AjBool Labels;
     AjPStr Symbols;
     AjPStr Equate;
-    AjBool Labels;
     AjPStr* Matrix;
+    char Missing;
+    char Padding[7];
 } AjONexusUnaligned;
 #define AjPNexusUnaligned AjONexusUnaligned*
 
@@ -150,27 +157,29 @@ typedef struct AjSNexusUnaligned {
 ** @delete nexusDistancesDel Default destructor
 **
 ** @attr NewTaxa [AjBool] New taxa read from data block
-** @attr Ntax [ajint] Number of taxons
-** @attr Nchar [ajint] Number of characters
-** @attr Triangle [AjPStr] Triangular distances block type
+** @attr Ntax [ajuint] Number of taxons
+** @attr Nchar [ajuint] Number of characters
 ** @attr Diagonal [AjBool] If true, expect to read diagonal of matrix
-** @attr Missing [char] Missing character in input data
 ** @attr Labels [AjBool] Labels if true
 ** @attr Interleave [AjBool] Interleaved input if true
+** @attr Triangle [AjPStr] Triangular distances block type
 ** @attr Matrix [AjPStr*] Matrix data
+** @attr Missing [char] Missing character in input data
+** @attr Padding [char[7]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSNexusDistances {
     AjBool NewTaxa;
-    ajint Ntax;
-    ajint Nchar;
-    AjPStr Triangle;
+    ajuint Ntax;
+    ajuint Nchar;
     AjBool Diagonal;
-    char Missing;
     AjBool Labels;
     AjBool Interleave;
+    AjPStr Triangle;
     AjPStr* Matrix;
+    char Missing;
+    char Padding[7];
 } AjONexusDistances;
 #define AjPNexusDistances AjONexusDistances*
 
@@ -335,7 +344,6 @@ typedef struct AjSNexusNotes {
 **
 ** @delete ajNexusDel Default destructor
 **
-** @attr Ntax [ajint] Number of taxa (wherever they were defined)
 ** @attr Taxa [AjPNexusTaxa] Taxa
 ** @attr Characters [AjPNexusCharacters] Characters (or data)
 ** @attr Unaligned [AjPNexusUnaligned] Unaligned
@@ -345,11 +353,12 @@ typedef struct AjSNexusNotes {
 ** @attr Codons [AjPNexusCodons] Codons
 ** @attr Trees [AjPNexusTrees] Trees
 ** @attr Notes [AjPNexusNotes] Notes
+** @attr Ntax [ajuint] Number of taxa (wherever they were defined)
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSNexus {
-    ajint Ntax;
     AjPNexusTaxa Taxa;
     AjPNexusCharacters Characters;
     AjPNexusUnaligned Unaligned;
@@ -359,6 +368,8 @@ typedef struct AjSNexus {
     AjPNexusCodons Codons;
     AjPNexusTrees Trees;
     AjPNexusNotes Notes;
+    ajuint Ntax;
+    char Padding[4];
 } AjONexus;
 #define AjPNexus AjONexus*
 
@@ -369,7 +380,7 @@ typedef struct AjSNexus {
 */
 
 void     ajNexusDel(AjPNexus* pthys);
-ajint    ajNexusGetNtaxa(const AjPNexus thys);
+ajuint   ajNexusGetNtaxa(const AjPNexus thys);
 AjPStr*  ajNexusGetTaxa(const AjPNexus thys);
 AjPStr*  ajNexusGetSequences(AjPNexus thys);
 AjPNexus ajNexusNew(void);

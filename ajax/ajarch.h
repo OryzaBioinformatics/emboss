@@ -132,8 +132,10 @@ typedef unsigned long long ajulong;
 
 #ifdef __GNUC__
 #define __deprecated __attribute__((deprecated))
+#define __noreturn __attribute__((noreturn))
 #else
 #define __deprecated
+#define __noreturn
 #endif
 
 #ifdef __cplusplus

@@ -187,6 +187,7 @@ POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 PURIFY_FALSE = @PURIFY_FALSE@
 PURIFY_TRUE = @PURIFY_TRUE@
 RANLIB = @RANLIB@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -280,10 +281,10 @@ pcre_internal.h pcreposix.h
 
 @ISCYGWIN_FALSE@libajax_la_SOURCES = $(AJAXSRC)
 @ISCYGWIN_TRUE@libajax_la_SOURCES = $(AJAXSRC) $(AJAXGSRC)
-@ISCYGWIN_FALSE@libajax_la_LDFLAGS = -version-info 4:0:0
-@ISCYGWIN_TRUE@libajax_la_LDFLAGS = -version-info 4:0:0
+@ISCYGWIN_FALSE@libajax_la_LDFLAGS = -version-info 4:1:0
+@ISCYGWIN_TRUE@libajax_la_LDFLAGS = -version-info 4:1:0
 @ISCYGWIN_FALSE@libajaxg_la_SOURCES = $(AJAXGSRC)
-@ISCYGWIN_FALSE@libajaxg_la_LDFLAGS = -version-info 4:0:0
+@ISCYGWIN_FALSE@libajaxg_la_LDFLAGS = -version-info 4:1:0
 all: all-am
 
 .SUFFIXES:

@@ -41,7 +41,7 @@ static void            domUpdateNode(AjPDomNode node);
 static AjPDomNode      domDoRemoveChild(AjPDomNode node, AjPDomNode child);
 static void            domRemoveFromMap(AjPDomNodeList list,
 					const AjPDomNode key);
-static void            domAddToMap(AjPDomNodeList list, const AjPDomNode key,
+static void            domAddToMap(AjPDomNodeList list, AjPDomNode key,
 				   AjPDomNodeEntry val);
 
 
@@ -142,13 +142,13 @@ static void domRemoveFromMap(AjPDomNodeList list, const AjPDomNode key)
 ** Add a key/value pair to a DOM nodelist 
 **
 ** @param [w] list [AjPDomNodeList] node list
-** @param [r] key [const AjPDomNode] key
+** @param [o] key [AjPDomNode] key
 ** @param [u] val [AjPDomNodeEntry] value
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void domAddToMap(AjPDomNodeList list, const AjPDomNode key,
+static void domAddToMap(AjPDomNodeList list, AjPDomNode key,
 			AjPDomNodeEntry val)
 {
     if(!list->table)
@@ -905,7 +905,9 @@ AjPDomDocument ajDomImplementationCreateDocument(const AjPStr uri,
 						 AjPDomDocumentType doctype)
 {
     const char *p = NULL;
-    
+
+    (void) uri;				/* temporary use */
+
     if(qualname)
         p = qualname->Ptr;
 
@@ -1223,14 +1225,14 @@ AjPDomNode ajDomNodeMapRemoveItemC(AjPDomNodeMap map, const char *name)
 ** Return the node in the map at a given index
 **
 ** @param [r] map [const AjPDomNodeMap] map
-** @param [r] index [ajint] index
+** @param [r] indexnum [ajint] index
 ** @return [AjPDomNode] node or NULL
 ** @@
 ******************************************************************************/
 
-AjPDomNode ajDomNodeMapItem(const AjPDomNodeMap map, ajint index)
+AjPDomNode ajDomNodeMapItem(const AjPDomNodeMap map, ajint indexnum)
 {
-    return ajDomNodeListItem(map,index);
+    return ajDomNodeListItem(map,indexnum);
 }
 
 
@@ -1241,24 +1243,24 @@ AjPDomNode ajDomNodeMapItem(const AjPDomNodeMap map, ajint index)
 ** Filter nodelist item
 **
 ** @param [r] list [const AjPDomNodeList] list
-** @param [r] index [ajint] index
+** @param [r] indexnum [ajint] index
 ** @param [r] nodetype [ajuint] nodetype
 ** @return [AjPDomNode] node or NULL
 ** @@
 ******************************************************************************/
 
 static AjPDomNode domNodeListItemFiltered(const AjPDomNodeList list,
-					  ajint index, ajuint nodetype)
+					  ajint indexnum, ajuint nodetype)
 {
     AjPDomNodeEntry e = NULL;
     
-    if(list && index >= 0 && index < list->length)
+    if(list && indexnum >= 0 && indexnum < list->length)
 	for(e=list->first; e; e=e->next)
 	    if(e->node->type == nodetype)
 	    {
-		if(!index)
+		if(!indexnum)
 		    return e->node;
-		--index;
+		--indexnum;
 	    }
 
     return NULL;
@@ -1272,23 +1274,23 @@ static AjPDomNode domNodeListItemFiltered(const AjPDomNodeList list,
 ** Return the node in the list at a given index
 **
 ** @param [r] list [const AjPDomNodeList] list
-** @param [r] index [ajint] index
+** @param [r] indexnum [ajint] index
 ** @return [AjPDomNode] node or NULL
 ** @@
 ******************************************************************************/
 
-AjPDomNode ajDomNodeListItem(const AjPDomNodeList list, ajint index)
+AjPDomNode ajDomNodeListItem(const AjPDomNodeList list, ajint indexnum)
 {
     AjPDomNodeEntry e = NULL;
 
     if(list)
     {
 	if(list->filter)
-	    return domNodeListItemFiltered(list->list,index,list->filter);
+	    return domNodeListItemFiltered(list->list,indexnum,list->filter);
 
-	if(index >= 0 && index < list->length)
-	    for(e=list->first; e; e=e->next, --index)
-		if(!index)
+	if(indexnum >= 0 && indexnum < list->length)
+	    for(e=list->first; e; e=e->next, --indexnum)
+		if(!indexnum)
 		    return e->node;
     }
 
@@ -2657,7 +2659,6 @@ void ajDomNodePrintNode(const AjPDomNode node)
 AjPDomNode ajDomNodeInsertBefore(AjPDomNode node, AjPDomNode newchild,
 				 AjPDomNode refchild)
 {
-    AjPDomNodeEntry e = NULL;
     AjPDomNode n = NULL;
     AjPDomNode nxt = NULL;
     
@@ -2705,7 +2706,7 @@ AjPDomNode ajDomNodeInsertBefore(AjPDomNode node, AjPDomNode newchild,
 
     domDoRemoveChild(node,newchild);
 
-    if(!(e=ajDomNodeListInsert(node->childnodes,newchild,refchild)))
+    if(!(ajDomNodeListInsert(node->childnodes,newchild,refchild)))
 	return NULL;
 
     if(!node->firstchild)
@@ -3385,6 +3386,201 @@ ajint ajDomWrite(const AjPDomDocument node, AjPFile outf)
 
 	for(c=node->firstchild; c; c=c->nextsibling)
 	    if(ajDomWrite(c,outf) == -1)
+		return -1;
+
+	ajFmtPrintF(outf,"\n");
+	break;
+
+    case AJDOM_DOCUMENT_TYPE_NODE:
+	ajFmtPrintF(outf,"\n<!DOCTYPE ");
+	ajFmtPrintF(outf,"%S",node->sub.DocumentType.name);
+	if(node->sub.DocumentType.systemid)
+	{
+	    ajFmtPrintF(outf," SYSTEM \"");
+	    ajFmtPrintF(outf,"%S",node->sub.DocumentType.systemid);
+	    ajFmtPrintF(outf,"\"");
+	}
+	else if(node->sub.DocumentType.publicid)
+	{
+	    ajFmtPrintF(outf," PUBLIC \"");
+	    ajFmtPrintF(outf,"%S",node->sub.DocumentType.publicid);
+	    ajFmtPrintF(outf,"\"");
+	}
+
+	if(node->sub.DocumentType.internalsubset)
+	{
+	    ajFmtPrintF(outf," [\n");
+	    ajFmtPrintF(outf,"%S",node->sub.DocumentType.internalsubset);
+	    ajFmtPrintF(outf,"]>\n");
+	}
+	else
+	    ajFmtPrintF(outf,">\n");
+
+	break;
+
+    case AJDOM_DOCUMENT_FRAGMENT_NODE:
+	break;
+    }
+
+    return 0;
+}
+
+
+
+
+/* @func ajDomWriteIndent ****************************************************
+**
+** Write XML from memory
+**
+** @param [r] node [const AjPDomDocument] document to write
+** @param [u] outf [AjPFile] output file
+** @param [r] indent [ajint] indent level
+** @return [ajint] zero OK, negative if error
+** @@
+******************************************************************************/
+
+ajint ajDomWriteIndent(const AjPDomDocument node, AjPFile outf, ajint indent)
+{
+    AjPDomNodeEntry e = NULL;
+    AjPDomNode c = NULL;
+    ajint i;
+
+    if(!node || !outf)
+	return -1;
+
+    for(i=0;i<indent;++i)
+        ajFmtPrintF(outf," ");
+
+    switch(node->type)
+    {
+    case AJDOM_ELEMENT_NODE:
+	ajFmtPrintF(outf,"<");
+	ajFmtPrintF(outf,"%S",node->name);
+	for(e=node->attributes->first; e; e=e->next)
+	{
+	    ajFmtPrintF(outf," %S=\"",e->node->name);
+	    domWriteEncoded(e->node->value,outf);
+	    ajFmtPrintF(outf,"\"");
+	}
+	
+	if(ajDomNodeHasChildNodes(node))
+	{
+	    ajFmtPrintF(outf,">\n");
+	    for(c=node->firstchild; c; c=c->nextsibling)
+	      if(ajDomWriteIndent(c,outf,indent+2) == -1)
+		    return -1;
+            for(i=0;i<indent;++i)
+                ajFmtPrintF(outf," ");
+
+
+	    ajFmtPrintF(outf,"</");
+	    ajFmtPrintF(outf,"%S",node->name);
+	    ajFmtPrintF(outf,">\n");
+	}
+	else
+	    ajFmtPrintF(outf,"/>\n");
+
+	break;
+
+    case AJDOM_ATTRIBUTE_NODE:
+	break;
+
+    case AJDOM_TEXT_NODE:
+	domWriteEncoded(node->value,outf);
+	break;
+
+    case AJDOM_CDATA_SECTION_NODE:
+	break;
+
+    case AJDOM_ENTITY_REFERENCE_NODE:
+	break;
+
+    case AJDOM_NOTATION_NODE:
+	ajFmtPrintF(outf,"    <!NOTATION ");
+	ajFmtPrintF(outf,"%S",node->name);
+	if(node->sub.Notation.publicid)
+	{
+	    ajFmtPrintF(outf," PUBLIC \"");
+	    ajFmtPrintF(outf,"%S",node->sub.Notation.publicid);
+	    ajFmtPrintF(outf,"\" \"");
+	    ajFmtPrintF(outf,"%S",node->sub.Notation.systemid);
+	    ajFmtPrintF(outf,"\"");
+	}
+	else if(node->sub.Notation.systemid)
+	{
+	    ajFmtPrintF(outf," SYSTEM \"");
+	    ajFmtPrintF(outf,"%S",node->sub.Notation.systemid);
+	    ajFmtPrintF(outf,"\"");
+	}
+
+	ajFmtPrintF(outf,">\n");
+	break;
+
+    case AJDOM_ENTITY_NODE:
+	ajFmtPrintF(outf,"    <!ENTITY ");
+	ajFmtPrintF(outf,"%S",node->name);
+	if(node->value)
+	{
+	    ajFmtPrintF(outf,"\"");
+	    ajFmtPrintF(outf,"%S",node->value);
+	    ajFmtPrintF(outf,"\"");
+	}
+	else
+	{
+	    if(node->sub.Entity.publicid)
+	    {
+		ajFmtPrintF(outf," PUBLIC \"");
+		ajFmtPrintF(outf,"%S",node->sub.Entity.publicid);
+		ajFmtPrintF(outf,"\" \"");
+		ajFmtPrintF(outf,"%S",node->sub.Entity.systemid);
+		ajFmtPrintF(outf,"\"");
+	    }
+	    else if(node->sub.Entity.systemid)
+	    {
+		ajFmtPrintF(outf," SYSTEM \"");
+		ajFmtPrintF(outf,"%S",node->sub.Entity.systemid);
+		ajFmtPrintF(outf,"\"");
+	    }
+
+	    if(node->sub.Entity.notationname)
+	    {
+		ajFmtPrintF(outf," NDATA ");
+		ajFmtPrintF(outf,"%S",node->sub.Entity.notationname);
+	    }
+	}
+
+	ajFmtPrintF(outf,">\n");
+	break;
+
+    case AJDOM_PROCESSING_INSTRUCTION_NODE:
+	ajFmtPrintF(outf,"<?");
+	ajFmtPrintF(outf,"%S ",node->sub.ProcessingInstruction.target);
+	domWriteEncoded(node->sub.ProcessingInstruction.data,outf);
+	ajFmtPrintF(outf,"?>\n");
+	break;
+
+    case AJDOM_COMMENT_NODE:
+	ajFmtPrintF(outf,"<!--");
+	domWriteEncoded(node->value,outf);
+	ajFmtPrintF(outf,"-->\n");
+	break;
+
+    case AJDOM_DOCUMENT_NODE:
+	ajFmtPrintF(outf,"<?xml");
+	ajFmtPrintF(outf," version=\"");
+	if(node->sub.Document.version)
+	    ajFmtPrintF(outf,"%S",node->sub.Document.version);
+	else
+	    ajFmtPrintF(outf,"1.0");
+	ajFmtPrintF(outf,"\"");
+
+	if(node->sub.Document.standalone)
+	    ajFmtPrintF(outf," standalone=\"yes\"");
+
+	ajFmtPrintF(outf,"?>\n");
+
+	for(c=node->firstchild; c; c=c->nextsibling)
+	  if(ajDomWriteIndent(c,outf,indent+2) == -1)
 		return -1;
 
 	ajFmtPrintF(outf,"\n");

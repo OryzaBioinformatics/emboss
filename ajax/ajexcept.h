@@ -15,13 +15,13 @@ extern "C"
 **
 ** Exception data structure
 **
-** @attr reason [char*] Reason for the exception
+** @attr reason [const char*] Reason for the exception
 ** @@
 ******************************************************************************/
 
 typedef struct Except_T
 {
-    char *reason;
+    const char *reason;
 } Except_T;
 
 /* @data Except_Frame ********************************************************
@@ -31,8 +31,9 @@ typedef struct Except_T
 ** @attr env [jmp_buf] Environment jump buffer
 ** @attr prev [struct Except_Frame*] Previous exception if any
 ** @attr file [const char*] source filename usually from __FILE__
-** @attr line [ajint] source line number usually from __LINE__
 ** @attr exception [const Except_T*] Exception data (reason)
+** @attr line [ajint] source line number usually from __LINE__
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -41,8 +42,9 @@ typedef struct Except_Frame
     jmp_buf env;
     struct Except_Frame *prev;
     const char *file;
-    ajint line;
     const Except_T *exception;
+    ajint line;
+    char Padding[4];
 } Except_Frame;
 
 enum { Except_entered=0, Except_raised,

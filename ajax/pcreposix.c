@@ -165,14 +165,14 @@ pcre_regerror(int errcode, const regex_t *preg, char *errbuf,
     length = strlen(message) + 1;
 
     addmessage = " at offset ";
-    addlength = (preg != NULL && (int)preg->re_erroffset != -1)?
+    addlength = (preg != NULL && (int)*(preg->re_erroffset) != -1)?
 	strlen(addmessage) + 6 : 0;
 
     if (errbuf_size > 0)
     {
 	if (addlength > 0 && errbuf_size >= length + addlength)
 	    sprintf(errbuf, "%s%s%-6d",
-		    message, addmessage, (int)preg->re_erroffset);
+		    message, addmessage, (int)*(preg->re_erroffset));
 	else
 	{
 	    strncpy(errbuf, message, errbuf_size - 1);
@@ -226,7 +226,7 @@ pcre_regcomp(regex_t *preg, const char *pattern, int cflags)
 
     preg->re_pcre = pcre_compile(pattern, options, &errorptr,
 				 &erroffset, NULL);
-    preg->re_erroffset = erroffset;
+    *(preg->re_erroffset) = erroffset;
 
     if (preg->re_pcre == NULL) return pcre_posix_error_code(errorptr);
 
@@ -268,9 +268,9 @@ pcre_regexec(const regex_t *preg, const char *strng, size_t nmatch,
     if ((eflags & REG_NOTBOL) != 0) options |= PCRE_NOTBOL;
     if ((eflags & REG_NOTEOL) != 0) options |= PCRE_NOTEOL;
     
-    ((regex_t *)preg)->re_erroffset = (size_t)(-1);  /* Only has meaning
+    *(preg->re_erroffset) = (size_t)(-1);  /* Only has meaning
 							after compile */
-    
+
     if (nmatch > 0)
     {
 	if (nmatch <= POSIX_MALLOC_THRESHOLD)

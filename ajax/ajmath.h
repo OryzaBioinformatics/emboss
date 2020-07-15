@@ -38,9 +38,13 @@ void               ajRecToPol (float x, float y, float *radius, float *angle);
 ajint              ajRound (ajint i, ajint round);
 float              ajRoundF (float a, ajint nbits);
 unsigned long long ajSp64Crc(const AjPStr thys);
-ajint              ajMathPosI(ajint len, ajint imin, ajint ipos);
-ajint              ajMathPos(ajint len, ajint ipos);
-
+ajuint             ajSp32Crc(const AjPStr thys);
+ajuint             ajMathPosI(ajuint len, ajuint imin, ajint ipos);
+ajuint             ajMathPos(ajuint len, ajint ipos);
+ajuint             ajNumLengthDouble(double dnumber);
+ajuint             ajNumLengthFloat(float fnumber);
+ajuint             ajNumLengthInt(ajlong inumber);
+ajuint             ajNumLengthUint(ajulong inumber);
 /*
 ** End of prototype definitions
 */

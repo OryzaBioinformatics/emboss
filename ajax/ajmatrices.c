@@ -72,7 +72,7 @@ AjPMatrix ajMatrixNew(const AjPPStr codes, ajint n, const AjPStr filename)
     AJCNEW0(ret->Matrix, nsize);
     for(i=0; i<nsize; i++)
 	AJCNEW0(ret->Matrix[i], nsize);
-    ret->Cvt = ajSeqCvtNewZeroS(codes, n);
+    ret->Cvt = ajSeqcvtNewStr(codes, n);
 
     return ret;
 }
@@ -82,7 +82,7 @@ AjPMatrix ajMatrixNew(const AjPPStr codes, ajint n, const AjPStr filename)
 
 /* @func ajMatrixNewAsym ******************************************************
 **
-** Creates a new, zero assymetrical matrix from two array of strings and a 
+** Creates a new, zero asymmetrical matrix from two array of strings and a 
 ** matrix name. If the matrix is a substitution matrix then each string would 
 ** be a defined code, e.g. sequence character.
 **
@@ -140,7 +140,7 @@ AjPMatrix ajMatrixNewAsym(const AjPPStr codes, ajint n,
     for(i=0; i<rnsize; i++)
 	AJCNEW0(ret->Matrix[i], nsize);
 
-    ret->Cvt = ajSeqCvtNewZeroSS(codes, n, rcodes, rn);
+    ret->Cvt = ajSeqcvtNewStrAsym(codes, n, rcodes, rn);
 
     return ret;
 }
@@ -193,7 +193,7 @@ AjPMatrixf ajMatrixfNew(const AjPPStr codes, ajint n, const AjPStr filename)
     AJCNEW0(ret->Matrixf, nsize);
     for(i=0; i<nsize; i++)
 	AJCNEW0(ret->Matrixf[i], nsize);
-    ret->Cvt = ajSeqCvtNewZeroS(codes, n);
+    ret->Cvt = ajSeqcvtNewStr(codes, n);
 
     return ret;
 }
@@ -204,7 +204,7 @@ AjPMatrixf ajMatrixfNew(const AjPPStr codes, ajint n, const AjPStr filename)
 
 /* @func ajMatrixfNewAsym *****************************************************
 **
-** Creates a new, zero assymetrical matrix from an array of strings and a 
+** Creates a new, zero asymmetrical matrix from an array of strings and a 
 ** matrix name. If the matrix is a residue substitution matrix then each 
 ** string would be a defined sequence character.
 **
@@ -264,7 +264,7 @@ AjPMatrixf ajMatrixfNewAsym(const AjPPStr codes, ajint n,
     for(i=0; i<rnsize; i++)
 	AJCNEW0(ret->Matrixf[i], nsize);
 
-    ret->Cvt = ajSeqCvtNewZeroSS(codes, n, rcodes, rn);
+    ret->Cvt = ajSeqcvtNewStrAsym(codes, n, rcodes, rn);
 
     return ret;
 }
@@ -317,7 +317,7 @@ void ajMatrixfDel(AjPMatrixf *thys)
 	AJFREE((*thys)->Matrixf[i]);
     AJFREE((*thys)->Matrixf);
 
-    ajSeqCvtDel(&(*thys)->Cvt);
+    ajSeqcvtDel(&(*thys)->Cvt);
     AJFREE(*thys);
 
     return;
@@ -367,7 +367,7 @@ void ajMatrixDel(AjPMatrix *thys)
 	AJFREE((*thys)->Matrix[i]);
     AJFREE((*thys)->Matrix);
 
-    ajSeqCvtDel(&(*thys)->Cvt);
+    ajSeqcvtDel(&(*thys)->Cvt);
     AJFREE(*thys);
 
     return;
@@ -675,9 +675,9 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
     AjPStr  *rlabel_arr  = NULL;
 
 #ifndef WIN32
-    static char *delimstr = " :\t\n";
+    static const char *delimstr = " :\t\n";
 #else
-    static char *delimstr = " :\t\n\r";
+    static const char *delimstr = " :\t\n\r";
 #endif
 
     rlabel_list = ajListNew();
@@ -751,14 +751,14 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
 		ajFmtScanC(ptr, "%S", &firststring);
 		
 		/* JISON 19/7/4
-		   k = ajSeqCvtK(thys->Cvt, ajStrGetCharFirst(firststring)); */
-		k = ajSeqCvtKSRow(thys->Cvt, firststring);
+		   k = ajSeqcvtGetCodeK(thys->Cvt, ajStrGetCharFirst(firststring)); */
+		k = ajSeqcvtGetCodeS(thys->Cvt, firststring);
 
 		/* 
 		 ** cols+1 is used below because 2nd and subsequent lines have 
 		 ** one more string in them (the residue label) 
 		 */
-		templine = ajArrIntLine(buffer,ajStrGetPtr(delim),cols+1,2,
+		templine = ajArrIntLine(buffer,ajStrGetPtr(delim),2,
 					cols+1);
 		
 		for(i=0; i<cols; i++)   
@@ -767,10 +767,10 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
 			minval = templine[i];
 
 		    /* JISON 19/7/4
-		    matrix[k][ajSeqCvtK(thys->Cvt,
+		    matrix[k][ajSeqcvtGetCodeK(thys->Cvt,
 					ajStrGetCharFirst(orderstring[i]))] 
 					    = templine[i]; */
-		    matrix[k][ajSeqCvtKSColumn(thys->Cvt,
+		    matrix[k][ajSeqcvtGetCodeAsymS(thys->Cvt,
 					       orderstring[i])] 
 						   = templine[i];
 		}
@@ -805,7 +805,7 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
 
 
 
-/* @func ajMatrixfRead********************************************************
+/* @func ajMatrixfRead ********************************************************
 **
 ** Constructs a comparison matrix from a given local data file
 **
@@ -844,9 +844,9 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
     AjPList rlabel_list = NULL;
     AjPStr  *rlabel_arr  = NULL;
 #ifndef WIN32
-    static char *delimstr = " :\t\n";
+    static const char *delimstr = " :\t\n";
 #else
-    static char *delimstr = " :\t\n\r";
+    static const char *delimstr = " :\t\n\r";
 #endif
 
 
@@ -924,8 +924,8 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
 	    {
 		ajFmtScanC(ptr, "%S", &firststring);
 		/* JISON 19/7/4 
-		   k = ajSeqCvtK(thys->Cvt, ajStrGetCharFirst(firststring)); */
-		k = ajSeqCvtKSRow(thys->Cvt, firststring); 
+		   k = ajSeqcvtGetCodeK(thys->Cvt, ajStrGetCharFirst(firststring)); */
+		k = ajSeqcvtGetCodeS(thys->Cvt, firststring); 
 
 		len = MAJSTRGETLEN(firststring);
 		ajStrAssignSubC(&reststring, ptr, len, -1);
@@ -941,18 +941,18 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
 		** from the string that's passsed
 		*/
 		templine
-		    =ajArrFloatLine(reststring,ajStrGetPtr(delim),cols,1,cols);
+		    =ajArrFloatLine(reststring,ajStrGetPtr(delim),1,cols);
 		
 		for(i=0; i<cols; i++)  
 		{
 		    if(templine[i] < minval) 
 			minval = templine[i];
 		    /* JISON 19/7/4
-		    matrix[k][ajSeqCvtK(thys->Cvt,
+		    matrix[k][ajSeqcvtGetCodeK(thys->Cvt,
 					ajStrGetCharFirst(orderstring[i]))] 
 					    = templine[i]; */
 
-		    matrix[k][ajSeqCvtKSColumn(thys->Cvt,
+		    matrix[k][ajSeqcvtGetCodeAsymS(thys->Cvt,
 					       orderstring[i])] 
 						   = templine[i];
 		}
@@ -1008,7 +1008,7 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
 
 AjBool ajMatrixSeqNum(const AjPMatrix thys, const AjPSeq seq, AjPStr* numseq)
 {
-    return ajSeqNum(seq, thys->Cvt, numseq);
+    return ajSeqConvertNum(seq, thys->Cvt, numseq);
 }
 
 
@@ -1029,7 +1029,7 @@ AjBool ajMatrixSeqNum(const AjPMatrix thys, const AjPSeq seq, AjPStr* numseq)
 
 AjBool ajMatrixfSeqNum(const AjPMatrixf thys, const AjPSeq seq, AjPStr* numseq)
 {
-    return ajSeqNum(seq, thys->Cvt, numseq);
+    return ajSeqConvertNum(seq, thys->Cvt, numseq);
 }
 
 /* @func ajMatrixGetCodes *****************************************************

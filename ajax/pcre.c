@@ -700,6 +700,8 @@ check_escape(const uschar **ptrptr, const char **errorptr, int bracount,
     const uschar *ptr = *ptrptr;
     int c, i;
 
+    (void) cd;
+
     /* If backslash is at the end of the pattern, it's an error. */
     
     c = *(++ptr);
@@ -894,6 +896,8 @@ check_escape(const uschar **ptrptr, const char **errorptr, int bracount,
 static BOOL
 is_counted_repeat(const uschar *p, const compile_data *cd)
 {
+    (void) cd;
+
     if ((digitab[*p++] && ctype_digit) == 0) return FALSE;
     while ((digitab[*p] & ctype_digit) != 0) p++;
     if (*p == '}') return TRUE;
@@ -936,6 +940,8 @@ read_repeat_counts(const uschar *p, int *minp, int *maxp,
     int min = 0;
     int max = -1;
     
+    (void) cd;
+
     while ((digitab[*p] & ctype_digit) != 0) min = min * 10 + *p++ - '0';
     
     if (*p == '}') max = min; else
@@ -1237,7 +1243,7 @@ find_bracket(const uschar *code, BOOL utf8, int number)
 	{
 	    int n = c - OP_BRA;
 	    if (n > EXTRACT_BASIC_MAX) n = GET2(code, 2+LINK_SIZE);
-	    if (n == number) return (uschar *)code;
+	    if (n == number) return code;
 	    code += OP_lengths[OP_BRA];
 	}
 	else
@@ -1813,7 +1819,7 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
 		   posix_class *= 3;
 		   for (i = 0; i < 3; i++)
 		   {
-		       BOOL isblank = strncmp((char *)ptr, "blank", 5) == 0;
+		       BOOL isblank = strncmp((const char *)ptr, "blank", 5) == 0;
 		       int taboffset = posix_class_maps[posix_class + i];
 		       if (taboffset < 0) break;
 		       if (local_negate)
@@ -2885,8 +2891,9 @@ compile_branch(int *optionsptr, int *brackets, uschar **codeptr,
 
 		       for (i = 0; i < cd->names_found; i++)
 		       {
-			   if (strncmp((char *)name,
-				       (char *)slot+2, namelen) == 0) break;
+			   if (strncmp((const char *)name,
+				       (const char *)slot+2, namelen) == 0)
+			       break;
 			   slot += cd->name_entry_size;
 		       }
 		       if (i >= cd->names_found)
@@ -3968,7 +3975,7 @@ BOOL inescq = FALSE;
 unsigned int brastackptr = 0;
 size_t size;
 uschar *code;
-const uschar *codestart;
+uschar *codestart;
 const uschar *ptr;
 compile_data compile_block;
 int brastack[BRASTACK_SIZE];

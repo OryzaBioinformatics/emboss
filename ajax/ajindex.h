@@ -44,7 +44,6 @@ extern "C"
 **
 ** Btree node
 **
-** @attr NodeType [ajint] Root, Internal or Leaf
 ** @attr BlockOffset [ajlong] Offset within mainindex
 ** @attr Nkeys [ajint] Number of keys filled
 ** @attr TotLen [ajint] Total length of keys
@@ -52,11 +51,12 @@ extern "C"
 ** @attr Right [ajlong] Right Sibling
 ** @attr Overflow [ajlong] Offset to overflow block
 ** @attr PrevNode [ajlong] Previous node
+** @attr NodeType [ajint] Root, Internal or Leaf
+** @attr Padding [char[4]] Padding to alignment boundary
 *****************************************************************************/
 
 typedef struct AjSBtNode
 {
-    ajint  NodeType;
     ajlong BlockOffset;
     ajint  Nkeys;
     ajint  TotLen;
@@ -64,6 +64,8 @@ typedef struct AjSBtNode
     ajlong Right;
     ajlong Overflow;
     ajlong PrevNode;
+    ajint  NodeType;
+    char Padding[4];
 } AjOBtNode;
 #define AjPBtNode AjOBtNode*
 
@@ -80,6 +82,7 @@ typedef struct AjSBtNode
 ** @attr parray [ajlong*] pointer arrays (primary and secondary trees)
 ** @attr overflows [ajlong*] overflows (primary) and keys (secondary)
 ** @attr used [AjBool] node in use
+** @attr Padding [char[4]] Padding to alignment boundary
 *****************************************************************************/
 
 typedef struct AjSBtMem
@@ -90,6 +93,7 @@ typedef struct AjSBtMem
     ajlong *parray;
     ajlong *overflows;
     AjBool used;
+    char Padding[4];
 } AjOBtMem;
 #define AjPBtMem AjOBtMem*
 
@@ -101,8 +105,8 @@ typedef struct AjSBtMem
 ** Btree ID
 **
 ** @attr id [AjPStr] Unique ID
-** @attr dbno [ajint] Database file number
-** @attr dups [ajint] Duplicates
+** @attr dbno [ajuint] Database file number
+** @attr dups [ajuint] Duplicates
 ** @attr offset [ajlong] Offset within database file (ftello)
 ** @attr refoffset [ajlong] Offset within reference database file (ftello)
 ******************************************************************************/
@@ -110,8 +114,8 @@ typedef struct AjSBtMem
 typedef struct AjSBtId
 {
     AjPStr id;
-    ajint  dbno;
-    ajint  dups;
+    ajuint  dbno;
+    ajuint  dups;
     ajlong offset;
     ajlong refoffset;
 } AjOBtId;
@@ -126,16 +130,18 @@ typedef struct AjSBtId
 **
 ** @attr id [AjPStr] Wildcard ID
 ** @attr pageno [ajlong] Page number of leaf
-** @attr first [AjBool] true for first search
 ** @attr list [AjPList] list of AjPBtIds
+** @attr first [AjBool] true for first search
+** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct AjSBtWild
 {
     AjPStr id;
     ajlong pageno;
-    AjBool first;
     AjPList list;
+    AjBool first;
+    char Padding[4];
 } AjOBtWild;
 #define AjPBtWild AjOBtWild*
 
@@ -172,16 +178,18 @@ typedef struct AjSBucket
 **
 ** Btree ID
 **
-** @attr dbno [ajint] Database file number
 ** @attr offset [ajlong] Offset within database file (ftello)
 ** @attr refoffset [ajlong] Offset within reference database file (ftello)
+** @attr dbno [ajint] Database file number
+** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct AjSBtNumId
 {
-    ajint  dbno;
     ajlong offset;
     ajlong refoffset;
+    ajint  dbno;
+    char Padding[4];
 } AjOBtNumId;
 #define AjPBtNumId AjOBtNumId*
 
@@ -223,12 +231,15 @@ typedef struct AjSNumBucket
 
 #if defined(LENDIAN)
 #define BT_GETAJINT(p,v) (memcpy((void*)v,(void*)p,sizeof(ajint)))
+#define BT_GETAJUINT(p,v) (memcpy((void*)v,(void*)p,sizeof(ajuint)))
 #define BT_GETAJLONG(p,v) (memcpy((void*)v,(void*)p,sizeof(ajlong)))
 #define BT_SETAJINT(p,v) (memcpy((void*)p,(void*)&v,sizeof(ajint)))
 #define BT_SETAJLONG(p,v) (memcpy((void*)p,(void*)&v,sizeof(ajlong)))
 #else
 #define BT_GETAJINT(p,v) memcpy((void*)v,(void*)p,sizeof(ajint)); \
                          ajUtilRevInt(v)
+#define BT_GETAJUINT(p,v) memcpy((void*)v,(void*)p,sizeof(ajuint)); \
+                         ajUtilRevUint(v)
 #define BT_GETAJLONG(p,v) memcpy((void*)v,(void*)p,sizeof(ajlong)); \
                           ajUtilRevLong(v)
 #define BT_SETAJINT(p,v)  ajUtilRevInt(&v); \
@@ -428,19 +439,21 @@ typedef struct AjSNumBucket
 ** Btree page
 **
 ** @attr pageno [ajlong] Page number
-** @attr dirty [ajint] Undocumented
 ** @attr next [struct AjSBtpage*] Next page
 ** @attr prev [struct AjSBtpage*] Previous page
 ** @attr buf [unsigned char*] Buffer
+** @attr dirty [ajint] BT_DIRTY if page needs to be written to disc
+** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct AjSBtpage
 {
     ajlong pageno;
-    ajint  dirty;
     struct AjSBtpage *next;
     struct AjSBtpage *prev;
     unsigned char *buf;
+    ajint  dirty;
+    char Padding[4];
 } AjOBtpage;
 #define AjPBtpage AjOBtpage*
 
@@ -450,10 +463,10 @@ typedef struct AjSBtpage
 ** B tree cache
 **
 ** @attr fp [FILE*] Tree index file pointer
-** @attr pagesize [ajint] Size of cache pages
 ** @attr totsize [ajlong] Tree index length
 ** @attr lru [AjPBtpage] Least recently used cache page
 ** @attr mru [AjPBtpage] Most recently used cache page
+** @attr pagesize [ajint] Size of cache pages
 ** @attr listLength [ajint] Number of pages in cache
 ** @attr order [ajint] Order of primary tree
 ** @attr level [ajint] Depth of primary tree
@@ -466,20 +479,21 @@ typedef struct AjSBtpage
 ** @attr sorder [ajint] Order of secondary tree
 ** @attr snperbucket [ajint] Number of entries in a secondary bucket
 ** @attr secrootblock [ajlong] Secondary tree root block
-** @attr kwlimit [ajint] Max length of secondary key
 ** @attr bmem [AjPBtMem] Primary array allocation MRU bottom
 ** @attr tmem [AjPBtMem] Primary array allocation MRU top
 ** @attr bsmem [AjPBtMem] Secondary array allocation MRU bottom
 ** @attr tsmem [AjPBtMem] Secondary array allocation MRU top
+** @attr kwlimit [ajint] Max length of secondary key
+** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct AjSBtCache
 {
     FILE *fp;
-    ajint pagesize;
     ajlong totsize;
     AjPBtpage lru;
     AjPBtpage mru;
+    ajint pagesize;
     ajint listLength;
     ajint order;
     ajint level;
@@ -492,13 +506,12 @@ typedef struct AjSBtCache
     ajint sorder;
     ajint snperbucket;
     ajlong secrootblock;
-    ajint  kwlimit;
-
     AjPBtMem bmem;
     AjPBtMem tmem;
     AjPBtMem bsmem;
     AjPBtMem tsmem;
-
+    ajint  kwlimit;
+    char Padding[4];
 } AjOBtcache;
 #define AjPBtcache AjOBtcache*
 
@@ -579,22 +592,24 @@ typedef struct AjSSecBucket
 **
 ** @attr keyword [AjPStr] Wildcard keyword
 ** @attr pageno [ajlong] Page number of primary tree leaf
-** @attr first [AjBool] true for first search
 ** @attr list [AjPList] list of AjPBtPris
 ** @attr cache [AjPBtcache] cache for secondary tree
 ** @attr idlist [AjPList] list of AjPStr IDs
 ** @attr secpageno [ajlong] Page number of secondary tree leaf
+** @attr first [AjBool] true for first search
+** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct AjSBtKeyWild
 {
     AjPStr keyword;
     ajlong pageno;
-    AjBool first;
     AjPList list;
     AjPBtcache cache;
     AjPList idlist;
     ajlong secpageno;
+    AjBool first;
+    char Padding[4];
 } AjOBtKeyWild;
 #define AjPBtKeyWild AjOBtKeyWild*
 

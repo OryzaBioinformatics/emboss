@@ -50,7 +50,15 @@
 #include "ajax.h"
 
 
+typedef void (*Fmt_T) (ajint code, VALIST ap,
+		       int put(int c, void *cl), void *cl,
+		       const ajuint* flags, ajint width, ajint precision);
 
+typedef void (*Fmt_S) (const char *fmt, const char **pos, VALIST ap, int width,
+		       AjBool convert, AjBool *ok);
+
+
+/*static Fmt_T  fmtRegister(ajint code, Fmt_T cvt);*/
 
 /* @datastatic FmtPBuf ********************************************************
 **
@@ -84,29 +92,29 @@ static AjBool c_notin(ajint c, const char *list);
 static AjBool c_isin(ajint c, const char *list);
 static ajint fmtVscan(const char *thys,const char *fmt,va_list ap);
 
-static void scvt_uS(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_uS(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok);
-static void scvt_d(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_d(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok);
-static void scvt_x(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_x(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok);
-static void scvt_f(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_f(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok);
-static void scvt_s(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_s(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok);
-static void scvt_o(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_o(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok);
-static void scvt_u(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_u(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok);
-static void scvt_p(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_p(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok);
-static void scvt_uB(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_uB(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok);
-static void scvt_c(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_c(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok);
-static void scvt_b(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_b(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok);
-static void scvt_z(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_z(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok);
 
 
@@ -216,6 +224,8 @@ static void cvt_s(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 {
     char *str = va_arg(VA_V(ap), char *);
 
+    (void) code;
+
     if(str)
 	ajFmtPuts(str, strlen(str), put, cl, flags,
 		  width, precision);
@@ -255,6 +265,8 @@ static void cvt_d(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 
     char buf[43];
     char *p = buf + sizeof buf;
+
+    (void) code;
 
     if(flags['l'])
     {
@@ -354,12 +366,14 @@ static void cvt_u(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
     char buf[43];
     char *p;
 
+    (void) code;
+
     p = buf + sizeof buf;
 
     if(flags['l'])
 	m  = va_arg(VA_V(ap), unsigned long);
     else if(flags['h'])
-	/* ANSI C converts short to ajint */
+	/* ANSI C converts short to int */
 	m  = va_arg(VA_V(ap), unsigned int);
     else if(flags['L'])
     {
@@ -420,6 +434,8 @@ static void cvt_o(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 #if defined(HAVE64)
     ajulong hm = 0;
 #endif
+
+    (void) code;
 
     p = buf + sizeof buf;
 
@@ -591,6 +607,8 @@ static void cvt_p(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
     char *p;
     precision = INT_MIN;
 
+    (void) code;
+
     m = (unsigned long)va_arg(VA_V(ap), void*);
     p = buf + sizeof buf;
 
@@ -630,6 +648,9 @@ static void cvt_c(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 		  const ajuint* flags, ajint width, ajint precision)
 {
     ajuint minusflag = flags['-'];
+
+    (void) code;
+    (void) precision;
 
     if(width == INT_MIN)
 	width = 0;
@@ -706,7 +727,7 @@ static void cvt_f(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 	sprintf(buf, fmt, va_arg(VA_V(ap), double));
 	if(code == 'g')
 	{
-	    if(width == INT_MIN && precision > strlen(buf))
+	    if(width == INT_MIN && (ajuint) precision > strlen(buf))
 		precision = strlen(buf);
 	}
     }
@@ -740,6 +761,8 @@ static void cvt_uS(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 		  const ajuint* flags, ajint width, ajint precision)
 {
     AjPStr str1;
+
+   (void) code;
 
     str1 = va_arg(VA_V(ap), AjPStr);
 
@@ -776,6 +799,8 @@ static void cvt_b(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 {
     AjBool bl;
 
+   (void) code;
+
     bl = va_arg(VA_V(ap), AjBool);
 
     if(bl)
@@ -811,6 +836,8 @@ static void cvt_uB(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 {
     AjBool bl;
 
+   (void) code;
+
     bl = va_arg(VA_V(ap), AjBool);
 
     if(bl)
@@ -844,18 +871,20 @@ static void cvt_uB(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 static void cvt_uD(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 		  const ajuint* flags, ajint width, ajint precision)
 {
-    AjPTime time;
+    AjPTime timeobj;
     struct tm *mytime;
     int lenyr;
 
     char buf[280];
     char yr[280];
 
-    time   =  va_arg(VA_V(ap), AjPTime);
-    mytime = &time->time;
+    (void) code;
 
-    if(time->format)
-	strftime(buf,280, time->format,mytime);
+    timeobj   =  va_arg(VA_V(ap), AjPTime);
+    mytime = &timeobj->time;
+
+    if(timeobj->format)
+	strftime(buf,280, timeobj->format,mytime);
     else
     {
 	/* Long-winded but gets around some compilers' %y warnings */
@@ -893,6 +922,8 @@ static void cvt_uF(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 		  const ajuint* flags, ajint width, ajint precision)
 {
     AjPFile fil;
+
+    (void) code;
 
     fil = va_arg(VA_V(ap), AjPFile);
 
@@ -988,7 +1019,7 @@ static Fmt_S scvt[256] =
 **
 ******************************************************************************/
 
-static char *Fmt_flags = "-+ 0#";
+static const char *Fmt_flags = "-+ 0#";
 
 
 
@@ -1101,7 +1132,6 @@ void ajFmtPuts(const char* str, ajint len, int put(int c, void* cl), void* cl,
 		const ajuint* flags, ajint width, ajint precision)
 {
     ajuint minusflag = flags['-'];
-    ajuint zeroflag = flags['0'];
 
     assert(len >= 0);
     assert(flags);
@@ -1114,9 +1144,6 @@ void ajFmtPuts(const char* str, ajint len, int put(int c, void* cl), void* cl,
 	minusflag = 1;
 	width = -width;
     }
-
-    if(precision >= 0)
-	zeroflag = 0;
 
     if(precision >= 0 && precision < len)
 	len = precision;
@@ -1597,7 +1624,7 @@ AjPStr ajFmtPrintAppS(AjPStr* pthis, const char* fmt, ...)
 **
 ** @param [w] pbuf [char**] char string to be written to.
 ** @param [r] pos [ajint] position in buffer to start writing
-** @param [u] size [ajint*] allocated size of the buffer
+** @param [u] size [ajuint*] allocated size of the buffer
 ** @param [r] fmt [const char*] Format string.
 ** @param [v] ap [va_list] Variable length argument list.
 **
@@ -1606,7 +1633,7 @@ AjPStr ajFmtPrintAppS(AjPStr* pthis, const char* fmt, ...)
 ** @@
 ******************************************************************************/
 
-ajint ajFmtVfmtStrCL(char **pbuf, ajint pos, ajint* size,
+ajint ajFmtVfmtStrCL(char **pbuf, ajint pos, ajuint* size,
 		     const char* fmt, va_list ap)
 {
     FmtOBuf cl;
@@ -1762,11 +1789,11 @@ void ajFmtVfmt(int put(int c, void* cl), void* cl, const char* fmt,
 	    if(Fmt_flags)
 	    {
 		/* look for any conversion flags */
-		unsigned char c = *fmt;
-		for( ; (int)c && strchr(Fmt_flags, c); c = *++fmt)
+		unsigned char cc = *fmt;
+		for( ; (int)cc && strchr(Fmt_flags, cc); cc = *++fmt)
 		{
-		    assert(flags[(int)c] < 255);
-		    flags[(int)c]++;
+		    assert(flags[(int)cc] < 255);
+		    flags[(int)cc]++;
 		}
 	    }
 
@@ -1836,29 +1863,30 @@ void ajFmtVfmt(int put(int c, void* cl), void* cl, const char* fmt,
 
 
 
-/* @func ajFmtRegister ********************************************************
+/* #funcstatic fmtRegister ****************************************************
 **
 ** Registers 'newcvt' as the conversion routine for format code 'code'
 **
-** @param [r] code [ajint] value of char to be replaced
-** @param [f] newcvt [Fmt_T] new routine for conversion
+** #param [r] code [ajint] value of char to be replaced
+** #param [f] newcvt [Fmt_T] new routine for conversion
 **
-** @return [Fmt_T] old value
-** @@
+** #return [Fmt_T] old value
+** ##
 ******************************************************************************/
 
-Fmt_T ajFmtRegister(ajint code, Fmt_T newcvt)
-{
-    Fmt_T old;
-
-    assert(0 < code && code < (ajint)(sizeof(cvt)/sizeof(cvt[0])));
-    old = cvt[code];
-    cvt[code] = newcvt;
-
-    return old;
-}
-
-
+/*
+//static Fmt_T fmtRegister(ajint code, Fmt_T newcvt)
+//{
+//    Fmt_T old;
+//
+//    assert(0 < code && code < (ajint)(sizeof(cvt)/sizeof(cvt[0])));
+//    old = cvt[code];
+//    cvt[code] = newcvt;
+//
+//    return old;
+//}
+//
+*/
 
 
 /* @func ajFmtPutd ************************************************************
@@ -2161,15 +2189,16 @@ ajint ajFmtScanF(AjPFile thys, const char* fmt, ...)
     ajint   n;
     FILE* file;
 
-    if(!thys)
-	return 0;
-
-    file = ajFileFp(thys);
 
 #if defined(__amd64__) || defined(__EM64T__) || \
     defined(__PPC__) && defined(_CALL_SYSV)
     va_list save_ap;
 #endif
+
+    if(!thys)
+	return 0;
+
+    file = ajFileFp(thys);
 
     va_start(ap, fmt);
 
@@ -2208,9 +2237,9 @@ ajint ajFmtScanF(AjPFile thys, const char* fmt, ...)
 static ajint fmtVscan(const char *thys,const char *fmt,va_list ap)
 {
     ajint n;
-    char *p;
+    const char *p;
     const char *q;
-    static char *wspace = " \n\t";
+    static const char *wspace = " \n\t";
     AjBool convert      = ajTrue;
     AjBool ok           = ajTrue;
     ajint width = 0;
@@ -2220,7 +2249,7 @@ static ajint fmtVscan(const char *thys,const char *fmt,va_list ap)
     n = 0;
 
     /*  we update it as a pointer */
-    p = (char*) thys;
+    p = (const char*) thys;
     q = fmt;
 
     while(*p && *q)
@@ -2326,7 +2355,7 @@ static ajint fmtVscan(const char *thys,const char *fmt,va_list ap)
 ** Conversion for %S to load a string
 **
 ** @param [r] fmt [const char*] Format string at conv char posn
-** @param [w] pos [char**] Input string current position
+** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
 ** @param [r] convert [AjBool] ajFalse if %* was specified
@@ -2335,14 +2364,16 @@ static ajint fmtVscan(const char *thys,const char *fmt,va_list ap)
 ** @@
 ******************************************************************************/
 
-static void scvt_uS(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_uS(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok)
 {
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     AjPStr *val = NULL;
-    static char *wspace=" \n\t";
+    static const char *wspace=" \n\t";
     ajint c = 0;
+
+    (void) fmt;				/* make it used */
 
     p = *pos;
 
@@ -2376,7 +2407,7 @@ static void scvt_uS(const char *fmt, char **pos, VALIST ap, ajint width,
 ** Conversion for %d to load an integer
 **
 ** @param [r] fmt [const char*] Format string at conv char posn
-** @param [w] pos [char**] Input string current position
+** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
 ** @param [r] convert [AjBool] ajFalse if %* was specified
@@ -2385,15 +2416,15 @@ static void scvt_uS(const char *fmt, char **pos, VALIST ap, ajint width,
 ** @@
 ******************************************************************************/
 
-static void scvt_d(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_d(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok)
 {
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     long *val    = NULL;
     ajlong *hval = NULL;
-    static char *wspace=" \n\t";
-    static char *dig="+-0123456789";
+    static const char *wspace=" \n\t";
+    static const char *dig="+-0123456789";
     ajint c=0;
     AjPStr t = NULL;
     long  n   = 0;
@@ -2460,7 +2491,7 @@ static void scvt_d(const char *fmt, char **pos, VALIST ap, ajint width,
 ** Conversion for %x to load an unsigned hexadecimal
 **
 ** @param [r] fmt [const char*] Format string at conv char posn
-** @param [w] pos [char**] Input string current position
+** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
 ** @param [r] convert [AjBool] ajFalse if %* was specified
@@ -2469,21 +2500,20 @@ static void scvt_d(const char *fmt, char **pos, VALIST ap, ajint width,
 ** @@
 ******************************************************************************/
 
-static void scvt_x(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_x(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok)
 {
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     unsigned long *val = NULL;
     ajulong *hval      = NULL;
-    static char *wspace=" \n\t";
-    static char *dig="0123456789abcdefABCDEFx";
+    static const char *wspace=" \n\t";
+    static const char *dig="0123456789abcdefABCDEFx";
     ajint c = 0;
     AjPStr t  = NULL;
     unsigned long  n = 0;
     ajulong hn       = 0;
     char  flag;
-
 
     p = *pos;
     flag=*(fmt-1);
@@ -2555,7 +2585,7 @@ static void scvt_x(const char *fmt, char **pos, VALIST ap, ajint width,
 ** Conversion for %f to load a float/double
 **
 ** @param [r] fmt [const char*] Format string at conv char posn
-** @param [w] pos [char**] Input string current position
+** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
 ** @param [r] convert [AjBool] ajFalse if %* was specified
@@ -2564,15 +2594,15 @@ static void scvt_x(const char *fmt, char **pos, VALIST ap, ajint width,
 ** @@
 ******************************************************************************/
 
-static void scvt_f(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_f(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok)
 {
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     double *val;
     float  *fval;
-    static char *wspace = " \n\t";
-    static char *dig = "+-0123456789.eE";
+    static const char *wspace = " \n\t";
+    static const char *dig = "+-0123456789.eE";
     ajint c=0;
     AjPStr t = NULL;
     double  n = (double)0.;
@@ -2633,7 +2663,7 @@ static void scvt_f(const char *fmt, char **pos, VALIST ap, ajint width,
 ** Conversion for %s to load a char *
 **
 ** @param [r] fmt [const char*] Format string at conv char posn
-** @param [w] pos [char**] Input string current position
+** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
 ** @param [r] convert [AjBool] ajFalse if %* was specified
@@ -2642,15 +2672,17 @@ static void scvt_f(const char *fmt, char **pos, VALIST ap, ajint width,
 ** @@
 ******************************************************************************/
 
-static void scvt_s(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_s(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok)
 {
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     char *val = NULL;
-    static char *wspace = " \n\t";
+    static const char *wspace = " \n\t";
     ajint c = 0;
     AjPStr t = NULL;
+
+    (void) fmt;				/* make it used */
 
     p = *pos;
 
@@ -2686,7 +2718,7 @@ static void scvt_s(const char *fmt, char **pos, VALIST ap, ajint width,
 ** Conversion for %o to load an unsigned octal
 **
 ** @param [r] fmt [const char*] Format string at conv char posn
-** @param [w] pos [char**] Input string current position
+** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
 ** @param [r] convert [AjBool] ajFalse if %* was specified
@@ -2695,15 +2727,15 @@ static void scvt_s(const char *fmt, char **pos, VALIST ap, ajint width,
 ** @@
 ******************************************************************************/
 
-static void scvt_o(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_o(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok)
 {
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     unsigned long *val = NULL;
     ajulong  *hval = NULL;
-    static char *wspace = " \n\t";
-    static char *dig = "01234567";
+    static const char *wspace = " \n\t";
+    static const char *dig = "01234567";
     ajint c = 0;
     AjPStr t  = NULL;
     unsigned long  n = 0;
@@ -2784,7 +2816,7 @@ static void scvt_o(const char *fmt, char **pos, VALIST ap, ajint width,
 ** Conversion for %u to load an unsigned integer
 **
 ** @param [r] fmt [const char*] Format string at conv char posn
-** @param [w] pos [char**] Input string current position
+** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
 ** @param [r] convert [AjBool] ajFalse if %* was specified
@@ -2793,15 +2825,15 @@ static void scvt_o(const char *fmt, char **pos, VALIST ap, ajint width,
 ** @@
 ******************************************************************************/
 
-static void scvt_u(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_u(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok)
 {
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     unsigned long *val = NULL;
     ajulong *hval      = NULL;
-    static char *wspace = " \n\t";
-    static char *dig = "+0123456789";
+    static const char *wspace = " \n\t";
+    static const char *dig = "+0123456789";
     ajint c=0;
     AjPStr t = NULL;
     unsigned long n = 0;
@@ -2884,7 +2916,7 @@ static void scvt_u(const char *fmt, char **pos, VALIST ap, ajint width,
 ** Conversion for %p to load a pointer of type void * as hexadecimal
 **
 ** @param [r] fmt [const char*] Format string at conv char posn
-** @param [w] pos [char**] Input string current position
+** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
 ** @param [r] convert [AjBool] ajFalse if %* was specified
@@ -2893,17 +2925,19 @@ static void scvt_u(const char *fmt, char **pos, VALIST ap, ajint width,
 ** @@
 ******************************************************************************/
 
-static void scvt_p(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_p(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok)
 {
-    char *p;
-    char *q;
-    void *val;
-    static char *wspace = " \n\t";
-    static char *dig = "0123456789abcdefABCDEFx";
+    const char *p;
+    const char *q;
+    void **val;
+    static const char *wspace = " \n\t";
+    static const char *dig = "0123456789abcdefABCDEFx";
     ajint c = 0;
     AjPStr t = NULL;
     unsigned long n = 0;
+
+    (void) fmt;				/* make it used */
 
     p = *pos;
 
@@ -2922,11 +2956,11 @@ static void scvt_p(const char *fmt, char **pos, VALIST ap, ajint width,
     {
 	if(convert)
 	{
-	    val = (void *) va_arg(VA_V(ap), void *);
+	    val = (void **) va_arg(VA_V(ap), void **);
 	    ajStrAssignSubC(&t,p,0,q-p-1);
 	    if(sscanf(ajStrGetPtr(t),"%lx",&n)!=1)
 		return;
-	    val = (void *)n;
+	    *val = (void *)n;
 	}
 
 	*pos = q;
@@ -2945,7 +2979,7 @@ static void scvt_p(const char *fmt, char **pos, VALIST ap, ajint width,
 ** Conversion for %B to load a boolean (integer or YyNnTtFf)
 **
 ** @param [r] fmt [const char*] Format string at conv char posn
-** @param [w] pos [char**] Input string current position
+** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
 ** @param [r] convert [AjBool] ajFalse if %* was specified
@@ -2954,19 +2988,21 @@ static void scvt_p(const char *fmt, char **pos, VALIST ap, ajint width,
 ** @@
 ******************************************************************************/
 
-static void scvt_uB(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_uB(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok)
 {
-    char *p;
-    char *q     = NULL;
+    const char *p;
+    const char *q     = NULL;
     AjBool *val = NULL;
-    static char *wspace = " \n\t";
-    static char *dig = "+-0123456789";
-    static char *tr = "YyTt";
-    static char *fa = "NnFf";
+    static const char *wspace = " \n\t";
+    static const char *dig = "+-0123456789";
+    static const char *tr = "YyTt";
+    static const char *fa = "NnFf";
     ajint c = 0;
     AjPStr t = NULL;
     AjBool n = ajFalse;
+
+    (void) fmt;				/* make it used */
 
     p = *pos;
 
@@ -3059,7 +3095,7 @@ static void scvt_uB(const char *fmt, char **pos, VALIST ap, ajint width,
 ** Conversion for %c to load a character
 **
 ** @param [r] fmt [const char*] Format string at conv char posn
-** @param [w] pos [char**] Input string current position
+** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
 ** @param [r] convert [AjBool] ajFalse if %* was specified
@@ -3068,14 +3104,15 @@ static void scvt_uB(const char *fmt, char **pos, VALIST ap, ajint width,
 ** @@
 ******************************************************************************/
 
-static void scvt_c(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_c(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok)
 {
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     char *val = NULL;
     char n = '\0';
 
+    (void) fmt;				/* make it used */
 
     p = *pos;
     q = p;
@@ -3107,7 +3144,7 @@ static void scvt_c(const char *fmt, char **pos, VALIST ap, ajint width,
 ** Conversion for %B to load a boolean (YyNnTtFf)
 **
 ** @param [r] fmt [const char*] Format string at conv char posn
-** @param [w] pos [char**] Input string current position
+** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
 ** @param [r] convert [AjBool] ajFalse if %* was specified
@@ -3116,14 +3153,16 @@ static void scvt_c(const char *fmt, char **pos, VALIST ap, ajint width,
 ** @@
 ******************************************************************************/
 
-static void scvt_b(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_b(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok)
 {
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     AjBool *val = NULL;
-    static char *tr = "YyTt";
-    static char *fa = "NnFf";
+    static const char *tr = "YyTt";
+    static const char *fa = "NnFf";
+
+    (void) fmt;				/* make it used */
 
     *ok = ajFalse;
 
@@ -3164,7 +3203,7 @@ static void scvt_b(const char *fmt, char **pos, VALIST ap, ajint width,
 ** Conversion for %z to load a char **
 **
 ** @param [r] fmt [const char*] Format string at conv char posn
-** @param [w] pos [char**] Input string current position
+** @param [w] pos [const char**] Input string current position
 ** @param [r] ap [VALIST] Original arguments at current position
 ** @param [r] width [ajint] Width
 ** @param [r] convert [AjBool] ajFalse if %* was specified
@@ -3173,16 +3212,18 @@ static void scvt_b(const char *fmt, char **pos, VALIST ap, ajint width,
 ** @@
 ******************************************************************************/
 
-static void scvt_z(const char *fmt, char **pos, VALIST ap, ajint width,
+static void scvt_z(const char *fmt, const char **pos, VALIST ap, ajint width,
 		   AjBool convert, AjBool *ok)
 {
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     char **val = NULL;
-    static char *wspace = " \n\t";
+    static const char *wspace = " \n\t";
     ajint c = 0;
     AjPStr t = NULL;
 
+    (void) fmt;				/* make it used */
+ 
     p = *pos;
 
     *ok = ajFalse;
@@ -3228,10 +3269,10 @@ static ajlong sc_long(const char *str)
 {
     ajlong v = 0;
     ajint d;
-    char *p;
+    const char *p;
     char c;
 
-    p = (char *)str;
+    p = str;
 
     while((c=*(p++)))
     {
@@ -3258,10 +3299,10 @@ static ajulong sc_ulong(const char *str)
 {
     ajulong v = 0;
     ajint d;
-    char *p;
+    const char *p;
     char c;
 
-    p = (char *)str;
+    p = str;
 
     while((c=*(p++)))
     {
@@ -3288,10 +3329,10 @@ static ajulong sc_hex(const char *str)
 {
     ajulong v = 0;
     ajint d;
-    char *p;
+    const char *p;
     char c;
 
-    p = (char *)str+2;
+    p = str+2;
 
     while((c=toupper((int)*(p++))))
     {
@@ -3321,10 +3362,10 @@ static ajulong sc_octal(const char *str)
 {
     ajulong v = 0;
     ajint d;
-    char *p;
+    const char *p;
     char c;
 
-    p = (char *)str+1;
+    p = str+1;
 
     while((c=toupper((int)*(p++))))
     {

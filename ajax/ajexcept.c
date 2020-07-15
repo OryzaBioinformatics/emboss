@@ -46,7 +46,7 @@ const Except_T Assert_Failed = { "Assertion failed" };
 ** @@
 ******************************************************************************/
 
-void ajExceptRaise(const T* e, const char* file,
+__noreturn void  ajExceptRaise(const T* e, const char* file,
 		   ajint line)
 {
     Except_Frame *p;
@@ -73,6 +73,4 @@ void ajExceptRaise(const T* e, const char* file,
     Except_stack = Except_stack->prev;
 
     longjmp(p->env, Except_raised);
-
-    return;
 }

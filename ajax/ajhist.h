@@ -62,10 +62,11 @@ __declspec(dllimport) ajint aj_hist_mark;
 ** @attr data [float*] y coordinates
 ** @attr deletedata [AjBool] if true, delete data
 ** @attr colour [ajint] colour code
-** @attr pattern [ajint] pattern code
 ** @attr title [AjPStr] graph title
 ** @attr xaxis [AjPStr] x axis title
 ** @attr yaxis [AjPStr] y axis title
+** @attr pattern [ajint] pattern code
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -73,10 +74,11 @@ typedef struct AjSHistData {
   float *data;
   AjBool deletedata;
   ajint colour;
-  ajint pattern;
   AjPStr title;
   AjPStr xaxis;
   AjPStr yaxis;
+  ajint pattern;
+  char Padding[4];
 } AjOHistData;
 #define AjPHistData AjOHistData*
 

@@ -22,7 +22,7 @@ if ISCYGWIN
 AM_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import -L../plplot -lplplot
 endif
 
-## PCRE stuff (evrsion 4.3)
+## PCRE stuff (version 4.3)
 
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 PCRELIBVERSION = @PCRE_LIB_VERSION@
@@ -65,10 +65,10 @@ pcre_internal.h pcreposix.h
 
 if ISCYGWIN
 libajax_la_SOURCES = $(AJAXSRC) $(AJAXGSRC)
-libajax_la_LDFLAGS = -version-info 4:0:0
+libajax_la_LDFLAGS = -version-info 4:1:0
 else
 libajax_la_SOURCES = $(AJAXSRC)
-libajax_la_LDFLAGS = -version-info 4:0:0
+libajax_la_LDFLAGS = -version-info 4:1:0
 libajaxg_la_SOURCES = $(AJAXGSRC)
-libajaxg_la_LDFLAGS = -version-info 4:0:0
+libajaxg_la_LDFLAGS = -version-info 4:1:0
 endif

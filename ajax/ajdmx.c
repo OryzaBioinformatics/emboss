@@ -64,6 +64,7 @@
 /* ======================================================================= */
 
 
+static void dmxTraceScophit(const AjPScophit scophit, const char* title);
 
 
 
@@ -267,7 +268,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 	{
 	    ok = ajTrue;
 	    ajStrAssignC(&type,ajStrGetPtr(line)+5);
-	    ajStrRemoveWhite(&type);
+	    ajStrRemoveWhiteExcess(&type);
 	}
     	else if(ajStrPrefixC(line,"# SI"))
 	{
@@ -276,7 +277,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
     	else if(ajStrPrefixC(line,"# CL"))
 	{
 	    ajStrAssignC(&class,ajStrGetPtr(line)+5);
-	    ajStrRemoveWhite(&class);
+	    ajStrRemoveWhiteExcess(&class);
 	}
 	else if(ajStrPrefixC(line,"# FO"))
 	{
@@ -287,7 +288,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 		    break;
 		ajStrAppendC(&fold,ajStrGetPtr(line)+5);
 	    }
-	    ajStrRemoveWhite(&fold);
+	    ajStrRemoveWhiteExcess(&fold);
 	}
 	else if(ajStrPrefixC(line,"# SF"))
 	{
@@ -298,7 +299,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 		    break;
 		ajStrAppendC(&super,ajStrGetPtr(line)+5);
 	    }
-	    ajStrRemoveWhite(&super);
+	    ajStrRemoveWhiteExcess(&super);
 	}
 	else if(ajStrPrefixC(line,"# FA"))
 	{
@@ -309,7 +310,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 		    break;
 		ajStrAppendC(&family,ajStrGetPtr(line)+5);
 	    }
-	    ajStrRemoveWhite(&family);
+	    ajStrRemoveWhiteExcess(&family);
 	}
 	else if(ajStrPrefixC(line,"# AR"))
 	{
@@ -320,7 +321,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 		    break;
 		ajStrAppendC(&arch,ajStrGetPtr(line)+5);
 	    }
-	    ajStrRemoveWhite(&arch);
+	    ajStrRemoveWhiteExcess(&arch);
 	}
 	else if(ajStrPrefixC(line,"# TP"))
 	{
@@ -331,7 +332,7 @@ AjBool ajDmxScopalgRead(AjPFile inf, AjPScopalg *thys)
 		    break;
 		ajStrAppendC(&topo,ajStrGetPtr(line)+5);
 	    }
-	    ajStrRemoveWhite(&topo);
+	    ajStrRemoveWhiteExcess(&topo);
 	}
 	else if(ajStrPrefixC(line,"# XX"))
 	    continue;
@@ -571,16 +572,15 @@ void ajDmxScophitDel(AjPScophit *pthis)
 **
 ** Wrapper to destructor for Scophit object for use with generic functions.
 **
-** @param [d] ptr [const void **] Object pointer
+** @param [d] ptr [void **] Object pointer
 **
 ** @return [void]
 ** @@
 ****************************************************************************/
 
-void ajDmxScophitDelWrap(const void  **ptr)
+void ajDmxScophitDelWrap(void  **ptr)
 {
     AjPScophit *del;
-
     del = (AjPScophit *) ptr;
     
     ajDmxScophitDel(del);
@@ -604,7 +604,7 @@ void ajDmxScophitDelWrap(const void  **ptr)
 
 void ajDmxScopalgDel(AjPScopalg *pthis)
 {
-    int x = 0;  /* Counter */
+    ajuint x = 0;  /* Counter */
 
     if(!pthis)
 	return;
@@ -930,11 +930,11 @@ AjBool ajDmxScophitCheckTarget(const AjPScophit ptr)
 
 ajint ajDmxScophitCompScore(const void *hit1, const void *hit2)
 {
-    AjPScophit p = NULL;
-    AjPScophit q = NULL;
+    const AjPScophit p = NULL;
+    const AjPScophit q = NULL;
 
-    p = (*(AjPScophit*)hit1);
-    q = (*(AjPScophit*)hit2);
+    p = (*(AjPScophit const *)hit1);
+    q = (*(AjPScophit const *)hit2);
     
     if(p->Score < q->Score)
         return -1;
@@ -962,11 +962,11 @@ ajint ajDmxScophitCompScore(const void *hit1, const void *hit2)
 
 ajint ajDmxScophitCompPval(const void *hit1, const void *hit2)
 {
-    AjPScophit p = NULL;
-    AjPScophit q = NULL;
+    const AjPScophit p = NULL;
+    const AjPScophit q = NULL;
 
-    p = (*(AjPScophit*)hit1);
-    q = (*(AjPScophit*)hit2);
+    p = (*(AjPScophit const *)hit1);
+    q = (*(AjPScophit const *)hit2);
     
     if(p->Pval < q->Pval)
         return -1;
@@ -995,12 +995,15 @@ ajint ajDmxScophitCompPval(const void *hit1, const void *hit2)
 
 ajint ajDmxScophitCompAcc(const void *hit1, const void *hit2)
 {
-    AjPScophit p = NULL;
-    AjPScophit q = NULL;
+    const AjPScophit p = NULL;
+    const AjPScophit q = NULL;
 
-    p = (*(AjPScophit*)hit1);
-    q = (*(AjPScophit*)hit2);
-    
+    p = (*(AjPScophit const *)hit1);
+    q = (*(AjPScophit const *)hit2);
+
+    dmxTraceScophit(p, "CompAcc p");
+    dmxTraceScophit(q, "CompAcc q");
+
     return ajStrCmpS(p->Acc, q->Acc);
 }
 
@@ -1022,11 +1025,11 @@ ajint ajDmxScophitCompAcc(const void *hit1, const void *hit2)
 
 ajint ajDmxScophitCompSunid(const void *entry1, const void *entry2)
 {
-    AjPScophit p = NULL;
-    AjPScophit q = NULL;
+    const AjPScophit p = NULL;
+    const AjPScophit q = NULL;
 
-    p = (*(AjPScophit*)entry1);
-    q = (*(AjPScophit*)entry2);
+    p = (*(AjPScophit const *)entry1);
+    q = (*(AjPScophit const *)entry2);
    
 
     if(p->Sunid_Family < q->Sunid_Family)
@@ -1056,11 +1059,11 @@ ajint ajDmxScophitCompSunid(const void *entry1, const void *entry2)
 
 ajint ajDmxScophitCompSpr(const void *hit1, const void *hit2)
 {
-    AjPScophit p = NULL;
-    AjPScophit q = NULL;
+    const AjPScophit p = NULL;
+    const AjPScophit q = NULL;
 
-    p = (*(AjPScophit*)hit1);
-    q = (*(AjPScophit*)hit2);
+    p = (*(AjPScophit const *)hit1);
+    q = (*(AjPScophit const *)hit2);
     
     return ajStrCmpS(p->Spr, q->Spr);
 }
@@ -1084,12 +1087,20 @@ ajint ajDmxScophitCompSpr(const void *hit1, const void *hit2)
 
 ajint ajDmxScophitCompEnd(const void *hit1, const void *hit2)
 {
-    AjPScophit p = NULL;
-    AjPScophit q = NULL;
+    const AjPScophit p = NULL;
+    const AjPScophit q = NULL;
 
-    p = (*(AjPScophit*)hit1);
-    q = (*(AjPScophit*)hit2);
+    p = (*(AjPScophit const *)hit1);
+    q = (*(AjPScophit const *)hit2);
+
+/*
+    p = (const AjPScophit) hit1;
+    q = (const AjPScophit) hit2;
+*/
    
+    dmxTraceScophit(p, "CompEnd p");
+    dmxTraceScophit(q, "CompEnd q");
+
 
     if(p->End < q->End)
 	return -1;
@@ -1117,12 +1128,15 @@ ajint ajDmxScophitCompEnd(const void *hit1, const void *hit2)
 
 ajint ajDmxScophitCompStart(const void *hit1, const void *hit2)
 {
-    AjPScophit p = NULL;
-    AjPScophit q = NULL;
+    const AjPScophit p = NULL;
+    const AjPScophit q = NULL;
 
-    p = (*(AjPScophit*)hit1);
-    q = (*(AjPScophit*)hit2);
+    p = (*(AjPScophit const *)hit1);
+    q = (*(AjPScophit const *)hit2);
    
+
+    dmxTraceScophit(p, "CompStart p");
+    dmxTraceScophit(q, "CompStart q");
 
     if(p->Start < q->Start)
 	return -1;
@@ -1150,11 +1164,11 @@ ajint ajDmxScophitCompStart(const void *hit1, const void *hit2)
 
 ajint ajDmxScophitCompFam(const void *hit1, const void *hit2)
 {
-    AjPScophit p = NULL;
-    AjPScophit q = NULL;
+    const AjPScophit p = NULL;
+    const AjPScophit q = NULL;
 
-    p = (*(AjPScophit*)hit1);
-    q = (*(AjPScophit*)hit2);
+    p = (*(AjPScophit const *)hit1);
+    q = (*(AjPScophit const *)hit2);
     
     return ajStrCmpS(p->Family, q->Family);
 }
@@ -1180,8 +1194,8 @@ ajint ajDmxScophitCompSfam(const void *hit1, const void *hit2)
     AjPScophit p = NULL;
     AjPScophit q = NULL;
 
-    p = (*(AjPScophit*)hit1);
-    q = (*(AjPScophit*)hit2);
+    p = (*(AjPScophit const *)hit1);
+    q = (*(AjPScophit const *)hit2);
     
     return ajStrCmpS(p->Superfamily, q->Superfamily);
 }
@@ -1205,8 +1219,8 @@ ajint ajDmxScophitCompClass(const void *hit1, const void *hit2)
     AjPScophit p = NULL;
     AjPScophit q = NULL;
 
-    p = (*(AjPScophit*)hit1);
-    q = (*(AjPScophit*)hit2);
+    p = (*(AjPScophit const *)hit1);
+    q = (*(AjPScophit const *)hit2);
     
     return ajStrCmpS(p->Class, q->Class);
 }
@@ -1231,8 +1245,8 @@ ajint ajDmxScophitCompFold(const void *hit1, const void *hit2)
     AjPScophit p = NULL;
     AjPScophit q = NULL;
 
-    p = (*(AjPScophit*)hit1);
-    q = (*(AjPScophit*)hit2);
+    p = (*(AjPScophit const *)hit1);
+    q = (*(AjPScophit const *)hit2);
     
     return ajStrCmpS(p->Fold, q->Fold);
 }
@@ -1258,7 +1272,7 @@ ajint ajDmxScophitCompFold(const void *hit1, const void *hit2)
 ****************************************************************************/
 ajint ajDmxScopalgGetseqs(const AjPScopalg thys, AjPStr **arr)
 {
-    ajint i;
+    ajuint i;
         
     /* Check args */
     if(!thys)
@@ -1566,7 +1580,7 @@ AjPScophit ajDmxScophitReadFasta(AjPFile inf)
 	    /* Process the last hit */
 	    if(donefirst)
 	    {
-		ajStrRemoveWhiteExcess(&hit->Seq);
+		ajStrRemoveWhite(&hit->Seq);
 		ajStrDel(&line);
 		ajStrDel(&subline);
 		ajStrDel(&type);
@@ -1682,7 +1696,7 @@ AjPScophit ajDmxScophitReadFasta(AjPFile inf)
     /* EOF therefore process last hit */
     if(donefirst)
     {
-	ajStrRemoveWhiteExcess(&hit->Seq);
+	ajStrRemoveWhite(&hit->Seq);
 	ajStrDel(&line);
 	ajStrDel(&subline);
 	ajStrDel(&type);
@@ -1738,12 +1752,12 @@ AjPScophit ajDmxScophitReadFasta(AjPFile inf)
 
 AjBool ajDmxScopalgWrite(const AjPScopalg scop, AjPFile outf)
 {
-    ajint x = 0;    
-    ajint y = 0;    
+    ajuint x = 0;    
+    ajuint y = 0;    
     ajint tmp_wid  = 0;     /* Temp. variable for width */
     ajint code_wid = 0;     /* Max. code width +1 */
     ajint seq_wid  = 0;     /* Width of alignment rounded up to nearest 60 */
-    ajint nblk     = 0;     /* Number of blocks of alignment in output */
+    ajuint nblk    = 0;     /* Number of blocks of alignment in output */
     
     AjPStr tmp_seq = NULL;  /* Temp. variable for sequence */
     AjPStr nogap = NULL;    /* Temp. variable for sequence w/o gaps */
@@ -1752,7 +1766,7 @@ AjBool ajDmxScopalgWrite(const AjPScopalg scop, AjPFile outf)
     
     ajint start    = 0;     /* Start position of sequence fragment wrt full
 				 length alignment */
-    ajint     end     =0;     /* End position of sequence fragment wrt full
+    ajuint end     =0;      /* End position of sequence fragment wrt full
 				 length alignment */
     AjPInt    idx  = NULL;  /* Index */
     
@@ -1867,7 +1881,7 @@ AjBool ajDmxScopalgWrite(const AjPScopalg scop, AjPFile outf)
 
 AjBool ajDmxScopalgWriteClustal(const AjPScopalg align, AjPFile outf)
 {
-    ajint i;
+    ajuint i;
     
     /* Check args */
     if(!align)
@@ -1906,7 +1920,7 @@ AjBool ajDmxScopalgWriteClustal(const AjPScopalg align, AjPFile outf)
 
 AjBool ajDmxScopalgWriteClustal2(const AjPScopalg align, AjPFile outf)
 {
-    ajint i;
+    ajuint i;
     
     /* Check args */
     if(!align)
@@ -1942,7 +1956,7 @@ AjBool ajDmxScopalgWriteClustal2(const AjPScopalg align, AjPFile outf)
 ****************************************************************************/
 AjBool ajDmxScopalgWriteFasta(const AjPScopalg align, AjPFile outf)
 {
-    ajint i;
+    ajuint i;
     
     /*Check args*/
     if(!align)
@@ -2050,3 +2064,21 @@ void ajDmxDummyFunction(void)
 
 
 
+/* @funcstatic dmxTraceScophit ***********************************************
+**
+** Reports internals of a SCOPhit object
+**
+** @param [r] scophit [const AjPScophit] SCOP hit object
+** @param [r] title [const char*] title
+** @return [void]
+******************************************************************************/
+
+static void dmxTraceScophit(const AjPScophit scophit, const char* title)
+{
+    ajDebug("SCOPhit trace: %s\n", title);
+    ajDebug("Type: %d\n", scophit->Type);
+    ajDebug("Acc: '%S'\n", scophit->Acc);
+    ajDebug("Start: %d\n", scophit->Start);
+    ajDebug("End: %d\n", scophit->End);
+    return;
+}

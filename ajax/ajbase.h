@@ -24,7 +24,10 @@ struct AjIUB
 */
 
 AjBool        ajBaseAa1ToAa3(char aa1, AjPStr *aa3);
+AjBool        ajBaseAa3ToAa1(char *aa1, const AjPStr aa3);
 const AjPStr  ajBaseCodes(ajint ibase);
+__deprecated char          ajSeqBaseComp (char base);
+char          ajBaseComp(char base);
 void          ajBaseExit(void);
 AjBool        ajBaseInit(void);
 float         ajBaseProb(ajint base1, ajint base2);
