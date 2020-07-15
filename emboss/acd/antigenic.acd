@@ -10,7 +10,7 @@ section: input [
 
   seqall: sequence [
     parameter: "Y"
-    type: "PureProtein"
+    type: "proteinstandard"
   ]
 
 endsection: input

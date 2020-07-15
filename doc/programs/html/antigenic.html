@@ -64,9 +64,9 @@ parameter and thus very simple to use.
 
 % <b>antigenic </b>
 Finds antigenic sites in proteins
-Input protein sequence(s): <b>tsw:act1_fugru</b>
+Input protein sequence(s): <b>tsw:actb1_fugru</b>
 Minimum length of antigenic region [6]: <b></b>
-Output report [act1_fugru.antigenic]: <b></b>
+Output report [actb1_fugru.antigenic]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -82,9 +82,9 @@ By using the '-rformat gff' qualifier, a GFF file of the predicted regions can b
 
 % <b>antigenic -rformat gff </b>
 Finds antigenic sites in proteins
-Input protein sequence(s): <b>tsw:act1_fugru</b>
+Input protein sequence(s): <b>tsw:actb1_fugru</b>
 Minimum length of antigenic region [6]: <b></b>
-Output report [act1_fugru.antigenic]: <b></b>
+Output report [actb1_fugru.antigenic]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -226,54 +226,77 @@ The input sequence can be one or more protein sequences.
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tsw:act1_fugru' is a sequence entry in the example protein database 'tsw'
+'tsw:actb1_fugru' is a sequence entry in the example protein database 'tsw'
 <p>
-<p><h3>Database entry: tsw:act1_fugru</h3>
+<p><h3>Database entry: tsw:actb1_fugru</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   ACT1_FUGRU     STANDARD;      PRT;   375 AA.
-AC   P53484;
-DT   01-OCT-1996 (REL. 34, CREATED)
-DT   01-OCT-1996 (REL. 34, LAST SEQUENCE UPDATE)
-DT   01-OCT-1996 (REL. 34, LAST ANNOTATION UPDATE)
-DE   ACTIN, CYTOPLASMIC 1 (BETA-ACTIN 1).
-OS   FUGU RUBRIPES (JAPANESE PUFFERFISH) (TAKIFUGU RUBRIPES).
-OC   EUKARYOTA; METAZOA; CHORDATA; VERTEBRATA; PISCES; GNATHOSTOMATA;
-OC   OSTEICHTHYES; ACTINOPTERYGII; TETRAODONTIFORMES.
+ID   ACTB1_FUGRU             Reviewed;         375 AA.
+AC   P68142; P53484;
+DT   25-OCT-2004, integrated into UniProtKB/Swiss-Prot.
+DT   25-OCT-2004, sequence version 1.
+DT   20-MAR-2007, entry version 16.
+DE   Actin, cytoplasmic 1 (Beta-actin A).
+GN   Name=ACTB-A;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
 RN   [1]
-RP   SEQUENCE FROM N.A.
-RX   MEDLINE; 96275651.
-RA   VENKATESH B., TAY B.H., ELGAR G., BRENNER S.;
-RL   J. MOL. BIOL. 259:655-665(1996).
-CC   -!- FUNCTION: ACTINS ARE HIGHLY CONSERVED PROTEINS THAT ARE INVOLVED
-CC       IN VARIOUS TYPES OF CELL MOTILITY AND ARE UBIQUITOUSLY EXPRESSED
-CC       IN ALL EUKARYOTIC CELLS.
-CC   -!- SUBUNIT: POLYMERIZATION OF GLOBULAR ACTIN (G-ACTIN) LEADS TO A
-CC       STRUCTURAL FILAMENT (F-ACTIN) IN THE FORM OF A TWO-STRANDED
-CC       HELIX. EACH ACTIN CAN BIND TO 4 OTHERS.
-CC   -!- SUBCELLULAR LOCATION: CYTOPLASMIC.
-CC   -!- TISSUE SPECIFICITY: WIDELY DISTRIBUTED. NOT EXPRESSED IN SKELETAL
-CC       MUSCLE.
-CC   -!- IN VERTEBRATES 3 MAIN GROUPS OF ACTIN ISOFORMS, ALPHA, BETA AND
-CC       GAMMA HAVE BEEN IDENTIFIED. THE ALPHA ACTINS ARE FOUND IN MUSCLE
-CC       TISSUES AND ARE A MAJOR CONSTITUENT OF THE CONTRACTILE APPARATUS.
-CC       THE BETA AND GAMMA ACTINS CO-EXISTS IN MOST CELL TYPES AS
-CC       COMPONENTS OF THE CYTOSKELETON AND AS MEDIATORS OF INTERNAL CELL
-CC       MOTILITY.
-CC   -!- THERE ARE THREE DIFFERENT BETA-CYTOPLASMIC ACTINS IN FUGU
-CC       RUBRIPES.
-DR   EMBL; U37499; G1335821; -.
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND TISSUE SPECIFICITY.
+RX   MEDLINE=96275651; PubMed=8683572; DOI=10.1006/jmbi.1996.0347;
+RA   Venkatesh B., Tay B.H., Elgar G., Brenner S.;
+RT   "Isolation, characterization and evolution of nine pufferfish (Fugu
+RT   rubripes) actin genes.";
+RL   J. Mol. Biol. 259:655-665(1996).
+CC   -!- FUNCTION: Actins are highly conserved proteins that are involved
+CC       in various types of cell motility and are ubiquitously expressed
+CC       in all eukaryotic cells.
+CC   -!- SUBUNIT: Polymerization of globular actin (G-actin) leads to a
+CC       structural filament (F-actin) in the form of a two-stranded helix.
+CC       Each actin can bind to 4 others.
+CC   -!- SUBCELLULAR LOCATION: Cytoplasm.
+CC   -!- TISSUE SPECIFICITY: Widely distributed. Not expressed in skeletal
+CC       muscle.
+CC   -!- MISCELLANEOUS: In vertebrates 3 main groups of actin isoforms,
+CC       alpha, beta and gamma have been identified. The alpha actins are
+CC       found in muscle tissues and are a major constituent of the
+CC       contractile apparatus. The beta and gamma actins coexist in most
+CC       cell types as components of the cytoskeleton and as mediators of
+CC       internal cell motility.
+CC   -!- MISCELLANEOUS: There are three different beta-cytoplasmic actins
+CC       in Fugu rubripes.
+CC   -!- SIMILARITY: Belongs to the actin family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; U37499; AAC59889.1; -; Genomic_DNA.
+DR   PIR; S71124; S71124.
+DR   HSSP; P02570; 1HLU.
+DR   SMR; P68142; 4-371.
+DR   Ensembl; NEWSINFRUG00000152503; Fugu rubripes.
+DR   InterPro; IPR004001; Actin.
+DR   InterPro; IPR004000; Actin_like.
+DR   PANTHER; PTHR11937; Actin_like; 1.
+DR   Pfam; PF00022; Actin; 1.
+DR   PRINTS; PR00190; ACTIN.
+DR   SMART; SM00268; ACTIN; 1.
 DR   PROSITE; PS00406; ACTINS_1; 1.
 DR   PROSITE; PS00432; ACTINS_2; 1.
 DR   PROSITE; PS01132; ACTINS_ACT_LIKE; 1.
-KW   MULTIGENE FAMILY; STRUCTURAL PROTEIN; METHYLATION; ACETYLATION;
-KW   CYTOSKELETON.
-FT   PROPEP        1      1       REMOVED IN MATURE FORM (BY SIMILARITY).
-FT   CHAIN         2    375       ACTIN, CYTOPLASMIC 1.
-FT   MOD_RES       1      1       ACETYLATION (BY SIMILARITY).
-FT   MOD_RES       2      2       ACETYLATION (BY SIMILARITY).
-FT   MOD_RES      73     73       METHYLATION (BY SIMILARITY).
-SQ   SEQUENCE   375 AA;  41766 MW;  3A0543DF CRC32;
+KW   Acetylation; ATP-binding; Cytoskeleton; Methylation;
+KW   Nucleotide-binding; Structural protein.
+FT   PROPEP        1      1       Removed in mature form (By similarity).
+FT                                /FTId=PRO_0000000808.
+FT   CHAIN         2    375       Actin, cytoplasmic 1.
+FT                                /FTId=PRO_0000000809.
+FT   MOD_RES       1      1       N-acetylmethionine (By similarity).
+FT   MOD_RES       2      2       N-acetylglutamate (By similarity).
+FT   MOD_RES      73     73       Tele-methylhistidine (By similarity).
+SQ   SEQUENCE   375 AA;  41767 MW;  9C505616D33E9495 CRC64;
      MEDEIAALVV DNGSGMCKAG FAGDDAPRAV FPSIVGRPRH QGVMVGMGQK DSYVGDEAQS
      KRGILTLKYP IEHGIVTNWD DMEKIWHHTF YNELRVAPEE HPVLLTEAPL NPKANREKMT
      QIMFETFNTP AMYVAIQAVL SLYASGRTTG IVMDSGDGVT HTVPIYEGYA LPHAILRLDL
@@ -318,21 +341,21 @@ By default <b>antigenic</b> writes a 'motif' report file.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: act1_fugru.antigenic</h3>
+<p><h3>File: actb1_fugru.antigenic</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: antigenic
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: antigenic
-#    -sequence tsw:act1_fugru
+#    -sequence tsw:actb1_fugru
 # Report_format: motif
-# Report_file: act1_fugru.antigenic
+# Report_file: actb1_fugru.antigenic
 ########################################
 
 #=======================================
 #
-# Sequence: ACT1_FUGRU     from: 1   to: 375
+# Sequence: ACTB1_FUGRU     from: 1   to: 375
 # HitCount: 18
 #=======================================
 
@@ -431,30 +454,30 @@ Max_score_pos at "*"
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: act1_fugru.antigenic</h3>
+<p><h3>File: actb1_fugru.antigenic</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
 ##date 2006-07-15
-##Type Protein ACT1_FUGRU
-ACT1_FUGRU	antigenic	region	214	222	1.207	+	.	Sequence "ACT1_FUGRU.1" ; note "*pos 218"
-ACT1_FUGRU	antigenic	region	131	145	1.187	+	.	Sequence "ACT1_FUGRU.2" ; note "*pos 137"
-ACT1_FUGRU	antigenic	region	5	12	1.166	+	.	Sequence "ACT1_FUGRU.3" ; note "*pos 8"
-ACT1_FUGRU	antigenic	region	27	38	1.164	+	.	Sequence "ACT1_FUGRU.4" ; note "*pos 32"
-ACT1_FUGRU	antigenic	region	160	183	1.136	+	.	Sequence "ACT1_FUGRU.5" ; note "*pos 173"
-ACT1_FUGRU	antigenic	region	367	372	1.135	+	.	Sequence "ACT1_FUGRU.6" ; note "*pos 372"
-ACT1_FUGRU	antigenic	region	93	108	1.116	+	.	Sequence "ACT1_FUGRU.7" ; note "*pos 103"
-ACT1_FUGRU	antigenic	region	295	301	1.113	+	.	Sequence "ACT1_FUGRU.8" ; note "*pos 296"
-ACT1_FUGRU	antigenic	region	256	266	1.110	+	.	Sequence "ACT1_FUGRU.9" ; note "*pos 264"
-ACT1_FUGRU	antigenic	region	336	352	1.107	+	.	Sequence "ACT1_FUGRU.10" ; note "*pos 347"
-ACT1_FUGRU	antigenic	region	62	76	1.102	+	.	Sequence "ACT1_FUGRU.11" ; note "*pos 68"
-ACT1_FUGRU	antigenic	region	232	250	1.086	+	.	Sequence "ACT1_FUGRU.12" ; note "*pos 245"
-ACT1_FUGRU	antigenic	region	327	332	1.083	+	.	Sequence "ACT1_FUGRU.13" ; note "*pos 330"
-ACT1_FUGRU	antigenic	region	317	323	1.074	+	.	Sequence "ACT1_FUGRU.14" ; note "*pos 320"
-ACT1_FUGRU	antigenic	region	186	192	1.068	+	.	Sequence "ACT1_FUGRU.15" ; note "*pos 191"
-ACT1_FUGRU	antigenic	region	40	46	1.066	+	.	Sequence "ACT1_FUGRU.16" ; note "*pos 43"
-ACT1_FUGRU	antigenic	region	269	275	1.045	+	.	Sequence "ACT1_FUGRU.17" ; note "*pos 269"
-ACT1_FUGRU	antigenic	region	51	57	1.034	+	.	Sequence "ACT1_FUGRU.18" ; note "*pos 52"
+##Type Protein ACTB1_FUGRU
+ACTB1_FUGRU	antigenic	region	214	222	1.207	+	.	Sequence "ACTB1_FUGRU.1" ; note "*pos 218"
+ACTB1_FUGRU	antigenic	region	131	145	1.187	+	.	Sequence "ACTB1_FUGRU.2" ; note "*pos 137"
+ACTB1_FUGRU	antigenic	region	5	12	1.166	+	.	Sequence "ACTB1_FUGRU.3" ; note "*pos 8"
+ACTB1_FUGRU	antigenic	region	27	38	1.164	+	.	Sequence "ACTB1_FUGRU.4" ; note "*pos 32"
+ACTB1_FUGRU	antigenic	region	160	183	1.136	+	.	Sequence "ACTB1_FUGRU.5" ; note "*pos 173"
+ACTB1_FUGRU	antigenic	region	367	372	1.135	+	.	Sequence "ACTB1_FUGRU.6" ; note "*pos 372"
+ACTB1_FUGRU	antigenic	region	93	108	1.116	+	.	Sequence "ACTB1_FUGRU.7" ; note "*pos 103"
+ACTB1_FUGRU	antigenic	region	295	301	1.113	+	.	Sequence "ACTB1_FUGRU.8" ; note "*pos 296"
+ACTB1_FUGRU	antigenic	region	256	266	1.110	+	.	Sequence "ACTB1_FUGRU.9" ; note "*pos 264"
+ACTB1_FUGRU	antigenic	region	336	352	1.107	+	.	Sequence "ACTB1_FUGRU.10" ; note "*pos 347"
+ACTB1_FUGRU	antigenic	region	62	76	1.102	+	.	Sequence "ACTB1_FUGRU.11" ; note "*pos 68"
+ACTB1_FUGRU	antigenic	region	232	250	1.086	+	.	Sequence "ACTB1_FUGRU.12" ; note "*pos 245"
+ACTB1_FUGRU	antigenic	region	327	332	1.083	+	.	Sequence "ACTB1_FUGRU.13" ; note "*pos 330"
+ACTB1_FUGRU	antigenic	region	317	323	1.074	+	.	Sequence "ACTB1_FUGRU.14" ; note "*pos 320"
+ACTB1_FUGRU	antigenic	region	186	192	1.068	+	.	Sequence "ACTB1_FUGRU.15" ; note "*pos 191"
+ACTB1_FUGRU	antigenic	region	40	46	1.066	+	.	Sequence "ACTB1_FUGRU.16" ; note "*pos 43"
+ACTB1_FUGRU	antigenic	region	269	275	1.045	+	.	Sequence "ACTB1_FUGRU.17" ; note "*pos 269"
+ACTB1_FUGRU	antigenic	region	51	57	1.034	+	.	Sequence "ACTB1_FUGRU.18" ; note "*pos 52"
 </pre>
 </td></tr></table><p>
 
