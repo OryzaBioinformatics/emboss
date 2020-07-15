@@ -73,13 +73,13 @@ familiarity with UNIX system administration.
 
 \subsection{Where to get it?}
 
-\EMBOSS\ is available for download from the primary site at the UK
-EMBnet node by anonymous ftp.\URL{ftp://ftp.uk.embnet.org/pub/EMBOSS/} This
+\EMBOSS\ is available for download from the primary site at Open-Bio
+by anonymous ftp.\URL{ftp://emboss.open-bio.org/pub/EMBOSS/} This
 directory contains the \EMBOSS\ package and several associated
 packages (collectively known as EMBASSY) that are distributed with
 \EMBOSS. Download these to a suitable location. Documentation is
 available on the WWW at the \EMBOSS\ web
-site.\URL{http://www.uk.embnet.org/Software/EMBOSS}
+site.\URL{http://emboss.sf.net/}
 
 FreeBSD distributions from 4.2 onwards now include \EMBOSS\ as an
 optional package maintained by Johann
@@ -93,19 +93,22 @@ Visagie.\URL{johann\@@egenetics.com} Please see section
 Change directory to the location in which you wish to download the
 \EMBOSS\ source code. In this example we will download the source to
 \filename{/packages/EMBOSS}. Then start your ftp client and point it
-to ftp.uk.embnet.org.
+to emboss.open-bio.org.
 
 \begin{verbatim}
-% ftp ftp.uk.embnet.org
-Connected to tantalum.hgmp.mrc.ac.uk.
-220 tantalum FTP server ready.
-Name (ftp.uk.embnet.org:embuser):
+% ftp emboss.open-bio.org
+Connected to emboss.open-bio.org.
+220 (vsFTPd 2.0.1)
+530 Please login with USER and PASS.
+530 Please login with USER and PASS.
+KERBEROS_V4 rejected as an authentication type
+Name (emboss.open-bio.org:someuser):
 \end{verbatim}
 
 We are using anonymous FTP so type the username \ilcomm{anonymous}.
 
 \begin{verbatim}
-Name (ftp.uk.embnet.org:embuser): anonymous
+Name (emboss.open-bio.org:someuser): anonymous
 331 Guest login ok, send your complete e-mail address as password.
 Password:
 \end{verbatim}
@@ -114,18 +117,7 @@ Enter your email address here as the password for user \filename{anonymous}.
 
 \begin{verbatim}
 Password:
-230-################################################################
-230-
-230-  Welcome to the UK HGMP Resource Centre anonymous ftp service
-230-
-230-       Please contact support@hgmp.mrc.ac.uk regarding
-230-                any problems with this service
-230-
-230-################################################################
-230-
-230-Please read the file README
-230-  it was last modified on Wed Aug 13 15:40:25 1997 - 1810 days ago
-230 Guest login ok, access restrictions apply.
+230 Login successful.
 Remote system type is UNIX.
 Using binary mode to transfer files.
 ftp>
@@ -180,10 +172,10 @@ have \progname{wget} installed, use the following command which
 generates a lot of output on the screen:
 
 \begin{verbatim}
-% wget -m 'ftp://ftp.uk.embnet.org/pub/EMBOSS'
---15:04:41--  ftp://ftp.uk.embnet.org:21/pub/EMBOSS
-           => `ftp.uk.embnet.org/pub/.listing'
-Connecting to ftp.uk.embnet.org:21... connected!
+% wget -m 'ftp://emboss.open-bio.org/pub/EMBOSS'
+--15:04:41--  ftp://emboss.open-bio.org:21/pub/EMBOSS
+           => `emboss.open-bio.org/pub/.listing'
+Connecting to emboss.open-bio.org:21... connected!
 Logging in as anonymous ... Logged in!
 ==> TYPE I ... done.  ==> CWD pub ... done.
 ==> PORT ... done.    ==> LIST ... done.
@@ -196,8 +188,8 @@ FINISHED --15:04:55--
 Downloaded: 2,657,366 bytes in 4 files
 \end{verbatim}
 
-A new directory \filename{ftp.uk.embnet.org} has been created and
-EMBOSS can be found at \filename{ftp.uk.embnet.org/pub/EMBOSS}. You
+A new directory \filename{emboss.open-bio.org} has been created and
+EMBOSS can be found at \filename{emboss.open-bio.org/pub/EMBOSS}. You
 may wish to create a symbolic link to this from your
 \filename{/packages} directory for convenience.
 
@@ -550,8 +542,8 @@ type' prompt.
 \subsection{Configuring for 64 bit systems}
 
 \EMBOSS\ configure looks for \progname{gcc} and uses this of
-preference when compiling \EMBOSS\. This is not ideal for those who
-wish to have a compiled and linked 64bit version of \EMBOSS\. The
+preference when compiling \EMBOSS. This is not ideal for those who
+wish to have a compiled and linked 64bit version of \EMBOSS. The
 current version is NOT 64 bit clean (ie. it does not necessarily use
 64 bit representation internally) but will compile and run quite
 happily on 64 bit systems.
@@ -631,10 +623,10 @@ You may see plenty of warnings (especially on SGI systems) complaining
 about libraries not being used to resolve any symbols. These can be
 safely ignored.
 
-If all goes according to plan you should have built \EMBOSS\
+If all goes according to plan you should have built \EMBOSS
 successfully. If not you will have to try to work out why the build
 failed. If you can't work it out yourself, send an email describing
-the problem to emboss-bug@embnet.org preferably with a copy of the
+the problem to emboss-bug@emboss.open-bio.org preferably with a copy of the
 output from the installation.
 
 Assuming that compilation was successful, you can\footnote{You don't
@@ -653,7 +645,7 @@ environment variables to determine where the libraries and data are
 found. These instructions assumed you installed \EMBOSS\ in
 \filename{/site/prog/emboss}. Adjust these instructions to suit your
 installation.  Insert the following lines at the end of
-\filename{/etc/cshrc} (or \filename{\~/.cshrc} for a personal
+\filename{/etc/cshrc} (or \filename{~/.cshrc} for a personal
 installation)
 
 \begin{verbatim}
@@ -662,7 +654,7 @@ set path=( /site/prog/emboss/bin \${path} )
 \end{verbatim}
 
 Or for bash/ksh/sh users, insert the following at the end of
-\filename{/etc/profile} or \filename{\~/.bashrc}
+\filename{/etc/profile} or \filename{~/.bashrc}
 
 \begin{verbatim}
 PLPLOT_LIB=/site/prog/emboss/lib
@@ -697,7 +689,7 @@ You can test your \EMBOSS\ installation by trying the program
 \end{verbatim}
 
 This should give a long list of programs that are available. Press
-space to page down through the list. This is just the \EMBOSS\
+space to page down through the list. This is just the \EMBOSS
 programs and doesn't include any of the EMBASSY programs, but only
 because they are not yet installed. (Note: Although wossname does have
 a -noembassy option this does not work with installed programs because
@@ -773,7 +765,7 @@ libraries and install those as necessary.
 Brief instructions are given here for the packages of which we are
 aware. These are maintained separately from the main source tree and
 may also install some files in operating system standard locations
-instead of the locations used by the `raw' \EMBOSS\
+instead of the locations used by the `raw' \EMBOSS
 distribution. Please read the more detailed instructions that
 accompany each package.
 
@@ -824,7 +816,6 @@ installation directory}
 \item A file \filename{.embossrc} in the directory specified by the
 \ilcomm{EMBOSSRC} environment variable.
 \item A file \filename{.embossrc} in the users home directory.
-\item A file \filename{.embossrc} in the current directory.
 \end{enumerate}
 \filename{emboss.default} and \filename{.embossrc} are plain text
 files that can readily be edited to suit.\footnote{A sample
@@ -934,7 +925,7 @@ whole database index.  \EMBOSS\ also provides methods for retrieving
 sequences via the WWW and three specific methods for interaction with
 SRS\URL{http://www.lionbioscience.com/solutions/srs} installed localy
 or through a remote public server.  For other non flatfile databases
-or flat file databases in formats not currently supported by \EMBOSS\
+or flat file databases in formats not currently supported by \EMBOSS
 you will have to configure an external application to retrieve
 sequences.
 
@@ -1595,7 +1586,7 @@ these databases.
 BLAST format databases are those generated using the tools distributed
 with NCBI-BLAST or with WU-BLAST.
 
-\begin{comment}At present \EMBOSS\
+\begin{comment}At present \EMBOSS
 will only index BLAST databases created from FASTA format input files
 with one of the recognised header formats.  More information on the
 relevant formats can be found in subsection \ref{subsec:fasta}
@@ -1727,7 +1718,7 @@ Blast index version [unknown]: 2
 
 \end{verbatim}
 
-The corresponding entry in \filename{\~/.embossrc} (or
+The corresponding entry in \filename{~/.embossrc} (or
 \filename{emboss.default}) would look like:
 
 
@@ -1772,7 +1763,7 @@ item in the header for the ID format.
 The FASTA specifications just define the sequence file as a header
 line that begins with \ilcomm{>} and subsequent lines containing the
 sequence.  The header line can be present in an almost infinite number
-of formats, several of which can be processed by \EMBOSS.  \EMBOSS\
+of formats, several of which can be processed by \EMBOSS.  \EMBOSS
 attempts to determine the accession number and/or ID for each
 sequence.  For indexing purposes there is no semantic difference
 between an accession number and an ID. In the real world, acession
@@ -1820,7 +1811,7 @@ have two options:
 \item (The preferred option) Get a C programmer to modify the source
 code for \progname{dbifasta} and recompile. If you are a community
 spirited person you will also contribute these changes to the main
-\EMBOSS\ source tree. (email emboss-dev\@@embnet.org for more
+\EMBOSS\ source tree. (email emboss-dev\@@emboss.open-bio.org for more
 information on contributing changes to the \EMBOSS\ source code and/or
 read the \EMBOSS\ developers documentation)
 \item (The quick hack) Write a custom script (using
@@ -1979,7 +1970,7 @@ Rebase is now installed and ready to use.
 Transfac is the transcription factor binding site database. It is
 available by anonymous
 FTP.\footnote{ftp://transfac.gbf.de/pub/transfac/ascii/} Unpacking the
-distribution reveals a file called site.dat. This is the one \EMBOSS\
+distribution reveals a file called site.dat. This is the one \EMBOSS
 needs.
 
 Run \progname{tfextract} to extract the data from TRANSFAC.
@@ -2023,7 +2014,7 @@ using the \EMBOSS\ program \progname{pscan}.
 PRINTS can be obtained via anonymous
 FTP.\footnote{ftp://ftp.ebi.ac.uk/pub/databases/prints} The database
 is made available as compressed files which should be uncompressed
-using \progname{gzip} before integrating them into \EMBOSS\
+using \progname{gzip} before integrating them into \EMBOSS
 
 PRINTS is integrated with \EMBOSS\ using the program \progname{printsextract}
 
@@ -2191,7 +2182,7 @@ separate data directory.
 \section{Logging}
 
 Many system administrators may wish to make use of the logging
-facilities of \EMBOSS\. Setting the variable \ilcomm{emboss\_logfile}
+facilities of \EMBOSS. Setting the variable \ilcomm{emboss\_logfile}
 in \filename{emboss.default} or \filename{.embossrc} allows the system
 to keep a log of which programs are used when and by whom.
 
@@ -2234,8 +2225,8 @@ available GUIs are stable enough to document.
 \section{Web sites}
 \subsection{Programs}
 \begin{description}
-\item[\EMBOSS\ source code]ftp://ftp.uk.embnet.org/pub/EMBOSS
-\item[\EMBOSS\ Documentation]http://www.uk.embnet.org/Software/EMBOSS
+\item[\EMBOSS\ source code]ftp://emboss.open-bio.org/pub/EMBOSS
+\item[\EMBOSS\ Documentation]http://emboss.sf.net/
 \item[BLAST tools]Tools for generating BLAST format databases are
 contained in the NCBI toolkit which can be obtained from NCBI at:
 \begin{quote}
@@ -2313,7 +2304,7 @@ or your \filename{emboss.default}.
 # This script should be sourced, not run.
 # EMBOSS UPDATE.
 # it assumes \$packages_dir/EMBOSS is a symbolic link to 
-# \$mirror_dir/ftp.uk.embnet.org/pub/EMBOSS
+# \$mirror_dir/emboss.open-bio.org/pub/EMBOSS
 #
 
 #site specific variables: season according to taste..
@@ -2329,7 +2320,7 @@ set oldpwd=`pwd`
 
 cd \$mirror_dir
 echo 'updating EMBOSS'
-if ( `wget -m 'ftp://ftp.uk.embnet.org/pub/EMBOSS' |& \
+if ( `wget -m 'ftp://emboss.open-bio.org/pub/EMBOSS' |& \
   tail -1 | awk '/^Downloaded:/{print \$5}'` != "0" ) then 
 
     cd \${packages_dir}/EMBOSS

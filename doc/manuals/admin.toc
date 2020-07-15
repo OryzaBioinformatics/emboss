@@ -8,16 +8,16 @@
 \contentsline {section}{\numberline {2.1}Retrieving {\sf \bfseries EMBOSS}\ by anonymous ftp}{6}
 \contentsline {subsection}{\numberline {2.1.1}Interactive FTP}{6}
 \contentsline {subsection}{\numberline {2.1.2}FTP using {\sc wget}}{7}
-\contentsline {section}{\numberline {2.2}Unpacking}{8}
+\contentsline {section}{\numberline {2.2}Unpacking}{7}
 \contentsline {section}{\numberline {2.3}Graphics Requirements}{8}
 \contentsline {subsection}{\numberline {2.3.1}zlib}{9}
 \contentsline {subsection}{\numberline {2.3.2}libpng}{9}
 \contentsline {subsection}{\numberline {2.3.3}gd}{10}
 \contentsline {section}{\numberline {2.4}Compilation}{10}
 \contentsline {subsection}{\numberline {2.4.1}Configure}{10}
-\contentsline {subsubsection}{Installation directory}{11}
+\contentsline {subsubsection}{Installation directory}{10}
 \contentsline {subsubsection}{Reconfiguration}{11}
-\contentsline {subsubsection}{Configuring {\sf \bfseries EMBOSS}\ graphics}{12}
+\contentsline {subsubsection}{Configuring {\sf \bfseries EMBOSS}\ graphics}{11}
 \contentsline {subsection}{\numberline {2.4.2}Configuring for 64 bit systems}{12}
 \contentsline {subsubsection}{IRIX 6.5.10}{12}
 \contentsline {subsection}{\numberline {2.4.3}Building {\sf \bfseries EMBOSS}}{13}
