@@ -1,15 +1,24 @@
-/* All core source files: made another pass to eliminate warnings when using
- * gcc -Wall.  Lots of cleaning up: got rid of includes of math.h or string.h
- * (now included by plplot.h), and other minor changes.  Now each file has
- * global access to the plstream pointer via extern; many accessor functions
- * eliminated as a result.  Subpage initialization code moved to this file --
- * subpage settings can now be changed any time (previously, it had to be
- * done before calling plinit).
-*/
-
-/*	plpage.c
+/* $Id: plpage.c,v 1.2 2007/05/08 09:09:37 rice Exp $
 
 	Page/subpage handling routines
+
+   Copyright (C) 2004  Alan W. Irwin
+
+   This file is part of PLplot.
+
+   PLplot is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Library Public License as published
+   by the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   PLplot is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with PLplot; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 #include "plplotP.h"
@@ -46,6 +55,38 @@ c_pladv(PLINT page)
     }
 
     plP_setsub();
+}
+
+/*--------------------------------------------------------------------------*\
+ * void plclear()
+ *
+ * Clear current subpage.  Subpages can be set with pladv before
+ * calling plclear. Not all drivers support this.
+\*--------------------------------------------------------------------------*/
+
+void
+c_plclear(void)
+{
+    if (plsc->level < 1) {
+	plabort("plclear: Please call plinit first");
+	return;
+    }
+
+    if (plsc->dev_clear)
+      plP_esc(PLESC_CLEAR, NULL);
+    else { /* driver does not support clear, fill using background color */
+
+	  short x[5], y[5];
+	  int ocolor = plsc->icol0;
+
+	  x[0] = x[3] = x[4] = plsc->sppxmi;
+	  x[1] = x[2] = plsc->sppxma;
+	  y[0] = y[1] = y[4] = plsc->sppymi;
+	  y[2] = y[3] = plsc->sppyma;
+	  plcol0(0);
+	  plP_fill(x, y, 5);
+	  plcol0(ocolor);
+    }
 }
 
 /*--------------------------------------------------------------------------*\
@@ -93,7 +134,7 @@ c_plbop(void)
 void
 plP_subpInit(void)
 {
-    PLFLT scale, size_chr, size_sym, size_maj, size_min;
+    PLFLT scale, size_chr, size_sym, size_maj, size_min, theta, rat;
 
 /* Subpage checks */
 
@@ -116,6 +157,16 @@ plP_subpInit(void)
     scale = 0.5 *
 	((plsc->phyxma - plsc->phyxmi) / plsc->xpmm +
 	 (plsc->phyyma - plsc->phyymi) / plsc->ypmm) / 200.0;
+
+    /* Take account of scaling caused by change of orientation */
+    if (plsc->difilt && PLDI_ORI) {
+      theta = 0.5*M_PI*plsc->diorot;
+      rat = ( (plsc->phyxma - plsc->phyxmi) / plsc->xpmm ) / 
+	( (plsc->phyyma - plsc->phyymi) / plsc->ypmm );
+      rat = MAX(rat,1.0/rat);
+      rat = fabs(cos(theta)) + rat*fabs(sin(theta));
+      scale /= rat;
+    }
 
     if (plsc->nsuby > 1)
 	scale /= sqrt((double) plsc->nsuby);
@@ -182,7 +233,7 @@ c_plgspa(PLFLT *xmin, PLFLT *xmax, PLFLT *ymin, PLFLT *ymax)
  * int plGetCursor()
  *
  * Wait for graphics input event and translate to world coordinates.
- * Returns 0 if no translation to world coordinates is possible.  
+ * Returns 0 if no translation to world coordinates is possible.
  * Written by Paul Casteels.
 \*--------------------------------------------------------------------------*/
 
@@ -198,34 +249,62 @@ plGetCursor(PLGraphicsIn *plg)
  *
  * Translates cursor position from relative device coordinates to world
  * coordinates.  Returns 0 if no translation to world coordinates is
- * possible.  Written by Paul Casteels.
+ * possible.  Written by Paul Casteels and modified by Alan W. Irwin.
 \*--------------------------------------------------------------------------*/
 
 int
 plTranslateCursor(PLGraphicsIn *plg)
+{
+    int window;
+    c_plcalc_world(plg->dX, plg->dY, &plg->wX, &plg->wY,
+		   (PLINT *) &window);
+    if ( window >= 0 ) {
+	plg->subwindow = window;
+	return 1;
+    }
+    else
+	return 0;
+}
+
+/*--------------------------------------------------------------------------*\
+ * void c_plcalc_world
+ *
+ * Calculate world coordinates wx, and wy from relative device coordinates, rx
+ * and ry.  Also, return the window index for which the world coordinates
+ * are valid. window is set to -1 and wx and wy to 0. if rx and ry do not
+ * correspond to valid world coordinates for any currently existing window.
+ * Originally written by Paul Casteels and modified by Alan W. Irwin.
+\*--------------------------------------------------------------------------*/
+
+void
+c_plcalc_world(PLFLT rx, PLFLT ry, PLFLT *wx, PLFLT *wy, PLINT *window)
 {
     int i;
     int lastwin = plsc->nplwin - 1;
     int firstwin = MAX(plsc->nplwin - PL_MAXWINDOWS, 0);
     PLWindow *w;
 
-    plg->wX = 0;
-    plg->wY = 0;
     for (i = lastwin; i >= firstwin; i--) {
 	w = &plsc->plwin[i % PL_MAXWINDOWS];
-	if ((plg->dX >= w->dxmi) &&
-	    (plg->dX <= w->dxma) &&
-	    (plg->dY >= w->dymi) &&
-	    (plg->dY <= w->dyma) ) {
+	if ((rx >= w->dxmi) &&
+	    (rx <= w->dxma) &&
+	    (ry >= w->dymi) &&
+	    (ry <= w->dyma) ) {
 
-	    plg->wX = w->wxmi + (plg->dX - w->dxmi) * 
+	    *wx = w->wxmi + (rx - w->dxmi) *
 		(w->wxma - w->wxmi) / (w->dxma - w->dxmi);
 
-	    plg->wY = w->wymi + (plg->dY - w->dymi) * 
+	    *wy = w->wymi + (ry - w->dymi) *
 		(w->wyma - w->wymi) / (w->dyma - w->dymi);
 
-	    return 1;
+	    *window = i;
+
+	    return;
 	}
     }
-    return 0;
+    /* No valid window found with these relative coordinates. */
+    *wx = 0.;
+    *wy = 0.;
+    *window = -1;
+    return;
 }

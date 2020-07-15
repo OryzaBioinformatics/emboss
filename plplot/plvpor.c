@@ -1,42 +1,104 @@
-/* All core source files: made another pass to eliminate warnings when using
- * gcc -Wall.  Lots of cleaning up: got rid of includes of math.h or string.h
- * (now included by plplot.h), and other minor changes.  Now each file has
- * global access to the plstream pointer via extern; many accessor functions
- * eliminated as a result.
-*/
-
-/*	plvpor.c
+/* $Id: plvpor.c,v 1.2 2007/05/08 09:09:37 rice Exp $
 
 	Functions dealing with viewports.
+
+   Copyright (C) 2004  Joao Cardoso
+
+   This file is part of PLplot.
+
+   PLplot is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Library Public License as published
+   by the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   PLplot is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with PLplot; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 #include "plplotP.h"
 
+static void
+c_plenvi(PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
+	 PLINT just, PLINT axis, PLINT old);
+
 /*--------------------------------------------------------------------------*\
  * void plenv()
  *
- * Simple interface for defining viewport and window. If "just"=1,
- * X and Y scales will be the same, otherwise they are scaled
- * independently. The "axis" parameter is interpreted as follows:
+ * Simple interface for defining viewport and window.
  *
- *	axis=-2 : draw no box, axis or labels
- *	axis=-1 : draw box only
- *	axis= 0 : Draw box and label with coordinates
- *	axis= 1 : Also draw the coordinate axes
- *	axis= 2 : Draw a grid at major tick positions
- *	axis=10 : Logarithmic X axis, Linear Y axis, No X=0 axis
- *	axis=11 : Logarithmic X axis, Linear Y axis, X=0 axis
- *	axis=20 : Linear X axis, Logarithmic Y axis, No Y=0 axis
- *	axis=21 : Linear X axis, Logarithmic Y axis, Y=0 axis
- *	axis=30 : Logarithmic X and Y axes
+ * The "just" parameter control how the axes will be scaled:
+ *
+ *       just=-1 : The scales will not be set, the user must set up the scale
+ *                   before calling plenv() using plsvpa(), plvasp() or other;
+ *       just= 0 : The scales will be set up to optimize plot area;
+ *       just= 1 : The scales will be the same;
+ *       just= 2 : The axes will be equal, the plot box will be square.
+ *
+ * The "axis" parameter is interpreted as follows:
+ *
+ *	axis=-2 : draw no box, no tick marks, no numeric tick labels, no axes.
+ *	axis=-1 : draw box only.
+ *	axis= 0 : Draw box, ticks, and numeric tick labels.
+ *	axis= 1 : Also draw coordinate axes at X=0, and Y=0.
+ *	axis= 2 : Also draw a grid at major tick positions in both coordinates.
+ *	axis= 3 : Same as 2, but the grid will be also at the minor ticks.
+ *	axis=10 : Same as 0 except Logarithmic X tick marks. (The X data have
+ *      to be converted to logarithms separately.)
+ *	axis=11 : Same as 1 except Logarithmic X tick marks. (The X data have
+ *      to be converted to logarithms separately.)
+ *	axis=12 : Same as 2 except Logarithmic X tick marks. (The X data have
+ *      to be converted to logarithms separately.)
+ *      axis=13 : Same as 12, but the grid will be also at the minor ticks.
+ *	axis=20 : Same as 0 except Logarithmic Y tick marks. (The Y data have
+ *      to be converted to logarithms separately.)
+ *	axis=21 : Same as 1 except Logarithmic Y tick marks. (The Y data have
+ *      to be converted to logarithms separately.)
+ *	axis=22 : Same as 2 except Logarithmic Y tick marks. (The Y data have
+ *      to be converted to logarithms separately.)
+ *      axis=23 : Same as 22, but the grid will be also at the minor ticks.
+ *	axis=30 : Same as 0 except Logarithmic X,Y tick marks. (The X,Y data have
+ *      to be converted to logarithms separately.)
+ *	axis=31 : Same as 1 except Logarithmic X,Y tick marks. (The X,Y data have
+ *      to be converted to logarithms separately.)
+ *	axis=32 : Same as 2 except Logarithmic X,Y tick marks. (The X,Y data have
+ *      to be converted to logarithms separately.)
+ *      axis=33 : Same as 32, but the grid will be also at the minor ticks.
 \*--------------------------------------------------------------------------*/
 
 void
 c_plenv(PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
 	PLINT just, PLINT axis)
 {
+  c_plenvi(xmin, xmax, ymin, ymax, just, axis, 1);
+}
+
+/*--------------------------------------------------------------------------*\
+ * void plenv0()
+ *
+ * same as plenv() above, but if in multiplot mode does not advance the subpage,
+ * instead clears it.
+\*--------------------------------------------------------------------------*/
+
+void
+c_plenv0(PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
+	PLINT just, PLINT axis)
+{
+  c_plenvi(xmin, xmax, ymin, ymax, just, axis, 0);
+}
+
+
+static void
+c_plenvi(PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
+	PLINT just, PLINT axis, PLINT old)
+{
     PLFLT lb, rb, tb, bb, dx, dy;
-    PLFLT xsize, ysize, xscale, yscale, scale;
+    PLFLT xsize, ysize, size, xscale, yscale, scale;
     PLFLT spxmin, spxmax, spymin, spymax;
     PLFLT vpxmin, vpxmax, vpymin, vpymax;
 
@@ -52,16 +114,22 @@ c_plenv(PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
 	plabort("plenv: Invalid ymin and ymax arguments");
 	return;
     }
-    if ((just != 0) && (just != 1)) {
+    if (just < -1 || just > 2) {
 	plabort("plenv: Invalid just option");
 	return;
     }
 
-    pladv(0);
+    if (plsc->nsubx * plsc->nsuby == 1) /* not multiplot mode */
+      old = 1;
+
+    if (old == 1)
+      pladv(0);
+    else
+      plclear();
 
     if (just == 0)
 	plvsta();
-    else {
+    else  if (just == 1){
 	lb = 8.0 * plsc->chrht;
 	rb = 5.0 * plsc->chrht;
 	tb = 5.0 * plsc->chrht;
@@ -78,7 +146,22 @@ c_plenv(PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
 	vpxmax = vpxmin + (dx / scale);
 	vpymin = MAX(bb, 0.5 * (ysize - dy / scale));
 	vpymax = vpymin + (dy / scale);
-
+	plsvpa(vpxmin, vpxmax, vpymin, vpymax);
+    } else if(just == 2) {
+        lb = 8.0 * plsc->chrht;
+        rb = 5.0 * plsc->chrht;
+	tb = 5.0 * plsc->chrht;
+	bb = 5.0 * plsc->chrht;
+	plgspa(&spxmin, &spxmax, &spymin, &spymax);
+	xsize = spxmax - spxmin;
+	ysize = spymax - spymin;
+	size = MIN(xsize-lb-rb, ysize-tb-bb);
+	dx = (xsize-size-lb-rb)/2;
+	vpxmin = lb + dx;
+	vpxmax = vpxmin + size;
+	dy = (ysize-size-bb-tb)/2;
+	vpymin = bb + dy;
+	vpymax = vpymin + size;
 	plsvpa(vpxmin, vpxmax, vpymin, vpymax);
     }
 
@@ -99,33 +182,45 @@ c_plenv(PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
     case 2:
 	plbox("abcgnst", (PLFLT) 0.0, 0, "abcgnstv", (PLFLT) 0.0, 0);
 	break;
+    case 3:
+	plbox("abcgnsth", (PLFLT) 0.0, 0, "abcgnstvh", (PLFLT) 0.0, 0);
+	break;
     case 10:
 	plbox("bclnst", (PLFLT) 0.0, 0, "bcnstv", (PLFLT) 0.0, 0);
 	break;
     case 11:
-	plbox("bclnst", (PLFLT) 0.0, 0, "abcnstv", (PLFLT) 0.0, 0);
+	plbox("abclnst", (PLFLT) 0.0, 0, "abcnstv", (PLFLT) 0.0, 0);
 	break;
-    case 12:/* jc: make it regular */
-	plbox("bclgnst", (PLFLT) 0.0, 0, "abcgnstv", (PLFLT) 0.0, 0);
+    case 12:
+	plbox("abcglnst", (PLFLT) 0.0, 0, "abcgnstv", (PLFLT) 0.0, 0);
+	break;
+    case 13:
+	plbox("abcglnsth", (PLFLT) 0.0, 0, "abcgnstvh", (PLFLT) 0.0, 0);
 	break;
     case 20:
 	plbox("bcnst", (PLFLT) 0.0, 0, "bclnstv", (PLFLT) 0.0, 0);
 	break;
     case 21:
-	plbox("bcnst", (PLFLT) 0.0, 0, "abclnstv", (PLFLT) 0.0, 0);
+	plbox("abcnst", (PLFLT) 0.0, 0, "abclnstv", (PLFLT) 0.0, 0);
 	break;
-    case 22:/* jc: make it regular */
-	plbox("bcngst", (PLFLT) 0.0, 0, "abcglnstv", (PLFLT) 0.0, 0);
-	break;	
+    case 22:
+	plbox("abcgnst", (PLFLT) 0.0, 0, "abcglnstv", (PLFLT) 0.0, 0);
+	break;
+    case 23:
+	plbox("abcgnsth", (PLFLT) 0.0, 0, "abcglnstvh", (PLFLT) 0.0, 0);
+	break;
     case 30:
 	plbox("bclnst", (PLFLT) 0.0, 0, "bclnstv", (PLFLT) 0.0, 0);
 	break;
-    case 31:/* jc: make it regular */
-	plbox("bclnst", (PLFLT) 0.0, 0, "abclnstv", (PLFLT) 0.0, 0);
+    case 31:
+	plbox("abclnst", (PLFLT) 0.0, 0, "abclnstv", (PLFLT) 0.0, 0);
 	break;
-    case 32:/* jc: make it regular */
-	plbox("bclngst", (PLFLT) 0.0, 0, "abcglnstv", (PLFLT) 0.0, 0);
-	break;	
+    case 32:
+	plbox("abcglnst", (PLFLT) 0.0, 0, "abcglnstv", (PLFLT) 0.0, 0);
+	break;
+    case 33:
+	plbox("abcglnsth", (PLFLT) 0.0, 0, "abcglnstvh", (PLFLT) 0.0, 0);
+	break;
     default:
 	plwarn("plenv: Invalid axis argument");
     }

@@ -1,12 +1,25 @@
-/* Bug fix: changed declarations of xclp[] and yclp[] from static to local
- * variables in plP_pllclp() and plP_plfclp(). plP_pllclp can call itself
- * consequently it needs local variables. Fixed problem with dash line and
- * orientation=1.  (Submitted by Wesley Ebisuzaki)
-*/
-
-/*	plline.c
+/* $Id: plline.c,v 1.3 2007/05/08 09:09:37 rice Exp $
 
 	Routines dealing with line generation.
+
+   Copyright (C) 2004  Maurice LeBrun
+
+   This file is part of PLplot.
+
+   PLplot is free software; you can redistribute it and/or modify
+   it under the terms of the GNU Library General Public License as published
+   by the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   PLplot is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with PLplot; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
 */
 
 #include "plplotP.h"
@@ -15,7 +28,7 @@
 
 static PLINT xline[PL_MAXPOLY], yline[PL_MAXPOLY];
 
-static PLINT lastx = UNDEFINED, lasty = UNDEFINED;
+static PLINT lastx = PL_UNDEFINED, lasty = PL_UNDEFINED;
 
 /* Function prototypes */
 
@@ -39,6 +52,11 @@ genlin(short *x, short *y, PLINT npts);
 
 static void
 grdashline(short *x, short *y);
+
+/* Determines if a point is inside a polygon or not */
+
+static int
+pointinpolygon( int n, PLINT *x, PLINT *y, PLINT xp, PLINT yp );
 
 /*----------------------------------------------------------------------*\
  * void pljoin()
@@ -75,32 +93,98 @@ c_plline(PLINT n, PLFLT *x, PLFLT *y)
  * Draws a line in 3 space.  You must first set up the viewport, the
  * 2d viewing window (in world coordinates), and the 3d normalized
  * coordinate box.  See x18c.c for more info.
+ *
+ * This version adds clipping against the 3d bounding box specified in plw3d
 \*----------------------------------------------------------------------*/
-
 void
 c_plline3(PLINT n, PLFLT *x, PLFLT *y, PLFLT *z)
 {
     int i;
-    PLFLT u, v;
+    PLFLT vmin[3], vmax[3], zscale;
 
     if (plsc->level < 3) {
 	plabort("plline3: Please set up window first");
 	return;
     }
 
-    for( i=0; i < n; i++ ) {
-	u = plP_wcpcx(plP_w3wcx( x[i], y[i], z[i] ));
-	v = plP_wcpcy(plP_w3wcy( x[i], y[i], z[i] ));
-	if (i==0)
-	    plP_movphy(u,v);
-	else
-	    plP_draphy(u,v);
+    /* get the bounding box in 3d */
+    plP_gdom(&vmin[0], &vmax[0], &vmin[1], &vmax[1]);
+    plP_grange(&zscale, &vmin[2], &vmax[2]);
+
+    /* interate over the vertices */
+    for( i=0; i < n-1; i++ ) {
+      PLFLT p0[3], p1[3];
+      int axis;
+
+      /* copy the end points of the segment to allow clipping */
+      p0[0] = x[i]; p0[1] = y[i]; p0[2] = z[i];
+      p1[0] = x[i+1]; p1[1] = y[i+1]; p1[2] = z[i+1];
+
+      /* check against each axis of the bounding box */
+      for(axis = 0; axis < 3; axis++) {
+	if(p0[axis] < vmin[axis]) { /* first out */
+	  if(p1[axis] < vmin[axis]) {
+	    break; /* both endpoints out so quit */
+	  } else {
+	    int j;
+	    /* interpolate to find intersection with box */
+	    PLFLT t = (vmin[axis] - p0[axis]) / (p1[axis] - p0[axis]);
+	    p0[axis] = vmin[axis];
+	    for(j = 1; j<3; j++) {
+	      int k = (axis+j)%3;
+	      p0[k] = (1-t)*p0[k] + t*p1[k];
+	    }
+	  }
+	} else if(p1[axis] < vmin[axis]) { /* second out */
+	  int j;
+	  /* interpolate to find intersection with box */
+	  PLFLT t = (vmin[axis] - p0[axis]) / (p1[axis] - p0[axis]);
+	  p1[axis] = vmin[axis];
+	  for(j = 1; j<3; j++) {
+	    int k = (axis+j)%3;
+	    p1[k] = (1-t)*p0[k] + t*p1[k];
+	  }
+	}
+	if(p0[axis] > vmax[axis]) { /* first out */
+	  if(p1[axis] > vmax[axis]) {
+	    break; /* both out so quit */
+	  } else {
+	    int j;
+	    /* interpolate to find intersection with box */
+	    PLFLT t = (vmax[axis] - p0[axis]) / (p1[axis] - p0[axis]);
+	    p0[axis] = vmax[axis];
+	    for(j = 1; j<3; j++) {
+	      int k = (axis+j)%3;
+	      p0[k] = (1-t)*p0[k] + t*p1[k];
+	    }
+	  }
+	} else if(p1[axis] > vmax[axis]) { /* second out */
+	  int j;
+	  /* interpolate to find intersection with box */
+	  PLFLT t = (vmax[axis] - p0[axis]) / (p1[axis] - p0[axis]);
+	  p1[axis] = vmax[axis];
+	  for(j = 1; j<3; j++) {
+	    int k = (axis+j)%3;
+	    p1[k] = (1-t)*p0[k] + t*p1[k];
+	  }
+	}
+      }
+      /* if we made it to here without "break"ing out of the loop, the
+	 remaining segment is visible */
+      if( axis == 3 ) { /*  not clipped away */
+	PLFLT u0, v0, u1, v1;
+	u0 = plP_wcpcx(plP_w3wcx( p0[0], p0[1], p0[2] ));
+	v0 = plP_wcpcy(plP_w3wcy( p0[0], p0[1], p0[2] ));
+	u1 = plP_wcpcx(plP_w3wcx( p1[0], p1[1], p1[2] ));
+	v1 = plP_wcpcy(plP_w3wcy( p1[0], p1[1], p1[2] ));
+	plP_movphy(u0,v0);
+	plP_draphy(u1,v1);
+      }
     }
     return;
 }
-
 /*----------------------------------------------------------------------*\
- * void plpoly3( n, x, y, z, draw )
+ * void plpoly3( n, x, y, z, draw, ifcc )
  *
  * Draws a polygon in 3 space.  This differs from plline3() in that
  * this attempts to determine if the polygon is viewable.  If the back
@@ -115,10 +199,11 @@ c_plline3(PLINT n, PLFLT *x, PLFLT *y, PLFLT *z)
  * So if you're 3 space polygons are too far from planar, consider
  * breaking them into smaller polygons.  "3 points define a plane" :-).
  *
- * The directionality of the polygon is determined by assuming the
- * points are laid out in clockwise order.  If you are drawing them in
- * counter clockwise order, make n the negative of the number of
- * points.
+ * For ifcc == 1, the directionality of the polygon is determined by assuming
+ * the points are laid out in counter-clockwise order.
+ *
+ * For ifcc == 0, the directionality of the polygon is determined by assuming
+ * the points are laid out in clockwise order.
  *
  * BUGS:  If one of the first two segments is of zero length, or if
  * they are colinear, the calculation of visibility has a 50/50 chance
@@ -127,10 +212,10 @@ c_plline3(PLINT n, PLFLT *x, PLFLT *y, PLFLT *z)
 \*----------------------------------------------------------------------*/
 
 void
-c_plpoly3(PLINT n, PLFLT *x, PLFLT *y, PLFLT *z, PLINT *draw)
+c_plpoly3(PLINT n, PLFLT *x, PLFLT *y, PLFLT *z, PLBOOL *draw, PLBOOL ifcc)
 {
-    int i, nn;
-    PLFLT u, v;
+    int i;
+    PLFLT vmin[3], vmax[3], zscale;
     PLFLT u1, v1, u2, v2, u3, v3;
     PLFLT c;
 
@@ -139,8 +224,7 @@ c_plpoly3(PLINT n, PLFLT *x, PLFLT *y, PLFLT *z, PLINT *draw)
 	return;
     }
 
-    nn = abs(n);
-    if ( nn < 3 ) {
+    if ( n < 3 ) {
 	plabort("plpoly3: Must specify at least 3 points");
 	return;
     }
@@ -158,20 +242,83 @@ c_plpoly3(PLINT n, PLFLT *x, PLFLT *y, PLFLT *z, PLINT *draw)
 
     c = (u1-u2)*(v3-v2)-(v1-v2)*(u3-u2);
 
-    if ( c * n < 0. )
-	return;
+    if ( c *(1 - 2*ABS(ifcc)) < 0. )
+        return;
 
-    for( i=0; i < nn; i++ ) {
-	u = plP_wcpcx(plP_w3wcx( x[i], y[i], z[i] ));
-	v = plP_wcpcy(plP_w3wcy( x[i], y[i], z[i] ));
-	if (i==0)
-	    plP_movphy(u,v);
-	else if (draw[i-1])
-	    plP_draphy(u,v);
-	else
-	    plP_movphy(u,v);
+    /* get the bounding box in 3d */
+    plP_gdom(&vmin[0], &vmax[0], &vmin[1], &vmax[1]);
+    plP_grange(&zscale, &vmin[2], &vmax[2]);
+
+    /* interate over the vertices */
+    for( i=0; i < n-1; i++ ) {
+      PLFLT p0[3], p1[3];
+      int axis;
+
+      /* copy the end points of the segment to allow clipping */
+      p0[0] = x[i]; p0[1] = y[i]; p0[2] = z[i];
+      p1[0] = x[i+1]; p1[1] = y[i+1]; p1[2] = z[i+1];
+
+      /* check against each axis of the bounding box */
+      for(axis = 0; axis < 3; axis++) {
+	if(p0[axis] < vmin[axis]) { /* first out */
+	  if(p1[axis] < vmin[axis]) {
+	    break; /* both endpoints out so quit */
+	  } else {
+	    int j;
+	    /* interpolate to find intersection with box */
+	    PLFLT t = (vmin[axis] - p0[axis]) / (p1[axis] - p0[axis]);
+	    p0[axis] = vmin[axis];
+	    for(j = 1; j<3; j++) {
+	      int k = (axis+j)%3;
+	      p0[k] = (1-t)*p0[k] + t*p1[k];
+	    }
+	  }
+	} else if(p1[axis] < vmin[axis]) { /* second out */
+	  int j;
+	  /* interpolate to find intersection with box */
+	  PLFLT t = (vmin[axis] - p0[axis]) / (p1[axis] - p0[axis]);
+	  p1[axis] = vmin[axis];
+	  for(j = 1; j<3; j++) {
+	    int k = (axis+j)%3;
+	    p1[k] = (1-t)*p0[k] + t*p1[k];
+	  }
+	}
+	if(p0[axis] > vmax[axis]) { /* first out */
+	  if(p1[axis] > vmax[axis]) {
+	    break; /* both out so quit */
+	  } else {
+	    int j;
+	    /* interpolate to find intersection with box */
+	    PLFLT t = (vmax[axis] - p0[axis]) / (p1[axis] - p0[axis]);
+	    p0[axis] = vmax[axis];
+	    for(j = 1; j<3; j++) {
+	      int k = (axis+j)%3;
+	      p0[k] = (1-t)*p0[k] + t*p1[k];
+	    }
+	  }
+	} else if(p1[axis] > vmax[axis]) { /* second out */
+	  int j;
+	  /* interpolate to find intersection with box */
+	  PLFLT t = (vmax[axis] - p0[axis]) / (p1[axis] - p0[axis]);
+	  p1[axis] = vmax[axis];
+	  for(j = 1; j<3; j++) {
+	    int k = (axis+j)%3;
+	    p1[k] = (1-t)*p0[k] + t*p1[k];
+	  }
+	}
+      }
+      /* if we made it to here without "break"ing out of the loop, the
+	 remaining segment is visible */
+      if( axis == 3 && draw[i] ) { /*  not clipped away */
+	PLFLT myu0, myv0, myu1, myv1;
+	myu0 = plP_wcpcx(plP_w3wcx( p0[0], p0[1], p0[2] ));
+	myv0 = plP_wcpcy(plP_w3wcy( p0[0], p0[1], p0[2] ));
+	myu1 = plP_wcpcx(plP_w3wcx( p1[0], p1[1], p1[2] ));
+	myv1 = plP_wcpcy(plP_w3wcy( p1[0], p1[1], p1[2] ));
+	plP_movphy(myu0,myv0);
+	plP_draphy(myu1,myv1);
+      }
     }
-
     return;
 }
 
@@ -342,17 +489,31 @@ pllclp(PLINT *x, PLINT *y, PLINT npts)
  * void plP_pllclp()
  *
  * Draws a polyline within the clip limits.
+ *
+ * (AM)
+ * Wanted to change the type of xclp, yclp to avoid overflows!
+ * But that changes the type for the drawing routines too!
 \*----------------------------------------------------------------------*/
 
 void
 plP_pllclp(PLINT *x, PLINT *y, PLINT npts,
-	   PLINT xmin, PLINT xmax, PLINT ymin, PLINT ymax, 
+	   PLINT xmin, PLINT xmax, PLINT ymin, PLINT ymax,
 	   void (*draw) (short *, short *, PLINT))
 {
     PLINT xx1, xx2, yy1, yy2;
     PLINT i, iclp = 0;
-    short xclp[PL_MAXPOLY], yclp[PL_MAXPOLY];
+
+    short _xclp[PL_MAXPOLY], _yclp[PL_MAXPOLY];
+    short *xclp, *yclp;
     int drawable;
+
+    if ( npts < PL_MAXPOLY ) {
+        xclp = _xclp;
+        yclp = _yclp;
+    } else {
+        xclp = (short *) malloc( npts*sizeof(short) ) ;
+        yclp = (short *) malloc( npts*sizeof(short) ) ;
+    }
 
     for (i = 0; i < npts - 1; i++) {
 	xx1 = x[i];
@@ -362,8 +523,8 @@ plP_pllclp(PLINT *x, PLINT *y, PLINT npts,
 
 	drawable = (INSIDE(xx1, yy1) && INSIDE(xx2, yy2));
 	if ( ! drawable)
-	    drawable = ! clipline(&xx1, &yy1, &xx2, &yy2,
-				  xmin, xmax, ymin, ymax);
+	    drawable = ! clipline(&xx1, &yy1, &xx2, &yy2, xmin,
+				  xmax, ymin, ymax);
 
 	if (drawable) {
 
@@ -377,7 +538,7 @@ plP_pllclp(PLINT *x, PLINT *y, PLINT npts,
 		yclp[iclp] = yy2;
 	    }
 
-/* Not first point.  Check if first point of this segment matches up to 
+/* Not first point.  Check if first point of this segment matches up to
    previous point, and if so, add it to the current polyline buffer. */
 
 	    else if (xx1 == xclp[iclp] && yy1 == yclp[iclp]) {
@@ -408,6 +569,59 @@ plP_pllclp(PLINT *x, PLINT *y, PLINT npts,
 
     plsc->currx = x[npts-1];
     plsc->curry = y[npts-1];
+
+    if ( xclp != _xclp ) {
+        free( xclp );
+        free( yclp );
+    }
+}
+
+/*----------------------------------------------------------------------*\
+ * int circulation()
+ *
+ * Returns the circulation direction for a given polyline: positive is
+ * counterclockwise, negative is clockwise (right hand rule).
+ *
+ * Used to get the circulation of the fill polygon around the bounding box,
+ * when the fill polygon is larger than the bounding box.  Counts left
+ * (positive) vs right (negative) hand turns using a cross product, instead of
+ * performing all the expensive trig calculations needed to get this 100%
+ * correct.  For the fill cases encountered in plplot, this treatment should
+ * give the correct answer most of the time, by far.  When used with plshades,
+ * the typical return value is 3 or -3, since 3 turns are necessary in order
+ * to complete the fill region.  Only for really oddly shaped fill regions
+ * will it give the wrong answer.
+ *
+ * AM:
+ * Changed the computation: use the outer product to compute the surface
+ * area, the sign determines if the polygon is followed clockwise or
+ * counterclockwise. This is more reliable. Floating-point numbers
+ * are used to avoid overflow.
+\*----------------------------------------------------------------------*/
+
+static int
+circulation(PLINT *x, PLINT *y, PLINT npts)
+{
+    PLFLT xproduct;
+    int direction = 0;
+    PLFLT xx1, yy1, xx2, yy2, xx3, yy3;
+    int i;
+
+    xproduct = 0.0 ;
+    for (i = 0; i < npts - 1; i++) {
+	xx1 = x[i]; xx2 = x[i+1];
+	yy1 = y[i]; yy2 = y[i+1];
+	if (i < npts-2) {
+	    xx3 = x[i+2]; yy3 = y[i+2];
+	} else {
+	    xx3 = x[0]; yy3 = y[0];
+	}
+	xproduct = xproduct + (xx2-xx1)*(yy3-yy2) - (yy2-yy1)*(xx3-xx2);
+    }
+
+    if (xproduct > 0.0) direction = 1;
+    if (xproduct < 0.0) direction = -1;
+    return direction;
 }
 
 /*----------------------------------------------------------------------*\
@@ -418,19 +632,45 @@ plP_pllclp(PLINT *x, PLINT *y, PLINT npts,
 
 void
 plP_plfclp(PLINT *x, PLINT *y, PLINT npts,
-	   PLINT xmin, PLINT xmax, PLINT ymin, PLINT ymax, 
+	   PLINT xmin, PLINT xmax, PLINT ymin, PLINT ymax,
 	   void (*draw) (short *, short *, PLINT))
 {
-    PLINT xx1, xx2, yy1, yy2;
-    PLINT i, iclp = -1;
-    short xclp[PL_MAXPOLY], yclp[PL_MAXPOLY];
+    PLINT i, xx1, xx2, yy1, yy2;
+    int iclp = 0, iout = 2;
+    short _xclp[2*PL_MAXPOLY+2], _yclp[2*PL_MAXPOLY+2];
+    short *xclp, *yclp;
     int drawable;
+    int crossed_xmin1 = 0, crossed_xmax1 = 0;
+    int crossed_ymin1 = 0, crossed_ymax1 = 0;
+    int crossed_xmin2 = 0, crossed_xmax2 = 0;
+    int crossed_ymin2 = 0, crossed_ymax2 = 0;
+    int crossed_up    = 0, crossed_down  = 0;
+    int crossed_left  = 0, crossed_right = 0;
+    int inside_lb ;
+    int inside_lu ;
+    int inside_rb ;
+    int inside_ru ;
+
+/* Must have at least 3 points and draw() specified */
+    if (npts < 3 || !draw) return;
+
+    if ( npts < PL_MAXPOLY ) {
+        xclp = _xclp;
+        yclp = _yclp;
+    } else {
+        xclp = (short *) malloc( (2*npts+2)*sizeof(short) ) ;
+        yclp = (short *) malloc( (2*npts+2)*sizeof(short) ) ;
+    }
+
+
+    inside_lb = pointinpolygon(npts,x,y,xmin,ymin) ;
+    inside_lu = pointinpolygon(npts,x,y,xmin,ymax) ;
+    inside_rb = pointinpolygon(npts,x,y,xmax,ymin) ;
+    inside_ru = pointinpolygon(npts,x,y,xmax,ymax) ;
 
     for (i = 0; i < npts - 1; i++) {
-	xx1 = x[i];
-	xx2 = x[i + 1];
-	yy1 = y[i];
-	yy2 = y[i + 1];
+	xx1 = x[i]; xx2 = x[i+1];
+	yy1 = y[i]; yy2 = y[i+1];
 
 	drawable = (INSIDE(xx1, yy1) && INSIDE(xx2, yy2));
 	if ( ! drawable)
@@ -438,114 +678,379 @@ plP_plfclp(PLINT *x, PLINT *y, PLINT npts,
 				  xmin, xmax, ymin, ymax);
 
 	if (drawable) {
+	/* Boundary crossing condition -- coming in. */
+	    crossed_xmin2 = (xx1 == xmin); crossed_xmax2 = (xx1 == xmax);
+	    crossed_ymin2 = (yy1 == ymin); crossed_ymax2 = (yy1 == ymax);
 
-/* Not first point.  If first point of this segment matches up to the
-   previous point, just add it.  */
+	    crossed_left  = (crossed_left  || crossed_xmin2);
+	    crossed_right = (crossed_right || crossed_xmax2);
+	    crossed_down  = (crossed_down  || crossed_ymin2);
+	    crossed_up    = (crossed_up    || crossed_ymax2);
+	    iout = iclp+2;
+	/* If the first segment, just add it. */
 
-	    if (iclp >= 0 && xx1 == xclp[iclp] && yy1 == yclp[iclp]) {
-		iclp++;
-		xclp[iclp] = xx2;
-		yclp[iclp] = yy2;
+	    if (iclp == 0) {
+		xclp[iclp] = xx1; yclp[iclp] = yy1; iclp++;
+		xclp[iclp] = xx2; yclp[iclp] = yy2; iclp++;
 	    }
 
-/* First point of polyline, OR . */
+	/* Not first point.  If first point of this segment matches up to the
+	   previous point, just add it.  */
 
-/* If not, we need to add both points, to connect the points in the
- * polygon along the clip boundary.  If any of the previous points were
- * outside one of the 4 corners, assume the corner was encircled and add
- * it first. 
- */
+	    else if (xx1 == xclp[iclp-1] && yy1 == yclp[iclp-1]) {
+		xclp[iclp] = xx2; yclp[iclp] = yy2; iclp++;
+	    }
+
+	/* Otherwise, we need to add both points, to connect the points in the
+	 * polygon along the clip boundary.  If we encircled a corner, we have
+	 * to add that first.
+	 */
+
 	    else {
-		iclp++;
-		xclp[iclp] = xx1;
-		yclp[iclp] = yy1;
+	    /* Treat the case where we encircled two corners:
+	       Construct a polygon out of the subset of vertices
+	       Note that the direction is important too when adding
+	       the extra points */
+		xclp[iclp+1] = xx2; yclp[iclp+1] = yy2;
+		xclp[iclp+2] = xx1; yclp[iclp+2] = yy1;
+		iout = iout - iclp + 1;
+	    /* Upper two */
+		if ( ((crossed_xmin1 && crossed_xmax2) ||
+			     (crossed_xmin2 && crossed_xmax1)) &&
+			inside_lu )
+		{
+		    if ( crossed_xmin1 )
+		    {
+		        xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+		        xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+		    } else {
+		        xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+		        xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+		    }
+		}
+	    /* Lower two */
+		else if ( ((crossed_xmin1 && crossed_xmax2) ||
+			          (crossed_xmin2 && crossed_xmax1)) &&
+			inside_lb )
+		{
+		    if ( crossed_xmin1 )
+		    {
+		        xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+		        xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+		    } else {
+		        xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+		        xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+		    }
+		}
+	    /* Left two */
+		else if ( ((crossed_ymin1 && crossed_ymax2) ||
+			          (crossed_ymin2 && crossed_ymax1)) &&
+			inside_lb )
+		{
+		    if ( crossed_ymin1 )
+		    {
+		        xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+		        xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+		    } else {
+		        xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+		        xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+		    }
+		}
+	    /* Right two */
+		else if ( ((crossed_ymin1 && crossed_ymax2) ||
+			          (crossed_ymin2 && crossed_ymax1)) &&
+			inside_rb )
+		{
+		    if ( crossed_ymin1 )
+		    {
+		        xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+		        xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+		    } else {
+		        xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+		        xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+		    }
+		}
+	    /* Now the case where we encircled one corner */
+	    /* Lower left */
+		else if ( (crossed_xmin1 && crossed_ymin2) ||
+			  (crossed_ymin1 && crossed_xmin2) )
+		{
+		    xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+		}
+	    /* Lower right */
+		else if ( (crossed_xmax1 && crossed_ymin2) ||
+			  (crossed_ymin1 && crossed_xmax2) )
+		{
+		    xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+		}
+	    /* Upper left */
+		else if ( (crossed_xmin1 && crossed_ymax2) ||
+			  (crossed_ymax1 && crossed_xmin2) )
+		{
+		    xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+		}
+	    /* Upper right */
+		else if ( (crossed_xmax1 && crossed_ymax2) ||
+			  (crossed_ymax1 && crossed_xmax2) )
+		{
+		    xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+		}
 
-		if ((xx1 == xmin && yy2 == ymin) ||
-		    (xx2 == xmin && yy1 == ymin)) {
-		    iclp++;
-		    xclp[iclp] = xmin;
-		    yclp[iclp] = ymin;
-		}
-		else if ((xx1 == xmax && yy2 == ymin) ||
-			 (xx2 == xmax && yy1 == ymin)) {
-		    iclp++;
-		    xclp[iclp] = xmax;
-		    yclp[iclp] = ymin;
-		}
-		else if ((xx1 == xmax && yy2 == ymax) ||
-			 (xx2 == xmax && yy1 == ymax)) {
-		    iclp++;
-		    xclp[iclp] = xmax;
-		    yclp[iclp] = ymax;
-		}
-		else if ((xx1 == xmin && yy2 == ymax) ||
-			 (xx2 == xmin && yy1 == ymax)) {
-		    iclp++;
-		    xclp[iclp] = xmin;
-		    yclp[iclp] = ymax;
-		}
-/*
-		for (j = 0; j < i; j++) {
-		    if (x[j] < xmin && y[j] < ymin) {
-			break;
-		    }
-		    else if (x[j] < xmin && y[j] > ymax) {
-			iclp++;
-			xclp[iclp] = xmin;
-			yclp[iclp] = ymax;
-			break;
-		    }
-		    else if (x[j] > xmax && y[j] < ymin) {
-			iclp++;
-			xclp[iclp] = xmax;
-			yclp[iclp] = ymin;
-			break;
-		    }
-		    else if (x[j] > xmax && y[j] > ymax) {
-			iclp++;
-			xclp[iclp] = xmax;
-			yclp[iclp] = ymax;
-			break;
-		    }
-		}
-*/
-		iclp++;
-		xclp[iclp] = xx2;
-		yclp[iclp] = yy2;
+	    /* Now add current segment. */
+		xclp[iclp] = xx1; yclp[iclp] = yy1; iclp++;
+		xclp[iclp] = xx2; yclp[iclp] = yy2; iclp++;
 	    }
+
+	/* Boundary crossing condition -- going out. */
+	    crossed_xmin1 = (xx2 == xmin); crossed_xmax1 = (xx2 == xmax);
+	    crossed_ymin1 = (yy2 == ymin); crossed_ymax1 = (yy2 == ymax);
+	}
+    }
+
+/* Limit case - all vertices are outside of bounding box.  So just fill entire
+   box, *if* the bounding box is completely encircled.
+*/
+
+    if (iclp == 0) {
+	PLINT xmin1, xmax1, ymin1, ymax1;
+	xmin1 = xmax1 = x[0];
+	ymin1 = ymax1 = y[0];
+	for (i = 1; i < npts; i++) {
+	    if (x[i] < xmin1) xmin1 = x[i];
+	    if (x[i] > xmax1) xmax1 = x[i];
+	    if (y[i] < ymin1) ymin1 = y[i];
+	    if (y[i] > ymax1) ymax1 = y[i];
+	}
+	if (xmin1 <= xmin && xmax1 >= xmax && ymin1 <= ymin && ymax1 >= ymax ) {
+	    xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+	    xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+	    xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+	    xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+	    (*draw)(xclp, yclp, iclp);
+
+	    if ( xclp != _xclp ) {
+	        free( xclp );
+	        free( yclp );
+	    }
+
+
+	    return;
+	}
+    }
+
+/* Now handle cases where fill polygon intersects two sides of the box */
+
+    if (iclp >= 2) {
+	int debug=0;
+	int dir = circulation(x, y, npts);
+	if (debug) {
+	    if ( (xclp[0] == xmin && xclp[iclp-1] == xmax) ||
+		 (xclp[0] == xmax && xclp[iclp-1] == xmin) ||
+		 (yclp[0] == ymin && yclp[iclp-1] == ymax) ||
+		 (yclp[0] == ymax && yclp[iclp-1] == ymin) ||
+		 (xclp[0] == xmin && yclp[iclp-1] == ymin) ||
+		 (yclp[0] == ymin && xclp[iclp-1] == xmin) ||
+		 (xclp[0] == xmax && yclp[iclp-1] == ymin) ||
+		 (yclp[0] == ymin && xclp[iclp-1] == xmax) ||
+		 (xclp[0] == xmax && yclp[iclp-1] == ymax) ||
+		 (yclp[0] == ymax && xclp[iclp-1] == xmax) ||
+		 (xclp[0] == xmin && yclp[iclp-1] == ymax) ||
+		 (yclp[0] == ymax && xclp[iclp-1] == xmin) ) {
+		printf("dir=%d, clipped points:\n", dir);
+		for (i=0; i < iclp; i++)
+		    printf(" x[%d]=%d y[%d]=%d", i, xclp[i], i, yclp[i]);
+		printf("\n");
+		printf("pre-clipped points:\n");
+		for (i=0; i < npts; i++)
+		    printf(" x[%d]=%d y[%d]=%d", i, x[i], i, y[i]);
+		printf("\n");
+	    }
+	}
+
+    /* The cases where the fill region is divided 2/2 */
+    /* Divided horizontally */
+	if (xclp[0] == xmin && xclp[iclp-1] == xmax)
+	{
+	    if (dir > 0) {
+		xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+		xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+	    }
+	    else {
+		xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+		xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+	    }
+	}
+	else if (xclp[0] == xmax && xclp[iclp-1] == xmin)
+	{
+	    if (dir > 0) {
+		xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+		xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+	    }
+	    else {
+		xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+		xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+	    }
+	}
+
+    /* Divided vertically */
+	else if (yclp[0] == ymin && yclp[iclp-1] == ymax)
+	{
+	    if (dir > 0) {
+		xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+		xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+	    }
+	    else {
+		xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+		xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+	    }
+	}
+	else if (yclp[0] == ymax && yclp[iclp-1] == ymin)
+	{
+	    if (dir > 0) {
+		xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+		xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+	    }
+	    else {
+		xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+		xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+	    }
+	}
+
+    /* The cases where the fill region is divided 3/1 --
+          LL           LR           UR           UL
+       +-----+      +-----+      +-----+      +-----+
+       |     |      |     |      |    \|      |/    |
+       |     |      |     |      |     |      |     |
+       |\    |      |    /|      |     |      |     |
+       +-----+      +-----+      +-----+      +-----+
+
+       Note when we go the long way around, if the direction is reversed the
+       three vertices must be visited in the opposite order.
+    */
+    /* LL, short way around */
+	else if ((xclp[0] == xmin && yclp[iclp-1] == ymin && dir < 0) ||
+		 (yclp[0] == ymin && xclp[iclp-1] == xmin && dir > 0) )
+	{
+	    xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+	}
+    /* LL, long way around, counterclockwise */
+	else if ((xclp[0] == xmin && yclp[iclp-1] == ymin && dir > 0))
+	{
+	    xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+	    xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+	    xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+	}
+    /* LL, long way around, clockwise */
+	else if ((yclp[0] == ymin && xclp[iclp-1] == xmin && dir < 0))
+	{
+	    xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+	    xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+	    xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+	}
+    /* LR, short way around */
+	else if ((xclp[0] == xmax && yclp[iclp-1] == ymin && dir > 0) ||
+		 (yclp[0] == ymin && xclp[iclp-1] == xmax && dir < 0) )
+	{
+	    xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+	}
+    /* LR, long way around, counterclockwise */
+	else if (yclp[0] == ymin && xclp[iclp-1] == xmax && dir > 0)
+	{
+	    xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+	    xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+	    xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+	}
+    /* LR, long way around, clockwise */
+	else if (xclp[0] == xmax && yclp[iclp-1] == ymin && dir < 0)
+	{
+	    xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+	    xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+	    xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+	}
+    /* UR, short way around */
+	else if ((xclp[0] == xmax && yclp[iclp-1] == ymax && dir < 0) ||
+		 (yclp[0] == ymax && xclp[iclp-1] == xmax && dir > 0) )
+	{
+	    xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+	}
+    /* UR, long way around, counterclockwise */
+	else if (xclp[0] == xmax && yclp[iclp-1] == ymax && dir > 0)
+	{
+	    xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+	    xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+	    xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+	}
+    /* UR, long way around, clockwise */
+	else if (yclp[0] == ymax && xclp[iclp-1] == xmax && dir < 0)
+	{
+	    xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+	    xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+	    xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+	}
+    /* UL, short way around */
+	else if ((xclp[0] == xmin && yclp[iclp-1] == ymax && dir > 0) ||
+		 (yclp[0] == ymax && xclp[iclp-1] == xmin && dir < 0) )
+	{
+	    xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+	}
+    /* UL, long way around, counterclockwise */
+	else if (yclp[0] == ymax && xclp[iclp-1] == xmin && dir > 0)
+	{
+	    xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+	    xclp[iclp] = xmax; yclp[iclp] = ymin; iclp++;
+	    xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+	}
+    /* UL, long way around, clockwise */
+	else if (xclp[0] == xmin && yclp[iclp-1] == ymax && dir < 0)
+	{
+	    xclp[iclp] = xmax; yclp[iclp] = ymax; iclp++;
+	    xclp[iclp] = xmin; yclp[iclp] = ymax; iclp++;
+	    xclp[iclp] = xmin; yclp[iclp] = ymin; iclp++;
+	}
+    }
+
+/* Check for the case that only one side has been crossed
+   (AM) Just checking a single point turns out not to be
+   enough, apparently the crossed_*1 and crossed_*2 variables
+   are not quite what I expected.
+*/
+    if ( crossed_left+crossed_right+crossed_down+crossed_up == 1 &&
+		inside_lb+inside_rb+inside_lu+inside_ru == 4 ) {
+	int dir = circulation(x, y, npts);
+	PLINT xlim[4], ylim[4];
+	int insert;
+	int incr;
+
+	xlim[0] = xmin ; ylim[0] = ymin ;
+	xlim[1] = xmax ; ylim[1] = ymin ;
+	xlim[2] = xmax ; ylim[2] = ymax ;
+	xlim[3] = xmin ; ylim[3] = ymax ;
+	if ( dir > 0 ) {
+	    incr   = 1;
+	    insert = 0*crossed_left + 1*crossed_down + 2*crossed_right +
+	             3*crossed_up ;
+	} else {
+	    incr   = -1;
+	    insert = 3*crossed_left + 2*crossed_up + 1*crossed_right +
+	             0*crossed_down ;
+	}
+	for ( i=0; i < 4; i ++ ) {
+	    xclp[iclp] = xlim[insert] ;
+	    yclp[iclp] = ylim[insert] ;
+	    iclp   ++ ;
+	    insert += incr ;
+	    if ( insert > 3 ) insert = 0 ;
+	    if ( insert < 0 ) insert = 3 ;
 	}
     }
 
 /* Draw the sucker */
+    if (iclp >= 3)
+	(*draw)(xclp, yclp, iclp);
 
-    if (iclp + 1 >= 2) {
-	if ((xclp[0] == xmin && yclp[iclp] == ymin) ||
-	    (xclp[iclp] == xmin && yclp[0] == ymin)) {
-	    iclp++;
-	    xclp[iclp] = xmin;
-	    yclp[iclp] = ymin;
-	}
-	else if ((xclp[0] == xmax && yclp[iclp] == ymin) ||
-		 (xclp[iclp] == xmax && yclp[0] == ymin)) {
-	    iclp++;
-	    xclp[iclp] = xmax;
-	    yclp[iclp] = ymin;
-	}
-	else if ((xclp[0] == xmax && yclp[iclp] == ymax) ||
-		 (xclp[iclp] == xmax && yclp[0] == ymax)) {
-	    iclp++;
-	    xclp[iclp] = xmax;
-	    yclp[iclp] = ymax;
-	}
-	else if ((xclp[0] == xmin && yclp[iclp] == ymax) ||
-		 (xclp[iclp] == xmin && yclp[0] == ymax)) {
-	    iclp++;
-	    xclp[iclp] = xmin;
-	    yclp[iclp] = ymax;
-	}
-    }
-    if (iclp + 1 >= 3) {
-	(*draw)(xclp, yclp, iclp + 1);
+    if ( xclp != _xclp ) {
+        free( xclp );
+        free( yclp );
     }
 }
 
@@ -560,7 +1065,7 @@ clipline(PLINT *p_x1, PLINT *p_y1, PLINT *p_x2, PLINT *p_y2,
 	 PLINT xmin, PLINT xmax, PLINT ymin, PLINT ymax)
 {
     PLINT t, dx, dy, flipx, flipy;
-    double dydx=0.0, dxdy=0.0;
+    double dydx = 0, dxdy = 0;
 
 /* If both points are outside clip region with no hope of intersection,
    return with an error */
@@ -666,7 +1171,19 @@ genlin(short *x, short *y, PLINT npts)
    should be improved */
 
     else {
+
 	PLINT i;
+
+        /* Call escape sequence to draw dashed lines, only for drivers
+	   that have this capability */
+        if (plsc->dev_dash) {
+	    plsc->dev_npts = npts;
+	    plsc->dev_x = x;
+	    plsc->dev_y = y;
+	    plP_esc(PLESC_DASH, NULL);
+            return;
+        }
+
 	for (i = 0; i < npts - 1; i++) {
 	    grdashline(x+i, y+i);
 	}
@@ -782,4 +1299,105 @@ grdashline(short *x, short *y)
 	lastx = xtmp;
 	lasty = ytmp;
     }
+}
+
+/*----------------------------------------------------------------------*\
+ * int pointinpolygon()
+ *
+ * Returns 1 if the point is inside the polygon, 0 otherwise
+ * Note:
+ * Points on the polygon are considered to be outside
+\*----------------------------------------------------------------------*/
+
+static int
+pointinpolygon( int n, PLINT *x, PLINT *y, PLINT xp, PLINT yp )
+{
+    int i;
+    int count_crossings;
+    PLFLT xx1, yy1, xx2, yy2, xpp, ypp, xout, yout, xmax;
+    PLFLT xvp, yvp, xvv, yvv, xv1, yv1, xv2, yv2;
+    PLFLT inprod1, inprod2;
+
+    xpp = (PLFLT) xp;
+    ypp = (PLFLT) yp;
+
+    count_crossings = 0;
+
+
+    /* Determine a point outside the polygon  */
+
+    xmax = x[0] ;
+    xout = x[0] ;
+    yout = y[0] ;
+    for ( i = 0; i < n ; i ++ ) {
+        if ( xout > x[i] ) {
+            xout = x[i] ;
+        }
+        if ( xmax < x[i] ) {
+            xmax = x[i] ;
+        }
+    }
+    xout = xout - (xmax-xout) ;
+
+    /* Determine for each side whether the line segment between
+       our two points crosses the vertex */
+
+    xpp = (PLFLT) xp;
+    ypp = (PLFLT) yp;
+
+    xvp = xpp - xout;
+    yvp = ypp - yout;
+
+    for ( i = 0; i < n; i ++ ) {
+        xx1 = (PLFLT) x[i] ;
+        yy1 = (PLFLT) y[i] ;
+        if ( i < n-1 ) {
+            xx2 = (PLFLT) x[i+1] ;
+            yy2 = (PLFLT) y[i+1] ;
+        } else {
+            xx2 = (PLFLT) x[0] ;
+            yy2 = (PLFLT) y[0] ;
+        }
+
+        /* Skip zero-length segments */
+        if ( xx1 == xx2 && yy1 == yy2 ) {
+            continue;
+        }
+
+        /* Line through the two fixed points:
+           Are x1 and x2 on either side? */
+        xv1 = xx1 - xout;
+        yv1 = yy1 - yout;
+        xv2 = xx2 - xout;
+        yv2 = yy2 - yout;
+        inprod1 = xv1*yvp - yv1*xvp; /* Well, with the normal vector */
+        inprod2 = xv2*yvp - yv2*xvp;
+        if ( inprod1 * inprod2 >= 0.0 ) {
+            /* No crossing possible! */
+            continue;
+        }
+
+        /* Line through the two vertices:
+           Are xout and xpp on either side? */
+        xvv = xx2  - xx1;
+        yvv = yy2  - yy1;
+        xv1 = xpp  - xx1;
+        yv1 = ypp  - yy1;
+        xv2 = xout - xx1;
+        yv2 = yout - yy1;
+        inprod1 = xv1*yvv - yv1*xvv;
+        inprod2 = xv2*yvv - yv2*xvv;
+        if ( inprod1 * inprod2 >= 0.0 ) {
+            /* No crossing possible! */
+            continue;
+        }
+
+        /* We do have a crossing */
+        count_crossings ++;
+    }
+
+    /* Return the result: an even number of crossings means the
+       point is outside the polygon */
+
+    return (count_crossings%2);
 }

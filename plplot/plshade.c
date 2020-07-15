@@ -1,88 +1,99 @@
-/* Main shade function now accepts a function evaluator and data much like
- * the contour functions.  Front-ends exist (plshade1(), plshade2()) to call
- * it in a simpler fashion, using predefined memory organizations for the
- * array.  Also, main shade function now accepts two arguments for handling
- * color of the shaded region -- the color map (0 or 1) and the index
- * (a float; >1 and integral for cmap0, in range [0,1] for cmap1).
-*/
-
-/*	plshade.c
+/* $Id: plshade.c,v 1.3 2007/05/08 09:09:37 rice Exp $
 
 	Functions to shade regions on the basis of value.
 	Can be used to shade contour plots or alone.
-	Copyright 1993 Wesley Ebisuzaki 
+	Copyright 1993 Wesley Ebisuzaki
+
+   Copyright (C) 2004  Alan W. Irwin
+
+   This file is part of PLplot.
+
+   PLplot is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Library Public License as published
+   by the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   PLplot is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with PLplot; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
 */
 
 /*----------------------------------------------------------------------*\
  * Call syntax for plshade():
- * 
- * void plshade(PLFLT *a, PLINT nx, PLINT ny, char *defined, 
- *	PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax, 
- * 	PLFLT shade_min, PLFLT shade_max, 
+ *
+ * void plshade(PLFLT *a, PLINT nx, PLINT ny, char *defined,
+ *	PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
+ * 	PLFLT shade_min, PLFLT shade_max,
  * 	PLINT sh_color, PLINT sh_width, PLINT min_color, PLINT min_width,
  * 	PLINT max_color, PLINT max_width, void (*fill)(), PLINT
  * 	rectangular, ...)
- * 
+ *
  * arguments:
- * 
+ *
  * 	PLFLT &(a[0][0])
- * 
+ *
  * Contains array to be plotted. The array must have been declared as
  * PLFLT a[nx][ny].  See following note on fortran-style arrays.
- * 
+ *
  * 	PLINT nx, ny
- * 
+ *
  * Dimension of array "a".
- * 
+ *
  * 	char &(defined[0][0])
- * 
+ *
  * Contains array of flags, 1 = data is valid, 0 = data is not valid.
  * This array determines which sections of the data is to be plotted.
  * This argument can be NULL if all the values are valid.  Must have been
  * declared as char defined[nx][ny].
- * 
+ *
  * 	PLFLT xmin, xmax, ymin, ymax
- * 
+ *
  * Defines the "grid" coordinates.  The data a[0][0] has a position of
  * (xmin,ymin).
- * 
+ *
  * 	void (*mapform)()
- * 
+ *
  * Transformation from `grid' coordinates to world coordinates.  This
  * pointer to a function can be NULL in which case the grid coordinates
  * are the same as the world coordinates.
- * 
+ *
  * 	PLFLT shade_min, shade_max
- * 
+ *
  * Defines the interval to be shaded. If shade_max <= shade_min, plshade
  * does nothing.
- * 
+ *
  *	PLINT sh_cmap, PLFLT sh_color, PLINT sh_width
- * 
+ *
  * Defines color map, color map index, and width used by the fill pattern.
- * 
+ *
  * 	PLINT min_color, min_width, max_color, max_width
- * 
+ *
  * Defines pen color, width used by the boundary of shaded region. The min
  * values are used for the shade_min boundary, and the max values are used
  * on the shade_max boundary.  Set color and width to zero for no plotted
  * boundaries.
- * 
+ *
  * 	void (*fill)()
- * 
+ *
  * Routine used to fill the region.  Use plfill.  Future version of plplot
  * may have other fill routines.
- * 
+ *
  * 	PLINT rectangular
- * 
+ *
  * Flag. Set to 1 if rectangles map to rectangles after (*mapform)() else
  * set to zero. If rectangular is set to 1, plshade tries to save time by
  * filling large rectangles.  This optimization fails if (*mapform)()
  * distorts the shape of rectangles.  For example a plot in polor
  * coordinates has to have rectangular set to zero.
- * 
+ *
  * Example mapform's:
- * 
+ *
  * Grid to world coordinate transformation.
  * This example goes from a r-theta to x-y for a polar plot.
  *
@@ -93,10 +104,10 @@
  * 	    r = x[i];
  * 	    theta = y[i];
  * 	    x[i] = r*cos(theta);
- * 	    y[i] = r*sin(theta);	
+ * 	    y[i] = r*sin(theta);
  * 	}
  * }
- * 
+ *
  * Grid was in cm, convert to world coordinates in inches.
  * Expands in x direction.
  *
@@ -132,30 +143,36 @@ static int min_pts[4], max_pts[4];
 static PLINT pen_col_min, pen_col_max;
 static PLINT pen_wd_min, pen_wd_max;
 static PLFLT int_val;
+
 /* Function prototypes */
 
-static void 
-set_cond(register int *cond, register PLFLT *a,
-	 register const char *defined, register PLINT n);
+static void
+set_cond(register int *cond, register PLFLT *a, register PLINT n);
 
-static int 
+static int
 find_interval(PLFLT a0, PLFLT a1, PLINT c0, PLINT c1, PLFLT *x);
 
-static void 
-poly(void (*fill) (PLINT, PLFLT *, PLFLT *),
+static void
+selected_polygon(void (*fill) (PLINT, PLFLT *, PLFLT *),
+     PLINT (*defined) (PLFLT, PLFLT),
      PLFLT *x, PLFLT *y, PLINT v1, PLINT v2, PLINT v3, PLINT v4);
 
-static void 
+static void
+exfill(void (*fill) (PLINT, PLFLT *, PLFLT *),
+       PLINT (*defined) (PLFLT, PLFLT),
+       int n, PLFLT *x, PLFLT *y);
+
+static void
 big_recl(int *cond_code, register int ny, int dx, int dy,
 	 int *ix, int *iy);
 
-static void 
+static void
 draw_boundary(PLINT slope, PLFLT *x, PLFLT *y);
 
-static PLINT 
+static PLINT
 plctest(PLFLT *x, PLFLT level);
 
-static PLINT 
+static PLINT
 plctestez(PLFLT *a, PLINT nx, PLINT ny, PLINT ix,
 	  PLINT iy, PLFLT level);
 
@@ -163,9 +180,10 @@ static void
 plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	PLPointer f2eval_data,
 	PLFLT (*c2eval) (PLINT, PLINT, PLPointer),
-	PLPointer c2eval_data, 
-	const char *defined, PLFLT missing_min, PLFLT missing_max,
-	PLINT nx, PLINT ny, 
+	PLPointer c2eval_data,
+	PLINT (*defined) (PLFLT, PLFLT),
+	PLFLT missing_min, PLFLT missing_max,
+	PLINT nx, PLINT ny,
 	PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
 	PLFLT shade_min, PLFLT shade_max,
 	PLINT sh_cmap, PLFLT sh_color, PLINT sh_width,
@@ -176,6 +194,86 @@ plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	PLPointer pltr_data);
 
 /*----------------------------------------------------------------------*\
+ * plshades()
+ *
+ * Shade regions via a series of calls to plshade.
+ * All arguments are the same as plshade except the following:
+ * clevel is a pointer to an array of values representing
+ * the shade edge values, nlevel-1 is
+ * the number of different shades, (nlevel is the number of shade edges),
+ * fill_width is the pattern fill width, and cont_color and cont_width
+ * are the color and width of the contour drawn at each shade edge.
+ * (if cont_color <= 0 or cont_width <=0, no such contours are drawn).
+\*----------------------------------------------------------------------*/
+
+void c_plshades( PLFLT **a, PLINT nx, PLINT ny, PLINT (*defined) (PLFLT, PLFLT),
+		PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
+		PLFLT *clevel, PLINT nlevel, PLINT fill_width,
+		PLINT cont_color, PLINT cont_width,
+		void (*fill) (PLINT, PLFLT *, PLFLT *), PLINT rectangular,
+		void (*pltr) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer),
+		PLPointer pltr_data )
+{
+   PLFLT shade_min, shade_max, shade_color;
+   PLINT i, init_color, init_width;
+
+   for (i = 0; i < nlevel-1; i++) {
+      shade_min = clevel[i];
+      shade_max = clevel[i+1];
+      shade_color = i / (PLFLT) (nlevel-2);
+      /* The constants in order mean
+       * (1) color map1,
+       * (0, 0, 0, 0) all edge effects will be done with plcont rather
+       * than the normal plshade drawing which gets partially blocked
+       * when sequential shading is done as in the present case */
+
+      plshade(a, nx, ny, defined, xmin, xmax, ymin, ymax,
+	      shade_min, shade_max,
+	      1, shade_color, fill_width,
+	      0, 0, 0, 0,
+	      fill, rectangular, pltr, pltr_data);
+   }
+   if(cont_color > 0 && cont_width > 0) {
+      init_color = plsc->icol0;
+      init_width = plsc->width;
+      plcol0(cont_color);
+      plwid(cont_width);
+      if(pltr && pltr_data) {
+	 plcont(a, nx, ny, 1, nx, 1, ny, clevel, nlevel, pltr, pltr_data);
+      }
+      else {
+	 /* For this case use the same interpretation that occurs internally
+	  * for plshade.  That is set up x and y grids that map from the
+	  * index ranges to xmin, xmax, ymin, ymax, and use those grids
+	  * for the plcont call.
+	  */
+	 PLcGrid  cgrid1;
+	 PLFLT *x, *y;
+	 cgrid1.nx = nx;
+	 cgrid1.ny = ny;
+	 x = (PLFLT *) malloc(nx * sizeof(PLFLT));
+	 if (x == NULL)
+	   plexit("plshades: Out of memory for x");
+	 cgrid1.xg = x;
+	 for (i = 0; i < nx; i++)
+	   cgrid1.xg[i] = xmin + (xmax - xmin)*(float)i/(float)(nx-1);
+	 y = (PLFLT *) malloc(ny * sizeof(PLFLT));
+	 if (y == NULL)
+	   plexit("plshades: Out of memory for y");
+	 cgrid1.yg = y;
+	 for (i = 0; i < ny; i++)
+	    cgrid1.yg[i] = ymin + (ymax - ymin)*(float)i/(float)(ny-1);
+	 plcont(a, nx, ny, 1, nx, 1, ny, clevel, nlevel,
+		pltr1, (void *) &cgrid1);
+	 free(x);
+	 free(y);
+      }
+      plcol0(init_color);
+      plwid(init_width);
+   }
+}
+
+/*----------------------------------------------------------------------*\
  * plshade()
  *
  * Shade region.
@@ -183,32 +281,30 @@ plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
  * via a (PLFLT **), and is column-dominant (normal C ordering).
 \*----------------------------------------------------------------------*/
 
-void 
-c_plshade(PLFLT **a, PLINT nx, PLINT ny, const char **defined,
-	  PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
-	  PLFLT shade_min, PLFLT shade_max,
-	  PLINT sh_cmap, PLFLT sh_color, PLINT sh_width,
-	  PLINT min_color, PLINT min_width,
-	  PLINT max_color, PLINT max_width,
-	  void (*fill) (PLINT, PLFLT *, PLFLT *), PLINT rectangular,
-	  void (*pltr) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer),
-	  PLPointer pltr_data)
+void c_plshade( PLFLT **a, PLINT nx, PLINT ny, PLINT (*defined) (PLFLT, PLFLT),
+                 PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
+                 PLFLT shade_min, PLFLT shade_max,
+                 PLINT sh_cmap, PLFLT sh_color, PLINT sh_width,
+                 PLINT min_color, PLINT min_width,
+                 PLINT max_color, PLINT max_width,
+                 void (*fill) (PLINT, PLFLT *, PLFLT *), PLINT rectangular,
+                 void (*pltr) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer),
+                 PLPointer pltr_data )
 {
     PLfGrid2 grid;
-
-    (void) defined;
 
     grid.f = a;
     grid.nx = nx;
     grid.ny = ny;
 
-    plfshade(plf2eval2, (PLPointer) &grid,
-	     NULL, NULL,
+    plshade_int( plf2eval2, (PLPointer) &grid,
+                 NULL, NULL,
 /*	     plc2eval, (PLPointer) &cgrid,*/
-	     nx, ny, xmin, xmax, ymin, ymax, shade_min, shade_max,
-	     sh_cmap, sh_color, sh_width,
-	     min_color, min_width, max_color, max_width,
-	     fill, rectangular, pltr, pltr_data);
+                 defined, MISSING_MIN_DEF, MISSING_MAX_DEF, nx, ny, xmin,
+                 xmax, ymin, ymax, shade_min, shade_max,
+                 sh_cmap, sh_color, sh_width,
+                 min_color, min_width, max_color, max_width,
+                 fill, rectangular, pltr, pltr_data );
 }
 
 /*----------------------------------------------------------------------*\
@@ -219,16 +315,15 @@ c_plshade(PLFLT **a, PLINT nx, PLINT ny, const char **defined,
  * via a (PLFLT *), and is column-dominant (normal C ordering).
 \*----------------------------------------------------------------------*/
 
-void 
-plshade1(PLFLT *a, PLINT nx, PLINT ny, const char *defined,
-	 PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
-	 PLFLT shade_min, PLFLT shade_max,
-	 PLINT sh_cmap, PLFLT sh_color, PLINT sh_width,
-	 PLINT min_color, PLINT min_width,
-	 PLINT max_color, PLINT max_width,
-	 void (*fill) (PLINT, PLFLT *, PLFLT *), PLINT rectangular,
-	 void (*pltr) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer),
-	 PLPointer pltr_data)
+void c_plshade1( PLFLT *a, PLINT nx, PLINT ny, PLINT (*defined) (PLFLT, PLFLT),
+                 PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
+                 PLFLT shade_min, PLFLT shade_max,
+                 PLINT sh_cmap, PLFLT sh_color, PLINT sh_width,
+                 PLINT min_color, PLINT min_width,
+                 PLINT max_color, PLINT max_width,
+                 void (*fill) (PLINT, PLFLT *, PLFLT *), PLINT rectangular,
+                 void (*pltr) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer),
+                 PLPointer pltr_data )
 {
     PLfGrid grid;
 
@@ -236,29 +331,29 @@ plshade1(PLFLT *a, PLINT nx, PLINT ny, const char *defined,
     grid.nx = nx;
     grid.ny = ny;
 
-    plshade_int(plf2eval, (PLPointer) &grid,
-	     NULL, NULL,
+    plshade_int( plf2eval, (PLPointer) &grid,
+                 NULL, NULL,
 /*	     plc2eval, (PLPointer) &cgrid,*/
-	     defined, MISSING_MIN_DEF, MISSING_MAX_DEF, nx, ny, xmin, 
-	     xmax, ymin, ymax, shade_min, shade_max,
-	     sh_cmap, sh_color, sh_width,
-	     min_color, min_width, max_color, max_width,
-	     fill, rectangular, pltr, pltr_data);
+                 defined, MISSING_MIN_DEF, MISSING_MAX_DEF, nx, ny, xmin,
+                 xmax, ymin, ymax, shade_min, shade_max,
+                 sh_cmap, sh_color, sh_width,
+                 min_color, min_width, max_color, max_width,
+                 fill, rectangular, pltr, pltr_data );
 }
 
 /*----------------------------------------------------------------------*\
  * plfshade()
  *
- * Shade region.  
+ * Shade region.
  * Array values are determined by the input function and the passed data.
 \*----------------------------------------------------------------------*/
 
-void 
+void
 plfshade(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	 PLPointer f2eval_data,
 	 PLFLT (*c2eval) (PLINT, PLINT, PLPointer),
 	 PLPointer c2eval_data,
-	 PLINT nx, PLINT ny, 
+	 PLINT nx, PLINT ny,
 	 PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
 	 PLFLT shade_min, PLFLT shade_max,
 	 PLINT sh_cmap, PLFLT sh_color, PLINT sh_width,
@@ -268,7 +363,7 @@ plfshade(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	 void (*pltr) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer),
 	 PLPointer pltr_data)
 {
-    plshade_int(f2eval,  f2eval_data, c2eval, c2eval_data, 
+    plshade_int(f2eval,  f2eval_data, c2eval, c2eval_data,
 	 NULL, MISSING_MIN_DEF, MISSING_MAX_DEF,
 	 nx, ny, xmin, xmax, ymin, ymax,
 	 shade_min, shade_max, sh_cmap, sh_color, sh_width,
@@ -320,9 +415,10 @@ static void
 plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	PLPointer f2eval_data,
 	PLFLT (*c2eval) (PLINT, PLINT, PLPointer),
-	PLPointer c2eval_data, 
-	const char *defined, PLFLT missing_min, PLFLT missing_max,
-	PLINT nx, PLINT ny, 
+	PLPointer c2eval_data,
+	PLINT (*defined) (PLFLT, PLFLT),
+	PLFLT missing_min, PLFLT missing_max,
+	PLINT nx, PLINT ny,
 	PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax,
 	PLFLT shade_min, PLFLT shade_max,
 	PLINT sh_cmap, PLFLT sh_color, PLINT sh_width,
@@ -333,15 +429,16 @@ plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	PLPointer pltr_data)
 {
 
-    PLINT init_width, n, slope=0, ix, iy;
+    PLINT init_width, n, slope = 0, ix, iy;
     int count, i, j, nxny;
     PLFLT *a, *a0, *a1, dx, dy;
     PLFLT x[8], y[8], xp[2], tx, ty;
-    char *new_defined;
     int *c, *c0, *c1;
 
-    (void) c2eval;			/* not yet implemented */
-    (void) c2eval_data;			/* not yet implemented */
+    (void) c2eval;			/* pmr: make it used */
+    (void) c2eval_data;
+    (void) missing_min;
+    (void) missing_max;
 
     if (plsc->level < 3) {
 	plabort("plfshade: window must be set up first");
@@ -371,7 +468,7 @@ plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
     pen_wd_max = max_width;
 
     plstyl((PLINT) 0, NULL, NULL);
-    plwid(sh_width); 
+    plwid(sh_width);
     if (fill != NULL) {
         switch (sh_cmap) {
         case 0:
@@ -393,47 +490,22 @@ plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	return;
     }
 
-    for (ix = 0; ix < nx; ix++) 
-	for (iy = 0; iy < ny; iy++) 
+    for (ix = 0; ix < nx; ix++)
+	for (iy = 0; iy < ny; iy++)
 	    a[iy + ix*ny] = f2eval(ix, iy, f2eval_data);
 
     /* alloc space for condition codes */
 
     if ((c = (int *) malloc(nxny * sizeof(int))) == NULL) {
 	plabort("plfshade: unable to allocate memory for condition codes");
-	free((void *)a);
+	free(a);
 	return;
     }
 
     sh_min = shade_min;
     sh_max = shade_max;
 
-    /* setup new_defined */
-    if (defined == NULL && missing_max < missing_min) {
-	new_defined = NULL;
-    }
-    else {
-        if ((new_defined = (char *) malloc(nxny * sizeof(char))) == NULL) {
-	    plabort("plfshade: unable to allocate memory for condition codes");
-	    free((void *)c);
-	    free((void *)a);
-            return;
-	}
-	if (defined == NULL) {
-	    for (i = 0; i < nxny; i++) new_defined[i] = 1;
-	}
-	else {
-	    memcpy(new_defined, defined, nxny);
-	}
-	for (i = 0; i < nxny; i++) {
-	    if (new_defined[i] == 1 && a[i] >= missing_min &&
-		a[i] <= missing_max) new_defined[i] = 0;
-	}
-    }
-
-    /* Ignore defined array for now */
-
-    set_cond(c, a, new_defined, nxny);
+    set_cond(c, a, nxny);
     dx = (xmax - xmin) / (nx - 1);
     dy = (ymax - ymin) / (ny - 1);
     a0 = a;
@@ -459,7 +531,7 @@ plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	    /* Entire rectangle can be filled */
 
 	    if (count == 4 * OK) {
-		/* find bigest rectangle that fits */
+		/* find biggest rectangle that fits */
 		if (rectangular) {
 		    big_recl(c0 + iy, ny, nx - ix, ny - iy, &i, &j);
 		}
@@ -484,8 +556,8 @@ plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 			y[i] = ymin + y[i]*dy;
 		    }
 		}
-		if (fill)
-		    (*fill) ((PLINT) 4, x, y);
+		if (fill != NULL)
+		    exfill (fill, defined, (PLINT) 4, x, y);
 		iy += j - 1;
 		continue;
 	    }
@@ -552,79 +624,79 @@ plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	      case 020:
 	      case 002:
 	      case 022:
-		if (fill && n > 0)
-		    (*fill) (n, x, y);
+		if (fill != NULL && n > 0)
+		    exfill (fill, defined, n, x, y);
 		break;
 	      case 040:	/* 2 contour lines in box */
 	      case 004:
 		if (n != 6)
-		    (void) fprintf(stderr, "plfshade err n=%d !6", (int) n);
+		    fprintf(stderr, "plfshade err n=%d !6", (int) n);
 		if (slope == 1 && c0[iy] == OK) {
-		    if (fill)
-			(*fill) (n, x, y);
+		    if (fill != NULL)
+			exfill (fill, defined, n, x, y);
 		}
 		else if (slope == 1) {
-		    poly(fill, x, y, 0, 1, 2, -1);
-		    poly(fill, x, y, 3, 4, 5, -1);
+		    selected_polygon(fill, defined, x, y, 0, 1, 2, -1);
+		    selected_polygon(fill, defined, x, y, 3, 4, 5, -1);
 		}
 		else if (c0[iy + 1] == OK) {
-		    if (fill)
-			(*fill) (n, x, y);
+		    if (fill != NULL)
+			exfill (fill, defined, n, x, y);
 		}
 		else {
-		    poly(fill, x, y, 0, 1, 5, -1);
-		    poly(fill, x, y, 2, 3, 4, -1);
+		    selected_polygon(fill, defined, x, y, 0, 1, 5, -1);
+		    selected_polygon(fill, defined, x, y, 2, 3, 4, -1);
 		}
 		break;
 	      case 044:
 		if (n != 8)
-		    (void) fprintf(stderr, "plfshade err n=%d !8", (int) n);
+		    fprintf(stderr, "plfshade err n=%d !8", (int) n);
 		if (slope == 1) {
-		    poly(fill, x, y, 0, 1, 2, 3);
-		    poly(fill, x, y, 4, 5, 6, 7);
+		    selected_polygon(fill, defined, x, y, 0, 1, 2, 3);
+		    selected_polygon(fill, defined, x, y, 4, 5, 6, 7);
 		}
 		else {
-		    poly(fill, x, y, 0, 1, 6, 7);
-		    poly(fill, x, y, 2, 3, 4, 5);
+		    selected_polygon(fill, defined, x, y, 0, 1, 6, 7);
+		    selected_polygon(fill, defined, x, y, 2, 3, 4, 5);
 		}
 		break;
 	      case 024:
 	      case 042:
 		/* 3 contours */
 		if (n != 7)
-		    (void) fprintf(stderr, "plfshade err n=%d !7", (int) n);
+		    fprintf(stderr, "plfshade err n=%d !7", (int) n);
 
 		if ((c0[iy] == OK || c1[iy+1] == OK) && slope == 1) {
-		    if (fill)
-		        (*fill) (n, x, y);
+		    if (fill != NULL)
+		        exfill (fill, defined, n, x, y);
 		}
 		else if ((c0[iy+1] == OK || c1[iy] == OK) && slope == 0) {
-		    if (fill)
-		        (*fill) (n, x, y);
+		    if (fill !=NULL)
+		        exfill (fill, defined, n, x, y);
 		}
 
 		else if (c0[iy] == OK) {
-		    poly(fill, x, y, 0, 1, 6, -1);
-		    poly(fill, x, y, 2, 3, 4, 5);
+		    selected_polygon(fill, defined, x, y, 0, 1, 6, -1);
+		    selected_polygon(fill, defined, x, y, 2, 3, 4, 5);
 		}
 		else if (c0[iy+1] == OK) {
-		    poly(fill, x, y, 0, 1, 2, -1);
-		    poly(fill, x, y, 3, 4, 5, 6);
+		    selected_polygon(fill, defined, x, y, 0, 1, 2, -1);
+		    selected_polygon(fill, defined, x, y, 3, 4, 5, 6);
 		}
 		else if (c1[iy+1] == OK) {
-		    poly(fill, x, y, 0, 1, 5, 6);
-		    poly(fill, x, y, 2, 3, 4, -1);
+		    selected_polygon(fill, defined, x, y, 0, 1, 5, 6);
+		    selected_polygon(fill, defined, x, y, 2, 3, 4, -1);
 		}
 		else if (c1[iy] == OK) {
-		    poly(fill, x, y, 0, 1, 2, 3);
-		    poly(fill, x, y, 4, 5, 6, -1);
+		    selected_polygon(fill, defined, x, y, 0, 1, 2, 3);
+		    selected_polygon(fill, defined, x, y, 4, 5, 6, -1);
 		}
 		else {
-		    (void) fprintf(stderr, "plfshade err logic case 024:042\n");
+		    fprintf(stderr, "plfshade err logic case 024:042\n");
 		}
 		break;
 	      default:
-		(void) fprintf(stderr, "prog err switch\n");
+		fprintf(stderr, "prog err switch\n");
 		break;
 	    }
 	    draw_boundary(slope, x, y);
@@ -642,9 +714,8 @@ plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	c1 += ny;
     }
 
-    free((void *)c);
-    free((void *)a);
-    if (new_defined) free(new_defined);
+    free(c);
+    free(a);
     plwid(init_width);
 }
 
@@ -654,33 +725,17 @@ plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
  * Fills out condition code array.
 \*----------------------------------------------------------------------*/
 
-static void 
-set_cond(register int *cond, register PLFLT *a,
-	 register const char *defined, register PLINT n)
+static void
+set_cond(register int *cond, register PLFLT *a, register PLINT n)
 {
-    if (defined) {
-	while (n--) {
-	    if (*defined++ == 0)
-		*cond++ = UNDEF;
-	    else if (*a < sh_min)
-		*cond++ = NEG;
-	    else if (*a > sh_max)
-		*cond++ = POS;
-	    else
-		*cond++ = OK;
-	    a++;
-	}
-    }
-    else {
-	while (n--) {
-	    if (*a < sh_min)
-		*cond++ = NEG;
-	    else if (*a > sh_max)
-		*cond++ = POS;
-	    else
-		*cond++ = OK;
-	    a++;
-	}
+    while (n--) {
+        if (*a < sh_min)
+	    *cond++ = NEG;
+	else if (*a > sh_max)
+	    *cond++ = POS;
+	else
+	    *cond++ = OK;
+	a++;
     }
 }
 
@@ -689,13 +744,13 @@ set_cond(register int *cond, register PLFLT *a,
  *
  * Two points x(0) = a0, (condition code c0) x(1) = a1, (condition code c1)
  * return interval on the line that are shaded
- * 
+ *
  * returns 0 : no points to be shaded 1 : x[0] <= x < 1 is the interval 2 :
  * x[0] <= x <= x[1] < 1 interval to be shaded n_point, max_points,
- * min_points are incremented location of min/max_points are stored 
+ * min_points are incremented location of min/max_points are stored
 \*----------------------------------------------------------------------*/
 
-static int 
+static int
 find_interval(PLFLT a0, PLFLT a1, PLINT c0, PLINT c1, PLFLT *x)
 {
     register int n;
@@ -732,14 +787,15 @@ find_interval(PLFLT a0, PLFLT a1, PLINT c0, PLINT c1, PLFLT *x)
 }
 
 /*----------------------------------------------------------------------*\
- * poly()
+ * selected_polygon()
  *
  * Draws a polygon from points in x[] and y[].
- * Point selected by v1..v4 
+ * Point selected by v1..v4
 \*----------------------------------------------------------------------*/
 
-static void 
-poly(void (*fill) (PLINT, PLFLT *, PLFLT *),
+static void
+selected_polygon(void (*fill) (PLINT, PLFLT *, PLFLT *),
+     PLINT (*defined) (PLFLT, PLFLT),
      PLFLT *x, PLFLT *y, PLINT v1, PLINT v2, PLINT v3, PLINT v4)
 {
     register PLINT n = 0;
@@ -763,7 +819,98 @@ poly(void (*fill) (PLINT, PLFLT *, PLFLT *),
 	xx[n] = x[v4];
 	yy[n++] = y[v4];
     }
-    (*fill) (n, xx, yy);
+    exfill (fill, defined, n, xx, yy);
+}
+
+/*----------------------------------------------------------------------*\
+ * bisect()
+ *
+ * Find boundary recursively by bisection.
+ * (x1, y1) is in the defined region, while (x2, y2) in the undefined one.
+ * The result is returned in
+\*----------------------------------------------------------------------*/
+
+static void
+bisect(PLINT (*defined) (PLFLT, PLFLT), PLINT niter,
+       PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2, PLFLT* xb, PLFLT* yb)
+{
+    PLFLT xm;
+    PLFLT ym;
+
+    if (niter == 0) {
+        *xb = xx1;
+        *yb = yy1;
+        return;
+    }
+
+    xm = (xx1 + xx2) / 2;
+    ym = (yy1 + yy2) / 2;
+
+    if (defined (xm, ym))
+      bisect (defined, niter - 1, xm, ym, xx2, yy2, xb, yb);
+    else
+      bisect (defined, niter - 1, xx1, yy1, xm, ym, xb, yb);
+}
+
+/*----------------------------------------------------------------------*\
+ * exfill()
+ *
+ * Draws a polygon from points in x[] and y[] by taking into account
+ * eventual exclusions
+\*----------------------------------------------------------------------*/
+
+static void
+exfill(void (*fill) (PLINT, PLFLT *, PLFLT *),
+       PLINT (*defined) (PLFLT, PLFLT),
+       int n, PLFLT *x, PLFLT *y)
+{
+    if (defined == NULL)
+
+        (*fill) (n, x, y);
+
+    else {
+        PLFLT xx[16];
+	PLFLT yy[16];
+	PLFLT xb, yb;
+	PLINT count = 0;
+	PLINT is_inside = defined (x[n-1], y[n-1]);
+	PLINT i;
+
+        for (i = 0; i < n; i++) {
+
+	    if (defined(x[i], y[i])) {
+	        if (!is_inside) {
+		    if (i > 0)
+		        bisect (defined, 10,
+				x[i], y[i], x[i-1], y[i-1], &xb, &yb);
+		    else
+		        bisect (defined, 10,
+				x[i], y[i], x[n-1], y[n-1], &xb, &yb);
+		    xx[count] = xb;
+		    yy[count++] = yb;
+		}
+		xx[count] = x[i];
+		yy[count++] = y[i];
+		is_inside = 1;
+	    }
+	    else {
+	        if (is_inside) {
+		    if (i > 0)
+		        bisect (defined, 10,
+				x[i-1], y[i-1], x[i], y[i], &xb, &yb);
+		    else
+		        bisect (defined, 10,
+				x[n-1], y[n-1], x[i], y[i], &xb, &yb);
+		    xx[count] = xb;
+		    yy[count++] = yb;
+		    is_inside = 0;
+		}
+	    }
+	}
+
+	if (count)
+  	    (*fill) (count, xx, yy);
+    }
 }
 
 /*----------------------------------------------------------------------*\
@@ -792,7 +939,7 @@ poly(void (*fill) (PLINT, PLFLT *, PLFLT *),
 #define RATIO 3
 #define COND(x,y) cond_code[x*ny + y]
 
-static void 
+static void
 big_recl(int *cond_code, register int ny, int dx, int dy,
 	 int *ix, int *iy)
 {
@@ -869,7 +1016,7 @@ big_recl(int *cond_code, register int ny, int dx, int dy,
  * Draw boundaries of contour regions based on min_pts[], and max_pts[].
 \*----------------------------------------------------------------------*/
 
-static void 
+static void
 draw_boundary(PLINT slope, PLFLT *x, PLFLT *y)
 {
     int i;
@@ -944,13 +1091,13 @@ draw_boundary(PLINT slope, PLFLT *x, PLFLT *y)
 #define NEGATIVE_SLOPE (PLINT) 0
 #define RATIO_SQ 6.0
 
-static PLINT 
+static PLINT
 plctest(PLFLT *x, PLFLT level)
 {
     int i, j;
     double t[4], sorted[4], temp;
 
-    (void) level;
+    (void) level;			/* pmr: make it used */
 
     sorted[0] = t[0] = X(1,1);
     sorted[1] = t[1] = X(2,2);
@@ -976,7 +1123,7 @@ plctest(PLFLT *x, PLFLT level)
 	    if (t[i] < temp) return i/2;
 	}
     }
-	
+
     /* find max contour */
     temp = int_val * floor(sorted[3]/int_val);
     if (temp > sorted[2]) {
@@ -998,7 +1145,7 @@ plctest(PLFLT *x, PLFLT level)
  * test location a[ix][iy] (lower left corner)
 \*----------------------------------------------------------------------*/
 
-static PLINT 
+static PLINT
 plctestez(PLFLT *a, PLINT nx, PLINT ny, PLINT ix,
 	  PLINT iy, PLFLT level)
 {

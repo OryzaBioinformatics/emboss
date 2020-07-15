@@ -1,13 +1,4 @@
-/* Added to help with debugging support.  Includes macros as well as a
- * static function pldebug, which has a stdarg (vargarg) based argument list.
- * Debugging output is only enabled if DEBUG is defined prior to inclusion of
- * this file and the debug stream variable is set (can be set by -debug command
- * line option).
- *
-*/
-
-/*
-    pldebug.h
+/* $Id: pldebug.h,v 1.2 2007/05/08 09:09:37 rice Exp $
 
     Copyright (C) 1995 by Maurice J. LeBrun
 
@@ -25,16 +16,15 @@
 
 #ifndef __PLDEBUG_H__
 #define __PLDEBUG_H__
-#undef DEBUG
-#include <stdarg.h>
 
+#include <stdarg.h>
 
 /* For the truly desperate debugging task */
 
 #ifdef DEBUG_ENTER
 #define dbug_enter(a) \
 if (plsc->debug) \
-    (void) fprintf(stderr, "Entered %s (%s)\n", a, __FILE__);
+    fprintf(stderr, "    entered %s (%s, line %d)\n", a, __FILE__, __LINE__);
 
 #else
 #define dbug_enter(a)
@@ -42,11 +32,62 @@ if (plsc->debug) \
 
 /* If we're using a debugging malloc, include the header file here */
 
-/*
 #ifdef DEBUGGING_MALLOC
 #include <malloc.h>
 #endif
-*/
 
+/*--------------------------------------------------------------------------*\
+ * pldebug()
+ *
+ * Included into every plplot source file to control debugging output.  To
+ * enable printing of debugging output, you must #define DEBUG before
+ * including plplotP.h or specify -DDEBUG in the compile line, for each file
+ * that you want to have debug output enabled.  When running the program you
+ * must in addition specify -debug.  This allows debugging output to tailored
+ * to many different circumstances but otherwise be fairly unobtrusive. 
+ *
+ * Note, any file that actually uses pldebug() must also define NEED_PLDEBUG
+ * before the plplotP.h include.  This is to eliminate warnings caused by
+ * those files in which this is defined but never referenced.  All this could
+ * be much nicer if CPP had the abilities of m4, sigh.. 
+ *
+ * Syntax:
+ *	pldebug(label, format [, arg1, arg2, ...] );
+ *
+ * The label is typically the calling function name.
+\*--------------------------------------------------------------------------*/
+
+#ifdef NEED_PLDEBUG
+static void
+pldebug( const char *label, ... )
+{
+#ifdef DEBUG
+    va_list args;
+    char *fmt;
+
+    if (plsc->debug) {
+	if (plsc->termin)
+	    c_pltext();
+	va_start(args, label);
+
+    /* print out identifying tag */
+
+	fprintf(stderr, "%s: ", label);
+
+    /* print out remainder of message */
+    /* Need to get fmt BEFORE it's used in the vfprintf */
+
+	fmt = (char *) va_arg(args, char *);
+	vfprintf(stderr, fmt, args);
+
+	va_end(args);
+	if (plsc->termin)
+	    c_plgra();
+    }
+#else
+    (void) label; 			/* pmr: make it used */
+#endif	/* DEBUG */
+}
+#endif	/* NEED_PLDEBUG */
 
 #endif	/* __PLDEBUG_H__ */

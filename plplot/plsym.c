@@ -1,13 +1,40 @@
-/*	plsym.c
+/* $Id: plsym.c,v 1.5 2007/05/08 09:09:37 rice Exp $
 
 	Point, symbol, and string plotting routines.
 	Also font management code.  See the description of plLibOpen() for
 	the search path used in finding the font files.
+
+   Copyright (C) 1992  Geoffrey Furnish 
+   Copyright (C) 1993, 1994, 1995, 2000, 2001, 2002  Maurice LeBrun
+   Copyright (C) 2000, 2002, 2004, 2005  Alan W. Irwin
+   Copyright (C) 2001, 2003, 2004  Rafael Laboissiere
+   Copyright (C) 2002  Vincent Darley
+   Copyright (C) 2004  Andrew Ross
+
+   This file is part of PLplot.
+
+   PLplot is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Library Public License as published
+   by the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   PLplot is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with PLplot; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
+#ifndef __PLSYM_H__
+#define __PLSYM_H__
 
 #include "plplotP.h"
 #include <float.h>
 #include <ctype.h>
+#include "plhershey-unicode.h"
 
 /* Declarations */
 
@@ -18,16 +45,17 @@ static short int numberfonts, numberchars;
 static short int indxleng;
 
 static short fontloaded = 0;
-static PLINT font = 1;		/* current font */
+/* moved to plstr.h, plsc->cfont  static PLINT font = 1;  current font */
 
 #define PLMAXSTR	300
 #define STLEN		250
 
-static char font_types[] = "nris";
-static char greek[] = "ABGDEZYHIKLMNCOPRSTUFXQWabgdezyhiklmncoprstufxqw";
+static const char font_types[] = "nris";
 
 static short symbol_buffer[PLMAXSTR];
 static signed char xygrid[STLEN];
+
+int hershey2unicode ( int in );
 
 /* Static function prototypes */
 
@@ -35,8 +63,7 @@ static void
 pldeco(short int **sym, PLINT *length, const char *text);
 
 static void
-plchar(signed char *localxygrid, PLFLT *xform,
-       PLINT base, PLINT oline, PLINT uline,
+plchar(signed char *xygrid, PLFLT *xform, PLINT base, PLINT oline, PLINT uline,
        PLINT refx, PLINT refy, PLFLT scale, PLFLT xpmm, PLFLT ypmm,
        PLFLT *p_xorg, PLFLT *p_yorg, PLFLT *p_width);
 
@@ -46,47 +73,8 @@ plcvec(PLINT ch, signed char **xygr);
 static void
 plhrsh(PLINT ch, PLINT x, PLINT y);
 
-
-/*--------------------------------------------------------------------------*\
- * pldebug()
- *
- * Included into every plplot source file to control debugging output.  To
- * enable printing of debugging output, you must #define DEBUG before
- * including plplotP.h or specify -DDEBUG in the compile line.  When running
- * the program you must in addition specify -debug.  This allows debugging
- * output to be available when asked for.
- *
- * Syntax:
- *	pldebug(function_name, format, arg1, arg2...);
-\*--------------------------------------------------------------------------*/
-
 static void
-pldebug( const char *fname, ... )
-{
-#ifdef DEBUG
-    va_list args;
-
-    if (plsc->debug) {
-	c_pltext();
-	va_start(args, fname);
-
-    /* print out name of caller and source file */
-
-	(void) fprintf(stderr, "%s (%s): ", fname, __FILE__);
-
-    /* print out remainder of message */
-
-	(void) vfprintf(stderr, (char *) va_arg(args, char *), args);
-	va_end(args);
-	c_plgra();
-    }
-#else
-    (void) fname;
-#endif
-}
-
-
-
+plhrsh2(PLINT ch, PLINT x, PLINT y);
 
 /*--------------------------------------------------------------------------*\
  * void plsym()
@@ -109,7 +97,9 @@ c_plsym(PLINT n, PLFLT *x, PLFLT *y, PLINT code)
     }
 
     for (i = 0; i < n; i++)
-	plhrsh(code, plP_wcpcx(x[i]), plP_wcpcy(y[i]));
+      {
+        plhrsh(code, plP_wcpcx(x[i]), plP_wcpcy(y[i]));
+      }
 }
 
 /*--------------------------------------------------------------------------*\
@@ -128,7 +118,7 @@ c_plsym(PLINT n, PLFLT *x, PLFLT *y, PLINT code)
 void
 c_plpoin(PLINT n, PLFLT *x, PLFLT *y, PLINT code)
 {
-    PLINT i, sym, ifont = font;
+    PLINT i, sym, ifont = plsc->cfont;
 
     if (plsc->level < 3) {
 	plabort("plpoin: Please set up window first");
@@ -162,8 +152,9 @@ c_plpoin(PLINT n, PLFLT *x, PLFLT *y, PLINT code)
 void
 c_plpoin3(PLINT n, PLFLT *x, PLFLT *y, PLFLT *z, PLINT code)
 {
-    PLINT i, sym, ifont = font;
+    PLINT i, sym, ifont = plsc->cfont;
     PLFLT u, v;
+    PLFLT xmin, xmax, ymin, ymax, zmin, zmax, zscale;
 
     if (plsc->level < 3) {
 	plabort("plpoin3: Please set up window first");
@@ -174,12 +165,19 @@ c_plpoin3(PLINT n, PLFLT *x, PLFLT *y, PLFLT *z, PLINT code)
 	return;
     }
 
+    plP_gdom(&xmin, &xmax, &ymin, &ymax);
+    plP_grange(&zscale, &zmin, &zmax);
+
     if (code == -1) {
 	for (i = 0; i < n; i++) {
+ 	  if(x[i] >= xmin && x[i] <= xmax &&
+ 	     y[i] >= ymin && y[i] <= ymax &&
+	     z[i] >= zmin && z[i] <= zmax) {
 	    u = plP_wcpcx(plP_w3wcx( x[i], y[i], z[i] ));
 	    v = plP_wcpcy(plP_w3wcy( x[i], y[i], z[i] ));
 	    plP_movphy(u,v);
 	    plP_draphy(u,v);
+	  }
 	}
     }
     else {
@@ -188,31 +186,133 @@ c_plpoin3(PLINT n, PLFLT *x, PLFLT *y, PLFLT *z, PLINT code)
 	sym = *(fntlkup + (ifont - 1) * numberchars + code);
 
 	for( i=0; i < n; i++ ) {
+ 	  if(x[i] >= xmin && x[i] <= xmax &&
+ 	     y[i] >= ymin && y[i] <= ymax &&
+	     z[i] >= zmin && z[i] <= zmax) {
 	    u = plP_wcpcx(plP_w3wcx( x[i], y[i], z[i] ));
 	    v = plP_wcpcy(plP_w3wcy( x[i], y[i], z[i] ));
 	    plhrsh(sym, u, v);
+	  }
 	}
     }
     return;
 }
 
 /*--------------------------------------------------------------------------*\
- * void plhrsh()
+ * static void plhrsh(PLINT ch, PLINT x, PLINT y)
+ *    PLINT ch - hershey code to plot
+ *    PLINT x - device-world x coordinate of hershey character
+ *    PLINT y - device-world y coordinate of hershey character
  *
- * Writes the Hershey symbol "ch" centred at the physical coordinate (x,y).
+ *  Writes the Hershey symbol "ch" centred at the physical coordinate (x,y).
+ *  This function is now just a "spoof" front end to the old plhersh,
+ *  which has now been renamed to plhrsh2(). All this function does is
+ *  decide whether or not we should render natively as unicode, and then
+ *  convert between hershey and unicode.
+ *
+ *  If the function KNOWS there isn't a unicode equivalent, then it will
+ *  try to render it as a hershey font. Understandably, this might make
+ *  testing out the unicode functions a little tricky, so if you want
+ *  to disable this behaviour, recompile with TEST_FOR_MISSING_GLYPHS
+ *  defined.
 \*--------------------------------------------------------------------------*/
 
 static void
 plhrsh(PLINT ch, PLINT x, PLINT y)
 {
+EscText args;
+int idx;
+PLUNICODE unicode_char;
+
+  /* Check to see if the device understands unicode and wants to draw
+   * symbols.
+   */
+  if ((plsc->dev_text)&&(plsc->dev_unicode)&&(!plsc->dev_hrshsym))
+    {
+      idx=plhershey2unicode(ch); /* Get the index in the lookup table */
+      unicode_char=hershey_to_unicode_lookup_table[idx].Unicode;
+
+    /*
+     *  Test to see if there is a defined unicode glyph for this hershey code;
+     *  if there isn't, then we pass the glyph to plhersh, and have it
+     *  rendered the old fashioned way.
+     *  Otherwise, we let the driver render it as unicode
+     */
+
+      if ((unicode_char==0)||(idx==-1))
+        {
+#ifndef TEST_FOR_MISSING_GLYPHS
+          plhrsh2(ch, x, y);
+#endif
+        }
+      else
+        {
+	  PLUNICODE  plhrsh_unicode_buffer[3], fci;
+	  PLFLT xform[] = {1.0, 0.0, 0.0, 1.0};
+	  unsigned char esc;
+          args.unicode_char=unicode_char;
+          args.font_face=hershey_to_unicode_lookup_table[idx].Font;
+          args.base = 1;
+          args.just = .5;
+          args.xform = 0;
+          args.x = x;
+          args.y = y;
+	  args.string=NULL;  /* Since we are using unicode, we want this to be NULL */
+	  /* "array method" */
+	  plgesc(&esc);
+	  args.xform = xform;
+	  args.unicode_array_len=2;
+	  /* Temporary Symbol font for every character. */
+	  plgfci(&fci);
+	  plP_hex2fci(PL_FCI_SYMBOL, PL_FCI_FAMILY, &fci);
+	  plhrsh_unicode_buffer[0] = fci;
+	  plhrsh_unicode_buffer[1] = unicode_char;
+	  /* watch out for escape character and unescape it by appending
+	   * one extra. */
+	  if (unicode_char == esc) {
+	     args.unicode_array_len=3;
+	     plhrsh_unicode_buffer[2] = unicode_char;
+	  }
+
+	  /* No need to change font back since only one character. */
+	  args.unicode_array=&plhrsh_unicode_buffer[0];   /* Get address of the unicode buffer (even though it is currently static) */
+
+          plsc->original_chrht=plsc->chrht;
+          plsc->original_chrdef=plsc->chrdef;
+          plsc->chrht=plsc->symht;
+          plsc->chrdef=plsc->symdef;
+
+          plP_esc(PLESC_HAS_TEXT, &args);
+
+          plsc->chrht=plsc->original_chrht;
+          plsc->chrdef=plsc->original_chrdef;
+        }
+
+    }
+  else
+    {
+       plhrsh2(ch, x, y);
+    }
+}
+
+/*--------------------------------------------------------------------------*\
+ * void plhrsh2()
+ *
+ * Writes the Hershey symbol "ch" centred at the physical coordinate (x,y).
+\*--------------------------------------------------------------------------*/
+
+static void
+plhrsh2(PLINT ch, PLINT x, PLINT y)
+{
     PLINT cx, cy, k, penup, style;
-    signed char *localxygrid;
+    signed char *vxygrid = 0;
     PLFLT scale, xscale, yscale;
+    PLINT llx[STLEN], lly[STLEN], l = 0;
 
     penup = 1;
     scale = 0.05 * plsc->symht;
 
-    if ( ! plcvec(ch, &localxygrid)) {
+    if ( ! plcvec(ch, &vxygrid)) {
 	plP_movphy(x, y);
 	return;
     }
@@ -229,127 +329,35 @@ plhrsh(PLINT ch, PLINT x, PLINT y)
 
     k = 4;
     for (;;) {
-	cx = localxygrid[k++];
-	cy = localxygrid[k++];
+	cx = vxygrid[k++];
+	cy = vxygrid[k++];
 	if (cx == 64 && cy == 64) {
-	    plP_movphy(x, y);
-	    plsc->nms = style;
-	    return;
+	  if (l) {
+	    plP_draphy_poly(llx, lly, l);
+	    l = 0;
+	  }
+	  plP_movphy(x, y);
+	  plsc->nms = style;
+	  return;
 	}
 	else if (cx == 64 && cy == 0)
 	    penup = 1;
 	else {
-	    if (penup != 0) {
-		plP_movphy(ROUND(x + xscale * cx), ROUND(y + yscale * cy));
-		penup = 0;
+	    if (penup == 1) {
+             if (l) {
+	       plP_draphy_poly(llx, lly, l);
+	       l = 0;
+	     }
+             llx[l] = ROUND(x+ xscale * cx);
+	     lly[l++] = ROUND(y + yscale * cy);
+             plP_movphy(llx[l-1], lly[l-1]);
+	     penup = 0;
 	    }
-	    else
-		plP_draphy(ROUND(x + xscale * cx), ROUND(y + yscale * cy));
+	    else {
+	      llx[l] = ROUND(x+ xscale * cx);
+	      lly[l++] = ROUND(y + yscale * cy);
+	    }
 	}
-    }
-}
-
-/*--------------------------------------------------------------------------*\
- * void plarrows()
- *
- * simple arrow plotter
- * copyright 1993 Wesley Ebisuzaki
- *
- * an arrow is defined by its location (x, y) and its direction (u, v)
- *
- * inputs:
- *   u[i], v[i]      arrow's horizontal and vertical projection
- *   x[i], y[i]      arrow's location (world coordinates)
- *   n               number of arrows to draw
- *   scale           > 0  scaling factor for arrows
- *                   0    default scaling factor
- *                   < 0  default scaling factor * (-scale)
- *   dx, dy          distance between arrows
- *                   used when calculating the default arrow scaling
- *                   so that arrows don't overlap
- *
-\*--------------------------------------------------------------------------*/
-
-#define SCALE0 2.0
-
-/* definition of original arrow: 2 line segments */
-
-static PLFLT arrow_x[4] = {0.5, -0.5, -0.27, -0.5};
-static PLFLT arrow_y[4] = {0.0, 0.0, 0.0, 0.20};
-
-void 
-plarrows(PLFLT *u, PLFLT *v, PLFLT *x, PLFLT *y, PLINT n,
-	 PLFLT scale, PLFLT dx, PLFLT dy) 
-{
-    PLFLT uu, vv;
-    PLINT i, j;
-    PLINT px0, py0, dpx, dpy;
-    PLINT a_x[4], a_y[4];
-    PLFLT max_u, max_v;
-    double t;
-
-    if (n <= 0) return;
-
-    if (scale <= 0.0) {
-
-    /* automatic scaling */
-    /* find max / min values of data */
-
-	max_u = u[0];
-	max_v = v[0];
-	for (i = 1; i < n; i++) {
-	    t = fabs((double) u[i]);
-	    max_u = t > max_u ? t : max_u;
-	    t = fabs((double) v[i]);
-	    max_v = t > max_v ? t : max_v;
-	}
-
-    /* measure distance in grid boxs */
-
-	max_u = max_u / fabs( (double) dx);
-	max_v = max_v / fabs( (double) dy);
-
-	t = (max_u > max_v ? max_u : max_v);
-	t = SCALE0 / t;
-	if (scale < 0) {
-	    scale = -scale * t;
-	}
-	else {
-	    scale = t;
-	}
-    }
-    pldebug("plarrows", "scale factor=%lf n=%d\n", scale,n);
-
-    for (i = 0; i < n; i++) {
-	uu = scale * u[i];
-	vv = scale * v[i];
-	if (uu == 0.0 && uu == 0.0) continue;
-
-    /* conversion to physical coordinates */
-
-	px0 = plP_wcpcx(x[i]);
-	py0 = plP_wcpcy(y[i]);
-
-	pldebug("plarrows", "%f %f %d %d\n",x[i],y[i],px0,py0);
-
-	dpx = plP_wcpcx(x[i] + 0.5*uu) - px0;
-	dpy = plP_wcpcy(y[i] + 0.5*vv) - py0;
-
-    /* transform arrow -> a */
-
-	for (j = 0; j < 4; j++) {
-	    a_x[j] = arrow_x[j] * dpx -
-		arrow_y[j] * dpy + px0;
-	    a_y[j] = arrow_x[j] * dpy +
-		arrow_y[j] * dpx + py0;
-	}
-
-    /* draw the arrow */
-
-	plP_movphy(a_x[0], a_y[0]);
-	plP_draphy(a_x[1], a_y[1]);
-	plP_movphy(a_x[2], a_y[2]);
-	plP_draphy(a_x[3], a_y[3]);
     }
 }
 
@@ -381,6 +389,8 @@ c_pllab(const char *xlabel, const char *ylabel, const char *tlabel)
  * side	String which is one of the following:
  *	B or b  :  Bottom of viewport
  *	T or t  :  Top of viewport
+ *	BV or bv : Bottom of viewport, vertical text
+ *	TV or tv : Top of viewport, vertical text
  *	L or l  :  Left of viewport
  *	R or r  :  Right of viewport
  *	LV or lv : Left of viewport, vertical text
@@ -406,9 +416,10 @@ c_plmtex(const char *side, PLFLT disp, PLFLT pos, PLFLT just,
 	 const char *text)
 {
     PLINT clpxmi, clpxma, clpymi, clpyma;
-    PLINT vert, refx, refy;
-    PLFLT xdv, ydv, xmm, ymm, shift, xformarr[4];
+    PLINT vert, refx, refy, x, y;
+    PLFLT xdv, ydv, xmm, ymm, refxmm, refymm, shift, xform[4];
     PLFLT chrdef, chrht;
+    PLFLT dispx, dispy;
 
     if (plsc->level < 2) {
 	plabort("plmtex: Please set up viewport first");
@@ -417,92 +428,124 @@ c_plmtex(const char *side, PLFLT disp, PLFLT pos, PLFLT just,
 
 /* Open clip limits to subpage limits */
 
-    plP_gclp(&clpxmi, &clpxma, &clpymi, &clpyma);
+    plP_gclp(&clpxmi, &clpxma, &clpymi, &clpyma); /* get and store current clip limits */
     plP_sclp(plsc->sppxmi, plsc->sppxma, plsc->sppymi, plsc->sppyma);
+
+    if (plP_stindex(side, "BV") != -1 || plP_stindex(side, "bv") != -1) {
+	vert = 1;
+	xdv  = plsc->vpdxmi + (plsc->vpdxma - plsc->vpdxmi) * pos;
+	ydv  = plsc->vpdymi;
+	dispx = 0;
+	dispy = -disp;
+    }
+    else if (plP_stindex(side, "TV") != -1 || plP_stindex(side, "tv") != -1) {
+	vert = 1;
+	xdv  = plsc->vpdxmi + (plsc->vpdxma - plsc->vpdxmi) * pos;
+	ydv  = plsc->vpdyma;
+	dispx = 0;
+	dispy = disp;
+    }
+    else if (plP_stsearch(side, 'b')) {
+	vert = 0;
+	xdv = plsc->vpdxmi + (plsc->vpdxma - plsc->vpdxmi) * pos;
+	ydv = plsc->vpdymi;
+	dispx = 0;
+	dispy = -disp;
+
+    } else if (plP_stsearch(side, 't')) {
+	vert = 0;
+	xdv = plsc->vpdxmi + (plsc->vpdxma - plsc->vpdxmi) * pos;
+	ydv = plsc->vpdyma;
+	dispx = 0;
+	dispy = disp;
+
+    } else if (plP_stindex(side, "LV") != -1 || plP_stindex(side, "lv") != -1) {
+	vert = 0;
+	xdv = plsc->vpdxmi;
+	ydv = plsc->vpdymi + (plsc->vpdyma - plsc->vpdymi) * pos;
+	dispx = -disp;
+	dispy = 0;
+
+    } else if (plP_stindex(side, "RV") != -1 || plP_stindex(side, "rv") != -1) {
+	vert = 0;
+	xdv = plsc->vpdxma;
+	ydv = plsc->vpdymi + (plsc->vpdyma - plsc->vpdymi) * pos;
+	dispx = disp;
+	dispy = 0;
+
+    } else if (plP_stsearch(side, 'l')) {
+	vert = 1;
+	xdv = plsc->vpdxmi;
+	ydv = plsc->vpdymi + (plsc->vpdyma - plsc->vpdymi) * pos;
+	dispx = -disp;
+	dispy = 0;
+
+    } else if (plP_stsearch(side, 'r')) {
+	vert = 1;
+	xdv = plsc->vpdxma;
+	ydv = plsc->vpdymi + (plsc->vpdyma - plsc->vpdymi) * pos;
+	dispx = disp;
+	dispy = 0;
+
+    } else {
+	plP_sclp(clpxmi, clpxma, clpymi, clpyma); /* restore initial clip limits */
+	return;
+    }
+
+/* Transformation matrix */
+
+    if (vert != 0) {
+	xform[0] = 0.0;
+	xform[1] = -1.0;
+	xform[2] = 1.0;
+	xform[3] = 0.0;
+    } else {
+	xform[0] = 1.0;
+	xform[1] = 0.0;
+	xform[2] = 0.0;
+	xform[3] = 1.0;
+    }
+
+/* Convert to physical units (mm) and compute shifts */
 
     plgchr(&chrdef, &chrht);
     shift = (just == 0.0) ? 0.0 : plstrl(text) * just;
 
-    if (plP_stsearch(side, 'b')) {
-	vert = 0;
-	xdv = plsc->vpdxmi + (plsc->vpdxma - plsc->vpdxmi) * pos;
-	ymm = plP_dcmmy(plsc->vpdymi) - disp * chrht;
-	refx = plP_dcpcx(xdv) - shift * plsc->xpmm;
-	refy = plP_mmpcy(ymm);
-    }
-    else if (plP_stsearch(side, 't')) {
-	vert = 0;
-	xdv = plsc->vpdxmi + (plsc->vpdxma - plsc->vpdxmi) * pos;
-	ymm = plP_dcmmy(plsc->vpdyma) + disp * chrht;
-	refx = plP_dcpcx(xdv) - shift * plsc->xpmm;
-	refy = plP_mmpcy(ymm);
-    }
-    else if (plP_stindex(side, "LV") != -1 || plP_stindex(side, "lv") != -1) {
-	vert = 0;
-	xmm = plP_dcmmx(plsc->vpdxmi) - disp * chrht - shift;
-	ydv = plsc->vpdymi + (plsc->vpdyma - plsc->vpdymi) * pos;
-	refx = plP_mmpcx(xmm);
-	refy = plP_dcpcy(ydv);
-    }
-    else if (plP_stindex(side, "RV") != -1 || plP_stindex(side, "rv") != -1) {
-	vert = 0;
-	xmm = plP_dcmmx(plsc->vpdxma) + disp * chrht - shift;
-	ydv = plsc->vpdymi + (plsc->vpdyma - plsc->vpdymi) * pos;
-	refx = plP_mmpcx(xmm);
-	refy = plP_dcpcy(ydv);
-    }
-    else if (plP_stsearch(side, 'l')) {
-	vert = 1;
-	xmm = plP_dcmmx(plsc->vpdxmi) - disp * chrht;
-	ydv = plsc->vpdymi + (plsc->vpdyma - plsc->vpdymi) * pos;
-	refx = plP_mmpcx(xmm);
-	refy = plP_dcpcy(ydv) - shift * plsc->ypmm;
-    }
-    else if (plP_stsearch(side, 'r')) {
-	vert = 1;
-	xmm = plP_dcmmx(plsc->vpdxma) + disp * chrht;
-	ydv = plsc->vpdymi + (plsc->vpdyma - plsc->vpdymi) * pos;
-	refx = plP_mmpcx(xmm);
-	refy = plP_dcpcy(ydv) - shift * plsc->ypmm;
-    }
-    else {
-	plP_sclp(clpxmi, clpxma, clpymi, clpyma);
-	return;
-    }
+    xmm = plP_dcmmx(xdv) + dispx * chrht;
+    ymm = plP_dcmmy(ydv) + dispy * chrht;
+    refxmm = xmm - shift * xform[0];
+    refymm = ymm - shift * xform[2];
 
-    if (vert != 0) {
-	xformarr[0] = 0.0;
-	xformarr[1] = -1.0;
-	xformarr[2] = 1.0;
-	xformarr[3] = 0.0;
-    }
-    else {
-	xformarr[0] = 1.0;
-	xformarr[1] = 0.0;
-	xformarr[2] = 0.0;
-	xformarr[3] = 1.0;
-    }
-    plstr(0, xformarr, refx, refy, text);
-    plP_sclp(clpxmi, clpxma, clpymi, clpyma);
+/* Convert to device units (pixels) and call text plotter */
+
+    x = plP_mmpcx(xmm);
+    y = plP_mmpcy(ymm);
+    refx = plP_mmpcx(refxmm);
+    refy = plP_mmpcy(refymm);
+
+    plP_text(0, just, xform, x, y, refx, refy, text);
+    plP_sclp(clpxmi, clpxma, clpymi, clpyma); /* restore clip limits */
 }
 
 /*--------------------------------------------------------------------------*\
  * void plptex()
  *
- * Prints out "text" at world cooordinate (x,y). The text may be
+ * Prints out "text" at world cooordinate (wx,wy). The text may be
  * at any angle "angle" relative to the horizontal. The parameter
  * "just" adjusts the horizontal justification of the string:
- *	just = 0.0 => left hand edge of string is at (x,y)
- *	just = 1.0 => right hand edge of string is at (x,y)
- *	just = 0.5 => center of string is at (x,y) etc.
+ *	just = 0.0 => left hand edge of string is at (wx,wy)
+ *	just = 1.0 => right hand edge of string is at (wx,wy)
+ *	just = 0.5 => center of string is at (wx,wy) etc.
 \*--------------------------------------------------------------------------*/
 
 void
-c_plptex(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy, PLFLT just, const char *text)
+c_plptex(PLFLT wx, PLFLT wy, PLFLT dx, PLFLT dy, PLFLT just, const char *text)
 {
-    PLINT refx, refy;
-    PLFLT shift, cc, ss;
-    PLFLT xformarr[4], diag;
+    PLINT x, y, refx, refy;
+    PLFLT xdv, ydv, xmm, ymm, refxmm, refymm, shift, cc, ss;
+    PLFLT xform[4], diag;
+    PLFLT chrdef, chrht;
+    PLFLT dispx, dispy;
 
     if (plsc->level < 3) {
 	plabort("plptex: Please set up window first");
@@ -518,17 +561,34 @@ c_plptex(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy, PLFLT just, const char *text)
     diag = sqrt(cc * cc + ss * ss);
     cc /= diag;
     ss /= diag;
+
+    xform[0] = cc;
+    xform[1] = -ss;
+    xform[2] = ss;
+    xform[3] = cc;
+
+    xdv = plP_wcdcx(wx);
+    ydv = plP_wcdcy(wy);
+
+    dispx = 0.;
+    dispy = 0.;
+
+/* Convert to physical units (mm) and compute shifts */
+
+    plgchr(&chrdef, &chrht);
     shift = (just == 0.0) ? 0.0 : plstrl(text) * just;
 
-    xformarr[0] = cc;
-    xformarr[1] = -ss;
-    xformarr[2] = ss;
-    xformarr[3] = cc;
+    xmm = plP_dcmmx(xdv) + dispx * chrht;
+    ymm = plP_dcmmy(ydv) + dispy * chrht;
+    refxmm = xmm - shift * xform[0];
+    refymm = ymm - shift * xform[2];
 
-    refx = plP_wcpcx(x) - shift * cc * plsc->xpmm;
-    refy = plP_wcpcy(y) - shift * ss * plsc->ypmm;
+    x = plP_mmpcx(xmm);
+    y = plP_mmpcy(ymm);
+    refx = plP_mmpcx(refxmm);
+    refy = plP_mmpcy(refymm);
 
-    plstr(0, xformarr, refx, refy, text);
+    plP_text(0, just, xform, x, y, refx, refy, text);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -536,7 +596,7 @@ c_plptex(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy, PLFLT just, const char *text)
  *
  * Prints out a "string" at reference position with physical coordinates
  * (refx,refy). The coordinates of the vectors defining the string are
- * passed through the linear mapping defined by the 2 x 2 matrix xforarrm()
+ * passed through the linear mapping defined by the 2 x 2 matrix xform()
  * before being plotted.  The reference position is at the left-hand edge of
  * the string. If base = 1, it is aligned with the baseline of the string.
  * If base = 0, it is aligned with the center of the character box.
@@ -546,10 +606,11 @@ c_plptex(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy, PLFLT just, const char *text)
 \*--------------------------------------------------------------------------*/
 
 void
-plstr(PLINT base, PLFLT *xformarr, PLINT refx, PLINT refy, const char *strng)
+plstr(PLINT base, PLFLT *xform, PLINT refx, PLINT refy, const char *string)
 {
     short int *symbol;
-    signed char *localxygrid;
+    signed char *vxygrid = 0;
+
     PLINT ch, i, length, level = 0, style, oline = 0, uline = 0;
     PLFLT width = 0., xorg = 0., yorg = 0., def, ht, dscale, scale;
 
@@ -562,30 +623,29 @@ plstr(PLINT base, PLFLT *xformarr, PLINT refx, PLINT refy, const char *strng)
     style = plsc->nms;
     plsc->nms = 0;
 
-    pldeco(&symbol, &length, strng);
+    pldeco(&symbol, &length, string);
 
     for (i = 0; i < length; i++) {
 	ch = symbol[i];
-	if (ch == -1) {
+	if (ch == -1) { /* super-script */
 	    level++;
 	    yorg += 16.0 * scale;
 	    scale = dscale * pow(0.75, (double) ABS(level));
 	}
-	else if (ch == -2) {
+	else if (ch == -2) { /* sub-script */
 	    level--;
 	    scale = dscale * pow(0.75, (double) ABS(level));
 	    yorg -= 16.0 * scale;
 	}
-	else if (ch == -3)
+	else if (ch == -3) /* back-char */
 	    xorg -= width * scale;
-	else if (ch == -4)
+	else if (ch == -4) /* toogle overline */
 	    oline = !oline;
-	else if (ch == -5)
+	else if (ch == -5)  /* toogle underline */
 	    uline = !uline;
 	else {
-	    if (plcvec(ch, &localxygrid))
-		plchar(localxygrid, xformarr, base, oline, uline,
-		       refx, refy, scale,
+	    if (plcvec(ch, &vxygrid))
+		plchar(vxygrid, xform, base, oline, uline, refx, refy, scale,
 		       plsc->xpmm, plsc->ypmm, &xorg, &yorg, &width);
 	}
     }
@@ -599,68 +659,87 @@ plstr(PLINT base, PLFLT *xformarr, PLINT refx, PLINT refy, const char *strng)
 \*--------------------------------------------------------------------------*/
 
 static void
-plchar(signed char *localxygrid, PLFLT *xformarr,
-       PLINT base, PLINT oline, PLINT uline,
+plchar(signed char *vxygrid, PLFLT *xform, PLINT base, PLINT oline, PLINT uline,
        PLINT refx, PLINT refy, PLFLT scale, PLFLT xpmm, PLFLT ypmm,
        PLFLT *p_xorg, PLFLT *p_yorg, PLFLT *p_width)
 {
     PLINT xbase, ybase, ydisp, lx, ly, cx, cy;
     PLINT k, penup;
     PLFLT x, y;
+    PLINT llx[STLEN], lly[STLEN], l = 0;
 
-    xbase = localxygrid[2];
-    *p_width = localxygrid[3] - xbase;
+    xbase = vxygrid[2];
+    *p_width = vxygrid[3] - xbase;
     if (base == 0) {
 	ybase = 0;
-	ydisp = localxygrid[0];
+	ydisp = vxygrid[0];
     }
     else {
-	ybase = localxygrid[0];
+	ybase = vxygrid[0];
 	ydisp = 0;
     }
     k = 4;
     penup = 1;
+
     for (;;) {
-	cx = localxygrid[k++];
-	cy = localxygrid[k++];
-	if (cx == 64 && cy == 64)
-	    break;
-	if (cx == 64 && cy == 0)
-	    penup = 1;
+	cx = vxygrid[k++];
+	cy = vxygrid[k++];
+	if (cx == 64 && cy == 64) {
+	  if (l) {
+	    plP_draphy_poly(llx, lly, l);
+	    l = 0;
+	  }
+	  break;
+	}
+	if (cx == 64 && cy == 0) {
+	  if (l) {
+	    plP_draphy_poly(llx, lly, l);
+	    l = 0;
+	  }
+	  penup = 1;
+	}
 	else {
 	    x = *p_xorg + (cx - xbase) * scale;
 	    y = *p_yorg + (cy - ybase) * scale;
-	    lx = refx + ROUND(xpmm * (xformarr[0] * x + xformarr[1] * y));
-	    ly = refy + ROUND(ypmm * (xformarr[2] * x + xformarr[3] * y));
-	    if (penup != 0) {
-		plP_movphy(lx, ly);
-		penup = 0;
+	    lx = refx + ROUND(xpmm * (xform[0] * x + xform[1] * y));
+	    ly = refy + ROUND(ypmm * (xform[2] * x + xform[3] * y));
+	    if (penup == 1) {
+	      if (l) {
+		plP_draphy_poly(llx, lly, l);
+		l = 0;
+	      }
+	      llx[l] = lx;
+	      lly[l++] = ly; /* store 1st point ! */
+	      plP_movphy(lx, ly);
+	      penup = 0;
 	    }
-	    else
-		plP_draphy(lx, ly);
+	    else {
+	      llx[l] = lx;
+	      lly[l++] = ly;
+	    }
 	}
     }
 
     if (oline) {
 	x = *p_xorg;
 	y = *p_yorg + (30 + ydisp) * scale;
-	lx = refx + ROUND(xpmm * (xformarr[0] * x + xformarr[1] * y));
-	ly = refy + ROUND(ypmm * (xformarr[2] * x + xformarr[3] * y));
+	lx = refx + ROUND(xpmm * (xform[0] * x + xform[1] * y));
+	ly = refy + ROUND(ypmm * (xform[2] * x + xform[3] * y));
 	plP_movphy(lx, ly);
 	x = *p_xorg + *p_width * scale;
-	lx = refx + ROUND(xpmm * (xformarr[0] * x + xformarr[1] * y));
-	ly = refy + ROUND(ypmm * (xformarr[2] * x + xformarr[3] * y));
+	lx = refx + ROUND(xpmm * (xform[0] * x + xform[1] * y));
+	ly = refy + ROUND(ypmm * (xform[2] * x + xform[3] * y));
 	plP_draphy(lx, ly);
     }
     if (uline) {
 	x = *p_xorg;
 	y = *p_yorg + (-5 + ydisp) * scale;
-	lx = refx + ROUND(xpmm * (xformarr[0] * x + xformarr[1] * y));
-	ly = refy + ROUND(ypmm * (xformarr[2] * x + xformarr[3] * y));
+	lx = refx + ROUND(xpmm * (xform[0] * x + xform[1] * y));
+	ly = refy + ROUND(ypmm * (xform[2] * x + xform[3] * y));
 	plP_movphy(lx, ly);
 	x = *p_xorg + *p_width * scale;
-	lx = refx + ROUND(xpmm * (xformarr[0] * x + xformarr[1] * y));
-	ly = refy + ROUND(ypmm * (xformarr[2] * x + xformarr[3] * y));
+	lx = refx + ROUND(xpmm * (xform[0] * x + xform[1] * y));
+	ly = refy + ROUND(ypmm * (xform[2] * x + xform[3] * y));
 	plP_draphy(lx, ly);
     }
     *p_xorg = *p_xorg + *p_width * scale;
@@ -673,17 +752,17 @@ plchar(signed char *localxygrid, PLFLT *xformarr,
 \*--------------------------------------------------------------------------*/
 
 PLFLT
-plstrl(const char *strng)
+plstrl(const char *string)
 {
     short int *symbol;
-    signed char *localxygrid;
+    signed char *vxygrid = 0;
     PLINT ch, i, length, level = 0;
     PLFLT width = 0., xorg = 0., dscale, scale, def, ht;
 
     plgchr(&def, &ht);
     dscale = 0.05 * ht;
     scale = dscale;
-    pldeco(&symbol, &length, strng);
+    pldeco(&symbol, &length, string);
 
     for (i = 0; i < length; i++) {
 	ch = symbol[i];
@@ -699,8 +778,8 @@ plstrl(const char *strng)
 	    xorg -= width * scale;
 	else if (ch == -4 || ch == -5);
 	else {
-	    if (plcvec(ch, &localxygrid)) {
-		width = xygrid[3] - xygrid[2];
+	    if (plcvec(ch, &vxygrid)) {
+		width = vxygrid[3] - vxygrid[2];
 		xorg += width * scale;
 	    }
 	}
@@ -736,6 +815,12 @@ plcvec(PLINT ch, signed char **xygr)
 	xygrid[k++] = y;
     } while ((x != 64 || y != 64) && k <= (STLEN - 2));
 
+    if (k == (STLEN-1)) {
+	/* This is bad if we get here */
+	xygrid[k] = 64;
+	xygrid[k] = 64;
+    }
+
     *xygr = xygrid;
     return (PLINT) 1;
 }
@@ -768,8 +853,9 @@ plcvec(PLINT ch, signed char **xygr)
 static void
 pldeco(short int **symbol, PLINT *length, const char *text)
 {
-    PLINT ch, ifont = font, ig, j = 0, lentxt = strlen(text);
-    char test, esc;
+    PLINT ch, ifont = plsc->cfont, ig, j = 0, lentxt = strlen(text);
+    char test;
+    unsigned char esc;
     short int *sym = symbol_buffer;
 
 /* Initialize parameters. */
@@ -825,14 +911,14 @@ pldeco(short int **symbol, PLINT *length, const char *text)
 	    else if (test == 'f' || test == 'F') {
 		test = text[j++];
 		ifont = 1 + plP_strpos(font_types,
-				       isupper((int) test) ? tolower((int) test) : test);
+				       isupper(test) ? tolower(test) : test);
 		if (ifont == 0 || ifont > numberfonts)
 		    ifont = 1;
 	    }
 	    else if (test == 'g' || test == 'G') {
 		test = text[j++];
-		ig = plP_strpos(greek, test) + 1;
-		sym[(*length)++] = 
+		ig = plP_strpos(plP_greek_mnemonic, test) + 1;
+		sym[(*length)++] =
 		    *(fntlkup + (ifont - 1) * numberchars + 127 + ig);
 	    }
 	    else {
@@ -843,7 +929,7 @@ pldeco(short int **symbol, PLINT *length, const char *text)
 
 	/* Decode character. */
 	/* >>PC<< removed increment from following expression to fix */
-	/* compiler bug */ 
+	/* compiler bug */
 
 	    sym[(*length)] = *(fntlkup + (ifont - 1) * numberchars + ch);
 	    (*length)++;
@@ -861,7 +947,7 @@ pldeco(short int **symbol, PLINT *length, const char *text)
 \*--------------------------------------------------------------------------*/
 
 PLINT
-plP_strpos(char *str, int chr)
+plP_strpos(const char *str, int chr)
 {
     char *temp;
 
@@ -919,6 +1005,7 @@ plP_stsearch(const char *str, int chr)
 void
 c_plfont(PLINT ifont)
 {
+    PLUNICODE fci = PL_FCI_MARK;
     if (plsc->level < 1) {
 	plabort("plfont: Please call plinit first");
 	return;
@@ -928,7 +1015,36 @@ c_plfont(PLINT ifont)
 	return;
     }
 
-    font = ifont;
+    plsc->cfont = ifont;
+
+   /* Provide some degree of forward compatibility if dealing with 
+    * unicode font. But better procedure is to call plsfci directly rather
+    * than using this lame Hershey font interface.
+    */
+    switch(ifont)
+     {
+      case 1:
+	/* normal = (medium, upright, sans serif) */
+	plP_hex2fci(PL_FCI_SANS, PL_FCI_FAMILY, &fci);
+	plsfci(fci);
+	break;
+	/* roman = (medium, upright, serif) */
+      case 2:
+	plP_hex2fci(PL_FCI_SERIF, PL_FCI_FAMILY, &fci);
+	plsfci(fci);
+	break;
+	/* italic = (medium, italic, serif) */
+      case 3:
+	plP_hex2fci(PL_FCI_ITALIC, PL_FCI_STYLE, &fci);
+	plP_hex2fci(PL_FCI_SERIF, PL_FCI_FAMILY, &fci);
+	plsfci(fci);
+	break;
+	/* script = (medium, upright, script) */
+      case 4:
+	plP_hex2fci(PL_FCI_SCRIPT, PL_FCI_FAMILY, &fci);
+	plsfci(fci);
+	break;
+     }
 }
 
 /*--------------------------------------------------------------------------*\
@@ -942,7 +1058,6 @@ plfntld(PLINT fnt)
 {
     static PLINT charset;
     short bffrleng;
-    FILE *file;
     PDFstrm *pdfs;
 
     if (fontloaded && (charset == fnt))
@@ -953,16 +1068,12 @@ plfntld(PLINT fnt)
     charset = fnt;
 
     if (fnt)
-	file = plLibOpen(PL_XFONT);
+	pdfs = plLibOpenPdfstrm(PL_XFONT);
     else
-	file = plLibOpen(PL_SFONT);
+	pdfs = plLibOpenPdfstrm(PL_SFONT);
 
-    if (file == NULL)
-	plexit("Unable to open font file");
-
-    pdfs = pdf_finit(file);
-    if ( ! pdfs)
-	plexit("plfntld: Out of memory while allocating PDF stream data.");
+    if (pdfs == NULL)
+	plexit("Unable to either (1) open/find or (2) allocate memory for the font file");
 
 /* Read fntlkup[] */
 
@@ -993,8 +1104,12 @@ plfntld(PLINT fnt)
     if ( ! fntbffr)
 	plexit("plfntld: Out of memory while allocating font buffer.");
 
-    fread((void *) fntbffr, (size_t) sizeof(signed char),
+#ifdef PLPLOT_USE_TCL_CHANNELS
+    pdf_rdx(fntbffr, sizeof(signed char)*(2 * bffrleng), pdfs);
+#else
+    plio_fread((void *) fntbffr, (size_t) sizeof(signed char),
 	  (size_t) (2 * bffrleng), pdfs->file);
+#endif
 
 /* Done */
 
@@ -1019,35 +1134,104 @@ plfontrel(void)
 }
 
 /*--------------------------------------------------------------------------*\
- * PLFLT plstrlW()
+ *  int plhershey2unicode ( int in )
  *
- * Computes the length of a string in pixels, including escape sequences.
+ *  Function searches for in, the input hershey code, in a lookup table and
+ *  returns the corresponding index in that table.
+ *  Using this index you can work out the unicode equivalent as well as
+ *  the closest approximate to the font-face. If the returned index is
+ *  -1 then no match was possible.
+ *
+ *  Two versions of the function exist, a simple linear search version,
+ *  and a more complex, but significantly faster, binary search version.
+ *  If there seem to be problems with the binary search method, the brain-dead
+ *  linear search can be enabled by defining SIMPLE_BUT_SAFE_HERSHEY_LOOKUP
+ *  at compile time.
 \*--------------------------------------------------------------------------*/
 
-PLFLT
-c_plstrlW(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy, const char *text)
+int plhershey2unicode ( unsigned int in ) /* pmr: unsigned cmp to Hershey */
 {
-    PLFLT diag;
+#ifdef SIMPLE_BUT_SAFE_HERSHEY_LOOKUP
+  int ret=-1;
+  int i;
 
-    (void) x;
-    (void) y;
+  for (i=0;(i<number_of_entries_in_hershey_to_unicode_table)&&(ret==-1);i++)
+    {
+      if (hershey_to_unicode_lookup_table[i].Hershey==in) ret=i;
+    }
 
-/* this has a bug: plP_wcmmx is the millimetre position and includes
-   the offset if the window origin is not (0,0). We need the true
-   scale */
+  return(ret);
 
+#else
 
-/*
-    if (dx == 0.0 && dy !=0.0) diag = plstrl(text)/plP_wcmmy(1.0);
-    else if (dy == 0.0 && dx !=0.0) diag = plstrl(text)/plP_wcmmx(1.0);
-    else diag = sqrt( (plstrl(text)/plP_wcmmx(1.0)) * (plstrl(text)/plP_wcmmx(1.0)) + 
-		      (plstrl(text)/plP_wcmmy(1.0)) * (plstrl(text)/plP_wcmmy(1.0)) );
-*/
-
-    if (dx == 0.0 && dy !=0.0) diag = plstrl(text)/plsc->wmxscl;
-    else if (dy == 0.0 && dx !=0.0) diag = plstrl(text)/plsc->wmyscl;
-    else diag = sqrt( (plstrl(text)/plsc->wmxscl) * (plstrl(text)/plsc->wmxscl) + 
-		      (plstrl(text)/plsc->wmyscl) * (plstrl(text)/plsc->wmyscl) );
-
-    return diag;
+   int jlo = -1, jmid, jhi = number_of_entries_in_hershey_to_unicode_table;
+   while (jhi - jlo > 1) 
+     {
+	/* Note that although jlo or jhi can be just outside valid
+	 * range (see initialization above) because of while condition
+	 * jlo < jmid < jhi and jmid must be in valid range.
+	 */
+	jmid = (jlo+jhi)/2;
+	if (in > hershey_to_unicode_lookup_table[jmid].Hershey)
+	  jlo = jmid;
+	else if (in < hershey_to_unicode_lookup_table[jmid].Hershey)
+	  jhi = jmid;
+	else
+	  /* We have found it!
+	   * in == hershey_to_unicode_lookup_table[jmid].Hershey 
+	   */
+	  return (jmid);
+     }
+   /* jlo is invalid or it is valid and in > hershey_to_unicode_lookup_table[jlo].Hershey.
+    * jhi is invalid or it is valid and in < hershey_to_unicode_lookup_table[jhi].Hershey.
+    * All these conditions together imply in cannot be found in
+    * hershey_to_unicode_lookup_table[j].Hershey, for all j.
+    */
+   return(-1);
+#endif
 }
+
+/*--------------------------------------------------------------------------*\
+ *  char *
+ *  plP_FCI2FontName ( PLUNICODE fci, 
+ *                     const FCI_to_FontName_Table lookup[], const int nlookup)
+ *
+ *  Function takes an input FCI (font characterization integer) index, 
+ *  looks through the lookup table (which must be sorted by PLUNICODE fci),
+ *  then returns the corresponding pointer to a valid font name.  If the FCI
+ *  index is not present the returned value is NULL.
+ \*--------------------------------------------------------------------------*/
+
+const unsigned char *
+plP_FCI2FontName ( PLUNICODE fci, 
+		     const FCI_to_FontName_Table lookup[], const int nlookup)
+{
+   int jlo = -1, jmid, jhi = nlookup;
+   while (jhi - jlo > 1) 
+     {
+	/* Note that although jlo or jhi can be just outside valid
+	 * range (see initialization above) because of while condition
+	 * jlo < jmid < jhi and jmid must be in valid range.
+	 */
+	jmid = (jlo+jhi)/2;
+	if (fci > lookup[jmid].fci)
+	  jlo = jmid;
+	else if (fci < lookup[jmid].fci)
+	  jhi = jmid;
+	else
+	  /* We have found it!
+	   * fci == lookup[jmid].fci 
+	   */
+	  return (lookup[jmid].pfont);
+     }
+   /* jlo is invalid or it is valid and fci > lookup[jlo].Unicode.
+    * jhi is invalid or it is valid and fci < lookup[jhi].Unicode.
+    * All these conditions together imply fci index cannot be found in lookup.
+    * Mark lookup failure with NULL pointer.
+    */
+   return(NULL);
+}
+
+
+#undef PLSYM_H
+#endif

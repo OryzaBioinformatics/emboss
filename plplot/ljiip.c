@@ -1,19 +1,10 @@
-/* All drivers: pls->width now more sensibly handled.  If the driver supports
- * multiple widths, it first checks to see if it has been initialized
- * already (e.g. from the command line) before initializing it.  For drivers
- * that don't support multiple widths, pls->width is ignored.
- *
- * Minor tweek.  Modified the pixel width to depend on the slope of the line.
- * Makes diagonal lines thinner.  Contributed by Wesley Ebisuzaki.
-*/
-
-/*	ljiip.c
+/* $Id: ljiip.c,v 1.3 2007/05/08 09:09:37 rice Exp $
 
 	PLplot Laser Jet IIp device driver.
 	Based on old LJII driver, modifications by Wesley Ebisuzaki
 
 	DPI = 300, 150, 100	(dots per inch)
-		default: Amiga/Unix 300 dpi, MS-DOS 150 dpi
+		default: Unix 300 dpi, MS-DOS 150 dpi
 		higher = better output, more memory, longer to print
 	GCMODE = 0, 2 (graphics compression mode)
 		default: 2,  old laser jets should use 0
@@ -22,7 +13,7 @@
 */
 #include "plDevs.h"
 
-#ifdef PLD_ljii
+#ifdef PLD_ljiip
 
 #include "plplotP.h"
 #include "drivers.h"
@@ -35,7 +26,22 @@
 #endif
 #endif
 
+/* Device info */
+const char* plD_DEVICE_INFO_ljiip =	/* pmr: const */
+  "ljiip:LaserJet IIp/deskjet compressed graphics:0:ljiip:32:ljiip";
+
 /* Function prototypes */
+
+/*void plD_dispatch_init_ljiip	( PLDispatchTable *pdt );*/ /* pmr: in drivers.h */
+
+void plD_init_ljiip		(PLStream *);
+void plD_line_ljiip		(PLStream *, short, short, short, short);
+void plD_polyline_ljiip		(PLStream *, short *, short *, PLINT);
+void plD_eop_ljiip		(PLStream *);
+void plD_bop_ljiip		(PLStream *);
+void plD_tidy_ljiip		(PLStream *);
+void plD_state_ljiip		(PLStream *, PLINT);
+void plD_esc_ljiip		(PLStream *, PLINT, void *);
 
 static void setpoint(PLINT, PLINT);
 
@@ -85,6 +91,24 @@ static char mask[8] =
 
 static unsigned char _HUGE *bitmap;	/* memory area NBYTES in size */
 
+void plD_dispatch_init_ljiip( PLDispatchTable *pdt )
+{
+#ifndef ENABLE_DYNDRIVERS
+    pdt->pl_MenuStr  = "LaserJet IIp/deskjet compressed graphics";
+    pdt->pl_DevName  = "ljiip";
+#endif
+    pdt->pl_type     = plDevType_FileOriented;
+    pdt->pl_seq      = 32;
+    pdt->pl_init     = (plD_init_fp)     plD_init_ljiip;
+    pdt->pl_line     = (plD_line_fp)     plD_line_ljiip;
+    pdt->pl_polyline = (plD_polyline_fp) plD_polyline_ljiip;
+    pdt->pl_eop      = (plD_eop_fp)      plD_eop_ljiip;
+    pdt->pl_bop      = (plD_bop_fp)      plD_bop_ljiip;
+    pdt->pl_tidy     = (plD_tidy_fp)     plD_tidy_ljiip;
+    pdt->pl_state    = (plD_state_fp)    plD_state_ljiip;
+    pdt->pl_esc      = (plD_esc_fp)      plD_esc_ljiip;
+}
+
 /*--------------------------------------------------------------------------*\
  * plD_init_ljiip()
  *
@@ -111,8 +135,8 @@ plD_init_ljiip(PLStream *pls)
 
     dev = plAllocDev(pls);
 
-    dev->xold = UNDEFINED;
-    dev->yold = UNDEFINED;
+    dev->xold = PL_UNDEFINED;
+    dev->yold = PL_UNDEFINED;
     dev->xmin = 0;
     dev->ymin = 0;
 
@@ -131,6 +155,18 @@ plD_init_ljiip(PLStream *pls)
 
     plP_setphy(dev->xmin, dev->xmax, dev->ymin, dev->ymax);
 
+/* If portrait mode is specified, then set up an additional rotation 
+ * transformation with aspect ratio allowed to adjust via freeaspect.  
+ * Default orientation is landscape (ORIENTATION == 3 or 90 deg rotation 
+ * counter-clockwise from portrait).  (Legacy PLplot used seascape
+ * which was equivalent to ORIENTATION == 1 or 90 deg clockwise rotation 
+ * from portrait.) */
+
+    if (pls->portrait) {
+       plsdiori((PLFLT)(4 - ORIENTATION));
+       pls->freeaspect = 1;
+    }
+
 /* Allocate storage for bit map matrix */
 
 #ifdef MSDOS
@@ -144,7 +180,7 @@ plD_init_ljiip(PLStream *pls)
 
 /* Reset Printer */
 
-    (void) fprintf(OF, "%cE", ESC);
+    fprintf(OF, "%cE", ESC);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -171,8 +207,8 @@ plD_line_ljiip(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 
 /* Rotate by 90 degrees */
 
-    plRotPhy(1, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &xx1, &yy1);
-    plRotPhy(1, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &xx2, &yy2);
+    plRotPhy(ORIENTATION, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &xx1, &yy1);
+    plRotPhy(ORIENTATION, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &xx2, &yy2);
 
     dx = xx2 - xx1;
     dy = yy2 - yy1;
@@ -301,26 +337,26 @@ plD_eop_ljiip(PLStream *pls)
 
 /* PCL III setup: ref. Deskjet Plus Printer Owner's Manual */
 
-    (void) fprintf(OF,"\033*rB");      	/* end raster graphics */
-    (void) fprintf(OF,"\033*t%3dR", DPI);	/* set DPI */
+    fprintf(OF,"\033*rB");      	/* end raster graphics */
+    fprintf(OF,"\033*t%3dR", DPI);	/* set DPI */
 
 #if GCMODE != 0
-    (void) fprintf(OF,"\033*r%dS", XDOTS);	/* raster width */
-    (void) fprintf(OF,"\033*b%1dM", GCMODE);	/* graphics mode */
+    fprintf(OF,"\033*r%dS", XDOTS);	/* raster width */
+    fprintf(OF,"\033*b%1dM", GCMODE);	/* graphics mode */
 #endif
 
 /* First move cursor to origin */
 
-    (void) fprintf(OF,"\033*p%ldX", CURX);
-    (void) fprintf(OF,"\033*p%ldY", CURY);
-    (void) fprintf(OF,"\033*r0A");		/* start graphics */
+    fprintf(OF,"\033*p%ldX", CURX);
+    fprintf(OF,"\033*p%ldY", CURY);
+    fprintf(OF,"\033*r0A");		/* start graphics */
 
 /* Write out raster data */
 
 #if GCMODE == 0
     for (j = 0, p = bitmap; j < YDOTS; j++, p += BPROW1) {
-	(void) fprintf(OF,"\033*b>%dW", BPROW);
-	(void) fwrite(p, BPROW, sizeof(char), OF);
+	fprintf(OF,"\033*b>%dW", BPROW);
+	fwrite(p, BPROW, sizeof(char), OF);
     }
 #endif
 #if GCMODE == 2
@@ -357,8 +393,8 @@ plD_eop_ljiip(PLStream *pls)
 		}
 	    }
 	}
-	(void) fprintf(OF,"\033*b%dW", (int) n);
-	(void) fwrite(t_buf, (int) n, sizeof(char), OF);
+	fprintf(OF,"\033*b%dW", (int) n);
+	fwrite(t_buf, (int) n, sizeof(char), OF);
     }
 #endif
 
@@ -366,12 +402,12 @@ plD_eop_ljiip(PLStream *pls)
 
 /* End raster graphics and send Form Feed */
 
-    (void) fprintf(OF, "\033*rB");
-    (void) fprintf(OF, "%c", FF);
+    fprintf(OF, "\033*rB");
+    fprintf(OF, "%c", FF);
 
 /* Finally, clear out bitmap storage area */
 
-    (void) memset((void *) bitmap, '\0', NBYTES);
+    memset((void *) bitmap, '\0', NBYTES);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -401,9 +437,9 @@ plD_tidy_ljiip(PLStream *pls)
 {
 /* Reset Printer */
 
-    (void) fprintf(OF, "%cE", ESC);
-    (void) fclose(OF);
-    free((void *) bitmap);
+    fprintf(OF, "%cE", ESC);
+    fclose(OF);
+    free((char *) bitmap);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -415,7 +451,7 @@ plD_tidy_ljiip(PLStream *pls)
 void 
 plD_state_ljiip(PLStream *pls, PLINT op)
 {
-    (void) pls;
+    (void) pls;				/* pmr: make these used */
     (void) op;
 }
 
@@ -428,7 +464,7 @@ plD_state_ljiip(PLStream *pls, PLINT op)
 void
 plD_esc_ljiip(PLStream *pls, PLINT op, void *ptr)
 {
-    (void) pls;
+    (void) pls;				/* pmr: make these used */
     (void) op;
     (void) ptr;
 }

@@ -1,6 +1,24 @@
-/*	plwind.c
+/* $Id: plwind.c,v 1.2 2007/05/08 09:09:37 rice Exp $
 
 	Routines for setting up world coordinates of the current viewport.
+
+   Copyright (C) 2004  Alan W. Irwin
+
+   This file is part of PLplot.
+
+   PLplot is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Library Public License as published
+   by the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   PLplot is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with PLplot; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 #include "plplotP.h"
@@ -67,6 +85,13 @@ c_plwind(PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax)
     plsc->wmxoff = (xmax * mmxmi - xmin * mmxma) / dx;
     plsc->wmyscl = (mmyma - mmymi) / dy;
     plsc->wmyoff = (ymax * mmymi - ymin * mmyma) / dy;
+
+/* Set transformation variables for world coordinates to device coords */
+
+    plsc->wdxscl = plsc->wmxscl * plsc->xpmm / (plsc->phyxma - plsc->phyxmi);
+    plsc->wdxoff = plsc->wmxoff * plsc->xpmm / (plsc->phyxma - plsc->phyxmi);
+    plsc->wdyscl = plsc->wmyscl * plsc->ypmm / (plsc->phyyma - plsc->phyymi);
+    plsc->wdyoff = plsc->wmyoff * plsc->ypmm / (plsc->phyyma - plsc->phyymi);
 
 /* Register plot window attributes */
 
@@ -161,7 +186,44 @@ c_plw3d(PLFLT basex, PLFLT basey, PLFLT height, PLFLT xmin0,
     plsc->base3y = basey;
     plsc->basecx = 0.5 * (xmin + xmax);
     plsc->basecy = 0.5 * (ymin + ymax);
-
+/* Mathematical explanation of the 3 transformations of coordinates:
+ * (I) Scaling:
+ *     x' = cx*(x-x_mid) = cx*(x-plsc->basecx)
+ *     y' = cy*(y-y_mid) = cy*(y-plsc->basecy)
+ *     z' = zscale*(z-zmin) = zscale*(z-plsc->ranmi)
+ * (II) Rotation about z' axis clockwise by the angle of the azimut when 
+ *      looking from the top in a right-handed coordinate system.
+ *     x''          x'
+ *     y'' =  M_1 * y'
+ *     z''          z'
+ *    where the rotation matrix M_1 (see any mathematical physics book such
+ *    as Mathematical Methods in the Physical Sciences by Boas) is
+ *    caz          -saz       0
+ *    saz           caz       0
+ *     0             0        1 
+ * (III) Rotation about x'' axis by 90 deg - alt to bring z''' axis 
+ *      coincident with line of sight and x''' and y''' corresponding to
+ *      x and y coordinates in the 2D plane of the plot.
+ *     x'''          x''
+ *     y''' =  M_2 * y''
+ *     z'''          z''
+ *    where the rotation matrix M_2 is
+ *     1            0         0
+ *     0           salt      calt
+ *     0          -calt      salt
+ * Note
+ *     x'''          x'
+ *     y''' =  M *   y'
+ *     z'''          z'
+ * where M = M_2*M_1 is given by
+ *          caz      -saz     0
+ *     salt*saz  salt*caz    calt
+ *    -calt*saz -calt*caz    salt
+ * plP_w3wcx and plP_w3wcy take the combination of the plsc->basecx,
+ * plsc->basecy, plsc->ranmi, plsc->cxx, plsc->cxy, plsc->cyx, plsc->cyy, and
+ * plsc->cyz data stored here to implement the combination of the 3 
+ * transformations to determine x''' and y''' from x, y, and z.
+ */   
     plsc->cxx = cx * caz;
     plsc->cxy = -cy * saz;
     plsc->cyx = cx * saz * salt;

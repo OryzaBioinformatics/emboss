@@ -1,15 +1,45 @@
-/*	plcore.c
+/* $Id: plcore.c,v 1.13 2007/07/11 12:04:49 ajb Exp $
 
 	Central dispatch facility for PLplot.
 	Also contains the PLplot main data structures, external access
 	routines, and initialization calls.
 
 	This stuff used to be in "dispatch.h", "dispatch.c", and "base.c".
+
+
+  Copyright (C) 2004  Joao Cardoso
+  Copyright (C) 2004, 2005  Rafael Laboissiere
+  Copyright (C) 2004, 2006  Andrew Ross
+  Copyright (C) 2004  Andrew Roach
+  Copyright (C) 2005  Alan W. Irwin
+  Copyright (C) 2005  Thomas J. Duck
+
+  This file is part of PLplot.
+
+  PLplot is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Library Public License as published
+  by the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  PLplot is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Library General Public License for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with PLplot; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
 */
 
 #define DEBUG
+
+#define NEED_PLDEBUG
 #include "plcore.h"
 
+#ifdef ENABLE_DYNDRIVERS
+#include <ltdl.h>
+#endif
 
 /*--------------------------------------------------------------------------*\
  * Driver Interface
@@ -43,68 +73,35 @@
 enum {AT_BOP, DRAWING, AT_EOP};
 
 /* Initialize device. */
-/* The plot buffer must be called last */
+/* The plot buffer must be called last. */
 
-
-/*--------------------------------------------------------------------------*\
- * pldebug()
- *
- * Included into every plplot source file to control debugging output.  To
- * enable printing of debugging output, you must #define DEBUG before
- * including plplotP.h or specify -DDEBUG in the compile line.  When running
- * the program you must in addition specify -debug.  This allows debugging
- * output to be available when asked for.
- *
- * Syntax:
- *	pldebug(function_name, format, arg1, arg2...);
-\*--------------------------------------------------------------------------*/
-
-static void
-pldebug( const char *fname, ... )
-{
-#ifdef DEBUG
-    va_list args;
-
-    if (plsc->debug) {
-	c_pltext();
-	va_start(args, fname);
-
-    /* print out name of caller and source file */
-
-	(void) fprintf(stderr, "%s (%s): ", fname, __FILE__);
-
-    /* print out remainder of message */
-
-	(void) vfprintf(stderr, (char *) va_arg(args, char *), args);
-	va_end(args);
-	c_plgra();
-    }
-#else
-    (void) fname;
-#endif
-}
-
+/* The following array of chars is used both here and in plsym.c for
+ * translating the Greek characters from the #g escape sequences into
+ * the Hershey and Unicode codings
+ */
+const char plP_greek_mnemonic[] = "ABGDEZYHIKLMNCOPRSTUFXQWabgdezyhiklmncoprstufxqw";
 
 void
 plP_init(void)
 {
     plsc->page_status = AT_EOP;
 
-    offset = plsc->device - 1;
-    (*dispatch_table[offset].pl_init) (plsc);
+    (*plsc->dispatch_table->pl_init) ((struct PLStream_struct *) plsc);
 
     if (plsc->plbuf_write)
 	plbuf_init(plsc);
 }
 
 /* End of page */
-/* The plot buffer must be called first */
-/* Ignore instruction if there's nothing drawn */
+/* The plot buffer must be called first. */
+/* Ignore instruction if already at eop. */
 
 void
 plP_eop(void)
 {
-    if (plsc->page_status != DRAWING)
+    int skip_driver_eop = 0;
+
+    if (plsc->page_status == AT_EOP)
 	return;
 
     plsc->page_status = AT_EOP;
@@ -112,18 +109,25 @@ plP_eop(void)
     if (plsc->plbuf_write)
 	plbuf_eop(plsc);
 
-    offset = plsc->device - 1;
-    (*dispatch_table[offset].pl_eop) (plsc);
+/* Call user eop handler if present. */
+
+    if (plsc->eop_handler != NULL)
+	(*plsc->eop_handler) (plsc->eop_data, &skip_driver_eop);
+
+    if (!skip_driver_eop)
+	(*plsc->dispatch_table->pl_eop) ((struct PLStream_struct *) plsc);
 }
 
 /* Set up new page. */
-/* The plot buffer must be called last */
-/* Ignore if the bop was already issued. */
+/* The plot buffer must be called last. */
+/* Ignore if already at bop. */
 /* It's not actually necessary to be AT_EOP here, so don't check for it. */
 
 void
 plP_bop(void)
 {
+    int skip_driver_bop = 0;
+
     plP_subpInit();
     if (plsc->page_status == AT_BOP)
 	return;
@@ -131,8 +135,13 @@ plP_bop(void)
     plsc->page_status = AT_BOP;
     plsc->nplwin = 0;
 
-    offset = plsc->device - 1;
-    (*dispatch_table[offset].pl_bop) (plsc);
+/* Call user bop handler if present. */
+
+    if (plsc->bop_handler != NULL)
+	(*plsc->bop_handler) (plsc->bop_data, &skip_driver_bop);
+
+    if (!skip_driver_bop)
+	(*plsc->dispatch_table->pl_bop) ((struct PLStream_struct *) plsc);
 
     if (plsc->plbuf_write)
 	plbuf_bop(plsc);
@@ -149,14 +158,14 @@ plP_tidy(void)
 	plsc->tidy_data = NULL;
     }
 
-    offset = plsc->device - 1;
-    (*dispatch_table[offset].pl_tidy) (plsc);
+    (*plsc->dispatch_table->pl_tidy) ((struct PLStream_struct *) plsc);
 
-    if (plsc->plbuf_write)
+    if (plsc->plbuf_write) {
 	plbuf_tidy(plsc);
+    }
 
     plsc->OutFile = NULL;
-    free_mem(plsc->FileName);
+
 }
 
 /* Change state. */
@@ -164,11 +173,9 @@ plP_tidy(void)
 void
 plP_state(PLINT op)
 {
-    offset = plsc->device - 1;
-    (*dispatch_table[offset].pl_state) (plsc, op);
+    if (plsc->plbuf_write) plbuf_state(plsc, op);
 
-    if (plsc->plbuf_write)
-	plbuf_state(plsc, op);
+    (*plsc->dispatch_table->pl_state) ((struct PLStream_struct *) plsc, op);
 }
 
 /* Escape function, for driver-specific commands. */
@@ -176,11 +183,23 @@ plP_state(PLINT op)
 void
 plP_esc(PLINT op, void *ptr)
 {
-    offset = plsc->device - 1;
-    (*dispatch_table[offset].pl_esc) (plsc, op, ptr);
+  PLINT clpxmi, clpxma, clpymi, clpyma;
+  EscText* args;
 
-    if (plsc->plbuf_write)
-	plbuf_esc(plsc, op, ptr);
+  /* The plot buffer must be called first */
+  if(plsc->plbuf_write) plbuf_esc(plsc, op, ptr);
+
+  /* Text coordinates must pass through the driver interface filter */
+  if(op==PLESC_HAS_TEXT && plsc->dev_unicode) {
+
+    /* Apply the driver interface filter */
+    if (plsc->difilt) {
+      args = (EscText*)ptr;
+      difilt(&(args->x),&(args->y),1,&clpxmi,&clpxma,&clpymi,&clpyma);
+    }
+  }
+
+  (*plsc->dispatch_table->pl_esc) ((struct PLStream_struct *) plsc, op, ptr);
 }
 
 /* Set up plot window parameters. */
@@ -228,8 +247,8 @@ plP_swin(PLWindow *plwin)
 /* It must use the filtered data, which it can get from *plsc */
 
     if (plsc->dev_swin) {
-	offset = plsc->device - 1;
-	(*dispatch_table[offset].pl_esc) (plsc, PLESC_SWIN, NULL);
+	(*plsc->dispatch_table->pl_esc) ( (struct PLStream_struct *) plsc,
+                                          PLESC_SWIN, NULL );
     }
 }
 
@@ -292,6 +311,10 @@ plP_polyline(short *x, short *y, PLINT npts)
 
 /* Fill polygon */
 /* The plot buffer must be called first */
+/* Here if the desired area fill capability isn't present, we mock up */
+/* something in software */
+
+static int foo;
 
 void
 plP_fill(short *x, short *y, PLINT npts)
@@ -307,43 +330,8 @@ plP_fill(short *x, short *y, PLINT npts)
 	plbuf_esc(plsc, PLESC_FILL, NULL);
     }
 
-    if (plsc->difilt) {
-	for (i = 0; i < npts; i++) {
-	    xscl[i] = x[i];
-	    yscl[i] = y[i];
-	}
-	difilt(xscl, yscl, npts, &clpxmi, &clpxma, &clpymi, &clpyma);
-	plP_plfclp(xscl, yscl, npts, clpxmi, clpxma, clpymi, clpyma,
-		   grfill);
-    }
-    else {
-	grfill(x, y, npts);
-    }
-}
+/* Account for driver ability to do fills */
 
-static void
-grline(short *x, short *y, PLINT npts)
-{
-    (void) npts;
-    offset = plsc->device - 1;
-    (*dispatch_table[offset].pl_line) (plsc, x[0], y[0], x[1], y[1]);
-}
-
-static void
-grpolyline(short *x, short *y, PLINT npts)
-{
-    offset = plsc->device - 1;
-    (*dispatch_table[offset].pl_polyline) (plsc, x, y, npts);
-}
-
-/* Here if the desired area fill capability isn't present, we mock up */
-/* something in software */
-
-static int foo;
-
-static void
-grfill(short *x, short *y, PLINT npts)
-{
     if (plsc->patt == 0 && ! plsc->dev_fill0) {
 	if ( ! foo) {
 	    plwarn("Driver does not support hardware solid fills, switching to software fill.\n");
@@ -352,25 +340,518 @@ grfill(short *x, short *y, PLINT npts)
 	plsc->patt = 8;
 	plpsty(plsc->patt);
     }
-    if (plsc->patt < 0 && ! plsc->dev_fill1) {
-	if ( ! foo) {
-	    plwarn("Driver does not support hardware pattern fills, switching to software fill.\n");
-	    foo = 1;
-	}
-	plsc->patt = ABS(plsc->patt) % 8 + 1;
-	plpsty(plsc->patt);
+    if (plsc->dev_fill1) {
+	plsc->patt = -ABS(plsc->patt);
     }
 
-    if (plsc->patt <= 0) {
-	plsc->dev_npts = npts;
-	plsc->dev_x = x;
-	plsc->dev_y = y;
+/* Perform fill.  Here we MUST NOT allow the software fill to pass through the
+   driver interface filtering twice, else we get the infamous 2*rotation for
+   software fills on orientation swaps.
+*/
 
-	offset = plsc->device - 1;
-	(*dispatch_table[offset].pl_esc) (plsc, PLESC_FILL, NULL);
-    }
-    else
+    if (plsc->patt > 0)
 	plfill_soft(x, y, npts);
+
+    else {
+	if (plsc->difilt) {
+	    for (i = 0; i < npts; i++) {
+		xscl[i] = x[i];
+		yscl[i] = y[i];
+	    }
+	    difilt(xscl, yscl, npts, &clpxmi, &clpxma, &clpymi, &clpyma);
+	    plP_plfclp(xscl, yscl, npts, clpxmi, clpxma, clpymi, clpyma,
+		       grfill);
+	}
+	else {
+	    grfill(x, y, npts);
+	}
+    }
+}
+
+/* Account for driver ability to draw text itself */
+/*
+#define DEBUG_TEXT
+*/
+
+#define hex2dec( a ) isdigit(a) ? a - 48 : (toupper(a) - 65) + 10
+
+int text2num( const char *text, char end, PLUNICODE *num);
+int text2fci( const char *text, unsigned char *hexdigit,
+	     unsigned char *hexpower);
+
+
+/*--------------------------------------------------------------------------*\
+ *  int text2num( char *text, char end, PLUNICODE *num)
+ *       char *text - pointer to the text to be parsed
+ *       char end   - end character (i.e. ')' or ']' to stop parsing
+ *       PLUNICODE *num - pointer to an PLUNICODE to store the value
+ *
+ *    Function takes a string, which can be either hex or decimal,
+ *    and converts it into an PLUNICODE, stopping at either a null,
+ *    or the character pointed to by 'end'. It is a bit brain-dead,
+ *    and probably should make more checks, but it works.
+\*--------------------------------------------------------------------------*/
+
+int text2num( const char *text, char end, PLUNICODE *num)
+{
+  int base=10;
+  unsigned short i=0;
+  *num=0;
+
+  if (text[1]=='x')
+    {
+      base=16;
+      i=2;
+    }
+
+  while ((text[i]!=end)&&(text[i]!=0))
+    {
+      *num*=base;
+      *num+=hex2dec(text[i]);
+      i++;
+    }
+  return(i);
+}
+
+/*--------------------------------------------------------------------------*\
+ *  int text2fci( char *text, unsigned char *hexdigit, unsigned char *hexpower)
+ *       char *text - pointer to the text to be parsed
+ *       unsigned char *hexdigit - pointer to hex value that is stored.
+ *       unsigned char *hexpower - pointer to hex power (left shift) that is stored.
+ *
+ *    Function takes a pointer to a string, which is looked up in a table
+ *    to determine the corresponding FCI (font characterization integer)
+ *    hex digit value and hex power (left shift).  All matched strings
+ *    start with "<" and end with the two characters "/>".
+ *    If the lookup succeeds, hexdigit and hexpower are set to the appropriate
+ *    values in the table, and the function returns the number of characters
+ *    in text that are consumed by the matching string in the table lookup.
+ *
+ *    If the lookup fails, hexdigit is set to 0, hexpower is set to and
+ *    impossible value, and the function returns 0.
+\*--------------------------------------------------------------------------*/
+
+int text2fci( const char *text, unsigned char *hexdigit, unsigned char *hexpower)
+{
+   typedef struct
+     {
+	const char *ptext;		/* pmr: const */
+	unsigned char hexdigit;
+	unsigned char hexpower;
+	unsigned char padding[6];	/* pmr: padding to align */
+     }
+   TextLookupTable;
+   /* This defines the various font control commands and the corresponding
+    * hexdigit and hexpower in the FCI.
+    */
+#define N_TextLookupTable 10
+   const TextLookupTable lookup[N_TextLookupTable] = {
+	{"<sans-serif/>", PL_FCI_SANS, PL_FCI_FAMILY, "      "},
+	{"<serif/>", PL_FCI_SERIF, PL_FCI_FAMILY, "      "},
+	{"<monospace/>", PL_FCI_MONO, PL_FCI_FAMILY, "      "},
+	{"<script/>", PL_FCI_SCRIPT, PL_FCI_FAMILY, "      "},
+	{"<symbol/>", PL_FCI_SYMBOL, PL_FCI_FAMILY, "      "},
+	{"<upright/>", PL_FCI_UPRIGHT, PL_FCI_STYLE, "      "},
+	{"<italic/>", PL_FCI_ITALIC, PL_FCI_STYLE, "      "},
+	{"<oblique/>", PL_FCI_OBLIQUE, PL_FCI_STYLE, "      "},
+	{"<medium/>", PL_FCI_MEDIUM, PL_FCI_WEIGHT, "      "},
+	{"<bold/>", PL_FCI_BOLD, PL_FCI_WEIGHT, "      "}
+   };
+   int i, length;
+   for (i=0; i<N_TextLookupTable; i++) {
+      length = strlen(lookup[i].ptext);
+      if (! strncmp(text, lookup[i].ptext, length)) {
+	 *hexdigit = lookup[i].hexdigit;
+	 *hexpower = lookup[i].hexpower;
+	 return(length);
+      }
+   }
+   *hexdigit = 0;
+   *hexpower = PL_FCI_HEXPOWER_IMPOSSIBLE;
+   return(0);
+}
+
+PLUNICODE unicode_buffer[1024];
+
+void
+plP_text(PLINT base, PLFLT just, PLFLT *xform, PLINT x, PLINT y,
+	 PLINT refx, PLINT refy, const char *string)
+{
+
+   if (plsc->dev_text) { /* Does the device render it's own text ? */
+      EscText args;
+      short len=0;
+      char skip;
+      unsigned short i,j;
+      PLUNICODE code;
+      unsigned char esc;
+      int idx;
+
+      args.base = base;
+      args.just = just;
+      args.xform = xform;
+      args.x = x;
+      args.y = y;
+      args.refx = refx;
+      args.refy = refy;
+      args.string = string;
+
+      if (plsc->dev_unicode) { /* Does the device also understand unicode? */
+	 PLINT ig;
+	 PLUNICODE fci, fcisave;
+	 unsigned char hexdigit, hexpower;
+
+	 /* Now process the text string */
+
+	 if (string!=NULL) {        /* If the string isn't blank, then we will
+                                     * continue
+				     */
+
+	    len=strlen(string);     /* this length is only used in the loop
+				     * counter, we will work out the length of
+				     * the unicode string as we go */
+	    plgesc(&esc);
+	
+	    /* At this stage we will do some translations into unicode, like
+	     * conversion to Greek , and will save other translations such as
+	     * superscript for the driver to do later on. As we move through
+	     * the string and do the translations, we will get
+	     * rid of the esc character sequence, just replacing it with
+	     * unicode.
+	     */
+	
+	    /* Obtain FCI (font characterization integer) for start of
+	     * string. */
+	    plgfci(&fci);
+	    for (j=i=0;i<len;i++) {    /* Walk through the string, and convert
+					* some stuff to unicode on the fly */
+	       skip=0;
+	
+	       if (string[i]==esc) {
+		  switch(string[i+1]) {
+		   case '(':  /* hershey code */
+		     i+=2+text2num(&string[i+2],')',&code);
+		     idx=plhershey2unicode(code);
+		     /* momentarily switch to symbol font. */
+		     fcisave = fci;
+		     plP_hex2fci(PL_FCI_SYMBOL, PL_FCI_FAMILY, &fci);
+		     unicode_buffer[j++]= fci;
+		     unicode_buffer[j++] = \
+		       (PLUNICODE)hershey_to_unicode_lookup_table[idx].Unicode;
+
+		     /* if unicode_buffer[j-1] corresponds to the escape
+		      * character must unescape it by appending one more.
+		      * This will probably always be necessary since it is
+		      * likely unicode_buffer will always have to contain
+		      * escape characters that are interpreted by the device
+		      * driver.
+		      */
+		     if (unicode_buffer[j-1]==esc) unicode_buffer[j++]=esc;
+		     fci = fcisave;
+		     unicode_buffer[j]= fci;
+		     skip=1;
+		     break;
+		
+		   case '[':  /* unicode */
+		     i+=2+text2num(&string[i+2],']',&code);
+		     /* momentarily switch to symbol font. */
+		     fcisave = fci;
+		     plP_hex2fci(PL_FCI_SYMBOL, PL_FCI_FAMILY, &fci);
+		     unicode_buffer[j++]= fci;
+		     unicode_buffer[j++]=code;
+		     /* if unicode_buffer[j-1] corresponds to the escape
+		      * character must unescape it by appending one more.
+		      * This will probably always be necessary since it is
+		      * likely unicode_buffer will always have to contain
+		      * escape characters that are interpreted by the device
+		      * driver.
+		      */
+		     if (unicode_buffer[j-1]==esc) unicode_buffer[j++]=esc;
+		     fci = fcisave;
+		     unicode_buffer[j] = fci;
+		     skip=1;
+		     break;
+		
+		   case '<':  /* change font*/
+		     if ('0' <= string[i+2] && string[i+2] <= '9' ) {
+			i+=2+text2num(&string[i+2],'>', &code);
+			if (code & PL_FCI_MARK) {
+			   /* code is a complete FCI (font characterization
+			    * integer): change FCI to this value.
+			    */
+			   fci = code;
+			   unicode_buffer[j]=fci;
+			   skip=1;
+			}
+			else {
+			   /* code is not complete FCI. Change
+			    * FCI with hex power in rightmost hex
+			    * digit and hex digit value in second rightmost
+			    * hex digit.
+			    */
+			   hexdigit = (code >> 4) & PL_FCI_HEXDIGIT_MASK;
+			   hexpower = code & PL_FCI_HEXPOWER_MASK;
+			   plP_hex2fci(hexdigit, hexpower, &fci);
+			   unicode_buffer[j]=fci;
+			   skip=1;
+			}
+		     }
+		
+		     else {
+			i+=text2fci(&string[i+1], &hexdigit, &hexpower);
+			if (hexpower < 7) {
+			   plP_hex2fci(hexdigit, hexpower, &fci);
+			   unicode_buffer[j]=fci;
+			   skip=1;
+			}
+		     }
+		     break;
+		
+		   case 'f':  /* Deprecated Hershey-style font change*/
+		   case 'F':  /* Deprecated Hershey-style font change*/
+		     /* We implement an approximate response here so that
+		      * reasonable results are obtained for unicode fonts,
+		      * but this method is deprecated and the #<nnn> or
+		      * #<command string> methods should be used instead
+		      * to change unicode fonts in mid-string.
+		      */
+		     fci = PL_FCI_MARK;
+		     if (string[i+2] == 'n') {
+			/* medium, upright, sans-serif */
+			plP_hex2fci(PL_FCI_SANS, PL_FCI_FAMILY, &fci);
+		     } else if (string[i+2] == 'r') {
+			/* medium, upright, serif */
+			plP_hex2fci(PL_FCI_SERIF, PL_FCI_FAMILY, &fci);
+		     } else if (string[i+2] == 'i') {
+			/* medium, italic, serif */
+			plP_hex2fci(PL_FCI_ITALIC, PL_FCI_STYLE, &fci);
+			plP_hex2fci(PL_FCI_SERIF, PL_FCI_FAMILY, &fci);
+		     } else if (string[i+2] == 's') {
+			/* medium, upright, script */
+			plP_hex2fci(PL_FCI_SCRIPT, PL_FCI_FAMILY, &fci);
+		     } else
+		       fci = PL_FCI_IMPOSSIBLE;
+		
+		     if (fci != PL_FCI_IMPOSSIBLE){
+			i+=2;
+			unicode_buffer[j] = fci;
+			skip = 1;
+		     }
+		     break;
+		
+		   case 'g':  /* Greek font */
+		   case 'G':  /* Greek font */
+		     /* Get the index in the lookup table
+		      * 527 = upper case alpha displacement in Hershey Table
+		      * 627 = lower case alpha displacement in Hershey Table
+		      */
+		     /* momentarily switch to symbol font. */
+		     fcisave = fci;
+		     plP_hex2fci(PL_FCI_SYMBOL, PL_FCI_FAMILY, &fci);
+		     unicode_buffer[j++]= fci;
+		     ig = plP_strpos(plP_greek_mnemonic, string[i+2]);
+		     if (ig >= 0) {
+			if (ig >= 24)
+			  ig = ig + 100 - 24;
+			idx=plhershey2unicode(ig+527);
+			unicode_buffer[j++] = \
+			  (PLUNICODE)hershey_to_unicode_lookup_table[idx].Unicode;
+			i+=2;
+			skip=1;  /* skip is set if we have copied something
+				  * into the unicode table */
+		     }
+		     else {
+			/* Use "unknown" unicode character if string[i+2]
+			 * is not in the Greek array.*/
+			unicode_buffer[j++]=(PLUNICODE)0x00;
+			i+=2;
+			skip=1;  /* skip is set if we have copied something
+				  * into  the unicode table */
+		     }
+		     fci = fcisave;
+		     unicode_buffer[j]= fci;
+		     break;
+		
+		  }
+	       }
+	
+	       if (skip==0) {
+                  PLUNICODE unichar = 0;
+#ifdef HAVE_LIBUNICODE
+		  char* ptr = unicode_get_utf8 (string + i, &unichar);
+#else
+		  const char* ptr = utf8_to_ucs4 (string + i, &unichar);
+#endif
+                  if (ptr == NULL) {
+                    char buf[80];
+                    strncpy (buf, string, 30);
+                    sprintf (buf, "UTF-8 string is malformed: %s%s",
+                             buf, strlen (string) > 30 ? "[...]" : "");
+                    plabort (buf);
+                  }
+                  unicode_buffer [j] = unichar;
+                  i += ptr - (string + i) - 1;
+
+		  /* Search for escesc (an unescaped escape) in the input
+		   * string and adjust unicode_buffer accordingly).
+		   */
+		  if (unicode_buffer[j] == esc && string[i+1] == esc) {
+		    i++;
+		    unicode_buffer[++j] = esc;
+		  }
+	       }
+	       j++;
+	    }
+	    if (j > 0) {
+	       args.unicode_array_len=j; /* Much easier to set the length than
+					  * work it out later :-) */
+	       args.unicode_array=&unicode_buffer[0]; /* Get address of the
+						       * unicode buffer (even
+						       * though it is
+						       * currently  static) */
+	    } else
+	      /* Don't print anything, if there is no unicode to print! */
+	      return;
+	 }
+      }
+
+      if (plsc->dev_unicode) {
+	args.string=NULL; /* We are using unicode */
+      }
+      else  {
+	args.string = string;
+      }
+
+      plP_esc(PLESC_HAS_TEXT, &args);
+#ifndef DEBUG_TEXT
+   } else {
+#endif
+      plstr(base, xform, refx, refy, string);
+   }
+}
+
+/* convert utf8 string to ucs4 unichar */
+static const char *
+utf8_to_ucs4(const char *ptr, PLUNICODE *unichar)
+{
+   char tmp;
+   int isFirst = 1;
+   int cnt = 0;
+
+   do {
+      /* Get next character in string */
+      tmp = *ptr++;
+      if (isFirst) { /* First char in UTF8 sequence */
+	 isFirst = 0;
+	 /* Determine length of sequence */
+	 if ((unsigned char)(tmp & 0x80) == 0x00) { /* single char */
+	    *unichar = (unsigned int)tmp & 0x7F;
+	    cnt = 0;
+	 } else if ((unsigned char)(tmp & 0xE0) == 0xC0) { /* 2 chars */
+	    *unichar = (unsigned int)tmp & 0x1F;
+	    cnt = 1;
+	 } else if ((unsigned char)(tmp & 0xF0) == 0xE0) { /* 3 chars */
+	    *unichar = (unsigned char)tmp & 0x0F;
+	    cnt = 2;
+	 } else if ((unsigned char)(tmp & 0xF8) == 0xF0) { /* 4 chars */
+	    *unichar = (unsigned char)tmp & 0x07;
+	    cnt = 3;
+	 } else if ((unsigned char)(tmp & 0xFC) == 0xF8) { /* 5 chars */
+	    *unichar = (unsigned char)tmp & 0x03;
+	    cnt = 4;
+	 } else if ((unsigned char)(tmp & 0xFE) == 0xFC) { /* 6 chars */
+	    *unichar = (unsigned char)tmp & 0x01;
+	    cnt = 5;
+	 } else { /* Malformed */
+	    ptr = NULL;
+	    cnt = 0;
+	 }
+      } else { /* Subsequent char in UTF8 sequence */
+	 if ((unsigned char)(tmp & 0xC0) == 0x80) {
+	    *unichar = (*unichar << 6) | ((unsigned int)tmp & 0x3F);
+	    cnt--;
+	 } else { /* Malformed */
+	    ptr = NULL;
+	    cnt = 0;
+	 }
+      }
+   } while (cnt > 0);
+   return (const char *) ptr;
+}
+
+/* convert ucs4 unichar to utf8 string */
+int
+ucs4_to_utf8(PLUNICODE unichar, char *ptr)
+{
+  unsigned char *tmp;
+  int len;
+
+  tmp = (unsigned char *)ptr;
+
+  if ( (unichar & 0xffff80) == 0 ) {  /* single byte */
+    *tmp = (unsigned char) unichar;
+    tmp++;
+    len = 1;
+  }
+  else if ( (unichar & 0xfff800) == 0) { /* two bytes */
+    *tmp = (unsigned char) 0xc0 | (unichar >> 6);
+    tmp++;
+    *tmp = (unsigned char) 0x80 | (unichar & 0x3f);
+    tmp++;
+    len = 2;
+  }
+  else if ( (unichar & 0xff0000) == 0) { /* three bytes */
+    *tmp = (unsigned char) 0xe0 | (unichar >> 12);
+    tmp++;
+    *tmp = (unsigned char) 0x80 | ((unichar >> 6) & 0x3f);
+    tmp++;
+    *tmp = (unsigned char) 0x80 | (unichar & 0x3f);
+    tmp++;
+    len = 3;
+  }
+  else if ( (unichar & 0xe0000) == 0){ /* four bytes */
+    *tmp = (unsigned char) 0xf0 | (unichar >> 18);
+    tmp++;
+    *tmp = (unsigned char) 0x80 | ((unichar >> 12) & 0x3f);
+    tmp++;
+    *tmp = (unsigned char) 0x80 | ((unichar >> 6) & 0x3f);
+    tmp++;
+    *tmp = (unsigned char) 0x80 | (unichar & 0x3f);
+    tmp++;
+    len = 4;
+  }
+  else {  /* Illegal coding */
+    len = 0;
+  }
+  *tmp = '\0';
+
+  return len;
+}
+
+static void
+grline(short *x, short *y, PLINT npts)
+{
+    (void) npts; 			/* pmr: make it used */
+   (*plsc->dispatch_table->pl_line) ( (struct PLStream_struct *) plsc,
+				      x[0], y[0], x[1], y[1] );
+}
+
+static void
+grpolyline(short *x, short *y, PLINT npts)
+{
+   (*plsc->dispatch_table->pl_polyline) ( (struct PLStream_struct *) plsc,
+					  x, y, npts );
+}
+
+static void
+grfill(short *x, short *y, PLINT npts)
+{
+   plsc->dev_npts = npts;
+   plsc->dev_x = x;
+   plsc->dev_y = y;
+
+   (*plsc->dispatch_table->pl_esc) ( (struct PLStream_struct *) plsc,
+				     PLESC_FILL, NULL );
 }
 
 /*--------------------------------------------------------------------------*\
@@ -393,8 +874,8 @@ grfill(short *x, short *y, PLINT npts)
  * Where appropriate, the page clip limits are modified.
 \*--------------------------------------------------------------------------*/
 
-static void
-difilt(PLINT *xxscl, PLINT *yyscl, PLINT npts,
+void
+difilt(PLINT *myxscl, PLINT *myyscl, PLINT npts,
        PLINT *clpxmi, PLINT *clpxma, PLINT *clpymi, PLINT *clpyma)
 {
     PLINT i, x, y;
@@ -403,8 +884,8 @@ difilt(PLINT *xxscl, PLINT *yyscl, PLINT npts,
 
     if (plsc->difilt & PLDI_MAP) {
 	for (i = 0; i < npts; i++) {
-	    xxscl[i] = plsc->dimxax * xxscl[i] + plsc->dimxb;
-	    yyscl[i] = plsc->dimyay * yyscl[i] + plsc->dimyb;
+	    myxscl[i] = plsc->dimxax * myxscl[i] + plsc->dimxb;
+	    myyscl[i] = plsc->dimyay * myyscl[i] + plsc->dimyb;
 	}
     }
 
@@ -412,12 +893,12 @@ difilt(PLINT *xxscl, PLINT *yyscl, PLINT npts,
 
     if (plsc->difilt & PLDI_ORI) {
 	for (i = 0; i < npts; i++) {
-	    x = plsc->dioxax * xxscl[i] + plsc->dioxay * yyscl[i] +
+	    x = plsc->dioxax * myxscl[i] + plsc->dioxay * myyscl[i] +
 		plsc->dioxb;
-	    y = plsc->dioyax * xxscl[i] + plsc->dioyay * yyscl[i] +
+	    y = plsc->dioyax * myxscl[i] + plsc->dioyay * myyscl[i] +
 		plsc->dioyb;
-	    xxscl[i] = x;
-	    yyscl[i] = y;
+	    myxscl[i] = x;
+	    myyscl[i] = y;
 	}
     }
 
@@ -425,8 +906,8 @@ difilt(PLINT *xxscl, PLINT *yyscl, PLINT npts,
 
     if (plsc->difilt & PLDI_PLT) {
 	for (i = 0; i < npts; i++) {
-	    xxscl[i] = plsc->dipxax * xxscl[i] + plsc->dipxb;
-	    yyscl[i] = plsc->dipyay * yyscl[i] + plsc->dipyb;
+	    myxscl[i] = plsc->dipxax * myxscl[i] + plsc->dipxb;
+	    myyscl[i] = plsc->dipyay * myyscl[i] + plsc->dipyb;
 	}
     }
 
@@ -435,8 +916,8 @@ difilt(PLINT *xxscl, PLINT *yyscl, PLINT npts,
 
     if (plsc->difilt & PLDI_DEV) {
 	for (i = 0; i < npts; i++) {
-	    xxscl[i] = plsc->didxax * xxscl[i] + plsc->didxb;
-	    yyscl[i] = plsc->didyay * yyscl[i] + plsc->didyb;
+	    myxscl[i] = plsc->didxax * myxscl[i] + plsc->didxb;
+	    myyscl[i] = plsc->didyay * myyscl[i] + plsc->didyb;
 	}
 	*clpxmi = plsc->diclpxmi;
 	*clpxma = plsc->diclpxma;
@@ -444,10 +925,67 @@ difilt(PLINT *xxscl, PLINT *yyscl, PLINT npts,
 	*clpyma = plsc->diclpyma;
     }
     else {
-	*clpxmi = plsc->phyxmi;
-	*clpxma = plsc->phyxma;
-	*clpymi = plsc->phyymi;
-	*clpyma = plsc->phyyma;
+      *clpxmi = plsc->phyxmi;
+      *clpxma = plsc->phyxma;
+      *clpymi = plsc->phyymi;
+      *clpyma = plsc->phyyma;
+    }
+}
+
+static void
+sdifilt(short *myxscl, short *myyscl, PLINT npts,
+       PLINT *clpxmi, PLINT *clpxma, PLINT *clpymi, PLINT *clpyma)
+{
+  int i;
+  short x, y;
+
+/* Map meta coordinates to physical coordinates */
+
+    if (plsc->difilt & PLDI_MAP) {
+    for (i = 0; i < npts; i++) {
+        myxscl[i] = plsc->dimxax * myxscl[i] + plsc->dimxb;
+        myyscl[i] = plsc->dimyay * myyscl[i] + plsc->dimyb;
+    }
+    }
+
+/* Change orientation */
+
+    if (plsc->difilt & PLDI_ORI) {
+    for (i = 0; i < npts; i++) {
+        x = plsc->dioxax * myxscl[i] + plsc->dioxay * myyscl[i] + plsc->dioxb;
+        y = plsc->dioyax * myxscl[i] + plsc->dioyay * myyscl[i] + plsc->dioyb;
+        myxscl[i] = x;
+        myyscl[i] = y;
+    }
+    }
+
+/* Change window into plot space */
+
+    if (plsc->difilt & PLDI_PLT) {
+    for (i = 0; i < npts; i++) {
+        myxscl[i] = plsc->dipxax * myxscl[i] + plsc->dipxb;
+        myyscl[i] = plsc->dipyay * myyscl[i] + plsc->dipyb;
+    }
+    }
+
+/* Change window into device space and set clip limits */
+/* (this is the only filter that modifies them) */
+
+    if (plsc->difilt & PLDI_DEV) {
+    for (i = 0; i < npts; i++) {
+        myxscl[i] = plsc->didxax * myxscl[i] + plsc->didxb;
+        myyscl[i] = plsc->didyay * myyscl[i] + plsc->didyb;
+    }
+    *clpxmi = plsc->diclpxmi;
+    *clpxma = plsc->diclpxma;
+    *clpymi = plsc->diclpymi;
+    *clpyma = plsc->diclpyma;
+    }
+    else {
+    *clpxmi = plsc->phyxmi;
+    *clpxma = plsc->phyxma;
+    *clpymi = plsc->phyymi;
+    *clpyma = plsc->phyyma;
     }
 }
 
@@ -459,7 +997,7 @@ difilt(PLINT *xxscl, PLINT *yyscl, PLINT npts,
 \*--------------------------------------------------------------------------*/
 
 static void
-setdef_diplt(void)
+setdef_diplt(void)			/* pmr: fix prototype */
 {
     plsc->dipxmin = 0.0;
     plsc->dipxmax = 1.0;
@@ -467,7 +1005,7 @@ setdef_diplt(void)
     plsc->dipymax = 1.0;
 }
 
-static void
+static void			/* pmr: fix prototype */
 setdef_didev(void)
 {
     plsc->mar = 0.0;
@@ -477,7 +1015,7 @@ setdef_didev(void)
 }
 
 static void
-setdef_diori(void)
+setdef_diori(void)			/* pmr: fix prototype */
 {
     plsc->diorot = 0.;
 }
@@ -520,13 +1058,13 @@ pldid2pc(PLFLT *xmin, PLFLT *ymin, PLFLT *xmax, PLFLT *ymax)
 {
     PLFLT pxmin, pymin, pxmax, pymax;
     PLFLT sxmin, symin, sxmax, symax;
-    PLFLT rxmin=0, rymin=0, rxmax=0, rymax=0;
-
-    pldebug("pldid2pc",
-	    "Relative device coordinates (in): %f, %f, %f, %f\n",
-	    *xmin, *ymin, *xmax, *ymax);
+    PLFLT rxmin, rymin, rxmax, rymax;
 
     if (plsc->difilt & PLDI_DEV) {
+
+	pldebug("pldid2pc",
+		"Relative device coordinates (in): %f, %f, %f, %f\n",
+		*xmin, *ymin, *xmax, *ymax);
 
 	pxmin = plP_dcpcx(*xmin);
 	pymin = plP_dcpcy(*ymin);
@@ -547,11 +1085,11 @@ pldid2pc(PLFLT *xmin, PLFLT *ymin, PLFLT *xmax, PLFLT *ymax)
 	*xmax = (rxmax > 1) ? 1 : rxmax;
 	*ymin = (rymin < 0) ? 0 : rymin;
 	*ymax = (rymax > 1) ? 1 : rymax;
-    }
 
-    pldebug("pldid2pc",
-	    "Relative plot coordinates (out): %f, %f, %f, %f\n",
-	    rxmin, rymin, rxmax, rymax);
+	pldebug("pldid2pc",
+		"Relative plot coordinates (out): %f, %f, %f, %f\n",
+		rxmin, rymin, rxmax, rymax);
+    }
 }
 
 /*--------------------------------------------------------------------------*\
@@ -566,13 +1104,13 @@ pldip2dc(PLFLT *xmin, PLFLT *ymin, PLFLT *xmax, PLFLT *ymax)
 {
     PLFLT pxmin, pymin, pxmax, pymax;
     PLFLT sxmin, symin, sxmax, symax;
-    PLFLT rxmin=0, rymin=0, rxmax=0, rymax=0;
-
-    pldebug("pldip2pc",
-	    "Relative plot coordinates (in): %f, %f, %f, %f\n",
-	    *xmin, *ymin, *xmax, *ymax);
+    PLFLT rxmin, rymin, rxmax, rymax;
 
     if (plsc->difilt & PLDI_DEV) {
+
+	pldebug("pldip2pc",
+		"Relative plot coordinates (in): %f, %f, %f, %f\n",
+		*xmin, *ymin, *xmax, *ymax);
 
 	pxmin = plP_dcpcx(*xmin);
 	pymin = plP_dcpcy(*ymin);
@@ -593,11 +1131,11 @@ pldip2dc(PLFLT *xmin, PLFLT *ymin, PLFLT *xmax, PLFLT *ymax)
 	*xmax = (rxmax > 1) ? 1 : rxmax;
 	*ymin = (rymin < 0) ? 0 : rymin;
 	*ymax = (rymax > 1) ? 1 : rymax;
-    }
 
-    pldebug("pldip2pc",
-	    "Relative device coordinates (out): %f, %f, %f, %f\n",
-	    rxmin, rymin, rxmax, rymax);
+	pldebug("pldip2pc",
+		"Relative device coordinates (out): %f, %f, %f, %f\n",
+		rxmin, rymin, rxmax, rymax);
+    }
 }
 
 /*--------------------------------------------------------------------------*\
@@ -659,8 +1197,8 @@ calc_diplt(void)
     PLINT pxmin, pxmax, pymin, pymax, pxlen, pylen;
 
     if (plsc->dev_di) {
-	offset = plsc->device - 1;
-	(*dispatch_table[offset].pl_esc) (plsc, PLESC_DI, NULL);
+	(*plsc->dispatch_table->pl_esc) ( (struct PLStream_struct *) plsc,
+                                          PLESC_DI, NULL );
     }
 
     if ( ! (plsc->difilt & PLDI_PLT))
@@ -716,7 +1254,7 @@ c_plsdidev(PLFLT mar, PLFLT aspect, PLFLT jx, PLFLT jy)
     plsetvar(plsc->jx, jx);
     plsetvar(plsc->jy, jy);
 
-    if (mar == 0. && aspect == 0. && jx == 0. && jy == 0. && 
+    if (mar == 0. && aspect == 0. && jx == 0. && jy == 0. &&
 	! (plsc->difilt & PLDI_ORI)) {
 	plsc->difilt &= ~PLDI_DEV;
 	return;
@@ -741,8 +1279,8 @@ calc_didev(void)
     PLINT pxmin, pxmax, pymin, pymax, pxlen, pylen;
 
     if (plsc->dev_di) {
-	offset = plsc->device - 1;
-	(*dispatch_table[offset].pl_esc) (plsc, PLESC_DI, NULL);
+	(*plsc->dispatch_table->pl_esc) ( (struct PLStream_struct *) plsc,
+                                          PLESC_DI, NULL );
     }
 
     if ( ! (plsc->difilt & PLDI_DEV))
@@ -859,8 +1397,8 @@ calc_diori(void)
     PLFLT xx0, yy0, lx, ly, aspect;
 
     if (plsc->dev_di) {
-	offset = plsc->device - 1;
-	(*dispatch_table[offset].pl_esc) (plsc, PLESC_DI, NULL);
+	(*plsc->dispatch_table->pl_esc) ( (struct PLStream_struct *) plsc,
+                                          PLESC_DI, NULL );
     }
 
     if ( ! (plsc->difilt & PLDI_ORI))
@@ -960,7 +1498,7 @@ c_plsdimap(PLINT dimxmin, PLINT dimxmax, PLINT dimymin, PLINT dimymax,
 \*--------------------------------------------------------------------------*/
 
 static void
-calc_dimap(void)
+calc_dimap(void)			/* pmr: prototype */
 {
     PLFLT lx, ly;
     PLINT pxmin, pxmax, pymin, pymax;
@@ -1008,8 +1546,8 @@ void
 c_plflush(void)
 {
     if (plsc->dev_flush) {
-	offset = plsc->device - 1;
-	(*dispatch_table[offset].pl_esc) (plsc, PLESC_FLUSH, NULL);
+	(*plsc->dispatch_table->pl_esc) ( (struct PLStream_struct *) plsc,
+                                          PLESC_FLUSH, NULL );
     }
     else {
 	if (plsc->OutFile != NULL)
@@ -1022,6 +1560,31 @@ c_plflush(void)
 \*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*\
+ * void pllib_init()
+ *
+ * Initialize library.  Called internally by every startup routine.
+ * Everything you want to always be initialized before plinit() is called
+ * you should put here.  E.g. dispatch table setup, rcfile read, etc.
+\*--------------------------------------------------------------------------*/
+
+void
+pllib_init(void)			/* pmr: prototype */
+{
+    if (lib_initialized) return;
+    lib_initialized = 1;
+
+#ifdef ENABLE_DYNDRIVERS
+/* Create libltdl resources */
+        lt_dlinit();
+#endif
+
+/* Initialize the dispatch table with the info from the static drivers table
+   and the available dynamic drivers. */
+
+    plInitDispatchTable();
+}
+
+/*--------------------------------------------------------------------------*\
  * void plstar(nx, ny)
  *
  * Initialize PLplot, passing in the windows/page settings.
@@ -1030,6 +1593,8 @@ c_plflush(void)
 void
 c_plstar(PLINT nx, PLINT ny)
 {
+    pllib_init();
+
     if (plsc->level != 0)
 	plend1();
 
@@ -1041,12 +1606,14 @@ c_plstar(PLINT nx, PLINT ny)
 /*--------------------------------------------------------------------------*\
  * void plstart(devname, nx, ny)
  *
- * Initialize PLplot, passing the device name and windows/page settings. 
+ * Initialize PLplot, passing the device name and windows/page settings.
 \*--------------------------------------------------------------------------*/
 
 void
 c_plstart(const char *devname, PLINT nx, PLINT ny)
 {
+    pllib_init();
+
     if (plsc->level != 0)
 	plend1();
 
@@ -1065,8 +1632,12 @@ c_plstart(const char *devname, PLINT nx, PLINT ny)
 void
 c_plinit(void)
 {
-    PLFLT lx, ly;
+    PLFLT def_arrow_x[6] = {-0.5, 0.5, 0.3, 0.5, 0.3, 0.5};
+    PLFLT def_arrow_y[6] = {0.0, 0.0,   0.2, 0.0, -0.2, 0.0};
+    PLFLT lx, ly, xpmm_loc, ypmm_loc, aspect_old, aspect_new;
     PLINT mk = 0, sp = 0, inc = 0, del = 2000;
+
+    pllib_init();
 
     if (plsc->level != 0)
 	plend1();
@@ -1075,9 +1646,9 @@ c_plinit(void)
 
     plsc->ipls = ipls;
 
-/* If device isn't set, prompt for it */
+/* Set up devices */
 
-    plGetDev();
+    pllib_devinit();
 
 /* Auxiliary stream setup */
 
@@ -1089,8 +1660,37 @@ c_plinit(void)
     plP_bop();
     plsc->level = 1;
 
+/* Calculate factor such that the character aspect ratio is preserved
+ * when the overall aspect ratio is changed, i.e., if portrait mode is
+ * requested (only honored for subset of drivers) or if the aspect ratio
+ * is specified in any way, or if a 90 deg rotation occurs with
+ * -freeaspect. */
+
+/* Case where plsc->aspect has a value.... (e.g., -a aspect on the
+ * command line or 2nd parameter of plsdidev specified) */
+    if (plsc->aspect > 0.) {
+       lx = plsc->phyxlen / plsc->xpmm;
+       ly = plsc->phyylen / plsc->ypmm;
+       aspect_old = lx / ly;
+       aspect_new = plsc->aspect;
+       plsc->caspfactor = sqrt(aspect_old/aspect_new);
+    }
+/* Case of 90 deg rotations with -freeaspect (this is also how portraite
+ * mode is implemented for the drivers that honor -portrait). */
+    else if (plsc->freeaspect && ABS(cos(plsc->diorot * PI / 2.)) <= 1.e-5) {
+       lx = plsc->phyxlen / plsc->xpmm;
+       ly = plsc->phyylen / plsc->ypmm;
+       aspect_old = lx / ly;
+       aspect_new = ly / lx;
+       plsc->caspfactor = sqrt(aspect_old/aspect_new);
+    }
+
+    else
+       plsc->caspfactor = 1.;
+
 /* Load fonts */
 
+    plsc->cfont = 1;
     plfntld(initfont);
 
 /* Set up subpages */
@@ -1109,13 +1709,15 @@ c_plinit(void)
     if (plsc->zdigmax == 0)
 	plsc->zdigmax = 3;
 
-/* Switch to graphics mode and set color */
+/* Switch to graphics mode and set color and arrow style*/
 
     plgra();
     plcol(1);
 
     plstyl(0, &mk, &sp);
     plpat(1, &inc, &del);
+
+    plsvect(def_arrow_x, def_arrow_y, 6, 0);
 
 /* Set clip limits. */
 
@@ -1133,6 +1735,15 @@ c_plinit(void)
 /* Initialize driver interface */
 
     pldi_ini();
+
+/* Apply compensating factor to original xpmm and ypmm so that
+ * character aspect ratio is preserved when overall aspect ratio
+ * is changed.  This must appear here in the code because previous
+ * code in this routine and in routines that it calls must use the original
+ * values of xpmm and ypmm before the compensating factor is applied.  */
+
+    plP_gpixmm(&xpmm_loc, &ypmm_loc);
+    plP_setpxl(xpmm_loc*plsc->caspfactor, ypmm_loc/plsc->caspfactor);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -1146,6 +1757,8 @@ c_plend(void)
 {
     PLINT i;
 
+    if (lib_initialized == 0) return;
+
     for (i = PL_NSTREAMS-1; i >= 0; i--) {
 	if (pls[i] != NULL) {
 	    plsstrm(i);
@@ -1153,6 +1766,35 @@ c_plend(void)
 	}
     }
     plfontrel();
+#ifdef ENABLE_DYNDRIVERS
+/* Release the libltdl resources */
+    lt_dlexit();
+/* Free up memory allocated to the dispatch tables */
+    for (i = 0; i < npldynamicdevices; i++) {
+      free_mem(loadable_device_list[i].devnam);
+      free_mem(loadable_device_list[i].description);
+      free_mem(loadable_device_list[i].drvnam);
+      free_mem(loadable_device_list[i].tag);
+    }
+    free_mem(loadable_device_list);
+    for (i = 0; i < nloadabledrivers; i++) {
+      free_mem(loadable_driver_list[i].drvnam);
+    }
+    free_mem(loadable_driver_list);
+    for (i = nplstaticdevices; i < npldrivers; i++) {
+      free_mem(dispatch_table[i]->pl_MenuStr);
+      free_mem(dispatch_table[i]->pl_DevName);
+      free_mem(dispatch_table[i]);
+    }
+#endif
+    for (i = 0; i < nplstaticdevices; i++) {
+      free_mem(dispatch_table[i]);
+    }
+    free_mem(dispatch_table);
+
+    plP_FreeDrvOpts();
+
+    lib_initialized = 0;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -1171,6 +1813,9 @@ c_plend1(void)
 	plP_tidy();
 	plsc->level = 0;
     }
+    /* Move from plP_tidy because FileName may be set even if level == 0 */
+    if (plsc->FileName)
+	free_mem(plsc->FileName);
 
 /* Free all malloc'ed stream memory */
 
@@ -1180,8 +1825,20 @@ c_plend1(void)
     free_mem(plsc->geometry);
     free_mem(plsc->dev);
     free_mem(plsc->BaseName);
-    free_mem(plsc->Ext);
-    free_mem(plsc->plwindow);
+    free_mem(plsc->Ext);		/* pmr: added for EMBOSS */
+#ifndef BUFFERED_FILE
+    free_mem(plsc->plbuf_buffer);
+#endif
+/*    if (plsc->program) free_mem(plsc->program);*/ /* pmr: now const */
+    if (plsc->server_name) free_mem(plsc->server_name);
+    if (plsc->server_host) free_mem(plsc->server_host);
+    if (plsc->server_port) free_mem(plsc->server_port);
+    if (plsc->user) free_mem(plsc->user);
+    if (plsc->plserver) free_mem(plsc->plserver);
+    if (plsc->auto_path) free_mem(plsc->auto_path);
+
+    if (plsc->arrow_x) free_mem(plsc->arrow_x);
+    if (plsc->arrow_y) free_mem(plsc->arrow_y);
 
 /* Free malloc'ed stream if not in initial stream, else clear it out */
 
@@ -1191,7 +1848,7 @@ c_plend1(void)
 	plsstrm(0);
     }
     else {
-	(void) memset((char *) pls[ipls], 0, sizeof(PLStream));
+	memset((char *) pls[ipls], 0, sizeof(PLStream));
     }
 }
 
@@ -1206,7 +1863,7 @@ void
 c_plsstrm(PLINT strm)
 {
     if (strm < 0 || strm >= PL_NSTREAMS) {
-	(void) fprintf(stderr,
+	fprintf(stderr,
 		"plsstrm: Illegal stream number %d, must be in [0, %d]\n",
 		(int) strm, PL_NSTREAMS);
     }
@@ -1217,7 +1874,7 @@ c_plsstrm(PLINT strm)
 	    if (pls[ipls] == NULL)
 		plexit("plsstrm: Out of memory.");
 
-	    (void) memset((char *) pls[ipls], 0, sizeof(PLStream));
+	    memset((char *) pls[ipls], 0, sizeof(PLStream));
 	}
 	plsc = pls[ipls];
 	plsc->ipls = ipls;
@@ -1260,7 +1917,7 @@ c_plmkstrm(PLINT *p_strm)
     }
 
     if (i == PL_NSTREAMS) {
-	(void) fprintf(stderr, "plmkstrm: Cannot create new stream\n");
+	fprintf(stderr, "plmkstrm: Cannot create new stream\n");
 	*p_strm = -1;
     }
     else {
@@ -1298,6 +1955,22 @@ plstrm_init(void)
 	if (plsc->cmap1 == NULL)
 	    plscmap1n(0);
     }
+
+    plsc->psdoc = NULL;
+}
+
+/*--------------------------------------------------------------------------*\
+ * pl_cpcolor
+ *
+ * Utility to copy one PLColor to another.
+\*--------------------------------------------------------------------------*/
+
+void
+pl_cpcolor(PLColor *to, PLColor *from)
+{
+    to->r = from->r;
+    to->g = from->g;
+    to->b = from->b;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -1314,14 +1987,6 @@ plstrm_init(void)
  * enabled (done automatically by some display drivers, such as X).
 \*--------------------------------------------------------------------------*/
 
-static void
-cp_color(PLColor *to, PLColor *from)
-{
-    to->r = from->r;
-    to->g = from->g;
-    to->b = from->b;
-}
-
 void
 c_plcpstrm(PLINT iplsr, PLINT flags)
 {
@@ -1330,8 +1995,7 @@ c_plcpstrm(PLINT iplsr, PLINT flags)
 
     plsr = pls[iplsr];
     if (plsr == NULL) {
-	(void) fprintf(stderr, "plcpstrm: stream %d not in use\n",
-		       (int) iplsr);
+	fprintf(stderr, "plcpstrm: stream %d not in use\n", (int) iplsr);
 	return;
     }
 
@@ -1342,12 +2006,20 @@ c_plcpstrm(PLINT iplsr, PLINT flags)
 /* Plot buffer -- need to copy file pointer so that plreplot() works */
 /* This also prevents inadvertent writes into the plot buffer */
 
+#ifdef BUFFERED_FILE
     plsc->plbufFile = plsr->plbufFile;
+#else
+    plsc->plbuf_buffer = plsr->plbuf_buffer;
+    plsc->plbuf_buffer_grow = plsr->plbuf_buffer_grow;
+    plsc->plbuf_buffer_size = plsr->plbuf_buffer_size;
+    plsc->plbuf_top = plsr->plbuf_top;
+    plsc->plbuf_readpos = plsr->plbuf_readpos;
+#endif
 
 /* Driver interface */
 /* Transformation must be recalculated in current driver coordinates */
 
-    if (plsr->difilt & PLDI_PLT) 
+    if (plsr->difilt & PLDI_PLT)
 	plsdiplt(plsr->dipxmin, plsr->dipymin, plsr->dipxmax, plsr->dipymax);
 
     if (plsr->difilt & PLDI_DEV)
@@ -1368,7 +2040,7 @@ c_plcpstrm(PLINT iplsr, PLINT flags)
 
 /* current color */
 
-    cp_color(&plsc->curcolor, &plsr->curcolor);
+    pl_cpcolor(&plsc->curcolor, &plsr->curcolor);
 
 /* cmap 0 */
 
@@ -1379,7 +2051,7 @@ c_plcpstrm(PLINT iplsr, PLINT flags)
 
     plsc->cmap0 = (PLColor *) calloc(1, plsc->ncol0 * sizeof(PLColor));
     for (i = 0; i < plsc->ncol0; i++)
-	cp_color(&plsc->cmap0[i], &plsr->cmap0[i]);
+	pl_cpcolor(&plsc->cmap0[i], &plsr->cmap0[i]);
 
 /* cmap 1 */
 
@@ -1389,8 +2061,8 @@ c_plcpstrm(PLINT iplsr, PLINT flags)
 	free((void *) plsc->cmap1);
 
     plsc->cmap1 = (PLColor *) calloc(1, plsc->ncol1 * sizeof(PLColor));
-    for (i = 0; i < plsc->ncol1; i++) 
-	cp_color(&plsc->cmap1[i], &plsr->cmap1[i]);
+    for (i = 0; i < plsc->ncol1; i++)
+	pl_cpcolor(&plsc->cmap1[i], &plsr->cmap1[i]);
 
 /* Initialize if it hasn't been done yet. */
 
@@ -1399,9 +2071,306 @@ c_plcpstrm(PLINT iplsr, PLINT flags)
 }
 
 /*--------------------------------------------------------------------------*\
- * void plGetDev()
+ * pllib_devinit()
  *
- * If the the user has not already specified the output device, or the
+ * Does preliminary setup of device driver.
+ *
+ * This function (previously plGetDev) used to be what is now shown as
+ * plSelectDev below.  However, the situation is a bit more complicated now in
+ * the dynloadable drivers era.  We now have to:
+ *
+ * 1) Make sure the dispatch table is initialized to the union of static
+ *    drivers and available dynamic drivers (done from pllib_init now).
+ * 2) Allow the user to select the desired device.
+ * 3) Initialize the dispatch table entries for the selected device, in the
+ *    case that it is a dynloadable driver that has not yet been loaded.
+ *
+ * Also made non-static, in order to allow some device calls to be made prior
+ * to calling plinit().  E.g. plframe needs to tell the X driver to create its
+ * internal data structure during widget construction time (using the escape
+ * function), but doesn't call plinit() until the plframe is actually mapped.
+\*--------------------------------------------------------------------------*/
+
+void
+pllib_devinit(void)			/* pmr: prototype */
+{
+    if (plsc->dev_initialized) return;
+    plsc->dev_initialized = 1;
+
+    plSelectDev();
+
+    plLoadDriver();
+
+/* offset by one since table is zero-based, but input list is not */
+    plsc->dispatch_table = dispatch_table[plsc->device - 1];
+}
+
+int PLDLLIMPEXP plInBuildTree(void)			/* pmr: prototype */
+{
+  static int inited = 0;
+  static int inBuildTree = 0;
+
+  if (inited == 0) {
+    char currdir[256];
+
+/* AM: getcwd has a somewhat strange status on Windows, its proper
+   name is _getcwd, this is a problem in the case of DLLs, like with
+   the Java bindings.
+*/
+#if defined(WIN32) && !defined(__BORLANDC__)
+#define getcwd _getcwd
+#endif
+
+    if (getcwd(currdir, 256) == NULL) {
+      pldebug("plInBuildTree():", "Not enough buffer space");
+    } else if (strncmp(BUILD_DIR, currdir, strlen(BUILD_DIR)) == 0)
+      inBuildTree = 1;
+    inited = 1;
+  }
+  return inBuildTree;
+}
+
+#ifdef ENABLE_DYNDRIVERS
+
+static char*
+plGetDrvDir ()
+{
+    char* drvdir;
+
+/* Get drivers directory in PLPLOT_DRV_DIR or DRV_DIR,
+ *  on this order
+ */
+
+    if (plInBuildTree() == 1) {
+      drvdir = BUILD_DIR "/drivers";
+      pldebug("plGetDrvDir", "Using %s as the driver directory.\n", drvdir);
+    } else {
+      pldebug("plGetDrvDir", "Trying to read env var PLPLOT_DRV_DIR\n");
+      drvdir = getenv ("PLPLOT_DRV_DIR");
+
+      if (drvdir == NULL) {
+        pldebug("plGetDrvDir",
+	        "Will use drivers dir: " DRV_DIR "\n");
+	drvdir = DRV_DIR;
+      }
+    }
+
+    return drvdir;
+}
+
+#endif
+
+
+/*--------------------------------------------------------------------------*\
+ * void plInitDispatchTable()
+ *
+ * ...
+\*--------------------------------------------------------------------------*/
+
+static int plDispatchSequencer( const void *p1, const void *p2 )
+{
+    const PLDispatchTable* t1 = *(const PLDispatchTable * const *) p1;
+    const PLDispatchTable* t2 = *(const PLDispatchTable * const *) p2;
+
+/*     printf( "sorting: t1.name=%s t1.seq=%d t2.name=%s t2.seq=%d\n", */
+/*             t1->pl_DevName, t1->pl_seq, t2->pl_DevName, t2->pl_seq ); */
+
+    return t1->pl_seq - t2->pl_seq;
+}
+
+static void
+plInitDispatchTable(void)		/* pmr: prototype */
+{
+    int n;
+
+#ifdef ENABLE_DYNDRIVERS
+    char buf[300];
+    char* drvdir;
+    char *devnam, *devdesc, *devtype, *driver, *tag, *seqstr;
+    int seq;
+    int i, j, driver_found, done=0;
+    FILE *fp_drvdb = NULL;
+    DIR* dp_drvdir = NULL;
+    struct dirent* entry;
+    /* lt_dlhandle dlhand; */
+
+    /* Make sure driver counts are zeroed */
+    npldynamicdevices = 0;
+    nloadabledrivers = 0;
+
+/* Open a temporary file in which all the plD_DEVICE_INFO_<driver> strings
+   will be stored */
+    fp_drvdb = tmpfile ();
+
+/* Open the drivers directory */
+    drvdir = plGetDrvDir ();
+    dp_drvdir = opendir (drvdir);
+    if (dp_drvdir == NULL) {
+      plabort ("plInitDispatchTable: Could not open drivers directory");
+      return;
+    }
+
+/* Loop over each entry in the drivers directory */
+
+    pldebug ("plInitDispatchTable", "Scanning dyndrivers dir\n");
+    while ((entry = readdir (dp_drvdir)) != NULL)
+    {
+        char* name = entry->d_name;
+        int len = strlen (name) - 3;
+
+            pldebug ("plInitDispatchTable",
+                     "Consider file %s\n", name);
+
+/* Only consider entries that have the ".rc" suffix */
+	if ((len > 0) && (strcmp (name + len, ".rc") == 0)) {
+	    char path[300];
+	    char buf[300];
+            FILE* fd;
+
+/* Open the driver's info file */
+            sprintf (path, "%s/%s", drvdir, name);
+            fd = fopen (path, "r");
+            if (fd == NULL) {
+	        sprintf (buf,
+                  "plInitDispatchTable: Could not open driver info file %s\n",
+                  name);
+	        plabort (buf);
+	        return;
+	    }
+
+/* Each line in the <driver>.rc file corresponds to a specific device.
+ * Write it to the drivers db file and take care of leading newline
+ * character */
+
+            pldebug ("plInitDispatchTable",
+                     "Opened driver info file %s\n", name);
+            while (fgets (buf, 300, fd) != NULL)
+	    {
+                fprintf (fp_drvdb, "%s", buf);
+		if ( buf [strlen (buf) - 1] != '\n' )
+		    fprintf (fp_drvdb, "\n");
+                npldynamicdevices++;
+	    }
+	    fclose (fd);
+	}
+    }
+
+/* Make sure that the temporary file containing the drivers database
+ * is ready to read and close the directory handle */
+    fflush (fp_drvdb);
+    closedir (dp_drvdir);
+
+#endif
+
+/* Allocate space for the dispatch table. */
+    dispatch_table = (PLDispatchTable **)
+	malloc( (nplstaticdevices + npldynamicdevices) * sizeof(PLDispatchTable *) );
+
+/* Initialize the dispatch table entries for the static devices by calling
+   the dispatch table initialization function for each static device.  This
+   is the same function that would be called at load time for dynamic
+   drivers. */
+
+    for( n=0; n < nplstaticdevices; n++ )
+    {
+        dispatch_table[n] = (PLDispatchTable *)malloc( sizeof(PLDispatchTable) );
+
+        (*static_device_initializers[n])( dispatch_table[n] );
+    }
+    npldrivers = nplstaticdevices;
+
+#ifdef ENABLE_DYNDRIVERS
+
+/* Allocate space for the device and driver specs.  We may not use all of
+ * these driver descriptors, but we obviously won't need more drivers than
+ * devices... */
+    loadable_device_list = malloc( npldynamicdevices * sizeof(PLLoadableDevice) );
+    loadable_driver_list = malloc( npldynamicdevices * sizeof(PLLoadableDriver) );
+
+    rewind( fp_drvdb );
+
+    i = 0;
+    done = !(i < npldynamicdevices);
+    while( !done ) {
+        char *p = fgets( buf, 300, fp_drvdb );
+
+        if (p == 0) {
+            done = 1;
+            continue;
+        }
+
+        devnam  = strtok( buf, ":" );
+        devdesc = strtok( 0, ":" );
+        devtype = strtok( 0, ":" );
+        driver  = strtok( 0, ":" );
+        seqstr  = strtok( 0, ":" );
+        tag     = strtok( 0, "\n" );
+
+        seq     = atoi(seqstr);
+
+        n = npldrivers++;
+
+        dispatch_table[n] = malloc( sizeof(PLDispatchTable) );
+
+    /* Fill in the dispatch table entries. */
+        dispatch_table[n]->pl_MenuStr = plstrdup(devdesc);
+        dispatch_table[n]->pl_DevName = plstrdup(devnam);
+        dispatch_table[n]->pl_type = atoi(devtype);
+        dispatch_table[n]->pl_seq = seq;
+        dispatch_table[n]->pl_init = 0;
+        dispatch_table[n]->pl_line = 0;
+        dispatch_table[n]->pl_polyline = 0;
+        dispatch_table[n]->pl_eop = 0;
+        dispatch_table[n]->pl_bop = 0;
+        dispatch_table[n]->pl_tidy = 0;
+        dispatch_table[n]->pl_state = 0;
+        dispatch_table[n]->pl_esc = 0;
+
+    /* Add a record to the loadable device list */
+        loadable_device_list[i].devnam = plstrdup(devnam);
+        loadable_device_list[i].description = plstrdup(devdesc);
+        loadable_device_list[i].drvnam = plstrdup(driver);
+        loadable_device_list[i].tag = plstrdup(tag);
+
+    /* Now see if this driver has been seen before.  If not, add a driver
+     * entry for it. */
+        driver_found = 0;
+        for( j=0; j < nloadabledrivers; j++ )
+            if (strcmp( driver, loadable_driver_list[j].drvnam) == 0)
+            {
+                driver_found = 1;
+                break;
+            }
+
+        if (!driver_found)
+        {
+            loadable_driver_list[nloadabledrivers].drvnam = plstrdup(driver);
+            loadable_driver_list[nloadabledrivers].dlhand = 0;
+            nloadabledrivers++;
+        }
+
+        loadable_device_list[i].drvidx = j;
+
+    /* Get ready for next loadable device spec */
+        i++;
+    }
+
+/* RML: close fp_drvdb */
+    fclose (fp_drvdb);
+
+#endif
+
+/* Finally, we need to sort the list into presentation order, based on the
+   sequence number in the dispatch ttable entries. */
+
+    qsort( dispatch_table, npldrivers, sizeof(PLDispatchTable*),
+           plDispatchSequencer );
+}
+
+/*--------------------------------------------------------------------------*\
+ * void plSelectDev()
+ *
+ * If the user has not already specified the output device, or the
  * one specified is either: (a) not available, (b) "?", or (c) NULL, the
  * user is prompted for it.
  *
@@ -1410,19 +2379,20 @@ c_plcpstrm(PLINT iplsr, PLINT flags)
 \*--------------------------------------------------------------------------*/
 
 static void
-plGetDev(void)
+plSelectDev(void)			/* pmr: prototype */
 {
     int dev, i, count, length;
     char response[80];
-
+    int tlen;
+    
 /* Device name already specified.  See if it is valid. */
 
     if (*(plsc->DevName) != '\0' && *(plsc->DevName) != '?') {
 	length = strlen(plsc->DevName);
 	for (i = 0; i < npldrivers; i++) {
-	    if ((*plsc->DevName == *dispatch_table[i].pl_DevName) &&
+	    if ((*plsc->DevName == *dispatch_table[i]->pl_DevName) &&
 		(strncmp(plsc->DevName,
-			 dispatch_table[i].pl_DevName, length) == 0))
+			 dispatch_table[i]->pl_DevName, length) == 0))
 		break;
 	}
 	if (i < npldrivers) {
@@ -1430,8 +2400,8 @@ plGetDev(void)
 	    return;
 	}
 	else {
-	    (void) fprintf(stderr, "Requested device %s not available\n",
-			   plsc->DevName);
+	    fprintf(stderr, "Requested device %s not available\n",
+		    plsc->DevName);
 	}
     }
 
@@ -1444,30 +2414,36 @@ plGetDev(void)
 /* User hasn't specified it correctly yet, so we prompt */
 
     while (dev < 1 || dev > npldrivers) {
-	(void) fprintf(stderr, "\nPlotting Options:\n");
+	fprintf(stdout, "\nPlotting Options:\n");
 	for (i = 0; i < npldrivers; i++) {
-	    (void) fprintf(stderr, " <%2d> %-10s %s\n", i + 1,
-			   dispatch_table[i].pl_DevName,
-			   dispatch_table[i].pl_MenuStr);
+	    fprintf(stdout, " <%2d> %-10s %s\n", i + 1,
+		    dispatch_table[i]->pl_DevName,
+		    dispatch_table[i]->pl_MenuStr);
 	}
 	if (ipls == 0)
-	    (void) fprintf(stderr, "\nEnter device number or keyword: ");
+	    fprintf(stdout, "\nEnter device number or keyword: ");
 	else
-	    (void) fprintf(stderr,
-			   "\nEnter device number or keyword (stream %d): ",
-			   (int) ipls);
+	    fprintf(stdout, "\nEnter device number or keyword (stream %d): ",
+		   (int) ipls);
 
-	(void) fgets(response, sizeof(response), stdin);
+	plio_fgets(response, sizeof(response), stdin);
 
     /* First check to see if device keyword was entered. */
     /* Final "\n" in response messes things up, so ignore it.  */
 
 	length = strlen(response);
-	if (*(response + length - 1) == '\n')
+	if(!length)
+	{
+	    fprintf(stderr,"Error: empty response\n");
+	    exit(-1);
+	}
+	
+	tlen = length - 1;
+	if (*(response + tlen) == '\n')
 	    length--;
 
 	for (i = 0; i < npldrivers; i++) {
-	    if ( ! strncmp(response, dispatch_table[i].pl_DevName,
+	    if ( ! strncmp(response, dispatch_table[i]->pl_DevName,
 			   (unsigned int) length))
 		break;
 	}
@@ -1476,15 +2452,107 @@ plGetDev(void)
 	}
 	else {
 	    if ((dev = atoi(response)) < 1) {
-		(void) fprintf(stderr, "\nInvalid device: %s", response);
+		fprintf(stdout, "\nInvalid device: %s", response);
 		dev = 0;
 	    }
 	}
 	if (count++ > 10)
-	    plexit("plGetDev: Too many tries.");
+	    plexit("plSelectDev: Too many tries.");
     }
     plsc->device = dev;
-    (void) strcpy(plsc->DevName, dispatch_table[dev - 1].pl_DevName);
+    strcpy(plsc->DevName, dispatch_table[dev - 1]->pl_DevName);
+}
+
+/*--------------------------------------------------------------------------*\
+ * void plLoadDriver()
+ *
+ * Make sure the selected driver is loaded.  Static drivers are already
+ * loaded, but if the user selected a dynamically loadable driver, we may
+ * have to take care of that now.
+\*--------------------------------------------------------------------------*/
+
+static void
+plLoadDriver(void)
+{
+#ifdef ENABLE_DYNDRIVERS
+    int i, drvidx;
+    char sym[60];
+    char *tag;
+
+    int n=plsc->device - 1;
+    PLDispatchTable *dev = dispatch_table[n];
+    PLLoadableDriver *driver = 0;
+
+/* If the dispatch table is already filled in, then either the device was
+ * linked in statically, or else perhaps it was already loaded.  In either
+ * case, we have nothing left to do. */
+    if (dev->pl_init)
+        return;
+
+    pldebug("plLoadDriver", "Device not loaded!\n");
+
+/* Now search through the list of loadable devices, looking for the record
+ * that corresponds to the requested device. */
+    for( i=0; i < npldynamicdevices; i++ )
+        if (strcmp( dev->pl_DevName, loadable_device_list[i].devnam ) == 0)
+            break;
+
+/* If we couldn't find such a record, then there is some sort of internal
+ * logic flaw since plSelectDev is supposed to only select a valid device.
+ */
+    if (i == npldynamicdevices) {
+        fprintf( stderr, "No such device: %s.\n", dev->pl_DevName );
+        plexit("plLoadDriver detected device logic screwup");
+    }
+
+/* Note the device tag, and the driver index. Note that a given driver could
+ * supply multiple devices, each with a unique tag to distinguish the driver
+ * entry points for the differnet supported devices. */
+    tag = loadable_device_list[i].tag;
+    drvidx = loadable_device_list[i].drvidx;
+
+    pldebug("plLoadDriver", "tag=%s, drvidx=%d\n", tag, drvidx );
+
+    driver = &loadable_driver_list[drvidx];
+
+/* Load the driver if it hasn't been loaded yet. */
+    if (!driver->dlhand)
+    {
+        char drvspec[ 400 ];
+        sprintf( drvspec, "%s/%s", plGetDrvDir (), driver->drvnam );
+
+	pldebug("plLoadDriver", "Trying to load %s on %s\n",
+		driver->drvnam, drvspec );
+
+        driver->dlhand = lt_dlopenext( drvspec);
+    }
+
+/* If it still isn't loaded, then we're doomed. */
+    if (!driver->dlhand)
+    {
+        pldebug("plLoadDriver", "lt_dlopenext failed because of "
+		 "the following reason:\n%s\n", lt_dlerror ());
+        fprintf( stderr, "Unable to load driver: %s.\n", driver->drvnam );
+        plexit("Unable to load driver");
+    }
+
+/* Now we are ready to ask the driver's device dispatch init function to
+   initialize the entries in the dispatch table. */
+
+    sprintf( sym, "plD_dispatch_init_%s", tag );
+    {
+        PLDispatchInit dispatch_init = (PLDispatchInit) lt_dlsym( driver->dlhand, sym );
+        if (!dispatch_init)
+        {
+            fprintf( stderr,
+                     "Unable to locate dispatch table initialization function for driver: %s.\n",
+		     driver->drvnam );
+            return;
+        }
+
+        (*dispatch_init)( dev );
+    }
+#endif
 }
 
 /*--------------------------------------------------------------------------*\
@@ -1514,7 +2582,11 @@ c_plfontld(PLINT ifont)
 void
 c_plreplot(void)
 {
+#ifdef BUFFERED_FILE
     if (plsc->plbufFile != NULL) {
+#else
+    if (plsc->plbuf_buffer != NULL) {
+#endif
 	plRemakePlot(plsc);
     }
     else {
@@ -1533,10 +2605,10 @@ c_plreplot(void)
  * number of devices actually present.
 \*--------------------------------------------------------------------------*/
 
-void
+void					/* pmr: const  */
 plgFileDevs(const char ***p_menustr, const char ***p_devname, int *p_ndev)
 {
-  plgdevlst(*p_menustr, *p_devname, p_ndev, 0);
+    plgdevlst(*p_menustr, *p_devname, p_ndev, 0);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -1545,22 +2617,23 @@ plgFileDevs(const char ***p_menustr, const char ***p_devname, int *p_ndev)
  * Like plgFileDevs(), but returns names and menu strings for all devices.
 \*--------------------------------------------------------------------------*/
 
-void
+void					/* pmr: const  */
 plgDevs(const char ***p_menustr, const char ***p_devname, int *p_ndev)
 {
-  plgdevlst(*p_menustr, *p_devname, p_ndev, -1);
+    plgdevlst(*p_menustr, *p_devname, p_ndev, -1);
 }
 
-static void
-plgdevlst(const char **p_menustr, const char **p_devname,
-	  int *p_ndev, int type)
+static void				/* pmr: const */
+plgdevlst(const char **p_menustr, const char **p_devname, int *p_ndev, int type)
 {
     int i, j;
 
+    pllib_init();
+
     for (i = j = 0; i < npldrivers; i++) {
-	if (type < 0 || dispatch_table[i].pl_type == type) {
-	    p_menustr[j] = dispatch_table[i].pl_MenuStr;
-	    p_devname[j] = dispatch_table[i].pl_DevName;
+	if (type < 0 || dispatch_table[i]->pl_type == type) {
+	    p_menustr[j] = dispatch_table[i]->pl_MenuStr;
+	    p_devname[j] = dispatch_table[i]->pl_DevName;
 	    if (++j + 1 >= *p_ndev) {
 	        plwarn("plgdevlst:  too many devices");
 		break;
@@ -1595,6 +2668,9 @@ c_plgpage(PLFLT *p_xp, PLFLT *p_yp,
 void
 c_plspage(PLFLT xp, PLFLT yp, PLINT xleng, PLINT yleng, PLINT xoff, PLINT yoff)
 {
+    if (plsc->level > 0)
+        plwarn("calling plspage() after plinit() may give unpredictable results");
+
     if (xp)
 	plsc->xdpi = xp;
     if (yp)
@@ -1626,8 +2702,9 @@ c_plssub(PLINT nx, PLINT ny)
 /* Force a page advance */
 
     if (plsc->level > 0) {
-	plP_eop();
-	plP_bop();
+        plP_subpInit();
+/*AWI	plP_eop();
+	plP_bop();*/
     }
 }
 
@@ -1641,7 +2718,7 @@ c_plsdev(const char *devname)
 	return;
     }
     if (devname != NULL) {
-	(void) strncpy(plsc->DevName, devname, sizeof(plsc->DevName) - 1);
+	strncpy(plsc->DevName, devname, sizeof(plsc->DevName) - 1);
 	plsc->DevName[sizeof(plsc->DevName) - 1] = '\0';
     }
 }
@@ -1652,7 +2729,23 @@ c_plsdev(const char *devname)
 void
 c_plgdev(char *p_dev)
 {
-    (void) strcpy(p_dev, plsc->DevName);
+    strcpy(p_dev, plsc->DevName);
+}
+
+/* Set the memory area to be plotted (with the 'mem' driver) as the 'dev'
+   member of the stream structure.  Also set the number
+   of pixels in the memory passed in in 'plotmem'.
+   Plotmem is a block of memory maxy by maxx by 3 bytes long, say:
+   480 x 640 x 3 (Y, X, RGB)
+
+   This memory will be freed by the user!
+*/
+
+void
+c_plsmem(PLINT maxx, PLINT maxy, void *plotmem)
+{
+    plsc->dev = plotmem;
+    plP_setphy (0, maxx, 0, maxy);
 }
 
 /* Get the current stream pointer */
@@ -1663,12 +2756,12 @@ plgpls(PLStream **p_pls)
     *p_pls = plsc;
 }
 
-/* Get the (current) run level. 
+/* Get the (current) run level.
  * Valid settings are:
- *   0	uninitialized 
+ *   0	uninitialized
  *   1	initialized
  *   2	viewport defined
- *   3	world coords defined 
+ *   3	world coords defined
  */
 
 void
@@ -1697,6 +2790,24 @@ plsButtonEH(void (*ButtonEH) (PLGraphicsIn *, void *, int *),
     plsc->ButtonEH_data = ButtonEH_data;
 }
 
+/* Sets an optional user bop handler. */
+
+void
+plsbopH(void (*handler) (void *, int *), void *handler_data)
+{
+    plsc->bop_handler = handler;
+    plsc->bop_data = handler_data;
+}
+
+/* Sets an optional user eop handler. */
+
+void
+plseopH(void (*handler) (void *, int *), void *handler_data)
+{
+    plsc->eop_handler = handler;
+    plsc->eop_data = handler_data;
+}
+
 /* Set the variables to be used for storing error info */
 
 void
@@ -1719,18 +2830,18 @@ c_plsori(PLINT ori)
 
 /*
  * Set pen width.  Can be done any time, but before calling plinit is best
- * since otherwise it may be volatile (i.e. reset on next page advance). 
- * If width <= 0 or is unchanged by the call, nothing is done.
+ * since otherwise it may be volatile (i.e. reset on next page advance).
+ * If width < 0 or is unchanged by the call, nothing is done.
  */
 
 void
 c_plwid(PLINT width)
 {
-    if (width != plsc->width && width > 0) {
+    if (width != plsc->width && width >= 0) {
 	plsc->width = width;
 
 	if (plsc->level > 0) {
-	    if ( ! plsc->widthlock) 
+	    if ( ! plsc->widthlock)
 		plP_state(PLSTATE_WIDTH);
 	}
     }
@@ -1752,14 +2863,22 @@ plsfile(FILE *file)
     plsc->OutFile = file;
 }
 
-/* Get the (current) output file name.  Must be preallocated to >80 bytes */
+/* Get the (current) output file name.  Must be preallocated to >=80 bytes */
 /* Beyond that, I truncate it.  You have been warned. */
 
 void
 c_plgfnam(char *fnam)
 {
-    (void) strncpy(fnam, plsc->FileName, 79);
-    fnam[79] = '\0';
+    if (fnam == NULL) {
+	plabort("filename string must be preallocated to >=80 bytes");
+	return;
+    }
+
+    *fnam = '\0';
+    if (plsc->FileName != NULL) {
+	strncpy(fnam, plsc->FileName, 79);
+	fnam[79] = '\0';
+    }
 }
 
 /* Set the output file name. */
@@ -1779,9 +2898,9 @@ c_plxsfnam(const char *fnam, const char* ext)
 /* Set the pause (on end-of-page) status */
 
 void
-c_plspause(PLINT pause)
+c_plspause(PLINT mypause)		/* pmr: pause in unistd.h */
 {
-    plsc->nopause = ! pause;
+    plsc->nopause = ! mypause;
 }
 
 /* Set the floating point precision (in number of places) in numeric labels. */
@@ -1834,7 +2953,7 @@ c_plsesc(char esc)
 /* Get the escape character for text strings. */
 
 void
-plgesc(char *p_esc)
+plgesc(unsigned char *p_esc)
 {
     if (plsc->esc == '\0')
 	plsc->esc = '#';
@@ -1842,13 +2961,57 @@ plgesc(char *p_esc)
     *p_esc = plsc->esc;
 }
 
+/* Set the FCI (font characterization integer) for unicode-enabled device
+ * drivers.
+ */
+void
+c_plsfci(PLUNICODE fci)
+{
+   /* Always mark FCI as such. */
+   plsc->fci = fci | PL_FCI_MARK;
+}
+
+/* Get the FCI (font characterization integer) for unicode-enabled device
+ * drivers.
+ */
+void
+c_plgfci(PLUNICODE *pfci)
+{
+   /* Always mark FCI as such. */
+   *pfci = plsc->fci | PL_FCI_MARK;
+}
+/* Store hex digit value shifted to the left by hexdigit hexadecimal digits
+ * into pre-existing FCI.
+ */
+void
+plP_hex2fci(unsigned char hexdigit, unsigned char hexpower, PLUNICODE *pfci)
+{
+   PLUNICODE mask;
+   hexpower = hexpower & PL_FCI_HEXPOWER_MASK;
+   mask = ~ (((PLUNICODE) PL_FCI_HEXDIGIT_MASK) << ((PLUNICODE) 4*hexpower));
+   *pfci = *pfci & mask;
+   mask = (((PLUNICODE) (hexdigit & PL_FCI_HEXDIGIT_MASK)) << (4*hexpower));
+   *pfci = *pfci | mask;
+}
+
+/* Retrieve hex digit value from FCI that is masked out and shifted to the
+ * right by hexpower hexadecimal digits. */
+void
+plP_fci2hex(PLUNICODE fci, unsigned char *phexdigit, unsigned char hexpower)
+{
+   PLUNICODE mask;
+   hexpower = hexpower & PL_FCI_HEXPOWER_MASK;
+   mask = (((PLUNICODE) PL_FCI_HEXPOWER_MASK) << ((PLUNICODE) (4*hexpower)));
+   *phexdigit = (unsigned char) ((fci & mask) >>
+				 ((PLUNICODE) (4*hexpower)));
+}
+
 /* Get the current library version number */
 /* Note: you MUST have allocated space for this (80 characters is safe) */
-
 void
 c_plgver(char *p_ver)
 {
-    (void) strcpy(p_ver, PLPLOT_VERSION);
+    strcpy(p_ver, PLPLT_VERSION);
 }
 
 /* Set inferior X window */
@@ -1961,39 +3124,6 @@ c_plszax(PLINT digmax, PLINT digits)
     plsc->zdigits = digits;
 }
 
-/*--------------------------------------------------------------------------*\
- * PLFLT plgchrW()
- *
- * Computes the height of a character in pixels.
-\*--------------------------------------------------------------------------*/
-
-PLFLT
-c_plgchrW(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy)
-{
-    PLFLT diag;
-
-    (void) x;
-    (void) y;
-
-/* this has a bug: plP_wcmmx is the millimetre position and includes
-   the offset if the window origin is not (0,0). We need the true
-   scale */
-
-
-/*
-    if (dx == 0.0 && dy !=0.0) diag = plsc->chrdef/plP_wcmmx(1.0);
-    else if (dy == 0.0 && dx !=0.0) diag = plsc->chrdef/plP_wcmmy(1.0);
-    else diag = sqrt( (plsc->chrdef/plP_wcmmx(1.0)) * (plsc->chrdef/plP_wcmmx(1.0)) 
-		      + (plsc->chrdef/plP_wcmmy(1.0)) * (plsc->chrdef/plP_wcmmy(1.0)) );
-
-*/
-    if (dx == 0.0 && dy !=0.0) diag = plsc->chrdef/plsc->wmxscl;
-    else if (dy == 0.0 && dx !=0.0) diag = plsc->chrdef/plsc->wmyscl;
-    else diag = sqrt( (plsc->chrdef/plsc->wmxscl) * (plsc->chrdef/plsc->wmxscl) 
-		      + (plsc->chrdef/plsc->wmyscl) * (plsc->chrdef/plsc->wmyscl) );
-    return diag;
-}
-
 /* Get character default height and current (scaled) height */
 
 void
@@ -2001,6 +3131,28 @@ c_plgchr(PLFLT *p_def, PLFLT *p_ht)
 {
     *p_def = plsc->chrdef;
     *p_ht = plsc->chrht;
+}
+
+/* Get viewport boundaries in normalized device coordinates */
+
+void
+c_plgvpd(PLFLT *p_xmin, PLFLT *p_xmax, PLFLT *p_ymin, PLFLT *p_ymax)
+{
+    *p_xmin = plsc->vpdxmi;
+    *p_xmax = plsc->vpdxma;
+    *p_ymin = plsc->vpdymi;
+    *p_ymax = plsc->vpdyma;
+}
+
+/* Get viewport boundaries in world coordinates */
+
+void
+c_plgvpw(PLFLT *p_xmin, PLFLT *p_xmax, PLFLT *p_ymin, PLFLT *p_ymax)
+{
+    *p_xmin = plsc->vpwxmi;
+    *p_xmax = plsc->vpwxma;
+    *p_ymin = plsc->vpwymi;
+    *p_ymax = plsc->vpwyma;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -2093,28 +3245,6 @@ plP_ssub(PLINT nx, PLINT ny, PLINT cs)
     plsc->cursub = cs;
 }
 
-/* Get viewport boundaries in normalized device coordinates */
-
-void
-plP_gvpd(PLFLT *p_xmin, PLFLT *p_xmax, PLFLT *p_ymin, PLFLT *p_ymax)
-{
-    *p_xmin = plsc->vpdxmi;
-    *p_xmax = plsc->vpdxma;
-    *p_ymin = plsc->vpdymi;
-    *p_ymax = plsc->vpdyma;
-}
-
-/* Get viewport boundaries in world coordinates */
-
-void
-plP_gvpw(PLFLT *p_xmin, PLFLT *p_xmax, PLFLT *p_ymin, PLFLT *p_ymax)
-{
-    *p_xmin = plsc->vpwxmi;
-    *p_xmax = plsc->vpwxma;
-    *p_ymin = plsc->vpwymi;
-    *p_ymax = plsc->vpwyma;
-}
-
 /* Get number of pixels to a millimeter */
 
 void
@@ -2151,21 +3281,178 @@ plP_setphy(PLINT xmin, PLINT xmax, PLINT ymin, PLINT ymax)
     plsc->phyylen = ymax - ymin;
 }
 
-/* Sets up the window name used by Xwindows */
+/*--------------------------------------------------------------------------*\
+ * void c_plscompression()
+ *
+ * Set compression.
+ * Has to be done before plinit.
+\*--------------------------------------------------------------------------*/
 
 void
-c_plxswin (const char *window) {
-  plPX_swin (plsc, window);
+c_plscompression(PLINT compression)
+{
+  if (plsc->level <= 0)
+     {
+      plsc->dev_compression=compression;
+     }
 }
 
-/* tracing the internals for debugging */
+/*--------------------------------------------------------------------------*\
+ * void c_plgcompression()
+ *
+ * Get compression
+\*--------------------------------------------------------------------------*/
 
 void
-c_plxtrace (FILE* outf) {
-  plPX_trace (plsc, outf);
+c_plgcompression(PLINT *compression)
+{
+    *compression = plsc->dev_compression;
 }
 
-int
-c_plfileinfo (char* tmp) {
-  return plFileInfo (plsc, tmp);
+
+/*--------------------------------------------------------------------------*\
+ * void plP_getinitdriverlist()
+ *
+ * Check to see if a driver/stream has been initialised
+ * Returns a space separated list of matches streams/drivers
+ * If more than one stream uses the same device, then the device name
+ * will be returned for each stream.
+ * Caller must allocate enough memory for "names" to hold the answer.
+\*--------------------------------------------------------------------------*/
+
+void
+plP_getinitdriverlist(char *names)
+{
+int i;
+
+for (i=0;i<PL_NSTREAMS;++i)
+   {
+    if (pls[i]!=NULL)
+       {
+       if (i==0)
+          strcpy(names,pls[i]->DevName);
+       else
+          {
+          strcat(names," ");
+          strcat(names,pls[i]->DevName);
+          }
+       }
+    else
+       break;
+   }
+}
+
+
+/*--------------------------------------------------------------------------*\
+ * PLINT plP_checkdriverinit()
+ *
+ * Checks from a list of given drivers which ones have been initialised
+ * and returns the number of devices matching the list, or -1 if in error.
+ * Effectively returns the number of streams matching the given stream.
+\*--------------------------------------------------------------------------*/
+
+PLINT plP_checkdriverinit( char *names)
+{
+char *buff;
+char *tok=NULL;
+PLINT ret=0;   /* set up return code to 0, the value if no devices match*/
+
+buff=(char *)malloc((size_t) PL_NSTREAMS*8); /* Allocate enough memory for 8
+                                                characters for each possible stream */
+
+if (buff!=NULL)
+   {
+    memset(buff,0,PL_NSTREAMS*8);    /* Make sure we clear it               */
+    plP_getinitdriverlist(buff);     /* Get the list of initialised devices */
+
+    for (tok = strtok(buff, " ,");   /* Check each device against the "name" */
+         tok; tok=strtok(0, " ,"))   /* supplied to the subroutine   */
+        {
+        if (strstr(names,tok)!=NULL)  /* Check to see if the device has been initialised */
+           {
+            ret++;                   /* Bump the return code if it has      */
+           }
+        }
+    free(buff);                      /* Clear up that memory we allocated   */
+    }
+else
+   ret=-1;                           /* Error flag */
+
+return(ret);
+}
+
+
+/*--------------------------------------------------------------------------*\
+ * plP_image
+ *
+ * Author: Alessandro Mirone, Nov 2001
+ *
+ *
+ *
+\*--------------------------------------------------------------------------*/
+
+void
+plP_image(short *x, short *y, unsigned short *z , PLINT nx, PLINT ny, PLFLT xmin, PLFLT ymin, PLFLT dx, PLFLT dy, unsigned short zmin, unsigned short zmax)
+{
+  PLINT i, npts;
+  short *myxscl, *myyscl;
+  int   plbuf_write;
+
+  plsc->page_status = DRAWING;
+
+  if (plsc->dev_fastimg == 0) {
+    plimageslow(x, y, z, nx-1, ny-1,
+         xmin, ymin, dx, dy, zmin, zmax);
+    return ;
+  }
+
+  if (plsc->plbuf_write) {
+    IMG_DT img_dt;
+
+    img_dt.xmin=xmin;
+    img_dt.ymin=ymin;
+    img_dt.dx=dx;
+    img_dt.dy=dy;
+
+    plsc->dev_ix = x;
+    plsc->dev_iy = y;
+    plsc->dev_z = z;
+    plsc->dev_nptsX = nx;
+    plsc->dev_nptsY = ny;
+    plsc->dev_zmin = zmin;
+    plsc->dev_zmax = zmax;
+
+    plbuf_esc(plsc, PLESC_IMAGE, &img_dt);
+  }
+
+  /* avoid re-saving plot buffer while in plP_esc() */
+  plbuf_write = plsc->plbuf_write;
+  plsc->plbuf_write = 0;
+
+  npts = nx*ny;
+  if (plsc->difilt) { /* isn't this odd? when replaying the plot buffer, e.g., when resizing the window, difilt() is caled again! the plot buffer should already contain the transformed data--it would save a lot of time! (and allow for differently oriented plots when in multiplot mode) */
+    PLINT clpxmi, clpxma, clpymi, clpyma;
+
+    myxscl = (short *) malloc(nx*ny*sizeof(short));
+    myyscl = (short *) malloc(nx*ny*sizeof(short));
+    for (i = 0; i < npts; i++) {
+      myxscl[i] = x[i];
+      myyscl[i] = y[i];
+    }
+    sdifilt(myxscl, myyscl, npts, &clpxmi, &clpxma, &clpymi, &clpyma);
+    plsc->imclxmin = clpxmi;
+    plsc->imclymin = clpymi;
+    plsc->imclxmax = clpxma;
+    plsc->imclymax = clpyma;
+    grimage(myxscl, myyscl, z, nx, ny);
+    free(myxscl);
+    free(myyscl);
+  } else {
+    plsc->imclxmin = plsc->phyxmi;
+    plsc->imclymin = plsc->phyymi;
+    plsc->imclxmax = plsc->phyxma;
+    plsc->imclymax = plsc->phyyma;
+    grimage(x, y, z, nx, ny );
+  }
+  plsc->plbuf_write = plbuf_write;
 }

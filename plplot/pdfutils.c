@@ -1,4 +1,4 @@
-/*--------------------------------------------------------------------------*\
+/* $Id: pdfutils.c,v 1.3 2007/05/08 09:09:37 rice Exp $
 
     pdf_utils.c
 
@@ -6,70 +6,37 @@
     Maurice LeBrun			mjl@dino.ph.utexas.edu
     Institute for Fusion Studies	University of Texas at Austin
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    Copyright (C) 2004  Joao Cardoso
+    Copyright (C) 2004  Alan W. Irwin
+    Copyright (C) 2004  Andrew Ross
 
-    This library is distributed in the hope that it will be useful,
+    This file is part of PLplot.
+
+    PLplot is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Library Public License as published
+    by the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    PLplot is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Library General Public License for more details.
 
-    You should have received a copy of the GNU Library General Public
-    License along with this library; if not, write to the Free
-    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    You should have received a copy of the GNU Library General Public License
+    along with PLplot; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
     These functions do the low-level reading/writing of portable data files.
     Data can be written to/read from either a file handle or memory buffer.
-\*--------------------------------------------------------------------------*/
+*/
 
+#define NEED_PLDEBUG
 #include "plplotP.h"
-
-/*--------------------------------------------------------------------------*\
- * pldebug()
- *
- * Included into every plplot source file to control debugging output.  To
- * enable printing of debugging output, you must #define DEBUG before
- * including plplotP.h or specify -DDEBUG in the compile line.  When running
- * the program you must in addition specify -debug.  This allows debugging
- * output to be available when asked for.
- *
- * Syntax:
- *	pldebug(function_name, format, arg1, arg2...);
-\*--------------------------------------------------------------------------*/
-
-static void
-pldebug( const char *fname, ... )
-{
-#ifdef DEBUG
-    va_list args;
-
-    if (plsc->debug) {
-	c_pltext();
-	va_start(args, fname);
-
-    /* print out name of caller and source file */
-
-	(void) fprintf(stderr, "%s (%s): ", fname, __FILE__);
-
-    /* print out remainder of message */
-
-	(void) vfprintf(stderr, (char *) va_arg(args, char *), args);
-	va_end(args);
-	c_plgra();
-    }
-#else
-    (void) fname;
-#endif
-}
-
 
 static void print_ieeef	(void *, void *);
 static int  pdf_wrx	(const U_CHAR *x, long nitems, PDFstrm *pdfs);
-static int  pdf_rdx	(U_CHAR *x, long nitems, PDFstrm *pdfs);
 
 static int debug = 0;
 
@@ -94,7 +61,7 @@ pdf_set(char *option, int value)
 \*--------------------------------------------------------------------------*/
 
 PDFstrm *
-pdf_fopen(char *filename, char *mode)
+pdf_fopen(const char *filename, const char *mode)
 {
     PDFstrm *pdfs;
 
@@ -104,12 +71,44 @@ pdf_fopen(char *filename, char *mode)
 
     if (pdfs != NULL) {
 	pdfs->buffer = NULL;
+	pdfs->file = NULL;
+	pdfs->bp = 0;
+#ifdef PLPLOT_USE_TCL_CHANNELS
+	pdfs->tclChan = NULL;
+	if (1) {
+	    char new_mode[3];
+	    int binary = 0;
+	    char *m, *p;
 
+	    /* Copy over the mode, removing 'b' if needed */
+	    for (m = mode, p = new_mode; *m != 0; m++) {
+	        if (*m == 'b') {
+	            binary = 1;
+	        } else {
+		    *p = *m;
+		    p++;
+	        }
+	    }
+	    *p = 0;
+
+	    pdfs->tclChan = Tcl_OpenFileChannel(NULL, filename, new_mode, 0);
+	    if (pdfs->tclChan == NULL) {
+		pdf_close(pdfs);
+		pdfs = NULL;
+	    } else {
+		if (binary) {
+		    Tcl_SetChannelOption(NULL, pdfs->tclChan, "-translation",
+					 "binary");
+		}
+	    }
+	}
+#else
 	pdfs->file = fopen(filename, mode);
 	if (pdfs->file == NULL) {
-	    (void) pdf_close(pdfs);
+	    pdf_close(pdfs);
 	    pdfs = NULL;
 	}
+#endif
     }
 
     return pdfs;
@@ -133,6 +132,9 @@ pdf_bopen(U_CHAR *buffer, long bufmax)
 
     if (pdfs != NULL) {
 	pdfs->file = NULL;
+#ifdef PLPLOT_USE_TCL_CHANNELS
+	pdfs->tclChan = NULL;
+#endif
 	pdfs->bp = 0;
 
 	if (buffer == NULL) {
@@ -143,7 +145,7 @@ pdf_bopen(U_CHAR *buffer, long bufmax)
 
 	    pdfs->buffer = (U_CHAR *) malloc(pdfs->bufmax);
 	    if (pdfs->buffer == NULL) {
-		(void) pdf_close(pdfs);
+		pdf_close(pdfs);
 		pdfs = NULL;
 	    }
 	}
@@ -175,6 +177,9 @@ pdf_finit(FILE *file)
     if (pdfs != NULL) {
 	pdfs->buffer = NULL;
 	pdfs->file = file;
+#ifdef PLPLOT_USE_TCL_CHANNELS
+	pdfs->tclChan = NULL;
+#endif
 	pdfs->bp = 0;
     }
 
@@ -194,12 +199,15 @@ pdf_close(PDFstrm *pdfs)
     dbug_enter("pdf_close");
 
     if (pdfs != NULL) {
-	if (pdfs->file != NULL)
-	    (void) fclose(pdfs->file);
-
-	else if (pdfs->buffer != NULL)
+	if (pdfs->file != NULL) {
+	    fclose(pdfs->file);
+#ifdef PLPLOT_USE_TCL_CHANNELS
+	} else if (pdfs->tclChan != NULL) {
+	    Tcl_Close(NULL, pdfs->tclChan);
+#endif
+	} else if (pdfs->buffer != NULL) {
 	    free ((void *) pdfs->buffer);
-
+	}
 	free((void *) pdfs);
     }
     return 0;
@@ -219,8 +227,12 @@ pdf_putc(int c, PDFstrm *pdfs)
     if (pdfs->file != NULL) {
 	result = putc(c, pdfs->file);
 	pdfs->bp++;
-    }
-    else if (pdfs->buffer != NULL) {
+#ifdef PLPLOT_USE_TCL_CHANNELS
+    } else if (pdfs->tclChan != NULL) {
+	result = Tcl_WriteChars(pdfs->tclChan, &c, 1);
+	pdfs->bp++;
+#endif
+    } else if (pdfs->buffer != NULL) {
 	if (pdfs->bp >= pdfs->bufmax) {
 	    pldebug("pdf_putc",
 		    "Increasing buffer to %d bytes\n", pdfs->bufmax);
@@ -251,8 +263,12 @@ pdf_getc(PDFstrm *pdfs)
     if (pdfs->file != NULL) {
 	result = getc(pdfs->file);
 	pdfs->bp++;
-    }
-    else if (pdfs->buffer != NULL) {
+#ifdef PLPLOT_USE_TCL_CHANNELS
+    } else if (pdfs->tclChan != NULL) {
+	result = Tcl_Read(pdfs->tclChan, &result, 1);
+	pdfs->bp++;
+#endif
+    } else if (pdfs->buffer != NULL) {
 	if (pdfs->bp < pdfs->bufmax)
 	    result = pdfs->buffer[pdfs->bp++];
     }
@@ -275,10 +291,15 @@ pdf_ungetc(int c, PDFstrm *pdfs)
 
     if (pdfs->file != NULL) {
 	result = ungetc(c, pdfs->file);
-	if (pdfs->bp > 0) 
+	if (pdfs->bp > 0)
 	    pdfs->bp--;
-    }
-    else if (pdfs->buffer != NULL) {
+#ifdef PLPLOT_USE_TCL_CHANNELS
+    } else if (pdfs->tclChan != NULL) {
+	result = Tcl_Ungets(pdfs->tclChan, &c, 1, 0);
+	if (pdfs->bp > 0)
+	    pdfs->bp--;
+#endif
+    } else if (pdfs->buffer != NULL) {
 	if (pdfs->bp > 0) {
 	    pdfs->buffer[--pdfs->bp] = c;
 	    result = c;
@@ -304,8 +325,12 @@ pdf_wrx(const U_CHAR *x, long nitems, PDFstrm *pdfs)
     if (pdfs->file != NULL) {
 	result = fwrite(x, 1, nitems, pdfs->file);
 	pdfs->bp += nitems;
-    }
-    else if (pdfs->buffer != NULL) {
+#ifdef PLPLOT_USE_TCL_CHANNELS
+    } else if (pdfs->tclChan != NULL) {
+	result = Tcl_Write(pdfs->tclChan, x, nitems);
+	pdfs->bp += nitems;
+#endif
+    } else if (pdfs->buffer != NULL) {
 	for (i = 0; i < nitems; i++) {
 	    if (pdfs->bp >= pdfs->bufmax) {
 		pldebug("pdf_wrx",
@@ -328,7 +353,7 @@ pdf_wrx(const U_CHAR *x, long nitems, PDFstrm *pdfs)
  * Reads a record.
 \*--------------------------------------------------------------------------*/
 
-static int
+int
 pdf_rdx(U_CHAR *x, long nitems, PDFstrm *pdfs)
 {
     int i, result = 0;
@@ -336,8 +361,12 @@ pdf_rdx(U_CHAR *x, long nitems, PDFstrm *pdfs)
     if (pdfs->file != NULL) {
 	result = fread(x, 1, nitems, pdfs->file);
 	pdfs->bp += nitems;
-    }
-    else if (pdfs->buffer != NULL) {
+#ifdef PLPLOT_USE_TCL_CHANNELS
+    } else if (pdfs->tclChan != NULL) {
+	result = Tcl_ReadRaw(pdfs->tclChan, x, nitems);
+	pdfs->bp += nitems;
+#endif
+    } else if (pdfs->buffer != NULL) {
 	for (i = 0; i < nitems; i++) {
 	    if (pdfs->bp > pdfs->bufmax)
 		break;
@@ -384,20 +413,68 @@ pdf_wr_header(PDFstrm *pdfs, const char *header)
 \*--------------------------------------------------------------------------*/
 
 int
-pdf_rd_header(PDFstrm *pdfs, signed char *header)
+pdf_rd_header(PDFstrm *pdfs, char *header)
 {
-    int i;
+    int i, c;
 
     dbug_enter("pdf_rd_header");
 
     for (i = 0; i < 79; i++) {
-	if ((header[i] = pdf_getc(pdfs)) == EOF)
+	if ((c = pdf_getc(pdfs)) == EOF)
 	    return PDF_RDERR;
 
+	header[i] = c;
 	if (header[i] == '\n')
 	    break;
     }
     header[i] = '\0';		/* NULL terminate */
+    return 0;
+}
+
+/*--------------------------------------------------------------------------*\
+ * pdf_wr_string()
+ *
+ * Writes a null-terminated string.
+\*--------------------------------------------------------------------------*/
+
+int
+pdf_wr_string(PDFstrm *pdfs, const char *string)
+{
+    int i;
+
+    dbug_enter("pdf_wr_string");
+
+    for (i = 0; i <= (int) strlen(string); i++) {
+	if (pdf_putc(string[i], pdfs) == EOF)
+	    return PDF_WRERR;
+    }
+
+    return 0;
+}
+
+/*--------------------------------------------------------------------------*\
+ * int pdf_rd_string
+ *
+ * Reads a null-terminated string from PDFstrm *pdfs.
+ * A max of nmax chars are read.
+\*--------------------------------------------------------------------------*/
+
+int
+pdf_rd_string(PDFstrm *pdfs, char *string, int nmax)
+{
+    int i, c;
+
+    dbug_enter("pdf_rd_string");
+
+    for (i = 0; i < nmax; i++) {
+	if ((c = pdf_getc(pdfs)) == EOF)
+	    return PDF_RDERR;
+
+	string[i] = c;
+	if (c == '\0')
+	    break;
+    }
+    string[i] = '\0';		/* handle boundary case */
     return 0;
 }
 
@@ -572,55 +649,55 @@ pdf_rd_4bytes(PDFstrm *pdfs, U_LONG *ps)
  * Here is the IEEE floating point specification in both 32 bit and 64 bit
  * precisions, from page 9 of "IEEE Standard for Binary Floating-Point
  * Arithmetic", copyright 1985, IEEE Std 754-1985:
- * 
- * 
+ *
+ *
  *                             Single Format
- * 
+ *
  * msb means most significant bit
  * lsb means least significant bit
- * 
+ *
  *   1         8                                23
  * _____________________________________________________________________
  * |   |                |                                              |
  * | s |       e        |                        f                     |
  * |___|________________|______________________________________________|
  *      msb          lsb msb                                        lsb
- * 
- * 
- * 
+ *
+ *
+ *
  *                             Double Format
- * 
+ *
  * msb means most significant bit
  * lsb means least significant bit
- * 
+ *
  *   1        11                                52
  * _____________________________________________________________________
  * |   |                |                                              |
  * | s |       e        |                        f                     |
  * |___|________________|______________________________________________|
  *      msb          lsb msb                                        lsb
- * 
- * 
+ *
+ *
  * (Thanks to: Andy Mai (mai@ncar.ucar.edu))
- * 
- * 
+ *
+ *
  * According to "inmos: Transputer instruction set" the IEEE standard
  * specifies the floating format as:
- * 
+ *
  *      s exp frac
- * 
+ *
  * Where: s = sign bit  (1 bit)
  *      exp = exponent (8 bits for 32 bit float / 11 bits for 64 bit float)
  *      frac = fraction (23 bits for 32 bit float / 52 bits for 64 bit float)
- * 
+ *
  * value of (s exp frac) = (-1)^s * 1.frac * 2^(exp-bias) ; if exp not 0
  *                         (-1)^s * 0.frac * 2^(1-bias) ; if exp = 0
- * 
+ *
  * where bias = 127 for 32 bit float
  *       bias = 1023 for 64 bit float
- * 
+ *
  * (Thanks to: Tom Bjorkholm(TBJORKHOLM@abo.fi))
- * 
+ *
 \*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*\
@@ -634,15 +711,15 @@ pdf_wr_ieeef(PDFstrm *pdfs, float f)
 {
     double fdbl, fmant, f_new;
     float fsgl, f_tmp;
-    int istat, iexp, e_new, e_off, bias = 127;
+    int istat, myexp, e_new, e_off, bias = 127;
     U_LONG value, s_ieee, e_ieee, f_ieee;
 
-    if (f == (float)0.0) {
+    if (f == 0.0) {
 	value = 0;
 	return (pdf_wr_4bytes(pdfs, value));
     }
     fsgl = fdbl = f;
-    fmant = frexp(fdbl, &iexp);
+    fmant = frexp(fdbl, &myexp);
 
     if (fmant < 0)
 	s_ieee = 1;
@@ -651,7 +728,7 @@ pdf_wr_ieeef(PDFstrm *pdfs, float f)
 
     fmant = fabs(fmant);
     f_new = 2 * fmant;
-    e_new = iexp - 1;
+    e_new = myexp - 1;
 
     if (e_new < 1 - bias) {
 	e_off = e_new - (1 - bias);
@@ -666,7 +743,7 @@ pdf_wr_ieeef(PDFstrm *pdfs, float f)
 
     if (e_ieee > 255) {
 	if (debug)
-	    (void) fprintf(stderr, "pdf_wr_ieeef: Warning -- overflow\n");
+	    fprintf(stderr, "pdf_wr_ieeef: Warning -- overflow\n");
 	e_ieee = 255;
     }
 
@@ -679,7 +756,7 @@ pdf_wr_ieeef(PDFstrm *pdfs, float f)
 	return (istat);
 
     if (debug) {
-	(void) fprintf(stderr, "Float value (written):      %g\n", fsgl);
+	fprintf(stderr, "Float value (written):      %g\n", fsgl);
 	print_ieeef(&fsgl, &value);
     }
 
@@ -697,7 +774,7 @@ pdf_rd_ieeef(PDFstrm *pdfs, float *pf)
 {
     double f_new, f_tmp;
     float fsgl;
-    int istat, iexp, bias = 127;
+    int istat, myexp, bias = 127;
     U_LONG value, s_ieee, e_ieee, f_ieee;
 
     if ((istat = pdf_rd_4bytes(pdfs, &value)))
@@ -710,22 +787,22 @@ pdf_rd_ieeef(PDFstrm *pdfs, float *pf)
     f_tmp = (double) f_ieee / 8388608.0;	/* divide by 2^23 */
 
     if (e_ieee == 0) {
-	iexp = 1 - bias;
+	myexp = 1 - bias;
 	f_new = f_tmp;
     }
     else {
-	iexp = (int) e_ieee - bias;
+	myexp = (int) e_ieee - bias;
 	f_new = 1.0 + f_tmp;
     }
 
-    fsgl = f_new * pow(2.0, (double) iexp);
+    fsgl = f_new * pow(2.0, (double) myexp);
     if (s_ieee == 1)
 	fsgl = -fsgl;
 
     *pf = fsgl;
 
     if (debug) {
-	(void) fprintf(stderr, "Float value (read):      %g\n", fsgl);
+	fprintf(stderr, "Float value (read):      %g\n", fsgl);
 	print_ieeef(&fsgl, &value);
     }
 
@@ -758,8 +835,8 @@ print_ieeef(void *vx, void *vy)
 	    bitrep[32 - i - 1] = '0';
 	f = f >> 1;
     }
-    (void) fprintf(stderr, "Binary representation:      ");
-    (void) fprintf(stderr, "%s\n", bitrep);
+    fprintf(stderr, "Binary representation:      ");
+    fprintf(stderr, "%s\n", bitrep);
 
     f = *y;
     for (i = 0; i < 32; i++) {
@@ -769,8 +846,8 @@ print_ieeef(void *vx, void *vy)
 	    bitrep[32 - i - 1] = '0';
 	f = f >> 1;
     }
-    (void) fprintf(stderr, "Converted representation:   ");
-    (void) fprintf(stderr, "%s\n\n", bitrep);
+    fprintf(stderr, "Converted representation:   ");
+    fprintf(stderr, "%s\n\n", bitrep);
 
     return;
 }
@@ -788,7 +865,6 @@ print_ieeef(void *vx, void *vy)
  *   PLFLT **z;
  *
  *   Alloc2dGrid(&z, XPTS, YPTS);
- *
 \*--------------------------------------------------------------------------*/
 
 void
@@ -796,10 +872,14 @@ plAlloc2dGrid(PLFLT ***f, PLINT nx, PLINT ny)
 {
     PLINT i;
 
-    *f = (PLFLT **) malloc(nx * sizeof(PLFLT *));
+    if ((*f = (PLFLT **) calloc(nx, sizeof(PLFLT *)))==NULL)
+        plexit("Memory allocation error in \"plAlloc2dGrid\"");
+
     for (i = 0; i < nx; i++) {
-	(*f)[i] = (PLFLT *) malloc(ny * sizeof(PLFLT));
+	if (((*f)[i] = (PLFLT *) calloc(ny ,sizeof(PLFLT)))==NULL)
+	   plexit("Memory allocation error in \"plAlloc2dGrid\"");
     }
+
 }
 
 /*--------------------------------------------------------------------------*\
@@ -812,10 +892,34 @@ void
 plFree2dGrid(PLFLT **f, PLINT nx, PLINT ny)
 {
     PLINT i;
-    (void) ny;
 
+    (void) ny;				/* pmr: make it used */
     for (i = 0; i < nx; i++)
 	free((void *) f[i]);
 
     free((void *) f);
+}
+
+/*--------------------------------------------------------------------------*\
+ * MinMax2dGrid()
+ *
+ * Finds the maximum and minimum of a 2d matrix allocated with plAllc2dGrid().
+\*--------------------------------------------------------------------------*/
+
+void
+plMinMax2dGrid(PLFLT **f, PLINT nx, PLINT ny, PLFLT *fmax, PLFLT *fmin)
+{
+    int i, j;
+    PLFLT m, M;
+
+    M = m = f[0][0];
+
+    for (i = 0; i < nx; i++) {
+	for (j = 0; j < ny; j++) {
+	    if (f[i][j] > M) M = f[i][j];
+	    if (f[i][j] < m) m = f[i][j];
+	}
+    }
+    *fmax = M;
+    *fmin = m;
 }

@@ -1,7 +1,4 @@
-/* All drivers: pls->width now more sensibly handled.  If the driver supports
- * multiple widths, it first checks to see if it has been initialized
- * already (e.g. from the command line) before initializing it.	 For drivers
- * that don't support multiple widths, pls->width is ignored.
+/* $Id: hpgl.c,v 1.3 2007/05/08 09:09:37 rice Exp $
  *
  *  File:	hpgl.c
  *
@@ -30,7 +27,6 @@
  *
 \*--------------------------------------------------------------------------*/
 
-
 #include "plDevs.h"
 
 #if defined(PLD_hp7470) || defined(PLD_hp7580) || defined(PLD_lj_hpgl)
@@ -39,6 +35,28 @@
 #include <stdio.h>
 #include <string.h>
 #include "drivers.h"
+
+/* Device info */
+const char* plD_DEVICE_INFO_hpgl =
+#if defined(PLD_hp7470)
+  "hp7470:HP 7470 Plotter File (HPGL Cartridge, Small Plotter):0:hpgl:34:hp7470\n"
+#endif
+#if defined(PLD_hp7580)
+  "hp7580:HP 7580 Plotter File (Large Plotter):0:hpgl:35:hp7580\n"
+#endif
+#if defined(PLD_lj_hpgl)        
+  "lj_hpgl:HP Laserjet III, HPGL emulation mode:0:hpgl:36:lj_hpgl"
+#endif
+;
+
+
+void plD_line_hpgl		(PLStream *, short, short, short, short);
+void plD_polyline_hpgl		(PLStream *, short *, short *, PLINT);
+void plD_eop_hpgl		(PLStream *);
+void plD_bop_hpgl		(PLStream *);
+void plD_tidy_hpgl		(PLStream *);
+void plD_state_hpgl		(PLStream *, PLINT);
+void plD_esc_hpgl		(PLStream *, PLINT, void *);
 
 /* top level declarations */
 
@@ -64,6 +82,26 @@
 #define MAX_WIDTH	10		/* Maximum pen width */
 #define DEF_WIDTH	1		/* Default pen width */
 
+static void hpgl_dispatch_init_helper( PLDispatchTable *pdt,
+                                       const char *menustr, const char *devnam,
+                                       int type, int seq, plD_init_fp init )
+{
+#ifndef ENABLE_DYNDRIVERS
+    pdt->pl_MenuStr  = menustr;
+    pdt->pl_DevName  = devnam;
+#endif
+    pdt->pl_type     = type;
+    pdt->pl_seq      = seq;
+    pdt->pl_init     = init;
+    pdt->pl_line     = (plD_line_fp)     plD_line_hpgl;
+    pdt->pl_polyline = (plD_polyline_fp) plD_polyline_hpgl;
+    pdt->pl_eop      = (plD_eop_fp)      plD_eop_hpgl;
+    pdt->pl_bop      = (plD_bop_fp)      plD_bop_hpgl;
+    pdt->pl_tidy     = (plD_tidy_fp)     plD_tidy_hpgl;
+    pdt->pl_state    = (plD_state_fp)    plD_state_hpgl;
+    pdt->pl_esc      = (plD_esc_fp)      plD_esc_hpgl;
+}
+
 /*--------------------------------------------------------------------------*\
  * initialize_hpgl_pls()
  *
@@ -81,8 +119,8 @@ initialize_hpgl_pls(PLStream *pls)
     plFamInit(pls);		/* Initialize family file info */
     plOpenFile(pls);		/* get file name if not already set */
 
-    dev->xold = UNDEFINED;
-    dev->yold = UNDEFINED;
+    dev->xold = PL_UNDEFINED;
+    dev->yold = PL_UNDEFINED;
     dev->xlen = dev->xmax - dev->xmin;
     dev->ylen = dev->ymax - dev->ymin;
 
@@ -97,6 +135,17 @@ initialize_hpgl_pls(PLStream *pls)
 \*--------------------------------------------------------------------------*/
 
 #ifdef PLD_hp7470
+void plD_init_hp7470		(PLStream *);
+
+void plD_dispatch_init_hp7470( PLDispatchTable *pdt )
+{
+    hpgl_dispatch_init_helper( pdt,
+                               "HP 7470 Plotter File (HPGL Cartridge, Small Plotter)",
+                               "hp7470",
+                               plDevType_FileOriented, 34,
+                               (plD_init_fp) plD_init_hp7470 );
+}
+
 void
 plD_init_hp7470(PLStream *pls)
 {
@@ -111,7 +160,7 @@ plD_init_hp7470(PLStream *pls)
 
     initialize_hpgl_pls(pls);	/* initialize plot stream */
 
-    (void) fputs( "\x1b.I200;;17:\x1b.N;19:\x1b.M;;;10:IN;\n", OF );
+    fputs( "\x1b.I200;;17:\x1b.N;19:\x1b.M;;;10:IN;\n", OF );
 }
 #endif		/* PLD_hp7470 */
 
@@ -122,6 +171,16 @@ plD_init_hp7470(PLStream *pls)
 \*--------------------------------------------------------------------------*/
 
 #ifdef PLD_hp7580
+void plD_init_hp7580		(PLStream *);
+
+void plD_dispatch_init_hp7580( PLDispatchTable *pdt )
+{
+    hpgl_dispatch_init_helper( pdt,
+                               "HP 7580 Plotter File (Large Plotter)", "hp7580",
+                               plDevType_FileOriented, 35,
+                               (plD_init_fp) plD_init_hp7580 );
+}
+
 void
 plD_init_hp7580(PLStream *pls)
 {
@@ -136,8 +195,8 @@ plD_init_hp7580(PLStream *pls)
 
     initialize_hpgl_pls(pls);	/* initialize plot stream */
 
-    (void) fputs( "\x1b.I200;;17:\x1b.N;19:\x1b.M;;;10:IN;\n", OF );
-    (void) fputs( "RO90;IP;SP4;PA;\n", OF );
+    fputs( "\x1b.I200;;17:\x1b.N;19:\x1b.M;;;10:IN;\n", OF );
+    fputs( "RO90;IP;SP4;PA;\n", OF );
 }
 #endif	/* PLD_hp7580 */
 
@@ -148,6 +207,16 @@ plD_init_hp7580(PLStream *pls)
 \*--------------------------------------------------------------------------*/
 
 #ifdef PLD_lj_hpgl
+void plD_init_lj_hpgl		(PLStream *);
+
+void plD_dispatch_init_hpgl( PLDispatchTable *pdt )
+{
+    hpgl_dispatch_init_helper( pdt,
+                               "HP Laserjet III, HPGL emulation mode", "lj_hpgl",
+                               plDevType_FileOriented, 36,
+                               (plD_init_fp) plD_init_lj_hpgl );
+}
+
 void
 plD_init_lj_hpgl(PLStream *pls)
 {
@@ -165,9 +234,8 @@ plD_init_lj_hpgl(PLStream *pls)
  * with 300DPI printing.
  * Next line : added pw 0.2 for pen width 0.2 (of an inch ?)
 */
-    (void)
     fputs("\x1b*T300R\x1b%1B;\x1b.I200;;17:\x1b.N;19:\x1b.M;;;10:IN;\n", OF);
-    (void) fputs("RO90;IP;PW 0.2;SP 1;PA;", OF);
+    fputs("RO90;IP;PW 0.2;SP 1;PA;", OF);
 }
 #endif	/* PLD_lj_hpgl */
 
@@ -231,7 +299,7 @@ plD_polyline_hpgl(PLStream *pls, short *xa, short *ya, PLINT npts)
 void
 plD_eop_hpgl(PLStream *pls)
 {
-    (void) pls;
+    (void) pls; 			/* pmr: make it used */
 }
 
 /*--------------------------------------------------------------------------*\
@@ -246,10 +314,10 @@ plD_bop_hpgl(PLStream *pls)
 {
     PLDev *dev = (PLDev *) pls->dev;
 
-    dev->xold = UNDEFINED;
-    dev->yold = UNDEFINED;
+    dev->xold = PL_UNDEFINED;
+    dev->yold = PL_UNDEFINED;
 
-    (void) fputs( "PG;\n", OF );
+    fputs( "PG;\n", OF );
     if (!pls->termin)
 	plGetFam(pls);
 
@@ -265,10 +333,9 @@ plD_bop_hpgl(PLStream *pls)
 void
 plD_tidy_hpgl(PLStream *pls)
 {
-    (void) pls;
-
-    (void) fputs( "SP0\n", OF );
-    (void) fclose(OF);
+    (void) pls; 			/* pmr: make it used */
+    fputs( "SP0\n", OF );
+    fclose(OF);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -280,11 +347,6 @@ plD_tidy_hpgl(PLStream *pls)
 void
 plD_state_hpgl(PLStream *pls, PLINT op)
 {
-  int col=1;
-  enum ajColours {BLACK, RED, YELLOW, GREEN, AQUAMARINE,
-		  PINK, WHEAT, GREY, BROWN, BLUE, BLUEVIOLET,
-		  CYAN, TURQUOISE, MAGENTA, SALMON, WHITE};
-
     switch (op) {
 
     case PLSTATE_WIDTH:
@@ -293,44 +355,10 @@ plD_state_hpgl(PLStream *pls, PLINT op)
 	    (pls->width < MIN_WIDTH) ? DEF_WIDTH :
 	    (pls->width > MAX_WIDTH) ? MAX_WIDTH : pls->width;
 
-	switch (pls->icol0) {
-	case WHITE:
-	case GREY:
-	  col =1;
-	  break;
-	case RED:
-	case PINK:
-	case SALMON:
-	  col =3;
-	  break;
-	case YELLOW:
-	case WHEAT:
-	case BROWN:
-	  col =8;
-	  break;
-	case GREEN:
-	  col = 4;
-	  break;
-	case BLUE:
-	case AQUAMARINE:
-	case BLUEVIOLET:
-	  col = 5;
-	  break;
-	case BLACK:
-	  col = 2;
-	  break;
-	case MAGENTA:
-	case TURQUOISE:
-	  col = 7;
-	  break;
-	case CYAN:
-	  col = 6;
-	break;
-	}
-	/*	if ( pls->icol0 < 1 || pls->icol0 > 8)
-	    (void) fputs( "\nInvalid pen selection.", stderr );
-	    else*/
-	    (void) fprintf( OF, "SP%d %d\n", col, width );
+	if ( pls->icol0 < 1 || pls->icol0 > 8)
+	    fputs( "\nInvalid pen selection.", stderr );
+	else
+	    fprintf( OF, "SP%d %d\n", pls->icol0, width );
 
 	break;
     }
@@ -348,7 +376,7 @@ plD_state_hpgl(PLStream *pls, PLINT op)
 void
 plD_esc_hpgl(PLStream *pls, PLINT op, void *ptr)
 {
-    (void) pls;
+    (void) pls; 			/* pmr: make it used */
     (void) op;
     (void) ptr;
 }

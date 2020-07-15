@@ -1,10 +1,4 @@
-/* This file added for inclusion by all user-defined event handlers to be
- * used with plplot.  It contains constant definitions used to transmit
- * info on the event that occurred (e.g. keystroke definitions).
-*/
-
-/*
-    plevent.h
+/* $Id: plevent.h,v 1.2 2007/05/08 09:09:37 rice Exp $
 
     Input event (especially keyboard) definitions for use from plplot
     event handlers.

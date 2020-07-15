@@ -1,13 +1,27 @@
-/* All core source files: made another pass to eliminate warnings when using
- * gcc -Wall.  Lots of cleaning up: got rid of includes of math.h or string.h
- * (now included by plplot.h), and other minor changes.  Now each file has
- * global access to the plstream pointer via extern; many accessor functions
- * eliminated as a result.
-*/
-
-/*	plcont.c
+/* $Id: plcont.c,v 1.3 2007/05/08 09:09:37 rice Exp $
 
 	Contour plotter.
+
+   Copyright (C) 1995, 2000, 2001 Maurice LeBrun
+   Copyright (C) 2000, 2002 Joao Cardoso
+   Copyright (C) 2000, 2001, 2002, 2004  Alan W. Irwin
+   Copyright (C) 2004  Andrew Ross
+
+   This file is part of PLplot.
+
+   PLplot is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Library Public License as published
+   by the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   PLplot is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with PLplot; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 #include "plplotP.h"
@@ -22,8 +36,7 @@ static void
 plcntr(PLFLT (*plf2eval) (PLINT, PLINT, PLPointer),
        PLPointer plf2eval_data,
        PLINT nx, PLINT ny, PLINT kx, PLINT lx,
-       PLINT ky, PLINT ly, PLFLT flev, PLINT *iscan,
-       PLINT *ixstor, PLINT *iystor, PLINT nstor,
+       PLINT ky, PLINT ly, PLFLT flev, PLINT **ipts, 
        void (*pltr) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer),
        PLPointer pltr_data);
 
@@ -31,27 +44,336 @@ static void
 pldrawcn(PLFLT (*plf2eval) (PLINT, PLINT, PLPointer),
 	 PLPointer plf2eval_data,
 	 PLINT nx, PLINT ny, PLINT kx, PLINT lx,
-	 PLINT ky, PLINT ly, PLFLT flev, PLINT kcol, PLINT krow,
-	 PLINT *p_kscan, PLINT *p_kstor, PLINT *iscan,
-	 PLINT *ixstor, PLINT *iystor, PLINT nstor,
+	 PLINT ky, PLINT ly, PLFLT flev, char *flabel, PLINT kcol, PLINT krow,
+	 PLFLT lastx, PLFLT lasty, PLINT startedge,
+	 PLINT **ipts, PLFLT *distance, PLINT *lastindex,
 	 void (*pltr) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer),
 	 PLPointer pltr_data);
 
 static void
-plccal(PLFLT (*plf2eval) (PLINT, PLINT, PLPointer),
-       PLPointer plf2eval_data,
-       PLFLT flev, PLINT ix, PLINT iy,
-       PLINT ixg, PLINT iyg, PLFLT *dist);
+plfloatlabel(PLFLT value, char *string);
 
-static void 
-plr45 (PLINT *ix, PLINT *iy, PLINT isens);
+static PLFLT
+plP_pcwcx(PLINT x);
 
-static void 
-plr135 (PLINT *ix, PLINT *iy, PLINT isens);
+static PLFLT
+plP_pcwcy(PLINT y);
+
+static void
+pl_drawcontlabel(PLFLT tpx, PLFLT tpy, char *flabel, PLFLT *distance, PLINT *lastindex);
 
 /* Error flag for aborts */
 
 static int error;
+
+/****************************************/
+/*                                      */
+/* Defaults for contour label printing. */
+/*                                      */
+/****************************************/
+
+/* Font height for contour labels (normalized) */
+static PLFLT
+contlabel_size = 0.3;
+
+/* Offset of label from contour line (if set to 0.0, labels are printed on the lines). */
+static PLFLT
+contlabel_offset = 0.006;
+
+/* Spacing parameter for contour labels */
+static PLFLT
+contlabel_space = 0.1;
+
+/* Activate labels, default off */
+static PLINT
+contlabel_active = 0;
+
+/* If the contour label exceed 10^(limexp) or 10^(-limexp), the exponential format is used */
+static PLINT
+limexp = 4;
+
+/* Number of significant digits */
+static PLINT
+sigprec = 2;
+
+/******** contour lines storage ****************************/
+
+static CONT_LEVEL *startlev = NULL;
+static CONT_LEVEL *currlev;
+static CONT_LINE *currline;
+
+static int cont3d = 0;
+
+static CONT_LINE *
+alloc_line(CONT_LEVEL *node)
+{
+  CONT_LINE *line;
+
+  (void) node;				/* pmr: make it used */
+  line = (CONT_LINE *) malloc(sizeof(CONT_LINE));
+  line->x = (PLFLT *) malloc(LINE_ITEMS*sizeof(PLFLT));
+  line->y = (PLFLT *) malloc(LINE_ITEMS*sizeof(PLFLT));
+  line->npts = 0;
+  line->next = NULL;
+
+  return line;
+}
+
+static CONT_LEVEL *
+alloc_level(PLFLT level)
+{
+  CONT_LEVEL *node;
+
+  node = (CONT_LEVEL *) malloc(sizeof(CONT_LEVEL));
+  node->level = level;
+  node->next = NULL;
+  node->line = alloc_line(node);
+
+  return node;
+}
+
+static void
+realloc_line(CONT_LINE *line)
+{
+  line->x = (PLFLT *) realloc(line->x,
+			      (line->npts + LINE_ITEMS)*sizeof(PLFLT));
+  line->y = (PLFLT *) realloc(line->y,
+			      (line->npts + LINE_ITEMS)*sizeof(PLFLT));
+}
+
+
+/* new contour level */
+static void
+cont_new_store(PLFLT level)
+{
+  if (cont3d) {
+    if (startlev == NULL) {
+      startlev = alloc_level(level);
+      currlev = startlev;
+    } else {
+      currlev->next = alloc_level(level);
+      currlev = currlev->next;
+    }
+    currline = currlev->line;
+  }
+}
+
+void
+cont_clean_store(CONT_LEVEL *ct)
+{
+  CONT_LINE *tline, *cline;
+  CONT_LEVEL *tlev, *clevel;
+
+  if (ct != NULL) {
+    clevel = ct;
+
+    do {
+      cline = clevel->line;
+      do {
+#ifdef CONT_PLOT_DEBUG /* for 2D plots. For 3D plots look at plot3.c:plotsh3di() */
+	plP_movwor(cline->x[0],cline->y[0]);
+	for (j=1; j<cline->npts; j++)
+	  plP_drawor(cline->x[j], cline->y[j]);
+#endif
+	tline = cline->next;
+	free(cline->x);
+	free(cline->y);
+	free(cline);
+	cline = tline;
+      }
+      while(cline != NULL);
+      tlev = clevel->next;
+      free(clevel);
+      clevel = tlev;
+    }
+    while(clevel != NULL);
+    startlev = NULL;
+  }
+}
+
+static void
+cont_xy_store(PLFLT xx, PLFLT yy)
+{
+  if (cont3d) {
+    PLINT pts = currline->npts;
+
+    if (pts % LINE_ITEMS == 0)
+      realloc_line(currline);
+
+    currline->x[pts] = xx;
+    currline->y[pts] = yy;
+    currline->npts++;
+  } else
+    plP_drawor(xx, yy);
+}
+
+static void
+cont_mv_store(PLFLT xx, PLFLT yy)
+{
+  if (cont3d) {
+    if (currline->npts != 0) { /* not an empty list, allocate new */
+      currline->next = alloc_line(currlev);
+      currline = currline->next;
+    }
+
+    /* and fill first element */
+    currline->x[0] = xx;
+    currline->y[0] = yy;
+    currline->npts = 1;
+  } else
+    plP_movwor(xx, yy);
+}
+
+/* small routine to set offset and spacing of contour labels, see desciption above */
+void c_pl_setcontlabelparam(PLFLT offset, PLFLT size, PLFLT spacing, PLINT active)
+{
+    contlabel_offset = offset;
+    contlabel_size   = size;
+    contlabel_space  = spacing;
+    contlabel_active = active;
+}
+
+/* small routine to set the format of the contour labels, description of limexp and prec see above */
+void c_pl_setcontlabelformat(PLINT lexp, PLINT sigdig)
+{
+    limexp  = lexp;
+    sigprec = sigdig;
+}
+
+static void pl_drawcontlabel(PLFLT tpx, PLFLT tpy, char *flabel, PLFLT *distance, PLINT *lastindex)
+{
+    PLFLT currx_old, curry_old,	delta_x, delta_y;
+
+    delta_x = plP_pcdcx(plsc->currx)-plP_pcdcx(plP_wcpcx(tpx));
+    delta_y = plP_pcdcy(plsc->curry)-plP_pcdcy(plP_wcpcy(tpy));
+
+    currx_old = plsc->currx;
+    curry_old = plsc->curry;
+
+    *distance += sqrt(delta_x*delta_x + delta_y*delta_y);
+
+    plP_drawor(tpx, tpy);
+
+    if ((int )(fabs(*distance/contlabel_space)) > *lastindex) {
+	PLFLT scale, vec_x, vec_y, mx, my, dev_x, dev_y, off_x, off_y;
+
+	vec_x = tpx-plP_pcwcx(currx_old);
+	vec_y = tpy-plP_pcwcy(curry_old);
+
+	/* Ensure labels appear the right way up */
+	if (vec_x < 0) {
+	    vec_x = -vec_x;
+	    vec_y = -vec_y;
+	}
+
+	mx = (double )plsc->wpxscl/(double )plsc->phyxlen;
+	my = (double )plsc->wpyscl/(double )plsc->phyylen;
+
+	dev_x = -my*vec_y/mx;
+	dev_y = mx*vec_x/my;
+
+	scale = sqrt((mx*mx*dev_x*dev_x + my*my*dev_y*dev_y)/
+		     (contlabel_offset*contlabel_offset));
+
+	off_x = dev_x/scale;
+	off_y = dev_y/scale;
+
+	plptex(tpx+off_x, tpy+off_y, vec_x, vec_y, 0.5, flabel);
+	plP_movwor(tpx, tpy);
+	(*lastindex)++;
+
+    } else
+	plP_movwor(tpx, tpy);
+}
+
+
+/* Format  contour labels. Arguments:
+ * value:  floating point number to be formatted
+ * string: the formatted label, plptex must be called with it to actually
+ * print the label
+ */
+
+static void plfloatlabel(PLFLT value, char *string)
+{
+    PLINT  setpre, precis;
+    /* form[10] gives enough space for all non-malicious formats.
+     * tmpstring[15] gives enough room for 3 digits in a negative exponent
+     * or 4 digits in a positive exponent + null termination.  That
+     * should be enough for all non-malicious use.
+     * Obviously there are security issues here that
+     * should be addressed as well.
+     */
+    char   form[10], tmpstring[15];
+    PLINT  exponent = 0;
+    PLFLT  mant, tmp;
+
+    PLINT  prec = sigprec;
+
+    plP_gprec(&setpre, &precis);
+
+    if (setpre)
+	prec = precis;
+
+    if (value > 0.0)
+	tmp = log10(value);
+    else if (value < 0.0)
+	tmp = log10(-value);
+    else
+	tmp = 0;
+
+    if (tmp >= 0.0)
+	exponent = (int )tmp;
+    else if (tmp < 0.0) {
+	tmp = -tmp;
+	if (floor(tmp) < tmp)
+            exponent = -(int )(floor(tmp) + 1.0);
+	else
+            exponent = -(int )(floor(tmp));
+    }
+
+    mant = value/pow(10.0, exponent);
+
+    if (mant != 0.0)
+	mant = (int )(mant*pow(10.0, prec-1) + 0.5*mant/fabs(mant))/pow(10.0, prec-1);
+
+    sprintf(form, "%%.%df", prec-1);
+    sprintf(string, form, mant);
+    sprintf(tmpstring, "#(229)10#u%d", exponent);
+    strcat(string, tmpstring);
+
+    if (abs(exponent) < limexp || value == 0.0) {
+	value = pow(10.0, exponent) * mant;
+
+	if (exponent >= 0)
+            prec = prec - 1 - exponent;
+	else
+            prec = prec - 1 + abs(exponent);
+
+	if (prec < 0)
+            prec = 0;
+
+	sprintf(form, "%%.%df", (int) prec);
+	sprintf(string, form, value);
+    }
+}
+
+/* physical coords (x) to world coords */
+
+static PLFLT
+plP_pcwcx(PLINT x)
+{
+    return ((x-plsc->wpxoff)/plsc->wpxscl);
+}
+
+/* physical coords (y) to world coords */
+
+static PLFLT
+plP_pcwcy(PLINT y)
+{
+    return ((y-plsc->wpyoff)/plsc->wpyscl);
+}
+
+
 
 /*--------------------------------------------------------------------------*\
  * plf2eval2()
@@ -110,6 +432,31 @@ plf2evalr(PLINT ix, PLINT iy, PLPointer plf2eval_data)
 }
 
 /*--------------------------------------------------------------------------*\
+ *
+ * cont_store:
+ *
+ * Draw contour lines in memory.
+ * cont_clean_store() must be called after use to release allocated memory.
+ *
+\*--------------------------------------------------------------------------*/
+
+void
+cont_store(PLFLT **f, PLINT nx, PLINT ny, PLINT kx, PLINT lx,
+	 PLINT ky, PLINT ly, PLFLT *clevel, PLINT nlevel,
+	 void (*pltr) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer),
+	 PLPointer pltr_data,
+	 CONT_LEVEL **contour)
+{
+  cont3d = 1;
+
+  plcont(f, nx, ny, kx, lx, ky, ly, clevel, nlevel,
+	 pltr,  pltr_data);
+
+  *contour = startlev;
+  cont3d = 0;
+}
+
+/*--------------------------------------------------------------------------*\
  * void plcont()
  *
  * Draws a contour plot from data in f(nx,ny).  Is just a front-end to
@@ -155,10 +502,7 @@ plfcont(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	void (*pltr) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer),
 	PLPointer pltr_data)
 {
-    PLINT i, mx, my, nstor, *heapc;
-
-    mx = lx - kx + 1;
-    my = ly - ky + 1;
+    PLINT i, **ipts;
 
     if (kx < 1 || kx >= lx) {
 	plabort("plfcont: indices must satisfy  1 <= kx <= lx <= nx");
@@ -169,17 +513,15 @@ plfcont(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	return;
     }
 
-    nstor = mx * my;
-    heapc = (PLINT *) malloc((size_t) (mx + 2 * nstor) * sizeof(PLINT));
-    if (heapc == NULL) {
-	plabort("plfcont: out of memory in heap allocation");
-	return;
+    ipts = (PLINT **) malloc(nx*sizeof(PLINT *));
+    for (i = 0; i < nx; i++) {
+      ipts[i] = (PLINT *) malloc(ny*sizeof(PLINT *));
     }
 
     for (i = 0; i < nlevel; i++) {
 	plcntr(f2eval, f2eval_data,
-	       nx, ny, kx-1, lx-1, ky-1, ly-1, clevel[i], &heapc[0],
-	       &heapc[nx], &heapc[nx + nstor], nstor, pltr, pltr_data);
+	       nx, ny, kx-1, lx-1, ky-1, ly-1, clevel[i], ipts,
+	       pltr, pltr_data);
 
 	if (error) {
 	    error = 0;
@@ -188,7 +530,10 @@ plfcont(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
     }
 
   done:
-    free((void *) heapc);
+    for (i = 0; i < nx; i++) {
+      free((void *)ipts[i]);
+    }
+    free((void *)ipts);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -202,61 +547,49 @@ static void
 plcntr(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
        PLPointer f2eval_data,
        PLINT nx, PLINT ny, PLINT kx, PLINT lx,
-       PLINT ky, PLINT ly, PLFLT flev, PLINT *iscan,
-       PLINT *ixstor, PLINT *iystor, PLINT nstor,
+       PLINT ky, PLINT ly, PLFLT flev, PLINT **ipts,
        void (*pltr) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer),
        PLPointer pltr_data)
 {
-    PLINT kcol, krow, kstor, kscan, l, ixt, iyt, jstor, next;
+    PLINT kcol, krow, lastindex;
+    PLFLT distance;
+    PLFLT save_def, save_scale;
 
-/* Initialize memory pointers */
+    char  flabel[30];
+    plgchr(&save_def, &save_scale);
+    save_scale = save_scale/save_def;
 
-    kstor = 0;
-    kscan = 0;
+    cont_new_store(flev);
 
-    for (krow = ky; krow <= ly; krow++) {
-	for (kcol = kx + 1; kcol <= lx; kcol++) {
+    /* format contour label for plptex and define the font height of the labels */
+    plfloatlabel(flev, flabel);
+    plschr(0.0, contlabel_size);
 
-	/* Follow and draw a contour */
-
-	    pldrawcn(f2eval, f2eval_data,
-		     nx, ny, kx, lx, ky, ly, flev, kcol, krow,
-		     &kscan, &kstor, iscan, ixstor, iystor, nstor,
-		     pltr, pltr_data);
-
-	    if (error)
-		return;
-	}
-
-    /* Search of row complete */
-    /* Set up memory of next row in iscan and edit ixstor and iystor */
-
-	if (krow < ny-1) {
-	    jstor = 0;
-	    kscan = 0;
-	    next = krow + 1;
-	    for (l = 1; l <= kstor; l++) {
-		ixt = ixstor[l - 1];
-		iyt = iystor[l - 1];
-
-	    /* Memory of next row into iscan */
-
-		if (iyt == next) {
-		    kscan = kscan + 1;
-		    iscan[kscan - 1] = ixt;
-		}
-
-	    /* Retain memory of rows to come, and forget rest */
-
-		else if (iyt > next) {
-		    jstor = jstor + 1;
-		    ixstor[jstor - 1] = ixt;
-		    iystor[jstor - 1] = iyt;
-		}
-	    }
-	    kstor = jstor;
-	}
+    /* Clear array for traversed squares */
+    for (kcol = kx; kcol < lx; kcol++) {
+        for (krow = ky; krow < ly; krow++) {
+	    ipts[kcol][krow] = 0;
+	} 
     }
+
+
+    for (krow = ky; krow < ly; krow++) {
+        for (kcol = kx; kcol < lx; kcol++) {
+	    if (ipts[kcol][krow] == 0) {
+	      
+	        /* Follow and draw a contour */
+	        pldrawcn(f2eval, f2eval_data,
+		         nx, ny, kx, lx, ky, ly, flev, flabel, kcol, krow,
+		         0.0, 0.0, -2, ipts, &distance, &lastindex,
+			 pltr, pltr_data);
+
+		if (error)
+		    return;
+	    }
+	}
+
+    }
+    plschr(save_def, save_scale);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -269,273 +602,154 @@ static void
 pldrawcn(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
 	 PLPointer f2eval_data,
 	 PLINT nx, PLINT ny, PLINT kx, PLINT lx,
-	 PLINT ky, PLINT ly, PLFLT flev, PLINT kcol, PLINT krow,
-	 PLINT *p_kscan, PLINT *p_kstor, PLINT *iscan,
-	 PLINT *ixstor, PLINT *iystor, PLINT nstor,
+	 PLINT ky, PLINT ly, PLFLT flev, char *flabel, PLINT kcol, PLINT krow,
+	 PLFLT lastx, PLFLT lasty, PLINT startedge, PLINT **ipts, 
+	 PLFLT *distance, PLINT *lastindex,
 	 void (*pltr) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer),
 	 PLPointer pltr_data)
 {
-    PLINT iwbeg, ixbeg, iybeg, izbeg;
-    PLINT iboun, iw, ix, iy, iz, ifirst, istep, ixgo, iygo;
-    PLINT l, ixg, iyg, ia, ib;
+    PLFLT f[4];
+    PLFLT px[4], py[4], locx[4], locy[4];
+    PLINT iedge[4];
+    PLINT i, j, k, num, first, inext, kcolnext, krownext;
 
-    PLFLT dist, dx, dy, xnew, ynew, fxl, fxr;
-    PLFLT xlas = 0., ylas = 0., tpx, tpy, xt, yt;
-    PLFLT f1, f2, f3, f4, fcheck;
 
-    (void) nx;
-    (void) ny;
+    (*pltr) (kcol,krow+1,&px[0],&py[0],pltr_data);
+    (*pltr) (kcol,krow,&px[1],&py[1],pltr_data);
+    (*pltr) (kcol+1,krow,&px[2],&py[2],pltr_data);
+    (*pltr) (kcol+1,krow+1,&px[3],&py[3],pltr_data);
 
-/* Check if a contour has been crossed */
+    f[0] = f2eval(kcol, krow+1, f2eval_data)-flev;
+    f[1] = f2eval(kcol, krow, f2eval_data)-flev;
+    f[2] = f2eval(kcol+1, krow, f2eval_data)-flev;
+    f[3] = f2eval(kcol+1, krow+1, f2eval_data)-flev;
 
-    fxl = f2eval(kcol-1, krow, f2eval_data);
-    fxr = f2eval(kcol, krow, f2eval_data);
-
-    if (fxl < flev && fxr >= flev) {
-	ixbeg = kcol - 1;
-	iwbeg = kcol;
-    }
-    else if (fxr < flev && fxl >= flev) {
-	ixbeg = kcol;
-	iwbeg = kcol - 1;
-    }
-    else
-	return;
-
-    iybeg = krow;
-    izbeg = krow;
-
-/* A contour has been crossed. */
-/* Check to see if it is a new one. */
-
-    for (l = 0; l < *p_kscan; l++) {
-	if (ixbeg == iscan[l])
-	    return;
+    for (i=0,j=1;i<4;i++,j = (j+1)%4) {
+        iedge[i] = (f[i]*f[j]>0.0)?-1:((f[i]*f[j] < 0.0)?1:0);
     }
 
-    for (iboun = 1; iboun >= -1; iboun -= 2) {
+    /* Mark this square as done */
+    ipts[kcol][krow] = 1;
 
-    /* Set up starting point and initial search directions */
+    /* Check if no contour has been crossed i.e. iedge[i] = -1 */
+    if ((iedge[0] == -1) && (iedge[1] == -1) && (iedge[2] == -1) 
+         && (iedge[3] == -1)) return;
 
-	ix = ixbeg;
-	iy = iybeg;
-	iw = iwbeg;
-	iz = izbeg;
-	ifirst = 1;
-	istep = 0;
-	ixgo = iw - ix;
-	iygo = iz - iy;
+    /* Check if this is a completely flat square - in which case 
+       ignore it */
+    if ( (f[0] == 0.0) && (f[1] == 0.0) && (f[2] == 0.0) && 
+	 (f[3] == 0.0) ) return;
 
-	for (;;) {
-	    plccal(f2eval, f2eval_data,
-		   flev, ix, iy, ixgo, iygo, &dist);
-
-	    dx = dist * ixgo;
-	    dy = dist * iygo;
-	    xnew = ix + dx;
-	    ynew = iy + dy;
-
-	/* Has a step occured in search? */
-
-	    if (istep != 0) {
-		if (ixgo * iygo == 0) {
-
-		/* This was a diagonal step, so interpolate missed point. */
-		/* Rotating 45 degrees to get it */
-
-		    ixg = ixgo;
-		    iyg = iygo;
-		    plr45(&ixg, &iyg, iboun);
-		    ia = iw - ixg;
-		    ib = iz - iyg;
-		    plccal(f2eval, f2eval_data,
-			   flev, ia, ib, ixg, iyg, &dist);
-
-		    (*pltr) (xlas, ylas, &tpx, &tpy, pltr_data);
-
-		    plP_drawor(tpx, tpy);
-		    dx = dist * ixg;
-		    dy = dist * iyg;
-		    xlas = ia + dx;
-		    ylas = ib + dy;
-		}
-		else {
-		    if (dist > 0.5) {
-			xt = xlas;
-			xlas = xnew;
-			xnew = xt;
-			yt = ylas;
-			ylas = ynew;
-			ynew = yt;
-		    }
-		}
-	    }
-	    if (ifirst != 1) {
-		(*pltr) (xlas, ylas, &tpx, &tpy, pltr_data);
-		plP_drawor(tpx, tpy);
-	    }
-	    else {
-		(*pltr) (xnew, ynew, &tpx, &tpy, pltr_data);
-		plP_movwor(tpx, tpy);
-	    }
-	    xlas = xnew;
-	    ylas = ynew;
-
-	/* Check if the contour is closed */
-
-	    if (ifirst != 1 &&
-		ix == ixbeg && iy == iybeg && iw == iwbeg && iz == izbeg) {
-		(*pltr) (xlas, ylas, &tpx, &tpy, pltr_data);
-		plP_drawor(tpx, tpy);
-		return;
-	    }
-	    ifirst = 0;
-
-	/* Now the rotation */
-
-	    istep = 0;
-	    plr45(&ixgo, &iygo, iboun);
-	    iw = ix + ixgo;
-	    iz = iy + iygo;
-
-	/* Check if out of bounds */
-
-	    if (iw < kx || iw > lx || iz < ky || iz > ly)
-		break;
-
-	/* Has contact been lost with the contour? */
-
-	    if (ixgo * iygo == 0)
-		fcheck = f2eval(iw, iz, f2eval_data);
-	    else {
-		f1 = f2eval(ix, iy, f2eval_data);
-		f2 = f2eval(iw, iz, f2eval_data);
-		f3 = f2eval(ix, iz, f2eval_data);
-		f4 = f2eval(iw, iy, f2eval_data);
-
-		fcheck = MAX(f2, (f1 + f2 + f3 + f4) / 4.);
-	    }
-
-	    if (fcheck < flev) {
-
-	    /* Yes, lost contact => step to new center */
-
-		istep = 1;
-		ix = iw;
-		iy = iz;
-		plr135(&ixgo, &iygo, iboun);
-		iw = ix + ixgo;
-		iz = iy + iygo;
-
-	    /* And do the contour memory */
-
-		if (iy == krow) {
-		    *p_kscan = *p_kscan + 1;
-		    iscan[*p_kscan - 1] = ix;
-		}
-		else if (iy > krow) {
-		    *p_kstor = *p_kstor + 1;
-		    if (*p_kstor > nstor) {
-			plabort("plfcont: heap exhausted");
-			error = 1;
-			return;
-		    }
-		    ixstor[*p_kstor - 1] = ix;
-		    iystor[*p_kstor - 1] = iy;
-		}
-	    }
-	}
-	/* Reach here only if boundary encountered - Draw last bit */
-
-	(*pltr) (xnew, ynew, &tpx, &tpy, pltr_data);
-	plP_drawor(tpx, tpy);
-    }
-}
-
-/*--------------------------------------------------------------------------*\
- * void plccal()
- *
- * Function to interpolate the position of a contour which is known to be
- * next to ix,iy in the direction ixg,iyg. The unscaled distance along
- * ixg,iyg is returned as dist.
-\*--------------------------------------------------------------------------*/
-
-static void
-plccal(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
-       PLPointer f2eval_data,
-       PLFLT flev, PLINT ix, PLINT iy,
-       PLINT ixg, PLINT iyg, PLFLT *dist)
-{
-    PLINT ia, ib;
-    PLFLT dbot, dtop, fmid;
-    PLFLT fxy, fab, fay, fxb, flow;
-
-    ia = ix + ixg;
-    ib = iy + iyg;
-    fxy = f2eval(ix, iy, f2eval_data);
-    fab = f2eval(ia, ib, f2eval_data);
-    fxb = f2eval(ix, ib, f2eval_data);
-    fay = f2eval(ia, iy, f2eval_data);
-
-    if (ixg == 0 || iyg == 0) {
-	dtop = flev - fxy;
-	dbot = fab - fxy;
-	*dist = 0.0;
-	if (dbot != 0.0)
-	    *dist = dtop / dbot;
+    /* Calculate intersection points */
+    num = 0;
+    if (startedge < 0) {
+        first = 1;
     }
     else {
-	fmid = (fxy + fab + fxb + fay) / 4.0;
-	*dist = 0.5;
-
-	if ((fxy - flev) * (fab - flev) <= 0.) {
-
-	    if (fmid >= flev) {
-		dtop = flev - fxy;
-		dbot = fmid - fxy;
-		if (dbot != 0.0)
-		    *dist = 0.5 * dtop / dbot;
-	    }
-	    else {
-		dtop = flev - fab;
-		dbot = fmid - fab;
-		if (dbot != 0.0)
-		    *dist = 1.0 - 0.5 * dtop / dbot;
-	    }
-	}
-	else {
-	    flow = (fxb + fay) / 2.0;
-	    dtop = fab - flev;
-	    dbot = fab + fxy - 2.0 * flow;
-	    if (dbot != 0.0)
-		*dist = 1. - dtop / dbot;
-	}
+	locx[num] = lastx;
+	locy[num] = lasty;
+	num++;
+	first = 0;
     }
-    if (*dist > 1.)
-	*dist = 1.;
-}
+    for (k=0, i = (startedge<0?0:startedge);k<4;k++,i=(i+1)%4) {
+      if (i == startedge) continue;
 
-/*--------------------------------------------------------------------------*\
- * Rotators
-\*--------------------------------------------------------------------------*/
+      /* If the contour is an edge check it hasn't already been done */
+      if (f[i] == 0.0 && f[(i+1)%4] == 0.0) {
+	   kcolnext = kcol;
+	   krownext = krow;
+	   if (i == 0) kcolnext--;
+	   if (i == 1) krownext--;
+	   if (i == 2) kcolnext++;
+	   if (i == 3) krownext++;
+	   if ((kcolnext < kx) || (kcolnext >= lx) ||
+	       (krownext < ky) || (krownext >= ly) ||
+	       (ipts[kcolnext][krownext] == 1)) continue;
+      }
+      if ((iedge[i] == 1) || (f[i] == 0.0)) {
+          j = (i+1)%4;
+          if (f[i] != 0.0) {
+	      locx[num] = (px[i]*fabs(f[j])+px[j]*fabs(f[i]))/fabs(f[j]-f[i]);
+	      locy[num] = (py[i]*fabs(f[j])+py[j]*fabs(f[i]))/fabs(f[j]-f[i]);
+	  }
+	  else {
+	      locx[num] = px[i];
+	      locy[num] = py[i];
+	  }
+	  /* If this is the start of the contour then move to the point */
+	  if (first == 1) {
+	      cont_mv_store(locx[num],locy[num]);
+	      first = 0;
+	      *distance = 0;
+	      *lastindex = 0;
+	  }
+	  else {
+	      /* Link to the next point on the contour */
+              if (contlabel_active)
+		  pl_drawcontlabel(locx[num], locy[num], flabel, distance, lastindex);
+      	      else
+		  cont_xy_store(locx[num],locy[num]);
+	      /* Need to follow contour into next grid box */
+	      /* Easy case where contour does not pass through corner */
+	      if (f[i] != 0.0) {
+		  kcolnext = kcol;
+		  krownext = krow;
+		  inext = (i+2)%4;
+		  if (i == 0) kcolnext--;
+		  if (i == 1) krownext--;
+		  if (i == 2) kcolnext++;
+		  if (i == 3) krownext++;
+		  if ((kcolnext >= kx) && (kcolnext < lx) &&
+		      (krownext >= ky) && (krownext < ly) &&
+		      (ipts[kcolnext][krownext] == 0)) {
+		      pldrawcn(f2eval, f2eval_data,
+			       nx, ny, kx, lx, ky, ly, flev, flabel, 
+			       kcolnext, krownext,
+			       locx[num], locy[num], inext, ipts, 
+			       distance, lastindex,
+			       pltr, pltr_data);
+		  }
+      	      }
+	      /* Hard case where contour passes through corner */
+	      /* This is still not perfect - it may lose the contour 
+	       * which won't upset the contour itself (we can find it
+	       * again later) but might upset the labelling */
+	      else {
+		  kcolnext = kcol;
+		  krownext = krow;
+		  inext = (i+2)%4;
+		  if (i == 0) {kcolnext--; krownext++;}
+		  if (i == 1) {krownext--; kcolnext--;}
+		  if (i == 2) {kcolnext++; krownext--;}
+		  if (i == 3) {krownext++; kcolnext++;}
+		  if ((kcolnext >= kx) && (kcolnext < lx) &&
+		      (krownext >= ky) && (krownext < ly) &&
+		      (ipts[kcolnext][krownext] == 0)) {
+		      pldrawcn(f2eval, f2eval_data,
+			       nx, ny, kx, lx, ky, ly, flev, flabel, 
+			       kcolnext, krownext,
+			       locx[num], locy[num], inext, ipts, 
+			       distance, lastindex,
+			       pltr, pltr_data);
+		  }
+		  
+	      }
+	      if (first == 1) {
+	 	  /* Move back to first point */
+	          cont_mv_store(locx[num],locy[num]);
+		  first = 0;
+		  *distance = 0;
+		  *lastindex = 0;
+		  first = 0;
+	      }
+	      else {
+		  first = 1;
+	      }
+	      num++;
+	}
+      }
+    }
 
-static void 
-plr45 (PLINT *ix, PLINT *iy, PLINT isens)
-{
-    PLINT ixx, iyy;
-
-    ixx = *ix - isens * (*iy);
-    iyy = *ix * isens + *iy;
-    *ix = ixx / MAX(1, ABS(ixx));
-    *iy = iyy / MAX(1, ABS(iyy));
-}
-
-static void 
-plr135 (PLINT *ix, PLINT *iy, PLINT isens)
-{
-    *ix = -*ix;
-    *iy = -*iy;
-    plr45(ix, iy, isens);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -547,7 +761,7 @@ plr135 (PLINT *ix, PLINT *iy, PLINT isens)
 void
 pltr0(PLFLT x, PLFLT y, PLFLT *tx, PLFLT *ty, PLPointer pltr_data)
 {
-    (void) pltr_data;
+    (void) pltr_data; 			/* pmr: make it used */
 
     *tx = x;
     *ty = y;
@@ -719,7 +933,7 @@ pltr2(PLFLT x, PLFLT y, PLFLT *tx, PLFLT *ty, PLPointer pltr_data)
 /* Normal case.
  * Look up coordinates in row-dominant array.
  * Have to handle right boundary specially -- if at the edge, we'd
- * better not reference the out of bounds point. 
+ * better not reference the out of bounds point.
  */
 
     else {

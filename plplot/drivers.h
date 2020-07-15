@@ -1,12 +1,27 @@
-/* All VGA driver function names now end with "_vga", a nice simplification.
- * Since all are compiler-dependent and mutually exclusive, this should pose
- * no problem.  Also HP pen plotter driver were consolidated.  Both
- * contributions by Mark Olesen (olesen@weber.me.queensu.ca).
-*/
-
-/*	drivers.h
+/* $Id: drivers.h,v 1.2 2007/05/08 09:09:37 rice Exp $
 
 	Contains all prototypes for driver functions.
+
+    Copyright (C) 2004  Andrew Roach
+    Copyright (C) 2005  Thomas J. Duck
+    Copyright (C) 2006  Andrew Ross
+
+    This file is part of PLplot.
+
+    PLplot is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Library General Public License as published
+    by the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    PLplot is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with PLplot; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
 */
 
 #ifndef __DRIVERS_H__
@@ -19,226 +34,62 @@
 extern "C" {
 #endif
 
-void plD_init_tk		(PLStream *);
-void plD_init_dp		(PLStream *);
-void plD_line_tk		(PLStream *, short, short, short, short);
-void plD_polyline_tk		(PLStream *, short *, short *, PLINT);
-void plD_eop_tk			(PLStream *);
-void plD_bop_tk			(PLStream *);
-void plD_tidy_tk		(PLStream *);
-void plD_state_tk		(PLStream *, PLINT);
-void plD_esc_tk			(PLStream *, PLINT, void *);
-
-void plD_init_xw		(PLStream *);
-void plD_line_xw		(PLStream *, short, short, short, short);
-void plD_polyline_xw		(PLStream *, short *, short *, PLINT);
-void plD_eop_xw			(PLStream *);
-void plD_bop_xw			(PLStream *);
-void plD_tidy_xw		(PLStream *);
-void plD_state_xw		(PLStream *, PLINT);
-void plD_esc_xw			(PLStream *, PLINT, void *);
-
-void plD_init_xterm		(PLStream *);
-void plD_init_tekt		(PLStream *);
-void plD_init_tekf		(PLStream *);
-void plD_init_tek4107t		(PLStream *);
-void plD_init_tek4107f		(PLStream *);
-void plD_init_mskermit		(PLStream *);
-void plD_init_versaterm		(PLStream *);
-void plD_init_vlt		(PLStream *);
-void plD_init_conex		(PLStream *);
-
-void plD_line_tek		(PLStream *, short, short, short, short);
-void plD_polyline_tek		(PLStream *, short *, short *, PLINT);
-void plD_eop_tek		(PLStream *);
-void plD_bop_tek		(PLStream *);
-void plD_tidy_tek		(PLStream *);
-void plD_state_tek		(PLStream *, PLINT);
-void plD_esc_tek		(PLStream *, PLINT, void *);
-
-void plD_init_mgr		(PLStream *);
-void plD_line_mgr		(PLStream *, short, short, short, short);
-void plD_polyline_mgr		(PLStream *, short *, short *, PLINT);
-void plD_eop_mgr		(PLStream *);
-void plD_bop_mgr		(PLStream *);
-void plD_tidy_mgr		(PLStream *);
-void plD_state_mgr		(PLStream *, PLINT);
-void plD_esc_mgr		(PLStream *, PLINT, void *);
-
-void plD_init_dg		(PLStream *);
-void plD_line_dg		(PLStream *, short, short, short, short);
-void plD_polyline_dg		(PLStream *, short *, short *, PLINT);
-void plD_eop_dg			(PLStream *);
-void plD_bop_dg			(PLStream *);
-void plD_tidy_dg		(PLStream *);
-void plD_state_dg		(PLStream *, PLINT);
-void plD_esc_dg			(PLStream *, PLINT, void *);
-
-void plD_init_hp7470		(PLStream *);
-void plD_init_hp7580		(PLStream *);
-void plD_init_lj_hpgl		(PLStream *);
-
-void plD_line_hpgl		(PLStream *, short, short, short, short);
-void plD_polyline_hpgl		(PLStream *, short *, short *, PLINT);
-void plD_eop_hpgl		(PLStream *);
-void plD_bop_hpgl		(PLStream *);
-void plD_tidy_hpgl		(PLStream *);
-void plD_state_hpgl		(PLStream *, PLINT);
-void plD_esc_hpgl		(PLStream *, PLINT, void *);
-
-void plD_init_imp		(PLStream *);
-void plD_line_imp		(PLStream *, short, short, short, short);
-void plD_polyline_imp		(PLStream *, short *, short *, PLINT);
-void plD_eop_imp		(PLStream *);
-void plD_bop_imp		(PLStream *);
-void plD_tidy_imp		(PLStream *);
-void plD_state_imp		(PLStream *, PLINT);
-void plD_esc_imp		(PLStream *, PLINT, void *);
-
-void plD_init_xfig		(PLStream *);
-void plD_line_xfig		(PLStream *, short, short, short, short);
-void plD_polyline_xfig		(PLStream *, short *, short *, PLINT);
-void plD_eop_xfig		(PLStream *);
-void plD_bop_xfig		(PLStream *);
-void plD_tidy_xfig		(PLStream *);
-void plD_state_xfig		(PLStream *, PLINT);
-void plD_esc_xfig		(PLStream *, PLINT, void *);
-
-void plD_init_ljiip		(PLStream *);
-void plD_line_ljiip		(PLStream *, short, short, short, short);
-void plD_polyline_ljiip		(PLStream *, short *, short *, PLINT);
-void plD_eop_ljiip		(PLStream *);
-void plD_bop_ljiip		(PLStream *);
-void plD_tidy_ljiip		(PLStream *);
-void plD_state_ljiip		(PLStream *, PLINT);
-void plD_esc_ljiip		(PLStream *, PLINT, void *);
-
-void plD_init_ljii		(PLStream *);
-void plD_line_ljii		(PLStream *, short, short, short, short);
-void plD_polyline_ljii		(PLStream *, short *, short *, PLINT);
-void plD_eop_ljii		(PLStream *);
-void plD_bop_ljii		(PLStream *);
-void plD_tidy_ljii		(PLStream *);
-void plD_state_ljii		(PLStream *, PLINT);
-void plD_esc_ljii		(PLStream *, PLINT, void *);
-
-void plD_init_psm		(PLStream *);
-void plD_init_psc		(PLStream *);
-void plD_line_ps		(PLStream *, short, short, short, short);
-void plD_polyline_ps		(PLStream *, short *, short *, PLINT);
-void plD_eop_ps			(PLStream *);
-void plD_bop_ps			(PLStream *);
-void plD_tidy_ps		(PLStream *);
-void plD_state_ps		(PLStream *, PLINT);
-void plD_esc_ps			(PLStream *, PLINT, void *);
-
-void plD_init_nx		(PLStream *);
-void plD_line_nx		(PLStream *, short, short, short, short);
-void plD_polyline_nx		(PLStream *, short *, short *, PLINT);
-void plD_eop_nx			(PLStream *);
-void plD_bop_nx			(PLStream *);
-void plD_tidy_nx		(PLStream *);
-void plD_state_nx		(PLStream *, PLINT);
-void plD_esc_nx			(PLStream *, PLINT, void *);
-
-void plD_init_plm		(PLStream *);
-void plD_line_plm		(PLStream *, short, short, short, short);
-void plD_polyline_plm		(PLStream *, short *, short *, PLINT);
-void plD_eop_plm		(PLStream *);
-void plD_bop_plm		(PLStream *);
-void plD_tidy_plm		(PLStream *);
-void plD_state_plm		(PLStream *, PLINT);
-void plD_esc_plm		(PLStream *, PLINT, void *);
-
-void plD_init_vga		(PLStream *);
-void plD_line_vga		(PLStream *, short, short, short, short);
-void plD_polyline_vga		(PLStream *, short *, short *, PLINT);
-void plD_eop_vga		(PLStream *);
-void plD_bop_vga		(PLStream *);
-void plD_tidy_vga		(PLStream *);
-void plD_state_vga		(PLStream *, PLINT);
-void plD_esc_vga		(PLStream *, PLINT, void *);
-
-void plD_init_mac		(PLStream *);
-void plD_line_mac		(PLStream *, short, short, short, short);
-void plD_polyline_mac		(PLStream *, short *, short *, PLINT);
-void plD_eop_mac		(PLStream *);
-void plD_bop_mac		(PLStream *);
-void plD_tidy_mac		(PLStream *);
-void plD_state_mac		(PLStream *, PLINT);
-void plD_esc_mac		(PLStream *, PLINT, void *);
-
-void plD_init_win3		(PLStream *);
-void plD_line_win3		(PLStream *, short, short, short, short);
-void plD_polyline_win3		(PLStream *, short *, short *, PLINT);
-void plD_eop_win3		(PLStream *);
-void plD_bop_win3		(PLStream *);
-void plD_tidy_win3		(PLStream *);
-void plD_state_win3		(PLStream *, PLINT);
-void plD_esc_win3		(PLStream *, PLINT, void *);
-
-void plD_init_os2		(PLStream *);				 
-void plD_line_os2		(PLStream *, short, short, short, short);
-void plD_polyline_os2		(PLStream *, short *, short *, PLINT);
-void plD_eop_os2		(PLStream *);				 
-void plD_bop_os2		(PLStream *);				 
-void plD_tidy_os2		(PLStream *);				 
-void plD_state_os2		(PLStream *, PLINT);
-void plD_esc_os2		(PLStream *, PLINT, void *);		 
-
-void plD_init_amiwn		(PLStream *);
-void plD_line_amiwn		(PLStream *, short, short, short, short);
-void plD_polyline_amiwn		(PLStream *, short *, short *, PLINT);
-void plD_eop_amiwn		(PLStream *);
-void plD_bop_amiwn		(PLStream *);
-void plD_tidy_amiwn		(PLStream *);
-void plD_state_amiwn		(PLStream *, PLINT);
-void plD_esc_amiwn		(PLStream *, PLINT, void *);
-
-void plD_init_amipr		(PLStream *);
-void plD_line_amipr		(PLStream *, short, short, short, short);
-void plD_polyline_amipr		(PLStream *, short *, short *, PLINT);
-void plD_eop_amipr		(PLStream *);
-void plD_bop_amipr		(PLStream *);
-void plD_tidy_amipr		(PLStream *);
-void plD_state_amipr		(PLStream *, PLINT);
-void plD_esc_amipr		(PLStream *, PLINT, void *);
-
-void plD_init_iff		(PLStream *);
-void plD_line_iff		(PLStream *, short, short, short, short);
-void plD_polyline_iff		(PLStream *, short *, short *, PLINT);
-void plD_eop_iff		(PLStream *);
-void plD_bop_iff		(PLStream *);
-void plD_tidy_iff		(PLStream *);
-void plD_state_iff		(PLStream *, PLINT);
-void plD_esc_iff		(PLStream *, PLINT, void *);
-
-void plD_init_aegis		(PLStream *);
-void plD_line_aegis		(PLStream *, short, short, short, short);
-void plD_polyline_aegis		(PLStream *, short *, short *, PLINT);
-void plD_eop_aegis		(PLStream *);
-void plD_bop_aegis		(PLStream *);
-void plD_tidy_aegis		(PLStream *);
-void plD_state_aegis		(PLStream *, PLINT);
-void plD_esc_aegis		(PLStream *, PLINT, void *);
-
-void plD_init_pbm		(PLStream *);
-void plD_line_pbm		(PLStream *, short, short, short, short);
-void plD_polyline_pbm		(PLStream *, short *, short *, PLINT);
-void plD_eop_pbm		(PLStream *);
-void plD_bop_pbm		(PLStream *);
-void plD_tidy_pbm		(PLStream *);
-void plD_state_pbm		(PLStream *, PLINT);
-void plD_esc_pbm		(PLStream *, PLINT, void *);
-
-void plD_init_null		(PLStream *);
-void plD_line_null		(PLStream *, short, short, short, short);
-void plD_polyline_null		(PLStream *, short *, short *, PLINT);
-void plD_eop_null		(PLStream *);
-void plD_bop_null		(PLStream *);
-void plD_tidy_null		(PLStream *);
-void plD_state_null		(PLStream *, PLINT);
-void plD_esc_null		(PLStream *, PLINT, void *);
+void plD_dispatch_init_mac8	( PLDispatchTable *pdt );
+void plD_dispatch_init_mac1	( PLDispatchTable *pdt );
+void plD_dispatch_init_aqt	( PLDispatchTable *pdt );
+void plD_dispatch_init_nx	( PLDispatchTable *pdt );
+void plD_dispatch_init_os2	( PLDispatchTable *pdt );
+void plD_dispatch_init_xw	( PLDispatchTable *pdt );
+void plD_dispatch_init_gcw	( PLDispatchTable *pdt );
+void plD_dispatch_init_gnome	( PLDispatchTable *pdt );
+void plD_dispatch_init_tk	( PLDispatchTable *pdt );
+void plD_dispatch_init_vga	( PLDispatchTable *pdt );
+void plD_dispatch_init_mgr	( PLDispatchTable *pdt );
+void plD_dispatch_init_win3	( PLDispatchTable *pdt );
+/*void plD_dispatch_init_vga	( PLDispatchTable *pdt );*/ /* pmr: duplic. */
+/*void plD_dispatch_init_vga	( PLDispatchTable *pdt );*/ /* pmr: duplic. */
+/*void plD_dispatch_init_vga	( PLDispatchTable *pdt );*/ /* pmr: duplic. */
+void plD_dispatch_init_tiff	( PLDispatchTable *pdt );
+void plD_dispatch_init_jpg	( PLDispatchTable *pdt );
+void plD_dispatch_init_jpeg	( PLDispatchTable *pdt );
+void plD_dispatch_init_bmp	( PLDispatchTable *pdt );
+/*void plD_dispatch_init_vga	( PLDispatchTable *pdt );*/ /* pmr: duplic. */
+void plD_dispatch_init_xterm	( PLDispatchTable *pdt );
+void plD_dispatch_init_tekt	( PLDispatchTable *pdt );
+void plD_dispatch_init_tek4107t	( PLDispatchTable *pdt );
+void plD_dispatch_init_mskermit	( PLDispatchTable *pdt );
+void plD_dispatch_init_versaterm( PLDispatchTable *pdt );
+void plD_dispatch_init_vlt	( PLDispatchTable *pdt );
+void plD_dispatch_init_conex	( PLDispatchTable *pdt );
+void plD_dispatch_init_dg	( PLDispatchTable *pdt );
+void plD_dispatch_init_plm	( PLDispatchTable *pdt );
+void plD_dispatch_init_tekf	( PLDispatchTable *pdt );
+void plD_dispatch_init_tek4107f	( PLDispatchTable *pdt );
+void plD_dispatch_init_psm	( PLDispatchTable *pdt );
+void plD_dispatch_init_psc	( PLDispatchTable *pdt );
+void plD_dispatch_init_xfig	( PLDispatchTable *pdt );
+void plD_dispatch_init_ljiip	( PLDispatchTable *pdt );
+void plD_dispatch_init_ljii	( PLDispatchTable *pdt );
+void plD_dispatch_init_hp7470	( PLDispatchTable *pdt );
+void plD_dispatch_init_hp7580	( PLDispatchTable *pdt );
+void plD_dispatch_init_hpgl	( PLDispatchTable *pdt );
+void plD_dispatch_init_imp	( PLDispatchTable *pdt );
+void plD_dispatch_init_pbm	( PLDispatchTable *pdt );
+void plD_dispatch_init_png	( PLDispatchTable *pdt );
+void plD_dispatch_init_gif	( PLDispatchTable *pdt );
+void plD_dispatch_init_cgm	( PLDispatchTable *pdt );
+void plD_dispatch_init_null	( PLDispatchTable *pdt );
+void plD_dispatch_init_tkwin	( PLDispatchTable *pdt );
+void plD_dispatch_init_pstex	( PLDispatchTable *pdt );
+void plD_dispatch_init_psttfc	( PLDispatchTable *pdt );
+void plD_dispatch_init_psttfm	( PLDispatchTable *pdt );
+void plD_dispatch_init_ntk	( PLDispatchTable *pdt );
+void plD_dispatch_init_mem	( PLDispatchTable *pdt );
+void plD_dispatch_init_wingcc	( PLDispatchTable *pdt );
+void plD_dispatch_init_wxwidgets	( PLDispatchTable *pdt );
+void plD_dispatch_init_svg	( PLDispatchTable *pdt );
+void plD_dispatch_init_pdf	( PLDispatchTable *pdt );
+void plD_dispatch_init_data	( PLDispatchTable *pdt );
 
 /* Prototypes for plot buffer calls. */
 
@@ -252,16 +103,6 @@ void plbuf_state	(PLStream *, PLINT);
 void plbuf_esc		(PLStream *, PLINT, void *);
 
 void plRemakePlot	(PLStream *);
-
-  /* png stuff */
-void plD_init_png (PLStream *);
-void plD_line_png (PLStream *, short, short, short, short);
-void plD_polyline_png (PLStream *, short *, short *, PLINT);
-void plD_eop_png (PLStream *);
-void plD_bop_png (PLStream *);
-void plD_tidy_png (PLStream *);
-void plD_state_png (PLStream *, PLINT);
-void plD_esc_png (PLStream *, PLINT, void *);
 
 #ifdef __cplusplus
 }

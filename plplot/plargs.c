@@ -1,43 +1,29 @@
-/* Massively reworked.  Now it is absolutely trivial to merge user command line
- * options to the internal options list for use when parsing the command line.
- * The globally visible functions are now:
- *
- *   plClearOpts()   Clear internal option table info structure.
- *   plResetOpts()   Reset internal option table info structure.
- *   plMergeOpts()   Merge user option table into internal info structure.
- *   plSetUsage()    Set the strings used in usage and syntax messages.
- *   plSetOpt()      Process input strings, treating them as an option and
- *                   argument pair.
- *   plParseOpts()   Process options list using current options info.
- *   plOptUsage()    Print usage & syntax message.
- *
- * See internal documentation and either x01c.c or plrender.c for example
- * usage.
- *
- */
-
-/*
-    plargs.c
+/* $Id: plargs.c,v 1.5 2007/05/14 14:43:37 ajb Exp $
 
     Copyright 1993, 1994, 1995
     Maurice LeBrun			mjl@dino.ph.utexas.edu
     Institute for Fusion Studies	University of Texas at Austin
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    Copyright (C) 2004  Maurice LeBrun
+    Copyright (C) 2004  Andrew Ross
 
-    This library is distributed in the hope that it will be useful,
+    This file is part of PLplot.
+
+    PLplot is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Library General Public License as published
+    by the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    PLplot is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Library General Public License for more details.
 
-    You should have received a copy of the GNU Library General Public
-    License along with this library; if not, write to the Free
-    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    You should have received a copy of the GNU Library General Public License
+    along with PLplot; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-    Some parts of this code were derived from "xterm.c" and "ParseCmd.c" of 
+    Some parts of this code were derived from "xterm.c" and "ParseCmd.c" of
     the X-windows Version 11 distribution.  The copyright notice is
     reproduced here:
 
@@ -53,17 +39,17 @@ and the Massachusetts Institute of Technology, Cambridge, Massachusetts.
     This file contains routines to extract & process command flags.  The
     command flags recognized by PLplot are stored in the "ploption_table"
     structure, along with strings giving the syntax, long help message, and
-    option handler.  
+    option handler.
 
-    The command line parser -- plParseOpts() -- removes all recognized flags
+    The command line parser -- plparseopts() -- removes all recognized flags
     (decreasing argc accordingly), so that invalid input may be readily
     detected.  It can also be used to process user command line flags.  The
     user can merge an option table of type PLOptionTable into the internal
     option table info structure using plMergeOpts().  Or, the user can
     specify that ONLY the external table(s) be parsed by calling
-    plClearOpts() before plMergeOpts().  
+    plClearOpts() before plMergeOpts().
 
-    The default action taken by plParseOpts() is as follows:
+    The default action taken by plparseopts() is as follows:
 	- Returns with an error if an unrecognized option or badly formed
 	  option-value pair are encountered.
 	- Returns immediately (return code 0) when the first non-option
@@ -88,7 +74,7 @@ and the Massachusetts Institute of Technology, Cambridge, Massachusetts.
 
     PL_PARSE_NODELETE -- Turns off deletion of processed arguments.
 
-    PL_PARSE_SHOWALL -- Show invisible options 
+    PL_PARSE_SHOWALL -- Show invisible options
 
     PL_PARSE_NOPROGRAM -- Specified if argv[0] is NOT a pointer to the
     program name.
@@ -109,15 +95,8 @@ and the Massachusetts Institute of Technology, Cambridge, Massachusetts.
 
     See plrender.c for examples of actual usage.  */
 
-
-#ifndef _BSD_SOURCE
-#define _BSD_SOURCE
-#endif
-#include <string.h>
-
 #include "plplotP.h"
 #include <ctype.h>
-
 
 /* Support functions */
 
@@ -144,6 +123,7 @@ static int opt_jy		(const char *, const char *, void *);
 static int opt_mar		(const char *, const char *, void *);
 static int opt_ori		(const char *, const char *, void *);
 static int opt_freeaspect	(const char *, const char *, void *);
+static int opt_portrait		(const char *, const char *, void *);
 static int opt_width		(const char *, const char *, void *);
 static int opt_bg		(const char *, const char *, void *);
 static int opt_ncol0		(const char *, const char *, void *);
@@ -160,20 +140,22 @@ static int opt_np		(const char *, const char *, void *);
 static int opt_px		(const char *, const char *, void *);
 static int opt_py		(const char *, const char *, void *);
 static int opt_wplt		(const char *, const char *, void *);
+static int opt_drvopt		(const char *, const char *, void *);
 
 static int opt_plserver		(const char *, const char *, void *);
 static int opt_plwindow		(const char *, const char *, void *);
 static int opt_tcl_cmd		(const char *, const char *, void *);
 static int opt_auto_path	(const char *, const char *, void *);
+/*static int opt_bufmax		(char *, char *, void *);*/ /* pmr: duplic. */
 static int opt_server_name	(const char *, const char *, void *);
-static int opt_server_host	(const char *, const char *, void *);
-static int opt_server_port	(const char *, const char *, void *);
-static int opt_user		(const char *, const char *, void *);
+static int opt_tk_file          (const char *, const char *, void *);
+static int opt_dpi		(const char *, const char *, void *);
+static int opt_dev_compression	(const char *, const char *, void *);
 
 /* Global variables */
 
-static char *program = NULL;
-static char *usage   = NULL;
+static const char *program = NULL;
+static const char *usage   = NULL;
 
 static int  mode_full;
 static int  mode_quiet;
@@ -182,6 +164,11 @@ static int  mode_showall;
 static int  mode_noprogram;
 static int  mode_nodash;
 static int  mode_skip;
+
+/* Temporary buffer used for parsing */
+
+#define OPTMAX 1024
+static char opttmp[OPTMAX];
 
 /*--------------------------------------------------------------------------*\
  * PLPLOT options data structure definition.
@@ -216,20 +203,20 @@ static int  mode_skip;
  *
  * The mode bits are:
  *
- * PL_OPT_ARG		Option has an argment 
- * PL_OPT_NODELETE	Don't delete after processing 
+ * PL_OPT_ARG		Option has an argment
+ * PL_OPT_NODELETE	Don't delete after processing
  * PL_OPT_INVISIBLE	Make invisible (usually for debugging)
  * PL_OPT_DISABLED	Ignore this option
  *
  * The following mode bits cause the option to be processed as specified:
  *
- * PL_OPT_FUNC		Call function handler (opt, optarg)
+ * PL_OPT_FUNC		Call function handler (opt, myoptarg)
  * PL_OPT_BOOL		Set *var=1
- * PL_OPT_INT		Set *var=atoi(optarg)
- * PL_OPT_FLOAT		Set *var=atof(optarg)
- * PL_OPT_STRING	Set *var=optarg
+ * PL_OPT_INT		Set *var=atoi(mtoptarg)
+ * PL_OPT_FLOAT		Set *var=atof(mtoptarg)
+ * PL_OPT_STRING	Set *var=myoptarg
  *
- * where opt points to the option string and optarg points to the
+ * where opt points to the option string and myoptarg points to the
  * argument string.
  *
 \*--------------------------------------------------------------------------*/
@@ -237,7 +224,7 @@ static int  mode_skip;
 static PLOptionTable ploption_table[] = {
 {
     "showall",			/* Turns on invisible options */
-    (int (*)(const char *,const char *, void *))NULL,
+    NULL,
     NULL,
     &mode_showall,
     PL_OPT_BOOL | PL_OPT_INVISIBLE,
@@ -245,7 +232,7 @@ static PLOptionTable ploption_table[] = {
     "Turns on invisible options" },
 {
     "h",			/* Help */
-    (int (*)(const char *,const char *, void *))opt_h,
+    opt_h,
     NULL,
     NULL,
     PL_OPT_FUNC,
@@ -253,7 +240,7 @@ static PLOptionTable ploption_table[] = {
     "Print out this message" },
 {
     "v",			/* Version */
-    (int (*)(const char *,const char *, void *))opt_v,
+    opt_v,
     NULL,
     NULL,
     PL_OPT_FUNC,
@@ -261,7 +248,7 @@ static PLOptionTable ploption_table[] = {
     "Print out the PLplot library version number" },
 {
     "verbose",			/* Be more verbose than usual */
-    (int (*)(const char *,const char *, void *))opt_verbose,
+    opt_verbose,
     NULL,
     NULL,
     PL_OPT_FUNC,
@@ -269,7 +256,7 @@ static PLOptionTable ploption_table[] = {
     "Be more verbose than usual" },
 {
     "debug",			/* Print debugging info */
-    (int (*)(const char *,const char *, void *))opt_debug,
+    opt_debug,
     NULL,
     NULL,
     PL_OPT_FUNC,
@@ -277,7 +264,7 @@ static PLOptionTable ploption_table[] = {
     "Print debugging info (implies -verbose)" },
 {
     "hack",			/* Enable driver-specific hack(s) */
-    (int (*)(const char *,const char *, void *))opt_hack,
+    opt_hack,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_INVISIBLE,
@@ -285,7 +272,7 @@ static PLOptionTable ploption_table[] = {
     "Enable driver-specific hack(s)" },
 {
     "dev",			/* Output device */
-    (int (*)(const char *,const char *, void *))opt_dev,
+    opt_dev,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -293,7 +280,7 @@ static PLOptionTable ploption_table[] = {
     "Output device name" },
 {
     "o",			/* Output filename */
-    (int (*)(const char *,const char *, void *))opt_o,
+    opt_o,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -301,7 +288,7 @@ static PLOptionTable ploption_table[] = {
     "Output filename" },
 {
     "display",			/* X server */
-    (int (*)(const char *,const char *, void *))opt_o,
+    opt_o,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -309,7 +296,7 @@ static PLOptionTable ploption_table[] = {
     "X server to contact" },
 {
     "px",			/* Plots per page in x */
-    (int (*)(const char *,const char *, void *))opt_px,
+    opt_px,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -317,7 +304,7 @@ static PLOptionTable ploption_table[] = {
     "Plots per page in x" },
 {
     "py",			/* Plots per page in y */
-    (int (*)(const char *,const char *, void *))opt_py,
+    opt_py,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -325,7 +312,7 @@ static PLOptionTable ploption_table[] = {
     "Plots per page in y" },
 {
     "geometry",			/* Geometry */
-    (int (*)(const char *,const char *, void *))opt_geo,
+    opt_geo,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -333,7 +320,7 @@ static PLOptionTable ploption_table[] = {
     "Window size, in pixels (e.g. -geometry 400x300)" },
 {
     "geo",			/* Geometry (alias) */
-    (int (*)(const char *,const char *, void *))opt_geo,
+    opt_geo,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG | PL_OPT_INVISIBLE,
@@ -341,7 +328,7 @@ static PLOptionTable ploption_table[] = {
     "Window size, in pixels (e.g. -geo 400x300)" },
 {
     "wplt",			/* Plot window */
-    (int (*)(const char *,const char *, void *))opt_wplt,
+    opt_wplt,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -349,7 +336,7 @@ static PLOptionTable ploption_table[] = {
     "Relative coordinates [0-1] of window into plot" },
 {
     "mar",			/* Margin */
-    (int (*)(const char *,const char *, void *))opt_mar,
+    opt_mar,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -357,7 +344,7 @@ static PLOptionTable ploption_table[] = {
     "Margin space in relative coordinates (0 to 0.5, def 0)" },
 {
     "a",			/* Aspect ratio */
-    (int (*)(const char *,const char *, void *))opt_a,
+    opt_a,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -365,7 +352,7 @@ static PLOptionTable ploption_table[] = {
     "Page aspect ratio (def: same as output device)"},
 {
     "jx",			/* Justification in x */
-    (int (*)(const char *,const char *, void *))opt_jx,
+    opt_jx,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -373,7 +360,7 @@ static PLOptionTable ploption_table[] = {
     "Page justification in x (-0.5 to 0.5, def 0)"},
 {
     "jy",			/* Justification in y */
-    (int (*)(const char *,const char *, void *))opt_jy,
+    opt_jy,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -381,39 +368,47 @@ static PLOptionTable ploption_table[] = {
     "Page justification in y (-0.5 to 0.5, def 0)"},
 {
     "ori",			/* Orientation */
-    (int (*)(const char *,const char *, void *))opt_ori,
+    opt_ori,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
     "-ori orient",
-    "Plot orientation (0,2=landscape, 1,3=portrait)" },
+    "Plot orientation (0,1,2,3=landscape,portrait,seascape,upside-down)" },
 {
     "freeaspect",		/* floating aspect ratio */
-    (int (*)(const char *,const char *, void *))opt_freeaspect,
+    opt_freeaspect,
     NULL,
     NULL,
     PL_OPT_FUNC,
     "-freeaspect",
-    "Do not preserve aspect ratio on orientation swaps" },
+    "Allow aspect ratio to adjust to orientation swaps" },
+{
+    "portrait",			/* floating aspect ratio */
+    opt_portrait,
+    NULL,
+    NULL,
+    PL_OPT_FUNC,
+    "-portrait",
+    "Sets portrait mode (both orientation and aspect ratio)" },
 {
     "width",			/* Pen width */
-    (int (*)(const char *,const char *, void *))opt_width,
+    opt_width,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
     "-width width",
-    "Sets pen width (1 <= width <= 10)" },
+    "Sets pen width (0 <= width)" },
 {
     "bg",			/* Background color */
-    (int (*)(const char *,const char *, void *))opt_bg,
+    opt_bg,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
     "-bg color",
-    "Background color (0=black, FFFFFF=white)" },
+    "Background color (000000=black, FFFFFF=white)" },
 {
     "ncol0",			/* Allocated colors in cmap 0 */
-    (int (*)(const char *,const char *, void *))opt_ncol0,
+    opt_ncol0,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -421,7 +416,7 @@ static PLOptionTable ploption_table[] = {
     "Number of colors to allocate in cmap 0 (upper bound)" },
 {
     "ncol1",			/* Allocated colors in cmap 1 */
-    (int (*)(const char *,const char *, void *))opt_ncol1,
+    opt_ncol1,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -429,7 +424,7 @@ static PLOptionTable ploption_table[] = {
     "Number of colors to allocate in cmap 1 (upper bound)" },
 {
     "fam",			/* Familying on switch */
-    (int (*)(const char *,const char *, void *))opt_fam,
+    opt_fam,
     NULL,
     NULL,
     PL_OPT_FUNC,
@@ -441,11 +436,11 @@ static PLOptionTable ploption_table[] = {
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
-    "-fsiz size",
-    "Output family file size in MB (e.g. -fsiz 1.0)" },
+    "-fsiz size[kKmMgG]",
+    "Output family file size (e.g. -fsiz 0.5G, def MB)" },
 {
     "fbeg",			/* Family starting member */
-    (int (*)(const char *,const char *, void *))opt_fbeg,
+    opt_fbeg,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -461,7 +456,7 @@ static PLOptionTable ploption_table[] = {
     "Increment between family members" },
 {
     "fflen",			/* Family member min field width */
-    (int (*)(const char *,const char *, void *))opt_fflen,
+    opt_fflen,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
@@ -469,7 +464,7 @@ static PLOptionTable ploption_table[] = {
     "Family member number minimum field width" },
 {
     "nopixmap",			/* Do not use pixmaps */
-    (int (*)(const char *,const char *, void *))opt_nopixmap,
+    opt_nopixmap,
     NULL,
     NULL,
     PL_OPT_FUNC,
@@ -477,7 +472,7 @@ static PLOptionTable ploption_table[] = {
     "Don't use pixmaps in X-based drivers" },
 {
     "db",			/* Double buffering on switch */
-    (int (*)(const char *,const char *, void *))opt_db,
+    opt_db,
     NULL,
     NULL,
     PL_OPT_FUNC,
@@ -485,7 +480,7 @@ static PLOptionTable ploption_table[] = {
     "Double buffer X window output" },
 {
     "np",			/* Page pause off switch */
-    (int (*)(const char *,const char *, void *))opt_np,
+    opt_np,
     NULL,
     NULL,
     PL_OPT_FUNC,
@@ -493,7 +488,7 @@ static PLOptionTable ploption_table[] = {
     "No pause between pages" },
 {
     "bufmax",			/* # bytes sent before flushing output */
-    (int (*)(const char *,const char *, void *))opt_bufmax,
+    opt_bufmax,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG | PL_OPT_INVISIBLE,
@@ -501,71 +496,79 @@ static PLOptionTable ploption_table[] = {
     "bytes sent before flushing output" },
 {
     "server_name",		/* Main window name of server */
-    (int (*)(const char *,const char *, void *))opt_server_name,
+    opt_server_name,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG,
     "-server_name name",
     "Main window name of PLplot server (tk driver)" },
 {
-    "server_host",		/* Host to run server on */
-    (int (*)(const char *,const char *, void *))opt_server_host,
-    NULL,
-    NULL,
-    PL_OPT_FUNC | PL_OPT_ARG,
-    "-server_host name",
-    "Host to run PLplot server on (dp driver)" },
-{
-    "server_port",		/* Port to talk to server on */
-    (int (*)(const char *,const char *, void *))opt_server_port,
-    NULL,
-    NULL,
-    PL_OPT_FUNC | PL_OPT_ARG,
-    "-server_port name",
-    "Port to talk to PLplot server on (dp driver)" },
-{
-    "user",			/* user name on remote node */
-    (int (*)(const char *,const char *, void *))opt_user,
-    NULL,
-    NULL,
-    PL_OPT_FUNC | PL_OPT_ARG,
-    "-user name",
-    "User name on remote node (dp driver)" },
-{
     "plserver",			/* PLplot server name */
-    (int (*)(const char *,const char *, void *))opt_plserver,
+    opt_plserver,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG | PL_OPT_INVISIBLE,
     "-plserver name",
-    "Invoked name of PLplot server (tk or dp driver)" },
+    "Invoked name of PLplot server (tk driver)" },
 {
     "plwindow",			/* PLplot container window name */
-    (int (*)(const char *,const char *, void *))opt_plwindow,
+    opt_plwindow,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG | PL_OPT_INVISIBLE,
     "-plwindow name",
-    "Name of PLplot container window (tk or dp driver)" },
+    "Name of PLplot container window (tk driver)" },
 {
     "tcl_cmd",			/* TCL initialization command */
-    (int (*)(const char *,const char *, void *))opt_tcl_cmd,
+    opt_tcl_cmd,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG | PL_OPT_INVISIBLE,
     "-tcl_cmd command",
-    "TCL command string run at startup (note: disabled)" },
+    "Depreciated - use -drvopt tcl_cmd= instead" },
 {
     "auto_path",		/* Additional directory(s) to autoload */
-    (int (*)(const char *,const char *, void *))opt_auto_path,
+    opt_auto_path,
     NULL,
     NULL,
     PL_OPT_FUNC | PL_OPT_ARG | PL_OPT_INVISIBLE,
     "-auto_path dir",
-    "Additional directory(s) to autoload (tk or dp driver)" },
+    "Additional directory(s) to autoload (tk driver)" },
+{
+    "tk_file",      /* -file option for plserver */
+    opt_tk_file,
+    NULL,
+    NULL,
+    PL_OPT_FUNC | PL_OPT_ARG | PL_OPT_INVISIBLE,
+    "-tk_file file",
+    "file for plserver (tk driver)" },
+{
+    "dpi",			/* Dots per inch */
+    opt_dpi,
+    NULL,
+    NULL,
+    PL_OPT_FUNC | PL_OPT_ARG,
+    "-dpi dpi",
+    "Resolution, in dots per inch (e.g. -dpi 360x360)" },
+{
+    "compression",			/* compression */
+    opt_dev_compression,
+    NULL,
+    NULL,
+    PL_OPT_FUNC | PL_OPT_ARG,
+    "-compression num",
+    "Sets compression level in supporting devices" },
+{
+    "drvopt",			/* Driver specific options */
+    opt_drvopt,
+    NULL,
+    NULL,
+    PL_OPT_ARG | PL_OPT_FUNC,
+    "-drvopt option[=value][,option[=value]]*",
+    "Driver specific options" },
 {
     NULL,			/* option */
-    (int (*)(const char *,const char *, void *))NULL,	/* handler */
+    NULL,			/* handler */
     NULL,			/* client data */
     NULL,			/* address of variable to set */
     0,				/* mode flag */
@@ -573,6 +576,7 @@ static PLOptionTable ploption_table[] = {
     NULL }			/* long syntax */
 };
 
+/* pmr: const */
 static const char *plplot_notes[] = {
 "All parameters must be white-space delimited.  Some options are driver",
 "dependent.  Please see the PLplot reference document for more detail.",
@@ -594,7 +598,7 @@ NULL};
 
 typedef struct {
     PLOptionTable *options;
-    const char *name;
+    const char *name;			/* pmr: const */
     const char **notes;
 } PLOptionInfo;
 
@@ -605,13 +609,24 @@ PLOptionInfo ploption_info_default = {
 };
 
 #define PL_MAX_OPT_TABLES 10
-PLOptionInfo ploption_info[PL_MAX_OPT_TABLES] = { 
+PLOptionInfo ploption_info[PL_MAX_OPT_TABLES] = {
     {
 	ploption_table,
 	"PLplot options",
 	plplot_notes
     }
 };
+
+/* The structure that hold the driver specific command line options */
+
+typedef struct DrvOptCmd {
+  char *option;
+  char *value;
+  struct DrvOptCmd *next;
+} DrvOptCmd;
+
+/* the variable where opt_drvopt() stores the driver specific command line options */
+static DrvOptCmd drv_opt;
 
 static int  tables = 1;
 
@@ -623,13 +638,19 @@ static int  tables = 1;
 \*--------------------------------------------------------------------------*/
 
 int
-plSetOpt(char *opt, char *optarg)
+c_plsetopt(char *opt, char *myoptarg) /* pmr: optarg in getopt.h */
+{
+    return(plSetOpt(opt, myoptarg));
+}
+
+int
+plSetOpt(char *opt, char *myoptarg)	/* pmr: optarg in getopt.h */
 {
     int mode = 0, argc = 2, status;
     char *argv[3];
 
     argv[0] = opt;
-    argv[1] = optarg;
+    argv[1] = myoptarg;
     argv[2] = NULL;
     mode =
 	PL_PARSE_QUIET |
@@ -637,9 +658,9 @@ plSetOpt(char *opt, char *optarg)
 	PL_PARSE_NOPROGRAM |
 	PL_PARSE_NODASH;
 
-    status = plParseOpts(&argc, argv, mode);
+    status = plparseopts(&argc, argv, mode);
     if (status) {
-	(void) fprintf( stderr, "plSetOpt: Unrecognized option %s\n", opt);
+	fprintf( stderr, "plSetOpt: Unrecognized option %s\n", opt);
     }
     return status;
 }
@@ -654,6 +675,8 @@ int
 plMergeOpts(PLOptionTable *options, const char *name, const char **notes)
 {
     PLOptionTable *tab;
+
+    pllib_init();
 
 /* Check to make sure option table has been terminated correctly */
 
@@ -713,7 +736,7 @@ plResetOpts(void)
 }
 
 /*--------------------------------------------------------------------------*\
- * plParseOpts()
+ * plparseopts()
  *
  * Process options list using current ploptions_info structure.
  * An error in parsing the argument list causes a program exit if
@@ -721,11 +744,12 @@ plResetOpts(void)
 \*--------------------------------------------------------------------------*/
 
 int
-plParseOpts(int *p_argc, char **argv, PLINT mode)
+c_plparseopts(int *p_argc, char **argv, PLINT mode)
 {
-    char **argsave = NULL;
-    char **argend;
+    char **argsave, **argend;
     int	i, myargc, status = 0;
+
+    pllib_init();
 
 /* Initialize */
 
@@ -737,24 +761,26 @@ plParseOpts(int *p_argc, char **argv, PLINT mode)
     mode_nodash    = mode & PL_PARSE_NODASH;
     mode_skip      = mode & PL_PARSE_SKIP;
 
-    myargc = (*p_argc); 
+    /* Initialize the driver specific option linked structure */
+    drv_opt.option  = drv_opt.value  = NULL;
+    drv_opt.next  = NULL;
+
+    myargc = (*p_argc);
     argend = argv + myargc;
 
 /* If program name is first argument, save and advance */
 
     if ( ! mode_noprogram) {
-	program = argv[0];
-	plsc->program = argv[0];
-
+	program = plstrdup(argv[0]);
+	plsc->program = program;
 	--myargc; ++argv;
-	argsave = argv;
     }
-
     if (myargc == 0)
 	return 0;
 
 /* Process the command line */
 
+    argsave = argv;
     for (; myargc > 0; --myargc, ++argv) {
 
     /* Allow for "holes" in argv list */
@@ -782,13 +808,12 @@ plParseOpts(int *p_argc, char **argv, PLINT mode)
 	   fully parsing, else return without error. */
 
 	    if (mode_skip) {
-		if ( ! mode_nodelete) 
+		if ( ! mode_nodelete)
 		    *argsave++ = *argv;
 		continue;
 	    }
 	    if ( ! mode_quiet && mode_full) {
-		(void) fprintf(stderr, "\nBad command line option \"%s\"\n",
-			       argv[0]);
+		fprintf(stderr, "\nBad command line option \"%s\"\n", argv[0]);
 		plOptUsage();
 	    }
 	    if (mode_full) exit(1);
@@ -801,8 +826,7 @@ plParseOpts(int *p_argc, char **argv, PLINT mode)
 	/* Illegal or badly formed */
 
 	    if ( ! mode_quiet) {
-		(void) fprintf(stderr, "\nBad command line option \"%s\"\n",
-			       argv[0]);
+		fprintf(stderr, "\nBad command line option \"%s\"\n", argv[0]);
 		plOptUsage();
 	    }
 	    if (mode_full) exit(1);
@@ -848,14 +872,14 @@ ParseOpt(int *p_myargc, char ***p_argv, int *p_argc, char ***p_argsave,
     if ( mode_nodash || (*p_argv)[0][0] == '-') {
 
 	opt = (*p_argv)[0];
-	if (*opt == '-') 
+	if (*opt == '-')
 	    opt++;
 
 	for (tab = option_table; tab->opt; tab++) {
 
 	/* Skip if option not enabled */
 
-	    if (tab->mode & PL_OPT_DISABLED) 
+	    if (tab->mode & PL_OPT_DISABLED)
 		continue;
 
 	/* Try to match it */
@@ -892,14 +916,14 @@ ProcessOpt(const char *opt, PLOptionTable *tab, int *p_myargc, char ***p_argv,
 	   int *p_argc)
 {
     int need_arg, res;
-    char *optarg = NULL;
+    char *myoptarg = NULL;		/* pmr: optarg is in getopt.h */
 
 /* Get option argument if necessary */
 
     need_arg = PL_OPT_ARG | PL_OPT_INT | PL_OPT_FLOAT | PL_OPT_STRING;
 
     if (tab->mode & need_arg) {
-	if (GetOptarg(&optarg, p_myargc, p_argv, p_argc))
+	if (GetOptarg(&myoptarg, p_myargc, p_argv, p_argc))
 	    return 1;
     }
 
@@ -912,28 +936,28 @@ ProcessOpt(const char *opt, PLOptionTable *tab, int *p_myargc, char ***p_argv,
     /* Call function handler to do the job */
 
 	if (tab->handler == NULL) {
-	    (void) fprintf(stderr,
+	    fprintf(stderr,
 		    "ProcessOpt: no handler specified for option %s\n",
 		    tab->opt);
 	    return 1;
 	}
 
-        if (mode_nodelete && optarg) {
+        if (mode_nodelete && myoptarg) {
 
-	/* Make a copy, since handler may mung optarg with strtok() */
-	    char *copy = 
-	      (char *) malloc((size_t)(1+strlen(optarg))*sizeof(char));
+	/* Make a copy, since handler may mung myoptarg with strtok() */
+	    char *copy =
+	      (char *) malloc((size_t)(1+strlen(myoptarg))*sizeof(char));
 	    if (copy == NULL) {
 	        plabort("ProcessOpt: out of memory");
 		return 1;
 	    }
-	    (void) strcpy(copy, optarg);
+	    strcpy(copy, myoptarg);
 	    res = ((*tab->handler) (opt, copy, tab->client_data));
 	    free((void *) copy);
 	    return res;
 	}
 	else {
-	  return ((*tab->handler) (opt, optarg, tab->client_data));
+	  return ((*tab->handler) (opt, myoptarg, tab->client_data));
 	}
 
     case PL_OPT_BOOL:
@@ -941,7 +965,7 @@ ProcessOpt(const char *opt, PLOptionTable *tab, int *p_myargc, char ***p_argv,
     /* Set *var as a boolean */
 
 	if (tab->var == NULL) {
-	    (void) fprintf(stderr,
+	    fprintf(stderr,
 		    "ProcessOpt: no variable specified for option %s\n",
 		    tab->opt);
 	    return 1;
@@ -954,12 +978,12 @@ ProcessOpt(const char *opt, PLOptionTable *tab, int *p_myargc, char ***p_argv,
     /* Set *var as an int */
 
 	if (tab->var == NULL) {
-	    (void) fprintf(stderr,
+	    fprintf(stderr,
 		    "ProcessOpt: no variable specified for option %s\n",
 		    tab->opt);
 	    return 1;
 	}
-	*(int *)tab->var = atoi(optarg);
+	*(int *)tab->var = atoi(myoptarg);
 	break;
 
     case PL_OPT_FLOAT:
@@ -967,26 +991,26 @@ ProcessOpt(const char *opt, PLOptionTable *tab, int *p_myargc, char ***p_argv,
     /* Set *var as a float */
 
 	if (tab->var == NULL) {
-	    (void) fprintf(stderr,
+	    fprintf(stderr,
 		    "ProcessOpt: no variable specified for option %s\n",
 		    tab->opt);
 	    return 1;
 	}
-	*(float *)tab->var = atof(optarg);
+	*(PLFLT *)tab->var = atof(myoptarg);
 	break;
 
     case PL_OPT_STRING:
 
-    /* Set var (can be NULL initially) to point to optarg string */
+    /* Set var (can be NULL initially) to point to myoptarg string */
 
-	*(char **)tab->var = (char *)optarg;
+	*(char **)tab->var = (char *)myoptarg;
 	break;
 
     default:
 
     /* Somebody messed up.. */
 
-	(void) fprintf(stderr,
+	fprintf(stderr,
 		"ProcessOpt: invalid processing mode for option %s\n",
 		tab->opt);
 	return 1;
@@ -1013,7 +1037,7 @@ GetOptarg(char **poptarg, int *p_myargc, char ***p_argv, int *p_argc)
 
     if ( ! result) {
 	(*p_argv)++;
-	if ((*p_argv)[0][0] == '-' && isalpha((int)(*p_argv)[0][1])) {
+	if ((*p_argv)[0][0] == '-' && isalpha((*p_argv)[0][1])) {
 
 	    (*p_argv)--;		/* oops, next arg is a flag */
 	    result = 1;
@@ -1026,8 +1050,7 @@ GetOptarg(char **poptarg, int *p_myargc, char ***p_argv, int *p_argc)
     }
     else {
 	if ( ! mode_quiet) {
-	    (void) fprintf(stderr, "Argument missing for %s option.\n",
-			   (*p_argv)[0]);
+	    fprintf(stderr, "Argument missing for %s option.\n", (*p_argv)[0]);
 	    plOptUsage();
 	}
     }
@@ -1041,7 +1064,7 @@ GetOptarg(char **poptarg, int *p_myargc, char ***p_argv, int *p_argc)
 \*--------------------------------------------------------------------------*/
 
 void
-plSetUsage(char *program_string, char *usage_string)
+plSetUsage(const char *program_string, const char *usage_string)
 {
     if (program_string != NULL)
 	program = program_string;
@@ -1060,14 +1083,14 @@ void
 plOptUsage(void)
 {
     if (usage == NULL)
-	(void) fprintf(stderr, "\nUsage:\n        %s [options]\n", program);
+	fprintf(stderr, "\nUsage:\n        %s [options]\n", program);
     else
-	(void) fputs(usage, stderr);
+	fputs(usage, stderr);
 
     Syntax();
 
-    (void) fprintf(stderr, "\n\nType %s -h for a full description.\n\n",
-		   program);
+    fprintf(stderr, "\n\nType %s -h for a full description.\n\n",
+	    program);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -1089,9 +1112,9 @@ Syntax(void)
     /* Introducer */
 
 	if (ploption_info[i].name)
-	    (void) fprintf(stderr, "\n%s:", ploption_info[i].name);
+	    fprintf(stderr, "\n%s:", ploption_info[i].name);
 	else
-	    (void) fputs("\nUser options:", stderr);
+	    fputs("\nUser options:", stderr);
 
     /* Print syntax for each option */
 
@@ -1111,10 +1134,10 @@ Syntax(void)
 		fprintf(stderr, "\n   ");		/* 3 spaces */
 		col = 3;
 	    }
-	    (void) fprintf(stderr, " [%s]", tab->syntax);
+	    fprintf(stderr, " [%s]", tab->syntax);
 	    col += len;
 	}
-	(void) fprintf(stderr, "\n");
+	fprintf(stderr, "\n");
     }
 }
 
@@ -1128,7 +1151,7 @@ static void
 Help(void)
 {
     PLOptionTable *tab;
-    const char **note;
+    const char **note;			/* pmr: const */
     int i;
     FILE *outfile = stderr;
 
@@ -1145,9 +1168,9 @@ Help(void)
 /* Usage line */
 
     if (usage == NULL)
-	(void) fprintf(outfile, "\nUsage:\n        %s [options]\n", program);
+	fprintf(outfile, "\nUsage:\n        %s [options]\n", program);
     else
-	(void) fputs(usage, outfile);
+	fputs(usage, outfile);
 
 /* Loop over all options tables */
 
@@ -1156,9 +1179,9 @@ Help(void)
     /* Introducer */
 
 	if (ploption_info[i].name)
-	    (void) fprintf(outfile, "\n%s:\n", ploption_info[i].name);
+	    fprintf(outfile, "\n%s:\n", ploption_info[i].name);
 	else
-	    (void) fputs("\nUser options:\n", outfile);
+	    fputs("\nUser options:\n", outfile);
 
     /* Print description for each option */
 
@@ -1172,30 +1195,142 @@ Help(void)
 	    if (tab->desc == NULL)
 		continue;
 
-	    if (tab->mode & PL_OPT_INVISIBLE) 
-		(void) fprintf(outfile, " *  %-20s %s\n", tab->syntax,
-			       tab->desc);
-	    else 
-		(void) fprintf(outfile, "    %-20s %s\n", tab->syntax,
-			       tab->desc);
+	    if (tab->mode & PL_OPT_INVISIBLE)
+		fprintf(outfile, " *  %-20s %s\n", tab->syntax, tab->desc);
+	    else
+		fprintf(outfile, "    %-20s %s\n", tab->syntax, tab->desc);
 	}
 
     /* Usage notes */
 
 	if (ploption_info[i].notes) {
-	    (void) putc('\n', outfile);
+	    putc('\n', outfile);
 	    for (note = ploption_info[i].notes; *note; note++) {
-		(void) fputs(*note, outfile);
-		(void) putc('\n', outfile);
+		fputs(*note, outfile);
+		putc('\n', outfile);
 	    }
 	}
     }
 
 #ifdef HAVE_POPEN
     if (pager != NULL)
-	(void) pclose(pager);
+	pclose(pager);
 #endif
 }
+
+/*--------------------------------------------------------------------------*\
+ * plParseDrvOpts
+ *
+ * Parse driver specific options
+\*--------------------------------------------------------------------------*/
+
+int
+plParseDrvOpts(DrvOpt *acc_opt) {
+  DrvOptCmd *drvp;
+  DrvOpt *t;
+  int fl;
+  char msg[80];
+
+  if (!drv_opt.option)
+    return 1;
+
+  drvp = &drv_opt;
+  do {
+    t = acc_opt; fl = 0;
+    while (t->opt) {
+      if (strcmp(drvp->option, t->opt) == 0) {
+	fl = 1;
+	switch (t->type) {
+
+	case DRV_STR:
+	  *(char **)(t->var_ptr) = (drvp->value);
+#ifdef DEBUG
+	  fprintf(stderr,"plParseDrvOpts: %s %s\n", t->opt, *(char**)t->var_ptr);
+#endif
+	  break;
+
+	case DRV_INT:
+	  if (sscanf(drvp->value, "%d", (int *)t->var_ptr) != 1) {
+	    sprintf(msg,"Incorrect argument to '%s' option", drvp->option);
+	    plexit(msg);
+	  }
+#ifdef DEBUG
+	  fprintf(stderr,"plParseDrvOpts: %s %d\n", t->opt, *(int *) t->var_ptr);
+#endif
+	  break;
+
+	case DRV_FLT:
+	  if (sscanf(drvp->value, "%f", (float *)t->var_ptr) != 1) {
+	    sprintf(msg,"Incorrect argument to '%s' option", drvp->option);
+	    plexit(msg);
+	  }
+#ifdef DEBUG
+	  fprintf(stderr,"plParseDrvOpts: %s %f\n", t->opt, *(float *) t->var_ptr);
+#endif
+	  break;
+	}
+      }
+    t++;
+    }
+
+    if (!fl) {
+      sprintf(msg, "Option '%s' not recognized.\n\nRecognized options for this driver are:\n", drvp->option);
+      plwarn(msg);
+      plHelpDrvOpts(acc_opt);
+      plexit("");
+    }
+  }
+  while((drvp = drvp->next))
+      ;
+
+  return 0;
+}
+
+/*--------------------------------------------------------------------------*\
+ * plHelpDrvOpts
+ *
+ * Give driver specific help
+\*--------------------------------------------------------------------------*/
+
+void
+plHelpDrvOpts(DrvOpt *acc_opt) {
+  DrvOpt *t;
+
+  t = acc_opt;
+  while(t->opt) {
+    fprintf(stderr, "%s:\t%s\n", t->opt, t->hlp_msg);
+    t++;
+  }
+}
+
+/*--------------------------------------------------------------------------*\
+ * tidyDrvOpts
+ *
+ * Tidy up and free memory associated with driver options
+\*--------------------------------------------------------------------------*/
+
+void
+plP_FreeDrvOpts(void) {			/* pmr: prototype */
+  DrvOptCmd *drvp, *drvpl;
+
+  if (!drv_opt.option) 
+    return;
+
+  drvp = &drv_opt;
+  do {
+    drvpl = drvp;
+    drvp = drvpl->next;
+
+    free(drvpl->option);
+    free(drvpl->value);
+    /* Free additional DrvOptCmd variables - 
+     * first entry in list is a static global variable */ 
+    if (drvpl != &drv_opt)
+      free(drvpl);
+
+  } while(drvp != NULL);
+}
+
 
 /*--------------------------------------------------------------------------*\
  * Option handlers
@@ -1208,11 +1343,11 @@ Help(void)
  * Issues help message
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_h(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_h(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
-    (void) optarg;
+    (void) opt;				/* pmr: make these used */
+    (void) myoptarg;
     (void) client_data;
 
     if ( ! mode_quiet)
@@ -1228,15 +1363,15 @@ opt_h(const char *opt, const char *optarg, void *client_data)
  * Issues version message
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_v(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_v(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
-    (void) optarg;
+    (void) opt;				/* pmr: make these used */
+    (void) myoptarg;
     (void) client_data;
 
-    if ( ! mode_quiet) 
-	(void) fprintf(stderr, "PLplot library version: %s\n", PLPLOT_VERSION);
+    if ( ! mode_quiet)
+	fprintf(stderr, "PLplot library version: %s\n", PLPLT_VERSION);
 
     return 2;
 }
@@ -1248,11 +1383,11 @@ opt_v(const char *opt, const char *optarg, void *client_data)
  * Turn on verbosity flag
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_verbose(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_verbose(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
-    (void) optarg;
+    (void) opt;				/* pmr: make these used */
+    (void) myoptarg;
     (void) client_data;
 
     plsc->verbose = 1;
@@ -1266,11 +1401,11 @@ opt_verbose(const char *opt, const char *optarg, void *client_data)
  * Turn on debugging flag
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_debug(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_debug(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
-    (void) optarg;
+    (void) opt;				/* pmr: make these used */
+    (void) myoptarg;
     (void) client_data;
 
     plsc->debug = 1;
@@ -1285,11 +1420,11 @@ opt_debug(const char *opt, const char *optarg, void *client_data)
  * Enables driver-specific hack(s)
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_hack(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_hack(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
-    (void) optarg;
+    (void) opt;				/* pmr: make these used */
+    (void) myoptarg;
     (void) client_data;
 
     plsc->hack = 1;
@@ -1303,13 +1438,13 @@ opt_hack(const char *opt, const char *optarg, void *client_data)
  * Sets output device keyword
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_dev(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_dev(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsdev(optarg);
+    plsdev(myoptarg);
     return 0;
 }
 
@@ -1320,13 +1455,13 @@ opt_dev(const char *opt, const char *optarg, void *client_data)
  * Sets output file name
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_o(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_o(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsfnam(optarg);
+    plsfnam(myoptarg);
     return 0;
 }
 
@@ -1337,13 +1472,13 @@ opt_o(const char *opt, const char *optarg, void *client_data)
  * Sets relative margin width
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_mar(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_mar(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsdidev(atof(optarg), PL_NOTSET, PL_NOTSET, PL_NOTSET);
+    plsdidev(atof(myoptarg), PL_NOTSET, PL_NOTSET, PL_NOTSET);
     return 0;
 }
 
@@ -1354,13 +1489,13 @@ opt_mar(const char *opt, const char *optarg, void *client_data)
  * Sets plot aspect ratio on page
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_a(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_a(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsdidev(PL_NOTSET, atof(optarg), PL_NOTSET, PL_NOTSET);
+    plsdidev(PL_NOTSET, atof(myoptarg), PL_NOTSET, PL_NOTSET);
     return 0;
 }
 
@@ -1371,13 +1506,13 @@ opt_a(const char *opt, const char *optarg, void *client_data)
  * Sets relative justification in x
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_jx(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_jx(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsdidev(PL_NOTSET, PL_NOTSET, atof(optarg), PL_NOTSET);
+    plsdidev(PL_NOTSET, PL_NOTSET, atof(myoptarg), PL_NOTSET);
     return 0;
 }
 
@@ -1388,13 +1523,13 @@ opt_jx(const char *opt, const char *optarg, void *client_data)
  * Sets relative justification in y
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_jy(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_jy(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsdidev(PL_NOTSET, PL_NOTSET, PL_NOTSET, atof(optarg));
+    plsdidev(PL_NOTSET, PL_NOTSET, PL_NOTSET, atof(myoptarg));
     return 0;
 }
 
@@ -1405,13 +1540,13 @@ opt_jy(const char *opt, const char *optarg, void *client_data)
  * Sets orientation
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_ori(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_ori(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsdiori(atof(optarg));
+    plsdiori(atof(myoptarg));
     return 0;
 }
 
@@ -1419,17 +1554,49 @@ opt_ori(const char *opt, const char *optarg, void *client_data)
  * opt_freeaspect()
  *
  * Performs appropriate action for option "freeaspect":
- * Do not preserve aspect ratio on orientation swaps.
+ * Allow aspect ratio to adjust to orientation swaps.
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_freeaspect(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_freeaspect(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
-    (void) optarg;
+    (void) opt;				/* pmr: make these used */
+    (void) myoptarg;
     (void) client_data;
 
     plsc->freeaspect = 1;
+    return 0;
+}
+
+/*--------------------------------------------------------------------------*\
+ * opt_portrait()
+ *
+ * Performs appropriate action for option "portrait":
+ * Set portrait mode.  If plsc->portrait = 1, then the orientation for certain
+ * drivers is changed by 90 deg to portrait orientation from the default
+ * landscape orientation used by PLplot while the  aspect ratio allowed to
+ * adjust using freeaspect.
+ * N.B. the driver list where this flag is honored is currently limited
+ * to ljii, ljiip, psc, ps, and pstex.  A 90 deg rotation is just not
+ * appropriate for certain other drivers.  These drivers where portrait
+ * mode is ignored include display drivers (e.g., xwin, tk), drivers
+ * which are subequently going to be transformed to another form
+ * (e.g., meta or pbm), or drivers which are normally used for web
+ * publishing (e.g., png, jpeg).  That said, the case is not entirely clear
+ * for all drivers so the list of drivers where portrait mode is honored
+ * may increase in the future. To add to the list simply copy the small
+ * bit of code from  ps.c that has to do with pls->portrait to the
+ * appropriate driver file.
+\*--------------------------------------------------------------------------*/
+
+static int /* pmr: optarg in getopt.h */
+opt_portrait(const char *opt, const char *myoptarg, void *client_data)
+{
+    (void) opt;				/* pmr: make these used */
+    (void) myoptarg;
+    (void) client_data;
+
+    plsc->portrait = 1;
     return 0;
 }
 
@@ -1440,17 +1607,17 @@ opt_freeaspect(const char *opt, const char *optarg, void *client_data)
  * Sets pen width
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_width(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_width(const char *opt, const char *myoptarg, void *client_data)
 {
     int width;
 
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    width = atoi(optarg);
-    if (width == 0) {
-	(void) fprintf(stderr, "?invalid width\n");
+    width = atoi(myoptarg);
+    if (width < 0) {
+	fprintf(stderr, "?invalid width\n");
 	return 1;
     }
     else {
@@ -1467,21 +1634,21 @@ opt_width(const char *opt, const char *optarg, void *client_data)
  * Sets background color
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_bg(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_bg(const char *opt, const char *myoptarg, void *client_data)
 {
-    const char *rgb;
+    const char *rgb;			/* pmr: const */
     long bgcolor, r, g, b;
 
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
 /* Always in hex!  Strip off leading "#" (TK-ism) if present. */
 
-    if (*optarg == '#')
-	rgb = optarg + 1;
+    if (*myoptarg == '#')
+	rgb = myoptarg + 1;
     else
-	rgb = optarg;
+	rgb = myoptarg;
 
 /* Get number in hex */
 
@@ -1508,8 +1675,7 @@ opt_bg(const char *opt, const char *optarg, void *client_data)
 	break;
 
     default:
-	(void) fprintf(stderr, "Unrecognized background color value %s\n",
-		       rgb);
+	fprintf(stderr, "Unrecognized background color value %s\n", rgb);
 	return 1;
     }
 
@@ -1525,13 +1691,13 @@ opt_bg(const char *opt, const char *optarg, void *client_data)
  * Sets number of colors to allocate in cmap 0 (upper bound).
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_ncol0(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_ncol0(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsc->ncol0 = atoi(optarg);
+    plsc->ncol0 = atoi(myoptarg);
     return 0;
 }
 
@@ -1542,13 +1708,13 @@ opt_ncol0(const char *opt, const char *optarg, void *client_data)
  * Sets number of colors to allocate in cmap 1 (upper bound).
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_ncol1(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_ncol1(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsc->ncol1 = atoi(optarg);
+    plsc->ncol1 = atoi(myoptarg);
     return 0;
 }
 
@@ -1559,21 +1725,18 @@ opt_ncol1(const char *opt, const char *optarg, void *client_data)
  * Sets (zoom) window into plot (e.g. "0,0,0.5,0.5")
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_wplt(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_wplt(const char *opt, const char *myoptarg, void *client_data)
 {
     char *field;
-    float xl, yl, xr, yr;
-    static char* myoptarg = NULL;
+    PLFLT xl, yl, xr, yr;
 
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    if(myoptarg)
-	free(myoptarg);
-    myoptarg = strdup(optarg);
-    strcpy(myoptarg, optarg);
-    if ((field = strtok(myoptarg, ",")) == NULL)
+    strncpy(opttmp, myoptarg, OPTMAX-1);
+
+    if ((field = strtok(opttmp, ",")) == NULL)
 	return 1;
 
     xl = atof(field);
@@ -1594,7 +1757,88 @@ opt_wplt(const char *opt, const char *optarg, void *client_data)
     yr = atof(field);
 
     plsdiplt(xl, yl, xr, yr);
-    free(myoptarg);
+    return 0;
+}
+
+/*--------------------------------------------------------------------------*\
+ * opt_drvopt()
+ *
+ * Get driver specific options in the form <option[=value]>[,option[=value]]*
+ * If "value" is not specified, it defaults to "1".
+\*--------------------------------------------------------------------------*/
+
+static int /* pmr: optarg in getopt.h */
+opt_drvopt(const char *opt, const char *myoptarg, void *client_data)
+{
+  char t, *tt, *option, *value;
+  int fl = 0;
+  DrvOptCmd *drvp;
+
+  (void) opt;				/* pmr: make these used */
+  (void) client_data;
+
+  option = (char *) malloc((size_t)(1+strlen(myoptarg))*sizeof(char));
+  if (option == NULL)
+    plexit("opt_drvopt: Out of memory!?");
+
+  value = (char *) malloc((size_t)(1+strlen(myoptarg))*sizeof(char));
+  if (value == NULL)
+    plexit("opt_drvopt: Out of memory!?");
+
+  drvp = &drv_opt;
+  *option = *value = '\0';
+  tt = option;
+    while((t = *myoptarg++)) {
+      switch (t) {
+      case ',':
+	if (fl)
+	  fl = 0;
+	else {
+	  value[0] = '1';
+	  value[1] = '\0';
+	}
+
+	*tt = '\0'; tt = option;
+	drvp->option = plstrdup(option); /* it should not be release, because of familying */
+	drvp->value = plstrdup(value); /* don't release */
+	drvp->next = (DrvOptCmd *) malloc(sizeof(DrvOptCmd)); /* don't release */
+	if (drvp->next == NULL)
+	  plexit("opt_drvopt: Out of memory!?\n");
+
+	drvp = drvp->next;
+	break;
+
+      case '=':
+	fl = 1;
+	*tt = '\0'; tt = value;
+	break;
+
+      default:
+	*tt++ = t;
+      }
+    }
+
+    *tt = '\0';
+    if (!fl) {
+      value[0] = '1';
+      value[1] = '\0';
+    }
+
+    drvp->option = plstrdup(option); /* don't release */
+    drvp->value = plstrdup(value); /* don't release */
+    drvp->next = NULL;
+
+#ifdef DEBUG
+    fprintf(stderr, "\nopt_drvopt: -drvopt parsed options:\n");
+    drvp = &drv_opt;
+    do
+      fprintf(stderr, "%s %s\n", drvp->option, drvp->value);
+    while(drvp = drvp->next);
+    fprintf(stderr, "\n");
+#endif
+
+    free(option); free(value);
+
     return 0;
 }
 
@@ -1605,12 +1849,12 @@ opt_wplt(const char *opt, const char *optarg, void *client_data)
  * Enables family output files
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_fam(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_fam(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
-    (void) optarg;
-    (void) client_data;
+  (void) opt;				/* pmr: make these used */
+  (void) myoptarg;
+  (void) client_data;
 
     plsfam(1, -1, -1);
     return 0;
@@ -1621,23 +1865,54 @@ opt_fam(const char *opt, const char *optarg, void *client_data)
  *
  * Performs appropriate action for option "fsiz":
  * Sets size of a family member file (may be somewhat larger since eof must
- * occur at a page break).
+ * occur at a page break).  Also turns on familying.  Example usage:
+ *
+ *	-fsiz 5M	(5 MB)
+ *	-fsiz 300K	(300 KB)
+ *	-fsiz .3M	(same)
+ *	-fsiz .5G	(half a GB)
+ *
+ * Note case of the trailing suffix doesn't matter.
+ * If no suffix, defaults to MB.
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_fsiz(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_fsiz(const char *opt, const char *myoptarg, void *client_data)
 {
     PLINT bytemax;
+    int len = strlen(myoptarg);
+    char lastchar = myoptarg[len-1];
+    PLFLT multiplier = 1.0e6;
+    char *spec = (char*)malloc(len+1);
 
-    (void) opt;
-    (void) client_data;
+  (void) opt;				/* pmr: make these used */
+  (void) client_data;
 
-    bytemax = 1.0e6 * atof(optarg);
+/* Interpret optional suffix */
+
+    switch (lastchar) {
+    case 'k':
+    case 'K':
+	multiplier = 1.0e3; len--;
+	break;
+    case 'm':
+    case 'M':
+	multiplier = 1.0e6; len--;
+	break;
+    case 'g':
+    case 'G':
+	multiplier = 1.0e9; len--;
+	break;
+    }
+    strncpy(spec, myoptarg, len);
+    spec[len] = '\0';
+
+    bytemax = multiplier * atof(spec);
     if (bytemax == 0) {
-	(void) fprintf(stderr, "?invalid bytemax\n");
+	fprintf(stderr, "?invalid bytemax\n");
 	return 1;
     }
-    plsfam(-1, -1, bytemax);
+    plsfam(1, -1, bytemax);
 
     return 0;
 }
@@ -1649,13 +1924,13 @@ opt_fsiz(const char *opt, const char *optarg, void *client_data)
  * Starts with the specified family member number.
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_fbeg(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_fbeg(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsc->member = atoi(optarg);
+    plsc->member = atoi(myoptarg);
 
     return 0;
 }
@@ -1667,13 +1942,13 @@ opt_fbeg(const char *opt, const char *optarg, void *client_data)
  * Specify increment between family members.
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_finc(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_finc(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsc->finc = atoi(optarg);
+    plsc->finc = atoi(myoptarg);
 
     return 0;
 }
@@ -1685,13 +1960,13 @@ opt_finc(const char *opt, const char *optarg, void *client_data)
  * Specify minimum field length for family member number.
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_fflen(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_fflen(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsc->fflen = atoi(optarg);
+    plsc->fflen = atoi(myoptarg);
 
     return 0;
 }
@@ -1703,11 +1978,11 @@ opt_fflen(const char *opt, const char *optarg, void *client_data)
  * Disables pause between pages
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_np(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_np(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
-    (void) optarg;
+    (void) opt;				/* pmr: make these used */
+    (void) myoptarg;
     (void) client_data;
 
     plspause(0);
@@ -1721,11 +1996,11 @@ opt_np(const char *opt, const char *optarg, void *client_data)
  * Disables use of pixmaps in X drivers
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_nopixmap(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_nopixmap(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
-    (void) optarg;
+    (void) opt;				/* pmr: make these used */
+    (void) myoptarg;
     (void) client_data;
 
     plsc->nopixmap = 1;
@@ -1739,11 +2014,11 @@ opt_nopixmap(const char *opt, const char *optarg, void *client_data)
  * Double buffer X output (update only done on eop or Expose)
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_db(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_db(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
-    (void) optarg;
+    (void) opt;				/* pmr: make these used */
+    (void) myoptarg;
     (void) client_data;
 
     plsc->db = 1;
@@ -1757,13 +2032,13 @@ opt_db(const char *opt, const char *optarg, void *client_data)
  * Sets size of data buffer for tk driver
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_bufmax(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_bufmax(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsc->bufmax = atoi(optarg);
+    plsc->bufmax = atoi(myoptarg);
     return 0;
 }
 
@@ -1771,67 +2046,16 @@ opt_bufmax(const char *opt, const char *optarg, void *client_data)
  * opt_server_name()
  *
  * Performs appropriate action for option "server_name":
- * Sets main window name of server (Tcl/TK/DP driver only)
+ * Sets main window name of server (Tcl/TK driver only)
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_server_name(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_server_name(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsc->server_name = strdup(optarg);
-    return 0;
-}
-
-/*--------------------------------------------------------------------------*\
- * opt_server_host()
- *
- * Performs appropriate action for option "server_host":
- * Sets host to run server on (Tcl/TK/DP driver only)
-\*--------------------------------------------------------------------------*/
-
-static int
-opt_server_host(const char *opt, const char *optarg, void *client_data)
-{
-    (void) opt;
-    (void) client_data;
-
-    plsc->server_host = strdup(optarg);
-    return 0;
-}
-
-/*--------------------------------------------------------------------------*\
- * opt_server_port()
- *
- * Performs appropriate action for option "server_port":
- * Sets port to talk to server on (Tcl/TK/DP driver only)
-\*--------------------------------------------------------------------------*/
-
-static int
-opt_server_port(const char *opt,const  char *optarg, void *client_data)
-{
-    (void) opt;
-    (void) client_data;
-
-    plsc->server_port = strdup(optarg);
-    return 0;
-}
-
-/*--------------------------------------------------------------------------*\
- * opt_user()
- *
- * Performs appropriate action for option "user":
- * Sets user name on remote node (for remsh), dp driver only
-\*--------------------------------------------------------------------------*/
-
-static int
-opt_user(const char *opt, const char *optarg, void *client_data)
-{
-    (void) opt;
-    (void) client_data;
-
-    plsc->user = strdup(optarg);
+    plsc->server_name = plstrdup(myoptarg);
     return 0;
 }
 
@@ -1839,16 +2063,16 @@ opt_user(const char *opt, const char *optarg, void *client_data)
  * opt_plserver()
  *
  * Performs appropriate action for option "plserver":
- * Sets name to use when invoking server (Tcl/TK/DP driver only)
+ * Sets name to use when invoking server (Tcl/TK driver only)
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_plserver(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_plserver(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsc->plserver = strdup(optarg);
+    plsc->plserver = plstrdup(myoptarg);
     return 0;
 }
 
@@ -1859,16 +2083,14 @@ opt_plserver(const char *opt, const char *optarg, void *client_data)
  * Sets PLplot window name
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_plwindow(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_plwindow(const char *opt, const char *myoptarg, void *client_data)
 {
-/*    char *strdup(); */
-
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-/* jc:    plsc->plwindow = optarg; */
-    plsc->plwindow = strdup(optarg);	/* jc: somehow the original string is lost */
+    plsc->plwindow = (char *) malloc((size_t)(1+strlen(myoptarg))*sizeof(char));
+    strcpy (plsc->plwindow, myoptarg);
     return 0;
 }
 
@@ -1877,15 +2099,26 @@ opt_plwindow(const char *opt, const char *optarg, void *client_data)
  *
  * Performs appropriate action for option "tcl_cmd":
  * Sets TCL command(s) to eval on startup
+ * Depreciated - just bounce on to -drvopt tcl_cmd=
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_tcl_cmd(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_tcl_cmd(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    char *newcmd;
+
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsc->tcl_cmd = strdup(optarg);
+    newcmd = (char *) malloc((size_t)(strlen(myoptarg)+9)*sizeof(char));
+    strcpy(newcmd,"tcl_cmd=");
+    strcat(newcmd,myoptarg);
+
+    fprintf(stderr,"-tcl_cmd <cmd> is obsolete. Please use -drvopt tcl_cmd=<cmd> instead\n");
+
+    opt_drvopt("drvopt",newcmd,NULL);
+    free(newcmd);
+
     return 0;
 }
 
@@ -1896,13 +2129,13 @@ opt_tcl_cmd(const char *opt, const char *optarg, void *client_data)
  * Sets additional directories to autoload
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_auto_path(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_auto_path(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plsc->auto_path = strdup(optarg);
+    plsc->auto_path = plstrdup(myoptarg);
     return 0;
 }
 
@@ -1913,13 +2146,13 @@ opt_auto_path(const char *opt, const char *optarg, void *client_data)
  * Set packing in x
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_px(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_px(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plssub(atoi(optarg), -1);
+    plssub(atoi(myoptarg), -1);
     return 0;
 }
 
@@ -1930,13 +2163,13 @@ opt_px(const char *opt, const char *optarg, void *client_data)
  * Set packing in y
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_py(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_py(const char *opt, const char *myoptarg, void *client_data)
 {
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    plssub(-1, atoi(optarg));
+    plssub(-1, atoi(myoptarg));
     return 0;
 }
 
@@ -1950,40 +2183,39 @@ opt_py(const char *opt, const char *optarg, void *client_data)
  *   e.g., "-geometry +100+0"
 \*--------------------------------------------------------------------------*/
 
-static int
-opt_geo(const char *opt, const char *optarg, void *client_data)
+static int /* pmr: optarg in getopt.h */
+opt_geo(const char *opt, const char *myoptarg, void *client_data)
 {
     char *field;
     PLFLT xdpi = 0., ydpi = 0.;
     PLINT xwid = 0, ywid = 0, xoff = 0, yoff = 0;
-    static char* myoptarg = NULL;
 
-    (void) opt;
+    (void) opt;				/* pmr: make these used */
     (void) client_data;
 
-    if(myoptarg)
-	free(myoptarg);
-    myoptarg = strdup(optarg);
-    /* The TK driver uses the geometry string directly */    
+/* The TK driver uses the geometry string directly */
 
-    plsc->geometry = (char *) malloc((size_t)(1+strlen(optarg))*sizeof(char));
-    strcpy (plsc->geometry, optarg);
+    plsc->geometry = (char *) malloc((size_t)(1+strlen(myoptarg))*sizeof(char));
+    strcpy (plsc->geometry, myoptarg);
 
-    if (strchr (optarg, 'x')) {
+/* Set up plplot dimensions */
+
+    strncpy(opttmp, myoptarg, OPTMAX-1);
+    if (strchr (opttmp, 'x')) {
 
     /* -geometry WxH or -geometry WxH+Xoff+Yoff */
 
-	field = strtok (myoptarg, "x");
+	field = strtok (opttmp, "x");
 	xwid = atoi (field);
 	if (xwid == 0)
-	    (void) fprintf (stderr, "?invalid xwid\n");
+	    fprintf (stderr, "?invalid xwid\n");
 
 	if ((field = strtok (NULL, "+")) == NULL)
 	    return 1;
 
 	ywid = atoi (field);
 	if (ywid == 0)
-	    (void) fprintf (stderr, "?invalid ywid\n");
+	    fprintf (stderr, "?invalid ywid\n");
 
 	field = strtok (NULL, "+");
     }
@@ -1991,7 +2223,7 @@ opt_geo(const char *opt, const char *optarg, void *client_data)
 
     /* -geometry +Xoff or -geometry +Xoff+Yoff only */
 
-	field = strtok (myoptarg, "+");
+	field = strtok (opttmp, "+");
     }
 
     if (field != NULL) {
@@ -2001,7 +2233,93 @@ opt_geo(const char *opt, const char *optarg, void *client_data)
     }
 
     plspage (xdpi, ydpi, xwid, ywid, xoff, yoff);
-    free(myoptarg);
     return 0;
 }
+
+/*--------------------------------------------------------------------------*\
+ * opt_tk_file()
+ *
+ * File name for plserver tk_file option
+\*--------------------------------------------------------------------------*/
+
+static int /* pmr: optarg in getopt.h */
+opt_tk_file(const char *opt, const char *myoptarg, void *client_data)
+{
+    (void) opt;				/* pmr: make these used */
+    (void) client_data;
+
+    plsc->tk_file = (char *) malloc((size_t)(1+strlen(myoptarg))*sizeof(char));
+    strcpy (plsc->tk_file, myoptarg);
+    return 0;
+}
+
+/*--------------------------------------------------------------------------*\
+ * opt_dpi()
+ *
+ * Performs appropriate action for option "dpi":
+ * Set dpi resolution for output device
+ *   e.g.,  "-dpi 600x300", will set X dpi to 600 and Y dpi to 300
+ * 		or
+ *   e.g., "-dpi 1200"
+ * Will set both X and Y dpi to 1200 dpi
+\*--------------------------------------------------------------------------*/
+
+static int /* pmr: optarg in getopt.h */
+opt_dpi(const char *opt, const char *myoptarg, void *client_data)
+{
+    char *field;
+    PLFLT xdpi = 0., ydpi = 0.;
+    PLINT xwid = 0, ywid = 0, xoff = 0, yoff = 0;
+
+    (void) opt;				/* pmr: make these used */
+    (void) client_data;
+
+    strncpy(opttmp, myoptarg, OPTMAX-1);
+    if (strchr (opttmp, 'x')) {
+	field = strtok (opttmp, "x");
+	xdpi = atof (field);
+	if (xdpi == 0)
+	    fprintf (stderr, "?invalid xdpi\n");
+
+	if ((field = strtok (NULL, " ")) == NULL)
+	   return 1;
+
+        ydpi = atof (field);
+        if (ydpi == 0)
+	   fprintf (stderr, "?invalid ydpi\n");
+
+    } else {
+	xdpi = atof (opttmp);
+	ydpi=xdpi;
+	if (xdpi==0) return 1;
+    }
+
+    plspage (xdpi, ydpi, xwid, ywid, xoff, yoff);
+    return 0;
+}
+
+/*--------------------------------------------------------------------------*\
+ * opt_dev_compression()
+ *
+ * Sets device compression
+\*--------------------------------------------------------------------------*/
+
+static int /* pmr: optarg in getopt.h */
+opt_dev_compression(const char *opt, const char *myoptarg, void *client_data)
+{
+    PLINT comp = 0;
+
+    (void) opt;				/* pmr: make these used */
+    (void) client_data;
+
+    comp = atoi(myoptarg);
+    if (comp == 0) {
+	fprintf(stderr, "?invalid compression\n");
+	return 1;
+    }
+    plscompression (comp);
+
+    return 0;
+}
+
 

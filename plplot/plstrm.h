@@ -1,14 +1,35 @@
-/*  Last edited: Feb 28 15:02 2000 (pmr) */
-/*	plstrm.h
+/* $Id: plstrm.h,v 1.6 2007/05/17 10:37:26 ajb Exp $
+ *
+ *	Contains declarations for PLStream and PLDev structs.
+ *	Also prototypes for stream & device utility functions.
 
-	Contains declarations for PLStream and PLDev structs.
-	Also prototypes for stream & device utility functions.
+    Copyright (C) 2004  Andrew Ross
+    Copyright (C) 2004  Andrew Roach
+
+    This file is part of PLplot.
+
+    PLplot is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Library General Public License as published
+    by the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    PLplot is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with PLplot; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 #include "pdf.h"
 
 #ifndef __PLSTRM_H__
 #define __PLSTRM_H__
+
+#include "disptab.h"
+#include "pldll.h"
 
 /*--------------------------------------------------------------------------*\
  * Define the PLDev data structure.
@@ -59,10 +80,11 @@ typedef struct {
  *
  * ipls		PLINT	Stream number
  * level	PLINT	Initialization level
- * program	char*	Program name
+ * program	const char*	Program name
  * verbose	PLINT	Be more verbose than usual
  * debug	PLINT	Generate debugging output
  * initialized	PLINT	Set if the stream has been initialized
+ * dev_initialized PLINT Set if the device driver has been loaded
  *
  ***************************************************************************
  *
@@ -92,16 +114,17 @@ typedef struct {
  * ncol0	PLINT	Number of colors allocated in color map 0.
  * icol1	PLINT	Color map 1 entry, current color (0 <= icol1 <= ncol1)
  * ncol1	PLINT	Number of colors allocated in color map 1.
- * ncol1cp	PLINT	Number of control points in cmap1 allocation (max 32)
+ * ncol1cp	PLINT	Number of control points in cmap1 allocation (max PL_MAX_CMAP1CP)
  * lcol1cp	PLFLT	Locations of control points in cmap1 [0,1]
  * curcmap	PLINT	Current color map
  * curcolor	RGB[]	Current color
+ * tmpcolor	RGB[]	Temporary color storage
  * cmap0 	RGB[]	Color map 0: maximum of ncol0 RGB 8-bit values
  * cmap1 	RGB[]	Color map 1: maximum of ncol1 RGB 8-bit values
  *
  ***************************************************************************
  *
- * Variables governing pen width 
+ * Variables governing pen width
  *
  * width	Current pen width
  * widthset	Set if pen width was specified
@@ -109,7 +132,16 @@ typedef struct {
  *
  ***************************************************************************
  *
- * Variables used to pass information between the core and the driver 
+ * Variables governing arrow type
+ *
+ * arrow_x      x coordinates of points in arrow
+ * arrow_y      y coordinates of points in arrow
+ * arrow_npts   number of points in arrow_x, arrow_y
+ * arrow_fill   whether the arrow should be filled or not
+ *
+ ***************************************************************************
+ *
+ * Variables used to pass information between the core and the driver
  *
  * It would be nice to use the "dev_" prefix uniformly but changing
  * all that old code would be quite a lot of work..
@@ -121,10 +153,17 @@ typedef struct {
  * plbuf_read	PLINT	Set during a plot buffer redraw
  * plbuf_write	PLINT	Set if driver needs to use the plot buffer
  * dev_fill0	PLINT	Set if driver can do solid area fills
+ * dev_text	PLINT	Set if driver want to do it's only text drawing
+ * dev_unicode	PLINT	Set if driver wants unicode
+ * dev_hrshsym	PLINT	Set for Hershey symbols to be used
  * dev_fill1	PLINT	Set if driver can do pattern area fills
+ * dev_dash     PLINT   Set if driver can do dashed lines
  * dev_di	PLINT	Set if driver wants to handle DI commands
  * dev_flush	PLINT	Set if driver wants to handle flushes itself
  * dev_swin	PLINT	Set if driver wants to handle 'set window' commands
+ * dev_fastimg  PLINT   Set if driver has fast image drawing capabilities
+ * dev_xor      PLINT   Set if driver supports xor mode.
+ * dev_clear    PLINT   Set if driver support clear.
  * termin	PLINT	Set for interactive devices
  * graphx	PLINT	Set if currently in graphics mode
  * nopause	PLINT	Set if we are skipping the pause between frames
@@ -137,6 +176,7 @@ typedef struct {
  * DevName	char*	Device name
  * OutFile	FILE	Output file pointer
  * BaseName	char*	Output base name (i.e. family)
+ * Ext		char*	Output extension (i.e. device) pmr: added for EMBOSS
  * FileName	char*	Output file name
  * output_type	int	0 for file, 1 for stream
  * bytecnt	PLINT	Byte count for output stream
@@ -147,10 +187,17 @@ typedef struct {
  * These are used by the escape function (for area fill, etc).
  *
  * dev_npts	PLINT	Number of points we are plotting
- * dev_x	short*	Pointer to array of x values 
- * dev_y	short*	Pointer to array of x values 
+ * dev_x	short*	Pointer to array of x values
+ * dev_y	short*	Pointer to array of x values
  *
- * The following pointer is for drivers that require device-specific 
+ * For images
+ * dev_nptsX	PLINT	Number of points we are plotting in X
+ * dev_nptsY	PLINT	Number of points we are plotting in Y
+ * dev_z	ushort*	Pointer to array of z values for the color
+ * dev_zmin,
+ * dev_zmax     ushort  Min and max values of z to plot
+ *
+ * The following pointer is for drivers that require device-specific
  * data.  At initialization the driver should malloc the necessary
  * space and set pls->dev to point to this area.  This way there can
  * be multiple streams using the same driver without conflict.
@@ -166,6 +213,12 @@ typedef struct {
  *
  * ButtonEH	void*	(Mouse) Button event handler
  * ButtonEH_data void*	Pointer to client data to pass
+ *
+ * bop_handler	void*	bop handler
+ * bop_data	void*	Pointer to client data to pass
+ *
+ * eop_handler	void*	eop handler
+ * eop_data	void*	Pointer to client data to pass
  *
  * Variables used for direct specification of device characteristics
  * Not supported by all drivers (or even very many)
@@ -191,7 +244,7 @@ typedef struct {
  * error code.
  *
  * errcode	PLINT*	pointer to variable to assign error code
- * errmsg	char*	pointer to error message buffer (must be >= 160 bytes)
+ * errmsg	char* pointer to error message buffer (must be >= 160 bytes)
  *
  ****************************************************************************
  *
@@ -203,6 +256,8 @@ typedef struct {
  * db		int	Set if you want to double buffer output
  *			(only pixmap is drawn to directly; it is blitted
  *			to output window on EOP or an Expose)
+ * ext_resize_draw int  Set if you want to control the redraw caused by a
+ *                      window resize by an external agent.
  ***************************************************************************
  *
  * These are for support of the TK driver.
@@ -213,7 +268,7 @@ typedef struct {
  * user		char*	Your user name on remote host (for remsh command)
  * plserver	char*	Name of server
  * plwindow	char*	Name of reference server window (malloc'ed)
- * tcl_cmd	char*	TCL command(s) to eval on startup
+ * tk_file	char*   File for plserver use with its -file option
  * auto_path	char*	Additional directories to autoload
  * bufmax	int	Number of bytes sent before output buffer is flushed
  * dp		int	Use Tcl-DP for communication, if set
@@ -223,7 +278,16 @@ typedef struct {
  *
  * Variables for use by the plot buffer
  *
+ * For BUFFERED_FILE
  * plbufFile	FILE	Plot buffer file pointer
+ *
+ * For Memory Buffer (default)
+ * plbuf_buffer_grow	size_t		Memory buffer growth step
+ * plbuf_buffer_size	size_t		Current size of memory buffer
+ * plbuf_buffer			void *		Pointer to memory buffer
+ * plbuf_top			size_t		Offset to the top of used area/start of free area
+ * plbuf_readpos		size_t		Offset to current position being read
+ *
  * plbufOwner	int	Typically set; only zero if current stream is cloned.
  *
  ***************************************************************************
@@ -232,10 +296,10 @@ typedef struct {
  *
  * difilt	PLINT	Driver interface filter flag
  *
- * dipxmin	PLFLT	
+ * dipxmin	PLFLT
  * dipymin	PLFLT	Min, max relative plot coordinates
  * dipxmax	PLFLT
- * dipymax	PLFLT	
+ * dipymax	PLFLT
  * dipxax 	PLFLT	Plot window transformation:
  * dipxb 	PLFLT	  x' = dipxax * x + dipxb
  * dipyay 	PLFLT
@@ -244,7 +308,10 @@ typedef struct {
  * aspdev	PLFLT	Original device aspect ratio
  * aspect	PLFLT	Page aspect ratio
  * aspori	PLFLT	Rotation-induced aspect ratio
- * freeaspect	PLINT	Do not preserve aspect ratio on orientation swaps
+ * caspfactor	PLFLT	Factor applied to preserve character aspect ratio
+ * freeaspect	PLINT	Allow aspect ratio to adjust to orientation swaps
+ * 			when overall aspect ratio is changed.
+ * portrait	PLINT	Portrait mode (orientation and aspect ratio)
  * mar		PLFLT	Page margin (minimum)
  * jx		PLFLT	Page justification in x
  * jy		PLFLT	Page justification in y
@@ -267,10 +334,10 @@ typedef struct {
  * dioyay	PLFLT
  * dioyb 	PLFLT
  *
- * dimxmin	PLFLT	
+ * dimxmin	PLFLT
  * dimymin	PLFLT	Target coordinate system parameters.
  * dimxmax	PLFLT
- * dimymax	PLFLT	
+ * dimymax	PLFLT
  * dimxpmm	PLFLT
  * dimypmm	PLFLT
  * dimxax 	PLFLT	Map meta to physical coordinates:
@@ -282,7 +349,7 @@ typedef struct {
  *
  ***************************************************************************
  *
- * Fill pattern state information. 
+ * Fill pattern state information.
  * patt < 0: Hardware fill, if available (not implemented yet)
  * patt ==0: Hardware fill, if available, solid
  * patt > 0: Software fill
@@ -377,32 +444,76 @@ typedef struct {
  * wp....	Transformation variables for world  to physical conversion
  * wm....	Transformation variables for world coordinates to mm
  *
+ ****************************************************************************
+ *
+ * Other variables
+ *
+ * dev_compression Compression level for supporting devices
+ *
+ ****************************************************************************
+ *
+ * Font related variables
+ *
+ * cfont           Current font number, replaces global 'font' in plsym.c
+ *                 This can be latter extended for font shape, series, family and size
+ * fci             FCI (font characterization integer)
+ * An FCI is sometimes inserted in the middle of a stream of
+ * unicode glyph indices.  Thus to distinguish it from those, the FCI is marked
+ * by 0x8 in the most significant 4 bits.  The remaining 7 hex digits
+ * stored in the 32-bit integer characterize 7 different font attributes.
+ * The font attributes are interpreted as follows:
+ * hexdigit =>                    0        1          2        3       4        5
+ * hexpower   Font attribute               Possible attribute values
+ *    0       font-family     sans-serif  serif    monospace  script  symbol |fantasy
+ *    1       font-style        upright   italic    oblique |
+ *    2       font-weight       medium     bold  |   bolder    light  lighter
+ *    3       font-variant      normal | small caps
+ *
+ * Everything to the right of the vertical bars is not implemented and is
+ * subject to change.  The four font attributes (font-family, font-style,
+ * font-weight, and font-variant are stored in the FCI in the order of
+ * hexpower, the left shift that is applied to the hex digit to place the
+ * hexdigit in the FCI.  The hexpower = 3 position is essentially undefined
+ * since there is currently only one hexdigit (0) defined, and similarly
+ * for hexpower = 4-6 so there is room for expansion of this scheme into more
+ * font attributes if required.  (hexpower = 7 is reserved for the 0x8 marker
+ * of the FCI.)
 \*--------------------------------------------------------------------------*/
+
+#define PL_MAX_CMAP1CP 256
 
 typedef struct {
 
 /* Misc control information */
 
-    PLINT ipls, level, verbose, debug, initialized;
-    char pad1x[4];
-    
-    char *program;
+    PLINT ipls, level, verbose, debug, initialized, dev_initialized;
+    const char *program;		/* pmr: const */
 
 /* Colormaps */
 
     PLINT icol0, ncol0, icol1, ncol1, ncp1, curcmap;
 
-    PLColor curcolor;
-    char pad2x[5];
+    PLColor curcolor, tmpcolor;
     PLColor *cmap0;
     PLColor *cmap1;
 
-    PLControlPt cmap1cp[32];
+    PLControlPt cmap1cp[PL_MAX_CMAP1CP];
 
 /* Variables governing pen width */
 
     PLINT width;
     PLINT widthset, widthlock;
+
+/* Variables governing arrow */
+    char  padding1[4];
+    PLFLT *arrow_x;
+    PLFLT *arrow_y;
+    PLINT arrow_npts;
+    PLINT arrow_fill;
+
+/* Driver dispatch table, obsoletes "device" member below. */
+
+    PLDispatchTable *dispatch_table;
 
 /* Variables used for interacting with or by device driver */
 
@@ -410,20 +521,33 @@ typedef struct {
     PLINT device, dev_minor, termin, graphx, nopause;
     PLINT color, colorset;
     PLINT family, member, finc, fflen, bytemax, famadv;
-    PLINT dev_fill0, dev_fill1, dev_di, dev_flush, dev_swin;
+    PLINT dev_fill0, dev_fill1, dev_dash, dev_di, dev_flush, dev_swin;
+    PLINT dev_text, dev_xor, dev_clear, dev_fastimg;
 
     char DevName[80];
-    char pad3x[4];
+    char Padding2[4];
+    
     FILE *OutFile;
     char *BaseName, *FileName;
-    char *Ext;
+    char *Ext;				/* pmr: added for EMBOSS */
     int  output_type;
     PLINT bytecnt, page, linepos;
     PDFstrm *pdfs;
 
     PLINT dev_npts;
-    char pad4x[4];
+    char Padding3[4];
+    
     short *dev_x, *dev_y;
+
+  /* variables for plimage() */
+
+    PLINT dev_nptsX, dev_nptsY;
+    short *dev_ix, *dev_iy;
+    unsigned short *dev_z;
+    unsigned short dev_zmin, dev_zmax;
+    PLINT imclxmin, imclxmax, imclymin, imclymax;
+    char Padding4[4];
+  /* end of variables for plimage() */
 
     void *dev;
 
@@ -438,6 +562,12 @@ typedef struct {
     void (*LocateEH)	(PLGraphicsIn *gin, void *LocateEH_data,
 			 int *locate_mode);
     void *LocateEH_data;
+
+    void (*bop_handler)	(void *bop_data, int *skip_driver_bop);
+    void *bop_data;
+
+    void (*eop_handler)	(void *eop_data, int *skip_driver_eop);
+    void *eop_data;
 
     PLFLT xdpi, ydpi;
     PLINT xlength, ylength;
@@ -458,18 +588,28 @@ typedef struct {
 
     char *geometry;
     long window_id;
-    int  nopixmap, db;
-
+    int  nopixmap, db, ext_resize_draw;
+    char Padding5[4];
 /* Stuff used by TK, DP drivers */
 
     char *server_name, *server_host, *server_port, *user;
     char *plserver, *plwindow;
-    char *tcl_cmd, *auto_path;
+    char *auto_path;
+    char *tk_file;  /* plserver -file option */
     int  bufmax, dp, server_nokill;
-
+    char Padding6[4];
+    
 /* Plot buffer settings */
-    char pad5x[4];
+
+#ifdef BUFFERED_FILE
     FILE *plbufFile;
+#else
+    size_t plbuf_buffer_grow;
+    size_t plbuf_buffer_size;	
+    void *plbuf_buffer;
+    size_t plbuf_top;
+    size_t plbuf_readpos;
+#endif
     int  plbufOwner;
 
 /* Driver interface (DI) */
@@ -477,13 +617,13 @@ typedef struct {
     PLINT difilt, diclpxmi, diclpxma, diclpymi, diclpyma;
     PLFLT dipxmin, dipymin, dipxmax, dipymax;
     PLFLT dipxax, dipxb, dipyay, dipyb;
-    PLFLT aspdev, aspect, aspori, mar, jx, jy;
+    PLFLT aspdev, aspect, aspori, caspfactor, mar, jx, jy;
     PLFLT didxax, didxb, didyay, didyb;
     PLFLT diorot;
     PLFLT dioxax, dioxay, dioxb, dioyax, dioyay, dioyb;
     PLFLT dimxax, dimxb, dimyay, dimyb;
     PLFLT dimxmin, dimymin, dimxmax, dimymax, dimxpmm, dimypmm;
-    PLINT page_status, freeaspect;
+    PLINT page_status, freeaspect, portrait;
 
 /* Fill pattern info */
 
@@ -498,7 +638,8 @@ typedef struct {
 /* Variables governing character strings */
 
     char  esc;
-    char pad2[3];
+    char padding[7];
+
 /* Scale factors for characters, symbols, and tick marks. */
 
     PLFLT scale;
@@ -545,6 +686,42 @@ typedef struct {
 
     PLFLT wpxscl, wpxoff, wpyscl, wpyoff;
     PLFLT wmxscl, wmxoff, wmyscl, wmyoff;
+    PLFLT wdxscl, wdxoff, wdyscl, wdyoff;
+
+/* Other variables */
+
+  PLINT dev_compression;
+  PLINT cfont;
+
+  char Padding7[4];
+    
+
+  void *FT;
+
+/* Stuff used by the Tkwin driver for Plframe */
+  struct PlPlotter *plPlotterPtr;
+
+
+/* Unicode section */
+
+  PLINT dev_unicode;
+
+  PLUNICODE fci;
+
+  PLINT dev_hrshsym;
+
+/* Used to keep a hold of a temporary copy of the original character height
+ * which I overload as a quick hack to fix up a bug in freetype an plsym()
+ */
+
+  PLFLT original_chrdef,original_chrht;
+  char Padding8[4];
+    
+  /*
+   * Pointer to postscript document class used by psttf
+   */
+  void *psdoc;
+
 
 } PLStream;
 
@@ -558,7 +735,7 @@ extern "C" {
 
 /* Get the current stream pointer */
 
-void
+void PLDLLIMPEXP
 plgpls(PLStream **p_pls);
 
 /* Initializes device cmap 1 entry by interpolation from pls->cmap1 entries */
@@ -582,7 +759,7 @@ void
 plP_sfnam(PLStream *pls, const char *fnam);
 
 void
-plPX_sfnam(PLStream *pls, const char *fnam, const char* ext);
+plPX_sfnam(PLStream *pls, const char *fnam, const char *ext);
 
 /* Initializes family file parameters. */
 
@@ -598,7 +775,7 @@ plGetFam(PLStream *pls);
 
 void
 plRotPhy(PLINT orient, PLINT xmin, PLINT ymin, PLINT xmax, PLINT ymax,
-	 int *px, int *py);
+	 PLINT *px, PLINT *py);
 
 /* Allocates a standard PLDev structure for device-specific data */
 
@@ -610,24 +787,8 @@ plAllocDev(PLStream *pls);
 void
 plGinInit(PLGraphicsIn *gin);
 
-/* sets the plot window name used by xwindows */
-
-void
-plPX_swin(PLStream *pls, const char *window);
-
-void
-plPX_trace (PLStream *pls, FILE* outf);
-
-/* tracing the internals for debugging */
-
-void
-plPX_plxtrace (PLStream *pls, FILE* outf);
-
-int
-plFileInfo (PLStream *pls, char* tmp);
-
 #ifdef __cplusplus
-};
+}
 #endif
 
 #endif	/* __PLSTRM_H__ */

@@ -1,11 +1,25 @@
-/* Split into two routines, one as a front-end to the driver interface fill
- * routine, and the other as a target of the driver interface when the driver
- * doesn't support the desired fill capability.
-*/
-
-/*	plfill.c
+/* $Id: plfill.c,v 1.3 2007/05/08 09:09:37 rice Exp $
 
 	Polygon pattern fill.
+
+   Copyright (C) 2004  Alan W. Irwin
+
+   This file is part of PLplot.
+
+   PLplot is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Library Public License as published
+   by the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   PLplot is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with PLplot; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
 */
 
 #include "plplotP.h"
@@ -40,7 +54,7 @@ static void  buildlist	(PLINT, PLINT, PLINT, PLINT, PLINT, PLINT, PLINT);
 void
 c_plfill(PLINT n, PLFLT *x, PLFLT *y)
 {
-    short xpoly[PL_MAXPOLY], ypoly[PL_MAXPOLY];
+    PLINT xpoly[PL_MAXPOLY], ypoly[PL_MAXPOLY];
     PLINT i;
 
     if (plsc->level < 3) {
@@ -66,7 +80,78 @@ c_plfill(PLINT n, PLFLT *x, PLFLT *y)
 	ypoly[n-1] = plP_wcpcy(y[0]);
     }
 
-    plP_fill(xpoly, ypoly, n);
+    plP_plfclp(xpoly, ypoly, n, plsc->clpxmi, plsc->clpxma,
+	       plsc->clpymi, plsc->clpyma, plP_fill);
+}
+
+/*----------------------------------------------------------------------*\
+ * void plfill3()
+ *
+ * Pattern fills the polygon in 3d bounded by the input points.
+ * If hardware fill is used, a maximum of PL_MAXPOLY-1 vertices is allowed.
+ * The final point is explicitly added if it doesn't match up to the first,
+ * to prevent clipping problems.
+\*----------------------------------------------------------------------*/
+
+void
+c_plfill3(PLINT n, PLFLT *x, PLFLT *y, PLFLT *z)
+{
+    PLFLT tx[PL_MAXPOLY], ty[PL_MAXPOLY], tz[PL_MAXPOLY];
+    PLFLT *V[3];
+    PLINT xpoly[PL_MAXPOLY], ypoly[PL_MAXPOLY];
+    PLINT i;
+    PLFLT xmin, xmax, ymin, ymax, zmin, zmax, zscale;
+
+    if (plsc->level < 3) {
+	plabort("plfill3: Please set up window first");
+	return;
+    }
+    if (n < 3) {
+	plabort("plfill3: Not enough points in object");
+	return;
+    }
+    if (n > PL_MAXPOLY-1) {
+	plwarn("plfill3: too many points in polygon");
+	n = PL_MAXPOLY;
+    }
+
+    plP_gdom(&xmin, &xmax, &ymin, &ymax);
+    plP_grange(&zscale, &zmin, &zmax);
+
+    /* copy the vertices so we can clip without corrupting the input */
+    for( i=0; i < n; i++ ) {
+      tx[i] = x[i]; ty[i] = y[i]; tz[i] = z[i];
+    }
+    if (tx[0] != tx[n-1] || ty[0] != ty[n-1] || tz[0] != tz[n-1]) {
+      tx[n] = tx[0]; ty[n] = ty[0]; tz[n] = tz[0];
+      n++;
+    }
+    V[0] = tx; V[1] = ty; V[2] = tz;
+    n = plP_clip_poly(n, V, 0,  1, -xmin);
+    n = plP_clip_poly(n, V, 0, -1,  xmax);
+    n = plP_clip_poly(n, V, 1,  1, -ymin);
+    n = plP_clip_poly(n, V, 1, -1,  ymax);
+    n = plP_clip_poly(n, V, 2,  1, -zmin);
+    n = plP_clip_poly(n, V, 2, -1,  zmax);
+    for( i=0; i < n; i++ ) {
+	xpoly[i] = plP_wcpcx(plP_w3wcx( tx[i], ty[i], tz[i] ));
+	ypoly[i] = plP_wcpcy(plP_w3wcy( tx[i], ty[i], tz[i] ));
+	}
+
+/* AWI: in the past we have used
+ *  plP_fill(xpoly, ypoly, n);
+ * here, but our educated guess is this fill should be done via the clipping
+ * interface instead as below.
+ * No example tests this code so one of our users will end up inadvertently
+ * testing this for us.
+ *
+ * jc: I have checked, and both versions does give the same result, i.e., clipping
+ * to the window boundaries. The reason is that the above plP_clip_poly() does
+ * the clipping. To check this, is enough to diminish the x/y/z min/max arguments in
+ * plw3d() in x08c. But let's keep it, although 10% slower...
+ */
+    plP_plfclp(xpoly, ypoly, n, plsc->clpxmi, plsc->clpxma,
+           plsc->clpymi, plsc->clpyma, plP_fill);
 }
 
 /*----------------------------------------------------------------------*\
@@ -154,9 +239,9 @@ plfill_soft(short *x, short *y, PLINT n)
 	    yp1 = buffer[i + 1];
 	    i += 2;
 	    if (yp2 != yp1) {
-		(void) fprintf(stderr, "plfill: oh oh we are lost\n");
+		fprintf(stderr, "plfill: oh oh we are lost\n");
 		for (j = 0; j < bufferleng; j+=2) {
-		    (void) fprintf(stderr, "plfill: %d %d\n",
+		    fprintf(stderr, "plfill: %d %d\n",
 			    (int) buffer[j], (int) buffer[j+1]);
 		}
 		continue;	/* Uh oh we're lost */
@@ -191,13 +276,13 @@ buildlist(PLINT xp1, PLINT yp1, PLINT xp2, PLINT yp2, PLINT xp3, PLINT yp3,
     PLINT min_y, max_y;
     PLINT dx, dy, cstep, nstep, ploty, plotx;
 
-    (void) xp3;
+    (void) xp3;				/* pmr: make it used */
 
     dx = xp2 - xp1;
     dy = yp2 - yp1;
 
     if (dy == 0) {
-	if (yp2 > yp3 && ((yp2 % dinc) == 0)) 
+	if (yp2 > yp3 && ((yp2 % dinc) == 0))
 	    addcoord(xp2, yp2);
 	return;
     }

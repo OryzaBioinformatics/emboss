@@ -1,6 +1,24 @@
-/*	plcvt.c
+/* $Id: plcvt.c,v 1.3 2007/05/08 09:09:37 rice Exp $
 
 	Coordinate transformation routines.
+
+   Copyright (C) 2004  Alan W. Irwin
+
+   This file is part of PLplot.
+
+   PLplot is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Library Public License as published
+   by the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   PLplot is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with PLplot; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 #include "plplotP.h"
@@ -93,6 +111,22 @@ plP_mmdcy(PLFLT y)
     return ((PLFLT) (y * plsc->ypmm / ABS(plsc->phyyma - plsc->phyymi)));
 }
 
+/* world coords into device coords (x) */
+
+PLFLT
+plP_wcdcx(PLFLT x)
+{
+    return ((PLFLT) (plsc->wdxoff + plsc->wdxscl * x));
+}
+
+/* world coords into device coords (y) */
+
+PLFLT
+plP_wcdcy(PLFLT y)
+{
+    return ((PLFLT) (plsc->wdyoff + plsc->wdyscl * y));
+}
+
 /* subpage coords to device coords (x) */
 
 PLFLT
@@ -170,16 +204,19 @@ plP_dcscy(PLFLT y)
 \*--------------------------------------------------------------------------*/
 
 /* 3-d coords to 2-d projection (x) */
+/* See c_plw3d for a mathematical explanation of the transformation. */
 
 PLFLT
 plP_w3wcx(PLFLT x, PLFLT y, PLFLT z)
 {
-    (void) z;
+    (void) z; 				/* pmr: make it used */
+
     return ((PLFLT) ((x - plsc->basecx) * plsc->cxx +
 		     (y - plsc->basecy) * plsc->cxy));
 }
 
 /* 3-d coords to 2-d projection (y) */
+/* See c_plw3d for a mathematical explanation of the transformation. */
 
 PLFLT
 plP_w3wcy(PLFLT x, PLFLT y, PLFLT z)

@@ -1,10 +1,4 @@
-/* All drivers: pls->width now more sensibly handled.  If the driver supports
- * multiple widths, it first checks to see if it has been initialized
- * already (e.g. from the command line) before initializing it.  For drivers
- * that don't support multiple widths, pls->width is ignored.
-*/
-
-/*	impress.c
+/* $Id: impress.c,v 1.3 2007/05/08 09:09:37 rice Exp $
 
 	PLplot ImPress device driver.
 */
@@ -15,7 +9,22 @@
 #include "plplotP.h"
 #include "drivers.h"
 
+/* Device info */
+const char* plD_DEVICE_INFO_impress = "imp:Impress File:0:impress:37:imp";
+
 /* Function prototypes */
+
+/* pmr: defined in drivers.h */
+/*void plD_dispatch_init_imp	( PLDispatchTable *pdt );*/
+
+void plD_init_imp		(PLStream *);
+void plD_line_imp		(PLStream *, short, short, short, short);
+void plD_polyline_imp		(PLStream *, short *, short *, PLINT);
+void plD_eop_imp		(PLStream *);
+void plD_bop_imp		(PLStream *);
+void plD_tidy_imp		(PLStream *);
+void plD_state_imp		(PLStream *, PLINT);
+void plD_esc_imp		(PLStream *, PLINT, void *);
 
 static void flushline(PLStream *);
 
@@ -50,6 +59,24 @@ static short FirstLine;
 static int penchange = 0, penwidth = 1;
 static short count;
 
+void plD_dispatch_init_imp( PLDispatchTable *pdt )
+{
+#ifndef ENABLE_DYNDRIVERS
+    pdt->pl_MenuStr  = "Impress File";
+    pdt->pl_DevName  = "imp";
+#endif
+    pdt->pl_type     = plDevType_FileOriented;
+    pdt->pl_seq      = 37;
+    pdt->pl_init     = (plD_init_fp)     plD_init_imp;
+    pdt->pl_line     = (plD_line_fp)     plD_line_imp;
+    pdt->pl_polyline = (plD_polyline_fp) plD_polyline_imp;
+    pdt->pl_eop      = (plD_eop_fp)      plD_eop_imp;
+    pdt->pl_bop      = (plD_bop_fp)      plD_bop_imp;
+    pdt->pl_tidy     = (plD_tidy_fp)     plD_tidy_imp;
+    pdt->pl_state    = (plD_state_fp)    plD_state_imp;
+    pdt->pl_esc      = (plD_esc_fp)      plD_esc_imp;
+}
+
 /*--------------------------------------------------------------------------*\
  * plD_init_imp()
  *
@@ -73,8 +100,8 @@ plD_init_imp(PLStream *pls)
 
     dev = plAllocDev(pls);
 
-    dev->xold = UNDEFINED;
-    dev->yold = UNDEFINED;
+    dev->xold = PL_UNDEFINED;
+    dev->yold = PL_UNDEFINED;
     dev->xmin = 0;
     dev->ymin = 0;
     dev->xmax = IMPX;
@@ -89,11 +116,11 @@ plD_init_imp(PLStream *pls)
     if (LineBuff == NULL) {
 	plexit("Error in memory alloc in plD_init_imp().");
     }
-    (void) fprintf(pls->OutFile, "@Document(Language ImPress, jobheader off)");
-    (void) fprintf(pls->OutFile, "%c%c", SET_HV_SYSTEM, OPBYTE1);
-    (void) fprintf(pls->OutFile, "%c%c%c", SET_ABS_H, OPWORDH1, OPWORDH2);
-    (void) fprintf(pls->OutFile, "%c%c%c", SET_ABS_V, OPWORDV1, OPWORDV2);
-    (void) fprintf(pls->OutFile, "%c%c", SET_HV_SYSTEM, OPBYTE2);
+    fprintf(pls->OutFile, "@Document(Language ImPress, jobheader off)");
+    fprintf(pls->OutFile, "%c%c", SET_HV_SYSTEM, OPBYTE1);
+    fprintf(pls->OutFile, "%c%c%c", SET_ABS_H, OPWORDH1, OPWORDH2);
+    fprintf(pls->OutFile, "%c%c%c", SET_ABS_V, OPWORDV1, OPWORDV2);
+    fprintf(pls->OutFile, "%c%c", SET_HV_SYSTEM, OPBYTE2);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -110,7 +137,7 @@ plD_line_imp(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 
     if (FirstLine) {
 	if (penchange) {
-	    (void) fprintf(pls->OutFile, "%c%c", SET_PEN, (char) penwidth);
+	    fprintf(pls->OutFile, "%c%c", SET_PEN, (char) penwidth);
 	    penchange = 0;
 	}
 
@@ -135,16 +162,14 @@ plD_line_imp(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
     /* Write out old path */
 
 	count /= 2;
-	(void) fprintf(pls->OutFile, "%c%c%c", CREATE_PATH,
-		       (char) count / 256, (char) count % 256);
-	(void) fwrite((char *) LineBuff, sizeof(short), 2 * count,
-		      pls->OutFile);
-	(void) fprintf(pls->OutFile, "%c%c", DRAW_PATH, OPTYPE);
+	fprintf(pls->OutFile, "%c%c%c", CREATE_PATH, (char) count / 256, (char) count % 256);
+	fwrite((char *) LineBuff, sizeof(short), 2 * count, pls->OutFile);
+	fprintf(pls->OutFile, "%c%c", DRAW_PATH, OPTYPE);
 
     /* And start a new path */
 
 	if (penchange) {
-	    (void) fprintf(pls->OutFile, "%c%c", SET_PEN, (char) penwidth);
+	    fprintf(pls->OutFile, "%c%c", SET_PEN, (char) penwidth);
 	    penchange = 0;
 	}
 	count = 0;
@@ -182,7 +207,7 @@ void
 plD_eop_imp(PLStream *pls)
 {
     flushline(pls);
-    (void) fprintf(pls->OutFile, "%c", ENDPAGE);
+    fprintf(pls->OutFile, "%c", ENDPAGE);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -197,8 +222,8 @@ plD_bop_imp(PLStream *pls)
     PLDev *dev = (PLDev *) pls->dev;
 
     FirstLine = 1;
-    dev->xold = UNDEFINED;
-    dev->yold = UNDEFINED;
+    dev->xold = PL_UNDEFINED;
+    dev->yold = PL_UNDEFINED;
 
     if (!pls->termin)
 	plGetFam(pls);
@@ -216,7 +241,7 @@ void
 plD_tidy_imp(PLStream *pls)
 {
     free((void *) LineBuff);
-    (void) fclose(pls->OutFile);
+    fclose(pls->OutFile);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -254,7 +279,7 @@ plD_state_imp(PLStream *pls, PLINT op)
 void
 plD_esc_imp(PLStream *pls, PLINT op, void *ptr)
 {
-    (void) pls;
+    (void) pls;				/* pmr: make these used */
     (void) op;
     (void) ptr;
 }
@@ -269,10 +294,9 @@ static void
 flushline(PLStream *pls)
 {
     count /= 2;
-    (void) fprintf(pls->OutFile, "%c%c%c", CREATE_PATH, (char) count / 256,
-		   (char) count % 256);
-    (void) fwrite((char *) LineBuff, sizeof(short), 2 * count, pls->OutFile);
-    (void) fprintf(pls->OutFile, "%c%c", DRAW_PATH, OPTYPE);
+    fprintf(pls->OutFile, "%c%c%c", CREATE_PATH, (char) count / 256, (char) count % 256);
+    fwrite((char *) LineBuff, sizeof(short), 2 * count, pls->OutFile);
+    fprintf(pls->OutFile, "%c%c", DRAW_PATH, OPTYPE);
     FirstLine = 1;
 }
 

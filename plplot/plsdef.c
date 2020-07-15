@@ -1,13 +1,25 @@
-/* All external API source files: replaced call to plexit() on simple
- * (recoverable) errors with simply printing the error message (via
- * plabort()) and returning.  Should help avoid loss of computer time in some
- * critical circumstances (during a long batch run, for example).
-*/
-
-/*	plsdef.c
+/* $Id: plsdef.c,v 1.2 2007/05/08 09:09:37 rice Exp $
 
 	Routines to set various plplot parameters, such as char height,
 	symbol size, tick length, line and fill patterns, etc.
+
+   Copyright (C) 2004  Alan W. Irwin
+
+   This file is part of PLplot.
+
+   PLplot is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Library Public License as published
+   by the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   PLplot is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with PLplot; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 #include "plplotP.h"
@@ -190,7 +202,7 @@ spat(PLINT inc[], PLINT del[], PLINT nlin);
 void
 c_plschr(PLFLT def, PLFLT scale)
 {
-    if (def != 0.0) 
+    if (def != 0.0)
 	plsc->chrdef = def;
 
     plsc->chrht = scale * plsc->chrdef;
@@ -205,7 +217,7 @@ c_plschr(PLFLT def, PLFLT scale)
 void
 c_plsmin(PLFLT def, PLFLT scale)
 {
-    if (def != 0.0) 
+    if (def != 0.0)
 	plsc->mindef = def;
 
     plsc->minht = scale * plsc->mindef;
@@ -220,7 +232,7 @@ c_plsmin(PLFLT def, PLFLT scale)
 void
 c_plsmaj(PLFLT def, PLFLT scale)
 {
-    if (def != 0.0) 
+    if (def != 0.0)
 	plsc->majdef = def;
 
     plsc->majht = scale * plsc->majdef;
@@ -235,7 +247,7 @@ c_plsmaj(PLFLT def, PLFLT scale)
 void
 c_plssym(PLFLT def, PLFLT scale)
 {
-    if (def != 0.0) 
+    if (def != 0.0)
 	plsc->symdef = def;
 
     plsc->symht = scale * plsc->symdef;
@@ -325,7 +337,7 @@ c_plpsty(PLINT patt)
 /*----------------------------------------------------------------------*\
  * void spat()
  *
- * Set defining parameters for pattern fill 
+ * Set defining parameters for pattern fill
 \*----------------------------------------------------------------------*/
 
 static void

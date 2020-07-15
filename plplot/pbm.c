@@ -1,3 +1,11 @@
+/*
+  $Id: pbm.c,v 1.3 2007/05/08 09:09:37 rice Exp $
+
+  PLplot PBM (PPM) device driver.
+
+  Contributed by John C. Atkinson and Zulfi Cumali.
+  Slightly modified by Geoffrey Furnish.
+*/
 #include "plDevs.h"
 
 #ifdef PLD_pbm
@@ -5,12 +13,27 @@
 #include "plplotP.h"
 #include "drivers.h"
 
+/* Device info */
+const char* plD_DEVICE_INFO_pbm = "pbm:PDB (PPM) Driver:0:pbm:38:pbm";
+
+/* pmr: defined in drivers.h */
+/* void plD_dispatch_init_pbm	( PLDispatchTable *pdt );*/
+
+void plD_init_pbm		(PLStream *);
+void plD_line_pbm		(PLStream *, short, short, short, short);
+void plD_polyline_pbm		(PLStream *, short *, short *, PLINT);
+void plD_eop_pbm		(PLStream *);
+void plD_bop_pbm		(PLStream *);
+void plD_tidy_pbm		(PLStream *);
+void plD_state_pbm		(PLStream *, PLINT);
+void plD_esc_pbm		(PLStream *, PLINT, void *);
+
 #undef PIXELS_X
 #undef PIXELS_Y
 #define PIXELS_X 640
 #define PIXELS_Y 480
 
-static char cmap[PIXELS_Y][PIXELS_X][3];
+static char *cmap;
 
 #undef MAX
 #undef ABS
@@ -18,6 +41,25 @@ static char cmap[PIXELS_Y][PIXELS_X][3];
 #define ABS(a) ((a<0) ? -a : a)
 
 #define MAX_INTENSITY 255
+
+void plD_dispatch_init_pbm( PLDispatchTable *pdt )
+{
+#ifndef ENABLE_DYNDRIVERS
+    pdt->pl_MenuStr  = "PDB (PPM) Driver";
+    pdt->pl_DevName  = "pbm";
+#endif
+    pdt->pl_type     = plDevType_FileOriented;
+    pdt->pl_seq      = 38;
+    pdt->pl_init     = (plD_init_fp)     plD_init_pbm;
+    pdt->pl_line     = (plD_line_fp)     plD_line_pbm;
+    pdt->pl_polyline = (plD_polyline_fp) plD_polyline_pbm;
+    pdt->pl_eop      = (plD_eop_fp)      plD_eop_pbm;
+    pdt->pl_bop      = (plD_bop_fp)      plD_bop_pbm;
+    pdt->pl_tidy     = (plD_tidy_fp)     plD_tidy_pbm;
+    pdt->pl_state    = (plD_state_fp)    plD_state_pbm;
+    pdt->pl_esc      = (plD_esc_fp)      plD_esc_pbm;
+}
+
 /*--------------------------------------------------------------------------*\
  * plD_init_pbm()
  *
@@ -53,7 +95,11 @@ plD_init_pbm(PLStream *pls)
 
 /* Set up device parameters */
 
-    plP_setphy(0, PIXELS_X, 0, PIXELS_Y);
+    if (pls->xlength <= 0 || pls->ylength <= 0) {
+      plspage(0., 0., PIXELS_X, PIXELS_Y, 0, 0);
+    }
+
+    plP_setphy(0, pls->xlength, 0, pls->ylength);
 }
 
 #if 0
@@ -137,9 +183,11 @@ plD_line_pbm(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
     }
 }
 #else
-#define plot(x,y,c) {cmap[y][x][0] = (c)->curcolor.r; \
-					 cmap[y][x][1] = (c)->curcolor.g; \
-					 cmap[y][x][2] = (c)->curcolor.b; }
+/* pmr: ii not i - shadows another i in the function */
+#define plot(x,y,c) {int ii = 3*((y)*(c)->xlength+(x)); \
+                     cmap[ii+0] = (c)->curcolor.r; \
+		     cmap[ii+1] = (c)->curcolor.g; \
+		     cmap[ii+2] = (c)->curcolor.b; }
 
 /* Modified version of the ljii routine (see ljii.c) */
 void
@@ -148,20 +196,15 @@ plD_line_pbm(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
     int i;
     int xx1 = x1a, yy1 = y1a, xx2 = x2a, yy2 = y2a;
     PLINT x1b, y1b, x2b, y2b;
-    float length, fx, fy, dx, dy;
+    PLFLT length, fx, fy, dx, dy;
 
 /* Take mirror image, since PCL expects (0,0) to be at top left */
 
-    yy1 = PIXELS_Y - (yy1 - 0);
-    yy2 = PIXELS_Y - (yy2 - 0);
+    yy1 = pls->ylength - (yy1 - 0);
+    yy2 = pls->ylength - (yy2 - 0);
 
-/* Rotate by 90 degrees */
-/*
-  plRotPhy(1, 0, 0, PIXELS_X, PIXELS_Y, &x1, &y1);
-  plRotPhy(1, 0, 0, PIXELS_X, PIXELS_Y, &x2, &y2);
-  */
     x1b = xx1, x2b = xx2, y1b = yy1, y2b = yy2;
-    length = (float) sqrt((double)
+    length = (PLFLT) sqrt((double)
 			  ((x2b - x1b) * (x2b - x1b) + (y2b - y1b) * (y2b - y1b)));
 
     if (length == 0.)
@@ -195,50 +238,62 @@ plD_eop_pbm(PLStream *pls)
     FILE *fp = pls->OutFile;
 
     if (fp != NULL) {
-	(void) fprintf(fp, "%s\n", "P6");
-	(void) fprintf(fp, "%d %d\n", PIXELS_X, PIXELS_Y);
-	(void) fprintf(fp, "%d\n", MAX_INTENSITY);
+	fprintf(fp, "%s\n", "P6");
+	fprintf(fp, "%d %d\n", pls->xlength, pls->ylength);
+	fprintf(fp, "%d\n", MAX_INTENSITY);
     /*
-	for (i=0; i<PIXELS_Y; i++)
-	    for (j=0; j<PIXELS_X; j++)
-		for (k=0; k<3; k++)
-		    (void) fprintf(fp, "%c", cmap[i][j][k]);
-		    */
-	(void) fwrite( cmap, 1, PIXELS_X * PIXELS_Y * 3, fp );
+	{
+	    int i, j, k;
+	    for (i=0; i<PIXELS_Y; i++)
+		for (j=0; j<PIXELS_X; j++)
+		    for (k=0; k<3; k++)
+			fprintf(fp, "%c", cmap[i][j][k]);
+	}
+    */
+	fwrite( cmap, 1, pls->xlength * pls->ylength * 3, fp );
 
-	(void) fclose(fp);
+	fclose(fp);
     } 
+    free(cmap);
+    cmap = 0;
 }
 
 void
 plD_bop_pbm(PLStream *pls)
 {
-    (void) pls;
-/* Nothing to do here */
+  int i,j,k;
+  cmap = (char*)malloc(pls->xlength*pls->ylength*3);
+  for (i=0; i<pls->ylength; i++)
+    for (j=0; j<pls->xlength; j++) {
+      k = (i*pls->xlength + j)*3;
+      cmap[k+0] = pls->cmap0[0].r;
+      cmap[k+1] = pls->cmap0[0].g;
+      cmap[k+2] = pls->cmap0[0].b;
+    }
 }
 
 void
 plD_tidy_pbm(PLStream *pls)
 {
-    (void) pls;
 /* Nothing to do here */
+    (void) pls;				/* pmr: make it used */
 }
 
 void 
 plD_state_pbm(PLStream *pls, PLINT op)
 {
-    (void) pls;
-    (void) op;
 /* Nothing to do here */
+    (void) pls;				/* pmr: make it used */
+    (void) op;
 }
 
 void
 plD_esc_pbm(PLStream *pls, PLINT op, void *ptr)
 {
-    (void) pls;
+/* Nothing to do here */
+    (void) pls;				/* pmr: make it used */
     (void) op;
     (void) ptr;
-/* Nothing to do here */
 }
 
 #else

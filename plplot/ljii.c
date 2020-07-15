@@ -1,10 +1,4 @@
-/* All drivers: pls->width now more sensibly handled.  If the driver supports
- * multiple widths, it first checks to see if it has been initialized
- * already (e.g. from the command line) before initializing it.  For drivers
- * that don't support multiple widths, pls->width is ignored.
-*/
-
-/*	ljii.c
+/* $Id: ljii.c,v 1.3 2007/05/08 09:09:37 rice Exp $
 
 	PLplot Laser Jet II device driver.
 
@@ -27,7 +21,23 @@
 #endif
 #endif
 
+/* Device info */
+const char* plD_DEVICE_INFO_ljii =
+  "ljii:LaserJet II Bitmap File (150 dpi):0:ljii:33:ljii";
+
 /* Function prototypes */
+
+/* pmr: in drivers.h */
+/* void plD_dispatch_init_ljii	( PLDispatchTable *pdt ); */
+
+void plD_init_ljii		(PLStream *);
+void plD_line_ljii		(PLStream *, short, short, short, short);
+void plD_polyline_ljii		(PLStream *, short *, short *, PLINT);
+void plD_eop_ljii		(PLStream *);
+void plD_bop_ljii		(PLStream *);
+void plD_tidy_ljii		(PLStream *);
+void plD_state_ljii		(PLStream *, PLINT);
+void plD_esc_ljii		(PLStream *, PLINT, void *);
 
 static void setpoint(PLINT, PLINT);
 
@@ -61,6 +71,24 @@ static char mask[8] =
 
 static char _HUGE *bitmap;	/* points to memory area NBYTES in size */
 
+void plD_dispatch_init_ljii( PLDispatchTable *pdt )
+{
+#ifndef ENABLE_DYNDRIVERS
+    pdt->pl_MenuStr  = "LaserJet II Bitmap File (150 dpi)";
+    pdt->pl_DevName  = "ljii";
+#endif
+    pdt->pl_type     = plDevType_FileOriented;
+    pdt->pl_seq      = 33;
+    pdt->pl_init     = (plD_init_fp)     plD_init_ljii;
+    pdt->pl_line     = (plD_line_fp)     plD_line_ljii;
+    pdt->pl_polyline = (plD_polyline_fp) plD_polyline_ljii;
+    pdt->pl_eop      = (plD_eop_fp)      plD_eop_ljii;
+    pdt->pl_bop      = (plD_bop_fp)      plD_bop_ljii;
+    pdt->pl_tidy     = (plD_tidy_fp)     plD_tidy_ljii;
+    pdt->pl_state    = (plD_state_fp)    plD_state_ljii;
+    pdt->pl_esc      = (plD_esc_fp)      plD_esc_ljii;
+}
+
 /*--------------------------------------------------------------------------*\
  * plD_init_ljii()
  *
@@ -84,8 +112,8 @@ plD_init_ljii(PLStream *pls)
 
     dev = plAllocDev(pls);
 
-    dev->xold = UNDEFINED;
-    dev->yold = UNDEFINED;
+    dev->xold = PL_UNDEFINED;
+    dev->yold = PL_UNDEFINED;
     dev->xmin = 0;
     dev->ymin = 0;
 
@@ -102,6 +130,18 @@ plD_init_ljii(PLStream *pls)
 
     plP_setphy(dev->xmin, dev->xmax, dev->ymin, dev->ymax);
 
+/* If portrait mode is specified, then set up an additional rotation 
+ * transformation with aspect ratio allowed to adjust via freeaspect.  
+ * Default orientation is landscape (ORIENTATION == 3 or 90 deg rotation 
+ * counter-clockwise from portrait).  (Legacy PLplot used seascape
+ * which was equivalent to ORIENTATION == 1 or 90 deg clockwise rotation 
+ * from portrait.) */
+
+    if (pls->portrait) {
+       plsdiori((PLFLT)(4 - ORIENTATION));
+       pls->freeaspect = 1;
+    }
+
 /* Allocate storage for bit map matrix */
 
 #ifdef MSDOS
@@ -114,7 +154,7 @@ plD_init_ljii(PLStream *pls)
 
 /* Reset Printer */
 
-    (void) fprintf(OF, "%cE", ESC);
+    fprintf(OF, "%cE", ESC);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -130,7 +170,7 @@ plD_line_ljii(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
     int i;
     int xx1 = x1a, yy1 = y1a, xx2 = x2a, yy2 = y2a;
     PLINT x1b, y1b, x2b, y2b;
-    float length, fx, fy, dx, dy;
+    PLFLT length, fx, fy, dx, dy;
 
 /* Take mirror image, since PCL expects (0,0) to be at top left */
 
@@ -139,11 +179,11 @@ plD_line_ljii(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 
 /* Rotate by 90 degrees */
 
-    plRotPhy(1, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &xx1, &yy1);
-    plRotPhy(1, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &xx2, &yy2);
+    plRotPhy(ORIENTATION, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &xx1, &yy1);
+    plRotPhy(ORIENTATION, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &xx2, &yy2);
 
     x1b = xx1, x2b = xx2, y1b = yy1, y2b = yy2;
-    length = (float) sqrt((double)
+    length = (PLFLT) sqrt((double)
 		     ((x2b - x1b) * (x2b - x1b) + (y2b - y1b) * (y2b - y1b)));
 
     if (length == 0.)
@@ -188,31 +228,31 @@ plD_eop_ljii(PLStream *pls)
 
 /* First move cursor to origin */
 
-    (void) fprintf(OF, "%c*p%dX", ESC, CURX);
-    (void) fprintf(OF, "%c*p%dY", ESC, CURY);
+    fprintf(OF, "%c*p%dX", ESC, CURX);
+    fprintf(OF, "%c*p%dY", ESC, CURY);
 
 /* Then put Laser Printer in 150 dpi mode */
 
-    (void) fprintf(OF, "%c*t%dR", ESC, DPI);
-    (void) fprintf(OF, "%c*r1A", ESC);
+    fprintf(OF, "%c*t%dR", ESC, DPI);
+    fprintf(OF, "%c*r1A", ESC);
 
 /* Write out raster data */
 
     for (j = 0; j < YDOTS; j++) {
-	(void) fprintf(OF, "%c*b%ldW", ESC, BPROW);
+	fprintf(OF, "%c*b%ldW", ESC, BPROW);
 	for (i = 0; i < BPROW; i++)
-	    (void) putc(*(bitmap + i + j * BPROW), OF);
+	    putc(*(bitmap + i + j * BPROW), OF);
     }
     pls->bytecnt += NBYTES;
 
 /* End raster graphics and send Form Feed */
 
-    (void) fprintf(OF, "%c*rB", ESC);
-    (void) fprintf(OF, "%c", FF);
+    fprintf(OF, "%c*rB", ESC);
+    fprintf(OF, "%c", FF);
 
 /* Finally, clear out bitmap storage area */
 
-    (void) memset(bitmap, '\0', NBYTES);
+    memset(bitmap, '\0', NBYTES);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -242,8 +282,8 @@ plD_tidy_ljii(PLStream *pls)
 {
 /* Reset Printer */
 
-    (void) fprintf(OF, "%cE", ESC);
-    (void) fclose(OF);
+    fprintf(OF, "%cE", ESC);
+    fclose(OF);
     free((void *) bitmap);
 }
 
@@ -256,7 +296,7 @@ plD_tidy_ljii(PLStream *pls)
 void 
 plD_state_ljii(PLStream *pls, PLINT op)
 {
-    (void) pls;
+    (void) pls;				/* pmr: make it used */
     (void) op;
 }
 
@@ -269,7 +309,7 @@ plD_state_ljii(PLStream *pls, PLINT op)
 void
 plD_esc_ljii(PLStream *pls, PLINT op, void *ptr)
 {
-    (void) pls;
+    (void) pls;				/* pmr: make it used */
     (void) op;
     (void) ptr;
 }

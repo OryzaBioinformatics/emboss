@@ -1,36 +1,61 @@
-/*	plctrl.c
+/* $Id: plctrl.c,v 1.11 2007/05/17 12:04:46 ajb Exp $
 
 	Misc. control routines, like begin, end, exit, change graphics/text
 	mode, change color.  Includes some spillage from plcore.c.  If you
-	don't know where it should go, put it here.  
+	don't know where it should go, put it here.
+
+   Copyright (C) 2004  Joao Cardoso
+   Copyright (C) 2004  Rafael Laboissiere
+
+   This file is part of PLplot.
+
+   PLplot is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Library Public License as published
+   by the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   PLplot is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with PLplot; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
 */
 
 #define DEBUG
 
-#define ifset(s) (s ? s : "<null>")
-#define ifsetu(s) (s ? s : (unsigned const char*) "<null>")
+#define NEED_PLDEBUG
 #include "plplotP.h"
+#ifdef macintosh
+#include "mac.h"
+/* for plMacLibOpen prototype; used in plLibOpen */
+#endif
 
-#ifdef __GO32__			/* dos386/djgpp */
+#ifdef DJGPP			/* dos386/djgpp */
 #ifdef __unix
 #undef __unix
 #endif
 #endif
 
 #ifdef __unix
-#ifdef HAVE_UNISTD_H
-#ifndef _BSD_SOURCE
-#define _BSD_SOURCE
-#endif
-#include <unistd.h>
-#endif
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 #include <errno.h>
 #endif
 
-
 /* Static functions */
+
+/* Used by any external init code to suggest a path */
+char PLDLLIMPEXP * plplotLibDir = 0;
+
+static void
+color_set(PLINT i, U_CHAR r, U_CHAR g, U_CHAR b, const char *name );
 
 static void
 strcat_delim(char *dirspec);
@@ -38,21 +63,22 @@ strcat_delim(char *dirspec);
 static int
 (*exit_handler) (const char *errormsg);
 
+void
+(*abort_handler) (const char *errormsg);
+
 static void
 plcmap0_def(int imin, int imax);
 
 static void
 plcmap1_def(void);
 
+static PLFLT
+value(double n1, double n2, double hue);
+
 /* An additional hardwired location for lib files. */
 /* I have no plans to change these again, ever. */
 
-#if defined(AMIGA)
-#ifndef PLLIBDEV
-#define PLLIBDEV  "plplot:lib"
-#endif
-
-#elif defined(GNU386)
+#if defined(DJGPP)
 #ifndef PLLIBDEV
 #define PLLIBDEV "c:/plplot/lib"
 #endif
@@ -72,48 +98,6 @@ plcmap1_def(void);
 
 #endif
 
-
-
-/*--------------------------------------------------------------------------*\
- * pldebug()
- *
- * Included into every plplot source file to control debugging output.  To
- * enable printing of debugging output, you must #define DEBUG before
- * including plplotP.h or specify -DDEBUG in the compile line.  When running
- * the program you must in addition specify -debug.  This allows debugging
- * output to be available when asked for.
- *
- * Syntax:
- *	pldebug(function_name, format, arg1, arg2...);
-\*--------------------------------------------------------------------------*/
-
-static void
-pldebug( const char *fname, ... )
-{
-#ifdef DEBUG
-    va_list args;
-
-    if (plsc->debug) {
-	c_pltext();
-	va_start(args, fname);
-
-    /* print out name of caller and source file */
-
-	(void) fprintf(stderr, "%s (%s): ", fname, __FILE__);
-
-    /* print out remainder of message */
-
-	(void) vfprintf(stderr, (char *) va_arg(args, char *), args);
-	va_end(args);
-	c_plgra();
-    }
-#else
-    (void) fname;
-#endif
-}
-
-
-
 /*--------------------------------------------------------------------------*\
  *  Routines that deal with colors & color maps.
 \*--------------------------------------------------------------------------*/
@@ -132,7 +116,9 @@ c_plcol0(PLINT icol0)
 	return;
     }
     if (icol0 < 0 || icol0 >= plsc->ncol0) {
-	plabort("plcol0: Invalid color.");
+	char buffer[256];
+	sprintf(buffer, "plcol0: Invalid color map entry: %d", (int) icol0);
+	plabort(buffer);
 	return;
     }
 
@@ -161,7 +147,9 @@ c_plcol1(PLFLT col1)
 	return;
     }
     if (col1 < 0 || col1 > 1) {
-	plabort("plcol1: Invalid color.");
+	char buffer[256];
+	sprintf(buffer, "plcol1: Invalid color map position: %f", (PLFLT) col1);
+	plabort(buffer);
 	return;
     }
 
@@ -215,11 +203,16 @@ c_plscol0(PLINT icol0, PLINT r, PLINT g, PLINT b)
 	plscmap0n(0);
 
     if (icol0 < 0 || icol0 >= plsc->ncol0) {
-	plabort("plscol0: Illegal color table value");
+	char buffer[256];
+	sprintf(buffer, "plscol0: Illegal color table value: %d", (int) icol0);
+	plabort(buffer);
 	return;
     }
     if ((r < 0 || r > 255) || (g < 0 || g > 255) || (b < 0 || b > 255)) {
-	plabort("plscol0: Invalid color");
+	char buffer[256];
+	sprintf(buffer, "plscol0: Invalid RGB color: %d, %d, %d",
+		(int) r, (int) g, (int) b);
+	plabort(buffer);
 	return;
     }
 
@@ -249,7 +242,9 @@ c_plgcol0(PLINT icol0, PLINT *r, PLINT *g, PLINT *b)
     *b = -1;
 
     if (icol0 < 0 || icol0 > plsc->ncol0) {
-	plabort("plgcol0: Invalid color index");
+	char buffer[256];
+	sprintf(buffer, "plgcol0: Invalid color index: %d", (int) icol0);
+	plabort(buffer);
 	return;
     }
 
@@ -279,10 +274,10 @@ c_plscmap0(PLINT *r, PLINT *g, PLINT *b, PLINT ncol0)
 	    (g[i] < 0 || g[i] > 255) ||
 	    (b[i] < 0 || b[i] > 255)) {
 
-	    (void) fprintf(stderr, "plscmap0: Invalid RGB color: %d, %d, %d\n",
-			   (int) r[i], (int) g[i], (int) b[i]);
-
-	    plabort("plscmap0: Invalid color");
+	    char buffer[256];
+	    sprintf(buffer, "plscmap0: Invalid RGB color: %d, %d, %d",
+		    (int) r[i], (int) g[i], (int) b[i]);
+	    plabort(buffer);
 	    return;
 	}
 
@@ -314,10 +309,10 @@ c_plscmap1(PLINT *r, PLINT *g, PLINT *b, PLINT ncol1)
 	    (g[i] < 0 || g[i] > 255) ||
 	    (b[i] < 0 || b[i] > 255)) {
 
-	    (void) fprintf(stderr, "plscmap1: Invalid RGB color: %d, %d, %d\n",
-			   (int) r[i], (int) g[i], (int) b[i]);
-
-	    plabort("plscmap1: Invalid color");
+	    char buffer[256];
+	    sprintf(buffer, "plscmap1: Invalid RGB color: %d, %d, %d",
+		    (int) r[i], (int) g[i], (int) b[i]);
+	    plabort(buffer);
 	    return;
 	}
 	plsc->cmap1[i].r = r[i];
@@ -355,7 +350,7 @@ c_plscmap1(PLINT *r, PLINT *g, PLINT *b, PLINT ncol1)
  *
  * Each control point must specify the position in cmap 1 as well as three
  * coordinates in HLS or RGB space.  The first point MUST correspond to
- * position = 0, and the last to position = 1.  
+ * position = 0, and the last to position = 1.
  *
  * The hue is interpolated around the "front" of the color wheel
  * (red<->green<->blue<->red) unless the "rev" flag is set, in which case
@@ -376,7 +371,7 @@ c_plscmap1(PLINT *r, PLINT *g, PLINT *b, PLINT ncol1)
  *	pos[]		position for each control point
  *	coord1[]	first coordinate for each control point
  *	coord2[]	second coordinate for each control point
- *	coord3[]	third coordinate for each control point 
+ *	coord3[]	third coordinate for each control point
  *	rev[]		reverse flag for each control point
 \*--------------------------------------------------------------------------*/
 
@@ -397,8 +392,8 @@ c_plscmap1l(PLINT itype, PLINT npts, PLFLT *pos,
 	return;
     }
 
-    if ( npts > 32 ) {
-	plabort("plscmap1l: Maximum of 32 control points allowed");
+    if ( npts > PL_MAX_CMAP1CP ) {
+	plabort("plscmap1l: exceeded maximum number of control points");
 	return;
     }
 
@@ -422,7 +417,7 @@ c_plscmap1l(PLINT itype, PLINT npts, PLFLT *pos,
 	    r = coord1[n];
 	    g = coord2[n];
 	    b = coord3[n];
-	    plRGB_HLS(r, g, b, &h, &l, &s);
+	    c_plrgbhls(r, g, b, &h, &l, &s);
 	}
 
 	plsc->cmap1cp[n].h = h;
@@ -499,7 +494,7 @@ plcmap1_calc(void)
 	    while (h < 0.)
 		h += 360.;
 
-	    plHLS_RGB(h, l, s, &r, &g, &b);
+	    c_plhlsrgb(h, l, s, &r, &g, &b);
 
 	    plsc->cmap1[i].r = MAX(0, MIN(255, (int) (256. * r)));
 	    plsc->cmap1[i].g = MAX(0, MIN(255, (int) (256. * g)));
@@ -558,6 +553,9 @@ c_plscmap0n(PLINT ncol0)
 
     plsc->ncol0 = ncol;
     plcmap0_def(imin, imax);
+
+    if (plsc->level > 0)
+	plP_state(PLSTATE_CMAP0);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -593,9 +591,9 @@ c_plscmap1n(PLINT ncol1)
 
 /* Allocate the space */
 
-    if (plsc->ncol1 > 0) 
+    if (plsc->ncol1 > 0)
 	plsc->cmap1 = (PLColor *) realloc(plsc->cmap1, size);
-    else 
+    else
 	plsc->cmap1 = (PLColor *) calloc(ncol, sizeof(PLColor));
 
 /* Fill in default entries */
@@ -613,12 +611,14 @@ c_plscmap1n(PLINT ncol1)
  * Initializes color table entry by RGB values.
 \*--------------------------------------------------------------------------*/
 
+/* pmr: const char* name */
 static void
-color_set(PLINT i, U_CHAR r, U_CHAR g, U_CHAR b)
+color_set(PLINT i, U_CHAR r, U_CHAR g, U_CHAR b, const char *name )
 {
     plsc->cmap0[i].r = r;
     plsc->cmap0[i].g = g;
     plsc->cmap0[i].b = b;
+    plsc->cmap0[i].name = name;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -626,40 +626,58 @@ color_set(PLINT i, U_CHAR r, U_CHAR g, U_CHAR b)
  *
  * Initializes specified color map 0 color entry to its default.
  *
- * Initial RGB values for color map 0 taken from HPUX 8.07 X-windows 
- * rgb.txt file, and may not accurately represent the described colors on 
+ * Initial RGB values for color map 0 taken from X11R6
+ * (XFree86-3.3.6) X-windows
+ * rgb.txt file, and may not accurately represent the described colors on
  * all systems.
 \*--------------------------------------------------------------------------*/
 
-#define color_def(i, r, g, b) \
-if (i >= imin && i <= imax) color_set(i, r, g, b);
+#define color_def(i, r, g, b, n) \
+if (i >= imin && i <= imax) color_set(i, r, g, b, n);
 
 static void
 plcmap0_def(int imin, int imax)
 {
     int i;
 
-    color_def(0,    0,   0,   0);	/* black */
-    color_def(1,  255,   0,   0);	/* red */
-    color_def(2,  255, 255,   0);	/* yellow */
-    color_def(3,    0, 255,   0);	/* green */
-    color_def(4,   50, 191, 193);	/* aquamarine */
-    color_def(5,  255, 181, 197);	/* pink */
-    color_def(6,  245, 222, 179);	/* wheat */
-    color_def(7,  126, 126, 126);	/* grey */
-    color_def(8,  165,  42,  42);	/* brown */
-    color_def(9,    0,   0, 255);	/* blue */
-    color_def(10, 138,  43, 226);	/* Blue Violet */
-    color_def(11,   0, 255, 255);	/* cyan */
-    color_def(12,  25, 204, 223);	/* turquoise */
-    color_def(13, 255,   0, 255);	/* magenta */
-    color_def(14, 233, 150, 122);	/* salmon */
-    color_def(15, 255, 255, 255);	/* white */
+    color_def(0,    0,   0,   0, "black" );	/* black */
+    color_def(1,  255,   0,   0, "red");	/* red */
+    color_def(2,  255, 255,   0, "yellow" );	/* yellow */
+    color_def(3,    0, 255,   0, "green" );	/* green */
+    color_def(4,  127, 255, 212, "aquamarine" );	/* aquamarine */
+    color_def(5,  255, 192, 203, "pink" );	/* pink */
+    color_def(6,  245, 222, 179, "wheat" );	/* wheat */
+    color_def(7,  190, 190, 190, "grey" );	/* grey */
+    color_def(8,  165,  42,  42, "brown" );	/* brown */
+    color_def(9,    0,   0, 255, "blue" );	/* blue */
+    color_def(10, 138,  43, 226, "BlueViolet" );	/* Blue Violet */
+    color_def(11,   0, 255, 255, "cyan" );	/* cyan */
+    color_def(12,  64, 224, 208, "turquoise" );	/* turquoise */
+    color_def(13, 255,   0, 255, "magenta" );	/* magenta */
+    color_def(14, 250, 128, 114, "salmon" );	/* salmon */
+    color_def(15, 255, 255, 255, "white" );	/* white */
+
+/*     color_def(0, 255, 255, 255, "white" );	/\* white *\/ */
+/*     color_def(1,    0,   0,   0, "black" );	/\* black *\/ */
+/*     color_def(2,    0,   0, 255, "blue" );	/\* blue *\/ */
+/*     color_def(3,  255,   0,   0, "red");	/\* red *\/ */
+/*     color_def(4,  165,  42,  42, "brown" );	/\* brown *\/ */
+/*     color_def(5, 250, 128, 114, "salmon" );	/\* salmon *\/ */
+/*     color_def(6,  255, 192, 203, "pink" );	/\* pink *\/ */
+/*     color_def(7,  127, 255, 212, "aquamarine" );	/\* aquamarine *\/ */
+/*     color_def(8,  245, 222, 179, "wheat" );	/\* wheat *\/ */
+/*     color_def(9,  64, 224, 208, "turquoise" );	/\* turquoise *\/ */
+/*     color_def(10,  190, 190, 190, "grey" );	/\* grey *\/ */
+/*     color_def(11,   0, 255, 255, "cyan" );	/\* cyan *\/ */
+/*     color_def(12,    0, 255,   0, "green" );	/\* green *\/ */
+/*     color_def(13,  255, 255,   0, "yellow" );	/\* yellow *\/ */
+/*     color_def(14, 255,   0, 255, "magenta" );	/\* magenta *\/ */
+/*     color_def(15, 138,  43, 226, "BlueViolet" );	/\* Blue Violet *\/ */
 
 /* Any others are just arbitrarily set */
 
     for (i = 16; i <= imax; i++)
-	color_def(i, 255, 0, 0); 	/* red */
+	color_def(i, 255, 0, 0, "red"); 	/* red */
 }
 
 /*--------------------------------------------------------------------------*\
@@ -667,51 +685,61 @@ plcmap0_def(int imin, int imax)
  *
  * Initializes color map 1.
  *
- * The default initialization uses 4 control points in HLS space, the two
- * inner ones being very close to one of the vertices of the HLS double
- * cone.  The vertex used (black or white) is chosen to be the closer to
- * the background color.  If you don't like these settings you can always
- * initialize it yourself.
+ * The default initialization uses 6 control points in HLS space, the inner
+ * ones being very close to one of the vertices of the HLS double cone.  The
+ * vertex used (black or white) is chosen to be the closer to the background
+ * color.  The 6 points were chosen over the older 4 points in order to make
+ * weaker structures more easily visible, and give more control through the
+ * palette editor.  If you don't like these settings.. change them!
 \*--------------------------------------------------------------------------*/
 
 static void
 plcmap1_def(void)
 {
-    PLFLT i[4], h[4], l[4], s[4], vertex = 0.;
+    PLFLT i[6], h[6], l[6], s[6], midpt = 0., vertex = 0.;
 
 /* Positions of control points */
 
     i[0] = 0;		/* left boundary */
-    i[1] = 0.45;	/* just before center */
-    i[2] = 0.55;	/* just after center */
-    i[3] = 1;		/* right boundary */
+    i[1] = 0.44;	/* a little left of center */
+    i[2] = 0.50;	/* at center */
+    i[3] = 0.50;	/* at center */
+    i[4] = 0.56;	/* a little right of center */
+    i[5] = 1;		/* right boundary */
 
 /* For center control points, pick black or white, whichever is closer to bg */
 /* Be carefult to pick just short of top or bottom else hue info is lost */
 
     if (plsc->cmap0 != NULL)
-	vertex = ((float) plsc->cmap0[0].r +
-		  (float) plsc->cmap0[0].g +
-		  (float) plsc->cmap0[0].b) / 3. / 255.;
+	vertex = ((PLFLT) plsc->cmap0[0].r +
+		  (PLFLT) plsc->cmap0[0].g +
+		  (PLFLT) plsc->cmap0[0].b) / 3. / 255.;
 
-    if (vertex < 0.5)
+    if (vertex < 0.5) {
 	vertex = 0.01;
-    else
+	midpt  = 0.10;
+    } else {
 	vertex = 0.99;
+	midpt  = 0.90;
+    }
 
 /* Set hue */
 
     h[0] = 260;		/* low: blue-violet */
     h[1] = 260;		/* only change as we go over vertex */
-    h[2] = 0;		/* high: red */
-    h[3] = 0;		/* keep fixed */
+    h[2] = 260;		/* only change as we go over vertex */
+    h[3] = 0;		/* high: red */
+    h[4] = 0;		/* high: red */
+    h[5] = 0;		/* keep fixed */
 
 /* Set lightness */
 
     l[0] = 0.5;		/* low */
-    l[1] = vertex;	/* bg */
+    l[1] = midpt;	/* midpoint value */
     l[2] = vertex;	/* bg */
-    l[3] = 0.5;		/* high */
+    l[3] = vertex;	/* bg */
+    l[4] = midpt;	/* midpoint value */
+    l[5] = 0.5;		/* high */
 
 /* Set saturation -- keep at maximum */
 
@@ -719,8 +747,13 @@ plcmap1_def(void)
     s[1] = 1;
     s[2] = 1;
     s[3] = 1;
+    s[4] = 1;
+    s[5] = 1;
 
-    c_plscmap1l(0, 4, i, h, l, s, NULL);
+    c_plscmap1l(0, 6, i, h, l, s, NULL);
+
+    if (plsc->level > 0)
+	plP_state(PLSTATE_CMAP1);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -801,20 +834,20 @@ c_plhls(PLFLT h, PLFLT l, PLFLT s)
 {
     PLFLT r, g, b;
 
-    plHLS_RGB(h, l, s, &r, &g, &b);
+    c_plhlsrgb(h, l, s, &r, &g, &b);
     plrgb(r, g, b);
 }
 
 /*--------------------------------------------------------------------------*\
  * void value()
  *
- * Auxiliary function used by plHLS_RGB().
+ * Auxiliary function used by c_plhlsrgb().
 \*--------------------------------------------------------------------------*/
 
-static float
+static PLFLT
 value(double n1, double n2, double hue)
 {
-    float val;
+    PLFLT val;
 
     while (hue >= 360.)
 	hue -= 360.;
@@ -834,7 +867,7 @@ value(double n1, double n2, double hue)
 }
 
 /*--------------------------------------------------------------------------*\
- * void plHLS_RGB()
+ * void c_plhlsrgb()
  *
  * Convert HLS color to RGB color.
  * Bounds on HLS (input):
@@ -848,9 +881,9 @@ value(double n1, double n2, double hue)
 \*--------------------------------------------------------------------------*/
 
 void
-plHLS_RGB(PLFLT h, PLFLT l, PLFLT s, PLFLT *p_r, PLFLT *p_g, PLFLT *p_b)
+c_plhlsrgb(PLFLT h, PLFLT l, PLFLT s, PLFLT *p_r, PLFLT *p_g, PLFLT *p_b)
 {
-    float m1, m2;
+    PLFLT m1, m2;
 
     if (l <= .5)
 	m2 = l * (s + 1.);
@@ -865,10 +898,10 @@ plHLS_RGB(PLFLT h, PLFLT l, PLFLT s, PLFLT *p_r, PLFLT *p_g, PLFLT *p_b)
 }
 
 /*--------------------------------------------------------------------------*\
- * void plRGB_HLS()
+ * void c_plrgbhls()
  *
  * Convert RGB color to HLS color.
- * Bounds on RGB (input) is always [0., 1.].  
+ * Bounds on RGB (input) is always [0., 1.].
  * Bounds on HLS (output):
  *	hue		[0., 360.]	degrees
  *	lightness	[0., 1.]	magnitude
@@ -876,7 +909,7 @@ plHLS_RGB(PLFLT h, PLFLT l, PLFLT s, PLFLT *p_r, PLFLT *p_g, PLFLT *p_b)
 \*--------------------------------------------------------------------------*/
 
 void
-plRGB_HLS(PLFLT r, PLFLT g, PLFLT b, PLFLT *p_h, PLFLT *p_l, PLFLT *p_s)
+c_plrgbhls(PLFLT r, PLFLT g, PLFLT b, PLFLT *p_h, PLFLT *p_l, PLFLT *p_s)
 {
     PLFLT h, l, s, d, rc, gc, bc, rgb_min, rgb_max;
 
@@ -888,12 +921,12 @@ plRGB_HLS(PLFLT r, PLFLT g, PLFLT b, PLFLT *p_h, PLFLT *p_l, PLFLT *p_s)
     if (rgb_min == rgb_max) {
 	s = 0;
 	h = 0;
-    } 
+    }
     else {
 	d = rgb_max - rgb_min;
 	if (l < 0.5)
 	    s = 0.5 * d / l;
-	else 
+	else
 	    s = 0.5* d / (1.-l);
 
 	rc = (rgb_max-r) / d;
@@ -929,7 +962,7 @@ plRGB_HLS(PLFLT r, PLFLT g, PLFLT b, PLFLT *p_h, PLFLT *p_l, PLFLT *p_s)
 \*--------------------------------------------------------------------------*/
 
 void
-plwarn(const char *errormsg)
+plwarn(const char *errormsg)		/* pmr: const */
 {
     int was_gfx = 0;
 
@@ -938,9 +971,9 @@ plwarn(const char *errormsg)
 	pltext();
     }
 
-    (void) fprintf(stderr, "\n*** PLPLOT WARNING ***\n");
+    fprintf(stderr, "\n*** PLPLOT WARNING ***\n");
     if (*errormsg != '\0')
-	(void) fprintf(stderr, "%s\n", errormsg);
+	fprintf(stderr, "%s\n", errormsg);
 
     if (was_gfx == 1)
 	plgra();
@@ -952,18 +985,25 @@ plwarn(const char *errormsg)
  * Much the same as plwarn(), but appends ", aborting operation" to the
  * error message.  Helps to keep source code uncluttered and provides a
  * convention for error aborts.
+ *
+ * If cleanup needs to be done in the main program, the user should write
+ * his/her own exit handler and pass it in via plsabort().
 \*--------------------------------------------------------------------------*/
 
 void
-plabort(const char *errormsg)
+plabort(const char *errormsg)		/* pmr: const */
 {
+
+    if (abort_handler != NULL)
+         (*abort_handler)(errormsg);
+
     if (plsc->errcode != NULL)
 	*(plsc->errcode) = 1;
 
     if (plsc->errmsg != NULL) {
-	(void) sprintf(plsc->errmsg, "\n*** PLPLOT ERROR ***\n");
+	sprintf(plsc->errmsg, "\n*** PLPLOT ERROR ***\n");
 	if (*errormsg != '\0')
-	    (void) sprintf(plsc->errmsg, "%s, aborting operation\n", errormsg);
+	    sprintf(plsc->errmsg, "%s, aborting operation\n", errormsg);
 
     } else {
 	int was_gfx = 0;
@@ -973,13 +1013,26 @@ plabort(const char *errormsg)
 	    pltext();
 	}
 
-	(void) fprintf(stderr, "\n*** PLPLOT ERROR ***\n");
+	fprintf(stderr, "\n*** PLPLOT ERROR ***\n");
 	if (*errormsg != '\0')
-	    (void) fprintf(stderr, "%s, aborting operation\n", errormsg);
+	    fprintf(stderr, "%s, aborting operation\n", errormsg);
 
 	if (was_gfx == 1)
 	    plgra();
     }
+}
+
+
+/*--------------------------------------------------------------------------*\
+ * void plsabort()
+ *
+ * Sets an optional user abort handler.
+\*--------------------------------------------------------------------------*/
+
+void
+plsabort(void (*handler) (const char *))		/* pmr: const */
+{
+    abort_handler = handler;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -995,7 +1048,7 @@ plabort(const char *errormsg)
 \*--------------------------------------------------------------------------*/
 
 __noreturn void
-plexit(const char *errormsg)
+plexit(const char *errormsg)		/* pmr: const */
 {
     int status = 1;
 
@@ -1003,13 +1056,13 @@ plexit(const char *errormsg)
 	status = (*exit_handler)(errormsg);
 
     plsc->nopause = 1;
-    plend();
     if (*errormsg != '\0') {
-	(void) fprintf(stderr, "\n*** PLPLOT ERROR ***\n");
-	(void) fprintf(stderr, "%s\n", errormsg);
+	fprintf(stderr, "\n*** PLPLOT ERROR ***\n");
+	fprintf(stderr, "%s\n", errormsg);
     }
+    plend();
 
-    (void) fprintf(stderr, "Program aborted\n");
+    fprintf(stderr, "Program aborted\n");
     exit(status);
 }
 
@@ -1020,7 +1073,7 @@ plexit(const char *errormsg)
 \*--------------------------------------------------------------------------*/
 
 void
-plsexit(int (*handler) (const char *))
+plsexit(int (*handler) (const char *))		/* pmr: const */
 {
     exit_handler = handler;
 }
@@ -1028,7 +1081,7 @@ plsexit(int (*handler) (const char *))
 /*--------------------------------------------------------------------------*\
  * void plgra()
  *
- * Switches to graphics screen.  
+ * Switches to graphics screen.
  *
  * Here and in pltext() it's a good idea to return silently if plinit()
  * hasn't yet been called, since plwarn() calls pltext() and plgra(), and
@@ -1040,6 +1093,27 @@ c_plgra(void)
 {
     if (plsc->level > 0)
 	plP_esc(PLESC_GRAPH, NULL);
+}
+
+void
+c_plxormod(PLINT mode, PLINT *status)	/* xor mode */
+{
+  static int ostate = 0;
+
+  if (!plsc->dev_xor) {
+    *status = 0;
+    return;
+  }
+
+  if (plsc->level > 0) {
+    plP_esc(PLESC_XORMOD, &mode);
+    if (mode) {
+      ostate = plsc->plbuf_write;
+      plsc->plbuf_write = 0;
+    } else
+      plsc->plbuf_write = ostate;
+  }
+  *status = 1;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -1073,6 +1147,10 @@ pl_cmd(PLINT op, void *ptr)
  * char *plFindCommand
  *
  * Looks for the specified executable file.  Search path:
+ *      if command invoked in the build tree:
+ *         build_tree/tk (plserver lies there - needed for the tk driver)
+ *         build_tree/scripts (plpr lies there - needed for the tk driver)
+ *      else
  *	PLPLOT_BIN_ENV = $(PLPLOT_BIN)
  *	current directory
  *	PLPLOT_HOME_ENV/bin = $(PLPLOT_HOME)/bin
@@ -1087,6 +1165,18 @@ plFindCommand(char *fn)
 {
     char *fs = NULL, *dn;
 
+    /**** see if in build tree ***/
+    if (plInBuildTree() == 1) {
+        plGetName(BUILD_DIR, "bindings/tk", fn, &fs);
+        if ( ! plFindName(fs))
+            return fs;
+	else {
+	  plGetName(BUILD_DIR, "scripts", fn, &fs);
+	  if ( ! plFindName(fs))
+            return fs;
+	}
+    }
+
 /* PLPLOT_BIN_ENV = $(PLPLOT_BIN) */
 
 #if defined(PLPLOT_BIN_ENV)
@@ -1094,8 +1184,7 @@ plFindCommand(char *fn)
         plGetName(dn, "", fn, &fs);
         if ( ! plFindName(fs))
             return fs;
-	/* what IS set? */
-        (void) fprintf(stderr, PLPLOT_BIN_ENV"=\"%s\"\n", dn);
+        fprintf(stderr, PLPLOT_BIN_ENV"=\"%s\"\n", dn); /* what IS set? */
     }
 #endif  /* PLPLOT_BIN_ENV */
 
@@ -1112,8 +1201,7 @@ plFindCommand(char *fn)
         plGetName(dn, "bin", fn, &fs);
         if ( ! plFindName(fs))
             return fs;
-        (void) fprintf(stderr,
-		       PLPLOT_HOME_ENV"=\"%s\"\n",dn); /* what IS set? */
+        fprintf(stderr, PLPLOT_HOME_ENV"=\"%s\"\n",dn); /* what IS set? */
     }
 #endif  /* PLPLOT_HOME_ENV */
 
@@ -1128,9 +1216,9 @@ plFindCommand(char *fn)
 /* Crapped out */
 
     free_mem(fs);
-    (void) fprintf(stderr, "plFindCommand: cannot locate command: %s\n", fn);
+    fprintf(stderr, "plFindCommand: cannot locate command: %s\n", fn);
 #if defined (BIN_DIR)
-    (void) fprintf(stderr, "bin dir=\"" BIN_DIR "\"\n" );  /* what WAS set? */
+    fprintf(stderr, "bin dir=\"" BIN_DIR "\"\n" );      /* what WAS set? */
 #endif  /* BIN_DIR */
     return NULL;
 }
@@ -1143,16 +1231,34 @@ plFindCommand(char *fn)
  *	PLPLOT_LIB_ENV = $(PLPLOT_LIB)
  *	current directory
  *	PLPLOT_HOME_ENV/lib = $(PLPLOT_HOME)/lib
- *	LIB_DIR
+ *	DATA_DIR
  *	PLLIBDEV
 \*--------------------------------------------------------------------------*/
 
 FILE *
-plLibOpen(const char *fn)
+plLibOpen(const char *fn)		/* pmr: const */
 {
-    FILE *file;
+    FILE *ret = NULL;
+
+    PDFstrm *pdfs = plLibOpenPdfstrm(fn);
+    if (pdfs == NULL) {
+        return NULL;
+    }
+    if (pdfs->file != NULL) {
+        ret = pdfs->file;
+	pdfs->file = NULL;
+    }
+    pdf_close(pdfs);
+    return ret;
+}
+
+PDFstrm *
+plLibOpenPdfstrm(const char *fn)		/* pmr: const */
+{
+    PDFstrm *file;
     char *fs = NULL, *dn = NULL;
 
+#ifndef WIN32
     /* EMBOSS additions to avoid need for PLPLOT_LIB */
     static const char *prefix = PREFIX;
     static const char *top    = EMBOSS_TOP;
@@ -1161,23 +1267,32 @@ plLibOpen(const char *fn)
     {
         plGetName(prefix, "share/EMBOSS", fn, &fs);
 
-        if ((file = fopen(fs, "rb")) != NULL)
+        if ((file = pdf_fopen(fs, "rb")) != NULL)
             goto done;
 
         plGetName(top, "plplot/lib", fn, &fs);
 
-        if ((file = fopen(fs, "rb")) != NULL)
+        if ((file = pdf_fopen(fs, "rb")) != NULL)
             goto done;
     }
     else
     {
         plGetName(prefix, "share/EMBOSS", fn, &fs);
 
-        if ((file = fopen(fs, "rb")) != NULL)
+        if ((file = pdf_fopen(fs, "rb")) != NULL)
             goto done;
     }
     /* End of EMBOSS additions */
+#endif
 
+/****   search build tree               ****/
+
+    if (plInBuildTree() == 1) {
+      plGetName(BUILD_DIR, "data", fn, &fs);
+
+      if ((file = pdf_fopen(fs, "rb")) != NULL)
+        goto done;
+    }
 
 /****	search PLPLOT_LIB_ENV = $(PLPLOT_LIB)	****/
 
@@ -1185,17 +1300,16 @@ plLibOpen(const char *fn)
     if ((dn = getenv(PLPLOT_LIB_ENV)) != NULL) {
         plGetName(dn, "", fn, &fs);
 
-        if ((file = fopen(fs, "rb")) != NULL)
+        if ((file = pdf_fopen(fs, "rb")) != NULL)
             goto done;
 
-        (void) fprintf(stderr,
-		       PLPLOT_LIB_ENV"=\"%s\"\n", dn); /* what IS set? */
+        fprintf(stderr, PLPLOT_LIB_ENV"=\"%s\"\n", dn); /* what IS set? */
     }
 #endif  /* PLPLOT_LIB_ENV */
 
 /****	search current directory	****/
 
-    if ((file = fopen(fn, "rb")) != NULL)
+    if ((file = pdf_fopen(fn, "rb")) != NULL)
         goto done;
 
 /****	search PLPLOT_HOME_ENV/lib = $(PLPLOT_HOME)/lib	****/
@@ -1204,44 +1318,49 @@ plLibOpen(const char *fn)
     if ((dn = getenv(PLPLOT_HOME_ENV)) != NULL) {
         plGetName(dn, "lib", fn, &fs);
 
-        if ((file = fopen(fs, "rb")) != NULL)
+        if ((file = pdf_fopen(fs, "rb")) != NULL)
             goto done;
-        (void) fprintf(stderr,
-		       PLPLOT_HOME_ENV"=\"%s\"\n",dn); /* what IS set? */
+        fprintf(stderr, PLPLOT_HOME_ENV"=\"%s\"\n",dn); /* what IS set? */
     }
 #endif  /* PLPLOT_HOME_ENV/lib */
 
 /**** 	search installed location	****/
 
-#if defined (LIB_DIR)
-    plGetName(LIB_DIR, "", fn, &fs);
+#if defined (DATA_DIR)
+    plGetName(DATA_DIR, "", fn, &fs);
 
-    if ((file = fopen(fs, "rb")) != NULL)
+    if ((file = pdf_fopen(fs, "rb")) != NULL)
         goto done;
-#endif  /* LIB_DIR */
+#endif  /* DATA_DIR */
 
 /**** 	search hardwired location	****/
 
 #ifdef PLLIBDEV
     plGetName(PLLIBDEV, "", fn, &fs);
 
-    if ((file = fopen(fs, "rb")) != NULL)
+    if ((file = pdf_fopen(fs, "rb")) != NULL)
 	goto done;
 #endif	/* PLLIBDEV */
 
-/**** 	not found, give up 	****/
+#ifdef macintosh
+    file = plMacLibOpen(fn);
+    if (file != NULL)
+        goto done;
+#endif /* macintosh */
 
-    pltext();
-    (void) fprintf(stderr, "\nCannot open library file: %s\n", fn);
-    /*#if defined (LIB_DIR)*/
-    /*fprintf(stderr, "lib dir=\"" LIB_DIR "\"\n" ); */     /* what WAS set? */
-    /*#endif*/  /* LIB_DIR */
-    (void) fprintf(stderr,
-	 "\nPlease set PLPLOT_LIB to the plplot/lib directory under emboss\n");
-    plgra();
+    if (plplotLibDir != NULL) {
+	plGetName(plplotLibDir, "", fn, &fs);
+	if ((file = pdf_fopen(fs, "rb")) != NULL)
+	    goto done;
+
+    }
+
+/**** 	not found, give up 	****/
+    pldebug("plLibOpenPdfstr", "File %s not found.\n", fn);
     return NULL;
 
  done:
+    pldebug("plLibOpenPdfstr", "Found file %s\n", fs);
     free_mem(fs);
     return (file);
 }
@@ -1265,19 +1384,12 @@ plLibOpen(const char *fn)
 \*--------------------------------------------------------------------------*/
 
 #ifdef __unix
-int 
+int
 plFindName(char *p)
 {
     int n;
     char buf[1024], *cp;
-/* Declare the `errno' variable, unless it's defined as a macro by
-   bits/errno.h.  This is the case in GNU, where it is a per-thread
-   variable.  This redeclaration using the macro still works, but it
-   will be a function declaration without a prototype and may trigger
-   a -Wstrict-prototypes warning.  */
-#ifndef errno
-    extern int errno;
-#endif
+    /*extern int errno;*/			/* pmr: redundant */
     struct stat sbuf;
 
     pldebug("plFindName", "Trying to find %s\n", p);
@@ -1286,7 +1398,7 @@ plFindName(char *p)
 	if (buf[0] == '/') {
 	/* Link is an absolute path */
 
-	    (void) strncpy(p, buf, n);
+	    strncpy(p, buf, n);
 	    p[n] = '\0';
 	    pldebug("plFindName", "Link is absolute: %s\n", p);
 	}
@@ -1294,7 +1406,7 @@ plFindName(char *p)
 	/* Link is relative to its directory; make it absolute */
 
 	    cp = 1 + strrchr(p, '/');
-	    (void) strncpy(cp, buf, n);
+	    strncpy(cp, buf, n);
 	    cp[n] = '\0';
 	    pldebug("plFindName",
 		    "Link is relative: %s\n\tTotal path:%s\n", cp, p);
@@ -1321,7 +1433,7 @@ plFindName(char *p)
 }
 
 #else
-int 
+int
 plFindName(char *p)
 {
     return 1;
@@ -1354,11 +1466,11 @@ plGetName(const char *dir, const char *subdir, const char *filename,
 
     if (*subdir != '\0') {
 	strcat_delim(*filespec);
-	(void) strcat(*filespec, subdir);
+	strcat(*filespec, subdir);
     }
     if (*filename != '\0') {
 	strcat_delim(*filespec);
-	(void) strcat(*filespec, filename);
+	strcat(*filespec, filename);
     }
 }
 
@@ -1366,8 +1478,7 @@ plGetName(const char *dir, const char *subdir, const char *filename,
  * void strcat_delim()
  *
  * Append path name deliminator if necessary (does not add one if one's
- * there already, or if dealing with a colon-terminated device name as
- * used on the Amiga).
+ * there already, or if dealing with a colon-terminated device name).
 \*--------------------------------------------------------------------------*/
 
 static void
@@ -1376,15 +1487,13 @@ strcat_delim(char *dirspec)
     int ldirspec = strlen(dirspec);
 #if defined (MSDOS)
     if (dirspec[ldirspec-1] != '\\')
-	(void) strcat(dirspec, "\\");
-#elif defined (AMIGA)
-    if (dirspec[ldirspec-1] != '/' && dirspec[ldirspec-1] != ':')
-	strcat(dirspec, "/");
-#elif defined (VMS)
-
+	strcat(dirspec, "\\");
+#elif defined (macintosh)
+    if (dirspec[ldirspec-1] != ':')
+        strcat(dirspec, ":");
 #else           /* unix is the default */
     if (dirspec[ldirspec-1] != '/')
-	(void) strcat(dirspec, "/");
+	strcat(dirspec, "/");
 #endif
 }
 
@@ -1399,7 +1508,7 @@ strcat_delim(char *dirspec)
 void
 plcol_interp(PLStream *pls, PLColor *newcolor, int i, int ncol)
 {
-    float x, delta;
+    PLFLT x, delta;
     int il, ir;
 
     x = (double) (i * (pls->ncol1-1)) / (double) (ncol-1);
@@ -1408,7 +1517,7 @@ plcol_interp(PLStream *pls, PLColor *newcolor, int i, int ncol)
     delta = x - il;
 
     if (ir > pls->ncol1 || il < 0)
-	(void) fprintf(stderr, "Invalid color\n");
+	fprintf(stderr, "Invalid color\n");
 
     else if (ir == pls->ncol1 || (delta == 0.)) {
 	newcolor->r = pls->cmap1[il].r;
@@ -1450,8 +1559,8 @@ plOpenFile(PLStream *pls)
 
 	if (pls->FileName == NULL) {
 	    do {
-		(void) fprintf(stderr, "Enter graphics output file name: ");
-		(void) fgets(line, sizeof(line), stdin);
+		fprintf(stdout, "Enter graphics output file name: ");
+		plio_fgets(line, sizeof(line), stdin);
 		len = strlen(line);
 		if (len)
 		    len--;
@@ -1471,18 +1580,18 @@ plOpenFile(PLStream *pls)
 
 /* Need this here again, for prompted family initialization */
 
-	if (pls->family && pls->BaseName != NULL) 
-	  plP_getmember(pls);
+	if (pls->family && pls->BaseName != NULL)
+	    plP_getmember(pls);
 
 	if (i++ > 10)
 	    plexit("Too many tries.");
 
-	if ((pls->OutFile = fopen(pls->FileName, "wb+")) == NULL) 
-	    (void) fprintf(stderr, "Can't open %s.\n", pls->FileName);
+	if ((pls->OutFile = fopen(pls->FileName, "wb+")) == NULL)
+	    fprintf(stderr, "Can't open %s.\n", pls->FileName);
 	/* silence this message - Peter Rice, 5-Apr-2002 */
 	/*
 //	else
-//	    (void) fprintf(stdout, "Created %s\n", pls->FileName);
+//	    pldebug("plOpenFile", "Opened %s\n", pls->FileName);
 	*/
     }
 }
@@ -1497,12 +1606,24 @@ void
 plP_getmember(PLStream *pls)
 {
     char tmp[256];
+    char prefix[256];
+    char* suffix;
 
     if (pls->FileName == NULL)
-	pls->FileName = (char *) malloc(10 + strlen(pls->BaseName) + strlen(pls->Ext));
+	pls->FileName = (char *) malloc(10 + strlen(pls->BaseName) +
+					strlen(pls->Ext));
 
-    (void) sprintf(tmp, "%s.%%0%1ii%s", pls->BaseName, (int) pls->fflen,pls->Ext);
-    (void) sprintf(pls->FileName, tmp, pls->member);
+    suffix = strstr (pls->BaseName, "%n");
+
+    if (suffix == NULL)
+      sprintf (tmp, "%s.%%0%1ii%s", pls->BaseName, (int) pls->fflen, pls->Ext);
+    else {
+      strncpy (prefix, pls->BaseName, 256);
+      prefix [suffix - pls->BaseName] = 0;
+      sprintf (tmp, "%s%%0%1ii%s", prefix, (int) pls->fflen, suffix + 2);
+    }
+
+    sprintf(pls->FileName, tmp, pls->member);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -1522,14 +1643,48 @@ plP_sfnam(PLStream *pls, const char *fnam)
 
     pls->FileName = (char *) malloc(10 + strlen(fnam));
 
-    (void) strcpy(pls->FileName, fnam);
+    strcpy(pls->FileName, fnam);
 
     if (pls->BaseName != NULL)
 	free((void *) pls->BaseName);
 
     pls->BaseName = (char *) malloc(10 + strlen(fnam));
 
-    (void) strcpy(pls->BaseName, fnam);
+    strcpy(pls->BaseName, fnam);
+}
+
+/*--------------------------------------------------------------------------*\
+ * plPX_sfnam()
+ *
+ * Sets up file name & family stem name.
+ * Reserve some extra space (5 chars) to hold an optional member number.
+\*--------------------------------------------------------------------------*/
+
+void
+plPX_sfnam(PLStream *pls, const char *fnam, const char* ext)
+{
+    pls->OutFile = NULL;
+
+    if (pls->FileName != NULL)
+	free((void *) pls->FileName);
+
+    pls->FileName = (char *) malloc(10 + strlen(fnam) + strlen(ext));
+
+    strcpy(pls->FileName, fnam);
+    strcpy(&pls->FileName[strlen(fnam)], ext);
+
+    if (pls->BaseName != NULL)
+	free((void *) pls->BaseName);
+
+    pls->BaseName = (char *) malloc(10 + strlen(fnam));
+
+    strcpy(pls->BaseName, fnam);
+    if (pls->Ext != NULL)
+	free((void *) pls->Ext);
+
+    pls->Ext = (char *) malloc(10 + strlen(ext));
+
+    strcpy(pls->Ext, ext);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -1567,12 +1722,18 @@ plFamInit(PLStream *pls)
 void
 plGetFam(PLStream *pls)
 {
+    PLFLT xpmm_loc, ypmm_loc;
     if (pls->family) {
 	if (pls->bytecnt > pls->bytemax || pls->famadv) {
 	    plP_tidy();
 	    pls->member += pls->finc;
 	    pls->famadv = 0;
 	    plP_init();
+	   /* Apply compensating factor to original xpmm and ypmm so that
+	    * character aspect ratio is preserved when overall aspect ratio
+	    * is changed. */
+	    plP_gpixmm(&xpmm_loc, &ypmm_loc);
+	    plP_setpxl(xpmm_loc*plsc->caspfactor, ypmm_loc/plsc->caspfactor);
 	    return;
 	}
     }
@@ -1589,7 +1750,7 @@ plGetFam(PLStream *pls)
 
 void
 plRotPhy(PLINT orient, PLINT xmin, PLINT ymin, PLINT xmax, PLINT ymax,
-	 int *px, int *py)
+	 PLINT *px, PLINT *py)
 {
     int x, y;
 
@@ -1671,16 +1832,16 @@ plGetInt(char *s)
     char line[256];
 
     while (i++ < 10) {
-	(void) fprintf(stderr, s);
-	(void) fgets(line, sizeof(line), stdin);
+	fprintf(stdout, s);
+	plio_fgets(line, sizeof(line), stdin);
+
 #ifdef MSDOS
 	m = atoi(line);
 	return (m);
 #else
 	if (sscanf(line, "%d", &m) == 1)
 	    return (m);
-	(void) fprintf(stderr,
-		       "No value or value out of range; please try again\n");
+	fprintf(stdout, "No value or value out of range; please try again\n");
 #endif
     }
     plexit("Too many tries.");
@@ -1697,598 +1858,44 @@ PLFLT
 plGetFlt(char *s)
 {
     PLFLT m;
+    double m1;
     int i = 0;
     char line[256];
 
     while (i++ < 10) {
-	(void) fprintf(stderr, s);
-	(void) fgets(line, sizeof(line), stdin);
+	fprintf(stdout, s);
+	plio_fgets(line, sizeof(line), stdin);
+
 #ifdef MSDOS
 	m = atof(line);
 	return (m);
 #else
-	if (sscanf(line, "%f", &m) == 1)
+	if (sscanf(line, "%lf", &m1) == 1) {
+	    m = (PLFLT) m1;
 	    return (m);
-	(void) fprintf(stderr,
-		       "No value or value out of range; please try again\n");
+	}
+	fprintf(stdout, "No value or value out of range; please try again\n");
 #endif
     }
     plexit("Too many tries.");
     return (0.);
 }
 
-void plPX_sfnam (PLStream* pls, const char* fnam, const char* ext) {
-  
-    pls->OutFile = NULL;
+/*--------------------------------------------------------------------------*\
+ * plstrdup()
+ *
+ * A replacement for strdup(), which isn't portable.
+ * Caller responsible for freeing the allocated memory.
+\*--------------------------------------------------------------------------*/
 
-    if (pls->FileName != NULL)
-	free((void *) pls->FileName);
+char PLDLLIMPEXP *
+plstrdup(const char *src)
+{
+    char *dest = (char *) malloc( (strlen(src) + 1) * sizeof(char) );
+    if (dest != NULL)
+	strcpy(dest, src);
+    else
+	plabort("Out of memory");
 
-    pls->FileName = (char *) malloc(10 + strlen(fnam) + strlen(ext));
-
-    (void) strcpy(pls->FileName, fnam);
-    (void) strcpy(&pls->FileName[strlen(fnam)], ext);
-
-    if (pls->BaseName != NULL)
-	free((void *) pls->BaseName);
-
-    pls->BaseName = (char *) malloc(10 + strlen(fnam));
-
-    (void) strcpy(pls->BaseName, fnam);
-
-    if (pls->Ext != NULL)
-	free((void *) pls->Ext);
-
-    pls->Ext = (char *) malloc(10 + strlen(ext));
-
-    (void) strcpy(pls->Ext, ext);
+    return dest;
 }
-
-void plPX_swin (PLStream* pls, const char* window) {
-  
-    if (pls->plwindow != NULL)
-	free((void *) pls->plwindow);
-
-    pls->plwindow = (char *) malloc(1 + strlen(window));
-
-    (void) strcpy(pls->plwindow, window);
-}
-
-void plPX_trace (PLStream *pls, FILE* outf) {
-
-  int i;
-
-  fprintf (outf, "\nPLPLOT INTERNALS TRACE\n");
-
-  fprintf (outf, "\nMisc control information\n");
-  fprintf (outf, "ipls %d > %s\n", pls->ipls,
-	   "Stream number");
-  fprintf (outf, "level %d > %s\n", pls->level,
-	   "Initialization level");
-  fprintf (outf, "verbose %d > %s\n", pls->verbose,
-	   "Be more verbose than usual");
-  fprintf (outf, "debug %d > %s\n", pls->debug,
-	   "Generate debugging output");
-  fprintf (outf, "initialized %d > %s\n", pls->initialized,
-	   "Set if the stream has been initialized");
-  fprintf (outf, "program '%s' > %s\n", ifset(pls->program),
-	   "Program name");
-
-  fprintf (outf, "\nColormaps\n");
-  fprintf (outf, "icol0   %3d > %s\n", pls->icol0,
-	   "Color map 0 entry, current color (0 <= icol0 <= ncol0)");
-  fprintf (outf, "ncol0   %3d > %s\n", pls->ncol0,
-	   "Number of colors allocated in color map 0.");
-  fprintf (outf, "icol1   %3d > %s\n", pls->icol1,
-	   "Color map 1 entry, current color (0 <= icol1 <= ncol1)");
-  fprintf (outf, "ncol1   %3d > %s\n", pls->ncol1,
-	   "Number of colors allocated in color map 1.");
-  fprintf (outf, "ncp1    %3d > %s\n", pls->ncp1,
-	   "Number of control points in cmap1 allocation (max 32)");
-  fprintf (outf, "curcmap %3d > %s\n", pls->curcmap, "Current color map");
-  fprintf (outf, "curcolor (%3d %3d %3d) RGB > %s\n",
-	   (int)pls->curcolor.r, (int)pls->curcolor.g, (int)pls->curcolor.b,
-	   "Current color");
-  fprintf (outf, "cmap0    %p > %s\n", pls->cmap0,
-	   "Color map 0: maximum of ncol0 RGB 8-bit values");
-  if (pls->cmap0)
-    fprintf (outf, "cmap0    (%3d %3d %3d) RGB\n",
-	   (int) pls->cmap0->r, (int) pls->cmap0->g, (int) pls->cmap0->b);
-  fprintf (outf, "cmap1    %p > %s\n", pls->cmap1,
-	   "Color map 1: maximum of ncol0 RGB 8-bit values");
-  if (pls->cmap1)
-  fprintf (outf, "cmap1    (%3d %3d %3d) RGB\n",
-	   (int) pls->cmap1->r, (int) pls->cmap1->g, (int) pls->cmap1->b);
-  for (i=0; i<32; i++)
-    fprintf (outf, "cmap1cp[%d] hue %3f light %f sat %f pos %f rev %d\n",
-	     i, pls->cmap1cp[i].h, pls->cmap1cp[i].l, pls->cmap1cp[i].s,
-	     pls->cmap1cp[i].p, pls->cmap1cp[i].rev );
-
-  fprintf (outf, "\nVariables governing pen width\n");
-  fprintf (outf, "width     %3d > %s\n", pls->width,
-	   "Current pen width");
-  fprintf (outf, "widthset  %3d > %s\n", pls->widthset,
-	   "Set if pen width was specified");
-  fprintf (outf, "widthlock %3d > %s\n", pls->widthlock,
-	   "Set if pen width is locked");
-
-  fprintf (outf, "\nVariables used for interacting with or by device driver\n");
-  fprintf (outf, "plbuf_read  %d > %s\n", pls->plbuf_read,
-	   "Set during a plot buffer redraw");
-  fprintf (outf, "plbuf_write %d > %s\n", pls->plbuf_write,
-	   "Set if driver needs to use the plot buffer");
-  fprintf (outf, "device    %d > %s\n", pls->device,
-	   "Graphics device id number");
-  fprintf (outf, "dev_minor %d > %s\n", pls->dev_minor,
-	   "Minor device id (for variations on one type)");
-  fprintf (outf, "termin    %d > %s\n", pls->termin,
-	   "Set for interactive devices");
-  fprintf (outf, "graphx    %d > %s\n", pls->graphx,
-	   "Set if currently in graphics mode");
-  fprintf (outf, "nopause   %d > %s\n", pls->nopause,
-	   "Set if we are skipping the pause between frames");
-  fprintf (outf, "family    %d > %s\n", pls->family,
-	   "Set if familying is enabled");
-  fprintf (outf, "member    %d > %s\n", pls->member,
-	   "Number of current family member file open");
-  fprintf (outf, "finc      %d > %s\n", pls->finc,
-	   "Number to increment between member files");
-  fprintf (outf, "fflen     %d > %s\n", pls->fflen,
-	   "Minimum field length to use in member file number");
-  fprintf (outf, "bytemax   %d > %s\n", pls->bytemax,
-	   "Number of bytes maximum per member file");
-  fprintf (outf, "famadv    %d > %s\n", pls->famadv,
-	   "Set to advance to the next family member");
-  fprintf (outf, "dev_fill0 %d > %s\n", pls->dev_fill0,
-	   "Set if driver can do solid area fills");
-  fprintf (outf, "dev_fill1 %d > %s\n", pls->dev_fill1,
-	   "Set if driver can do pattern area fills");
-  fprintf (outf, "dev_di    %d > %s\n", pls->dev_di,
-	   "Set if driver wants to handle DI commands");
-  fprintf (outf, "dev_flush %d > %s\n", pls->dev_flush,
-	   "Set if driver wants to handle flushes itself");
-  fprintf (outf, "dev_swin  %d > %s\n", pls->dev_swin,
-	   "Set if driver wants to handle 'set window' commands");
-  fprintf (outf, "DevName '%s' > %s\n", ifset(pls->DevName),
-	   "Device name");
-  fprintf (outf, "OutFile %p > %s\n", pls->OutFile,
-	   "Output file pointer");
-  fprintf (outf, "BaseName '%s' > %s\n", ifset(pls->BaseName),
-	   "Output base name (i.e. family)");
-  fprintf (outf, "FileName '%s' > %s\n", ifset(pls->FileName),
-	   "Output file name");
-  fprintf (outf, "Ext      '%s' > %s\n", ifset(pls->Ext),
-	   "Output file extension");
-  fprintf (outf, "output_type %d > %s\n", pls->output_type,
-	   "0 for file, 1 for stream");
-  fprintf (outf, "bytecnt   %d > %s\n", pls->bytecnt,
-	   "Byte count for output stream");
-  fprintf (outf, "page %d > %s\n", pls->page,
-	   "Page count for output stream");
-  fprintf (outf, "linepos %d > %s\n", pls->linepos,
-	   "Line count for output stream");
-  fprintf (outf, "pdfs %p > %s\n", pls->pdfs,
-	   "PDF stream pointer");
-  if (pls->pdfs) {
-    fprintf (outf, "pdfs file %p bp %ld bufmax %ld\n",
-	     pls->pdfs->file, pls->pdfs->bp, pls->pdfs->bufmax);
-    fprintf (outf, ".... buffer '%s'\n", ifsetu(pls->pdfs->buffer));
-  }
-  fprintf (outf, "dev_npts %d > %s\n", pls->dev_npts,
-	   "Number of points we are plotting");
-  fprintf (outf, "dev_x %p > %s\n", pls->dev_x,
-	   "Pointer to array of x values");
-  fprintf (outf, "dev_y %p > %s\n", pls->dev_y,
-	   "Pointer to array of x values");
-  if (pls->dev_x && pls->dev_y && pls->dev_npts) {
-    for (i=0; i< pls->dev_npts; i++)
-      fprintf (outf, "dev_x[%d] %6hd dev_y[%d] %6hd\n",
-	       i, pls->dev_x[i], i, pls->dev_y[i]); 
-  }
-  fprintf (outf, "dev %p > %s\n", pls->dev,
-	   "pointer to device-specific data (malloc'ed)");
-  fprintf (outf, "KeyEH         %p > %s\n", pls->KeyEH,
-	   "Keyboard event handler");
-  fprintf (outf, "KeyEH_data    %p > %s\n", pls->KeyEH_data,
-	   "Pointer to client data to pass");
-  fprintf (outf, "ButtonEH      %p > %s\n", pls->ButtonEH,
-	   "(Mouse) Button event handler");
-  fprintf (outf, "LocateEH      %p > %s\n", pls->LocateEH,
-	   "Locate event handler");
-  fprintf (outf, "LocateEH_data %p > %s\n", pls->LocateEH_data,
-	   "Pointer to client data to pass");
-  fprintf (outf, "xdpi %f > %s\n", pls->xdpi,
-	   "Device DPI settings in x and y");
-  fprintf (outf, "ydpi %f > %s\n", pls->ydpi,
-	   "...");
-  fprintf (outf, "xlength %5d > %s\n", pls->xlength,
-	   "Device output lengths in x and y");
-  fprintf (outf, "ylength %5d > %s\n", pls->ylength,
-	   "...");
-  fprintf (outf, "xoffset %d > %s\n", pls->xoffset,
-	   "Device offsets from upper left hand corner");
-  fprintf (outf, "yoffset %d > %s\n", pls->yoffset,
-	   "...");
-  fprintf (outf, "pageset %d > %s\n", pls->pageset,
-	   "Set if page dimensions were specified");
-  fprintf (outf, "hack    %d > %s\n", pls->hack,
-	   "Enables driver-specific hack(s) if set");
-
-  fprintf (outf, "\nPer stream tidy function.\n");
-  fprintf (outf, "tidy      %p > %s\n", pls->tidy,
-	   "pointer to cleanup routine");
-  fprintf (outf, "tidy_data %p > %s\n", pls->tidy_data,
-	   "pointer to client data to pass");
-
-  fprintf (outf, "\nError info\n");
-  fprintf (outf, "errcode %p > %s\n", pls->errcode,
-	   "pointer to variable to assign error code");
-  if (pls->errcode)
-    fprintf (outf, "   *errcode %d\n", *pls->errcode);
-  fprintf (outf, "errmsg '%s' > %s\n", ifset(pls->errmsg),
-	   "pointer to error message buffer (must be >= 160 bytes)");
-
-  fprintf (outf, "\nStuff used by Xlib driver\n");
-  fprintf (outf, "geometry '%s' > %s\n", ifset(pls->geometry),
-	   "Window geometry (malloc'ed)");
-  fprintf (outf, "window_id %ld > %s\n", pls->window_id,
-	   "X-window window ID");
-  fprintf (outf, "nopixmap  %d > %s\n", pls->nopixmap,
-	   "Set if you want to forbid allocation of pixmaps");
-  fprintf (outf, "db        %d > %s\n", pls->db,
-	   "Set if you want to double buffer output");
-
-  fprintf (outf, "\nStuff used by TK, DP drivers\n");
-  fprintf (outf, "server_name '%s' > %s\n", ifset(pls->server_name),
-	   "Main window name of server");
-  fprintf (outf, "server_host '%s' > %s\n", ifset(pls->server_host),
-	   "Name of host to run server on");
-  fprintf (outf, "server_port '%s' > %s\n", ifset(pls->server_port),
-	   "Port to talk to server on");
-  fprintf (outf, "user        '%s' > %s\n", ifset(pls->user),
-	   "Your user name on remote host (for remsh command)");
-  fprintf (outf, "plserver    '%s' > %s\n", ifset(pls->plserver),
-	   "Name of server");
-  fprintf (outf, "plwindow    '%s' > %s\n", ifset(pls->plwindow),
-	   "Name of reference server window (malloc'ed)");
-  fprintf (outf, "tcl_cmd     '%s' > %s\n", ifset(pls->tcl_cmd),
-	   "TCL command(s) to eval on startup");
-  fprintf (outf, "auto_path   '%s' > %s\n", ifset(pls->auto_path),
-	   "Additional directories to autoload");
-  fprintf (outf, "bufmax        %d > %s\n", pls->bufmax,
-	   "Number of bytes sent before output buffer is flushed");
-  fprintf (outf, "dp            %d > %s\n", pls->dp,
-	   "Use Tcl-DP for communication, if set");
-  fprintf (outf, "server_nokill %d > %s\n", pls->server_nokill,
-	   "Don't kill plserver on a ^C if set");
-
-  fprintf (outf, "\nPlot buffer settings\n");
-  fprintf (outf, "plbufFile  %p > %s\n", pls->plbufFile,
-	   "Plot buffer file pointer");
-  fprintf (outf, "plbufOwner %d > %s\n", pls->plbufOwner,
-	   "Typically set; only zero if current stream is cloned.");
-
-  fprintf (outf, "\nDriver interface (DI)\n");
-  fprintf (outf, "difilt   %d > %s\n", pls->difilt,
-	   "Driver interface filter flag");
-  fprintf (outf, "diclpxmi %d > %s\n", pls->diclpxmi,
-	   "Device clip limits");
-  fprintf (outf, "diclpxma %d > %s\n", pls->diclpxma,
-	   "...");
-  fprintf (outf, "diclpymi %d > %s\n", pls->diclpymi,
-	   "...");
-  fprintf (outf, "diclpyma %d > %s\n", pls->diclpyma,
-	   "...");
-  fprintf (outf, "dipxmin %f > %s\n", pls->dipxmin,
-	   "Min, max relative plot coordinates");
-  fprintf (outf, "dipymin %f > %s\n", pls->dipymin,
-	   "...");
-  fprintf (outf, "dipxmax %f > %s\n", pls->dipxmax,
-	   "...");
-  fprintf (outf, "dipymax %f > %s\n", pls->dipymax,
-	   "...");
-  fprintf (outf, "dipxax  %f > %s\n", pls->dipxax,
-	   "Plot window transformation:");
-  fprintf (outf, "dipxb   %f > %s\n", pls->dipxb,
-	   "    x' = dipxax * x + dipxb");
-  fprintf (outf, "dipyay  %f > %s\n", pls->dipyay,
-	   "and");
-  fprintf (outf, "dipyb   %f > %s\n", pls->dipyb,
-	   "    y' = dipyay * y + dipyb");
-  fprintf (outf, "aspdev  %f > %s\n", pls->aspdev,
-	   "Original device aspect ratio");
-  fprintf (outf, "aspect  %f > %s\n", pls->aspect,
-	   "Page aspect ratio");
-  fprintf (outf, "aspori  %f > %s\n", pls->aspori,
-	   "Rotation-induced aspect ratio");
-  fprintf (outf, "mar     %f > %s\n", pls->mar,
-	   "Page margin (minimum)");
-  fprintf (outf, "jx      %f > %s\n", pls->jx,
-	   "Page justification in x");
-  fprintf (outf, "jy      %f > %s\n", pls->jy,
-	   "Page justification in y");
-  fprintf (outf, "didxax  %f > %s\n", pls->didxax,
-	   "Device window transformation:");
-  fprintf (outf, "didxb   %f > %s\n", pls->didxb,
-	   "    x' = didxax * x + didxb");
-  fprintf (outf, "didyay  %f > %s\n", pls->didyay,
-	   "and");
-  fprintf (outf, "didyb   %f > %s\n", pls->didyb,
-	   "    y' = didyay * y + didyb");
-  fprintf (outf, "diorot  %f > %s\n", pls->diorot,
-	   "Rotation angle (in units of pi/2)");
-  fprintf (outf, "dioxax  %f > %s\n", pls->dioxax,
-	   "Orientation transformation:");
-  fprintf (outf, "dioxay  %f > %s\n", pls->dioxay,
-	   "    x' = dioxax * x + dioxay * y + dioxb");
-  fprintf (outf, "dioxb   %f > %s\n", pls->dioxb,
-	   ".");
-  fprintf (outf, "dioyax  %f > %s\n", pls->dioyax,
-	   "and");
-  fprintf (outf, "dioyay  %f > %s\n", pls->dioyay,
-	   "    y' = dioyax * x + dioyay * y + dioyb");
-  fprintf (outf, "dioyb   %f > %s\n", pls->dioyb,
-	   ".");
-  fprintf (outf, "dimxax  %f > %s\n", pls->dimxax,
-	   "Map meta to physical coordinates:");
-  fprintf (outf, "dimxb   %f > %s\n", pls->dimxb,
-	   "    x' = dimxax * x + dimxb");
-  fprintf (outf, "dimyay  %f > %s\n", pls->dimyay,
-	   "and");
-  fprintf (outf, "dimyb   %f > %s\n", pls->dimyb,
-	   "    y' = dimyay * y + dimyb");
-  fprintf (outf, "dimxmin %f > %s\n", pls->dimxmin,
-	   "Target coordinate system parameters.");
-  fprintf (outf, "dimymin %f > %s\n", pls->dimymin,
-	   "...");
-  fprintf (outf, "dimxmax %f > %s\n", pls->dimxmax,
-	   "...");
-  fprintf (outf, "dimymax %f > %s\n", pls->dimymax,
-	   "...");
-  fprintf (outf, "dimxpmm %f > %s\n", pls->dimxpmm,
-	   "... pixels per mm");
-  fprintf (outf, "dimypmm %f > %s\n", pls->dimypmm,
-	   "... pixels per mm");
-  fprintf (outf, "page_status %d > %s\n", pls->page_status,
-	   "Flag to indicate current action");
-  fprintf (outf, "freeaspect  %d > %s\n", pls->freeaspect,
-	   "Do not preserve aspect ratio on orientation swaps");
-
-  fprintf (outf, "\nFill pattern info\n");
-  fprintf (outf, "patt %d > %s\n", pls->patt,
-	   "Fill pattern number 0: Hardware > 0: Software");
-  fprintf (outf, "inclin %5d %5d > %s\n", pls->inclin[0], pls->inclin[1],
-	   "Array of inclinations in tenths of degree for fill lines");
-  fprintf (outf, "delta  %5d %5d > %s\n", pls->delta[0], pls->delta[1],
-	   "Array of spacings in micrometers between fill lines");
-  fprintf (outf, "nps  %d > %s\n", pls->nps,
-	   "Number of distinct line styles for fills");
-
-  fprintf (outf, "\nVariables used in line drawing\n");
-  fprintf (outf, "currx %6d > %s\n", pls->currx,
-	   "Physical x-coordinate of current point");
-  fprintf (outf, "curry %6d > %s\n", pls->curry,
-	   "Physical y-coordinate of current point");
-  fprintf (outf, "Mark:  Array of mark lengths in micrometers for broken lines\n");
-  fprintf (outf, "Space: Array of space lengths in micrometers for broken lines\n");
-  for (i=0; i<10; i++)
-    fprintf (outf, "mark[%d] %d space[%d] %d\n",
-	     i, pls->mark[i], i, pls->space[i]);
-  fprintf (outf, "nms     %d > %s\n", pls->nms,
-	   "Number of elements for current broken line style");
-  fprintf (outf, "timecnt %d > %s\n", pls->timecnt,
-	   "Timer for broken lines");
-  fprintf (outf, "alarm   %d > %s\n", pls->alarm,
-	   "Alarm indicating change of broken line status");
-  fprintf (outf, "pendn   %d > %s\n", pls->pendn,
-	   "Flag indicating if pen is up or down");
-  fprintf (outf, "curel   %d > %s\n", pls->curel,
-	   "Current element within broken line");
-
-  fprintf (outf, "\nVariables governing character strings\n");
-  fprintf (outf, "esc %d ASCII %x hex > %s\n", (int) pls->esc, (int) pls->esc,
-	   "Text string escape character");
-
-  fprintf (outf, "\nScale factors for characters, symbols, and tick marks.\n");
-  fprintf (outf, "scale  %f > %s\n", pls->scale,
-	   "Scaling factor for chr, sym, maj, min.");
-  fprintf (outf, "chrdef %f > %s\n", pls->chrdef,
-	   "Character default height");
-  fprintf (outf, "chrht  %f > %s\n", pls->chrht,
-	   "Character  current (scaled) height");
-  fprintf (outf, "symdef %f > %s\n", pls->symdef,
-	   "Symbol     default height");
-  fprintf (outf, "symht  %f > %s\n", pls->symht,
-	   "Symbol     current (scaled) height");
-  fprintf (outf, "majdef %f > %s\n", pls->majdef,
-	   "Major tick default height");
-  fprintf (outf, "majht  %f > %s\n", pls->majht,
-	   "Major tick current (scaled) height");
-  fprintf (outf, "mindef %f > %s\n", pls->mindef,
-	   "Minor tick default height");
-  fprintf (outf, "minht  %f > %s\n", pls->minht,
-	   "Minor tick current (scaled) height");
-
-  fprintf (outf, "\nVariables governing numeric axis label appearance\n");
-  fprintf (outf, "setpre  %d > %s\n", pls->setpre,
-	   "Non-zero to set precision using 'prec'");
-  fprintf (outf, "precis  %d > %s\n", pls->precis,
-	   "User-specified precision");
-  fprintf (outf, "xdigmax %d > %s\n", pls->xdigmax,
-	   "Allowed #digits in axes labels");
-  fprintf (outf, "ydigmax %d > %s\n", pls->ydigmax,
-	   "Allowed #digits in axes labels");
-  fprintf (outf, "zdigmax %d > %s\n", pls->zdigmax,
-	   "Allowed #digits in axes labels");
-  fprintf (outf, "xdigits %d > %s\n", pls->xdigits,
-	   "Actual field widths (returned)");
-  fprintf (outf, "ydigits %d > %s\n", pls->ydigits,
-	   "Actual field widths (returned)");
-  fprintf (outf, "zdigits %d > %s\n", pls->zdigits,
-	   "Actual field widths (returned)");
-
-  fprintf (outf, "\nVariables governing physical coordinate system\n");
-  fprintf (outf, "vppxmi  %6d > %s\n", pls->vppxmi,
-	   "Viewport boundaries in physical coordinates");
-  fprintf (outf, "vppxma  %6d > %s\n", pls->vppxma,
-	   "...");
-  fprintf (outf, "vppymi  %6d > %s\n", pls->vppymi,
-	   "...");
-  fprintf (outf, "vppyma  %6d > %s\n", pls->vppyma,
-	   "...");
-  fprintf (outf, "sppxmi  %6d > %s\n", pls->sppxmi,
-	   "Subpage  boundaries in physical coordinates");
-  fprintf (outf, "sppxma  %6d > %s\n", pls->sppxma,
-	   "...");
-  fprintf (outf, "sppymi  %6d > %s\n", pls->sppymi,
-	   "...");
-  fprintf (outf, "sppyma  %6d > %s\n", pls->sppyma,
-	   "...");
-  fprintf (outf, "clpxmi  %6d > %s\n", pls->clpxmi,
-	   "Clip     boundaries in physical coordinates");
-  fprintf (outf, "clpxma  %6d > %s\n", pls->clpxma,
-	   "...");
-  fprintf (outf, "clpymi  %6d > %s\n", pls->clpymi,
-	   "...");
-  fprintf (outf, "clpyma  %6d > %s\n", pls->clpyma,
-	   "...");
-  fprintf (outf, "phyxmi  %6d > %s\n", pls->phyxmi,
-	   "Physical device limits in physical coordinates");
-  fprintf (outf, "phyxma  %6d > %s\n", pls->phyxma,
-	   "...");
-  fprintf (outf, "phyxlen %6d > %s\n", pls->phyxlen,
-	   "...");
-  fprintf (outf, "phyymi  %6d > %s\n", pls->phyymi,
-	   "...");
-  fprintf (outf, "phyyma  %6d > %s\n", pls->phyyma,
-	   "...");
-  fprintf (outf, "phyylen %6d > %s\n", pls->phyylen,
-	   "...");
-  fprintf (outf, "umx     %6d > %s\n", pls->umx,
-	   "Number of micrometers in a pixel");
-  fprintf (outf, "umy     %6d > %s\n", pls->umy,
-	   "...");
-  fprintf (outf, "xpmm %5f > %s\n", pls->xpmm,
-	   "Number of pixels to a millimeter");
-  fprintf (outf, "ypmm %5f > %s\n", pls->ypmm,
-	   "...");
-
-  fprintf (outf, "\nState variables for 3d plots\n");
-  fprintf (outf, "base3x %f > %s\n", pls->base3x,
-	   "World coordinate size of base for 3-d plot");
-  fprintf (outf, "base3y %f > %s\n", pls->base3y,
-	   "...");
-  fprintf (outf, "basecx %f > %s\n", pls->basecx,
-	   "Position of centre of base for 3-d plot");
-  fprintf (outf, "basecy %f > %s\n", pls->basecy,
-	   "...");
-  fprintf (outf, "domxmi %f > %s\n", pls->domxmi,
-	   "Minimum and maximum values for domain");
-  fprintf (outf, "domxma %f > %s\n", pls->domxma,
-	   "...");
-  fprintf (outf, "domymi %f > %s\n", pls->domymi,
-	   "...");
-  fprintf (outf, "domyma %f > %s\n", pls->domyma,
-	   "...");
-  fprintf (outf, "zzscl  %f > %s\n", pls->zzscl,
-	   "Vertical (z) scale for 3-d plot");
-  fprintf (outf, "ranmi  %f > %s\n", pls->ranmi,
-	   "Minimum and maximum z values for 3-d plot");
-  fprintf (outf, "ranma  %f > %s\n", pls->ranma,
-	   "...");
-  fprintf (outf, "cxx    %f > %s\n", pls->cxx,
-	   "Coordinate transformation from 3-d to 2-d");
-  fprintf (outf, "cxy    %f > %s\n", pls->cxy,
-	   "...");
-  fprintf (outf, "cyx    %f > %s\n", pls->cyx,
-	   "...");
-  fprintf (outf, "cyy    %f > %s\n", pls->cyy,
-	   "...");
-  fprintf (outf, "cyz    %f > %s\n", pls->cyz,
-	   "...");
-
-  fprintf (outf, "\nVariables for keeping track of windows on a page.\n");
-  fprintf (outf, "nplwin %d > %s\n", pls->nplwin,
-	   "Number of coordinate windows on current page");
-  fprintf (outf, "Array of plCWindows for current page\n");
-  for (i=0; i< pls->nplwin; i++) {
-    fprintf (outf, "  plwin[%d].dxmi %3f\n", i, pls->plwin[i].dxmi);
-    fprintf (outf, "  plwin[%d].dxma %3f\n", i, pls->plwin[i].dxma);
-    fprintf (outf, "  plwin[%d].dymi %3f\n", i, pls->plwin[i].dymi);
-    fprintf (outf, "  plwin[%d].dyma %3f\n", i, pls->plwin[i].dyma);
-    fprintf (outf, "  plwin[%d].wxmi %3f\n", i, pls->plwin[i].wxmi);
-    fprintf (outf, "  plwin[%d].wxma %3f\n", i, pls->plwin[i].wxma);
-    fprintf (outf, "  plwin[%d].wymi %3f\n", i, pls->plwin[i].wymi);
-    fprintf (outf, "  plwin[%d].wyma %3f\n.\n", i, pls->plwin[i].wyma);
-  }
-
-  fprintf (outf, "\nVariables governing subpages and viewports.\n");
-  fprintf (outf, "nsubx %d > %s\n", pls->nsubx,
-	   "Number of subpages on physical device");
-  fprintf (outf, "nsuby %d > %s\n", pls->nsuby,
-	   "...");
-  fprintf (outf, "cursub %d > %s\n", pls->cursub,
-	   "Current subpage");
-  fprintf (outf, "spdxmi %f > %s\n", pls->spdxmi,
-	   "Subpage  boundaries in normalized device coordinates");
-  fprintf (outf, "spdxma %f > %s\n", pls->spdxma,
-	   "...");
-  fprintf (outf, "spdymi %f > %s\n", pls->spdymi,
-	   "...");
-  fprintf (outf, "spdyma %f > %s\n", pls->spdyma,
-	   "...");
-  fprintf (outf, "vpdxmi %f > %s\n", pls->vpdxmi,
-	   "Viewport boundaries in normalized device coordinates");
-  fprintf (outf, "vpdxma %f > %s\n", pls->vpdxma,
-	   "...");
-  fprintf (outf, "vpdymi %f > %s\n", pls->vpdymi,
-	   "...");
-  fprintf (outf, "vpdyma %f > %s\n", pls->vpdyma,
-	   "...");
-  fprintf (outf, "vpwxmi %f > %s\n", pls->vpwxmi,
-	   "Viewport boundaries in world coordinates");
-  fprintf (outf, "vpwxma %f > %s\n", pls->vpwxma,
-	   "...");
-  fprintf (outf, "vpwymi %f > %s\n", pls->vpwymi,
-	   "...");
-  fprintf (outf, "vpwyma %f > %s\n", pls->vpwyma,
-	   "...");
-
-  fprintf (outf, "\nTransformation variables\n");
-  fprintf (outf, "wpxscl %5f > %s\n", pls->wpxscl,
-	   "Transformation variables for world  to physical conversion");
-  fprintf (outf, "wpxoff %5f > %s\n", pls->wpxoff,
-	   "...");
-  fprintf (outf, "wpyscl %5f > %s\n", pls->wpyscl,
-	   "...");
-  fprintf (outf, "wpyoff %5f > %s\n", pls->wpyoff,
-	   "...");
-  fprintf (outf, "wmxscl %5f > %s\n", pls->wmxscl,
-	   "Transformation variables for world coordinates to mm");
-  fprintf (outf, "wmxoff %5f > %s\n", pls->wmxoff,
-	   "...");
-  fprintf (outf, "wmyscl %5f > %s\n", pls->wmyscl,
-	   "...");
-  fprintf (outf, "wmyoff %5f > %s\n", pls->wmyoff,
-	   "...");
-    
-}
-
-int plFileInfo (PLStream *pls, char* tmp) {
-
-  if (pls->family && pls->BaseName != NULL) {  /* family names*/
-    (void) sprintf(tmp, "%s.%%0%1dd%s",
-		   pls->BaseName, (int) pls->fflen,pls->Ext);
-    return pls->member;
-  }
-
-  if (pls->FileName == NULL) {
-    *tmp='\0';
-    return 0;
-  }
-
-  /* simple filenames */
-  (void) sprintf(tmp, pls->FileName);
-  return -1;
-}
-
