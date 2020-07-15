@@ -2,7 +2,9 @@
 **
 ** Displays some simple information about sequences
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Jon Ison (jison@ebi.ac.uk) 2006
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @modified 29 June 2006 Jon Ison (major rewrite)
 ** @modified 04/02/2000 rbsk@sanger - added 'percent GC' computation
 ** @@
 **
@@ -25,6 +27,16 @@
 
 
 
+static AjBool infoseq_printheader(AjBool html,  AjBool instring,
+				  const char *text, 
+				  ajint wid, AjBool columns,
+				  const AjPStr delimiter, 
+				  AjPFile outfile);
+static AjBool infoseq_print(AjBool html, AjBool instring,
+			    const AjPStr str, AjBool 
+			    usewid, ajint wid, AjBool columns,
+			    const AjPStr delimiter, AjPFile outfile);
+
 
 /* @prog infoseq **************************************************************
 **
@@ -34,68 +46,84 @@
 
 int main(int argc, char **argv)
 {
+    /* VARIABLE DECLARATIONS */
+    AjPSeqall seqall    = NULL;
+    AjPSeq    seq       = NULL;
+    AjBool    html;
+    AjBool    doheader;
+    AjBool    dotype;
+    AjBool    dousa;
+    AjBool    doname;
+    AjBool    doacc;
+    AjBool    dogi;
+    AjBool    dosv;
+    AjBool    dolength;
+    AjBool    dodesc;
+    AjBool    dopgc;
+    AjPFile   outfile   = NULL;
+    AjPStr    altusa 	= NULL;  /* default name when the real name is unknown */
+    AjPStr    altname   = NULL;
+    AjPStr    altacc    = NULL;
+    AjPStr    altgi     = NULL;
+    AjPStr    altsv     = NULL;
+    ajint     length;
+    AjBool    type      = ajTrue; /* ajTrue if Protein */
+    float     pgc       = 0.0;
+    AjBool    firsttime = ajTrue;
+    AjPStr usa       = NULL;
+    AjPStr name      = NULL;
+    AjPStr acc       = NULL;
+    AjPStr gi        = NULL;
+    AjPStr sv        = NULL;
+    AjPStr desc      = NULL;
+    AjBool columns   = ajFalse;   
+    AjPStr delimiter = NULL;      
+    AjPStr tempstr   = NULL;      
+    AjBool instring  = ajFalse; /* If token was printed and not at 
+				   end-of-line yet */
+    
 
-    AjPSeqall seqall;
-    AjPSeq seq;
 
-    AjBool html;
-    AjBool doheader;
-    AjBool dotype;
-    AjBool dousa;
-    AjBool doname;
-    AjBool doacc;
-    AjBool dogi;
-    AjBool dosv;
-    AjBool dolength;
-    AjBool dodesc;
-    AjBool dopgc;
 
-    AjPFile outfile;
 
-    const AjPStr usa;
-    const AjPStr name;
-    const AjPStr acc;
-    const AjPStr gi;
-    const AjPStr sv;
-    const AjPStr desc;
-    AjPStr altusa;	/* default name when the real name is not known */
-    AjPStr altname;
-    AjPStr altacc;
-    AjPStr altgi;
-    AjPStr altsv;
-    ajint length;
-    AjBool type = ajTrue;			/* ajTrue if Protein */
-    float pgc = 0.0;
-    AjBool firsttime = ajTrue;
-
+    /* ACD PROCESSING */
     embInit("infoseq", argc, argv);
 
-    outfile  = ajAcdGetOutfile("outfile");
-    seqall   = ajAcdGetSeqall("sequence");
-    html     = ajAcdGetBool("html");
-    doheader = ajAcdGetBool("heading");
-    dousa    = ajAcdGetBool("usa");
-    doname   = ajAcdGetBool("name");
-    doacc    = ajAcdGetBool("accession");
-    dogi     = ajAcdGetBool("gi");
-    dosv     = ajAcdGetBool("version");
-    dotype   = ajAcdGetBool("type");
-    dolength = ajAcdGetBool("length");
-    dopgc    = ajAcdGetBool("pgc");
-    dodesc   = ajAcdGetBool("description");
+    outfile   = ajAcdGetOutfile("outfile");
+    seqall    = ajAcdGetSeqall("sequence");
+    html      = ajAcdGetBool("html");
+    doheader  = ajAcdGetBool("heading");
+    dousa     = ajAcdGetBool("usa");
+    doname    = ajAcdGetBool("name");
+    doacc     = ajAcdGetBool("accession");
+    dogi      = ajAcdGetBool("gi");
+    dosv      = ajAcdGetBool("version");
+    dotype    = ajAcdGetBool("type");
+    dolength  = ajAcdGetBool("length");
+    dopgc     = ajAcdGetBool("pgc");
+    dodesc    = ajAcdGetBool("description");
+    columns   = ajAcdGetBool("columns");     
+    delimiter = ajAcdGetString("delimiter"); 
+    
+    altusa    = ajStrNewC("-");
+    altname   = ajStrNewC("-");
+    altacc    = ajStrNewC("-");
+    altgi     = ajStrNewC("-");
+    altsv     = ajStrNewC("-");
+    tempstr   = ajStrNew();   
+    
+
+    
 
 
-    altusa  = ajStrNewC("-");
-    altname = ajStrNewC("-");
-    altacc  = ajStrNewC("-     ");
-    altgi   = ajStrNewC("-     ");
-    altsv   = ajStrNewC("-     ");
-
-    /* start the HTML table */
+    /* PRINT START OF HTML TABLE */
     if(html)
 	ajFmtPrintF(outfile,"<table border cellpadding=4 bgcolor=\"#FFFFF0"
 		    "\">\n");
 
+
+
+    /* MAIN APPLICATION LOOP */
     while(ajSeqallNext(seqall, &seq))
     {
 	ajSeqTrim(seq);
@@ -106,290 +134,173 @@ int main(int argc, char **argv)
 
 	if(firsttime)
 	{
-	    /* print the header information */
+	    /* Print the header information */
 	    if(doheader)
 	    {
-		/* start the HTML table title line and output Name header */
+		/* Start the HTML table title line */
 		if(html)
 		    ajFmtPrintF(outfile, "<tr>");
-		else
-		    ajFmtPrintF(outfile, "%s", "# ");
+		/* else if(columns)
+		    ajFmtPrintF(outfile, "%s", "#"); */
 
+
+		
 		if(dousa)
-		{
-		    if(html)
-			ajFmtPrintF(outfile, "<th>USA</th>");
-		    else
-			ajFmtPrintF(outfile, "%-16s", "USA");
-		}
-
+		    instring = infoseq_printheader(html, instring,
+						   "USA", 25, 
+						   columns, delimiter,
+						   outfile);
 		if(doname)
-		{
-		    if(html)
-			ajFmtPrintF(outfile, "<th>Name</th>");
-		    else
-			ajFmtPrintF(outfile, "%-12s", "Name");
-		}
-
+		    instring = infoseq_printheader(html, instring,
+						   "Name", 15, 
+						   columns, delimiter,
+						   outfile);
 		if(doacc)
-		{
-		    if(html)
-			ajFmtPrintF(outfile, "<th>Accession</th>");
-		    else
-			ajFmtPrintF(outfile, "%s", "Accession ");
-		}
-
+		    instring = infoseq_printheader(html, instring,
+						   "Accession", 15,
+						   columns, delimiter, 
+						   outfile);
 		if(dogi)
-		{
-		    if(html)
-			ajFmtPrintF(outfile, "<th>GI</th>");
-		    else
-			ajFmtPrintF(outfile, "%s", "GI        ");
-		}
-
+		    instring = infoseq_printheader(html, instring,
+						   "GI", 15, 
+						   columns, delimiter, 
+						   outfile);
 		if(dosv)
-		{
-		    if(html)
-			ajFmtPrintF(outfile, "<th>Version</th>");
-		    else
-			ajFmtPrintF(outfile, "%s", "Version   ");
-		}
-
+		    instring = infoseq_printheader(html, instring,
+						   "Version", 8, 
+						   columns, delimiter,
+						   outfile);
 		if(dotype)
-		{
-		    if(html)
-			ajFmtPrintF(outfile, "<th>Type</th>");
-		    else
-			ajFmtPrintF(outfile, "Type ");
-		}
-
-		if(dolength)
-		{
-		    if(html)
-			ajFmtPrintF(outfile, "<th>Length</th>");
-		    else
-			ajFmtPrintF(outfile, "Length\t");
-		}
-
+		    instring = infoseq_printheader(html, instring,
+						   "Type", 5, 
+						   columns, delimiter, 
+						   outfile);
+		if(dolength)		
+		    instring = infoseq_printheader(html, instring,
+						   "Length", 7, 
+						   columns, delimiter, 
+						   outfile);
 		if(!type && dopgc)
-		{
-		    if(html)
-			ajFmtPrintF(outfile, "<th>%%GC</th>");
-		    else
-			ajFmtPrintF(outfile, " %%GC   ");
-		}
-
+		    instring = infoseq_printheader(html, instring,
+						   "%GC", 7, 
+						   columns, delimiter, 
+						   outfile);
 		if(dodesc)
-		{
-		    if(html)
-			ajFmtPrintF(outfile, "<th>Description</th>");
-		    else
-			ajFmtPrintF(outfile, "Description");
-		}
+		    instring = infoseq_printheader(html, instring,
+						   "Description", 12,
+						   columns, delimiter, 
+						   outfile);
 
-		/* end the HTML table title line */
+		/* End the HTML table title line */
 		if(html)
 		    ajFmtPrintF(outfile, "</tr>\n");
 		else
 		    ajFmtPrintF(outfile, "\n");
+		instring = ajFalse;
 	    }
 	    firsttime = ajFalse;
 	}
-
-
-	/* get the usa ('-' if unknown) */
-	usa = ajSeqGetUsa(seq);
-	if(ajStrLen(usa) == 0)
+	
+	/* GET SEQUENCE ATTRIBUTES (strings set to '-' if unknown) */ 
+	/* usa */
+	usa = (AjPStr) ajSeqGetUsaS(seq);
+	if(ajStrGetLen(usa) == 0)
 	    usa = altusa;
 
-	/* get the name ('-' if unknown) */
-	name = ajSeqGetName(seq);
-	if(ajStrLen(name) == 0)
+	/* name */
+	name = (AjPStr)ajSeqGetNameS(seq);
+	if(ajStrGetLen(name) == 0)
 	    name = altname;
 
-	/* get the accession number ('-' if unknown) */
-	acc = ajSeqGetAcc(seq);
-	if(ajStrLen(acc) == 0)
+	/* accession number */
+	acc = (AjPStr)ajSeqGetAccS(seq);
+	if(ajStrGetLen(acc) == 0)
 	    acc = altacc;
 
-	/* get the GI number ('-' if unknown) */
-	gi = ajSeqGetGi(seq);
-	if(ajStrLen(gi) == 0)
+	/* GI number */
+	gi = (AjPStr) ajSeqGetGiS(seq);
+	if(ajStrGetLen(gi) == 0)
 	    gi = altgi;
 
-	/* get the version number ('-' if unknown) */
-	sv = ajSeqGetSv(seq);
-	if(ajStrLen(sv) == 0)
+	/* version number */
+	sv = (AjPStr) ajSeqGetSvS(seq);
+	if(ajStrGetLen(sv) == 0)
 	    sv = altsv;
 
-	length = ajSeqLen(seq);
+	/* length */
+	length = ajSeqGetLen(seq);
 	if(dopgc && !type)
 	{
-	    pgc = ajMeltGC(ajSeqStr(seq),length);
+	    pgc = ajMeltGC(ajSeqGetSeqS(seq),length);
 	    pgc *= 100;			/* percentage */
 	}
-	desc = ajSeqGetDesc(seq);
+	
+	/* description */
+	desc = (AjPStr) ajSeqGetDescS(seq);
+
 
 	/* start table line */
 	if(html)
 	    ajFmtPrintF(outfile, "<tr>");
 
+	/* To correspond to # in header line */
+	/*	if(doheader && columns)
+	    ajFmtPrintF(outfile, " "); */
+
+
+
 	if(dousa)
-	{
-	    if(html)
-		ajFmtPrintF(outfile, "<td>%S</td>", usa);
-	    else
-	    {
-		/*
-		**  Format:
-		**
-		**  If this is the last item, don't put spaces or TABs after
-		**  it. Try to fit the name in 18 spaces, else just add a
-		**  TAB after it
-		*/
-		if(ajStrLen(usa) < 18)
-		{
-		    if(doname || doacc || dogi || dosv || dotype || dolength ||
-			(!type && dopgc) || dodesc)
-			ajFmtPrintF(outfile, "%-18.17S", usa);
-		    else
-			ajFmtPrintF(outfile, "%S", usa);
-		}
-		else
-		{
-		    ajFmtPrintF(outfile, "%S", usa);
-		    if(doname || doacc || dogi || dosv || dotype || dolength ||
-			(!type && dopgc) || dodesc)
-			ajFmtPrintF(outfile, "\t");
-		}
-	    }
-	}
-
+	    instring = infoseq_print(html, instring, usa,
+				     ajTrue, 25, columns, 
+				     delimiter, outfile);
 	if(doname)
-	{
-	    if(html)
-		ajFmtPrintF(outfile, "<td>%S</td>", name);
-	    else
-	    {
-		/*
-		**  Format:
-		**
-		**  If this is the last item, don't put spaces or TABs after
-		**  it. Try to fit the name in 14 space, else just add a
-		**  TAB after it
-		*/
-		if(ajStrLen(name) < 14)
-		{
-		    if(doacc || dogi || dosv || dotype || dolength ||
-		        (!type && dopgc) || dodesc)
-			ajFmtPrintF(outfile, "%-14.13S", name);
-		    else
-			ajFmtPrintF(outfile, "%S", name);
-		}
-		else
-		{
-		    ajFmtPrintF(outfile, "%S", name);
-		    if(doacc || dogi || dosv || dotype || dolength ||
-		        (!type && dopgc) || dodesc)
-			ajFmtPrintF(outfile, "\t");
-		}
-	    }
-	}
-
+	    instring = infoseq_print(html, instring, name,
+				     ajTrue, 15, columns, 
+				     delimiter, outfile);
 	if(doacc)
-	{
-	    if(html)
-		ajFmtPrintF(outfile, "<td>%S</td>", acc);
-	    else
-	    {
-		ajFmtPrintF(outfile, "%S", acc);
-		if(dogi || dosv || dotype || dolength ||
-		    (!type && dopgc) || dodesc)
-		    ajFmtPrintF(outfile, "\t");
-	    }
-	}
-
+	    instring = infoseq_print(html, instring, acc,
+				     ajTrue, 15, columns, 
+				     delimiter, outfile);
 	if(dogi)
-	{
-	    if(html)
-		ajFmtPrintF(outfile, "<td>%S</td>", gi);
-	    else
-	    {
-		ajFmtPrintF(outfile, "%S", gi);
-		if(dosv || dotype || dolength ||
-		    (!type && dopgc) || dodesc)
-		    ajFmtPrintF(outfile, "\t");
-	    }
-	}
-
+	    instring = infoseq_print(html, instring, gi,
+				     ajTrue, 15, columns, 
+				     delimiter, outfile);
 	if(dosv)
-	{
-	    if(html)
-		ajFmtPrintF(outfile, "<td>%S</td>", sv);
-	    else
-	    {
-		ajFmtPrintF(outfile, "%S", sv);
-		if(dotype || dolength ||
-		    (!type && dopgc) || dodesc)
-		    ajFmtPrintF(outfile, "\t");
-	    }
-	}
-
+	    instring = infoseq_print(html, instring, sv,
+				     ajTrue, 8, columns, 
+				     delimiter, outfile);
 	if(dotype)
 	{
-	    if(html)
-		ajFmtPrintF(outfile, "<td>%c</td>", type?'P':'N');
+	    if(type)
+		ajFmtPrintS(&tempstr, "%c", 'P');
 	    else
-	    {
-		ajFmtPrintF(outfile, "%c", type?'P':'N');
-		if(dolength || (!type && dopgc) || dodesc)
-		    ajFmtPrintF(outfile, "    ");
-	    }
+		ajFmtPrintS(&tempstr, "%c", 'N');
+	    instring = infoseq_print(html, instring, tempstr, ajTrue, 5, 
+				     columns, delimiter, outfile);
 	}
-
-	if(dolength)
+	if(dolength)		
 	{
-	    if(html)
-		ajFmtPrintF(outfile, "<td>%d</td>", length);
-	    else
-	    {
-		ajFmtPrintF(outfile, "%d", length);
-		if((!type && dopgc) || dodesc )
-		    ajFmtPrintF(outfile, "\t");
-	    }
+	    ajFmtPrintS(&tempstr, "%d", length);
+	    instring = infoseq_print(html, instring, tempstr, ajTrue, 7, 
+				     columns, delimiter, outfile);
 	}
-
 	if(!type && dopgc)
 	{
-	    if(html)
-	    {
-		if(!type)
-		    ajFmtPrintF(outfile, "<td>%-6.2f</td>", pgc);
-		else
-		    ajFmtPrintF(outfile, "<td></td>");
-	    }
-	    else
-	    {
-		/* don't use %-6.2f here as there are no trailing spaces */
-		ajFmtPrintF(outfile, "%6.2f", pgc);
-		if(dodesc)
-		    ajFmtPrintF(outfile, " ");
-	    }
-	}
+	    ajFmtPrintS(&tempstr, "%.2f", pgc);
+	    instring = infoseq_print(html, instring, tempstr, ajTrue, 7, 
+				     columns, delimiter, outfile);
+	}	
 
 	if(dodesc)
-	{
-	    if(html)
-		ajFmtPrintF(outfile, "<td>%S</td>", desc);
-	    else
-		ajFmtPrintF(outfile, "%S", desc);
-	}
+	    instring = infoseq_print(html, instring, desc, ajFalse, 0, 
+				     columns, delimiter, outfile);
 
 	/* end table line */
 	if(html)
 	    ajFmtPrintF(outfile, "</tr>\n");
 	else
 	    ajFmtPrintF(outfile, "\n");
+	instring = ajFalse;
     }
 
 
@@ -404,8 +315,125 @@ int main(int argc, char **argv)
     ajStrDel(&altacc);
     ajStrDel(&altsv);
     ajStrDel(&altgi);
+    ajStrDel(&delimiter); /* JISON */
+    ajStrDel(&tempstr); /* JISON */
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajStrDel(&altusa);
+    ajStrDel(&altname);
+    ajStrDel(&altacc);
+    ajStrDel(&altgi);
+    ajStrDel(&altsv);
+
+    embExit();
 
     return 0;
+}
+
+
+
+/* @funcstatic infoseq_printheader ********************************************
+**
+** Prints out a sequence information record to html or text file. 
+**
+** @param [r] html  [AjBool] Undocumented
+** @param [r] instring [AjBool] Undocumented
+** @param [r] text [const char *] Undocumented
+** @param [r] wid [ajint] Undocumented
+** @param [r] columns [AjBool] Undocumented
+** @param [r] delimiter [const AjPStr] Undocumented
+** @param [u] outfile [AjPFile] Undocumented
+** @return [AjBool] True on success.
+** @@
+******************************************************************************/
+static AjBool infoseq_printheader(AjBool html,  AjBool instring,
+				  const char *text, 
+				  ajint wid, AjBool columns,
+				  const AjPStr delimiter, 
+				  AjPFile outfile)
+{
+    /* Suppress delimiter on first call (for first string printed out) */
+    static AjBool nodelim = AJTRUE;
+    
+    /* Reset for each new line */
+    if(instring == ajFalse)
+	nodelim = ajTrue;
+
+    if(html)
+	ajFmtPrintF(outfile, "<th>%s</th>", text);
+    else
+    {
+	if(columns)
+	    ajFmtPrintF(outfile, "%-*s", wid, text); 
+	else
+	{
+	    if(nodelim)
+		ajFmtPrintF(outfile, "%s", text); 
+	    else
+		ajFmtPrintF(outfile, "%S%s", delimiter, text); 
+	}
+    }	
+
+    nodelim = ajFalse;
+
+    return ajTrue;
+}
+
+
+
+
+
+
+
+/* @funcstatic infoseq_print **************************************************
+**
+** Prints out a sequence information record to html or text file. 
+**
+** @param [r] html  [AjBool] Undocumented
+** @param [r] instring [AjBool] Undocumented
+** @param [r] str [const AjPStr] Undocumented
+** @param [r] usewid [AjBool] Undocumented
+** @param [r] wid [ajint] Undocumented
+** @param [r] columns [AjBool] Undocumented
+** @param [r] delimiter [const AjPStr] Undocumented
+** @param [u] outfile [AjPFile] Undocumented
+** @return [AjBool]  True on success.
+** @@
+******************************************************************************/
+static AjBool infoseq_print(AjBool html, AjBool instring, const AjPStr str,
+			    AjBool usewid, ajint wid, AjBool columns,
+			    const AjPStr delimiter, AjPFile outfile)
+{
+    /* Suppress delimiter on first call (for first string printed out) */
+    static AjBool nodelim = AJTRUE;
+
+    /* Reset for each new line */
+    if(instring == ajFalse)
+	nodelim = ajTrue;
+   
+
+    if(html)
+	ajFmtPrintF(outfile, "<td>%S</td>", str);
+    else
+    {
+	if(columns)
+	{
+	    if(usewid)
+		ajFmtPrintF(outfile, "%-*S", wid, str); 
+	    else
+		ajFmtPrintF(outfile, "%S", str); 
+	}
+	else
+	{
+	    if(nodelim)
+		ajFmtPrintF(outfile, "%S", str); 
+	    else
+		ajFmtPrintF(outfile, "%S%S", delimiter, str); 
+	}
+    }	
+
+    nodelim = ajFalse;
+    
+    return ajTrue;
 }
