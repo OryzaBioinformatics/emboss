@@ -32,13 +32,14 @@
 
 int main(int argc, char **argv)
 {
-    AjPSeqall seqall;
-    AjPSeq seq;
+    AjPSeqall seqall = NULL;
+    AjPSeq seq = NULL;
     AjPFeattable tab = NULL;
     AjPReport report = NULL;
     AjPStr tmpstr = NULL;
-
+ 
     AjPPatlistSeq plist = NULL;
+    AjBool writeok = ajTrue;
 
     embInit("fuzzpro", argc, argv);
 
@@ -49,14 +50,15 @@ int main(int argc, char **argv)
     ajPatlistSeqDoc(plist, &tmpstr);
     ajReportSetHeader(report, tmpstr);
 
-    while(ajSeqallNext(seqall,&seq))
+    writeok=ajTrue;
+    while(writeok && ajSeqallNext(seqall,&seq))
     {
 	tab = ajFeattableNewProt(ajSeqGetNameS(seq));
         embPatlistSeqSearch(tab,seq,plist,ajFalse);
-        ajReportWrite(report,tab,seq);
+	if(ajFeattableSize(tab))
+	    writeok = ajReportWrite(report,tab,seq);
         ajFeattableDel(&tab);
     }
-
 
     ajPatlistSeqDel(&plist);
 
@@ -67,7 +69,7 @@ int main(int argc, char **argv)
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

@@ -69,19 +69,19 @@ Output report [100k_rat.fuzzpro]: <b></b>
                                   format, or reference (input USA)
    -pattern            pattern    The standard IUPAC one-letter codes for the
                                   amino acids are used.
-                                  The symbol `x' is used for a position where
+                                  The symbol 'x' is used for a position where
                                   any amino acid is accepted.
                                   Ambiguities are indicated by listing the
                                   acceptable amino acids for a given position,
-                                  between square parentheses `[ ]'. For
+                                  between square parentheses '[ ]'. For
                                   example: [ALT] stands for Ala or Leu or Thr.
                                   Ambiguities are also indicated by listing
-                                  between a pair of curly brackets `{ }' the
+                                  between a pair of curly brackets '{ }' the
                                   amino acids that are not accepted at a given
                                   position. For example: {AM} stands for any
                                   amino acid except Ala and Met.
                                   Each element in a pattern is separated from
-                                  its neighbor by a `-'. (Optional in
+                                  its neighbor by a '-'. (Optional in
                                   fuzzpro).
                                   Repetition of an element of the pattern can
                                   be indicated by following that element with
@@ -91,12 +91,12 @@ Output report [100k_rat.fuzzpro]: <b></b>
                                   x-x or x-x-x or x-x-x-x.
                                   When a pattern is restricted to either the
                                   N- or C-terminal of a sequence, that pattern
-                                  either starts with a `<' symbol or
-                                  respectively ends with a `>' symbol.
+                                  either starts with a '<' symbol or
+                                  respectively ends with a '>' symbol.
                                   A period ends the pattern. (Optional in
                                   fuzzpro).
                                   For example, [DE](2)HS{P}X(2)PX(2,4)C
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.fuzzpro] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -132,6 +132,8 @@ Output report [100k_rat.fuzzpro]: <b></b>
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -168,12 +170,12 @@ Output report [100k_rat.fuzzpro]: <b></b>
 <tr>
 <td>-pattern</td>
 <td>The standard IUPAC one-letter codes for the amino acids are used.
-The symbol `x' is used for a position where any amino acid is accepted.
-Ambiguities are indicated by listing the acceptable amino acids for a given position, between square parentheses `[ ]'. For example: [ALT] stands for Ala or Leu or Thr.
-Ambiguities are also indicated by listing between a pair of curly brackets `{ }' the amino acids that are not accepted at a given position. For example: {AM} stands for any amino acid except Ala and Met.
-Each element in a pattern is separated from its neighbor by a `-'. (Optional in fuzzpro).
+The symbol 'x' is used for a position where any amino acid is accepted.
+Ambiguities are indicated by listing the acceptable amino acids for a given position, between square parentheses '[ ]'. For example: [ALT] stands for Ala or Leu or Thr.
+Ambiguities are also indicated by listing between a pair of curly brackets '{ }' the amino acids that are not accepted at a given position. For example: {AM} stands for any amino acid except Ala and Met.
+Each element in a pattern is separated from its neighbor by a '-'. (Optional in fuzzpro).
 Repetition of an element of the pattern can be indicated by following that element with a numerical value or a numerical range between parenthesis. Examples: x(3) corresponds to x-x-x, x(2,4) corresponds to x-x or x-x-x or x-x-x-x.
-When a pattern is restricted to either the N- or C-terminal of a sequence, that pattern either starts with a `<' symbol or respectively ends with a `>' symbol.
+When a pattern is restricted to either the N- or C-terminal of a sequence, that pattern either starts with a '&lt;' symbol or respectively ends with a '&gt;' symbol.
 A period ends the pattern. (Optional in fuzzpro).
 For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 <td>Property value(s)</td>
@@ -184,7 +186,7 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.fuzzpro</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -320,42 +322,14 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: fuzzpro
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: fuzzpro
-#    -sequence tsw:*
-#    -pattern [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#    -sequence "tsw:*"
+#    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"
 # Report_format: seqtable
 # Report_file: 100k_rat.fuzzpro
 ########################################
 
-#=======================================
-#
-# Sequence: 100K_RAT     from: 1   to: 889
-# HitCount: 0
-#
-# Pattern_name Mismatch Pattern
-# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-#
-#=======================================
-
-  Start     End Pattern_name Mismatch Sequence
-
-#---------------------------------------
-#---------------------------------------
-#=======================================
-#
-# Sequence: 5H1D_FUGRU     from: 1   to: 379
-# HitCount: 0
-#
-# Pattern_name Mismatch Pattern
-# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-#
-#=======================================
-
-  Start     End Pattern_name Mismatch Sequence
-
-#---------------------------------------
-#---------------------------------------
 #=======================================
 #
 # Sequence: ACT1_FUGRU     from: 1   to: 375
@@ -369,22 +343,42 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
   Start     End Pattern_name Mismatch Sequence
      53      63 pattern1            . YVGDEAQSKRG
 
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACT2_FUGRU     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+     53      63 pattern1            . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACT3_FUGRU     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-# Pattern_name Mismatch Pattern
-# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-#
-#=======================================
-
-  Start     End Pattern_name Mismatch Sequence
-
-#---------------------------------------
 #---------------------------------------
 #=======================================
 #
-# Sequence: OPS2_SCHGR     from: 1   to: 380
-# HitCount: 0
+# Sequence: ACTC_FUGRU     from: 1   to: 377
+# HitCount: 1
 #
 # Pattern_name Mismatch Pattern
 # pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
@@ -392,13 +386,14 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #=======================================
 
   Start     End Pattern_name Mismatch Sequence
+     55      65 pattern1            . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
 #=======================================
 #
-# Sequence: AQP1_HUMAN     from: 1   to: 269
-# HitCount: 0
+# Sequence: ACTS_FUGRU     from: 1   to: 377
+# HitCount: 1
 #
 # Pattern_name Mismatch Pattern
 # pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
@@ -406,13 +401,14 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #=======================================
 
   Start     End Pattern_name Mismatch Sequence
+     55      65 pattern1            . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
 #=======================================
 #
-# Sequence: IFNA2_HUMAN     from: 1   to: 188
-# HitCount: 0
+# Sequence: ACTT_FUGRU     from: 1   to: 377
+# HitCount: 1
 #
 # Pattern_name Mismatch Pattern
 # pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
@@ -420,8 +416,14 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #=======================================
 
   Start     End Pattern_name Mismatch Sequence
+     55      65 pattern1            . YVGDEAQSKRG
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 6
+# Total_hitcount: 6
 #---------------------------------------
 </pre>
 </td></tr></table><p>

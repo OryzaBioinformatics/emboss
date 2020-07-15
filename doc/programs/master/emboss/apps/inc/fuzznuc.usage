@@ -13,3 +13,51 @@ Output report [hhtetra.fuzznuc]: <b></b>
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fuzznuc </b>
+Nucleic acid pattern search
+Input nucleotide sequence(s): <b>tembl:hhtetra</b>
+Search pattern: <b>@nucseq.pat</b>
+Output report [hhtetra.fuzznuc]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fuzznuc -pname test </b>
+Nucleic acid pattern search
+Input nucleotide sequence(s): <b>tembl:hhtetra</b>
+Search pattern: <b>@nucsimple.pat</b>
+Output report [hhtetra.fuzznuc]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.3">Go to the input files for this example</a><br><a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fuzznuc </b>
+Nucleic acid pattern search
+Input nucleotide sequence(s): <b>tembl:hhtetra</b>
+Search pattern: <b>@nuc.pat</b>
+Output report [hhtetra.fuzznuc]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.4">Go to the input files for this example</a><br><a href="#output.4">Go to the output files for this example</a><p><p>

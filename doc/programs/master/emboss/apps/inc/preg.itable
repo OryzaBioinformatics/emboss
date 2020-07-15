@@ -15,7 +15,7 @@
 <tr>
 <td>[-pattern]<br>(Parameter 2)</td>
 <td>Regular expression pattern</td>
-<td>Any regular epression pattern is accepted</td>
+<td>Any regular expression pattern is accepted</td>
 <td><b>Required</b></td>
 </tr>
 
@@ -23,7 +23,7 @@
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.preg</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

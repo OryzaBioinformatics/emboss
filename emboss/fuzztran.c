@@ -38,8 +38,8 @@ static void fuzztran_SourceFeature(const AjPFeattable thys, const AjPSeq pseq,
 
 int main(int argc, char **argv)
 {
-    AjPSeqall seqall;
-    AjPSeq seq;
+    AjPSeqall seqall = NULL;
+    AjPSeq seq = NULL;
     AjPReport report = NULL;
     AjPFeattable tab = NULL;
     AjPFeattable seqtab = NULL;
@@ -59,6 +59,7 @@ int main(int argc, char **argv)
     ajint end;
 
     AjPStr tmpstr = NULL;
+    AjBool writeok = ajTrue;
 
     embInit("fuzztran", argc, argv);
 
@@ -77,10 +78,11 @@ int main(int argc, char **argv)
 
     trantable = ajTrnNewI(table);
 
-    while(ajSeqallNext(seqall,&seq))
+    writeok=ajTrue;
+    while(writeok && ajSeqallNext(seqall,&seq))
     {
-	begin = ajSeqallBegin(seqall);
-	end   = ajSeqallEnd(seqall);
+	begin = ajSeqallGetseqBegin(seqall);
+	end   = ajSeqallGetseqEnd(seqall);
 	ajStrAssignSubC(&text,ajSeqGetSeqC(seq),begin-1,end-1);
 	ajStrFmtUpper(&text);
 	seqtab = ajFeattableNewDna(ajSeqGetNameS(seq));
@@ -156,7 +158,8 @@ int main(int argc, char **argv)
 	    ajSeqDel(&pseq);
 	}
 
-	ajReportWrite(report, seqtab, seq);
+	if(ajFeattableSize(seqtab))
+	    writeok = ajReportWrite(report, seqtab, seq);
 	ajStrDel(&text);
     }
 
@@ -179,7 +182,7 @@ int main(int argc, char **argv)
     ajFeattableDel(&tab);
 
     ajTrnDel(&trantable);
-    ajExit();
+    embExit();
 
     return 0;
 }

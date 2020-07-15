@@ -991,8 +991,8 @@ Output report [paamir.dreg]: <b></b>
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
-  [-pattern]           regexp     Any regular epression pattern is accepted
-  [-outfile]           report     Output report file name
+  [-pattern]           regexp     Any regular expression pattern is accepted)
+  [-outfile]           report     [*.dreg] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -1027,6 +1027,8 @@ Output report [paamir.dreg]: <b></b>
    -rdesshow3          boolean    Show description in the report
    -rscoreshow3        boolean    Show the score in the report
    -rusashow3          boolean    Show the full USA in the report
+   -rmaxall3           integer    Maximum total hits to report
+   -rmaxseq3           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -1063,7 +1065,7 @@ Output report [paamir.dreg]: <b></b>
 <tr>
 <td>[-pattern]<br>(Parameter 2)</td>
 <td>Regular expression pattern</td>
-<td>Any regular epression pattern is accepted</td>
+<td>Any regular expression pattern is accepted</td>
 <td><b>Required</b></td>
 </tr>
 
@@ -1071,7 +1073,7 @@ Output report [paamir.dreg]: <b></b>
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.dreg</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -1232,7 +1234,7 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 <pre>
 ########################################
 # Program: dreg
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: dreg
 #    -sequence tembl:paamir
 #    -pattern ggtacc
@@ -1253,6 +1255,11 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
       1       6 regex1       ggtacc
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 1
 #---------------------------------------
 </pre>
 </td></tr></table><p>

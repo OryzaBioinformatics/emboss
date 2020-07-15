@@ -6,10 +6,10 @@
 <pre>
 ########################################
 # Program: preg
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: preg
-#    -sequence tsw:*_rat
-#    -pattern IA[QWF]A
+#    -sequence "tsw:*_rat"
+#    -pattern "IA[QWF]A"
 # Report_format: seqtable
 # Report_file: 100k_rat.preg
 ########################################
@@ -27,6 +27,11 @@
     390     393 regex1       IAQA
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 1
 #---------------------------------------
 </pre>
 </td></tr></table><p>

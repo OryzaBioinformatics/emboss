@@ -57,6 +57,54 @@ Output report [hhtetra.fuzznuc]: <b></b>
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fuzznuc </b>
+Nucleic acid pattern search
+Input nucleotide sequence(s): <b>tembl:hhtetra</b>
+Search pattern: <b>@nucseq.pat</b>
+Output report [hhtetra.fuzznuc]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fuzznuc -pname test </b>
+Nucleic acid pattern search
+Input nucleotide sequence(s): <b>tembl:hhtetra</b>
+Search pattern: <b>@nucsimple.pat</b>
+Output report [hhtetra.fuzznuc]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.3">Go to the input files for this example</a><br><a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fuzznuc </b>
+Nucleic acid pattern search
+Input nucleotide sequence(s): <b>tembl:hhtetra</b>
+Search pattern: <b>@nuc.pat</b>
+Output report [hhtetra.fuzznuc]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.4">Go to the input files for this example</a><br><a href="#output.4">Go to the output files for this example</a><p><p>
 
 <H2>
     Command line arguments
@@ -68,19 +116,19 @@ Output report [hhtetra.fuzznuc]: <b></b>
                                   format, or reference (input USA)
    -pattern            pattern    The standard IUPAC one-letter codes for the
                                   nucleotides are used.
-                                  The symbol `n' is used for a position where
+                                  The symbol 'n' is used for a position where
                                   any nucleotide is accepted.
                                   Ambiguities are indicated by listing the
                                   acceptable nucleotides for a given position,
-                                  between square parentheses `[ ]'. For
+                                  between square parentheses '[ ]'. For
                                   example: [ACG] stands for A or C or G.
                                   Ambiguities are also indicated by listing
-                                  between a pair of curly brackets `{ }' the
+                                  between a pair of curly brackets '{ }' the
                                   nucleotides that are not accepted at a given
                                   position. For example: {AG} stands for any
                                   nucleotides except A and G.
                                   Each element in a pattern is separated from
-                                  its neighbor by a `-'. (Optional in
+                                  its neighbor by a '-'. (Optional in
                                   fuzznuc).
                                   Repetition of an element of the pattern can
                                   be indicated by following that element with
@@ -90,12 +138,12 @@ Output report [hhtetra.fuzznuc]: <b></b>
                                   N-N or N-N-N or N-N-N-N.
                                   When a pattern is restricted to either the
                                   5' or 3' end of a sequence, that pattern
-                                  either starts with a `<' symbol or
-                                  respectively ends with a `>' symbol.
+                                  either starts with a '<' symbol or
+                                  respectively ends with a '>' symbol.
                                   A period ends the pattern. (Optional in
                                   fuzznuc).
                                   For example, [CG](5)TG{A}N(1,5)C
-  [-outfile]           report     Output report file name
+  [-outfile]           report     [*.fuzznuc] Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -133,6 +181,8 @@ Output report [hhtetra.fuzznuc]: <b></b>
    -rdesshow2          boolean    Show description in the report
    -rscoreshow2        boolean    Show the score in the report
    -rusashow2          boolean    Show the full USA in the report
+   -rmaxall2           integer    Maximum total hits to report
+   -rmaxseq2           integer    Maximum hits to report for one sequence
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -169,12 +219,12 @@ Output report [hhtetra.fuzznuc]: <b></b>
 <tr>
 <td>-pattern</td>
 <td>The standard IUPAC one-letter codes for the nucleotides are used.
-The symbol `n' is used for a position where any nucleotide is accepted.
-Ambiguities are indicated by listing the acceptable nucleotides for a given position, between square parentheses `[ ]'. For example: [ACG] stands for A or C or G.
-Ambiguities are also indicated by listing between a pair of curly brackets `{ }' the nucleotides that are not accepted at a given position. For example: {AG} stands for any nucleotides except A and G.
-Each element in a pattern is separated from its neighbor by a `-'. (Optional in fuzznuc).
+The symbol 'n' is used for a position where any nucleotide is accepted.
+Ambiguities are indicated by listing the acceptable nucleotides for a given position, between square parentheses '[ ]'. For example: [ACG] stands for A or C or G.
+Ambiguities are also indicated by listing between a pair of curly brackets '{ }' the nucleotides that are not accepted at a given position. For example: {AG} stands for any nucleotides except A and G.
+Each element in a pattern is separated from its neighbor by a '-'. (Optional in fuzznuc).
 Repetition of an element of the pattern can be indicated by following that element with a numerical value or a numerical range between parenthesis. Examples: N(3) corresponds to N-N-N, N(2,4) corresponds to N-N or N-N-N or N-N-N-N.
-When a pattern is restricted to either the 5' or 3' end of a sequence, that pattern either starts with a `<' symbol or respectively ends with a `>' symbol.
+When a pattern is restricted to either the 5' or 3' end of a sequence, that pattern either starts with a '&lt;' symbol or respectively ends with a '&gt;' symbol.
 A period ends the pattern. (Optional in fuzznuc).
 For example, [CG](5)TG{A}N(1,5)C</td>
 <td>Property value(s)</td>
@@ -185,7 +235,7 @@ For example, [CG](5)TG{A}N(1,5)C</td>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
 <td>Report output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.fuzznuc</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -298,6 +348,43 @@ SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
 </pre>
 </td></tr></table><p>
 
+<a name="input.2"></a>
+<h3>Input files for usage example 2</h3>
+<p><h3>File: nucseq.pat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;targetseq
+cg(2)c(3)taac
+cctagc(3)ta
+</pre>
+</td></tr></table><p>
+
+<a name="input.3"></a>
+<h3>Input files for usage example 3</h3>
+<p><h3>File: nucsimple.pat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+cg(2)c(3)taac
+cctagc(3)ta
+</pre>
+</td></tr></table><p>
+
+<a name="input.4"></a>
+<h3>Input files for usage example 4</h3>
+<p><h3>File: nuc.pat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;pat1
+cggccctaaccctagcccta
+&gt;pat2 &lt;mismatch=1&gt;
+cg(2)c(3)taac
+cctagc(3)ta
+&gt;pat3
+cggc(2,4)taac(2,5)
+
+</pre>
+</td></tr></table><p>
+
 
 <h3>Pattern specification</h3>
 
@@ -406,7 +493,7 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:hhtetra
 #    -pattern AAGCTT
@@ -431,6 +518,166 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
    1267    1272 pattern1            . aagctt
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 2
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: hhtetra.fuzznuc</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: fuzznuc
+# Rundate: Sat 15 Jul 2006 12:00:00
+# Commandline: fuzznuc
+#    -sequence tembl:hhtetra
+#    -pattern @../../data/nucseq.pat
+# Report_format: seqtable
+# Report_file: hhtetra.fuzznuc
+########################################
+
+#=======================================
+#
+# Sequence: HHTETRA     from: 1   to: 1272
+# HitCount: 2
+#
+# Pattern_name Mismatch Pattern
+# targetseq           0 cg(2)c(3)taaccctagc(3)ta
+# 
+# Complement: No
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+    429     448 targetseq           . cggccctaaccctagcccta
+    491     510 targetseq           . cggccctaaccctagcccta
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 2
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: hhtetra.fuzznuc</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: fuzznuc
+# Rundate: Sat 15 Jul 2006 12:00:00
+# Commandline: fuzznuc
+#    -pname test
+#    -sequence tembl:hhtetra
+#    -pattern @../../data/nucsimple.pat
+# Report_format: seqtable
+# Report_file: hhtetra.fuzznuc
+########################################
+
+#=======================================
+#
+# Sequence: HHTETRA     from: 1   to: 1272
+# HitCount: 13
+#
+# Pattern_name Mismatch Pattern
+# test1               0 cg(2)c(3)taac
+# test2               0 cctagc(3)ta
+# 
+# Complement: No
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+    429     438 test1               . cggccctaac
+    491     500 test1               . cggccctaac
+    535     544 test1               . cggccctaac
+    605     614 test1               . cggccctaac
+    631     640 test1               . cggccctaac
+    695     704 test1               . cggccctaac
+    721     730 test1               . cggccctaac
+    753     762 test1               . cggccctaac
+    293     302 test2               . cctagcccta
+    439     448 test2               . cctagcccta
+    469     478 test2               . cctagcccta
+    501     510 test2               . cctagcccta
+    801     810 test2               . cctagcccta
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 13
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: hhtetra.fuzznuc</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: fuzznuc
+# Rundate: Sat 15 Jul 2006 12:00:00
+# Commandline: fuzznuc
+#    -sequence tembl:hhtetra
+#    -pattern @../../data/nuc.pat
+# Report_format: seqtable
+# Report_file: hhtetra.fuzznuc
+########################################
+
+#=======================================
+#
+# Sequence: HHTETRA     from: 1   to: 1272
+# HitCount: 19
+#
+# Pattern_name Mismatch Pattern
+# pat1                0 cggccctaaccctagcccta
+# pat2                1 cg(2)c(3)taaccctagc(3)ta
+# pat3                0 cggc(2,4)taac(2,5)
+# 
+# Complement: No
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+    429     448 pat1                . cggccctaaccctagcccta
+    491     510 pat1                . cggccctaaccctagcccta
+    429     448 pat2                . cggccctaaccctagcccta
+    491     510 pat2                . cggccctaaccctagcccta
+    535     554 pat2                1 cggccctaaccctaacccta
+    605     624 pat2                1 cggccctaaccctaacccta
+    631     650 pat2                1 cggccctaaccctaacccta
+    695     714 pat2                1 cggccctaaccctaacccta
+    721     740 pat2                1 cggccctaaccctaacccta
+    753     772 pat2                1 cggccctaaccctaacccta
+    791     810 pat2                1 cggcccgaaccctagcccta
+    429     440 pat3                . cggccctaaccc
+    491     502 pat3                . cggccctaaccc
+    535     546 pat3                . cggccctaaccc
+    605     616 pat3                . cggccctaaccc
+    631     642 pat3                . cggccctaaccc
+    695     706 pat3                . cggccctaaccc
+    721     732 pat3                . cggccctaaccc
+    753     764 pat3                . cggccctaaccc
+
+#---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 19
 #---------------------------------------
 </pre>
 </td></tr></table><p>

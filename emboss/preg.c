@@ -34,20 +34,14 @@
 int main(int argc, char **argv)
 {
     AjPSeqall seqall;
-    AjPRegexp patexp;
     AjPPatlistRegex plist = NULL;
-    AjPPatternRegex pat = NULL;
     AjPReport report;
     AjPFeattable feat=NULL;
-    AjPFeature sf = NULL;
     AjPSeq seq = NULL;
     AjPStr str = NULL;
     AjPStr tmpstr = NULL;
     AjPStr substr = NULL;
-    ajint ioff;
-    ajint ipos;
-    ajint ilen;
-
+ 
     embInit("preg", argc, argv);
 
     report = ajAcdGetReport("outfile");
@@ -59,37 +53,12 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	ipos = 1;
 	ajStrAssignS(&str, ajSeqGetSeqS(seq));
 	ajStrFmtUpper(&str);
 	ajDebug("Testing '%s' len: %d %d\n",
 		ajSeqGetNameC(seq), ajSeqGetLen(seq), ajStrGetLen(str));
         feat = ajFeattableNewProt(ajSeqGetNameS(seq));
-	while(ajPatlistRegexGetNext(plist,&pat))
-	{
-	    patexp = ajPatternRegexGetCompiled(pat);
-	    while(ajStrGetLen(str) && ajRegExec(patexp, str))
-	    {
-		ioff = ajRegOffset(patexp);
-		ilen = ajRegLenI(patexp, 0);
-		if(ioff || ilen)
-		{
-		    ajRegSubI(patexp, 0, &substr);
-		    ajRegPost(patexp, &tmpstr);
-		    ajStrAssignS(&str, tmpstr);
-		    ipos += ioff;
-		    sf = ajFeatNewII (feat,ipos,ipos+ilen-1);
-		    ajFmtPrintS (&tmpstr,"*pat %S", ajPatternRegexGetName(pat));
-		    ajFeatTagAdd (sf,NULL,tmpstr);
-		    ipos += ilen;
-		}
-		else
-		{
-		    ipos++;
-		    ajStrCutStart(&str, 1);
-		}
-	    }
-	}
+	embPatlistRegexSearch(feat, seq, plist, AJFALSE);
 	(void) ajReportWrite (report,feat,seq);
 	ajFeattableDel(&feat);
     }

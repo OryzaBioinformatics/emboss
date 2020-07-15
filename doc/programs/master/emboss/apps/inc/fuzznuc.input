@@ -74,3 +74,40 @@ SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
 //
 </pre>
 </td></tr></table><p>
+
+<a name="input.2"></a>
+<h3>Input files for usage example 2</h3>
+<p><h3>File: nucseq.pat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;targetseq
+cg(2)c(3)taac
+cctagc(3)ta
+</pre>
+</td></tr></table><p>
+
+<a name="input.3"></a>
+<h3>Input files for usage example 3</h3>
+<p><h3>File: nucsimple.pat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+cg(2)c(3)taac
+cctagc(3)ta
+</pre>
+</td></tr></table><p>
+
+<a name="input.4"></a>
+<h3>Input files for usage example 4</h3>
+<p><h3>File: nuc.pat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;pat1
+cggccctaaccctagcccta
+&gt;pat2 &lt;mismatch=1&gt;
+cg(2)c(3)taac
+cctagc(3)ta
+&gt;pat3
+cggc(2,4)taac(2,5)
+
+</pre>
+</td></tr></table><p>

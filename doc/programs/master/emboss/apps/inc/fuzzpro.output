@@ -6,42 +6,14 @@
 <pre>
 ########################################
 # Program: fuzzpro
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: fuzzpro
-#    -sequence tsw:*
-#    -pattern [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#    -sequence "tsw:*"
+#    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"
 # Report_format: seqtable
 # Report_file: 100k_rat.fuzzpro
 ########################################
 
-#=======================================
-#
-# Sequence: 100K_RAT     from: 1   to: 889
-# HitCount: 0
-#
-# Pattern_name Mismatch Pattern
-# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-#
-#=======================================
-
-  Start     End Pattern_name Mismatch Sequence
-
-#---------------------------------------
-#---------------------------------------
-#=======================================
-#
-# Sequence: 5H1D_FUGRU     from: 1   to: 379
-# HitCount: 0
-#
-# Pattern_name Mismatch Pattern
-# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-#
-#=======================================
-
-  Start     End Pattern_name Mismatch Sequence
-
-#---------------------------------------
-#---------------------------------------
 #=======================================
 #
 # Sequence: ACT1_FUGRU     from: 1   to: 375
@@ -55,22 +27,42 @@
   Start     End Pattern_name Mismatch Sequence
      53      63 pattern1            . YVGDEAQSKRG
 
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACT2_FUGRU     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+  Start     End Pattern_name Mismatch Sequence
+     53      63 pattern1            . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACT3_FUGRU     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern_name Mismatch Pattern
+# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+#
+#=======================================
+
+
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-# Pattern_name Mismatch Pattern
-# pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-#
-#=======================================
-
-  Start     End Pattern_name Mismatch Sequence
-
-#---------------------------------------
 #---------------------------------------
 #=======================================
 #
-# Sequence: OPS2_SCHGR     from: 1   to: 380
-# HitCount: 0
+# Sequence: ACTC_FUGRU     from: 1   to: 377
+# HitCount: 1
 #
 # Pattern_name Mismatch Pattern
 # pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
@@ -78,13 +70,14 @@
 #=======================================
 
   Start     End Pattern_name Mismatch Sequence
+     55      65 pattern1            . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
 #=======================================
 #
-# Sequence: AQP1_HUMAN     from: 1   to: 269
-# HitCount: 0
+# Sequence: ACTS_FUGRU     from: 1   to: 377
+# HitCount: 1
 #
 # Pattern_name Mismatch Pattern
 # pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
@@ -92,13 +85,14 @@
 #=======================================
 
   Start     End Pattern_name Mismatch Sequence
+     55      65 pattern1            . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
 #=======================================
 #
-# Sequence: IFNA2_HUMAN     from: 1   to: 188
-# HitCount: 0
+# Sequence: ACTT_FUGRU     from: 1   to: 377
+# HitCount: 1
 #
 # Pattern_name Mismatch Pattern
 # pattern1            0 [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
@@ -106,8 +100,14 @@
 #=======================================
 
   Start     End Pattern_name Mismatch Sequence
+     55      65 pattern1            . YVGDEAQSKRG
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 6
+# Total_hitcount: 6
 #---------------------------------------
 </pre>
 </td></tr></table><p>

@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: dreg
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Commandline: dreg
 #    -sequence tembl:paamir
 #    -pattern ggtacc
@@ -27,6 +27,11 @@
       1       6 regex1       ggtacc
 
 #---------------------------------------
+#---------------------------------------
+
+#---------------------------------------
+# Total_sequences: 1
+# Total_hitcount: 1
 #---------------------------------------
 </pre>
 </td></tr></table><p>
