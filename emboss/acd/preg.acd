@@ -9,12 +9,12 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "protein"
   ]
 
-  regexp: pattern  [
+  regexp: pattern [
     parameter: "Y"
     upper: "Y"
     information: "Regular expression pattern"
@@ -27,8 +27,9 @@ section: output [
   type: "page"
 ]
 
-  report: outfile  [
+  report: outfile [
     parameter: "Y"
+    taglist: "str:pat=Pattern_name"
     rformat: "seqtable"
   ]
 

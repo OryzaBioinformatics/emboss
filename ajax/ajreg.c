@@ -41,7 +41,6 @@
 ******************************************************************************/
 
 #include "ajax.h"
-#include "ajreg.h"
 
 
 
@@ -68,7 +67,7 @@ static ajlong regTotal     = 0;
 
 AjPRegexp ajRegComp(const AjPStr exp)
 {
-    return ajRegCompC(ajStrStr(exp));
+    return ajRegCompC(ajStrGetPtr(exp));
 }
 
 
@@ -125,7 +124,7 @@ AjPRegexp ajRegCompC(const char* exp)
 
 AjPRegexp ajRegCompCase(const AjPStr exp)
 {
-    return ajRegCompCaseC(ajStrStr(exp));
+    return ajRegCompCaseC(ajStrGetPtr(exp));
 }
 
 
@@ -195,12 +194,12 @@ AjBool ajRegExec(AjPRegexp prog, const AjPStr str)
     int options     = 0;
     int status      = 0;
 
-    status = pcre_exec(prog->pcre, prog->extra, ajStrStr(str), ajStrLen(str),
+    status = pcre_exec(prog->pcre, prog->extra, ajStrGetPtr(str), ajStrGetLen(str),
 		       startoffset, options, prog->ovector, 3*prog->ovecsize);
 
     if(status >= 0)
     {
-	prog->orig = ajStrStr(str);
+	prog->orig = ajStrGetPtr(str);
 	if(status == 0)
 	    ajWarn("ajRegExec too many substrings");
 	return ajTrue;
@@ -209,7 +208,7 @@ AjBool ajRegExec(AjPRegexp prog, const AjPStr str)
     if(status < -1)		    /* -1 is a simple fail to match */
     {				/* others are recursion limits etc. */
 	ajDebug("ajRegExec returned unexpected status '%d'\n", status);
-	prog->orig = ajStrStr(str);	/* needed for the trace */
+	prog->orig = ajStrGetPtr(str);	/* needed for the trace */
 	ajRegTrace(prog);
     }
 
@@ -241,12 +240,12 @@ AjBool ajRegExecB(AjPRegexp prog, const AjPStr str)
     int options     = 0;
     int status      = 0;
 
-    status = pcre_exec(prog->pcre, prog->extra, ajStrStr(str), ajStrLen(str),
+    status = pcre_exec(prog->pcre, prog->extra, ajStrGetPtr(str), ajStrGetLen(str),
 		       startoffset, options, prog->ovector, 3*prog->ovecsize);
 
     if(status >= 0)
     {
-	prog->orig = ajStrStr(str);
+	prog->orig = ajStrGetPtr(str);
 	if(status == 0)
 	    ajWarn("ajRegExec too many substrings");
 	return ajTrue;
@@ -255,7 +254,7 @@ AjBool ajRegExecB(AjPRegexp prog, const AjPStr str)
     if(status < -1)		    /* -1 is a simple fail to match */
     {				/* others are recursion limits etc. */
 	ajDebug("ajRegExec returned unexpected status '%d'\n", status);
-	prog->orig = ajStrStr(str);	/* needed for the trace */
+	prog->orig = ajStrGetPtr(str);	/* needed for the trace */
 	ajRegTrace(prog);
     }
 
@@ -411,11 +410,11 @@ AjBool ajRegPost(const AjPRegexp rp, AjPStr* post)
 {
     if(rp->ovector[1])
     {
-	ajStrAssC(post, &rp->orig[rp->ovector[1]]);
+	ajStrAssignC(post, &rp->orig[rp->ovector[1]]);
 	return ajTrue;
     }
 
-    ajStrDelReuse(post);
+    ajStrDelStatic(post);
 
     return ajFalse;
 }
@@ -467,7 +466,7 @@ AjBool ajRegPre(const AjPRegexp rp, AjPStr* dest)
     ajint ilen;
 
     ilen = rp->ovector[0];
-    ajStrModL(dest, ilen+1);
+    ajStrSetRes(dest, ilen+1);
     if(ilen)
     {
 	memmove((*dest)->Ptr, rp->orig, ilen);
@@ -477,7 +476,7 @@ AjBool ajRegPre(const AjPRegexp rp, AjPStr* dest)
 	return ajTrue;
     }
 
-    ajStrDelReuse(dest);
+    ajStrDelStatic(dest);
 
     return ajFalse;
 }
@@ -510,24 +509,24 @@ AjBool ajRegSubI(const AjPRegexp rp, ajint isub, AjPStr* dest)
 
     if(isub < 0)
     {
-	ajStrDelReuse(dest);
+	ajStrDelStatic(dest);
 	return ajFalse;
     }
 
     if(isub >= rp->ovecsize)
     {
-	ajStrDelReuse(dest);
+	ajStrDelStatic(dest);
 	return ajFalse;
     }
 
     if(rp->ovector[istart] < 0)
     {
-	ajStrDelReuse(dest);
+	ajStrDelStatic(dest);
 	return ajFalse;
     }
 
     ilen = rp->ovector[iend] - rp->ovector[istart];
-    ajStrModL(dest, ilen+1);
+    ajStrSetRes(dest, ilen+1);
     if(ilen)
 	memmove((*dest)->Ptr, &rp->orig[rp->ovector[istart]], ilen);
     (*dest)->Len = ilen;
@@ -628,7 +627,7 @@ void ajRegTrace(const AjPRegexp exp)
 	if(exp->ovector[iend] >= exp->ovector[istart])
 	{
 	    ilen = exp->ovector[iend] - exp->ovector[istart];
-	    ajStrModL(&str, ilen+1);
+	    ajStrSetRes(&str, ilen+1);
 	    memmove(str->Ptr, &exp->orig[exp->ovector[istart]], ilen);
 	    str->Len = ilen;
 	    str->Ptr[ilen] = '\0';
@@ -646,7 +645,7 @@ void ajRegTrace(const AjPRegexp exp)
     }
     ajDebug("\n");
 
-    ajStrDelReuse(&str);
+    ajStrDelStatic(&str);
 
     return;
 }
@@ -664,10 +663,10 @@ void ajRegTrace(const AjPRegexp exp)
 
 void ajRegExit(void)
 {
-    ajDebug("Regexp usage (bytes): %Ld allocated, %Ld freed, %Ld in use\n",
+    ajDebug("Regexp usage (bytes): %Ld allocated, %Ld freed, %Ld in use (sizes change)\n",
 	    regAlloc, regFree, (regAlloc - regFree));
     ajDebug("Regexp usage (number): %Ld allocated, %Ld freed %Ld in use\n",
-	    regTotal, regFreeCount, regCount);
+	    regCount, regFreeCount, regTotal);
 
     return;
 }

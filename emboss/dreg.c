@@ -2,7 +2,7 @@
 **
 ** DNA regular expressions (perl style)
 **
-** @author: Copyright (C) Peter Rice
+** @author Copyright (C) Peter Rice
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -35,7 +35,9 @@ int main(int argc, char **argv)
 {
 
     AjPSeqall seqall;
-    AjPRegexp patexp;
+    AjPRegexp patexp = NULL;
+    AjPPatlistRegex plist = NULL;
+    AjPPatternRegex pat = NULL;
     AjPReport report=NULL;
     AjPFeattable feat=NULL;
     AjPFeature sf = NULL;
@@ -51,37 +53,44 @@ int main(int argc, char **argv)
 
     report = ajAcdGetReport ("outfile");
     seqall = ajAcdGetSeqall("sequence");
-    patexp = ajAcdGetRegexp("pattern");
+    plist  = ajAcdGetRegexp("pattern");
 
-    ajFmtPrintAppS (&tmpstr, "Pattern: %S\n", ajAcdValue("pattern"));
+    ajFmtPrintAppS (&tmpstr, "Pattern: %S\n", ajAcdGetValue("pattern"));
     ajReportSetHeader (report, tmpstr);
 
     while(ajSeqallNext(seqall, &seq))
     {
 	ipos  = 1;
-	ajStrAssS(&str, ajSeqStr(seq));
-	ajStrToUpper(&str);
-	ajDebug("Testing '%s' len: %d %d\n",
-		ajSeqName(seq), ajSeqLen(seq), ajStrLen(str));
-	feat = ajFeattableNewDna(ajSeqGetName(seq));
-	while(ajStrLen(str) && ajRegExec(patexp, str))
+	ajStrAssignS(&str, ajSeqGetSeqS(seq));
+	ajStrFmtUpper(&str);
+	ajDebug("Testing '%s' len: %d %d regex %x\n",
+		ajSeqGetNameC(seq), ajSeqGetLen(seq), ajStrGetLen(str),
+		patexp);
+	feat = ajFeattableNewDna(ajSeqGetNameS(seq));
+	while(ajPatlistRegexGetNext(plist,&pat))
 	{
-	    ioff = ajRegOffset(patexp);
-	    ilen = ajRegLenI(patexp, 0);
+	    patexp = ajPatternRegexGetCompiled(pat);
+	    while(ajStrGetLen(str) && ajRegExec(patexp, str))
+	    {
+		ioff = ajRegOffset(patexp);
+		ilen = ajRegLenI(patexp, 0);
 
-	    if(ioff || ilen)
-	    {
-		ajRegSubI(patexp, 0, &substr);
-		ajRegPost(patexp, &tmpstr);
-		ajStrAssS(&str, tmpstr);
-		ipos += ioff;
-		sf = ajFeatNewII (feat,ipos,ipos+ilen-1);
-		ipos += ilen;
-	    }
-	    else
-	    {
-		ipos++;
-		ajStrTrim(&str, 1);
+		if(ioff || ilen)
+		{
+		    ajRegSubI(patexp, 0, &substr);
+		    ajRegPost(patexp, &tmpstr);
+		    ajStrAssignS(&str, tmpstr);
+		    ipos += ioff;
+		    sf = ajFeatNewII (feat,ipos,ipos+ilen-1);
+		    ajFmtPrintS (&tmpstr,"*pat %S", ajPatternRegexGetName(pat));
+		    ajFeatTagAdd (sf,NULL,tmpstr);
+		    ipos += ilen;
+		}
+		else
+		{
+		    ipos++;
+		    ajStrCutStart(&str, 1);
+		}
 	    }
 	}
         (void) ajReportWrite (report,feat,seq);
@@ -91,7 +100,15 @@ int main(int argc, char **argv)
     ajReportClose(report);
     ajReportDel(&report);
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+
+    ajStrDel(&tmpstr);
+    ajStrDel(&substr);
+    ajStrDel(&str);
+    ajPatlistRegexDel(&plist);
+
+    embExit();
 
     return 0;
 }

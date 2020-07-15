@@ -3,6 +3,9 @@ extern "C"
 {
 #endif
 
+
+
+
 /******************************************************************************
 **
 ** AJAX regular expression functions
@@ -42,6 +45,13 @@ typedef struct AjSRegexp {
 
 #define AjPRegexp AjORegexp*
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 /* constructors */
 
 AjPRegexp ajRegComp (const AjPStr exp);
@@ -75,6 +85,11 @@ void   ajRegFree (AjPRegexp* pexp);
 void   ajRegTrace (const AjPRegexp exp);
 
 void   ajRegExit (void);
+
+/*
+** End of prototype definitions
+*/
+
 #endif
 
 #ifdef __cplusplus
