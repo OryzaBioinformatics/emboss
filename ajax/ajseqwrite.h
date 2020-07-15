@@ -6,6 +6,9 @@ extern "C"
 #ifndef ajseqwrite_h
 #define ajseqwrite_h
 
+
+
+
 /* @data AjPSeqout ************************************************************
 **
 ** Ajax Sequence Output object.
@@ -28,7 +31,7 @@ extern "C"
 ** @attr Doc [AjPStr] Obsolete - see TextPtr
 ** @attr Rev [AjBool] true: to be reverse-complemented
 ** @attr Offset [ajint] offset from start
-** @attr Usa [AjPStr] USA fo re-reading
+** @attr Usa [AjPStr] USA for re-reading
 ** @attr Ufo [AjPStr] UFO for re-reading
 ** @attr Fttable [AjPFeattable] Feature table
 ** @attr Ftquery [AjPFeattabOut] Feature table output
@@ -112,10 +115,20 @@ typedef struct AjSSeqout {
 
 #define AjPSeqout AjOSeqout*
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 void         ajSeqAllWrite (AjPSeqout outseq, const AjPSeq seq);
 AjBool       ajSeqFileNewOut (AjPSeqout seqout, const AjPStr name);
 ajint        ajSeqoutCheckGcg (const AjPSeqout outseq);
 void         ajSeqoutClear (AjPSeqout thys);
+void         ajSeqoutCount(const AjPSeqout seqout, ajint* b);
+void         ajSeqoutDefName(AjPSeqout thys,
+			     const AjPStr setname, AjBool multi);
 void         ajSeqoutDel (AjPSeqout* thys);
 AjBool       ajSeqOutFormatDefault (AjPStr* pformat);
 AjBool       ajSeqOutFormatSingle (AjPStr format);
@@ -130,9 +143,14 @@ void         ajSeqoutUsa (AjPSeqout* pthis, const AjPStr Usa);
 void         ajSeqsetWrite (AjPSeqout seqout, const AjPSeqset seq);
 void         ajSeqWrite (AjPSeqout seqout, const AjPSeq seq);
 void         ajSeqWriteClose (AjPSeqout outseq);
+void         ajSeqWriteExit(void);
 void         ajSeqWriteXyz(AjPFile outf, const AjPStr seq, const char *prefix);
 void         ajSssWriteXyz(AjPFile outf, const AjPStr seq, const char *prefix);
 
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

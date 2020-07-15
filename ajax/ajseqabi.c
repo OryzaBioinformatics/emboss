@@ -61,7 +61,7 @@ AjBool ajSeqABITest(AjPFile fp)
 	if(ajFileRead((void *)pabi,4,1,fp))
 	{
 	    ajDebug("ajSeqABITest was at '%s'\n", pabi);
-	    if(ajStrPrefixCC(pabi,"ABIF"))
+	    if(ajCharPrefixC(pabi,"ABIF"))
 		return ajTrue;
 	}
 
@@ -71,7 +71,7 @@ AjBool ajSeqABITest(AjPFile fp)
 	if(ajFileRead((void*)pabi,4,1,fp))
 	{
 	    ajDebug("ajSeqABITest seek to '%s'\n", pabi);
-	    if(ajStrPrefixCC(pabi,"ABIF"))
+	    if(ajCharPrefixC(pabi,"ABIF"))
 		return ajTrue;
 	}
     }
@@ -106,7 +106,7 @@ AjBool ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
     for (i=0;i<(ajint)numBases;i++)
     {
 	ajFileRead(&pseq,1,1,fp);
-	ajStrAppK(nseq,pseq);
+	ajStrAppendK(nseq,pseq);
     }
 
     return ajTrue;
@@ -138,9 +138,9 @@ AjBool ajSeqABIMachineName(AjPFile fp,AjPStr *machine)
 	if (ajFileSeek(fp,mchn,SEEK_SET) >= 0)
 	{
 	    ajFileRead(&l,sizeof(char),1,fp);
-	    *machine = ajStrNewL(l+1);
-	    ajFileRead((void*)ajStrStrMod(machine),l,1,fp);
-	    *(ajStrStrMod(machine)+l)='\0';
+	    *machine = ajStrNewRes(l+1);
+	    ajFileRead((void*)ajStrGetuniquePtr(machine),l,1,fp);
+	    *(ajStrGetuniquePtr(machine)+l)='\0';
 	}
 	else
 	    return ajFalse;
@@ -583,14 +583,18 @@ static AjBool seqABIReadFloat4(AjPFile fp,float* f4)
 {
 
     unsigned char buf[sizeof(ajlong)];
-
+    ajulong res;
+    
     if (ajFileRead((void *)buf,4,1,fp) != 1)
 	return ajFalse;
-    *f4 = (ajlong)
+
+    res = (ajulong)
         (((ajulong)buf[3]) +
          ((ajulong)buf[2]<<8) +
          ((ajulong)buf[1]<<16) +
          ((ajulong)buf[0]<<24));
+
+    *f4 = (float) res;
 
     return ajTrue;
 }
@@ -832,9 +836,9 @@ AjBool ajSeqABISampleName(AjPFile fp, AjPStr *sample)
        (ajFileSeek(fp,mchn,SEEK_SET) >= 0))
     {
 	ajFileRead(&l,sizeof(char),1,fp);
-	*sample = ajStrNewL(l+1);
-	ajFileRead((void*)ajStrStrMod(sample),l,1,fp);
-	*(ajStrStrMod(sample)+l)='\0';
+	*sample = ajStrNewRes(l+1);
+	ajFileRead((void*)ajStrGetuniquePtr(sample),l,1,fp);
+	*(ajStrGetuniquePtr(sample)+l)='\0';
     }
 
     return ajTrue;

@@ -6,6 +6,13 @@ extern "C"
 #ifndef ajseqabi_h
 #define ajseqabi_h
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 ajint      ajSeqABIGetBaseOffset(AjPFile fp);
 void       ajSeqABIGetBasePosition(AjPFile fp,ajlong numBases,
 				   AjPShort* basePositions);
@@ -27,6 +34,10 @@ AjBool     ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
 			   AjPStr* nseq);
 AjBool     ajSeqABISampleName(AjPFile fp, AjPStr *sample);
 AjBool     ajSeqABITest(AjPFile fp);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 
