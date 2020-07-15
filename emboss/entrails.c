@@ -2,7 +2,7 @@
 **
 ** Show EMBOSS internals
 **
-** @author: Copyright (C) Peter Rice
+** @author Copyright (C) Peter Rice
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -43,17 +43,21 @@ int main(int argc, char **argv)
 
     ajAcdPrintType(outf, full);
     ajAcdPrintQual(outf, full);
+    ajAcdPrintAppl(outf, full);
     ajSeqPrintInFormat(outf, full);
     ajSeqPrintOutFormat(outf, full);
     ajSeqPrintType(outf, full);
     ajSeqPrintAccess(outf, full);
     ajNamPrintDbAttr(outf, full);
     ajNamPrintRsAttr(outf, full);
+    ajFeatPrintFormat(outf, full);
     ajAlignPrintFormat(outf, full);
     ajReportPrintFormat(outf, full);
     ajCodPrintFormat(outf, full);
 
     ajGraphPrintType(outf, full);
+
+    ajFileClose(&outf);
 
     ajExit();
 

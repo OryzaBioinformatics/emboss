@@ -4,13 +4,12 @@ application: entrails [
   groups: "Utils:Misc"
 ]
 
-
 section: additional [
   information: "Additional section"
   type: "page"
 ]
 
-  boolean: fullreport  [
+  boolean: fullreport [
     additional: "Y"
     default: "N"
     information: "Full report"
@@ -18,12 +17,13 @@ section: additional [
   ]
 
 endsection: additional
+
 section: output [
   information: "Output section"
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     parameter: "Y"
     knowntype: "entrails output"
   ]
