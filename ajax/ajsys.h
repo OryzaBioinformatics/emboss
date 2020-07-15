@@ -28,32 +28,54 @@ extern "C"
 ** Prototype definitions
 */
 
-AjBool        ajSysArglist (const AjPStr cmdline, char** pgm, char*** arglist);
-void          ajSysArgListFree (char*** arglist);
-void          ajSysBasename(AjPStr *filename);
+AjBool        ajSysArglistBuild (const AjPStr cmdline,
+				 char** Pname, char*** PParglist);
+void          ajSysArglistFree (char*** arglist);
 void          ajSysCanon(AjBool state);
+char          ajSysCastItoc(ajint v);
+unsigned char ajSysCastItouc(ajint v);
 void          ajSysExit(void);
-char          ajSysItoC(ajint v);
-unsigned char ajSysItoUC(ajint v);
-AjBool        ajSysIsDirectory(const char *s);
-AjBool        ajSysIsRegular(const char *s);
-FILE         *ajSysFdopen(ajint filedes, const char *mode);
-void          ajSystem(const AjPStr cl);
-void          ajSystemEnv(const AjPStr cl, char * const env[]);
-char         *ajSysStrdup(const char *s);
-AjBool        ajSysUnlink(const AjPStr s);
-AjBool        ajSysWhich(AjPStr *exefile);
-AjBool        ajSysWhichEnv(AjPStr *exefile, char * const env[]);
-char         *ajSysStrtok(const char *s, const char *t);
-char         *ajSysStrtokR(char *s, const char *t, char **ptrptr,
-			    AjPStr *buf);
-char         *ajSysFgets(char *buf, int size, FILE *fp);
-FILE         *ajSysFopen(const char *name, const char *flags);
+AjBool        ajSysFileUnlink(const AjPStr s);
+AjBool        ajSysFileWhich(AjPStr *Pfilename);
+AjBool        ajSysFileWhichEnv(AjPStr *Pfilename, char * const env[]);
+FILE*         ajSysFuncFdopen(ajint filedes, const char *mode);
+char*         ajSysFuncFgets(char *buf, int size, FILE *fp);
+FILE*         ajSysFuncFopen(const char *name, const char *flags);
+char*         ajSysFuncStrtokR(const char *s, const char *t,
+			       const char **ptrptr,
+			       AjPStr *buf);
+char*         ajSysFuncStrtok(const char *s, const char *t);
+char*         ajSysFuncStrdup(const char *s);
+void          ajSysSystem(const AjPStr cl);
+void          ajSysSystemEnv(const AjPStr cl, char * const env[]);
+void          ajSysSystemOut(const AjPStr cl, const AjPStr outfname);
 
 /*
 ** End of prototype definitions
 */
 
+
+__deprecated void          ajSystem(const AjPStr cl);
+__deprecated void          ajSystemEnv(const AjPStr cl, char * const env[]);
+__deprecated void          ajSystemOut(const AjPStr cl, const AjPStr outfname);
+__deprecated char         *ajSysStrdup(const char *s);
+__deprecated char         *ajSysStrtok(const char *s, const char *t);
+__deprecated char         *ajSysStrtokR(const char *s, const char *t,
+					const char **ptrptr, AjPStr *buf);
+__deprecated char         *ajSysFgets(char *buf, int size, FILE *fp);
+__deprecated FILE         *ajSysFopen(const char *name, const char *flags);
+__deprecated FILE         *ajSysFdopen(ajint filedes, const char *mode);
+__deprecated AjBool        ajSysWhich(AjPStr *exefile);
+__deprecated AjBool        ajSysWhichEnv(AjPStr *exefile, char * const env[]);
+__deprecated void          ajSysBasename(AjPStr *filename);
+__deprecated void          ajSysArgListFree (char*** arglist);
+__deprecated AjBool        ajSysIsDirectory(const char *s);
+__deprecated AjBool        ajSysIsRegular(const char *s);
+__deprecated AjBool        ajSysArglist (const AjPStr cmdline,
+					 char** Pname, char*** PParglist);
+__deprecated char          ajSysItoC(ajint v);
+__deprecated unsigned char ajSysItoUC(ajint v);
+__deprecated AjBool        ajSysUnlink(const AjPStr s);
 
 /*
 ** S_IFREG is non-ANSI therefore define it here

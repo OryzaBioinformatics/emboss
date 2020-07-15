@@ -41,55 +41,38 @@ static ajint utilBigendCalled = 0;
 
 
 
-/* @func ajExit ***************************************************************
+/* @filesection ajutil *******************************************************
 **
-** Calls 'exit' with a successful code (zero).
+** @nam1rule aj Function belongs to the AJAX library.
 **
-** But first it calls some cleanup routines which can report on resource
-** usage etc.
+*/
+
+/* @datasection [none] Exit functions ****************************************
 **
-** @return [void]
-** @@
+** @nam2rule Exit Functions for exiting cleanly
+**
+*/
+
+/* @section exit  *************************************************************
+**
+** Functions for exiting cleanly.
+**
+** @fdata [none]
+**
+** @nam3rule  Abort  Exits without flushing any files. 
+** @nam3rule  Bad    Calls 'exit' with an unsuccessful code (EXIT_FAILURE
+**                   defined in stdlib.h).
+** 
+** @valrule   *  [void] All functions do not return
+** 
+** @fcategory misc
+**
 ******************************************************************************/
 
-__noreturn void  ajExit(void)
-{
-#ifdef WIN32
-    WSACleanup();
-#endif
-    ajDebug("\nFinal Summary\n=============\n\n");
-    ajLogInfo();
-    ajTableExit();
-    ajListExit();
-    ajFileExit();
-    ajFeatExit();
-    ajSeqExit();
-    ajPhyloExit();
-    ajAlignExit();
-    ajReportExit();
-    ajAcdExit(ajFalse);
-    ajNamExit();
-    ajSysExit();
-    ajCallExit();
-    ajBaseExit();
-    ajCodExit();
-    ajTrnExit();
-    ajMeltExit();
-    ajTimeExit();
-    ajRegExit();
-    ajArrExit();
-    ajStrExit();
-    ajMemExit();
-    ajMessExit();     /* clears data for ajDebug - do this last!!!  */
-    exit(0);
-}
-
-
-
-
-/* @func ajExitBad ************************************************************
+/* @func ajExit ***************************************************************
 **
-** Calls 'exit' with an unsuccessful code (EXIT_FAILURE defined in stdlib.h).
+** Calls 'exit' with a successful code (zero), but first calls ajReset to
+** call memory clean up and debug reporting functions.
 **
 ** No cleanup or reporting routines are called. Simply crashes.
 **
@@ -97,12 +80,11 @@ __noreturn void  ajExit(void)
 ** @@
 ******************************************************************************/
 
-__noreturn void  ajExitBad(void)
+__noreturn void ajExit(void)
 {
-    exit(EXIT_FAILURE);
+    ajReset();
+    exit(0);
 }
-
-
 
 
 /* @func ajExitAbort **********************************************************
@@ -129,41 +111,81 @@ __noreturn void  ajExitAbort(void)
 
 
 
-/* @func ajLogInfo ************************************************************
+/* @func ajExitBad ************************************************************
 **
-** If a log file is in use, writes run details to end of file.
+** Calls 'exit' with an unsuccessful code (EXIT_FAILURE defined in stdlib.h).
+**
+** No cleanup or reporting routines are called. Simply crashes.
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajLogInfo(void)
+__noreturn void  ajExitBad(void)
 {
-    AjPFile logf;
-    AjPStr logfname = NULL;
-    AjPStr uids    = NULL;
-    AjPTime today = NULL;
-
-    today = ajTimeTodayF("log");
-    
-    if(ajNamGetValueC("logfile", &logfname))
-    {
-	logf = ajFileNewApp(logfname);
-	if(!logf)
-	    return;
-
-	ajUtilUid(&uids),
-	ajFmtPrintF(logf, "%S\t%S\t%D\n",
-		    ajAcdGetProgram(),
-		    uids,
-		    today);
-	ajStrDel(&uids);
-	ajStrDel(&logfname);
-	ajFileClose(&logf);
-    }
+    exit(EXIT_FAILURE);
+}
 
 
-    AJFREE(today);
+/* @datasection [none] Memory cleanup functions ********************************
+**
+** @nam2rule  Reset  Resets internal memory and returns.
+**
+*/
+
+/* @section reset **************************************************************
+**
+** Functions for memory cleanup
+**
+** @fdata [none]
+**
+** 
+** @valrule   *  [void] No return value
+** 
+** @fcategory misc
+**
+******************************************************************************/
+
+/* @func ajReset **************************************************************
+**
+** Cleans up all internal memory by calling cleanup routines which
+** can report on resource usage etc.
+**
+** Intended to be called at the end of processing by exit functions.
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajReset(void)
+{
+#ifdef WIN32
+    WSACleanup();
+#endif
+    ajDebug("\nFinal Summary\n=============\n\n");
+    ajUtilLoginfo();
+    ajTableExit();
+    ajListExit();
+    ajFileExit();
+    ajFeatExit();
+    ajSeqExit();
+    ajPhyloExit();
+    ajAlignExit();
+    ajReportExit();
+    ajAcdExit(ajFalse);
+    ajNamExit();
+    ajSysExit();
+    ajCallExit();
+    ajBaseExit();
+    ajCodExit();
+    ajTrnExit();
+    ajMeltExit();
+    ajTimeExit();
+    ajRegExit();
+    ajArrExit();
+    ajStrExit();
+    ajMemExit();
+    ajMessExit();     /* clears data for ajDebug - do this last!!!  */
 
     return;
 }
@@ -171,103 +193,97 @@ void ajLogInfo(void)
 
 
 
-/* @func ajUtilUid ************************************************************
+/* @datasection [none] Byte manipulation functions ****************************
 **
-** Returns the user's userid
+** @nam2rule  Byte          Manipulate a byte of data.
 **
-** @param [w] dest [AjPStr*] String to return result
-** @return [AjBool] ajTrue on success
+*/
+
+
+
+/* @section byte manipulation functions  **************************************
+**
+** Functions for manipulating bytes.
+**
+** @fdata [none]
+**
+** @nam3rule  Rev       Reverse the byte order.
+** @nam4rule  RevLen2      Reverse the byte order in a 2 byte integer.
+** @nam4rule  RevLen4      Reverse the byte order in a 4 byte integer.
+** @nam4rule  RevLen8      Reverse the byte order in a 8 byte integer.
+** @nam4rule  RevInt    Reverse the byte order in an integer.
+** @nam4rule  RevShort  Reverse the byte order in a short integer.
+** @nam4rule  RevLong   Reverse the byte order in a long.
+** @nam4rule  RevUint    Reverse the byte order in an unsigned integer.
+**
+** @argrule   RevLen2  sval [short*] Short to be reversed
+** @argrule   RevLen4  ival [ajint*] Integer to be reversed
+** @argrule   RevLen8  lval [ajlong*] Long integer to be reversed
+** @argrule   RevShort sval [short*] Short to be reversed
+** @argrule   RevInt   ival [ajint*] Integer to be reversed
+** @argrule   RevLong  lval [ajlong*] Long integer to be reversed
+** @argrule   RevUint  ival [ajuint*] Unsigned integer to be reversed
+** 
+** @valrule   *  [void]
+** 
+** @fcategory misc
+**
+******************************************************************************/
+
+
+/* @func ajByteRevInt *********************************************************
+**
+** Reverses the byte order in an integer.
+**
+** @param [u] ival [ajint*] Integer in wrong byte order.
+**                        Returned in correct order.
+** @return [void]
 ** @@
 ******************************************************************************/
 
-AjBool ajUtilUid(AjPStr* dest)
+void ajByteRevInt(ajint* ival)
 {
-#ifndef WIN32
-    ajint uid;
-    struct passwd* pwd;
-
-    ajDebug("ajUtilUid\n");
-
-    uid = getuid();
-    if(!uid)
+    union lbytes
     {
-	ajStrAssignC(dest, "");
-	return ajFalse;
-    }
-
-    ajDebug("  uid: %d\n", uid);
-    pwd = getpwuid(uid);
-    if(!pwd)
-    {
-	ajStrAssignC(dest, "");
-	return ajFalse;
-    }
-
-    ajDebug("  pwd: '%s'\n", pwd->pw_name);
-
-    ajStrAssignC(dest, pwd->pw_name);
-
-    return ajTrue;
-
-#else	/* WIN32 */
-    char nameBuf[UNLEN+1];
-    DWORD nameLen = UNLEN+1;
-
-    ajDebug("ajUtilUid\n");
-
-    if (GetUserName(nameBuf, &nameLen))
-    {
-	ajDebug("  pwd: '%s'\n", nameBuf);
-	ajStrAssC (dest, nameBuf);
-	return ajTrue;
-    }
-
-    ajStrAssC (dest, "");
-
-    return ajFalse;
-#endif
-}
-
-
-
-
-/* @func ajUtilBigendian ******************************************************
-**
-** Tests whether the host system uses big endian byte order.
-**
-** @return [AjBool] ajTrue if host is big endian.
-** @@
-******************************************************************************/
-
-AjBool ajUtilBigendian(void)
-{
-    static union lbytes
-    {
-	char chars[sizeof(ajint)];
+	char chars[8];
 	ajint i;
-    } data;
+    } data, revdata;
+    char* cs;
+    char* cd;
+    ajuint i;
 
-    if(!utilBigendCalled)
+    data.i = *ival;
+    cs     = data.chars;
+    cd     = &revdata.chars[sizeof(ajint)-1];
+    for(i=0; i < sizeof(ajint); i++)
     {
-	utilBigendCalled = 1;
-	data.i           = 0;
-	data.chars[0]    = '\1';
-
-	if(data.i == 1)
-	    utilBigendian = ajFalse;
-	else
-	    utilBigendian = ajTrue;
+	*cd = *cs++;
+	--cd;
     }
 
-    return utilBigendian;
+    *ival = revdata.i;
+
+    return;
 }
 
 
 
+/* @obsolete ajUtilRevInt
+** @rename ajByteRevInt
+*/
 
-/* @func ajUtilRev2 ***********************************************************
+__deprecated void ajUtilRevInt(ajint* ival)
+{
+    ajByteRevInt(ival);
+}
+
+
+/* @func ajByteRevLen2 ********************************************************
 **
 ** Reverses the byte order in a 2 byte integer.
+**
+** Intended for cases where the number of bytes is known, for
+** example when reading a binary file.
 **
 ** @param [u] sval [short*] Short integer in wrong byte order.
 **                          Returned in correct order.
@@ -275,7 +291,7 @@ AjBool ajUtilBigendian(void)
 ** @@
 ******************************************************************************/
 
-void ajUtilRev2(short* sval)
+void ajByteRevLen2(short* sval)
 {
     union lbytes
     {
@@ -302,11 +318,21 @@ void ajUtilRev2(short* sval)
 }
 
 
+/* @obsolete ajUtilRev2
+** @rename ajByteRev2
+*/
 
+__deprecated void ajUtilRev2(short* sval)
+{
+    ajByteRevLen2(sval);
+}
 
-/* @func ajUtilRev4 ***********************************************************
+/* @func ajByteRevLen4 ********************************************************
 **
 ** Reverses the byte order in a 4 byte integer.
+**
+** Intended for cases where the number of bytes is known, for
+** example when reading a binary file.
 **
 ** @param [u] ival [ajint*] Integer in wrong byte order.
 **                        Returned in correct order.
@@ -314,7 +340,7 @@ void ajUtilRev2(short* sval)
 ** @@
 ******************************************************************************/
 
-void ajUtilRev4(ajint* ival)
+void ajByteRevLen4(ajint* ival)
 {
     union lbytes
     {
@@ -341,18 +367,30 @@ void ajUtilRev4(ajint* ival)
 
 
 
+/* @obsolete ajUtilRev4
+** @rename ajByteRevLen4
+*/
 
-/* @func ajUtilRev8 ***********************************************************
+__deprecated void ajUtilRev4(ajint* ival)
+{
+    ajByteRevLen4(ival);
+}
+
+
+/* @func ajByteRevLen8 ********************************************************
 **
 ** Reverses the byte order in an 8 byte long.
 **
-** @param [u] ival [ajlong*] Integer in wrong byte order.
+** Intended for cases where the number of bytes is known, for
+** example when reading a binary file.
+**
+** @param [u] lval [ajlong*] Integer in wrong byte order.
 **                           Returned in correct order.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajUtilRev8(ajlong* ival)
+void ajByteRevLen8(ajlong* lval)
 {
     union lbytes
     {
@@ -363,7 +401,7 @@ void ajUtilRev8(ajlong* ival)
     char* cd;
     ajint i;
     
-    data.l = *ival;
+    data.l = *lval;
     cs     = data.chars;
     cd     = &revdata.chars[7];
     for(i=0; i < 8; i++)
@@ -372,15 +410,72 @@ void ajUtilRev8(ajlong* ival)
 	--cd;
     }
     
-    *ival = revdata.l;
+    *lval = revdata.l;
     
     return;
 }
 
 
 
+/* @obsolete ajUtilRev8
+** @rename ajByteRevLen8
+*/
 
-/* @func ajUtilRevShort ******************************************************
+__deprecated void ajUtilRev8(ajlong* lval)
+{
+    ajByteRevLen8(lval);
+}
+
+
+
+/* @func ajByteRevLong *******************************************************
+**
+** Reverses the byte order in a long.
+**
+** @param [u] lval [ajlong*] Integer in wrong byte order.
+**                           Returned in correct order.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajByteRevLong(ajlong* lval)
+{
+    union lbytes
+    {
+	char chars[8];
+	ajlong l;
+    } data, revdata;
+    char* cs;
+    char* cd;
+    ajuint i;
+    
+    data.l = *lval;
+    cs     = data.chars;
+    cd     = &revdata.chars[sizeof(ajlong)-1];
+    for(i=0; i < sizeof(ajlong); i++)
+    {
+	*cd = *cs++;
+	--cd;
+    }
+    
+    *lval = revdata.l;
+    
+    return;
+}
+
+
+
+/* @obsolete ajUtilRevLong
+** @rename ajByteRevLong
+*/
+
+__deprecated void ajUtilRevLong(ajlong* lval)
+{
+    ajByteRevLong(lval);
+}
+
+
+/* @func ajByteRevShort ******************************************************
 **
 ** Reverses the byte order in a short integer.
 **
@@ -390,7 +485,7 @@ void ajUtilRev8(ajlong* ival)
 ** @@
 ******************************************************************************/
 
-void ajUtilRevShort(short* sval)
+void ajByteRevShort(short* sval)
 {
     union lbytes
     {
@@ -418,46 +513,17 @@ void ajUtilRevShort(short* sval)
 
 
 
+/* @obsolete ajUtilRevShort
+** @rename ajByteRevShort
+*/
 
-/* @func ajUtilRevInt *********************************************************
-**
-** Reverses the byte order in an integer.
-**
-** @param [u] ival [ajint*] Integer in wrong byte order.
-**                        Returned in correct order.
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajUtilRevInt(ajint* ival)
+__deprecated void ajUtilRevShort(short* sval)
 {
-    union lbytes
-    {
-	char chars[8];
-	ajint i;
-    } data, revdata;
-    char* cs;
-    char* cd;
-    ajuint i;
-
-    data.i = *ival;
-    cs     = data.chars;
-    cd     = &revdata.chars[sizeof(ajint)-1];
-    for(i=0; i < sizeof(ajint); i++)
-    {
-	*cd = *cs++;
-	--cd;
-    }
-
-    *ival = revdata.i;
-
-    return;
+    ajByteRevShort(sval);
 }
 
 
-
-
-/* @func ajUtilRevUint ********************************************************
+/* @func ajByteRevUint ********************************************************
 **
 ** Reverses the byte order in an unsigned integer.
 **
@@ -467,7 +533,7 @@ void ajUtilRevInt(ajint* ival)
 ** @@
 ******************************************************************************/
 
-void ajUtilRevUint(ajuint* ival)
+void ajByteRevUint(ajuint* ival)
 {
     union lbytes
     {
@@ -493,43 +559,49 @@ void ajUtilRevUint(ajuint* ival)
 }
 
 
+/* @obsolete ajUtilRevUint
+** @rename ajByteRevUint
+*/
 
-
-/* @func ajUtilRevLong *******************************************************
-**
-** Reverses the byte order in a long.
-**
-** @param [u] lval [ajlong*] Integer in wrong byte order.
-**                           Returned in correct order.
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajUtilRevLong(ajlong* lval)
+__deprecated void ajUtilRevUint(ajuint* ival)
 {
-    union lbytes
-    {
-	char chars[8];
-	ajlong l;
-    } data, revdata;
-    char* cs;
-    char* cd;
-    ajuint i;
-    
-    data.l = *lval;
-    cs     = data.chars;
-    cd     = &revdata.chars[sizeof(ajlong)-1];
-    for(i=0; i < sizeof(ajlong); i++)
-    {
-	*cd = *cs++;
-	--cd;
-    }
-    
-    *lval = revdata.l;
-    
-    return;
+    ajByteRevUint(ival);
 }
 
+/* @datasection [none]  Miscellaneous utility functions ***********************
+**
+** Miscellaneous utility functions.
+**
+**
+** @nam2rule  Util           Miscellaneous utility functions.
+*/
+
+
+
+
+/* @section Miscellaneous utility functions ***********************************
+**
+** Miscellaneous utility functions.
+**
+** @fdata [none]
+**
+** @nam3rule  Catch      Dummy function to be called in special cases so 
+**                       it can be used when debugging in GDB.
+** @nam3rule  Get        Retrieve system information
+** @nam4rule  GetBigendian  Tests whether the host system uses big endian 
+**                          byte order.
+** @nam4rule  GetUid        Returns the user's userid.
+** 
+** @nam3rule  Loginfo    If a log file is in use, writes run details to 
+**                       end of file.
+** @argrule   GetUid  Puid [AjPStr*] User's userid
+** 
+** @valrule   *  [void] 
+** @valrule   *Get  [AjBool] True if operation was successful.
+** 
+** @fcategory misc
+**
+******************************************************************************/
 
 
 /* @func ajUtilCatch **********************************************************
@@ -552,3 +624,165 @@ void ajUtilCatch(void)
 
     return;
 }
+
+
+/* @func ajUtilGetBigendian ***************************************************
+**
+** Tests whether the host system uses big endian byte order.
+**
+** @return [AjBool] ajTrue if host is big endian.
+** @@
+******************************************************************************/
+
+AjBool ajUtilGetBigendian(void)
+{
+    static union lbytes
+    {
+	char chars[sizeof(ajint)];
+	ajint i;
+    } data;
+
+    if(!utilBigendCalled)
+    {
+	utilBigendCalled = 1;
+	data.i           = 0;
+	data.chars[0]    = '\1';
+
+	if(data.i == 1)
+	    utilBigendian = ajFalse;
+	else
+	    utilBigendian = ajTrue;
+    }
+
+    return utilBigendian;
+}
+
+/* @obsolete ajUtilBigendian
+** @rename ajUtilGetBigendian
+*/
+__deprecated AjBool ajUtilBigendian(void)
+{
+    return ajUtilGetBigendian();
+}
+
+
+
+
+/* @func ajUtilGetUid *********************************************************
+**
+** Returns the user's userid
+**
+** @param [w] Puid [AjPStr*] String to return result
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+AjBool ajUtilGetUid(AjPStr* Puid)
+{
+#ifndef WIN32
+    ajint uid;
+    struct passwd* pwd;
+
+    ajDebug("ajUtilUid\n");
+
+    uid = getuid();
+    if(!uid)
+    {
+	ajStrAssignC(Puid, "");
+	return ajFalse;
+    }
+
+    ajDebug("  uid: %d\n", uid);
+    pwd = getpwuid(uid);
+    if(!pwd)
+    {
+	ajStrAssignC(Puid, "");
+	return ajFalse;
+    }
+
+    ajDebug("  pwd: '%s'\n", pwd->pw_name);
+
+    ajStrAssignC(Puid, pwd->pw_name);
+
+    return ajTrue;
+
+#else	/* WIN32 */
+    char nameBuf[UNLEN+1];
+    DWORD nameLen = UNLEN+1;
+
+    ajDebug("ajUtilUid\n");
+
+    if (GetUserName(nameBuf, &nameLen))
+    {
+	ajDebug("  pwd: '%s'\n", nameBuf);
+	ajStrAssC (Puid, nameBuf);
+	return ajTrue;
+    }
+
+    ajStrAssC (Puid, "");
+
+    return ajFalse;
+#endif
+}
+
+
+/* @obsolete ajUtilUid
+** @rename ajUtilGetUid
+*/
+
+__deprecated AjBool ajUtilUid(AjPStr* dest)
+{
+    return ajUtilGetUid(dest);
+}
+
+
+/* @func ajUtilLoginfo ********************************************************
+**
+** If a log file is in use, writes run details to end of file.
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajUtilLoginfo(void)
+{
+    AjPFile logf;
+    AjPStr logfname = NULL;
+    AjPStr uids    = NULL;
+    AjPTime today = NULL;
+
+    today = ajTimeNewTodayFmt("log");
+    
+    if(ajNamGetValueC("logfile", &logfname))
+    {
+	logf = ajFileNewApp(logfname);
+	if(!logf)
+	    return;
+
+	ajUtilGetUid(&uids),
+	ajFmtPrintF(logf, "%S\t%S\t%D\n",
+		    ajAcdGetProgram(),
+		    uids,
+		    today);
+	ajStrDel(&uids);
+	ajStrDel(&logfname);
+	ajFileClose(&logf);
+    }
+
+
+    AJFREE(today);
+
+    return;
+}
+
+
+/* @obsolete ajLogInfo
+** @rename ajUtilLoginfo
+*/
+
+__deprecated void ajLogInfo(void)
+{
+    ajUtilLoginfo();
+    return;
+}
+

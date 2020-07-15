@@ -16,22 +16,36 @@ extern "C"
 __noreturn void   ajExit (void);
 __noreturn void   ajExitAbort (void);
 __noreturn void   ajExitBad (void);
-void   ajLogInfo (void);
-AjBool ajUtilBigendian (void);
-void   ajUtilCatch (void);
-void   ajUtilRev2 (short* i);
-void   ajUtilRev4 (ajint* i);
-void   ajUtilRev8 (ajlong* i);
-void   ajUtilRevInt(ajint* sval);
-void   ajUtilRevShort(short* ival);
-void   ajUtilRevLong(ajlong* lval);
-void   ajUtilRevUint(ajuint* ival);
 
-AjBool ajUtilUid (AjPStr* dest);
+void   ajByteRevLen2 (short* i);
+void   ajByteRevLen4 (ajint* i);
+void   ajByteRevLen8 (ajlong* i);
+void   ajByteRevInt(ajint* sval);
+void   ajByteRevShort(short* ival);
+void   ajByteRevLong(ajlong* lval);
+void   ajByteRevUint(ajuint* ival);
+
+void   ajReset(void);
+
+void   ajUtilCatch (void);
+AjBool ajUtilGetBigendian (void);
+AjBool ajUtilGetUid (AjPStr* Puid);
+void   ajUtilLoginfo (void);
 
 /*
 ** End of prototype definitions
 */
+
+__deprecated void   ajLogInfo (void);
+__deprecated void   ajUtilRev2 (short* i);
+__deprecated void   ajUtilRev4 (ajint* i);
+__deprecated void   ajUtilRev8 (ajlong* i);
+__deprecated void   ajUtilRevInt(ajint* ival);
+__deprecated void   ajUtilRevShort(short* ival);
+__deprecated void   ajUtilRevLong(ajlong* lval);
+__deprecated void   ajUtilRevUint(ajuint* ival);
+__deprecated AjBool ajUtilBigendian (void);
+__deprecated AjBool ajUtilUid (AjPStr* dest);
 
 #endif
 

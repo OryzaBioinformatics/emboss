@@ -37,6 +37,8 @@
 **
 ** @attr Name [const char*] format name
 ** @attr Format [const char*] C run time library time format string
+** @attr Uppercase [AjBool] Convert to upper case on output
+** @attr Padding [ajint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -44,6 +46,8 @@ typedef struct TimeSFormat
 {
     const char* Name;
     const char* Format;
+    AjBool Uppercase;
+    ajint Padding;
 } TimeOFormat;
 #define TimePFormat TimeOFormat*
 
@@ -54,203 +58,92 @@ static AjPTime timeTodaySaved = NULL;
 
 static TimeOFormat timeFormat[] =  /* formats for strftime */
 {
-    {"GFF", "%Y-%m-%d"},
-    {"yyyy-mm-dd", "%Y-%m-%d"},
-    {"dd Mon yyyy", "%d %b %Y"},
-    {"day", "%d-%b-%Y"},
-    {"time", "%H:%M:%S"},
-    {"daytime", "%d-%b-%Y %H:%M"},
-    {"log", "%a %b %d %H:%M:%S %Y"},
+    {"GFF", "%Y-%m-%d", AJFALSE, 0},
+    {"yyyy-mm-dd", "%Y-%m-%d", AJFALSE, 0},
+    {"dd Mon yyyy", "%d %b %Y", AJFALSE, 0},
+    {"day", "%d-%b-%Y", AJFALSE, 0},
+    {"time", "%H:%M:%S", AJFALSE, 0},
+    {"daytime", "%d-%b-%Y %H:%M", AJFALSE, 0},
+    {"log", "%a %b %d %H:%M:%S %Y", AJFALSE, 0},
 #ifndef WIN32
-    {"report", "%a %e %b %Y %H:%M:%S"},
+    {"report", "%a %e %b %Y %H:%M:%S", AJFALSE, 0},
 #else
-    {"report", "%a %#d %b %Y %H:%M:%S"},
+    {"report", "%a %#d %b %Y %H:%M:%S", AJFALSE, 0},
 #endif
-    {"dbindex", "%d/%m/%y"},
-    { NULL, NULL}
+    {"dbindex", "%d/%m/%y", AJFALSE, 0},
+    {"dtline", "%d-%b-%Y", AJTRUE, 0},
+    { NULL, NULL, AJFALSE, 0}
 };
 
 
-static const char* TimeFormat(const char *timefmt);
+static const char* TimeFormat(const char *timefmt, AjBool* makeupper);
 
-/* @func ajTimeTodayRef *******************************************************
+/* @filesection ajtime *******************************************************
 **
-** AJAX function to return today's time as an AjPTime object reference
-** @return [const AjPTime] Pointer to static time object containing
-**                         today's date/time
-** @@
-******************************************************************************/
-
-const AjPTime ajTimeTodayRef(void)
-{
-    time_t tim;
-    
-    tim = time(0);
-
-    if(!timeTodaySaved)
-	AJNEW0(timeTodaySaved);
-
-    if(!ajTimeLocal(tim,timeTodaySaved))
-        return NULL;
-
-    timeTodaySaved->format = NULL;
-
-    return timeTodaySaved;
-}
-
-
-
-
-/* @func ajTimeToday **********************************************************
+** @nam1rule aj Function belongs to the AJAX library.
 **
-** AJAX function to return today's time as an AjPTime object
-** @return [AjPTime] Pointer to time object containing today's date/time
-** @exception  'Mem_Failed' from memory allocations
-** @@
-******************************************************************************/
-
-AjPTime ajTimeToday(void)
-{
-    AjPTime thys = NULL;
-    time_t tim;
-    
-    tim = time(0);
-
-    if(!thys)
-	AJNEW0(thys);
-
-    if(!ajTimeLocal(tim,thys))
-        return NULL;
-
-    thys->format = NULL;
-
-    return thys;
-}
+*/
 
 
-
-
-/* @funcstatic TimeFormat *****************************************************
+/* @datasection [AjPTime] Time object ****************************************
 **
-** AJAX function to return the ANSI C format for an AJAX time string
+** @nam2rule Time     Function is for handling time and usually processes an
+**                    AjSTime object.
+*/
+
+
+
+/* @section constructors ******************************************************
 **
-** @param [r] timefmt [const char*] AJAX time format
-** @return [const char*] ANSI C time format, or NULL if none found
-** @@
-******************************************************************************/
-
-static const char* TimeFormat(const char *timefmt)
-{
-    ajint i;
-    AjBool ok    = ajFalse;
-    const char *format = NULL ;
-
-    for(i=0; timeFormat[i].Name; i++)
-	if(ajCharMatchCaseC(timefmt, timeFormat[i].Name))
-	{
-	    ok = ajTrue;
-	    break;
-	}
-
-    if(ok)
-	format = timeFormat[i].Format;
-    else
-	ajWarn("Unknown date/time format %s", timefmt);
-  
-    return format;
-}
-
-
-
-
-/* @func ajTimeTodayF *********************************************************
+** Functions for constructing time objects.
 **
-** AJAX function to return today's time as an AjPTime object
-** with a specified output format
+** @fdata [AjPTime]
 **
-** @param [r] timefmt [const char*] A controlled vocabulary of time formats
+** @nam3rule  New            Construct a new time object.
+** @nam4rule  NewDay         Construct with specified day.
+** @nam5rule  NewDayFmt      Construct with specified day in specified format.
+** @nam4rule  NewToday       Construct with current time in default format.
+** @nam5rule  NewTodayFmt    Construct with current time in specified format.
+** @nam4rule  NewTime        Copy constructor
 **
-** @return [] [AjPTime] Pointer to time object containing today's date/time
-** @exception  'Mem_Failed' from memory allocations
-** @@
+** @argrule Fmt timefmt [const char*] Known EMBOSS time format
+** @argrule Day mday [ajint] Day of the month (1-31)
+** @argrule Day mon  [ajint] Day of the month (1-12)
+** @argrule Day year [ajint] Year as a 4 digit number
+** @argrule NewTime src [const AjPTime] Time object to be copied
+**
+** @valrule   *  [AjPTime] New time object.
+** @fcategory new
 **
 ******************************************************************************/
 
-AjPTime ajTimeTodayF(const char* timefmt)
+
+
+
+
+
+
+/* @func ajTimeNew ************************************************************
+**
+** Constructor for AjPTime object.
+**
+** @return [AjPTime] An AjPTime object
+** @@
+******************************************************************************/
+
+AjPTime ajTimeNew(void)
 {
     AjPTime thys = NULL;
-    time_t tim;
-    
-    tim = time(0);
 
-    if(!thys)
-	AJNEW0(thys);
+    AJNEW0(thys);
 
-    if(!ajTimeLocal(tim,thys))
-        return NULL;
-
-    thys->format = TimeFormat(timefmt);
-
-    return thys;
+    return thys ;
 }
 
 
 
 
-/* @func ajTimeTodayRefF ******************************************************
-**
-** AJAX function to return today's time as a static AjPTime object
-** with a specified output format
-**
-** @param [r] timefmt [const char*] A controlled vocabulary of time formats
-**
-** @return [] [const AjPTime] Pointer to static time object containing
-**                            today's date/time
-** @@
-**
-******************************************************************************/
-
-const AjPTime ajTimeTodayRefF(const char* timefmt)
-{
-    time_t tim;
-    
-    tim = time(0);
-
-    if(!timeTodayData)
-	AJNEW0(timeTodayData);
-
-    if(!ajTimeLocal(tim,timeTodayData))
-        return NULL;
-
-    timeTodayData->format = TimeFormat(timefmt);
-
-    return timeTodayData;
-}
-
-
-
-
-/* @func ajTimeTrace **********************************************************
-**
-** Debug report on the contents of an AjPTime object
-**
-** @param [r] thys [const AjPTime] Time object
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajTimeTrace(const AjPTime thys) 
-{
-    ajDebug("Time value trace '%D'\n", thys);
-    ajDebug("format: '%s'\n", thys->format);
-
-    return;
-}
-
-
-
-
-/* @func ajTimeSet ************************************************************
+/* @func ajTimeNewDayFmt ******************************************************
 **
 ** Constructor for user specification of an arbitrary AjPTime object.
 ** Except for 'timefmt', the arguments are based upon the UNIX
@@ -265,11 +158,12 @@ void ajTimeTrace(const AjPTime thys)
 ** @@
 ******************************************************************************/
 
-AjPTime ajTimeSet( const char *timefmt, ajint mday, ajint mon, ajint year)
+AjPTime ajTimeNewDayFmt( const char *timefmt,
+			ajint mday, ajint mon, ajint year)
 {
     AjPTime thys;
 
-    thys = ajTimeTodayF(timefmt) ;
+    thys = ajTimeNewTodayFmt(timefmt) ;
 
     thys->time.tm_mday  = mday ;
     thys->time.tm_mon   = mon-1;
@@ -283,8 +177,316 @@ AjPTime ajTimeSet( const char *timefmt, ajint mday, ajint mon, ajint year)
 
 
 
+/* @obsolete ajTimeSet
+** @rename ajTimeNewDayFmt
+*/
 
-/* @func ajTimeSetS ***********************************************************
+__deprecated AjPTime ajTimeSet(const char *timefmt,
+			       ajint mday, ajint mon, ajint year)
+{
+    return ajTimeNewDayFmt(timefmt, mday, mon, year);
+}
+
+
+
+
+/* @func ajTimeNewTime ********************************************************
+**
+** Constructor for AjPTime object, making a copy of an existing time object
+**
+** @param  [r] src [const AjPTime] Time object to be copied
+** @return [AjPTime] An AjPTime object
+** @@
+******************************************************************************/
+
+AjPTime ajTimeNewTime(const AjPTime src)
+{
+    AjPTime thys = NULL;
+
+    AJNEW0(thys);
+
+    thys->time = src->time;
+    thys->format = src->format;
+    thys->uppercase = src->uppercase;
+
+    return thys ;
+}
+
+
+
+
+/* @func ajTimeNewToday *******************************************************
+**
+** AJAX function to return today's time as an AjPTime object
+** @return [AjPTime] Pointer to time object containing today's date/time
+** @@
+******************************************************************************/
+
+AjPTime ajTimeNewToday(void)
+{
+    AjPTime thys = NULL;
+    time_t tim;
+    
+    tim = time(0);
+
+    AJNEW0(thys);
+
+    if(!ajTimeSetLocal(thys, tim))
+        return NULL;
+
+    thys->format = NULL;
+
+    return thys;
+}
+
+
+
+/* @obsolete ajTimeToday
+** @rename ajTimeNewToday
+*/
+
+__deprecated AjPTime ajTimeToday(void)
+{
+    return ajTimeNewToday();
+}
+
+/* @func ajTimeNewTodayFmt ****************************************************
+**
+** AJAX function to return today's time as an AjPTime object
+** with a specified output format
+**
+** @param [r] timefmt [const char*] A controlled vocabulary of time formats
+**
+** @return [] [AjPTime] Pointer to time object containing today's date/time
+** @@
+**
+******************************************************************************/
+
+AjPTime ajTimeNewTodayFmt(const char* timefmt)
+{
+    AjPTime thys = NULL;
+    time_t tim;
+    
+    tim = time(0);
+
+    if(!thys)
+	AJNEW0(thys);
+
+    if(!ajTimeSetLocal(thys, tim))
+        return NULL;
+
+    thys->format = TimeFormat(timefmt, &thys->uppercase);
+
+    return thys;
+}
+
+/* @obsolete ajTimeTodayF
+** @rename ajTimeNewTodayFmt
+*/
+
+__deprecated AjPTime ajTimeTodayF(const char* timefmt)
+{
+    return ajTimeNewTodayFmt(timefmt);
+}
+
+
+/* @section destructors *******************************************************
+**
+** Functions for destructing time objects.
+**
+** @fdata [AjPTime]
+**
+** @nam3rule  Del         Destruct a time object.
+**
+** @argrule   *  Ptime [AjPTime*] Time object to be deleted
+**
+** @valrule * [void]
+**
+** @fcategory delete
+**
+******************************************************************************/
+
+/* @func ajTimeDel ************************************************************
+**
+** Destructor for AjPTime object.
+**
+** @param [w] Ptime [AjPTime*] Time object pointer
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajTimeDel(AjPTime *Ptime)
+{
+    /* Check arg's */
+    if(*Ptime==NULL)
+	return;
+
+    AJFREE(*Ptime);
+    *Ptime = NULL;
+    
+    return;
+}
+
+/* @section get time **********************************************************
+**
+** Functions for retrieving elements of a time object
+**
+** @fdata [AjPTime]
+**
+** @nam3rule  Get            Return elements from a time object.
+** @nam4rule  GetTimetype    Return time as a standard C time_t structure
+**
+** @argrule Get thys [const AjPTime] Time object
+**
+** @valrule   *  [time_t]  Standard C time_t structure
+** @fcategory use
+**
+******************************************************************************/
+
+/* @func ajTimeGetTimetype ****************************************************
+**
+** An AjPTime object version of the mktime function that returns
+** a standard time_t value
+**
+** @param [r] thys [const AjPTime] Time object
+** @return [time_t] Standard time value
+** @@
+******************************************************************************/
+
+time_t ajTimeGetTimetype(const AjPTime thys)
+{
+    struct tm tm = thys->time;		/* mktime resets wday and yday */
+    return mktime(&tm);
+}
+
+
+/* @obsolete ajTimeMake
+** @rename ajTimeGetTimetype
+*/
+__deprecated time_t ajTimeMake(const AjPTime thys)
+{
+    return ajTimeGetTimetype(thys);
+}
+
+
+/* @section get reference to internals ****************************************
+**
+** Functions for retrieving references to tiome internals
+**
+** @fdata [AjPTime]
+**
+** @nam3rule  Ref            Reference time object.
+** @nam4rule  RefToday       Reference time object with current time in 
+**                           default format.
+** @nam5rule  RefTodayFmt    Reference time in defined format.
+**
+** @argrule Fmt timefmt [const char*] A controlled vocabulary of time formats
+** 
+** @valrule   *  [const AjPTime]  Reference to Time object.
+** @fcategory misc
+**
+******************************************************************************/
+
+/* @func ajTimeRefToday *******************************************************
+**
+** AJAX function to return today's time as an AjPTime object reference
+** @return [const AjPTime] Pointer to static time object containing
+**                         today's date/time
+** @@
+******************************************************************************/
+
+const AjPTime ajTimeRefToday(void)
+{
+    time_t tim;
+    
+    tim = time(0);
+
+    if(!timeTodaySaved)
+	AJNEW0(timeTodaySaved);
+
+    if(!ajTimeSetLocal(timeTodaySaved, tim))
+        return NULL;
+
+    timeTodaySaved->format = NULL;
+
+    return timeTodaySaved;
+}
+
+/* @obsolete ajTimeTodayRef
+** @rename ajTimeRefToday
+*/
+
+__deprecated const AjPTime ajTimeTodayRef(void)
+{
+    return ajTimeRefToday();
+}
+
+
+
+/* @func ajTimeRefTodayFmt ****************************************************
+**
+** AJAX function to return today's time as a static AjPTime object
+** with a specified output format
+**
+** @param [r] timefmt [const char*] A controlled vocabulary of time formats
+**
+** @return [] [const AjPTime] Pointer to static time object containing
+**                            today's date/time
+** @@
+**
+******************************************************************************/
+
+const AjPTime ajTimeRefTodayFmt(const char* timefmt)
+{
+    time_t tim;
+    
+    tim = time(0);
+
+    if(!timeTodayData)
+	AJNEW0(timeTodayData);
+
+    if(!ajTimeSetLocal(timeTodayData, tim))
+        return NULL;
+
+    timeTodayData->format = TimeFormat(timefmt, &timeTodayData->uppercase);
+
+    return timeTodayData;
+}
+
+/* @obsolete ajTimeTodayRefF
+** @rename ajTimeRefTodayFmt
+*/
+
+__deprecated const AjPTime ajTimeTodayRefF(const char* timefmt)
+{
+    return ajTimeRefTodayFmt(timefmt);
+}
+
+/* @section set time ***********************************************************
+**
+** Functions for setting the time.
+**
+** @fdata [AjPTime]
+**
+** @nam3rule  Set          Set the time.
+** @nam4rule  SetLocal     A localtime()/localtime_r() replacement for AjPTime
+**                           objects
+** @suffix C Char* argument
+** @suffix S AjPStr argument
+**
+** @argrule   *  thys [AjPTime]   Time object to set. 
+** @argrule   Local  timer [const time_t] Populated standard C time structure
+** @argrule   C  timestr [const char*] Time as a string
+** @argrule   S  timestr [const AjPStr] Time as a string
+** RefF
+** @valrule   *  [AjBool]  True if time was set.
+**
+** @fcategory modify
+**
+******************************************************************************/
+
+/* @func ajTimeSetC ***********************************************************
 **
 ** Constructor for user specification of an AjPTime object.
 ** using the time set as a string in format
@@ -299,7 +501,7 @@ AjPTime ajTimeSet( const char *timefmt, ajint mday, ajint mon, ajint year)
 ** @@
 ******************************************************************************/
 
-AjBool ajTimeSetS(AjPTime thys, const char* timestr)
+AjBool ajTimeSetC(AjPTime thys, const char* timestr)
 {
     ajint year;
     ajint mon;
@@ -307,6 +509,9 @@ AjBool ajTimeSetS(AjPTime thys, const char* timestr)
     ajint hour;
     ajint min;
     ajint sec;
+
+    if(!timestr)
+	return ajFalse;
 
     if(!ajFmtScanC(timestr, "%4d-%2d-%2d %2d:%2d:%2d",
 	       &year, &mon, &mday, &hour, &min, &sec))
@@ -327,27 +532,71 @@ AjBool ajTimeSetS(AjPTime thys, const char* timestr)
 }
 
 
+/* @func ajTimeSetS ***********************************************************
+**
+** Constructor for user specification of an AjPTime object.
+** using the time set as a string in format
+** yyyy-mm-dd hh:mm:ss
+**
+** used so that graphs which include the date can remain constant for
+** documentation and testing.
+**
+** @param [w] thys [AjPTime] Time object
+** @param [r] timestr [const AjPStr] Time in format yyyy-mm-dd hh:mm:ss
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+AjBool ajTimeSetS(AjPTime thys, const AjPStr timestr)
+{
+    ajint year;
+    ajint mon;
+    ajint mday;
+    ajint hour;
+    ajint min;
+    ajint sec;
+
+    if(!ajStrGetLen(timestr))
+	return ajFalse;
+
+    if(!ajFmtScanS(timestr, "%4d-%2d-%2d %2d:%2d:%2d",
+	       &year, &mon, &mday, &hour, &min, &sec))
+	return ajFalse;
+
+    if(year > 1899) year = year-1900;
+    thys->time.tm_year  = year ;
+    thys->time.tm_mon   = mon-1;
+    thys->time.tm_mday  = mday ;
+    thys->time.tm_hour = hour;
+    thys->time.tm_min = min;
+    thys->time.tm_sec = sec;
+    thys->time.tm_isdst = -1;
+
+    mktime(&thys->time);
+
+    return ajTrue;
+}
 
 
-/* @func ajTimeLocal **********************************************************
+/* @func ajTimeSetLocal *******************************************************
 **
 ** A localtime()/localtime_r() replacement for AjPTime objects
 **
-** @param  [r] timer [const time_t] Time
 ** @param  [w] thys [AjPTime] Time object
+** @param  [r] timer [const time_t] Populated standard C time structure
 **
 ** @return [AjBool] true if successful
 ** @@
 ******************************************************************************/
 
-AjBool ajTimeLocal(const time_t timer, AjPTime thys)
+AjBool ajTimeSetLocal(AjPTime thys, const time_t timer)
 {
     struct tm *result;
     AjPStr timestr = NULL;
 
     if(ajNamGetValueC("timetoday", &timestr))
     {
-	if(ajTimeSetS(thys, ajStrGetPtr(timestr)))
+	if(ajTimeSetS(thys, timestr))
 	{
 	    ajStrDel(&timestr);
 	    return ajTrue;
@@ -375,67 +624,105 @@ AjBool ajTimeLocal(const time_t timer, AjPTime thys)
     return ajTrue;
 }
 
+/* @obsolete ajTimeLocal
+** @replace ajTimeSetLocal (1,2/2,1)
+*/
+
+__deprecated AjBool ajTimeLocal(const time_t timer, AjPTime thys)
+{
+    return ajTimeSetLocal(thys, timer);
+}
 
 
-
-/* @func ajTimeNew ************************************************************
+/* @funcstatic TimeFormat *****************************************************
 **
-** Constructor for AjPTime object.
+** AJAX function to return the ANSI C format for an AJAX time string
 **
-** @return [AjPTime] An AjPTime object
+** @param [r] timefmt [const char*] AJAX time format
+** @param [w] makeupper [AjBool*] If true, convert time to upper case
+** @return [const char*] ANSI C time format, or NULL if none found
 ** @@
 ******************************************************************************/
 
-AjPTime ajTimeNew(void)
+static const char* TimeFormat(const char *timefmt, AjBool* makeupper)
 {
-    AjPTime thys = NULL;
+    ajint i;
+    AjBool ok    = ajFalse;
+    const char *format = NULL ;
 
-    AJNEW0(thys);
+    for(i=0; timeFormat[i].Name; i++)
+	if(ajCharMatchCaseC(timefmt, timeFormat[i].Name))
+	{
+	    ok = ajTrue;
+	    break;
+	}
 
-    return thys ;
+    if(ok)
+    {
+	format = timeFormat[i].Format;
+	*makeupper = timeFormat[i].Uppercase;
+    }
+    else
+    {
+	*makeupper = ajFalse;
+	ajWarn("Unknown date/time format %s", timefmt);
+    }
+
+    return format;
 }
 
 
 
 
-/* @func ajTimeDel ************************************************************
+
+/* @section debug *************************************************************
 **
-** Destructor for AjPTime object.
+** Functions for debugging time objects.
 **
-** @param [w] thys [AjPTime*] Time object pointer
+** @fdata [AjPTime]
 **
+** @nam3rule  Trace  Write information on contents of AjPTime object to 
+**                      debug file.
+**
+** @argrule   *   thys [const AjPTime] Time object to debug.
+** 
+** @valrule   *  [void]
+** @fcategory use
+**
+******************************************************************************/
+
+
+/* @func ajTimeTrace **********************************************************
+**
+** Debug report on the contents of an AjPTime object
+**
+** @param [r] thys [const AjPTime] Time object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajTimeDel(AjPTime *thys)
+void ajTimeTrace(const AjPTime thys) 
 {
-    /* Check arg's */
-    if(*thys==NULL)
-	return;
+    ajDebug("Time value trace '%D'\n", thys);
+    ajDebug("format: '%s'\n", thys->format);
 
-    AJFREE(*thys);
-    *thys = NULL;
-    
     return;
 }
 
-
-/* @func ajTimeMake ***********************************************************
+/* @section exit
 **
-** An AjPTime object version of the mktime function that returns
-** a standard time_t value
+** Functions called on exit from the program by ajExit to do
+** any necessary cleanup and to report internal statistics to the debug file
 **
-** @param [r] thys [const AjPTime] Time object
-** @return [time_t] Standard time value
-** @@
-******************************************************************************/
-
-time_t ajTimeMake(const AjPTime thys)
-{
-    struct tm tm = thys->time;		/* mktime resets wday and yday */
-    return mktime(&tm);
-}
+** @fdata      [AjPTime]
+** @fnote     general exit functions, no arguments
+**
+** @nam3rule Exit Cleanup and report on exit
+**
+** @valrule * [void]
+**
+** @fcategory misc
+*/
 
 
 /* @func ajTimeExit ***********************************************************
