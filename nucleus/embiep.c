@@ -134,49 +134,28 @@ void embIepPkRead(void)
     while(ajFileGets(inf,&line))
     {
 	p = ajStrGetPtr(line);
-#ifndef WIN32
-	if(*p=='#' || *p=='!' || *p=='\n')
-#else
 	if(*p=='#' || *p=='!' || *p=='\n' || *p=='\r')
-#endif
 	    continue;
 
-	if(!ajStrCmpLenC(line,"Amino",5))
+	if(ajStrPrefixCaseC(line,"Amino"))
 	{
-#ifndef WIN32
-	    p = ajSysStrtok(p," \t\n");
-	    p = ajSysStrtok(NULL," \t\n");
-#else
 	    p = ajSysStrtok(p," \t\n\r");
 	    p = ajSysStrtok(NULL," \t\n\r");
-#endif
 	    sscanf(p,"%lf",&amino);
 	    continue;
 	}
 
-	if(!ajStrCmpLenC(line,"Carboxyl",8))
+	if(ajStrPrefixCaseC(line,"Carboxyl"))
 	{
-#ifndef WIN32
-	    p = ajSysStrtok(p," \t\n");
-	    p = ajSysStrtok(NULL," \t\n");
-#else
 	    p = ajSysStrtok(p," \t\n\r");
 	    p = ajSysStrtok(NULL," \t\n\r");
-#endif
-
 	    sscanf(p,"%lf",&carboxyl);
 	    continue;
 	}
 
-#ifndef WIN32
-	p  = ajSysStrtok(p," \t\n");
-	ch = ajSysItoC(toupper((ajint)*p));
-	p  = ajSysStrtok(NULL," \t\n");
-#else
 	p  = ajSysStrtok(p," \t\n\r");
 	ch = ajSysItoC(toupper((ajint)*p));
 	p  = ajSysStrtok(NULL," \t\n\r");
-#endif
 	sscanf(p,"%lf",&AjpK[ajAZToInt(ch)]);
     }
 
@@ -211,6 +190,7 @@ void embIepCompC(const char *s, ajint amino,
 		 ajint *c)
 {
     ajint i;
+    ajint j;
     const char *p;
 
     for(i=0;i<EMBIEPSIZE;++i)
@@ -221,6 +201,26 @@ void embIepCompC(const char *s, ajint amino,
     {
 	++c[ajAZToInt(ajSysItoC(toupper((ajint)*p)))];
 	++p;
+    }
+
+    if(c[1])				/* B = D or N use Dayhoff freq */
+    {
+	j = (int) (0.5 + ((float)c[1]) * 5.5 / 9.8);
+	c[3] += j;
+	c[13] += c[1] - j;
+	ajDebug("embIepCompC B:%d => D:%d N:%d\n",
+		c[1], j, c[1]-j);
+	c[1] = 0;
+    }
+
+    if(c[25])				/* Z = E or Q use Dayhoff freq */
+    {
+	j = (int) (0.5 + ((float)c[25]) * 6.0 / 9.9);
+	c[4] += j;
+	c[16] += c[25] - j;
+	ajDebug("embIepCompC Z:%d => E:%d Q:%d\n",
+		c[25], j, c[25]-j);
+	c[25] = 0;
     }
 
     c[EMBIEPAMINO]    = amino;
@@ -283,7 +283,7 @@ void embIepCompS(const AjPStr str, ajint amino,
 /* @obsolete embIepComp
 ** @replace embIepCompC (1,2,3/1,2,0,0,3)
 */
-void __deprecated embIepComp(const char *s, ajint amino, ajint *c)
+__deprecated void  embIepComp(const char *s, ajint amino, ajint *c)
 {
     embIepCompC(s, amino, 0, 0, c);
     return;
@@ -377,11 +377,11 @@ double embIepGetCharge(const ajint *c, const double *pro, double *total)
     for(i=0,*total=0.0;i<EMBIEPSIZE;++i)
 	*total += pro[i];
 
-    C = (pro[10]+pro[17]+pro[7]+pro[EMBIEPAMINO]) -
-	((double)c[24]-pro[24] +
-	 (double)c[2]-pro[2] +
-	 (double)c[3]-pro[3] +
-	 (double)c[4]-pro[4] +
+    C = (pro[10]+pro[17]+pro[7]+pro[EMBIEPAMINO]) - /* basic: KRH */
+	((double)c[24]-pro[24] +	/* Y */
+	 (double)c[2]-pro[2] +		/* C */
+	 (double)c[3]-pro[3] +		/* D */
+	 (double)c[4]-pro[4] +		/* E */
 	 (double)c[EMBIEPCARBOXYL]-pro[EMBIEPCARBOXYL] );
 
     return C;
@@ -531,7 +531,7 @@ AjBool embIepIepS(const AjPStr str, ajint amino,
 ** @replace embIepIepC (1,2,3,4/1,2,0,0,3,4)
 */
 
-AjBool __deprecated embIepIEP(const char *s, ajint amino,
+__deprecated AjBool  embIepIEP(const char *s, ajint amino,
 			      double *iep, AjBool termini)
 {
     return embIepIepC(s, amino, 0, 0, iep, termini);

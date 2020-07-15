@@ -9,7 +9,7 @@ extern "C"
 #define EMBIEPSIZE 28			/* Usual alpha plus two array */
 #define EMBIEPCYSTEINE 2	      /* Array index for C */
 #define EMBIEPLYSINE 10		      /* Array index for K */
-#define EMBIEPAMINO 26			/* Amino rerminus array index  */
+#define EMBIEPAMINO 26			/* Amino terminus array index  */
 #define EMBIEPCARBOXYL 27		/* Carboxyl terminus array index */
 
 
@@ -42,8 +42,8 @@ void   embIepPkRead (void);
 double embIepPkToK (double pK);
 double embIepPkFromK (double K);
 
-void   __deprecated embIepComp (const char *s, ajint amino, ajint *c);
-AjBool __deprecated embIepIEP (const char *s, ajint amino,
+__deprecated void    embIepComp (const char *s, ajint amino, ajint *c);
+__deprecated AjBool  embIepIEP (const char *s, ajint amino,
 			       double *iep, AjBool termini);
 /*
 ** End of prototype definitions

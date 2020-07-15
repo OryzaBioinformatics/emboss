@@ -104,9 +104,9 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(all,&a))
     {
-	be = ajSeqallBegin(all);
-	en = ajSeqallEnd(all);
-	ajStrAssignSubC(&substr,ajSeqChar(a),be-1,en-1);
+	be = ajSeqallGetseqBegin(all);
+	en = ajSeqallGetseqEnd(all);
+	ajStrAssignSubC(&substr,ajSeqGetSeqC(a),be-1,en-1);
 
 	for(i=0;i<EMBIEPSIZE;++i)
 	{
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
 
 	    tit = ajStrNew();
 	    tmp = ajStrNew();
-	    ajFmtPrintS(&tit,"%s %d-%d IEP=",ajSeqName(a),be,en);
+	    ajFmtPrintS(&tit,"%s %d-%d IEP=",ajSeqGetNameC(a),be,en);
 
 	    if(!embIepIepS(substr, amino, sscount, modlysine,
 			   &iep,termini))
