@@ -8,14 +8,14 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "DNA"
   ]
 
-  datafile: datafile  [
+  datafile: datafile [
     default: ""
-    information: "Alternative RE data file"
+    information: "Restriction enzyme data file (optional)"
     knowntype: "restriction enzyme data"
     nullok: "Y"
   ]
@@ -27,7 +27,7 @@ section: required [
   type: "page"
 ]
 
-  integer: sitelen  [
+  integer: sitelen [
     standard: "Y"
     minimum: "2"
     maximum: "20"
@@ -38,7 +38,7 @@ section: required [
            ignored."
   ]
 
-  string: enzymes  [
+  string: enzymes [
     standard: "Y"
     default: "all"
     information: "Comma separated enzyme list"
@@ -70,7 +70,7 @@ section: advanced [
   type: "page"
 ]
 
-  integer: min  [
+  integer: min [
     minimum: "1"
     maximum: "1000"
     default: "1"
@@ -80,7 +80,7 @@ section: advanced [
            than this will be ignored."
   ]
 
-  integer: max  [
+  integer: max [
     minimum: "$(min)"
     maximum: "2000000000"
     default: "2000000000"
@@ -90,15 +90,15 @@ section: advanced [
            than this will be ignored."
   ]
 
-  boolean: solofragment  [
+  boolean: solofragment [
     default: "N"
     information: "List individual enzymes with their fragments"
     help: "This gives the fragment lengths of the forward sense strand
-           produced by complete restriction by each restriction enzyme on its
-           own. Results are added to the tail section of the report."
+           produced by complete restriction by each restriction enzyme on
+           its own. Results are added to the tail section of the report."
   ]
 
-  boolean: single  [
+  boolean: single [
     default: "N"
     information: "Force single site only cuts"
     help: "If this is set then this forces the values of the mincuts
@@ -106,14 +106,14 @@ section: advanced [
            set them to will be ignored."
   ]
 
-  boolean: blunt  [
+  boolean: blunt [
     default: "Y"
     information: "Allow blunt end cutters"
     help: "This allows those enzymes which cut at the same position on
            the forward and reverse strands to be considered."
   ]
 
-  boolean: sticky  [
+  boolean: sticky [
     default: "Y"
     information: "Allow sticky end cutters"
     help: "This allows those enzymes which cut at different positions
@@ -121,14 +121,14 @@ section: advanced [
            considered."
   ]
 
-  boolean: ambiguity  [
+  boolean: ambiguity [
     default: "Y"
     information: "Allow ambiguous matches"
     help: "This allows those enzymes which have one or more 'N'
            ambiguity codes in their pattern to be considered"
   ]
 
-  boolean: plasmid  [
+  boolean: plasmid [
     default: "N"
     information: "Allow circular DNA"
     help: "If this is set then this allows searches for restriction
@@ -136,7 +136,7 @@ section: advanced [
            sequence to be considered."
   ]
 
-  boolean: commercial  [
+  boolean: commercial [
     default: "Y"
     information: "Only enzymes with suppliers"
     help: "If this is set, then only those enzymes with a commercial
@@ -156,7 +156,7 @@ section: output [
   type: "page"
 ]
 
-  boolean: limit  [
+  boolean: limit [
     default: "Y"
     information: "Limits reports to one isoschizomer"
     help: "This limits the reporting of enzymes to just one enzyme
@@ -170,12 +170,12 @@ section: output [
            explicit set of enzymes rather than searching 'all' of them."
   ]
 
-  boolean: alphabetic  [
+  boolean: alphabetic [
     default: "N"
     information: "Sort output alphabetically"
   ]
 
-  boolean: fragments  [
+  boolean: fragments [
     default: "N"
     information: "Show fragment lengths"
     help: "This gives the fragment lengths of the forward sense strand
@@ -183,12 +183,12 @@ section: output [
            together. Results are added to the tail section of the report."
   ]
 
-  boolean: name  [
+  boolean: name [
     default: "N"
     information: "Show sequence name"
   ]
 
-  report: outfile  [
+  report: outfile [
     parameter: "Y"
     rformat: "table"
     rscoreshow: "N"
