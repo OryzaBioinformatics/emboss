@@ -44,6 +44,8 @@ void         ajSeqType (AjPSeq thys);
 AjBool       ajSeqTypeCheckIn (AjPSeq thys, const AjPSeqin seqin);
 AjBool       ajSeqTypeCheckS (AjPStr* pthys, const AjPStr type_name);
 
+void         ajSeqTypeUnused(void);
+
 /*
 ** End of prototype definitions
 */

@@ -22,10 +22,10 @@ extern "C"
 ** @attr Tax [AjPStr] Main taxonomy (species)
 ** @attr Desc [AjPStr] One-line description
 ** @attr Type [AjPStr] Type N or P
-** @attr EType [AjEnum] unused, obsolete
 ** @attr Outputtype [AjPStr] Output sequence known type
-** @attr Db [AjPStr] Database name from input
-** @attr Setdb [AjPStr] Database name from command line
+** @attr Db [AjPStr] Database name from input name
+** @attr Setdb [AjPStr] Database name from input command line
+** @attr Setoutdb [AjPStr] Database name from command line
 ** @attr Full [AjPStr] Full name
 ** @attr Date [AjPStr] Date
 ** @attr Doc [AjPStr] Obsolete - see TextPtr
@@ -39,6 +39,7 @@ extern "C"
 ** @attr FtFilename [AjPStr] Feature output filename (if not in UFO)
 ** @attr Informatstr [AjPStr] Input format
 ** @attr Formatstr [AjPStr] Output format
+** @attr EType [AjEnum] unused, obsolete
 ** @attr Format [AjEnum] Output format index
 ** @attr Filename [AjPStr] Output filename (if not in USA)
 ** @attr Directory [AjPStr] Output firectory
@@ -52,10 +53,11 @@ extern "C"
 ** @attr Single [AjBool] If true, single sequence in each file (-ossingle)
 ** @attr Features [AjBool] If true, save features with sequence or in file
 ** @attr Extension [AjPStr] File extension
-** @attr Count [ajint] Number of sequences
 ** @attr Accuracy [ajint*] Accuracy values (one per base) from base calling
 ** @attr Savelist [AjPList] Previous sequences saved for later output
 **                          (e.g. MSF format)
+** @attr Count [ajint] Number of sequences
+** @attr Padding [char[4]] Padding to alignment boundary
 **
 ** @new ajSeqoutNew Default constructor
 ** @delete ajSeqoutDel Default destructor
@@ -78,10 +80,10 @@ typedef struct AjSSeqout {
   AjPStr Tax;
   AjPStr Desc;
   AjPStr Type;
-  AjEnum EType;
   AjPStr Outputtype;
   AjPStr Db;
   AjPStr Setdb;
+  AjPStr Setoutdb;
   AjPStr Full;
   AjPStr Date;
   AjPStr Doc;
@@ -95,6 +97,7 @@ typedef struct AjSSeqout {
   AjPStr FtFilename;
   AjPStr Informatstr;
   AjPStr Formatstr;
+  AjEnum EType;
   AjEnum Format;
   AjPStr Filename;
   AjPStr Directory;
@@ -108,9 +111,10 @@ typedef struct AjSSeqout {
   AjBool Single;
   AjBool Features;
   AjPStr Extension;
-  ajint Count;
   ajint* Accuracy;
   AjPList Savelist;
+  ajint Count;
+  char Padding[4];
 } AjOSeqout;
 
 #define AjPSeqout AjOSeqout*
@@ -122,32 +126,36 @@ typedef struct AjSSeqout {
 ** Prototype definitions
 */
 
-void         ajSeqAllWrite (AjPSeqout outseq, const AjPSeq seq);
-AjBool       ajSeqFileNewOut (AjPSeqout seqout, const AjPStr name);
+__deprecated void          ajSeqAllWrite (AjPSeqout outseq, const AjPSeq seq);
+void         ajSeqoutWriteSeq (AjPSeqout outseq, const AjPSeq seq);
+AjBool       ajSeqoutOpenFilename (AjPSeqout seqout, const AjPStr name);
+__deprecated AjBool        ajSeqFileNewOut (AjPSeqout seqout,
+					   const AjPStr name);
 ajint        ajSeqoutCheckGcg (const AjPSeqout outseq);
 void         ajSeqoutClear (AjPSeqout thys);
-void         ajSeqoutCount(const AjPSeqout seqout, ajint* b);
+void         ajSeqoutCount(const AjPSeqout seqout, ajuint* b);
 void         ajSeqoutDefName(AjPSeqout thys,
 			     const AjPStr setname, AjBool multi);
 void         ajSeqoutDel (AjPSeqout* thys);
 AjBool       ajSeqOutFormatDefault (AjPStr* pformat);
 AjBool       ajSeqOutFormatSingle (AjPStr format);
 AjPSeqout    ajSeqoutNew (void);
-AjPSeqout    ajSeqoutNewF (AjPFile file);
+AjPSeqout    ajSeqoutNewFile (AjPFile file);
+__deprecated AjPSeqout     ajSeqoutNewF (AjPFile file);
 AjBool       ajSeqoutOpen (AjPSeqout thys);
 AjBool       ajSeqOutSetFormat (AjPSeqout thys, const AjPStr format);
 AjBool       ajSeqOutSetFormatC (AjPSeqout thys, const char* format);
 void         ajSeqoutTrace (const AjPSeqout seq);
 void         ajSeqPrintOutFormat (AjPFile outf, AjBool full);
 void         ajSeqoutUsa (AjPSeqout* pthis, const AjPStr Usa);
-void         ajSeqsetWrite (AjPSeqout seqout, const AjPSeqset seq);
-void         ajSeqWrite (AjPSeqout seqout, const AjPSeq seq);
-void         ajSeqWriteClose (AjPSeqout outseq);
+void         ajSeqoutWriteSet (AjPSeqout seqout, const AjPSeqset seq);
+__deprecated void          ajSeqWrite (AjPSeqout seqout, const AjPSeq seq);
+void         ajSeqoutClose (AjPSeqout outseq);
+__deprecated void          ajSeqWriteClose (AjPSeqout outseq);
 void         ajSeqWriteExit(void);
 void         ajSeqWriteXyz(AjPFile outf, const AjPStr seq, const char *prefix);
 void         ajSssWriteXyz(AjPFile outf, const AjPStr seq, const char *prefix);
-
-
+__deprecated void         ajSeqsetWrite(AjPSeqout outseq, const AjPSeqset seq);
 /*
 ** End of prototype definitions
 */

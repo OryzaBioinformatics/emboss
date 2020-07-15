@@ -9,49 +9,6 @@ extern "C"
 
 
 
-/* @data SeqPAccess ***********************************************************
-**
-** Ajax Sequence Access database reading object.
-**
-** Holds information needed to read a sequence from a database.
-** Access methods are defined for each known database type.
-**
-** Sequences are read from the database using the defined
-** database access function, which is usually a static function
-** within ajseq.c
-**
-** This should be a static data object but is needed for the definition
-** of AjPSeqin.
-**
-** @alias SeqSAccess
-** @new ajSeqMethod returns a copy of a known access method definition.
-** @other AjPSeqin Sequence input
-**
-** @attr Name [char*] Access method name used in emboss.default
-** @attr Alias [AjBool] Alias for another name
-** @attr Entry [AjBool] Supports retrieval of single entries
-** @attr Query [AjBool] Supports retrieval of selected entries
-** @attr All [AjBool] Supports retrieval of all entries
-** @attr Access [(AjBool*)] Access function
-** @attr AccessFree [(AjBool*)] Access cleanup function
-** @attr Desc [char*] Description
-** @@
-******************************************************************************/
-
-typedef struct SeqSAccess {
-  char *Name;
-  AjBool Alias;
-  AjBool Entry;
-  AjBool Query;
-  AjBool All;
-  AjBool (*Access) (AjPSeqin seqin);
-  AjBool (*AccessFree) (void* qry);
-  char* Desc;
-} SeqOAccess;
-
-#define SeqPAccess SeqOAccess*
-
-
 
 
 /*
@@ -75,7 +32,7 @@ void         ajSeqinTrace (const AjPSeqin thys);
 AjBool       ajSeqParseFasta(const AjPStr str, AjPStr* id, AjPStr* acc,
 			     AjPStr* sv, AjPStr* desc);
 AjBool       ajSeqParseNcbi(const AjPStr str, AjPStr* id, AjPStr* acc,
-			    AjPStr* sv, AjPStr* gi, AjPStr* desc);
+			    AjPStr* sv, AjPStr* gi, AjPStr* db, AjPStr* desc);
 void         ajSeqQueryClear (AjPSeqQuery thys);
 void         ajSeqQueryDel (AjPSeqQuery *pthis);
 AjBool       ajSeqQueryIs (const AjPSeqQuery qry);
