@@ -2,7 +2,7 @@
 **
 ** Predict transmembrane regions
 **
-** @author: Copyright (C) Bengt Persson
+** @author Copyright (C) Bengt Persson
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -51,16 +51,9 @@
 #include <limits.h>
 #include <float.h>
 
-#define NUMBER 300
-#define LENGTH 6000
-
 #define UTGAVA "46"
 
-#define TM_NUMBER 100
-
-#define MAX_PROF 10    /* Max antal profiler */
 #define NOLLVARDE FLT_MIN /*-10.000*/
-#define MAXHIT 200  /* Max antal pred. TM-segment */
 
 #define N_SPANN 4
 #define M_SPANN 21
@@ -93,7 +86,7 @@
 
 
 
-static float profile[MAX_PROF][LENGTH+1];
+static float **profile;
 
 
 /* P values and spans */
@@ -167,29 +160,29 @@ static float P[2][26] =
 };
 
 
-static char s[NUMBER][LENGTH];            /* Sequences  */
-static ajint relc[LENGTH];
-static ajint reln[LENGTH];
+static char **s = NULL;            /* Sequences  */
+static ajint *relc = NULL;
+static ajint *reln = NULL;
 
 static ajint nr;
 static ajint pos;
 static ajint poss;
 
-static float norm_skillnad[NUMBER];
+static float *norm_skillnad = NULL;
 
 static ajint tm_number;
-static ajint tm_segment[TM_NUMBER][2];
-static ajint npos[MAXHIT];
-static ajint cpos[MAXHIT];
+static ajint **tm_segment = NULL;
+static ajint *npos = NULL;
+static ajint *cpos = NULL;
 
-static ajint pred_mode[TM_NUMBER];
+static ajint *pred_mode = NULL;
 static ajint e_spann_min;
 static ajint e_spann_max;
 
 static float mx_limit;
 static float me_limit;
 
-static ajint ali_ok[LENGTH];
+static ajint *ali_ok = NULL;
 
 
 
@@ -203,7 +196,7 @@ static void tmap_present3p(ajint antal, const ajint *npos, const ajint *cpos,
 static ajint tmap_peak1(ajint start, ajint stopp, float *parameter);
 static ajint tmap_vec_to_stst(ajint *vec, ajint *start, ajint *stopp,
 			      ajint length);
-static void tmap_weights(char [][LENGTH], ajint, ajint, float *);
+static void tmap_weights(char **, ajint, ajint, float *);
 static void tmap_refpos2(ajint, ajint);
 static float tmap_summa1(ajint start, ajint stopp, const float *parameter);
 static ajint tmap_pred1(float, float, float, ajint);
@@ -245,10 +238,6 @@ int main(int argc, char **argv)
     mult   = ajAcdGetGraphxy("graph");
     report = ajAcdGetReport("outfile");
 
-    if(!ajSeqsetLen(seqset))
-	ajFatal("No useable sequences were specified");
-
-
     e_spann_min = E_SPANN_MIN;
     e_spann_max = E_SPANN_MAX;
 
@@ -262,6 +251,23 @@ int main(int argc, char **argv)
 
     nr = ajSeqsetSize(seqset);
     poss = ajSeqsetLen(seqset);
+    ajDebug("tmap nr: %d poss %d\n", nr, poss);
+
+    AJCNEW0(s, nr);
+    ajDebug("tmap s %x \n", s);
+    for(i=0;i<nr;i++)
+    {
+	AJCNEW0(s[i], poss+1);
+	ajDebug("tmap s[%d] %x \n", i, s[i]);
+    }
+
+    AJCNEW0(relc, poss+1);
+    AJCNEW0(reln, poss+1);
+    AJCNEW0(ali_ok, poss+1);
+    AJCNEW0(npos, poss+1);
+    AJCNEW0(cpos, poss+1);
+
+    AJCNEW0(norm_skillnad, nr);
 
     nr--;
 
@@ -280,6 +286,11 @@ int main(int argc, char **argv)
     else
 	tmap_weights(s,poss,nr,norm_skillnad);
 
+    ajDebug("tmap pp_antal: %d\n", pp_antal);
+    AJCNEW0(profile, pp_antal);
+    for(i=0;i<pp_antal; i++)
+	AJCNEW0(profile[i], poss+1);
+
     for(j=0; j<pp_antal; j++)
     {
 	tmap_align_rel(nr,poss,span[j]);
@@ -287,6 +298,11 @@ int main(int argc, char **argv)
     }
 
     tm_number = tmap_pred1(m_limit,ml_limit,e_limit,nr);
+
+    ajDebug("tmap tm_number: %d\n", tm_number);
+    AJCNEW0(tm_segment, tm_number+1);
+    for(i=0;i<=tm_number;i++)
+	AJCNEW0(tm_segment[i], 2);
 
     tmap_present3p(tm_number, npos, cpos, poss, nr, seqset, report);
 
@@ -298,8 +314,29 @@ int main(int argc, char **argv)
 
     tmap_plot2(mult);
 
+    ajDebug("tmap done .. cleaning up\n");
+    ajSeqsetDel(&seqset);
+    ajGraphxyDel(&mult);
     ajReportClose(report);
     ajReportDel(&report);
+
+/* note: nr is one less than it was at the start */
+
+    for(i=0;i<=nr;i++)
+	AJFREE(s[i]);
+    AJFREE(s);
+    AJFREE(relc);
+    AJFREE(reln);
+    AJFREE(ali_ok);
+    AJFREE(npos);
+    AJFREE(cpos);
+    AJFREE(norm_skillnad);
+    for(i=0;i<pp_antal; i++)
+	AJFREE(profile[i]);
+    AJFREE(profile);
+    for(i=0;i<=tm_number;i++)
+	AJFREE(tm_segment[i]);
+    AJFREE(tm_segment);
 
     ajExit();
 
@@ -332,7 +369,7 @@ static void tmap_refpos2(ajint refnr, ajint poss)
     ajint i;
     ajint temp;
 
-    for(i=0; i<LENGTH; i++)
+    for(i=0; i<poss; i++)
 	relc[i]=reln[i]=0;
 
     temp = 1;
@@ -412,12 +449,12 @@ static float tmap_length1(ajint nr, ajint start, ajint stopp)
     ajint j;
     ajint l;
     ajint ll;
-    ajint correct_sequence[MAXHIT];
+    ajint *correct_sequence;
     ajint nr_correct;
 
+    AJCNEW0(correct_sequence, nr+1);
+
     /* First, check for sequences with less than 10 a. a. residues */
-    for(i=0; i<MAXHIT; i++)
-	correct_sequence[i] = 0;
     nr_correct = 0;
 
     for(i=0; i<=nr; i++)
@@ -443,6 +480,8 @@ static float tmap_length1(ajint nr, ajint start, ajint stopp)
 		if(s[i][j]!=GAP) l++;
 	    ll += l;
 	}
+
+    AJFREE(correct_sequence);
 
     if(nr_correct!=0)
 	return (float)ll/nr_correct;
@@ -489,13 +528,13 @@ static void tmap_present3p(ajint antal, const ajint *npos, const ajint *cpos,
     ajAlignConsStats(seqset, NULL, &cons,
 		     &calcid, &calcsim, &calcgap, &calclen);
 
-    ajStrAssC(&hdr, "");
+    ajStrAssignC(&hdr, "");
     ajReportSetHeader(report, hdr);
 
-    seq = ajSeqNewL(ajSeqsetSize(seqset));
+    seq = ajSeqNewRes(ajSeqsetSize(seqset));
     ajSeqSetProt(seq);
-    ajSeqAssNameC(seq, "Consensus");
-    ajSeqAssSeq(seq, cons);
+    ajSeqAssignNameC(seq, "Consensus");
+    ajSeqAssignSeqS(seq, cons);
     feat = ajFeattableNewSeq(seq);
 
     for(i=1; i<=antal; i++)
@@ -514,7 +553,7 @@ static void tmap_present3p(ajint antal, const ajint *npos, const ajint *cpos,
 	cseq = ajSeqsetGetSeq(seqset, j);
 	feat = ajFeattableNewSeq(cseq);
 	tmap_refpos2(j, poss);
-	ajStrAssC(&hdr, "");
+	ajStrAssignC(&hdr, "");
 	ajReportSetHeader(report, hdr);
 	for(i=1; i<=antal; i++)
 	{
@@ -557,16 +596,16 @@ static ajint tmap_pred1(float m_limit, float ml_limit, float e_limit, ajint nr)
     ajint flag;
     ajint length;
 
-    ajint start[MAXHIT];
-    ajint stopp[MAXHIT];
-    ajint hitposs[LENGTH];
+    ajint *start = NULL;
+    ajint *stopp = NULL;
+    ajint *hitposs = NULL;
 
     ajint avstand;
     ajint mitt;
     ajint start0;
 
-    ajint start_e_pos[MAXHIT];
-    ajint stopp_e_pos[MAXHIT];
+    ajint *start_e_pos = NULL;
+    ajint *stopp_e_pos = NULL;
 
     float sum;
 
@@ -579,8 +618,12 @@ static ajint tmap_pred1(float m_limit, float ml_limit, float e_limit, ajint nr)
     ajint stopptmp;
     ajint temp;
 
+    AJCNEW0(hitposs, poss+1);
+    AJCNEW0(pred_mode, poss+1);
 
-    for(i=0; i<TM_NUMBER; i++)
+    ajDebug("tmap pred_mode tm_number:%d\n", tm_number);
+
+    for(i=0; i<tm_number; i++)
 	pred_mode[i] = 0;
 
     /* Find peak values */
@@ -591,7 +634,7 @@ static ajint tmap_pred1(float m_limit, float ml_limit, float e_limit, ajint nr)
 	    hitposs[i] = 0;
 
 
-    /* Smoothing: Disregard 1 or 2 consequtive positions in vector hitposs[] */
+    /* Smoothing: Disregard 1 or 2 consecutive positions in vector hitposs[] */
     for(i=3; i<=poss-1; i++)
 	if((hitposs[i-2]==1) && (hitposs[i+1]==1))
 	    hitposs[i] = hitposs[i-1]=1;
@@ -600,14 +643,21 @@ static ajint tmap_pred1(float m_limit, float ml_limit, float e_limit, ajint nr)
 	    hitposs[i] = 1;
 
 
+    AJCNEW0(start, poss+1);
+    AJCNEW0(stopp, poss+1);
+    AJCNEW0(start_e_pos, poss+1);
+    AJCNEW0(stopp_e_pos, poss+1);
 
     /* Transform hitposs[] to TM vector */
-    for(i=0; i<MAXHIT; i++)
-	start[i] = stopp[i]=npos[i]=cpos[i]=0;
+    for(i=0; i<=poss; i++)
+	npos[i]=cpos[i]=0;
     tm_ant = tmap_vec_to_stst(hitposs,start,stopp,poss);
 
-    for(i=1; i<=tm_ant; i++)
+    for(i=1; i<=tm_ant; i++) {
+	ajDebug("tmap pred_mode[%d]\n", i);
+	ajDebug("tmap pred_mode[%d] %x\n", i, pred_mode[i]);
 	pred_mode[i]=pred_mode[i] | 1;
+    }
 
 
     /* Remove start[] & stopp[] with length <=M_KORT2_LIMIT */
@@ -924,6 +974,12 @@ static ajint tmap_pred1(float m_limit, float ml_limit, float e_limit, ajint nr)
 	cpos[i] = stopp[i];
     }
 
+    AJFREE(hitposs);
+    AJFREE(pred_mode);
+    AJFREE(start);
+    AJFREE(stopp);
+    AJFREE(start_e_pos);
+    AJFREE(stopp_e_pos);
 
     return tm_ant;
 }
@@ -1131,7 +1187,7 @@ static ajint tmap_vec_to_stst(ajint *vec, ajint *start, ajint *stopp,
 ** Calculates number of differences between sequence 'testnr' and all
 **  other sequences (Ref. Vingron & Argos, CABIOS 5 (1989) 115-121).
 **
-** @param [r] sw [CONST char{}{LENGTH}] sekvensmatris (sequence matrix)
+** @param [r] sw [CONST char**] sekvensmatris (sequence matrix)
 ** @param [r] poss [ajint] antal positioner i sekvenserna
 **                         (position in sequence)
 ** @param [r] nr [ajint] max nr av sekvenserna (max number of sequences)
@@ -1139,15 +1195,16 @@ static ajint tmap_vec_to_stst(ajint *vec, ajint *start, ajint *stopp,
 ** @@
 ******************************************************************************/
 
-static void tmap_weights(char sw[][LENGTH], ajint poss, ajint nr,
+static void tmap_weights(char **sw, ajint poss, ajint nr,
 			 float *norm_sk)
 {
     ajint i;
     ajint j;
     ajint testnr;
-    ajint skillnad[NUMBER+1];
+    ajint *skillnad = NULL;
     float summa;
 
+    AJCNEW0(skillnad, nr+1);
     for(testnr=0; testnr<=nr; testnr++)
 	for(i=0; i<=nr; i++)
 	    if(i!=testnr)
@@ -1156,7 +1213,7 @@ static void tmap_weights(char sw[][LENGTH], ajint poss, ajint nr,
 			skillnad[testnr]++;
 
     /* Normalize 'skillnad[]' */
-    for(i=0, j=LENGTH*NUMBER; i<=nr; i++)
+    for(i=0, j=poss*nr; i<=nr; i++)
 	if(skillnad[i]<j)
 	    j = skillnad[i];
     for(i=0; i<=nr; i++)
@@ -1178,7 +1235,7 @@ static void tmap_weights(char sw[][LENGTH], ajint poss, ajint nr,
 
 /* @funcstatic tmap_profile2 **************************************************
 **
-**  Calculates mean values of 'P[]' over 'span' a.a.
+** Calculates mean values of 'P[]' over 'span' a.a.
 ** and stores the result in 'profile[]'.
 **
 ** Calculates on all sequences of the alignment
@@ -1194,10 +1251,12 @@ static void tmap_weights(char sw[][LENGTH], ajint poss, ajint nr,
 static void tmap_profile2(ajint prof, ajint antal, ajint poss, ajint span)
 {
     ajint bin=0,count,i,j,nr;
-    ajint flagga[LENGTH+1];
+    ajint *flagga = NULL;
     float prof_temp;
-    float summa_vikt[LENGTH+1];
+    float *summa_vikt = NULL;
 
+    AJCNEW0(flagga, poss+1);
+    AJCNEW0(summa_vikt, poss+1);
 
     for(i=1; i<=poss; i++)
     {
@@ -1234,6 +1293,9 @@ static void tmap_profile2(ajint prof, ajint antal, ajint poss, ajint span)
 	    profile[prof][i] = NOLLVARDE;
 	else
 	    profile[prof][i] = profile[prof][i]/summa_vikt[i];
+
+    AJFREE(flagga);
+    AJFREE(summa_vikt);
 
     return;
 }
@@ -1341,7 +1403,5 @@ static void tmap_plot2(AjPGraph mult)
   ajGraphxyDisplay(mult,AJFALSE);
   ajGraphCloseWin();
 
-  ajExit();
-
-  return;   /* Never gets here */
+  return;
 }

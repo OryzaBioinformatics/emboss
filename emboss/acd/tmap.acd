@@ -8,7 +8,7 @@ section: input [
   type: "page"
 ]
 
-  seqset: sequences  [
+  seqset: sequences [
     parameter: "Y"
     type: "gapprotein"
     aligned: "Y"
@@ -22,17 +22,17 @@ section: output [
   type: "page"
 ]
 
-  xygraph: graph  [
+  xygraph: graph [
     standard: "y"
     multiple: "2"
     gxtitle: "Residue number"
     goutfile: "tmap"
   ]
 
- report: outfile  [
-   parameter: "Y"
-   rformat: "seqtable"
-   taglist: "int:TM=TransMem"
- ]
+  report: outfile [
+    parameter: "Y"
+    rformat: "seqtable"
+    taglist: "int:TM=TransMem"
+  ]
 
 endsection: output
