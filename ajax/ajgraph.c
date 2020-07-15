@@ -960,7 +960,6 @@ static void GraphFill(ajint numofpoints, float *x, float *y)
 	ajDebug("=g= plfill( %d, <> .. <>, <> .. <>) [num x..x y..y]\n",
 		numofpoints );
 
-    if (graphData != NULL)
     plfill(numofpoints, x, y);
 
     return;
