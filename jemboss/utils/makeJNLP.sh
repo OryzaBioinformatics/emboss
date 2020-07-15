@@ -155,9 +155,9 @@ echo "create a key store...."
 echo
 echo "What is your first and last name [Unknown]?"
 read NAME
-echo "What is the name of your organizational unit [Unknown]?"
+echo "What is the name of your organisational unit [Unknown]?"
 read ORGU
-echo "What is the name of your organization [Unknown]?"
+echo "What is the name of your organisation [Unknown]?"
 read ORG
 echo "What is the name of your City or Locality [Unknown]?"
 read LOC

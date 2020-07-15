@@ -23,10 +23,27 @@
 package org.emboss.jemboss.gui.form;
 
 import java.awt.*;
-import javax.swing.*;
+
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import java.net.URL;
 import org.apache.regexp.*;
 
 import java.util.Hashtable;
@@ -67,6 +84,7 @@ public class BuildJembossForm implements ActionListener
   private JCheckBox  checkBox[];
   private InputSequenceAttributes inSeqAttr[];
   private ListFilePanel filelist[];
+  private MultiTextField multiTextField[];
   /** png/jemboss graphics selection */
   private JComboBox graphics;
 
@@ -292,6 +310,7 @@ public class BuildJembossForm implements ActionListener
     int mlist  = parseAcd.getNumMList();
     int nrange = parseAcd.getNumRange();
     int nflist = parseAcd.getNumFileList();
+    int nmultiText = parseAcd.getNumMultiTextField();
 
     textf     = new TextFieldSink[ntextf];
     textInt   = new TextFieldInt[nint];
@@ -304,9 +323,13 @@ public class BuildJembossForm implements ActionListener
     rangeField  = new JTextField[nrange];
 
     inSeq  = new SetInFileCard[nseqs];
+    
+    multiTextField = new MultiTextField[nmultiText];
+    
 //  JRadioButton rpaste[] = new JRadioButton [nseqs];
     Box lab[] = new Box[numofFields];
 
+    
     for(int j=0;j<nbool;j++)
       checkBox[j] = new JCheckBox();
 
@@ -376,7 +399,7 @@ public class BuildJembossForm implements ActionListener
       if(nfield < numofFields)
       {
         SectionPanel sp = new SectionPanel(f,p3,fieldPane,parseAcd,
-              nfield,textf,textInt,textFloat,rangeField,checkBox,
+              nfield,multiTextField,textf,textInt,textFloat,rangeField,checkBox,
               inSeqAttr,fieldOption,multiOption,inSeq,filelist,graphics,
               db,appDescription,lab,numofFields,mysettings,withSoap,envp);
 
@@ -740,10 +763,10 @@ public class BuildJembossForm implements ActionListener
         else
           options = options.concat(" -" + val + " data");
       }
-      if ( att.startsWith("dirlist")|| att.startsWith("featout")||
-           att.startsWith("string")  || att.startsWith("seqout") ||
-           att.startsWith("outfile") || att.startsWith("codon") ||
-           att.startsWith("regexp") )
+      if ( att.startsWith("dirlist") || att.startsWith("featout") ||
+           att.startsWith("string")  || att.startsWith("seqout")  ||
+           att.startsWith("outfile") || att.startsWith("codon")   ||
+           att.startsWith("regexp")  )
       {
         if(!(textf[h].getText()).equals("") && textf[h].isVisible()
                                             && textf[h].isEnabled()) 
@@ -764,6 +787,16 @@ public class BuildJembossForm implements ActionListener
         if(att.startsWith("seqout"))
           options = options.concat(outSeqAttr.getOuputSeqAttr());
 
+      }
+      else if ( att.startsWith("pattern") )
+      {
+        JTextField textFields[] = multiTextField[h].getJTextField();
+        
+        if(textFields[0].getText() != null && !textFields[0].getText().trim().equals(""))
+          options = options.concat(" -" + val + " " + textFields[0].getText());
+        
+        if(textFields[1].getText() != null && !textFields[1].getText().trim().equals(""))
+          options = options.concat(" -pmismatch " + textFields[1].getText());
       }
       else if ( att.startsWith("int") )
       {
@@ -1096,7 +1129,7 @@ public class BuildJembossForm implements ActionListener
 * @return String command line to use
 *
 */
-  private String getCommand()
+/*  private String getCommand()
   {
 
     String command = embossBin.concat(applName);
@@ -1110,7 +1143,7 @@ public class BuildJembossForm implements ActionListener
       command = command.concat(options + " -stdout -auto");
 
     return command;
-  }
+  }*/
 
 
 /**

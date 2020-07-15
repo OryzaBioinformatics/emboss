@@ -136,6 +136,7 @@ POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 PURIFY_FALSE = @PURIFY_FALSE@
 PURIFY_TRUE = @PURIFY_TRUE@
 RANLIB = @RANLIB@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -192,7 +193,7 @@ target_alias = @target_alias@
 pkgdata_DATA = BuildJembossForm.java ListFilePanel.java SectionPanel.java \
 SetInFileCard.java SetOutFileCard.java TextFieldFloat.java \
 TextFieldInt.java TextFieldSink.java JembossComboPopup.java \
-MultiLineToolTipUI.java PlafMacros.java ReportFormat.java \
+MultiLineToolTipUI.java MultiTextField.java PlafMacros.java ReportFormat.java \
 AlignFormat.java ApplicationNamePanel.java LabelTextBox.java Separator.java
 
 all: all-am

@@ -153,7 +153,8 @@ embassy_install()
   echo
   echo "EMBASSY packages can optionally be installed along with"
   echo "the EMBOSS applications, see:"
-  echo "http://emboss.sourceforge.net/apps/#Embassy"
+  echo "http://emboss.sourceforge.net/apps/release/version/embassy"
+  echo "where 'version' corresponds to the EMBOSS version e.g. 4.0"
   echo
   echo "--------------------------------------------------------------"
   echo
@@ -800,7 +801,7 @@ AIX="n"
 MACOSX="n"
 if [ "$PLAT" = "1" ]; then
   PLATFORM="linux"
-  AUTH_TYPE_TMP=1
+  AUTH_TYPE_TMP=3
 elif [ "$PLAT" = "2" ]; then
   PLATFORM="aix"
   AIX="y"
@@ -1049,7 +1050,7 @@ if [ "$AUTH" = "y" ]; then
     UUIDTMP="506"
   fi
 
-  echo "Provide the UID of the account (non-priveleged) to run Tomcat,"
+  echo "Provide the UID of the account (non-privileged) to run Tomcat,"
   echo "it has to be greater than 100 [$UUIDTMP]:"
   read UUID
 
@@ -1592,7 +1593,7 @@ if [ "$AUTH" = "y" ]; then
   echo "1. As root:"
   echo "   chown root $EMBOSS_INSTALL/bin/jembossctl"
   echo "   chmod u+s $EMBOSS_INSTALL/bin/jembossctl"
-  echo "2. Ensure that tomcat is running as the non-priveliged user,"
+  echo "2. Ensure that tomcat is running as the non-privileged user,"
   echo "   with the same UID (i.e. $UUID) that was given to this script"
   echo "   (and NOT as root!)."
   echo "3. Use the tomstop & tomstart scripts in this directory"

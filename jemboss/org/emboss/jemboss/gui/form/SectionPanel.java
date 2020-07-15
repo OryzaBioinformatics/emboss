@@ -51,6 +51,7 @@ import org.emboss.jemboss.JembossParams;
 public class SectionPanel
 {
 
+  private MultiTextField multiTextField[];
   /** text field sink    */
   private TextFieldSink textf[];
   /** integer field sink */
@@ -161,7 +162,8 @@ public class SectionPanel
   *
   */
   protected SectionPanel(JFrame f, JPanel p3, Box fieldPane, 
-            ParseAcd parseAcd, int nff, final TextFieldSink textf[], 
+            ParseAcd parseAcd, int nff, final MultiTextField multiTextField[],
+            final TextFieldSink textf[], 
             TextFieldInt textInt[], TextFieldFloat textFloat[],
             JTextField rangeField[], JCheckBox  checkBox[],
             InputSequenceAttributes inSeqAttr[],
@@ -261,7 +263,7 @@ public class SectionPanel
 
         String l = getMinMaxDefault(null,null,null,nf);
 
-	lab[nf] = new LabelTextBox(parseAcd.getInfoParamValue(nf),
+      	lab[nf] = new LabelTextBox(parseAcd.getInfoParamValue(nf),
                                   parseAcd.getHelpParamValue(nf));
 
         if(l != null && !att.startsWith("bool"))
@@ -396,6 +398,17 @@ public class SectionPanel
 
           pan.add(textf[h]);
           pan.add(lab[nf]);
+        }
+        else if( att.startsWith("pattern") )
+        {
+          LabelTextBox labs[] = new LabelTextBox[2];
+          
+          labs[0] = (LabelTextBox)lab[nf];
+          labs[1] = new LabelTextBox("Pattern mismatch",
+                                     "Number of pattern mismatch");
+          
+          multiTextField[h] = new MultiTextField(2, labs);
+          pan.add(multiTextField[h].getBoxOfTextFields());
         }
         else if(att.startsWith("seqout"))
         {

@@ -24,7 +24,6 @@ package org.emboss.jemboss.parser;
 import org.emboss.jemboss.parser.acd.*;
 import java.io.*;
 import java.util.StringTokenizer;
-import java.util.Hashtable;
 import java.util.Vector;
 import java.util.Enumeration;
 
@@ -84,6 +83,8 @@ public class ParseAcd
                       
                       /** default for list or select data type */
   private Vector listdefault;
+  
+  private int nmultiTextField;
 
 // Groups the program belongs to
                       /** true if primary group is defined */
@@ -482,14 +483,19 @@ public class ParseAcd
   private void setGuiHandleNumber(String dataType, ApplicationFields appF)
   {
 
-    if ( dataType.startsWith("datafile") || dataType.startsWith("featout")||
-         dataType.startsWith("string")   || dataType.startsWith("seqout") ||
-         dataType.startsWith("outfile")  || dataType.startsWith("matrix") ||
-         dataType.startsWith("infile")   || dataType.startsWith("regexp") ||
+    if ( dataType.startsWith("datafile") || dataType.startsWith("featout") ||
+         dataType.startsWith("string")   || dataType.startsWith("seqout")  ||
+         dataType.startsWith("outfile")  || dataType.startsWith("matrix")  ||
+         dataType.startsWith("infile")   || dataType.startsWith("regexp")  ||
          dataType.startsWith("codon")    || dataType.startsWith("dirlist") )
     {
       appF.setGuiHandleNumber(ntextf);
       ntextf++;
+    }
+    else if(dataType.startsWith("pattern"))
+    {
+      appF.setGuiHandleNumber(nmultiTextField);
+      nmultiTextField++;
     }
     else if (dataType.startsWith("int"))
     {
@@ -1422,6 +1428,12 @@ public class ParseAcd
  
     numofParams++;
     return st.ttype;
+  }
+
+
+  public int getNumMultiTextField()
+  {
+    return nmultiTextField;
   }
   
 }
