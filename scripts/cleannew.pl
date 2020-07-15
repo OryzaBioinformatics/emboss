@@ -1,7 +1,8 @@
 #!/usr/bin/perl -w
 
 @validfile = ("acdvalid.txt", "acdvalidreport.txt",
-	      "myall.csh", "myconfig.csh", "mydoc.csh", "myembassyall.csh",
+	      "myall.csh", "myalltest.csh",
+	      "myconfig.csh", "mydoc.csh", "myembassyall.csh",
 	      "myembassyconfig.csh", "myefunc.csh", "myacdvalid.csh",
 	      "src-embassy", "summary.log", "x", "jembossctl"
 	      );
@@ -74,6 +75,17 @@ while (<>) {
     if ($base =~ /^[.]libs$/) {next}
     if($base =~ /[.]lo$/) {next}
     if($base =~ /[.]la$/) {next}
+    if ($file =~ /^test\/memtest\/output\/([^\/]+)$/) {next}
+    if ($file =~ /^test\/memtest\/valgrind\/([^\/]+)$/) {next}
+    if ($file =~ /^test\/memtest\/valgrind.err/) {next}
+    if ($file =~ /^test\/memtest\/valgrind.out/) {next}
+    if ($file =~ /^test\/memtest\/valgrind.result/) {next}
+    if ($file =~ /^test\/memtest\/valgrind.summary/) {next}
+    if ($file =~ /^test\/memtest\/valgrind.txt/) {next}
+    if ($file =~ /^test\/qa\/qatest.log/) {next}
+    if ($file =~ /^test\/qa\/qatest.doclog/) {next}
+    if ($file =~ /^test\/qa\/qatest.out/) {next}
+    if ($file =~ /^test\/qa\/qatest.summary/) {next}
     if ($file =~ /^emboss\/([^\/]+)$/) {
 	if(defined($progs{$1})) {next}
     }
