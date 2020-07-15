@@ -23,14 +23,14 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 
-#ifdef GROUT
-
 #include "ajax.h"
 #include <math.h>
 
 #define ONE_METER_FONT 1.784
 #define RESIDUE_SQUARE_SIZE 1.7
 #define SQUARESIZE 0.03
+
+#ifdef GROUT
 
 
 static AjPXmlNode	xml_MakeNewNode(AjPGraphXml file,const AjPStr name,
@@ -242,27 +242,27 @@ AjBool ajXmlSetMaxMin (AjPGraphXml file, double xMin, double yMin,
 				 xml_GetCurrentGraphic(file));
 
     xml_StrFromDouble(&doub, xMin);
-    ajStrApp(&value, doub);  
-    ajStrAppC(&value, ", ");  
+    ajStrAppendS(&value, doub);  
+    ajStrAppendC(&value, ", ");  
 
 
     xml_StrFromDouble(&doub, yMin);
-    ajStrApp(&value, doub);  
-    ajStrAppC(&value, ", ");  
+    ajStrAppendS(&value, doub);  
+    ajStrAppendC(&value, ", ");  
 
 
     xml_StrFromDouble(&doub, xMax);
-    ajStrApp(&value, doub);  
-    ajStrAppC(&value, ", ");  
+    ajStrAppendS(&value, doub);  
+    ajStrAppendC(&value, ", ");  
 
 
     xml_StrFromDouble(&doub, yMax);
-    ajStrApp(&value, doub);  
-    ajStrAppC(&value, "]");  
+    ajStrAppendS(&value, doub);  
+    ajStrAppendC(&value, "]");  
 
 
     xml_SetAttributeC(minMaxNode, "fieldName", "MaxMin");
-    xml_SetAttributeC(minMaxNode, "value", ajStrStr(value));
+    xml_SetAttributeC(minMaxNode, "value", ajStrGetPtr(value));
     
     xml_UnrefNode(&minMaxNode);
     
@@ -357,7 +357,7 @@ AjBool ajXmlSetSource(AjPGraphXml file, const AjPStr title)
     titleNode = xml_MakeNewNodeC(file, "fieldValue", 
 				xml_GetCurrentGraphic(file));
     xml_SetAttributeC(titleNode, "fieldName", "Source");
-    xml_SetAttributeC(titleNode, "value", ajStrStr(title));
+    xml_SetAttributeC(titleNode, "value", ajStrGetPtr(title));
 
     xml_UnrefNode(&titleNode);
 
@@ -392,7 +392,7 @@ AjBool ajXmlAddMainTitleC(AjPGraphXml file, const char *title)
 				xml_GetCurrentGraphic(file));
 
     xml_SetAttributeC(graphNode, "name", "Graph.mainTitle");
-    xml_SetAttributeC(graphNode, "value", ajStrStr(titleAltered));
+    xml_SetAttributeC(graphNode, "value", ajStrGetPtr(titleAltered));
 
     xml_UnrefNode(&graphNode);
 
@@ -432,7 +432,7 @@ AjBool ajXmlAddXTitleC (AjPGraphXml file, const char *title)
     titleNode = xml_MakeNewNodeC(file, "fieldValue", 
 				xml_GetCurrentGraphic(file));
     xml_SetAttributeC(titleNode, "name", "Graph.xTitle");
-    xml_SetAttributeC(titleNode, "value", ajStrStr(titleAltered));
+    xml_SetAttributeC(titleNode, "value", ajStrGetPtr(titleAltered));
 
     xml_UnrefNode(&titleNode);
     ajStrDel(&titleAltered);
@@ -470,7 +470,7 @@ AjBool ajXmlAddYTitleC(AjPGraphXml file, const char *title)
     titleNode = xml_MakeNewNodeC(file, "fieldValue", 
 				xml_GetCurrentGraphic(file));
     xml_SetAttributeC(titleNode, "name", "Graph.yTitle");
-    xml_SetAttributeC(titleNode, "value", ajStrStr(titleAltered));
+    xml_SetAttributeC(titleNode, "value", ajStrGetPtr(titleAltered));
 
     xml_UnrefNode(&titleNode);
     ajStrDel(&titleAltered);
@@ -495,7 +495,7 @@ AjBool ajXmlAddYTitleC(AjPGraphXml file, const char *title)
 
 AjBool ajXmlAddMainTitle(AjPGraphXml file, const AjPStr title)
 {
-    return ajXmlAddMainTitleC(file, ajStrStr(title));
+    return ajXmlAddMainTitleC(file, ajStrGetPtr(title));
 }
 
 
@@ -515,7 +515,7 @@ AjBool ajXmlAddMainTitle(AjPGraphXml file, const AjPStr title)
 
 AjBool ajXmlAddXTitle (AjPGraphXml file, const AjPStr title)
 {
-    return ajXmlAddXTitleC(file, ajStrStr(title));
+    return ajXmlAddXTitleC(file, ajStrGetPtr(title));
 }
 
 
@@ -535,7 +535,7 @@ AjBool ajXmlAddXTitle (AjPGraphXml file, const AjPStr title)
 
 AjBool ajXmlAddYTitle(AjPGraphXml file, const AjPStr title)
 {
-    return ajXmlAddYTitleC(file, ajStrStr(title));
+    return ajXmlAddYTitleC(file, ajStrGetPtr(title));
 }
 
 
@@ -564,7 +564,7 @@ void ajXmlAddTextCentred(AjPGraphXml file, double x, double y,
 {
     float stringLength;
 
-    stringLength = ajStrLen(text) * size / ONE_METER_FONT;
+    stringLength = ajStrGetLen(text) * size / ONE_METER_FONT;
     ajXmlAddText(file, (x - ((stringLength / 2) * cos(angle))), y, 
 		 size, angle, fontFamily, fontStyle, text);
     
@@ -650,14 +650,14 @@ void ajXmlAddTextC(AjPGraphXml file, double x, double y, double size,
     transformNode = xml_MakeNewNodeC(file, "Transform", tranformParent);
 
     xml_AddACoord(x, y, ajFalse, &attributeVal, &temp);
-    xml_SetAttributeC(transformNode, "translation", ajStrStr(attributeVal));
-    ajStrAssC(&attributeVal,"0 0 1 ");
-    ajStrAssC(&temp,"");
+    xml_SetAttributeC(transformNode, "translation", ajStrGetPtr(attributeVal));
+    ajStrAssignC(&attributeVal,"0 0 1 ");
+    ajStrAssignC(&temp,"");
 
     xml_StrFromDouble(&temp, angle);
-    ajStrApp(&attributeVal, temp);
+    ajStrAppendS(&attributeVal, temp);
   
-    xml_SetAttributeC(transformNode, "rotation", ajStrStr(attributeVal));
+    xml_SetAttributeC(transformNode, "rotation", ajStrGetPtr(attributeVal));
 
     elText = xml_MakeNewShapeNodeC(file, transformNode, "Text");
 
@@ -680,7 +680,7 @@ void ajXmlAddTextC(AjPGraphXml file, double x, double y, double size,
        if(size >= 0)
        {
        ajStrFromDouble(&temp, size, 2);
-       xml_SetAttributeC(elFont, "size", ajStrStr(temp));
+       xml_SetAttributeC(elFont, "size", ajStrGetPtr(temp));
        }
        }
        */
@@ -723,9 +723,9 @@ void ajXmlAddText(AjPGraphXml file, double x, double y, double size,
 		  const AjPStr text)
 {
     ajXmlAddTextC(file,x,y,size,angle,
-                  (fontFamily) ? ajStrStr(fontFamily) : NULL,
-		  (fontStyle)  ? ajStrStr(fontStyle)  : NULL,
-		  (text) ? ajStrStr(text) : NULL);
+                  (fontFamily) ? ajStrGetPtr(fontFamily) : NULL,
+		  (fontStyle)  ? ajStrGetPtr(fontStyle)  : NULL,
+		  (text) ? ajStrGetPtr(text) : NULL);
     return;
 }
 
@@ -781,45 +781,45 @@ void ajXmlAddTextWithCJustify(AjPGraphXml file, double x, double y,
 				    xml_GetCurrentGraphic(file));
 
     xml_AddACoord(x, y, ajFalse, &attributeVal, &temp);
-    xml_SetAttributeC(transformNode, "translation", ajStrStr(attributeVal));
+    xml_SetAttributeC(transformNode, "translation", ajStrGetPtr(attributeVal));
   
-    ajStrClear(&attributeVal);
+    ajStrSetClear(&attributeVal);
     xml_AddACoord(angle, 0, ajFalse, &attributeVal, &temp);
-    xml_SetAttributeC(transformNode, "rotation", ajStrStr(attributeVal));
+    xml_SetAttributeC(transformNode, "rotation", ajStrGetPtr(attributeVal));
 
     elFont = elText = xml_MakeNewShapeNodeC(file, transformNode, 
 					    "Text");
 
-    xml_SetAttributeC(elText, "string", ajStrStr(text));
+    xml_SetAttributeC(elText, "string", ajStrGetPtr(text));
 
     elFont = xml_MakeNewNodeC(file, "Font", elText);
     if(fontFamily != NULL)
-	xml_SetAttributeC(elFont, "family", ajStrStr(fontFamily));
+	xml_SetAttributeC(elFont, "family", ajStrGetPtr(fontFamily));
 
     if(fontStyle != NULL)
-	xml_SetAttributeC(elFont, "style", ajStrStr(fontStyle));
+	xml_SetAttributeC(elFont, "style", ajStrGetPtr(fontStyle));
 
     if(size >= 0)
     {
 	ajStrFromInt(&temp, size);
-	xml_SetAttributeC(elFont, "size", ajStrStr(temp));
+	xml_SetAttributeC(elFont, "size", ajStrGetPtr(temp));
     }
 
     xml_SetAttributeC(elFont, "horizontal", 
-		      ajStrStr(xml_StrFromBool(horizontal)));
+		      ajStrGetPtr(xml_StrFromBool(horizontal)));
     xml_SetAttributeC(elFont, "leftToRight", 
-		      ajStrStr(xml_StrFromBool(leftToRight)));
+		      ajStrGetPtr(xml_StrFromBool(leftToRight)));
     xml_SetAttributeC(elFont, "topToBottom", 
-		      ajStrStr(xml_StrFromBool(topToBottom)));
+		      ajStrGetPtr(xml_StrFromBool(topToBottom)));
 
-    ajStrAssC(&attributeVal,"\"");
+    ajStrAssignC(&attributeVal,"\"");
 
-    ajStrAppC(&attributeVal, justifyMajor);
-    ajStrAppC(&attributeVal, "\",\"");
-    ajStrAppC(&attributeVal, justifyMinor);
-    ajStrAppC(&attributeVal, "\"");
+    ajStrAppendC(&attributeVal, justifyMajor);
+    ajStrAppendC(&attributeVal, "\",\"");
+    ajStrAppendC(&attributeVal, justifyMinor);
+    ajStrAppendC(&attributeVal, "\"");
 
-    xml_SetAttributeC(elFont, "justify", ajStrStr(attributeVal));
+    xml_SetAttributeC(elFont, "justify", ajStrGetPtr(attributeVal));
 
     ajStrDel(&attributeVal);
     ajStrDel(&temp);
@@ -871,7 +871,7 @@ void ajXmlAddTextWithJustify(AjPGraphXml file, double x, double y,
 {
     ajXmlAddTextWithCJustify(file,x,y,size,angle,fontFamily,fontStyle, 
 			     text,horizontal,leftToRight,topToBottom, 
-			     ajStrStr(justifyMajor),ajStrStr(justifyMinor));
+			     ajStrGetPtr(justifyMajor),ajStrGetPtr(justifyMinor));
     return;
 }
 
@@ -922,12 +922,12 @@ void ajXmlAddTextOnArc(AjPGraphXml file, double xCentre, double yCentre,
 
     letter = ajStrNew();
 
-    textLength = ajStrLen(text) / ONE_METER_FONT;
+    textLength = ajStrGetLen(text) / ONE_METER_FONT;
     arcLength = (endAngle - startAngle) * radius;
     
     if(textLength > arcLength)
     {
-	size = (arcLength * ONE_METER_FONT) / ajStrLen(text);
+	size = (arcLength * ONE_METER_FONT) / ajStrGetLen(text);
 	lettersInFront = 0;
     }
     else if(textLength < arcLength)
@@ -940,14 +940,14 @@ void ajXmlAddTextOnArc(AjPGraphXml file, double xCentre, double yCentre,
     
     /* why does this run one more time than it should? hugh */
     /* 
-       for(i=lettersInFront; i<(((double) ajStrLen(text)) + 
+       for(i=lettersInFront; i<(((double) ajStrGetLen(text)) + 
        lettersInFront); ++i) 
        */
 
-    limit = ajStrLen(text);
+    limit = ajStrGetLen(text);
     for(i=0; i<limit; ++i)
     {
-	ajStrAssSubC(&letter, ajStrStr(text), i, i);
+	ajStrAssignSubC(&letter, ajStrGetPtr(text), i, i);
 	if(!ajStrMatchC(letter, " "))
 	{
 	    letterAngle = ((((double)i) + lettersInFront) * 
@@ -1537,7 +1537,7 @@ AjBool ajXmlAddPointLabelCircle(AjPGraphXml file, double angle,
     yEnd = (cos(angle) * (radius + length)) + yCentre;
     
     if(xml_AngleIsInSecondHalfOfCircle(angle))
-	ajStrRev(&textPrinted);
+	ajStrReverse(&textPrinted);
 
     textXStart = (cos(angle) * (radius + (length * 2))) + xCentre;
     textYStart = (sin(angle) * (radius + (length * 2))) + yCentre;
@@ -1810,7 +1810,7 @@ AjBool ajXmlAddPointLabelLinear(AjPGraphXml file, double angle,
 	textAngle = angle + (acos(0) / 2);
 
     if(xml_AngleIsInSecondHalfOfCircle(textAngle))
-	ajStrRev(&textPrinted);
+	ajStrReverse(&textPrinted);
 
     ajXmlAddLine(file, xPoint, yPoint, xEnd, yEnd);
     if(textParallelToLine)
@@ -2412,7 +2412,7 @@ float ajXmlFitTextOnLine(float x1, float y1, float x2, float y2,
     float lineLength;
     ajint textLength;
     
-    textLength = ajStrLen(text);
+    textLength = ajStrGetLen(text);
 
     lineLength = pow((pow((x2 - x1), 2) + pow((y2 - y1), 2)), 0.5);
     
@@ -2594,7 +2594,7 @@ AjPGraphXml ajXmlCreateNewOutputFile()
 
 void ajXmlAddGraphic(AjPGraphXml file, const AjPStr type)
 {
-    ajXmlAddGraphicC(file, ajStrStr(type));
+    ajXmlAddGraphicC(file, ajStrGetPtr(type));
 
     return;
 }
@@ -2794,7 +2794,7 @@ void ajXmlAddCircle(AjPGraphXml file, double xCentre, double yCentre,
 				       "NurbsCurve2D");
     xml_SetAttributeC(circleNode, "knots", "0 0 0 1 1 2 2 3 3 3");
     xml_SetAttributeC(circleNode, "order", "3");
-    xml_SetAttributeC(circleNode, "controlPoint", ajStrStr(controlPoints));
+    xml_SetAttributeC(circleNode, "controlPoint", ajStrGetPtr(controlPoints));
     xml_SetAttributeC(circleNode, "weight", "1 0.5 1 0.5 1 0.5 1");
 
     ajStrDel(&controlPoints);
@@ -2821,7 +2821,7 @@ void ajXmlAddCircle(AjPGraphXml file, double xCentre, double yCentre,
 void ajXmlAddGroutOption(AjPGraphXml file,
 			 const AjPStr name, const AjPStr value)
 {
-    ajXmlAddGroutOptionC(file, ajStrStr(name), ajStrStr(value));
+    ajXmlAddGroutOptionC(file, ajStrGetPtr(name), ajStrGetPtr(value));
 
     return;
 }
@@ -2912,31 +2912,31 @@ static void xml_AddCylinder(AjPGraphXml file, double xCentre, double yCentre,
     rotation    = ajStrNewC("0 0 1 ");    
 
     xml_StrFromDouble(&translation, xCentre);
-    ajStrAppC(&translation, " ");
+    ajStrAppendC(&translation, " ");
     xml_StrFromDouble(&temp, yCentre);
-    ajStrApp(&translation, temp);
-    ajStrAppC(&translation, " 0");
+    ajStrAppendS(&translation, temp);
+    ajStrAppendC(&translation, " 0");
 
-    ajStrAssC(&temp,"");
+    ajStrAssignC(&temp,"");
     xml_StrFromDouble(&temp, angle);
-    ajStrApp(&rotation, temp);
+    ajStrAppendS(&rotation, temp);
     
     transformNode = xml_MakeNewNodeC(file, "Transform", 
 				    xml_GetCurrentGraphic(file));
 
-    xml_SetAttributeC(transformNode, "translation", ajStrStr(translation));
-    xml_SetAttributeC(transformNode, "rotation", ajStrStr(rotation));
+    xml_SetAttributeC(transformNode, "translation", ajStrGetPtr(translation));
+    xml_SetAttributeC(transformNode, "rotation", ajStrGetPtr(rotation));
   
 
     elCylinder = xml_MakeNewShapeNodeC(file, transformNode, 
 				      "Cylinder");
 
-    ajStrAssC(&temp,"");
+    ajStrAssignC(&temp,"");
     xml_StrFromDouble(&temp, height);
-    xml_SetAttributeC(elCylinder, "height", ajStrStr(temp));
-    ajStrAssC(&temp,"");
+    xml_SetAttributeC(elCylinder, "height", ajStrGetPtr(temp));
+    ajStrAssignC(&temp,"");
     xml_StrFromDouble(&temp, width);
-    xml_SetAttributeC(elCylinder, "width", ajStrStr(temp));
+    xml_SetAttributeC(elCylinder, "width", ajStrGetPtr(temp));
 
     ajStrDel(&temp);
     ajStrDel(&rotation);
@@ -3005,21 +3005,21 @@ static AjBool xml_StrFromDouble(AjPStr *result, double val)
     mantisa = ajStrNew();
     exponent = ajStrNew();
 
-    ajStrFromDoubleE(&whole, val, 14);
+    ajStrFromDoubleExp(&whole, val, 14);
 
-    ajStrAssSubC(&signStr, ajStrStr(whole), 0, 0);
+    ajStrAssignSubC(&signStr, ajStrGetPtr(whole), 0, 0);
 
     if(ajStrMatchC(signStr, "-"))
 	sign = 1;
     else
 	sign = 0;
 
-    ajStrAssSubC(&mantisa, ajStrStr(whole), (0+sign), (15+sign));
-    ajStrAssSubC(&exponent, ajStrStr(whole), (17+sign), (20+sign));
+    ajStrAssignSubC(&mantisa, ajStrGetPtr(whole), (0+sign), (15+sign));
+    ajStrAssignSubC(&exponent, ajStrGetPtr(whole), (17+sign), (20+sign));
     ajStrToInt(exponent, &exponentInt);
 
     for(i=14; ajStrSuffixC(mantisa, "0"); --i)
-	iret = ajStrChop(&mantisa);
+	iret = ajStrCutEnd(&mantisa,1);
     decimalPlaces = i-exponentInt;
     if(decimalPlaces<0)
 	decimalPlaces = 0;
@@ -3088,7 +3088,7 @@ static AjBool xml_PresentGraphicTypeIs(AjPGraphXml file, const AjPStr name)
     attributeValue = xml_GetAttributeC(xml_GetCurrentGraphic(file), 
 				       "name");
 
-    returnValue = ajStrMatch(attributeValue, name);
+    returnValue = ajStrMatchS(attributeValue, name);
   
     if(ajStrMatchC(attributeValue, "") && (name == NULL))
 	returnValue = ajTrue;
@@ -3184,7 +3184,7 @@ static AjPStr xml_GetAttributeC(AjPXmlNode node, const char *atName)
 static AjPStr xml_GetAttribute(AjPXmlNode node, const AjPStr atName)
 {
 
-    return xml_GetAttributeC(node,ajStrStr(atName));
+    return xml_GetAttributeC(node,ajStrGetPtr(atName));
 }
 
 
@@ -3237,7 +3237,7 @@ static void xml_SetAttributeC(AjPXmlNode node,
 static void xml_SetAttribute(AjPXmlNode node,
 			     const AjPStr atName, const AjPStr atValue)
 {
-    xml_SetAttributeC(node, ajStrStr(atName), ajStrStr(atValue));
+    xml_SetAttributeC(node, ajStrGetPtr(atName), ajStrGetPtr(atValue));
     
     return;
 }
@@ -3275,7 +3275,7 @@ static AjPStr xml_GetIndex(AjPXmlNode passedNode)
     
     nodeName = gdome_el_tagName(xml_GetNodeElement(passedNode), &exc);
     
-    if(ajStrMatchCC("Shape", nodeName->str))
+    if(ajCharMatchC("Shape", nodeName->str))
     {
 	gdome_str_unref(nodeName);
 	nodeName = gdome_str_mkref("IndexedLineSet");
@@ -3304,7 +3304,7 @@ static AjPStr xml_GetIndex(AjPXmlNode passedNode)
     gdome_str_unref(nodeName);
     nodeName = gdome_el_tagName(xml_GetNodeElement(passedNode), &exc);
 
-    if(ajStrMatchCC("ProtoInstance", nodeName->str))
+    if(ajCharMatchC("ProtoInstance", nodeName->str))
     {
 	ajAttributeValue = xml_GetAttributeC(node, "name");
 	if(ajStrMatchC(ajAttributeValue, "Graph"))
@@ -3343,7 +3343,7 @@ static AjPStr xml_GetIndex(AjPXmlNode passedNode)
 	nodeName = gdome_el_tagName(xml_GetNodeElement(node), &exc);
 
 	/*
-	   if(ajStrMatchCC("Shape", nodeName->str))
+	   if(ajCharMatchC("Shape", nodeName->str))
 	   {
 	   gdome_str_unref(nodeName);
 	   nodeName = gdome_str_mkref("IndexedFaceSet");
@@ -3401,7 +3401,7 @@ static void xml_SetIndex(AjPXmlNode passedNode, const AjPStr index)
     
     nodeName = gdome_el_tagName(xml_GetNodeElement(passedNode), &exc);
 
-    if(ajStrMatchCC("Shape", nodeName->str))
+    if(ajCharMatchC("Shape", nodeName->str))
     {
 	nodeName = gdome_str_mkref("IndexedLineSet");
 	gdome_str_unref(nodeName);
@@ -3431,7 +3431,7 @@ static void xml_SetIndex(AjPXmlNode passedNode, const AjPStr index)
     gdome_str_unref(nodeName);
     nodeName = gdome_el_tagName(xml_GetNodeElement(passedNode), &exc);
 
-    if(ajStrMatchCC("ProtoInstance", nodeName->str))
+    if(ajCharMatchC("ProtoInstance", nodeName->str))
     {
 	ajAttributeValue = xml_GetAttributeC(node, "name");
 	if(ajStrMatchC(ajAttributeValue, "Graph"))
@@ -3457,7 +3457,7 @@ static void xml_SetIndex(AjPXmlNode passedNode, const AjPStr index)
 
 	    if(ajStrMatchC(ajAttributeValue, "Graph.index"))
 	    {
-		xml_SetAttributeC(tempNode, "value", ajStrStr(index));
+		xml_SetAttributeC(tempNode, "value", ajStrGetPtr(index));
 	    }
 
 	    ajStrDel(&ajAttributeValue);
@@ -3468,7 +3468,7 @@ static void xml_SetIndex(AjPXmlNode passedNode, const AjPStr index)
     }
     else
     {
-	if(ajStrMatchCC("Shape", nodeName->str))
+	if(ajCharMatchC("Shape", nodeName->str))
 	{
 	    gdome_str_unref(nodeName);
 	    nodeName = gdome_str_mkref("IndexedFaceSet");
@@ -3479,11 +3479,11 @@ static void xml_SetIndex(AjPXmlNode passedNode, const AjPStr index)
 		tempNode = xml_SetNode(gdome_nl_item(listShapes, i, &exc));
 
 	    gdome_nl_unref(listShapes, &exc);
-	    xml_SetAttributeC(tempNode, "coordIndex", ajStrStr(index));
+	    xml_SetAttributeC(tempNode, "coordIndex", ajStrGetPtr(index));
 	    xml_UnrefNode(&tempNode);	    
 	}
 	else
-	    xml_SetAttributeC(node, "coordIndex", ajStrStr(index));
+	    xml_SetAttributeC(node, "coordIndex", ajStrGetPtr(index));
     }
     
     return;
@@ -3522,7 +3522,7 @@ static AjPStr xml_GetPoints(AjPXmlNode passedNode)
 
     nodeName = gdome_el_tagName(xml_GetNodeElement(passedNode), &exc);
 
-    if(ajStrMatchCC("Shape", nodeName->str))
+    if(ajCharMatchC("Shape", nodeName->str))
     {
 	gdome_str_unref(nodeName);
 	nodeName = gdome_str_mkref("IndexedLineSet");
@@ -3552,7 +3552,7 @@ static AjPStr xml_GetPoints(AjPXmlNode passedNode)
     gdome_str_unref(nodeName);
     nodeName = gdome_el_tagName(xml_GetNodeElement(passedNode), &exc);
     
-    if(ajStrMatchCC("ProtoInstance", nodeName->str))
+    if(ajCharMatchC("ProtoInstance", nodeName->str))
     {
 	ajAttributeValue = xml_GetAttributeC(node, "name");
 	if(ajStrMatchC(ajAttributeValue, "Graph"))
@@ -3587,9 +3587,9 @@ static AjPStr xml_GetPoints(AjPXmlNode passedNode)
     {
 	nodeName = gdome_n_nodeName(xml_GetNode(node), &exc);
     
-	if(!(ajStrMatchCC(nodeName->str, "IndexedLineSet")
-	     || ajStrMatchCC(nodeName->str, "IndexedFaceSet")
-	     || ajStrMatchCC(nodeName->str, "IndexedPointSet")))
+	if(!(ajCharMatchC(nodeName->str, "IndexedLineSet")
+	     || ajCharMatchC(nodeName->str, "IndexedFaceSet")
+	     || ajCharMatchC(nodeName->str, "IndexedPointSet")))
 	{
 	    ajDebug("Exception: cannot get points from a node "
 		    "that is not an IndexedSet, this is a %s", nodeName->str);
@@ -3666,7 +3666,7 @@ static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
     
     nodeName = gdome_el_tagName(xml_GetNodeElement(passedNode), &exc);
 
-    if(ajStrMatchCC("Shape", nodeName->str))
+    if(ajCharMatchC("Shape", nodeName->str))
     {
 	nodeName = gdome_str_mkref("IndexedLineSet");
 	listShapes = gdome_el_getElementsByTagName
@@ -3695,7 +3695,7 @@ static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
     gdome_str_unref(nodeName);
     nodeName = gdome_el_tagName(xml_GetNodeElement(passedNode), &exc);
 
-    if(ajStrMatchCC("ProtoInstance", nodeName->str))
+    if(ajCharMatchC("ProtoInstance", nodeName->str))
     {
 	ajAttributeValue = xml_GetAttributeC(node, "name");
 	if(ajStrMatchC(ajAttributeValue, "Graph"))
@@ -3719,7 +3719,7 @@ static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
 						 "name");
 
 	    if(ajStrMatchC(ajAttributeValue, "Graph.points"))
-		xml_SetAttributeC(tempNode, "value", ajStrStr(points));
+		xml_SetAttributeC(tempNode, "value", ajStrGetPtr(points));
 
 	    ajStrDel(&ajAttributeValue);
 	    xml_UnrefNode(&tempNode);
@@ -3731,9 +3731,9 @@ static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
     {
 	nodeName = gdome_n_nodeName(xml_GetNode(node), &exc);
     
-	if(!(ajStrMatchCC(nodeName->str, "IndexedLineSet")
-	     || ajStrMatchCC(nodeName->str, "IndexedFaceSet")
-	     || ajStrMatchCC(nodeName->str, "IndexedPointSet")))
+	if(!(ajCharMatchC(nodeName->str, "IndexedLineSet")
+	     || ajCharMatchC(nodeName->str, "IndexedFaceSet")
+	     || ajCharMatchC(nodeName->str, "IndexedPointSet")))
 	{
 	    ajDebug("Exception: cannot set points from a node "
 		   "that is not an IndexedSet, this is a %s", nodeName->str);
@@ -3757,7 +3757,7 @@ static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
     
 	gdome_str_unref(nodeName);
 	nodeName = gdome_str_mkref_dup("point");
-	nodeName2 = gdome_str_mkref_dup(ajStrStr(points));
+	nodeName2 = gdome_str_mkref_dup(ajStrGetPtr(points));
 	gdome_el_setAttribute(xml_GetNodeElement(coordinateNode), 
 			      nodeName, nodeName2, &exc);
 
@@ -3789,7 +3789,7 @@ static AjBool xml_SetPoints(AjPXmlNode passedNode, const AjPStr points)
 static AjPXmlNode xml_MakeNewNode(AjPGraphXml file, const AjPStr name, 
 				  AjPXmlNode parent)
 {
-    return xml_MakeNewNodeC(file, ajStrStr(name), parent);
+    return xml_MakeNewNodeC(file, ajStrGetPtr(name), parent);
 }
 
 
@@ -3858,11 +3858,11 @@ static  AjPStr xml_PresentColourAsString(const AjPGraphXml file)
     
     for(i=0; i<3; ++i)
     {
-	ajStrAssC(&temp,"");
+	ajStrAssignC(&temp,"");
 	xml_StrFromDouble(&temp, file->colour[i]);
-	ajStrApp(&colour, temp);
+	ajStrAppendS(&colour, temp);
 	if(i<2)
-	    ajStrAppC(&colour, " ");
+	    ajStrAppendC(&colour, " ");
     }
 
     ajStrDel(&temp);
@@ -3953,7 +3953,7 @@ static AjBool xml_FileNeedsProtoDeclare(const AjPGraphXml file,
 					const AjPStr protoName)
 {
 
-    return xml_FileNeedsProtoDeclareC(file,ajStrStr(protoName));
+    return xml_FileNeedsProtoDeclareC(file,ajStrGetPtr(protoName));
 }
 
 
@@ -4020,7 +4020,7 @@ static AjBool xml_IsShapeThisColour(AjPGraphXml file, AjPXmlNode shape)
 	    ajStrDel(&attributeValue);
 	    attributeValue = xml_PresentColourAsString(file);
 	    xml_SetAttributeC(tempNode, "value", 
-			     ajStrStr(attributeValue));
+			     ajStrGetPtr(attributeValue));
 
 	    ajStrDel(&attributeValue);
 	    ajXmlNodeDel(&tempNode);
@@ -4062,7 +4062,7 @@ static AjBool xml_IsShapeThisColour(AjPGraphXml file, AjPXmlNode shape)
 	gdome_str_unref(nodeName);
     }
     
-    returnValue = ajStrMatch(colour, presentColour);
+    returnValue = ajStrMatchS(colour, presentColour);
 
 
     return returnValue;
@@ -4102,7 +4102,7 @@ static AjPXmlNode xml_MakeNewShapeNodeC(AjPGraphXml file,
     Material = xml_MakeNewNodeC(file, "Material", Appearance);
 
     colour = xml_PresentColourAsString(file);
-    xml_SetAttributeC(Material, "diffuseColor", ajStrStr(colour));
+    xml_SetAttributeC(Material, "diffuseColor", ajStrGetPtr(colour));
 
     xml_UnrefNode(&shape);
     xml_UnrefNode(&Appearance);
@@ -4133,7 +4133,7 @@ static AjPXmlNode xml_MakeNewShapeNode(AjPGraphXml file,
 				       const AjPStr nameReqd)
 {
 
-    return xml_MakeNewShapeNodeC(file,parentNode,ajStrStr(nameReqd));
+    return xml_MakeNewShapeNodeC(file,parentNode,ajStrGetPtr(nameReqd));
 }
 
 
@@ -4209,19 +4209,19 @@ static void xml_AddArc(AjPGraphXml file, double xCentre, double yCentre,
     xml_AddACoord(xMiddle, yMiddle, ajFalse, &controlPoints, &temp);
     xml_AddACoord(xEnd, yEnd, ajFalse, &controlPoints, &temp);
 
-    ajStrAppC(&weights, "1 ");
-    ajStrAssC(&temp,"");
+    ajStrAppendC(&weights, "1 ");
+    ajStrAssignC(&temp,"");
     xml_StrFromDouble(&temp, middleWeight);
-    ajStrAppC(&weights, ajStrStr(temp));
-    ajStrAppC(&weights, " 1");
+    ajStrAppendC(&weights, ajStrGetPtr(temp));
+    ajStrAppendC(&weights, " 1");
     
     nurbsNode = xml_MakeNewShapeNodeC(file, 
 				      xml_GetCurrentGraphic(file), 
 				      "NurbsCurve");
     xml_SetAttributeC(nurbsNode, "knot", "0,0,0,1,1,1");
     xml_SetAttributeC(nurbsNode, "order", "3");
-    xml_SetAttributeC(nurbsNode, "controlPoint", ajStrStr(controlPoints));
-    xml_SetAttributeC(nurbsNode, "weight", ajStrStr(weights));
+    xml_SetAttributeC(nurbsNode, "controlPoint", ajStrGetPtr(controlPoints));
+    xml_SetAttributeC(nurbsNode, "weight", ajStrGetPtr(weights));
     
     ajStrDel(&temp);
     ajStrDel(&controlPoints);
@@ -4416,7 +4416,7 @@ static AjPXmlNode xml_GetNodeTypeMakeIfNot(AjPGraphXml file,
 		for(j=0; j<limit2 && returnNode == NULL; ++j)
 		{
 		    gdome_str_unref(nodeName);
-		    nodeName = gdome_str_mkref(ajStrStr(nameReqd));
+		    nodeName = gdome_str_mkref(ajStrGetPtr(nameReqd));
 		    listIndexLineSets  = gdome_el_getElementsByTagName
 			((GdomeElement *)gdome_nl_item(listGeometrys, j, 
 						       &exc), nodeName, &exc);
@@ -4559,34 +4559,34 @@ static void xml_AddACoord(double x, double y, AjBool joined, AjPStr* coord,
     temp = ajStrNew();
 
     if(ajStrCmpC((*coord), "") != 0)
-	ajStrAppC(coord,  ", ");
+	ajStrAppendC(coord,  ", ");
 
     xml_StrFromDouble(&temp, x);
-    ajStrAppC(coord, ajStrStr(temp));
-    ajStrAppC(coord, " ");
+    ajStrAppendC(coord, ajStrGetPtr(temp));
+    ajStrAppendC(coord, " ");
 
-    ajStrAssC(&temp,"");
+    ajStrAssignC(&temp,"");
     xml_StrFromDouble(&temp, y);
-    ajStrAppC(coord, ajStrStr(temp));
-    ajStrAppC(coord, " ");
+    ajStrAppendC(coord, ajStrGetPtr(temp));
+    ajStrAppendC(coord, " ");
 
-    ajStrAssC(&temp,"");
+    ajStrAssignC(&temp,"");
     ajStrFromInt(&temp, 0);
-    ajStrAppC(coord, ajStrStr(temp));
+    ajStrAppendC(coord, ajStrGetPtr(temp));
     
     if(ajStrCmpC((*index), "") != 0)
     {
 	lastIndex = xml_GetLastInt(*index);
-	ajStrAppC(index,  " ");
+	ajStrAppendC(index,  " ");
 	if(!joined)
-	    ajStrAppC(index, "-1 ");
+	    ajStrAppendC(index, "-1 ");
     }
     else
 	lastIndex = -1;
 
-    ajStrAssC(&temp,"");
+    ajStrAssignC(&temp,"");
     ajStrFromInt(&temp, (lastIndex+1));
-    ajStrAppC(index, ajStrStr(temp));
+    ajStrAppendC(index, ajStrGetPtr(temp));
       
     ajStrDel(&temp);
 
@@ -4614,11 +4614,11 @@ static int xml_GetLastInt(const AjPStr str)
     int value;
     AjPStr token = NULL;
 
-    count = ajStrTokenCount(str, " ");
-    token = ajStrTok(str);
+    count = ajStrParseCountC(str, " ");
+    token = ajStrParseWhite(str);
 
     for(i = count - 1; i >= 1; --i)
-	token = ajStrTok(NULL);
+	token = ajStrParseWhite(NULL);
 
 
     if(token != NULL)
@@ -4655,11 +4655,11 @@ static double xml_GetLastDouble(const AjPStr str)
     double value;
     AjPStr token = NULL;
 
-    count = ajStrTokenCount(str, " ");
-    token = ajStrTok(str);
+    count = ajStrParseCountC(str, " ");
+    token = ajStrParseWhite(str);
 
     for(i = count - 1; i >= 1; --i)
-	token = ajStrTok(NULL);
+	token = ajStrParseWhite(NULL);
 
     if(token != NULL)
     {    
@@ -4694,15 +4694,15 @@ static double xml_GetDoubleNo(const AjPStr str, int index)
     double value;
     AjPStr token = NULL;
 
-    count = ajStrTokenCount(str, " ");
-    token = ajStrTok(str);
+    count = ajStrParseCountC(str, " ");
+    token = ajStrParseWhite(str);
 
     if(index>count)
 	ajDebug("Exception: index higher than no. of tokens\n");
 
 
     for(i = 1; i <= index; ++i)
-	token = ajStrTok(NULL);
+	token = ajStrParseWhite(NULL);
 
     if(token != NULL)
     {    
@@ -5064,7 +5064,7 @@ static AjBool xml_WriteFile(const AjPGraphXml file, const AjPStr filename)
     GdomeException exc;
 
     if (!gdome_di_saveDocToFileEnc (file->domimpl, file->doc, 
-				 ajStrStr(filename), "UTF-8",
+				 ajStrGetPtr(filename), "UTF-8",
 				 GDOME_SAVE_LIBXML_INDENT, &exc)) 
     {
 	ajDebug("DOMImplementation.saveDocToFile: failed\n\tException #%d\n",

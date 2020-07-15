@@ -73,6 +73,11 @@ extern "C"
 		       AJGRAPH_SUBTITLE + AJGRAPH_OVERLAP)
 
 
+
+/*
+** Prototype definitions
+*/
+
 void          ajGraphBox (PLFLT x0, PLFLT y0,PLFLT size);
 void          ajGraphBoxFill (PLFLT x0, PLFLT y0, PLFLT size);
 ajint         ajGraphCheckColour (const AjPStr colour);
@@ -108,14 +113,12 @@ void          ajGraphDiaFill (PLFLT x0, PLFLT y0, PLFLT size);
 void          ajGraphDots (PLFLT *x1,PLFLT *y1, ajint numofdots);
 void          ajGraphDumpDevices (void);
 ajint*        ajGraphGetBaseColour (void);
+ajint*        ajGraphGetBaseColourNuc(const AjPStr codes);
+ajint*        ajGraphGetBaseColourProt(const AjPStr codes);
 void          ajGraphGetCharSize (float *defheight, float *currentheight);
 ajint         ajGraphGetColour(void);
 void          ajGraphGetOut (float *xp,float *yp, ajint *xleng,
 			     ajint *yleng, ajint *xoff, ajint *yoff);
-void          ajGraphGetOutputDeviceParams(float *xp,float *yp,
-					   ajint *xleng, ajint *yleng,
-					   ajint *xoff,
-					   ajint *yoff);
 const AjPStr  ajGraphGetSubTitle(const AjPGraph thys);
 const char*   ajGraphGetSubTitleC(const AjPGraph thys);
 const AjPStr  ajGraphGetTitle(const AjPGraph thys);
@@ -128,8 +131,8 @@ const char*   ajGraphGetYTitleC(const AjPGraph thys);
 void          ajGraphHoriBars (ajint numofpoints, PLFLT *y,
 				   PLFLT *xmin, PLFLT *xmax);
 ajint         ajGraphInfo(AjPList* files);
-AjStatus      ajGraphInit (const char *pgm, ajint argc, char * const argv[]);
-AjStatus      ajGraphInitP (const char *pgm, ajint argc,char * const argv[],
+void          ajGraphInit (const char *pgm, ajint argc, char * const argv[]);
+void          ajGraphInitP (const char *pgm, ajint argc,char * const argv[],
 			    const char *package);
 void          ajGraphInitSeq (AjPGraph thys, const AjPSeq seq);
 AjBool        ajGraphIsData(const AjPGraph thys);
@@ -161,17 +164,18 @@ void          ajGraphPrintType(AjPFile outf, AjBool full);
 void          ajGraphRect (PLFLT x0, PLFLT y0,PLFLT x1, PLFLT y1) ;
 void          ajGraphRectFill (PLFLT x0, PLFLT y0, PLFLT x1, PLFLT y1) ;
 AjBool        ajGraphSet (AjPGraph thys, const AjPStr type);
-void          ajGraphSetDevice(const AjPGraph thys);
-float         ajGraphSetCharSize (float size);
 void          ajGraphSetBackBlack (void);
 void          ajGraphSetBackWhite (void);
-void          ajGraphSetPenWidth(float width);
+float         ajGraphSetCharSize (float size);
+void          ajGraphSetDevice(const AjPGraph thys);
+void          ajGraphSetDir(AjPGraph thys, const AjPStr txt);
 ajint         ajGraphSetFillPat (ajint style);
 ajint         ajGraphSetFore (ajint colour);
 ajint         ajGraphSetLineStyle (ajint style);
 void          ajGraphSetMulti (AjPGraph thys, ajint numsets);
 void          ajGraphSetName (const AjPGraph thys);
 void          ajGraphSetOri(ajint ori);
+void          ajGraphSetPenWidth(float width);
 void          ajGraphSymbols( ajint numofdots, PLFLT *x1,PLFLT *y1,
 			      ajint symbol);
 void          ajGraphText (PLFLT x1, PLFLT y1, const char *text, PLFLT just);
@@ -218,7 +222,6 @@ void          ajGraphPlpDataSetYTitleC (AjPGraphPlpData graphdata,
 void          ajGraphxyDel (AjPGraph* pmult);
 void          ajGraphxyDisplay (AjPGraph thys, AjBool closeit );
 AjPGraph      ajGraphxyNewI (ajint numofpoints);
-void          ajGraphxyPrint (AjPGraph thys) ;
 void          ajGraphxyCheckMaxMin (AjPGraph thys);
 AjBool        ajGraphxySet (AjPGraph thys, const AjPStr type);
 void          ajGraphxySetCirclePoints (AjPGraph thys, AjBool set);
@@ -260,7 +263,6 @@ void          ajGraphSetSubTitle  (AjPGraph thys, const AjPStr title);
 void          ajGraphSetSubTitleC (AjPGraph thys, const char *title);
 void          ajGraphSetTitle     (AjPGraph thys, const AjPStr title);
 void          ajGraphSetTitleC    (AjPGraph thys, const char *title);
-void          ajGraphxyTrace      (AjPGraph thys);
 void          ajGraphSetXTitle  (AjPGraph thys, const AjPStr title);
 void          ajGraphSetXTitleC (AjPGraph thys, const char *title);
 void          ajGraphSetYTitle  (AjPGraph thys, const AjPStr title);
@@ -290,6 +292,9 @@ void          ajGraphFillRectangleOnCurve(PLFLT xcentre, PLFLT ycentre,
 					  PLFLT Radius, PLFLT BoxHeight,
 					  PLFLT StartAngle, PLFLT EndAngle);
 
+/*
+** End of prototype definitions
+*/
 
 #endif /* ajgraph_h */
 
