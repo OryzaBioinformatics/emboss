@@ -73,7 +73,7 @@ Created cpgplot.ps
 
 Command line arguments
 
-   Standard (Mandatory) qualifiers:
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
    -window             integer    [100] The percentage CG content and the
@@ -99,13 +99,14 @@ Command line arguments
                                   holding the report of the input sequence
                                   name, CpG island parameters and the output
                                   details of any CpG islands that are found.
-  [-graph]             xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tekt, tek, none, data, xterm, png)
   [-outfeat]           featout    [unknown.gff] File for output features
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
+   -[no]plot           toggle     [Y] Plot CpG island score
    -[no]obsexp         boolean    [Y] If this is set to true then the graph of
                                   the observed to expected ratio of C plus G
                                   to CpG within a window is displayed.
@@ -138,21 +139,22 @@ Command line arguments
    -odirectory2        string     Output directory
 
    "-graph" associated qualifiers
-   -gprompt3           boolean    Graph prompting
-   -gtitle3            string     Graph title
-   -gsubtitle3         string     Graph subtitle
-   -gxtitle3           string     Graph x axis title
-   -gytitle3           string     Graph y axis title
-   -goutfile3          string     Output file for non interactive displays
-   -gdirectory3        string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gdesc              string     Graph description
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    "-outfeat" associated qualifiers
-   -offormat4          string     Output feature format
-   -ofopenfile4        string     Features file name
-   -ofextension4       string     File name extension
-   -ofdirectory4       string     Output directory
-   -ofname4            string     Base file name
-   -ofsingle4          boolean    Separate file for each entry
+   -offormat3          string     Output feature format
+   -ofopenfile3        string     Features file name
+   -ofextension3       string     File name extension
+   -ofdirectory3       string     Output directory
+   -ofname3            string     Base file name
+   -ofsingle3          boolean    Separate file for each entry
 
    General qualifiers:
    -auto               boolean    Turn off prompts

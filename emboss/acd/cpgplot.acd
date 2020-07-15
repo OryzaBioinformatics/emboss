@@ -78,8 +78,13 @@ section: output [
     knowntype: "cpgplot output"
   ]
 
+  toggle: plot [
+    default: "Y"
+    information: "Plot CpG island score"
+  ]
+
   xygraph: graph [
-    parameter: "Y"
+    standard: "$(plot)"
     multiple: "3"
   ]
 

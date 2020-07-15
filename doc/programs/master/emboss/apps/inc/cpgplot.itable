@@ -44,18 +44,18 @@
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>This sets the name of the file holding the report of the input sequence name, CpG island parameters and the output details of any CpG islands that are found.</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.cpgplot</td>
 </tr>
 
 <tr>
-<td>[-graph]<br>(Parameter 3)</td>
+<td>-graph</td>
 <td>Graph type</td>
 <td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
 <tr>
-<td>[-outfeat]<br>(Parameter 4)</td>
+<td>[-outfeat]<br>(Parameter 3)</td>
 <td>File for output features</td>
 <td>Writeable feature table</td>
 <td><i>unknown.gff</i></td>
@@ -75,6 +75,13 @@
 <th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]plot</td>
+<td>Plot CpG island score</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
 </tr>
 
 <tr>
