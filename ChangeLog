@@ -1,4 +1,149 @@
+Version 5.0.0
+	The MRS server in Nijmegen changed its syntax just before our
+	release. A new database access method "MRS3" supports the main
+	MRS3 server. We have very little documentation on the changed URL
+	query syntax. Access by ID appears to work at this stage. The
+	database URL is defined as http://mrs.cmbi.ru.nl/mrs-3/plain.do
+	The plain text output is now defined in the URL. The database
+	names have all changed on the server. At present the same server
+	appears to still support the old MRS access method with the URL
+	http://mrs.cmbi.ru.nl/mrs/cgi-bin/mrs.cgi
+
+	ACD parsing now allows square brackets within quoted strings.
+
+	Functions for lists and tables have been renamed to new standard
+	naming conventions. Some source files remain to be standardized
+	after the release, most importantly ajfile, ajfeat and some
+	remaining ajseq source files.
+
+	Warning messages are available for sequence formats that do not
+	allow additional characters. The environment variable
+	EMBOSS_SEQWARN needs to be set to "Y" to enable warnings. For
+	example, EMBL format allows numbers in the sequence records. Fasta
+	and related formats now warn for any characters that are not
+	whitespace and not known sequence characters. These warnings are
+	controlled by an environment variable so they can be disabled (or
+	enabled) for specific installations and/or wrappers. We expect
+	many cut-and-paste inputs can generate warnings. EMBOSS will
+	normally silently remove non-sequence characters.
+
+	Regular expression pattern file names (for dreg and preg) were
+	converted to upper case if the ACD file required the patterns to
+	be upper case.
+
+	The EMBOSS commandline now accepts gnu-style syntax with
+	--qualifier (we allow one or two '-' characters). Users who tried
+	this syntax were confused because EMBOSS treated --qualifier as a
+	parameter. In many cases it was used as the output filename, which
+	would give no error message but make it hard to find the output.
+	
+	Antigenic now accepts any protein sequence as input (earlier
+	versions did not allow ambiguity codes). B and Z are treated as
+	weighted averages of D/N and E/Q. All others are converted to X
+	and treated as a weighted average of all values. The data table
+	used has no information for selenocysteine or pyrrolysine.
+
+	Dottup is corrected to plot only the selected sequence range. The
+	plot lines were 1 residue too long (only noticeable on very short
+	sequences).
+
+	Distance matrix data can now read multiple distance matrices from
+	a single input file. This is used by three programs (fneighbor,
+	ffitch and fkitsch) in the phylipnew EMBASSY package.
+
+	Discrete states input now correctly defaults to all non-space
+	characters if no characters attribute is given in the ACD file.
+	This was the intention, but two programs (fpars and fdiscboot)
+	were instead accepting only 0 and 1. Other phylip programs have
+	their discrete state character set specified in the ACD file.
+
+	A new function ajSystemOut calls a system command, and redirects
+	standard output to a named file.
+	
+	Function names are standardised for the ajsys, ajtime and ajutil
+	functions.
+
+	New function ajStrTableFreeKey frees only the key from tables
+	where the value is a constant.
+
+	Error messages from reading badly formatted comparison matrix
+	files are improved to report the line and the token that failed
+	to parse.
+
+	Test data has been updated. EMBL and SwissProt entries are updated
+	to the latest versions of these entries. Swnew entries are now a
+	selection from the SpTrEmbl subset in UniProt. The wormpep
+	database is obsolete. We do not have current data for the gb
+	directory which contained GCG reformatted genbank entries.
+
+	NBRF (or PIR) format failed to read some entries from SRSWWW
+	servers because the sequence ID does not match if the protein is a
+	fragment.
+
+	Efficiency of building large strings is greatly improved by
+	doubling the reserved space each time the end is reached. This
+	speeds up the reading of all long sequences.
+
+	String function ajStrFmtWrap to wrap strings for output now
+	respect newlines in the original string. A new function
+	ajStrFmtWrapAt prefers to wrap at a seleacted character, for
+	example ',' for author lists.
+
+	Sequence objects are extended to include the full set of fields
+	defined in EMBL, Genbank and UniProt database entries. The "embl"
+	"genbank" and "swissprot" formats now read and write all fields,
+	so that entries will be rewritten exactly as in the originals
+	except for a few minor corrections (extra spaces in feature tables
+	are removed). We cannot guarantee that information is preserved
+	when writing out in a different format. For example, EMBL and
+	Genbank formats do not contain the same information.
+
+	GIF graphics output added where the gd library is a recent enough
+	version to provide support.
+
+	The plplot graphics library has been updated to 5.7.2. New files
+	are disptab.h pldll.h, file gd.c replaces file gdpng.c and needed
+	one change for FREETYPE.
+
+	Infoseq can now optionally display the database name.
+
+	The acdvalid utility warns about qualifier names that do not fit
+	the standard naming convention. The messages now include a
+	suggested valid name, for example an input file called -sites
+	will be suggested as -sitesfile.
+
+	Sequence output in EMBL and SWISS formats now defaults to the new
+	format of the databases from 2006. The previous formats are still
+	available as "emblold" and "swissold". As sequence input, "embl"
+	and "swiss" formats will read both versions of the files.
+
+	Function ajTableRemove deletes an entry in a table, but only
+	returns the value. This is replaced by ajTableRemoveKey which also
+	returns the original key. The caller now owns both the value and
+	the key, and is reponsible for deleting them. ajTableRemove is now
+	declared obsolete and will be removed from a future release.
+
+	Infoseq by default uses columns with fixed width, but this fails
+	to delimit long sequence names (for example, long file names and
+	paths). Two changes make this better. Infoseq now inserts a space
+	in column-delimited output (the default) when a string fills the
+	whole column. It is also now possible to specify a tab as
+	delimiter with -nocolumn -delimiter "\t" to return to 3.0.0
+	behaviour. This was needed for the W2H interface and maybe some
+	other wrappers.
+
+	Renamed libplplot to libeplplot and plplot headers are now
+	installed to include/eplplot. This avoids collisions with later
+	versions of plplot.
+
 Version 4.1.0
+	Bugfix 1: graphics output failed to reset the title correctly in
+	some applications. Prettyplot and banana badly rescale the output
+	from the second page of multipage output. Abiview produced
+	additional blank pages with only the title. Abiview also had bugs
+	in display when the user changed the window size or asked for
+	separate plots for each trace.
+
 	A new ACD attribute outputmodifier: "Y" identifies qualifiers that
 	cause the kinds of output changes that can break parsers. An
 	obvious example is the -html qualifier on may of the utility
@@ -109,11 +254,11 @@ Version 4.1.0
 	sequence data, but not the feature table. Efficiency improvements
 	to set the sequence type to nucleotide for EMBL entries showed
 	that swissprot entries were being read by the EMBL parser. A test
-	for swissprot protein information on the ID line should redifrect
-	these entries to the swissprot parser. In previous release the
-	seuqnece type was not set, so there was no problem with the
+	for swissprot protein information on the ID line should redirect
+	these entries to the swissprot parser. In previous releases the
+	sequence type was not set, so there was no problem with the
 	sequence type - although feature lines may not have been readable
-	form swissprot format flat files. Database definitions specify the
+	from swissprot format flat files. Database definitions specify the
 	swiss or embl format so they are not affected.
 
 	Large sequences were running very slowly. This was traced to the
@@ -1162,7 +1307,7 @@ Version 2.8.0
 	Fix for HTTP 1.1 lines for MacOSX added (Cedric Rossi).
 
 	The home directory ~/.embossrc file can be turned off with
-	"setenv EMBOSS_HOMERC N" This was added for cleaner QA tests
+	"setenv EMBOSS_RCHOME N" This was added for cleaner QA tests
 	but may have other uses.
 
 	Report format output added (by Henrikki Almusa) for dreg, preg,

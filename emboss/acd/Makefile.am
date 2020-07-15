@@ -8,7 +8,7 @@ pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
 	compseq.acd cons.acd corbatest.acd cpgplot.acd cpgreport.acd \
 	cusp.acd cutgextract.acd cutseq.acd dan.acd dbiblast.acd \
 	dbifasta.acd dbiflat.acd dbigcg.acd dbxfasta.acd dbxflat.acd \
-	dbxgcg.acd degapseq.acd demoalign.acd \
+	dbxgcg.acd dbxstat.acd degapseq.acd demoalign.acd \
 	demofeatures.acd demolist.acd demoreport.acd demosequence.acd \
 	demostring.acd demostringnew.acd \
 	demotable.acd descseq.acd diffseq.acd digest.acd \
