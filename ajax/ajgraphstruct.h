@@ -17,6 +17,7 @@
 ** @attr xx2 [float] x end
 ** @attr yy1 [float] y start
 ** @attr yy2 [float] y end
+** @attr scale [float] scale for text (0.0 to use the default)
 ** @attr next [struct AjSGraphPlpObj*] link to next object in the list
 ** @@
 ******************************************************************************/
@@ -29,6 +30,7 @@ typedef struct AjSGraphPlpObj {
   float xx2;
   float yy1;
   float yy2;
+  float scale;
   struct AjSGraphPlpObj *next;
 } AjOGraphPlpObj;
 #define AjPGraphPlpObj AjOGraphPlpObj*
@@ -107,6 +109,7 @@ typedef struct AjSGraphPlpData {
 ** @attr yend [float] Last y value to plot
 ** @attr ready [AjBool] Set by plplot device init
 ** @attr minmaxcalc [AjBool] Set true when (xy)start/end are set
+** @attr windowset [AjBool] Set true when (xy) window coordinates are set
 ** @attr isdata [AjBool] True for a data type graph
 ** @attr displaytype [ajint] Displaytype index to graphType
 ** @attr desc [AjPStr] Plot description, used to set default title
@@ -135,6 +138,7 @@ typedef struct AjSGraphPlp {
   float yend;
   AjBool ready;
   AjBool minmaxcalc;
+  AjBool windowset;
   AjBool isdata;
   ajint displaytype;
   AjPStr desc;

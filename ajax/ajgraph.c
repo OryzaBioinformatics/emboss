@@ -503,6 +503,7 @@ static GraphOType graphType[] = {
 
 static ajint currentfgcolour  = BLACK;     /* Use ajGraphSetFore to change */
 static ajint currentbgwhite = 1;      /* By default use a white background */
+static float currentcharsize   = 4.0; /* Use ajGraphSetCharSize to change */
 static float currentcharscale  = 1.0; /* Use ajGraphSetCharScale to change */
 static ajint currentlinestyle = 1;     /* Use ajGraphSetLineStyle to change*/
 static ajint currentfillpattern = 1;     /* Use ajGraphSetLineStyle to change*/
@@ -540,6 +541,7 @@ static void GraphDefCharSize(float size)
 {
     plschr((PLFLT)size, 1.0);
     currentcharscale = 1.0;
+    currentcharsize = size;
 }
 
 
@@ -1088,11 +1090,14 @@ static void GraphClose(void)
 
     if(graphData)
     {
+	ajDebug("GraphClose deleting graphData '%F' '%S'.'%S'\n",
+		graphData->File, graphData->FName, graphData->Ext);
 	ajListstrDel(&graphData->List);
 	ajFileClose(&graphData->File);
 	ajStrDel(&graphData->FName);
 	ajStrDel(&graphData->Ext);
 	AJFREE(graphData);
+	ajDebug("=g= plend()\n");
  	plend();
     }
     else
@@ -1265,7 +1270,8 @@ static void GraphLabelTitle(const char *title, const char *subtitle)
     ajDebug("=g= plmtex('t', 2.5, 0.5, 0.5, '%S') [title]\n", tmpstr);
     if(ajStrGetLen(tmpstr)) {
 	fold = ajGraphSetCharScale(1.0);
-	ajDebug("GraphLabelTitle title fold: %.3f\n", fold);
+	ajDebug("GraphLabelTitle title fold: %.3f size: %.3f scale %.3f\n",
+		fold, currentcharsize, currentcharscale);
 	plmtex("t", (PLFLT) 4.0, (PLFLT) 0.5, (PLFLT) 0.5,
 	       ajStrGetPtr(tmpstr));
 	fold = ajGraphSetCharScale(fold);
@@ -1281,8 +1287,9 @@ static void GraphLabelTitle(const char *title, const char *subtitle)
     if(ajStrGetLen(tmpstr))
     {
 	fold = ajGraphSetCharScale(1.0);
-	ajGraphSetCharScale(fold/(float)2.0);
-	ajDebug("GraphLabelTitle subtitle fold: %.3f\n", fold);
+	ajGraphSetCharScale(0.5);
+	ajDebug("GraphLabelTitle subtitle fold: %.3f size: %.3f scale %.3f\n",
+		fold, currentcharsize, currentcharscale);
 	plmtex("t", (PLFLT) 5.0, (PLFLT) 0.5, (PLFLT) 0.5,
 	       ajStrGetPtr(tmpstr));
 	fold = ajGraphSetCharScale(fold);
@@ -1421,6 +1428,7 @@ void ajGraphOpenWin(AjPGraph thys, float xmin, float xmax,
 	thys->plplot->xend = xmax;
 	thys->plplot->ystart = ymin;
 	thys->plplot->yend = ymax;
+	thys->plplot->windowset = ajTrue;
     }
     GraphSetWin(xmin, xmax, ymin, ymax);
 
@@ -1444,6 +1452,7 @@ void ajGraphOpenWin(AjPGraph thys, float xmin, float xmax,
 void ajGraphNewPage(AjPGraph thys, AjBool resetdefaults)
 {
     ajint old;
+    ajint cold;
     float fold;
 
 
@@ -1465,10 +1474,8 @@ void ajGraphNewPage(AjPGraph thys, AjBool resetdefaults)
     else
     {
 	/* pladv resets every thing so need */
-	/* to get the old copy */
-	old = ajGraphSetFore(BLACK);
-	/* then set in again */
-	ajGraphSetFore(old);
+	/* to get the old copies */
+	cold = ajGraphSetFore(BLACK);
 	fold = ajGraphSetCharScale(0.0);
 	old = ajGraphSetLineStyle(0);
 	ajGraphTrace(thys);
@@ -1479,22 +1486,22 @@ void ajGraphNewPage(AjPGraph thys, AjBool resetdefaults)
 			     ajStrGetPtr(thys->plplot->title) : " "),
 			    ((thys->plplot->flags & AJGRAPH_SUBTITLE) ?
 			     ajStrGetPtr(thys->plplot->subtitle) : " "));
-	    if(thys->plplot->minmaxcalc)
+
+	    if(thys->plplot->windowset)
 		GraphSetWin(thys->plplot->xstart, thys->plplot->xend,
 			    thys->plplot->ystart, thys->plplot->yend);
 	    else
 		GraphSetWin(0.0, 480.0,
 			    0.0, 640.0);
-
 	}
+	/* then set it again */
+	ajGraphSetFore(cold);
 	ajGraphSetCharScale(fold);
 	ajGraphSetLineStyle(old);
     }
 
     return;
 }
-
-
 
 
 /* @func ajGraphCloseWin ******************************************************
@@ -3243,6 +3250,31 @@ float ajGraphSetCharScale(float scale)
 
 
 
+/* @func ajGraphSetCharSize ***************************************************
+**
+** Set the character size factor
+**
+** @param [r] size [float]  character size.
+** @return [float] the previous character size factor.
+** @@
+******************************************************************************/
+
+float ajGraphSetCharSize(float size)
+{
+    float oldsize;
+
+    oldsize = currentcharsize;
+    if(size)
+    {
+	currentcharsize = size;
+	plschr((PLFLT)size, 1.0);
+    }
+    return oldsize;
+}
+
+
+
+
 /* @funcstatic GraphCheckPoints ***********************************************
 **
 ** Prints a list of data points from two floating point arrays.
@@ -4592,8 +4624,9 @@ void ajGraphxyDel(AjPGraph* pthis)
 	    graphdata = (thys->plplot->graphs)[i];
 	    if (graphdata)
 	    {
-		ajDebug("ajGraphxyDel graphs[%d] xcalc:%B ycalc:%B\n",
-			i, graphdata->xcalc, graphdata->ycalc);
+		ajDebug("ajGraphxyDel graphs[%d] xcalc:%B ycalc:%B x:%x y:%x\n",
+			i, graphdata->xcalc, graphdata->ycalc,
+			graphdata->x, graphdata->y);
 
 		if(!graphdata->xcalc)
 		    AJFREE(graphdata->x);
@@ -6170,6 +6203,62 @@ void ajGraphAddText(AjPGraph thys, float xx1, float yy1,
     Obj->yy1 = yy1;
     Obj->yy2 = 0.0;
     Obj->colour = colour;
+    Obj->scale = 0.0;
+    Obj->next = 0;
+
+    return;
+}
+
+
+
+
+/* @func ajGraphAddTextScale **************************************************
+**
+** Add text to be drawn when the graph is plotted.
+**
+** @param [u] thys [AjPGraph] Graph object
+** @param [r] xx1 [float] Start x position
+** @param [r] yy1 [float] Start y position
+** @param [r] colour [ajint] Colour code (see PLPLOT)
+** @param [r] scale [float] Character scale (0.0 to use the default)
+** @param [r] text [const char*] Text
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajGraphAddTextScale(AjPGraph thys, float xx1, float yy1,
+			 ajint colour, float scale, const char *text)
+{
+    AjPGraphPlpObj Obj;
+
+    if (!thys->plplot)
+	return;
+    if(!thys->plplot->Obj)
+    {
+	AJNEW((thys->plplot->Obj));
+	Obj = thys->plplot->Obj;
+    }
+    else
+    {
+	Obj = thys->plplot->Obj;
+	while(Obj->next)
+	    Obj = Obj->next;
+	AJNEW(Obj->next);
+	Obj = Obj->next;
+    }
+
+    ++thys->plplot->numofobjects;
+
+
+    Obj->type = TEXT;
+    Obj->text = ajStrNewC(text);
+    Obj->xx1 = xx1;
+    Obj->xx2 = 0.0;
+    Obj->yy1 = yy1;
+    Obj->yy2 = 0.0;
+    Obj->colour = colour;
+    Obj->scale = scale;
     Obj->next = 0;
 
     return;
@@ -6390,6 +6479,7 @@ static void GraphDraw(const AjPGraph thys)
 {
     AjPGraphPlpObj Obj;
     ajint temp;
+    float cold = 1.0;
 
     /* graphdata : calls ajGraphLine etc. */
 
@@ -6418,10 +6508,14 @@ static void GraphDraw(const AjPGraph thys)
 	    }
 	    else if(Obj->type == TEXT )
 	    {
+		if(Obj->scale)
+		    cold = ajGraphSetCharScale(Obj->scale);
 		temp = ajGraphSetFore(Obj->colour);
 		ajGraphTextStart(Obj->xx1, Obj->yy1,
 				 ajStrGetPtr(Obj->text));
 		ajGraphSetFore(temp);
+		if(Obj->scale)
+		    ajGraphSetCharScale(cold);
 	    }
 	    else if(Obj->type == LINE)
 	    {
@@ -6584,6 +6678,62 @@ void ajGraphPlpDataAddText(AjPGraphPlpData graphdata, float xx1, float yy1,
     Obj->yy1 = yy1;
     Obj->yy2 = 0.0;
     Obj->colour = colour;
+    Obj->scale = 0.0;
+    Obj->next = 0;
+
+    return;
+}
+
+
+
+
+/* @func ajGraphPlpDataAddTextScale *******************************************
+**
+** Add Text to be drawn when the graph is plotted.
+**
+** @param [u] graphdata [AjPGraphPlpData] Graph data object
+** @param [r] xx1 [float] Start x position
+** @param [r] yy1 [float] Start y position
+** @param [r] colour [ajint] Colour code (see PLPLOT)
+** @param [r] scale [float] Character scale (0.0 to use the default)
+** @param [r] text [const char*] Text to add
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajGraphPlpDataAddTextScale(AjPGraphPlpData graphdata,
+				float xx1, float yy1,
+				ajint colour, float scale, const char *text)
+{
+    AjPGraphPlpObj Obj;
+
+    if(!graphdata->Obj)
+    {
+	AJNEW((graphdata->Obj));
+	Obj = graphdata->Obj;
+    }
+    else			   /* cycle through till NULL found */
+    {
+	Obj = graphdata->Obj;
+	while(Obj->next)
+	    Obj = Obj->next;
+	AJNEW(Obj->next);
+	Obj = Obj->next;
+    }
+
+    ++graphdata->numofobjects;
+
+
+    Obj->type = TEXT;
+    Obj->text = 0;
+    ajStrAssignEmptyC(&Obj->text,text);
+    Obj->xx1 = xx1;
+    Obj->xx2 = 0.0;
+    Obj->yy1 = yy1;
+    Obj->yy2 = 0.0;
+    Obj->colour = colour;
+    Obj->scale = scale;
     Obj->next = 0;
 
     return;

@@ -96,6 +96,10 @@ void          ajGraphPlpDataAddRect (AjPGraphPlpData graphs,
 void          ajGraphPlpDataAddText (AjPGraphPlpData graphs,
 				     float xx1, float yy1,
 				     ajint colour, const char *text);
+void          ajGraphPlpDataAddTextScale (AjPGraphPlpData graphs,
+					  float xx1, float yy1,
+					  ajint colour, float scale,
+					  const char *text);
 void          ajGraphPlpDataSetMaxMin (AjPGraphPlpData graphdata, float xmin,
 				      float xmax, float ymin, float ymax);
 void          ajGraphArrayMaxMin(const float *array, ajint npoints, float *min,
@@ -145,11 +149,15 @@ void          ajGraphLines (PLFLT *xx1,PLFLT *yy1,PLFLT *xx2,PLFLT *yy2,
 AjPGraph      ajGraphNew (void);
 void          ajGraphNewPage (AjPGraph thys, AjBool resetdefaults);
 void          ajGraphAddLine (AjPGraph thys, float xx1, float yy1,
-				 float xx2, float yy2, ajint colour);
+			      float xx2, float yy2, ajint colour);
 void          ajGraphAddRect (AjPGraph thys, float xx1, float yy1,
-				 float xx2, float yy2, ajint colour, ajint fill);
+			      float xx2, float yy2, ajint colour,
+			      ajint fill);
 void          ajGraphAddText (AjPGraph thys, float xx1, float yy1,
 				 ajint colour, const char *text);
+void          ajGraphAddTextScale (AjPGraph thys, float xx1, float yy1,
+				   ajint colour, float scale,
+				   const char *text);
 void          ajGraphPlpDataDel(AjPGraphPlpData *thys);
 void          ajGraphOpen (AjPGraph thys, PLFLT xmin, PLFLT xmax,
 			   PLFLT ymin, PLFLT ymax, ajint flags);
@@ -167,6 +175,7 @@ AjBool        ajGraphSet (AjPGraph thys, const AjPStr type);
 void          ajGraphSetBackBlack (void);
 void          ajGraphSetBackWhite (void);
 float         ajGraphSetCharScale (float scale);
+float         ajGraphSetCharSize(float size);
 void          ajGraphSetDesc(AjPGraph thys, const AjPStr title);
 void          ajGraphSetDevice(const AjPGraph thys);
 void          ajGraphSetDir(AjPGraph thys, const AjPStr txt);
