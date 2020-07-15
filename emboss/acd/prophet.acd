@@ -11,14 +11,14 @@ section: input [
   type: "page"
 ]
 
-  seqall: sequence  [
+  seqall: sequence [
     parameter: "Y"
     type: "any"
   ]
 
-  infile: infile  [
+  infile: infile [
     parameter: "Y"
-    information: "Profile or matrix file"
+    information: "Profile or weight matrix file"
     knowntype: "profile or matrix"
   ]
 
@@ -29,7 +29,7 @@ section: required [
   type: "page"
 ]
 
-  float: gapopen  [
+  float: gapopen [
     standard: "Y"
     default: "1.0"
     minimum: "0.0"
@@ -37,7 +37,7 @@ section: required [
     information: "Gap opening coefficient"
   ]
 
-  float: gapextend  [
+  float: gapextend [
     standard: "Y"
     default: "1.0"
     minimum: "0.0"
@@ -52,9 +52,9 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  align: outfile [
     parameter: "Y"
-    knowntype: "prophet output"
+    aformat: "simple"
   ]
 
 endsection: output
