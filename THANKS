@@ -1,16 +1,19 @@
 EMBOSS THANKS file
 
-EMBOSS is a collaborative project, coordinated at the HGMP,
-Hinxton.
+EMBOSS is a collaborative project, coordinated at the EBI, Hinxton.
+
+In the past EMBOSS was coordinated at the Sanger Centre, Hinxton
+(1996-2000) and at the HGMP/RFCGR, Hinxton (2000-2005).
 
 Many people have further contributed to EMBOSS by reporting problems,
 suggesting various improvements, or submitting actual code. Here is a
 list of those people. Help us to keep this complete and free from
-errors by mailing any changes to emboss-bug@embnet.org
+errors by mailing any changes to emboss-bug@emboss.open-bio.org
 
 Peter Rice <pmr@ebi.ac.uk>
 Ian Longden <ianl@inpharmatica.co.uk>
-Alan Bleasby <ableasby@hgmp.mrc.ac.uk>
+Alan Bleasby <ajb@ebi.ac.uk>
+Jon Ison <jison@ebi.ac.uk>
 Gary Williams <gwilliam@hgmp.mrc.ac.uk>
 Ewan Birney <birney@ebi.ac.uk>
 Bill Pearson <wrp@virginia.edu>
@@ -23,29 +26,11 @@ Cedric Rossi <cedric@cedricrossi.com>
 Regexp
 ======
 
-The regular expression functions are derived from Henry Spencer's
-regexp library. The COPYRIGHT file states:
+The regular expression library is derived from the PCRE (Perl
+Compatible Regular Expressions) library.
 
-> Copyright (c) 1986, 1993, 1995 by University of Toronto.
-> Written by Henry Spencer.  Not derived from licensed software.
-> 
-> Permission is granted to anyone to use this software for any
-> purpose on any computer system, and to redistribute it in any way,
-> subject to the following restrictions:
-> 
-> 1. The author is not responsible for the consequences of use of
->         this software, no matter how awful, even if they arise
->         from defects in it.
-> 
-> 2. The origin of this software must not be misrepresented, either
->         by explicit claim or by omission.
-> 
-> 3. Altered versions must be plainly marked as such, and must not
->         be misrepresented (by explicit claim or omission) as being
->         the original software.
-> 
-> 4. This notice must not be removed or altered.
-
+The regular expression functions were originally derived from Henry Spencer's
+regexp library.
 
 CII
 ===
@@ -55,7 +40,7 @@ Some of the suggestions and code examples from David Hanson's book
 This library is available from http://www.cs.princeton.edu/software/cii/
 or ftp://ftp.cs.princeton.edu/pub/packages/cii/
 
-The CPYRIGHT file in release 1.10 says:
+The COPYRIGHT file in release 1.10 says:
 
 > The author of this software is David R. Hanson.
 > 
