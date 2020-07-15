@@ -265,7 +265,7 @@ operates.
      Type is P for protein, or N for nucleotide.
 
      Method is the access method used to query or read the database
-     (See http://www.uk.embnet.org/Software/EMBOSS/).
+     (See http://emboss.sf.net).
      Some databases can have multiple access methods, though this is
      less common with later EMBOSS versions. The main use now is with
      the SRS access method, which uses SRS's getz command but cannot
@@ -277,7 +277,7 @@ operates.
      Format is the sequence format returned by the acces method. For a
      list of known input formats, see:
 
-     http://www.uk.embnet.org/Software/EMBOSS/Themes/SequenceFormats.html
+     http://emboss.sf.net
 
      
 
