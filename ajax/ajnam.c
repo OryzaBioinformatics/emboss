@@ -62,7 +62,7 @@ static AjPStr namValNameTmp  = NULL;
 
 static AjBool namListParseOK = AJFALSE;
 
-char* namTypes[] = { "unknown", "SET", "DBNAME", "RESOURCE", "INCLUDE" };
+const char* namTypes[] = { "unknown", "SET", "DBNAME", "RESOURCE", "INCLUDE" };
 
 /* source directory where control and data files can be found */
 
@@ -124,17 +124,17 @@ static AjPRegexp namVarExp  = NULL;
 ** @alias NamSAttr
 ** @alias NamOAttr
 **
-** @attr Name [char*] Attribute name
-** @attr Defval [char*] Default value, usually an empty string
-** @attr Comment [char*] Comment for documentation purposes
+** @attr Name [const char*] Attribute name
+** @attr Defval [const char*] Default value, usually an empty string
+** @attr Comment [const char*] Comment for documentation purposes
 ** @@
 ******************************************************************************/
 
 typedef struct NamSAttr
 {
-    char* Name;
-    char* Defval;
-    char* Comment;
+    const char* Name;
+    const char* Defval;
+    const char* Comment;
 } NamOAttr;
 
 #define NamPAttr NamOAttr*
@@ -149,15 +149,15 @@ typedef struct NamSAttr
 ** @alias NamSValid
 ** @alias NamOValid
 **
-** @attr Name [char*] Attribute name
-** @attr Comment [char*] Comment for documentation purposes
+** @attr Name [const char*] Attribute name
+** @attr Comment [const char*] Comment for documentation purposes
 ** @@
 ******************************************************************************/
 
 typedef struct NamSValid
 {
-    char* Name;
-    char* Comment;
+    const char* Name;
+    const char* Comment;
 } NamOValid;
 
 #define NamPValid NamOValid*
@@ -176,6 +176,7 @@ NamOAttr namDbAttrs[] =
     {"appentry", "", "external commandline for 'methodentry' (APP, EXTERNAL)"},
     {"appquery", "", "external commandline for 'methodquery' (APP, EXTERNAL)"},
 
+    {"caseidmatch", "N", "match exact case of entry identifier"},
     {"command", "", "command line to return entry/ies"},
     {"comment", "", "text comment for the DB definition"},
     {"dbalias", "", "database name to be used by access method if different"},
@@ -189,6 +190,7 @@ NamOAttr namDbAttrs[] =
     {"formatentry", "", "database entry format for 'methodentry' access"},
     {"formatquery", "", "database entry format for 'methodall' access"},
 
+    {"hasaccession", "Y", "database has an acc field as an alternate id"},
     {"httpversion", "", "HTTP version for GET requests (URL, SRSWWW)"},
     {"identifier", "", "standard identifier (defaults to name)"},
     {"indexdirectory", "", "Index directory, defaults to data 'directory'"},
@@ -272,8 +274,10 @@ typedef struct NamSEntry
 
 static ajint  namDbAttr(const AjPStr thys);
 static ajint  namDbAttrC(const char* str);
-static AjBool namDbSetAttr(const AjPStr* dbattr, const char* attrib,
-			   AjPStr* qrystr);
+static AjBool namDbSetAttrBool(const AjPStr* dbattr, const char* attrib,
+			       AjBool* qrybool);
+static AjBool namDbSetAttrStr(const AjPStr* dbattr, const char* attrib,
+			      AjPStr* qrystr);
 static void   namDebugDatabase(const AjPStr* dbattr);
 static void   namDebugResource(const AjPStr* dbattr);
 static void   namDebugVariables(void);
@@ -367,19 +371,21 @@ static void namListMasterDelete(AjPTable table, ajint which)
 {
     ajint i;
     NamPEntry fnew = 0;
-    void **array;
+    void **keyarray = NULL;
+    void **valarray = NULL;
 
     if(!table) return;
 
-    array = ajTableToarray(table, NULL);
+    ajTableToarray(table, &keyarray, &valarray);
 
-    for(i = 0; array[i]; i += 2)
+    for(i = 0; keyarray[i]; i++)
     {
-	AJFREE(array[i]);		/* the key */
-	fnew = (NamPEntry) array[i+1];
+	AJFREE(keyarray[i]);		/* the key */
+	fnew = (NamPEntry) valarray[i];
 	namEntryDelete(&fnew, which);
     }
-    AJFREE(array);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -446,7 +452,9 @@ void ajNamPrintDbAttr(AjPFile outf, AjBool full)
 {
     ajint i;
     AjPStr tmpstr = NULL;
-    ajint maxtmp = 0;
+    ajuint maxtmp = 0;
+
+    (void) full;			/* no extra detail to report */
 
     ajFmtPrintF(outf, "# Database attributes\n");
     ajFmtPrintF(outf, "# %-15s %-12s %s\n", "Attribute", "Default", "Comment");
@@ -485,9 +493,11 @@ void ajNamPrintRsAttr(AjPFile outf, AjBool full)
 {
     ajint i;
     AjPStr tmpstr = NULL;
-    ajint maxtmp = 0;
+    ajuint maxtmp = 0;
 
-    ajFmtPrintF(outf, "# Resource attributes\n");
+    (void) full;			/* no extra detail to report */
+
+   ajFmtPrintF(outf, "# Resource attributes\n");
     ajFmtPrintF(outf, "# %-15s %-12s %s\n", "Attribute", "Default", "Comment");
     ajFmtPrintF(outf, "namRsAttrs {\n");
     for(i=0; namRsAttrs[i].Name; i++)
@@ -573,15 +583,16 @@ static void namListMaster(const AjPTable table, ajint which)
 {
     ajint i;
     NamPEntry fnew;
-    void **array;
+    void **keyarray = NULL;
+    void **valarray = NULL;
     char *key;
 
-    array = ajTableToarray(table, NULL);
+    ajTableToarray(table, &keyarray, &valarray);
 
-    for(i = 0; array[i]; i += 2)
+    for(i = 0; keyarray[i]; i++)
     {
-	fnew =(NamPEntry) array[i+1];
-	key = (char*) array[i];
+	key = (char*) keyarray[i];
+	fnew =(NamPEntry) valarray[i];
 	if(TYPE_DB == which)
 	{
 	    ajUser("DB %S\t *%s*", fnew->name, key);
@@ -599,7 +610,8 @@ static void namListMaster(const AjPTable table, ajint which)
 	    ajUser("ENV %S\t%S\t *%s*",fnew->name,fnew->value,key);
 	}
     }
-    AJFREE(array);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -623,15 +635,16 @@ static void namDebugMaster(const AjPTable table, ajint which)
 {
     ajint i;
     NamPEntry fnew;
-    void **array;
+    void **keyarray = NULL;
+    void **valarray = NULL;
     char *key;
 
-    array = ajTableToarray(table, NULL);
+    ajTableToarray(table, &keyarray, &valarray);
 
-    for(i = 0; array[i]; i += 2)
+    for(i = 0; keyarray[i]; i++)
     {
-	fnew = (NamPEntry) array[i+1];
-	key = (char*) array[i];
+	key = (char*) keyarray[i];
+	fnew = (NamPEntry) valarray[i];
 	if(TYPE_DB == which)
 	{
 	    ajDebug("DB %S\t *%s*\n", fnew->name, key);
@@ -653,7 +666,8 @@ static void namDebugMaster(const AjPTable table, ajint which)
 
     }
 
-    AJFREE(array);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -809,6 +823,10 @@ static ajint namMethod2Scope(const AjPStr method)
 	result = (METHOD_ENTRY | METHOD_QUERY);
     else if(!ajStrCmpC(method, "srswww"))
 	result = METHOD_ENTRY;
+    else if(!ajStrCmpC(method, "dbfetch"))
+	result = METHOD_ENTRY;
+    else if(!ajStrCmpC(method, "mrs"))
+	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
     else if(!ajStrCmpC(method, "url"))
 	result = METHOD_ENTRY;
     else if(!ajStrCmpC(method, "app"))
@@ -974,18 +992,20 @@ void ajNamListListDatabases(AjPList dbnames)
 {
     ajint i;
     NamPEntry fnew;
-    void **array;
+    void **keyarray =  NULL;
+    void **valarray =  NULL;
 
-    array = ajTableToarray(namDbMasterTable, NULL);
+    ajTableToarray(namDbMasterTable, &keyarray, &valarray);
     ajDebug("ajNamListListDatabases\n");
 
-    for(i = 0; array[i]; i += 2)
+    for(i = 0; valarray[i]; i++)
     {
-	fnew = (NamPEntry) array[i+1];
+	fnew = (NamPEntry) valarray[i];
 	ajDebug("DB: %S\n", fnew->name);
 	ajListstrPushApp(dbnames, fnew->name);
     }
-    AJFREE(array);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -1006,17 +1026,19 @@ void ajNamListListResources(AjPList rsnames)
 {
     ajint i;
     NamPEntry fnew;
-    void **array;
+    void **keyarray = NULL;
+    void **valarray = NULL;
 
-    array = ajTableToarray(namResMasterTable, NULL);
+    ajTableToarray(namResMasterTable, &keyarray, &valarray);
 
-    for(i = 0; array[i]; i += 2)
+    for(i = 0; valarray[i]; i++)
     {
-	fnew = (NamPEntry) array[i+1];
+	fnew = (NamPEntry) valarray[i];
 	ajDebug("RES: %S\n", fnew->name);
 	ajListstrPushApp(rsnames, fnew->name);
     }
-    AJFREE(array);
+    AJFREE(keyarray);
+    AJFREE(valarray);
 
     return;
 }
@@ -1516,6 +1538,7 @@ static void namListParse(AjPList listwords, AjPList listcount,
     }
 
     ajStrDel(&saveshortname);
+    ajStrTableFree(&Ifiles);
 
     return;
 }
@@ -2409,19 +2432,21 @@ AjBool ajNamDbData(AjPSeqQuery qry)
 
     /* general defaults */
 
-    namDbSetAttr(dbattr, "type", &qry->DbType);
-    namDbSetAttr(dbattr, "method", &qry->Method);
-    namDbSetAttr(dbattr, "format", &qry->Formatstr);
-    namDbSetAttr(dbattr, "app", &qry->Application);
-    namDbSetAttr(dbattr, "directory", &qry->IndexDir);
-    namDbSetAttr(dbattr, "indexdirectory", &qry->IndexDir);
-    namDbSetAttr(dbattr, "indexdirectory", &qry->Directory);
-    namDbSetAttr(dbattr, "directory", &qry->Directory);
-    namDbSetAttr(dbattr, "exclude", &qry->Exclude);
-    namDbSetAttr(dbattr, "filename", &qry->Filename);
-    namDbSetAttr(dbattr, "fields", &qry->DbFields);
-    namDbSetAttr(dbattr, "proxy", &qry->DbProxy);
-    namDbSetAttr(dbattr, "httpversion", &qry->DbHttpVer);
+    namDbSetAttrStr(dbattr, "type", &qry->DbType);
+    namDbSetAttrStr(dbattr, "method", &qry->Method);
+    namDbSetAttrStr(dbattr, "format", &qry->Formatstr);
+    namDbSetAttrStr(dbattr, "app", &qry->Application);
+    namDbSetAttrStr(dbattr, "directory", &qry->IndexDir);
+    namDbSetAttrStr(dbattr, "indexdirectory", &qry->IndexDir);
+    namDbSetAttrStr(dbattr, "indexdirectory", &qry->Directory);
+    namDbSetAttrStr(dbattr, "directory", &qry->Directory);
+    namDbSetAttrStr(dbattr, "exclude", &qry->Exclude);
+    namDbSetAttrStr(dbattr, "filename", &qry->Filename);
+    namDbSetAttrStr(dbattr, "fields", &qry->DbFields);
+    namDbSetAttrStr(dbattr, "proxy", &qry->DbProxy);
+    namDbSetAttrStr(dbattr, "httpversion", &qry->DbHttpVer);
+    namDbSetAttrBool(dbattr, "caseidmatch", &qry->CaseId);
+    namDbSetAttrBool(dbattr, "hasaccession", &qry->HasAcc);
     /*
        ajDebug("ajNamDbQuery DbName '%S'\n", qry->DbName);
        ajDebug("    Id '%S' Acc '%S' Des '%S'\n",
@@ -2472,22 +2497,22 @@ AjBool ajNamDbQuery(AjPSeqQuery qry)
     if(!ajSeqQueryIs(qry))   /* must have a method for all entries */
     {
 
-	namDbSetAttr(dbattr, "methodall", &qry->Method);
-	namDbSetAttr(dbattr, "formatall", &qry->Formatstr);
-	namDbSetAttr(dbattr, "appall", &qry->Application);
+	namDbSetAttrStr(dbattr, "methodall", &qry->Method);
+	namDbSetAttrStr(dbattr, "formatall", &qry->Formatstr);
+	namDbSetAttrStr(dbattr, "appall", &qry->Application);
 	qry->Type = QRY_ALL;
     }
     else		      /* must be able to query the database */
     {
-	namDbSetAttr(dbattr, "methodquery", &qry->Method);
-	namDbSetAttr(dbattr, "formatquery", &qry->Formatstr);
-	namDbSetAttr(dbattr, "appquery", &qry->Application);
+	namDbSetAttrStr(dbattr, "methodquery", &qry->Method);
+	namDbSetAttrStr(dbattr, "formatquery", &qry->Formatstr);
+	namDbSetAttrStr(dbattr, "appquery", &qry->Application);
 
 	if(!ajSeqQueryWild(qry)) /* ID - single entry may be available */
 	{
-	    namDbSetAttr(dbattr, "methodentry", &qry->Method);
-	    namDbSetAttr(dbattr, "formatentry", &qry->Formatstr);
-	    namDbSetAttr(dbattr, "appentry", &qry->Application);
+	    namDbSetAttrStr(dbattr, "methodentry", &qry->Method);
+	    namDbSetAttrStr(dbattr, "formatentry", &qry->Formatstr);
+	    namDbSetAttrStr(dbattr, "appentry", &qry->Application);
 	    qry->Type = QRY_ENTRY;
 	}
 	else
@@ -2513,9 +2538,9 @@ AjBool ajNamDbQuery(AjPSeqQuery qry)
 
 
 
-/* @funcstatic namDbSetAttr ***************************************************
+/* @funcstatic namDbSetAttrStr ************************************************
 **
-** Sets a named attribute value from an attribute list.
+** Sets a named string attribute value from an attribute list.
 **
 ** @param [r] dbattr [const AjPStr*] Attribute definitions.
 ** @param [r] attrib [const char*] Attribute name.
@@ -2524,8 +2549,8 @@ AjBool ajNamDbQuery(AjPSeqQuery qry)
 ** @@
 ******************************************************************************/
 
-static AjBool namDbSetAttr(const AjPStr* dbattr, const char* attrib,
-			    AjPStr* qrystr)
+static AjBool namDbSetAttrStr(const AjPStr* dbattr, const char* attrib,
+			      AjPStr* qrystr)
 {
     ajint i;
 
@@ -2543,6 +2568,52 @@ static AjBool namDbSetAttr(const AjPStr* dbattr, const char* attrib,
     namVarResolve(qrystr);
 
     return ajTrue;
+}
+
+
+
+
+/* @funcstatic namDbSetAttrBool ***********************************************
+**
+** Sets a named boolean attribute value from an attribute list.
+**
+** @param [r] dbattr [const AjPStr*] Attribute definitions.
+** @param [r] attrib [const char*] Attribute name.
+** @param [w] qrybool [AjBool*] Returned attribute value.
+** @return [AjBool] ajTrue on success.
+** @@
+******************************************************************************/
+
+static AjBool namDbSetAttrBool(const AjPStr* dbattr, const char* attrib,
+			       AjBool* qrybool)
+{
+    AjBool ret = ajTrue;
+    ajint i;
+    AjPStr tmpstr = NULL;
+
+    i = namDbAttrC(attrib);
+
+    if(i < 0)
+	ajFatal("unknown attribute '%s' requested",  attrib);
+
+    if(!ajStrGetLen(dbattr[i]))
+    {
+	ajStrAssignC(&tmpstr, namDbAttrs[i].Defval);
+	ret = ajFalse;
+    }
+    else
+    {
+	ajStrAssignS(&tmpstr, dbattr[i]);
+	ret = ajTrue;
+    }
+
+    /* ajDebug("namDbSetAttr('%S')\n", *qrystr); */
+
+    namVarResolve(&tmpstr);
+    ajStrToBool(tmpstr, qrybool);
+    ajStrDel(&tmpstr);
+
+    return ret;
 }
 
 
@@ -2935,7 +3006,6 @@ static AjBool namValidResource(const NamPEntry entry)
     ajint iattr = 0;
     ajint j;
     AjPStr* attrs;
-    AjBool hastype = ajFalse;
     AjBool ok;
 
     attrs = (AjPStr *) entry->data;
@@ -2950,8 +3020,6 @@ static AjBool namValidResource(const NamPEntry entry)
 	if(attrs[j])
 	{
 	    iattr++;
-	    if(ajCharPrefixC(namDbAttrs[j].Name, "type"))
-		hastype=ajTrue;
 	}
 
     ok = ajTrue;
@@ -2978,6 +3046,16 @@ static AjBool namValidResource(const NamPEntry entry)
 
 static AjBool namValidVariable(const NamPEntry entry)
 {
+    AjPStr* attrs;
+
+    attrs = (AjPStr *) entry->data;
+    if(attrs)
+    {			 /* strange - should be nothing for variables */
+	namError("Variable '%S' has a list of attributes",
+		  entry->name);
+	return ajFalse;
+    }
+    
     return ajTrue;
 }
 
