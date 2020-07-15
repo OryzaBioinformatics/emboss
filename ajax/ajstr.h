@@ -9,6 +9,9 @@ extern "C"
 #include "ajdefine.h"
 #include "ajtable.h"
 
+
+
+
 /* @data AjPStr ***************************************************************
 **
 ** Ajax string object.
@@ -35,146 +38,12 @@ extern "C"
 ** @alias AjOStr
 ** @iterator AjIStr
 **
-** @new ajStrNew Default constructor
-** @new ajStrNewC Constructor with char* text
-** @new ajStrNewL Constructor with reserved size
-** @new ajStrNewCL Constructor with char* text and reserved size
-** @new ajStrNewCIL Constructor with char* text, length and reserved size
-** @new ajStrNull Null string pointer
-** @new ajStrDup Duplicates an existing string (with increased reference count)
-**
-** @delete ajStrDel Default destructor
-**
-** @assign ajStrSet   If empty, initialize with a copy of a string object
-** @assign ajStrSetC  If empty, initialize with a copy of a char* text
-** @assign ajStrAss   Assignment with a copy of a string object
-** @assign ajStrAssC  Assignment with char* text.
-** @assign ajStrAssI  Assignment with a copy of a string object and a maximum
-**                 length.
-** @assign ajStrAssL  Assignment with a copy of a string object and a minimum
-**                 reserved size.
-** @assign ajStrAssCI  Assignment with char* text and a maximum
-**                 length.
-** @assign ajStrAssCL  Assignment with a char* text and a minimum
-**                 reserved size.
-** @assign ajStrAssSub Assignment with a substring of a string object
-** @assign ajStrAssSubC Assignment with a substring of a char* text
-**
-** @assign ajStrFromBool Creates a string representation of an AjBool
-** @assign ajStrFromInt  Creates a string representation of an int
-** @assign ajStrFromLong Creates a string representation of a ajlong int
-** @assign ajStrFromFloat Creates a string representation of a float
-** @assign ajStrFromDouble Creates a string representation of a double
-** @assign ajStrFromDoubleE Creates a string representation (exp) of a double
-**
-** @modify ajStrClear Clears all contents
-** @modify ajStrApp   Appends a string object
-** @modify ajStrAppC  Appends a char* text
-** @modify ajStrAppK  Appends a char
-** @modify ajStrAppSub Appends a substring
-** @modify ajStrInsert  Inserts string object text within a string.
-** @modify ajStrInsertC Inserts char* text within a string.
-** @modify ajStrTruncate Removes characters beyond a given position.
-** @modify ajStrReplace Replace remainder of string with string object text.
-** @modify ajStrReplaceC  Replace remainder of string with char* text.
-** @modify ajStrJoin  Replace remainder of string with remainder of second string.
-** @modify ajStrJoinC Replace remainder of string with remainder of char* text.
-** @modify ajStrSubstitute   Replace all occurances of one string with another in
-**                        the string object.
-** @modify ajStrSubstituteCC Replace all occurances of char *text  with
-**                        another char* in the string object.
-** @modify ajStrSubstituteKK Replace all occurances of char text  with
-**                        another char in the string object.
-** @modify ajStrChompEnd Removes white space from end of string.
-** @modify ajStrChomp Removes white space from front and end of string.
-** @modify ajStrChompC Removes white space from front and end of string.
-** @modify ajStrChop  Removes the last character from a string
-** @modify ajStrTrim  Removes a number of characters from start of end of a string
-** @modify ajStrTrimC Removes a set of characters from start of end of a string
-** @modify ajStrTrimEndC Removes a set of characters from end of a string
-** @modify ajStrTrimStartC Removes a set of characters from start of a string
-** @modify ajStrCut Removes a range of character positions from a string
-** @modify ajStrMask Masks out a range of characters from a string
-** @modify ajStrRev Reverses the order of characters in a string
-** @modify ajStrSub Reduces string to a substring of itself.
-** @modify ajStrMod  Make certain a string is modifiable by checking it has no
-**                other references, or by making a new real copy of the string.
-** @modify ajStrModL Make certain a string is modifiable, and big enough for its
-**                intended purpose.
-** @modify ajStrConvert   Replaces one set of characters with another set,
-**                     defined as two string objects
-** @modify ajStrConvertCC Replaces one set of characters with another set,
-**                     defined as two char* texts.
-** @modify ajStrToLower  Converts a string to lower case.
-** @modify ajStrToUpper  Converts a string to upper case.
-** @modify ajStrClean   Remove excess whitespace from a string
-** @modify ajStrCleanWhite Remove all whitespace from a string
-** @modify ajStrFix  Reset string length when some nasty caller may have edited it
-** @modify ajStrFixI Reset string length when some nasty caller may have edited it
-** @modify ajStrWildPrefix Tests for wildcard characters and terminates the
-**                      string at the first wild character (if any).
-**
-** @use ajStrFind   Find
-** @use ajStrFindC  Find
-** @use ajStrFindCase   Find
-** @use ajStrFindCaseC  Find
-** @use ajStrRFindC Reverse find.
-** @use ajStrFindAny   Find
-** @use ajStrFindAnyC  Find
-** @use ajStrCmp  String compare
-** @use ajStrCmpO  String compare
-** @use ajStrCmpC  String compare
-** @use ajStrNCmpO String compare
-** @use ajStrNCmpC String compare
-** @use ajStrCmpCase String case insensitive compare
-**
-** @use ajStrMatch       Test for matching strings
-** @use ajStrMatchC      Test for matching strings
-** @use ajStrMatchCase   Test for matching strings
-** @use ajStrMatchCaseC  Test for matching strings
-** @use ajStrMatchWild   Test for matching strings with wildcards
-** @use ajStrMatchWildC  Test for matching strings with wildcards
-** @use ajStrIsWild Tests whether a string contains standard wildcard
-**                  characters '*' or '?'
-** @use ajStrCheck Tests a string has a valid internal structure
-** @output ajStrTrace Writes a debug report on a string
-** @cast ajStrStr Returns char* text.
-**                Note: this should be treated as a constant as it is a
-**                pointer to the actual data to avoid excessive memory
-**                allocations.
-** @cast ajStrLen Returns string length
-** @cast ajStrSize Returns string reserved bytes (including trailing null)
-** @cast ajStrRef Returns string reference count
-** @cast ajStrPos Converts a string position into a true position
-** @cast ajStrTok  Returns a static next string from token parsing of a string
-**                 with the previous delimiter set
-** @cast ajStrTokC Returns a static next string from token parsing of a
-**                 string with a new delimiter set
-** @cast ajStrIsBool returns true if the string is a valid AjBool
-** @cast ajStrIsInt returns true if the string is a valid int
-** @cast ajStrIsLong returns true if the string is a valid ajlong int
-** @cast ajStrIsFloat returns true if the string is a valid float
-** @cast ajStrIsDouble returns true if the string is a valid double
-** @cast ajStrToBool Converts a string to an AjBool
-** @cast ajStrToHex Converts a string to an int using hexadecimal
-** @cast ajStrToInt Converts a string to an int
-** @cast ajStrToLong Converts a string to a ajlong int
-** @cast ajStrToFloat Converts a string to a float
-** @cast ajStrToDouble Converts a string to a double
-** @cast ajStrTokenCount Returns the number of tokens in a string
-** @cast ajStrRoom Returns the additional space available in a string
-** @cast ajStrPos Converts a string position into a true position
-** @cast ajStrPosI Converts a string position into a true position
-**
-** @other AjPSeq uses AjPStr to store most values
-** @other AjPStrTok parses AjPStr with delimiters
-**
 ** @attr Res [ajint] Reserved bytes (usable for expanding in place)
 ** @attr Len [ajint] Length of current string, excluding NULL at end
-** @attr Use [ajint] Use count - 1 for single reference, more if several
+** @attr Use [ajint] Use count: 1 for single reference, more if several
 **                   pointers share the same string.
 **                   Must drop to 0 before deleting. Modifying means making
-**                  a new string if not 1.
+**                   a new string if not 1.
 ** @attr Ptr [char*] The string, as a NULL-terminated C string.
 ** @@
 ******************************************************************************/
@@ -187,6 +56,9 @@ typedef struct AjSStr {
 } AjOStr;
 #define AjPStr AjOStr*
 typedef AjPStr* AjPPStr;
+
+
+
 
 /* @data AjIStr ***************************************************************
 **
@@ -211,6 +83,7 @@ typedef AjPStr* AjPPStr;
 ** @attr Ptr [char*] Current string pointer
 ** @@
 ******************************************************************************/
+
 typedef struct AjSStrIter {
   char *Start;
   char *End;
@@ -218,6 +91,8 @@ typedef struct AjSStrIter {
 } AjOStrIter;
 
 #define AjIStr  AjOStrIter*
+
+
 
 
 /* @data AjPStrTok ************************************************************
@@ -244,254 +119,594 @@ typedef struct AjSStrTok {
 #define AjPStrTok AjOStrTok*
 
 
+
+
 /* ========================================================================= */
-/* =================== All functions in alphabetical order ================= */
+/* ========================= All functions by section ====================== */
 /* ========================================================================= */
 
-void       ajCharFree (char** txt);
+/*
+** Prototype definitions
+*/
+
+/* === C character string === */
+
+/* constructors */
+
 char*      ajCharNewC (const char* txt);
-char*      ajCharNew (const AjPStr thys);
-char*      ajCharNewL (ajint len);
-char*      ajCharNewLS (size_t size, const AjPStr thys);
-ajint      ajCharPos (const char* thys, ajint ipos);
-void       ajCharToLower (char *txt);
-void       ajCharToUpper (char *txt);
+char*      ajCharNewS (const AjPStr thys);
+char*      ajCharNewRes(size_t size);
+char*      ajCharNewResC(const char* txt, size_t size);
+char*      ajCharNewResS(const AjPStr str, size_t size);
+char*      ajCharNewResLenC(const char* txt, size_t size, size_t len);
 
-AjBool     ajStrApp  (AjPStr* pthis, const AjPStr src);
-AjBool     ajStrAppC (AjPStr* pthis, const char *txt);
-AjBool     ajStrAppCI (AjPStr* pthis, const char *txt, size_t i);
-AjBool     ajStrAppK (AjPStr* pthis, const char chr);
-AjBool     ajStrAppKI (AjPStr* pthis, const char chr, ajint number);
-AjBool     ajStrAppSub (AjPStr* pthis, const AjPStr src,
-			ajint begin, ajint end);
-void       ajStrArrayDel (AjPStr** pthis);
-AjBool     ajStrAss   (AjPStr* pthis, AjPStr str); /* not const */
-AjBool     ajStrAssC  (AjPStr* pthis, const char* txt);
-AjBool     ajStrAssCI (AjPStr* pthis, const char* txt, size_t i);
-AjBool     ajStrAssCL (AjPStr* pthis, const char* txt, size_t i);
-AjBool     ajStrAssI  (AjPStr* pthis, const AjPStr str, size_t i);
-AjBool     ajStrAssK  (AjPStr* pthis, const char text);
-AjBool     ajStrAssL  (AjPStr* pthis, const AjPStr str, size_t i);
-AjBool     ajStrAssS  (AjPStr* pthis, const AjPStr str);
-AjBool     ajStrAssSub  (AjPStr* pthis, const AjPStr str,
-			 ajint begin, ajint end);
-AjBool     ajStrAssSubC (AjPStr* pthis, const char* txt,
-			 ajint begin, ajint end);
-AjBool     ajStrBlock (AjPStr* pthis, ajint blksize);
-char*      ajStrBool (AjBool boule);
-char       ajStrChar (const AjPStr thys, ajint pos);
-AjBool     ajStrCheck (const AjPStr thys);
-AjBool     ajStrChomp (AjPStr* pthis);
-AjBool     ajStrChompC (AjPStr* pthis, const char* delim);
-AjBool     ajStrChompEnd (AjPStr* pthis);
-AjBool     ajStrChop  (AjPStr* pthis);
-AjBool     ajStrClean (AjPStr* s);
-AjBool     ajStrCleanWhite (AjPStr* s);
-AjBool     ajStrClear (AjPStr* pthis);
-int        ajStrCmpC  (const AjPStr thys, const char *text);
-int        ajStrCmpCase (const AjPStr str1, const AjPStr str2);
-int        ajStrCmpCaseCC (const char* str1, const char* str2);
-int        ajStrCmp  (const void* str1, const void* str2);
-int        ajStrCmpO  (const AjPStr thys, const AjPStr anoth);
-int        ajStrCmpWild (const AjPStr thys, const AjPStr str);
-int        ajStrCmpWildC (const AjPStr thys, const char* text);
-int        ajStrCmpWildCC (const char* str, const char* text);
-AjBool     ajStrConvert   (AjPStr* pthis, const AjPStr oldc,
-			   const AjPStr newc);
-AjBool     ajStrConvertCC (AjPStr* pthis, const char* oldc, const char* newc);
-AjBool     ajStrCopy (AjPStr* pthis, AjPStr str); /* not const */
-AjBool     ajStrCopyC (AjPStr* pthis, const char* str);
-ajint      ajStrCountC (const AjPStr thys, const char* str);
-ajint      ajStrCountK (const AjPStr thys, char ch);
-AjBool     ajStrCut (AjPStr* pthis, ajint begin, ajint end);
-void       ajStrDegap(AjPStr* pthis);
-void       ajStrDel (AjPStr* pthis);
-AjBool     ajStrDelim (AjPStr* pthis, AjPStrTok *ptoken, const char *delim);
-AjBool     ajStrDelReuse (AjPStr* pthis);
-AjPStr     ajStrDup (AjPStr thys);
-void       ajStrExit (void);
+/* destructors */
 
-ajint      ajStrFind (const AjPStr thys, const AjPStr text);
-ajint      ajStrFindAny (const AjPStr thys, const AjPStr text);
-ajint      ajStrFindAnyC  (const AjPStr thys, const char* txt);
-ajint      ajStrFindC  (const AjPStr thys, const char* txt);
-ajint      ajStrFindCase (const AjPStr thys, const AjPStr text);
-ajint      ajStrFindCaseC (const AjPStr thys, const char* txt);
-ajint      ajStrFindK  (const AjPStr thys, const char chr);
+void       ajCharDel(char** Ptxt);
 
-void       ajStrFill (AjPStr* pthis, ajint count, char fill);
-void       ajStrFix (AjPStr *pthys);
-void       ajStrFixI (AjPStr *pthys, ajint ilen);
-void       ajStrFixTestI (AjPStr* pthis, ajint ilen);
-AjBool     ajStrFromBool (AjPStr* pthis, AjBool boule);
-AjBool     ajStrFromDouble (AjPStr* pthis, double val, ajint precision);
-AjBool     ajStrFromDoubleE (AjPStr* pthis, double val, ajint precision);
-AjBool     ajStrFromFloat (AjPStr* pthis, float val, ajint precision);
-AjBool     ajStrFromInt (AjPStr *pthis, ajint val);
-AjBool     ajStrFromLong (AjPStr *pthis, ajlong val);
+/* formatting */
 
-AjBool     ajStrInsert  (AjPStr* pthis, ajint pos, const AjPStr str);
-AjBool     ajStrInsertC (AjPStr* pthis, ajint pos, const char* str);
-AjBool     ajStrInsertK (AjPStr* pthis, ajint begin, char insert);
-AjBool     ajStrIsAlnum (const AjPStr thys);
-AjBool     ajStrIsAlpha (const AjPStr thys);
-AjBool     ajStrIsBool (const AjPStr thys);
-AjBool     ajStrIsDouble (const AjPStr thys);
-AjBool     ajStrIsFloat (const AjPStr thys);
-AjBool     ajStrIsHex (const AjPStr thys);
-AjBool     ajStrIsInt (const AjPStr thys);
-AjBool     ajStrIsLong (const AjPStr thys);
-AjBool     ajStrIsLower (const AjPStr thys);
-AjBool     ajStrIsNum (const AjPStr thys);
-AjBool     ajStrIsSpace (const AjPStr thys);
-AjBool     ajStrIsUpper (const AjPStr thys);
-AjBool     ajStrIsWild (const AjPStr thys);
-AjBool     ajStrIsWhite (const AjPStr thys);
-AjBool     ajStrIsWord (const AjPStr thys);
-AjIStr     ajStrIter (const AjPStr thys);
-AjIStr     ajStrIterBack (const AjPStr thys);
-#define    ajStrIterBackDone(iter) (iter->Ptr < iter->Start)
-#define    ajStrIterBackMore(iter) (iter->Ptr > iter->Start)
-AjIStr     ajStrIterBackNext (AjIStr iter);
-#define    ajStrIterBegin(iter) (iter->Ptr = iter->Start)
-#define    ajStrIterDone(iter) (iter->Ptr > iter->End)
-#define    ajStrIterEnd(iter) (iter->Ptr = iter->End)
-void       ajStrIterFree (AjIStr *iter);
-#define    ajStrIterGetK(iter) (*iter->Ptr)
-#define    ajStrIterGetC(iter) (iter->Ptr)
-#define    ajStrIterMore(iter) (iter->Ptr < iter->End)
-AjIStr     ajStrIterNext (AjIStr iter);
-#define    ajStrIterPutK(iter,c) (*iter->Ptr = c)
-AjBool     ajStrJoin  (AjPStr* pthis, ajint pos1,
-		       const AjPStr addbit, ajint pos2);
-AjBool     ajStrJoinC (AjPStr* pthis, ajint pos1,
-		       const char* addbit, ajint pos2);
+AjBool     ajCharFmtLower (char *txt);
+AjBool     ajCharFmtUpper (char *txt);
 
-AjBool     ajStrKeepAlphaC (AjPStr* pthis, const char* chars);
-AjBool     ajStrKeepC (AjPStr* pthis, const char* chars);
-ajint      ajStrLen(const AjPStr thys);
+/* comparison */
 
-#define    MAJSTRLEN(str) str->Len
-ajint      ajStrListToArray(const AjPStr str, AjPStr **array);
-AjBool     ajStrMask(AjPStr* str, ajint begin, ajint end, char maskchar);
-AjBool     ajStrMatch       (const AjPStr thys, const AjPStr str);
-AjBool     ajStrMatchC      (const AjPStr thys, const char* txt);
-AjBool     ajStrMatchCase   (const AjPStr thys, const AjPStr str);
-AjBool     ajStrMatchCaseC  (const AjPStr thys, const char* text);
-AjBool     ajStrMatchCaseCC (const char* thys, const char* text);
-AjBool     ajStrMatchCC     (const char* thys, const char* text);
-AjBool     ajStrMatchWild   (const AjPStr thys, const AjPStr wild);
-AjBool     ajStrMatchWildC  (const AjPStr thys, const char* text);
-AjBool     ajStrMatchWildCC (const char* str, const char* text);
-AjBool     ajStrMatchWildCO (const char* str, const AjPStr wild);
-AjBool     ajStrMatchWord (const AjPStr str, const AjPStr text);
-AjBool     ajStrMatchWordC (const AjPStr str, const char* text);
-AjBool     ajStrMatchWordCC (const char* str, const char* text);
-AjBool     ajStrMod  (AjPStr* pthis);
-AjBool     ajStrModL (AjPStr* pthis, size_t size);
-AjBool     ajStrModMinL (AjPStr* pthis, size_t size);
-ajint      ajStrNCmpC (const AjPStr thys, const char *text, ajint n);
-ajint 	   ajStrNCmpCaseCC (const char* str1, const char* str2, ajint len);
-ajint      ajStrNCmpO (const AjPStr thys, const AjPStr anoth, ajint n);
+AjBool     ajCharMatchC(const char* txt1, const char* txt2);
+AjBool     ajCharMatchCaseC(const char* txt1, const char* txt2);
+AjBool     ajCharMatchWildC(const char* txt1, const char* txt2);
+AjBool     ajCharMatchWildS(const char* txt, const AjPStr str);
+AjBool     ajCharMatchWildNextC(const char* txt1, const char* txt2);
+AjBool     ajCharMatchWildWordC(const char* str, const char* txt);
+AjBool     ajCharPrefixC(const char* txt, const char* pref);
+AjBool     ajCharPrefixS(const char* txt, const AjPStr pref);
+AjBool     ajCharPrefixCaseC(const char* txt, const char* pref);
+AjBool     ajCharPrefixCaseS(const char* txt, const AjPStr pref);
+AjBool     ajCharSuffixC(const char* txt, const char* suff);
+AjBool     ajCharSuffixS(const char* txt, const AjPStr suff);
+AjBool     ajCharSuffixCaseC(const char* txt, const char* suff);
+AjBool     ajCharSuffixCaseS(const char* txt, const AjPStr suff);
+
+/* comparison (sorting) */
+
+
+int        ajCharCmpCase(const char* txt1, const char* txt2);
+int        ajCharCmpCaseLen(const char* txt1, const char* txt2, size_t len);
+ajint      ajCharCmpWild(const char* txt1, const char* txt2);
+
+/* parsing */
+
+AjPStr     ajCharParseC (const char* txt, const char* delim);
+
+/* === AjPStr string === */
+
+/* constructors */
+
 AjPStr     ajStrNew (void);
 AjPStr     ajStrNewC (const char *txt);
-AjPStr     ajStrNewCIL (const char *txt, ajint len, size_t size);
-AjPStr     ajStrNewCL (const char *txt, size_t size);
-AjPStr     ajStrNewL (size_t size);
 AjPStr     ajStrNewS (const AjPStr str);
-const AjPStr ajStrNull(void);
+AjPStr     ajStrNewRef(AjPStr str);
+AjPStr     ajStrNewRes(size_t size);
+AjPStr     ajStrNewResC (const char *txt, size_t size);
+AjPStr     ajStrNewResS (const AjPStr str, size_t size);
+AjPStr     ajStrNewResLenC (const char *txt, size_t size, size_t len);
 
-AjBool     ajStrParentheses(const AjPStr s);
-ajint      ajStrPos  (const AjPStr thys, ajint ipos);
-ajint      ajStrPosI (const AjPStr thys, ajint imin, ajint ipos);
-ajint      ajStrPosII (ajint ilen, ajint imin, ajint ipos);
-AjBool     ajStrPrefix (const AjPStr thys, const AjPStr pref);
-AjBool     ajStrPrefixC (const AjPStr thys, const char* pref);
-AjBool     ajStrPrefixCC (const char *str, const char* pref);
-AjBool     ajStrPrefixCase (const AjPStr thys, const AjPStr pref);
-AjBool     ajStrPrefixCaseC (const AjPStr thys, const char* pref);
-AjBool     ajStrPrefixCaseCC (const char *str, const char* pref);
-AjBool     ajStrPrefixCaseCO (const char* thys, const AjPStr pref);
-AjBool     ajStrPrefixCO (const char *str, const AjPStr thys);
-void       ajStrQuote(AjPStr *s);
-void       ajStrQuoteStrip(AjPStr *s);
-void       ajStrQuoteStripAll(AjPStr *s);
-void       ajStrRandom(AjPStr *s);
-AjBool     ajStrReplace  (AjPStr* pthis, ajint pos1,
-			  const AjPStr overwrite, ajint len);
-AjBool     ajStrReplaceC (AjPStr* pthis, ajint pos1,
-			  const char* overwrite, ajint len);
-AjBool     ajStrReplaceK (AjPStr* pthis, ajint pos1,
-			  char overwrite, ajint len);
-AjBool     ajStrReplaceS( AjPStr* pthis, ajint begin, const AjPStr overwrite);
-ajint      ajStrRef(const AjPStr thys);
-#define    MAJSTRREF(str) str->Use
-void       ajStrRemoveCharsC(AjPStr* thys, const char *strng);
-void       ajStrRemoveHtml(AjPStr* pthis);
-void       ajStrRemoveNewline(AjPStr* pthis);
-AjBool     ajStrRev (AjPStr* pthis);
-ajint      ajStrRFindC (const AjPStr thys, const char *text);
-ajint      ajStrRoom (const AjPStr thys);
-AjBool     ajStrSet   (AjPStr* pthis, const AjPStr str);
-AjBool     ajStrSetC  (AjPStr* pthis, const char* str);
-ajint      ajStrSize (const AjPStr thys);
-#define    MAJSTRSIZE(str) str->Res
-#define    MAJSTRSUBK(str,pos,c) str->Ptr[pos]=c
-void       ajStrStat (const char* title);
-const char* ajStrStr (const AjPStr thys);
-char*      ajStrStrMod (AjPStr* thys);
-#define    MAJSTRSTR(str) str->Ptr
-AjBool     ajStrSub (AjPStr* pthis, ajint begin, ajint len);
-AjBool     ajStrSubstitute   (AjPStr* pthis, const AjPStr replace,
-			      const AjPStr putin);
-AjBool     ajStrSubstituteCC (AjPStr* pthis, const char* replace,
-			      const char* putin);
-AjBool     ajStrSubstituteKK (AjPStr* pthis, char replace,
-			      char putin);
-AjBool     ajStrSuffix (const AjPStr thys, const AjPStr suff);
-AjBool     ajStrSuffixC (const AjPStr thys, const char* suff);
-AjBool     ajStrSuffixCC (const char *str, const char* suff);
-AjBool     ajStrSuffixCO (const char *str, const AjPStr suff);
+/* destructors */
 
-AjBool     ajStrToBool (const AjPStr thys, AjBool* result);
-AjBool     ajStrToDouble (const AjPStr thys, double* result);
-AjBool     ajStrToFloat (const AjPStr thys, float* result);
-AjBool     ajStrToHex (const AjPStr thys, ajint* result);
-AjBool     ajStrToInt (const AjPStr thys, ajint* result);
-AjPStr     ajStrTok (const AjPStr thys);
-AjPStr     ajStrTokC (const AjPStr thys, const char* delim);
-AjPStr     ajStrTokCC (const char* thys, const char* delim);
-AjBool     ajStrToken (AjPStr* pthis, AjPStrTok *ptoken, const char *delim);
-AjBool     ajStrTokenAss (AjPStrTok *ptok, const AjPStr thys,
-			  const char *delim);
-void       ajStrTokenClear (AjPStrTok *token);
-ajint      ajStrTokenCount(const AjPStr line, const char *delim);
-ajint      ajStrTokenCountR(const AjPStr line, const char *delim);
-AjPStrTok  ajStrTokenInit (const AjPStr thys, const char *delim);
-void       ajStrTokenReset (AjPStrTok* ptok);
-AjBool     ajStrTokenRest (AjPStr* pthis, AjPStrTok* ptoken);
-void       ajStrTokenTrace (const AjPStrTok tok);
+void       ajStrDel (AjPStr* Pstr);
+void       ajStrDelarray(AjPStr** PPstr);
+AjBool     ajStrDelStatic(AjPStr* Pstr);
+
+/* assignment */
+
+AjBool     ajStrAssignC(AjPStr* Pstr, const char* txt);
+AjBool     ajStrAssignK(AjPStr* Pstr, char chr);
+AjBool     ajStrAssignS(AjPStr* Pstr, const AjPStr str);
+AjBool     ajStrAssignEmptyC  (AjPStr* pthis, const char* str);
+AjBool     ajStrAssignEmptyS   (AjPStr* pthis, const AjPStr str);
+AjBool     ajStrAssignLenC(AjPStr* Pstr, const char* txt, size_t ilen);
+AjBool     ajStrAssignRef(AjPStr* Pstr, AjPStr refstr);
+AjBool     ajStrAssignResC(AjPStr* Pstr, size_t size, const char* txt);
+AjBool     ajStrAssignResS(AjPStr* Pstr, size_t i, const AjPStr str);
+AjBool     ajStrAssignSubC(AjPStr* Pstr, const char* txt,
+			   ajint pos1, ajint pos2);
+AjBool     ajStrAssignSubS(AjPStr* Pstr, const AjPStr str,
+			  ajint pos1, ajint pos2);
+
+/* combination */
+
+AjBool     ajStrAppendC(AjPStr* Pstr, const char* txt);
+AjBool     ajStrAppendK(AjPStr* Pstr, char chr);
+AjBool     ajStrAppendS(AjPStr* Pstr, const AjPStr str);
+AjBool     ajStrAppendCountK(AjPStr* Pstr, char chr, size_t num);
+AjBool     ajStrAppendLenC(AjPStr* Pstr, const char* txt, size_t len);
+AjBool     ajStrAppendSubS(AjPStr* Pstr, const AjPStr str,
+			   ajint pos1, ajint pos2);
+
+AjBool     ajStrInsertC (AjPStr* pthis, ajint pos, const char* str);
+AjBool     ajStrInsertK (AjPStr* pthis, ajint begin, char insert);
+AjBool     ajStrInsertS  (AjPStr* pthis, ajint pos, const AjPStr str);
+
+AjBool     ajStrJoinC (AjPStr* Pstr, ajint pos1,
+		       const char* txt, ajint pos2);
+AjBool     ajStrJoinS (AjPStr* Pstr, ajint pos,
+		       const AjPStr str, ajint posb);
+AjBool     ajStrMask(AjPStr* str, ajint begin, ajint end,
+				  char maskchar);
+AjBool     ajStrPasteS( AjPStr* Pstr, ajint pos, const AjPStr str);
+AjBool     ajStrPasteCountK(AjPStr* Pstr, ajint pos, char chr,
+		      size_t num);
+AjBool     ajStrPasteMaxC (AjPStr* Pstr, ajint pos, const char* txt,
+		     size_t n);
+AjBool     ajStrPasteMaxS( AjPStr* Pstr, ajint pos, const AjPStr str,
+		       size_t n);
+
+/* cut */
+
+AjBool     ajStrCutComments(AjPStr* Pstr);
+AjBool     ajStrCutCommentsStart(AjPStr* Pstr);
+AjBool     ajStrCutEnd(AjPStr* Pstr, size_t len);
+AjBool     ajStrCutRange(AjPStr* Pstr, ajint pos1, ajint pos2);
+AjBool     ajStrCutStart(AjPStr* Pstr, size_t len);
+AjBool     ajStrKeepRange(AjPStr* Pstr, ajint pos1, ajint pos2);
+AjBool     ajStrKeepSetC(AjPStr* Pstr, const char* txt);
+AjBool     ajStrKeepSetAlphaC(AjPStr* Pstr, const char* txt);
+AjBool     ajStrQuoteStrip(AjPStr *Pstr);
+AjBool     ajStrQuoteStripAll(AjPStr *Pstr);
+AjBool     ajStrRemoveGap(AjPStr* thys);
+AjBool     ajStrRemoveHtml(AjPStr* pthis);
+AjBool     ajStrRemoveLastNewline(AjPStr* Pstr);
+AjBool     ajStrRemoveSetC(AjPStr* Pstr, const char *txt);
+AjBool     ajStrRemoveWhite(AjPStr* Pstr);
+AjBool     ajStrRemoveWhiteExcess(AjPStr* Pstr);
+AjBool     ajStrRemoveWild(AjPStr* Pstr);
+AjBool     ajStrTrimC (AjPStr* pthis, const char* txt);
+AjBool     ajStrTrimEndC (AjPStr* Pstr, const char* txt);
+AjBool     ajStrTrimStartC (AjPStr* Pstr, const char* txt);
+AjBool     ajStrTrimWhite(AjPStr* Pstr);
+AjBool     ajStrTrimWhiteEnd(AjPStr* Pstr);
+AjBool     ajStrTruncateLen(AjPStr* Pstr, size_t len);
+AjBool     ajStrTruncatePos(AjPStr* Pstr, ajint pos);
+
+/* substitution */
+
+AjBool     ajStrExchangeCC(AjPStr* Pstr, const char* txt, const char* txtnew);
+AjBool     ajStrExchangeCS(AjPStr* Pstr, const char* txt,
+			   const AjPStr strnew);
+AjBool     ajStrExchangeKK(AjPStr* Pstr, char chr, char chrnew);
+AjBool     ajStrExchangeSC(AjPStr* Pstr, const AjPStr str,
+			   const char* txtnew);
+AjBool     ajStrExchangeSS(AjPStr* Pstr, const AjPStr str,
+			   const AjPStr strnew);
+AjBool     ajStrExchangeSetCC(AjPStr* Pstr, const char* oldc,
+			      const char* newc);
+AjBool     ajStrExchangeSetSS(AjPStr* Pstr, const AjPStr str,
+			    const AjPStr strnew);
+AjBool     ajStrRandom(AjPStr *s);
+AjBool     ajStrReverse(AjPStr* Pstr);
+
+/* query */
+
+ajint      ajStrCalcCountC(const AjPStr str, const char* txt);
+ajint      ajStrCalcCountK(const AjPStr str, char chr);
+AjBool     ajStrHasParentheses(const AjPStr str);
+AjBool     ajStrIsAlnum (const AjPStr str);
+AjBool     ajStrIsAlpha (const AjPStr str);
+AjBool     ajStrIsBool (const AjPStr str);
+AjBool     ajStrIsDouble (const AjPStr str);
+AjBool     ajStrIsFloat (const AjPStr str);
+AjBool     ajStrIsHex (const AjPStr str);
+AjBool     ajStrIsInt (const AjPStr str);
+AjBool     ajStrIsLong (const AjPStr str);
+AjBool     ajStrIsLower (const AjPStr str);
+AjBool     ajStrIsNum (const AjPStr str);
+AjBool     ajStrIsUpper (const AjPStr str);
+AjBool     ajStrIsWild (const AjPStr str);
+AjBool     ajStrIsWhite (const AjPStr str);
+AjBool     ajStrIsWord (const AjPStr str);
+AjBool     ajStrWhole (const AjPStr str, ajint pos1, ajint pos2);
+
+/* element retrieval */
+
+char       ajStrGetCharFirst(const AjPStr str);
+char       ajStrGetCharLast(const AjPStr str);
+char       ajStrGetCharPos(const AjPStr str, ajint pos);
+ajint      ajStrGetLen(const AjPStr str);
+#define    MAJSTRGETLEN(str) str->Len
+const char* ajStrGetPtr(const AjPStr str);
+#define    MAJSTRGETPTR(str) str->Ptr
+ajint      ajStrGetRes(const AjPStr str);
+#define    MAJSTRGETRES(str) str->Res
+ajint      ajStrGetRoom(const AjPStr str);
+ajint      ajStrGetUse(const AjPStr str);
+#define    MAJSTRGETUSE(str) str->Use
+AjBool     ajStrGetValid (const AjPStr thys);
+
+/* modifiable string retrieval */
+
+char*      ajStrGetuniquePtr(AjPStr *Pstr);
+AjPStr     ajStrGetuniqueStr(AjPStr *Pstr);
+
+/* element assignment */
+
+AjBool     ajStrSetClear (AjPStr* pthis);
+AjBool     ajStrSetRes(AjPStr* Pstr, size_t size);
+AjBool     ajStrSetResRound(AjPStr* Pstr, size_t size);
+AjBool     ajStrSetValid(AjPStr *Pstr);
+AjBool     ajStrSetValidLen(AjPStr* Pstr, size_t len);
+
+/* string to datatype conversion functions */
+
+AjBool     ajStrToBool (const AjPStr str, AjBool* Pval);
+AjBool     ajStrToDouble (const AjPStr str, double* Pval);
+AjBool     ajStrToFloat (const AjPStr str, float* Pval);
+AjBool     ajStrToHex (const AjPStr str, ajint* Pval);
+AjBool     ajStrToInt (const AjPStr str, ajint* Pval);
 AjBool     ajStrToLong (const AjPStr thys, ajlong* result);
-AjBool     ajStrToLower (AjPStr* pthis);
-AjBool     ajStrToLowerII(AjPStr* pthis, ajint begin, ajint end);
-AjBool     ajStrToTitle (AjPStr* pthis);
-AjBool     ajStrToUpper (AjPStr* pthis);
-AjBool     ajStrToUpperII(AjPStr* pthis, ajint begin, ajint end);
+
+/* datatype to string conversion functions */
+
+AjBool     ajStrFromBool (AjPStr* Pstr, AjBool val);
+AjBool     ajStrFromDouble (AjPStr* Pstr, double val, ajint precision);
+AjBool     ajStrFromDoubleExp (AjPStr* Pstr, double val, ajint precision);
+AjBool     ajStrFromFloat (AjPStr* Pstr, float val, ajint precision);
+AjBool     ajStrFromInt (AjPStr* Pstr, ajint val);
+AjBool     ajStrFromLong (AjPStr* Pstr, ajlong val);
+
+/* formatting */
+
+AjBool     ajStrFmtBlock(AjPStr* pthis, ajint blksize);
+AjBool     ajStrFmtLower(AjPStr* Pstr);
+AjBool     ajStrFmtLowerSub(AjPStr* Pstr, ajint pos1, ajint pos2);
+AjBool     ajStrFmtQuote(AjPStr* Pstr);
+AjBool     ajStrFmtTitle(AjPStr* Pstr);
+AjBool     ajStrFmtUpper(AjPStr* Pstr);
+AjBool     ajStrFmtUpperSub(AjPStr* Pstr, ajint pos1, ajint pos2);
+AjBool     ajStrFmtWrap(AjPStr* Pstr, ajint width );
+AjBool     ajStrFmtWrapLeft(AjPStr* Pstr, ajint width, ajint left);
+
+/* comparison */
+
+AjBool     ajStrMatchC      (const AjPStr thys, const char* txt);
+AjBool     ajStrMatchS      (const AjPStr thys, const AjPStr str);
+AjBool     ajStrMatchCaseC  (const AjPStr thys, const char* text);
+AjBool     ajStrMatchCaseS  (const AjPStr thys, const AjPStr str);
+AjBool     ajStrMatchWildC  (const AjPStr thys, const char* text);
+AjBool     ajStrMatchWildS  (const AjPStr thys, const AjPStr wild);
+AjBool     ajStrMatchWildWordC (const AjPStr str, const char* text);
+AjBool     ajStrMatchWildWordS (const AjPStr str, const AjPStr text);
+AjBool     ajStrMatchWordAllS(const AjPStr str, const AjPStr str2);
+AjBool     ajStrMatchWordOneS(const AjPStr str, const AjPStr str2);
+AjBool     ajStrPrefixC(const AjPStr str, const char* txt2);
+AjBool     ajStrPrefixS(const AjPStr str, const AjPStr str2);
+AjBool     ajStrPrefixCaseC (const AjPStr str, const char* pref);
+AjBool     ajStrPrefixCaseS (const AjPStr str, const AjPStr pref);
+AjBool     ajStrSuffixC (const AjPStr thys, const char* suff);
+AjBool     ajStrSuffixS (const AjPStr thys, const AjPStr suff);
+AjBool     ajStrSuffixCaseC (const AjPStr str, const char* pref);
+AjBool     ajStrSuffixCaseS (const AjPStr str, const AjPStr pref);
+
+/* comparison (sorting) */
+
+int        ajStrCmpC  (const AjPStr thys, const char *text);
+int        ajStrCmpS(const AjPStr str, const AjPStr str2);
+int        ajStrCmpCaseS (const AjPStr str1, const AjPStr str2);
+ajint      ajStrCmpLenC (const AjPStr thys, const char *text, size_t len);
+int        ajStrCmpLenS(const AjPStr str, const AjPStr str2, size_t len);
+int        ajStrCmpWildC (const AjPStr thys, const char* text);
+int        ajStrCmpWildS (const AjPStr thys, const AjPStr str);
+int        ajStrVcmp  (const void* str1, const void* str2);
+
+/* comparison (search) */
+
+ajint      ajStrFindC  (const AjPStr str, const char* txt);
+ajint      ajStrFindK  (const AjPStr str, const char chr);
+ajint      ajStrFindS (const AjPStr str, const AjPStr str2);
+ajint      ajStrFindAnyC  (const AjPStr str, const char* txt);
+ajint      ajStrFindAnyK(const AjPStr str, char chr);
+ajint      ajStrFindAnyS (const AjPStr str, const AjPStr str2);
+ajint      ajStrFindCaseC (const AjPStr str, const char* txt);
+ajint      ajStrFindCaseS (const AjPStr str, const AjPStr str2);
+ajint      ajStrFindlastC(const AjPStr str, const char* txt);
+ajint      ajStrFindlastS(const AjPStr str, const AjPStr str2);
+
+/* parsing */
+
+AjBool     ajStrExtractFirst(const AjPStr str, AjPStr* Prest, AjPStr* Pword);
+AjBool     ajStrExtractWord(const AjPStr str, AjPStr* Prest, AjPStr* Pword);
+const AjPStr ajStrParseC(const AjPStr str, const char* txtdelim);
+ajint      ajStrParseCount(const AjPStr line);
+ajint      ajStrParseCountC(const AjPStr line, const char *txtdelim);
+ajint      ajStrParseCountS(const AjPStr line, const AjPStr strdelim);
+ajint      ajStrParseCountMultiC(const AjPStr str, const char *txtdelim);
+ajint      ajStrParseSplit(const AjPStr str, AjPStr **PPstr);
+const AjPStr ajStrParseWhite(const AjPStr str);
+
+/*( debug */
+
+void       ajStrStat (const char* title);
 void       ajStrTrace (const AjPStr thys);
-void       ajStrTraceChars (const AjPStr thys);
-void       ajStrTraceT (const AjPStr thys, const char* title);
-AjBool     ajStrTrim  (AjPStr* pthis, ajint num);
-AjBool     ajStrTrimC (AjPStr* pthis, const char* chars);
-AjBool     ajStrTrimEndC (AjPStr* pthis, const char* chars);
-AjBool     ajStrTrimStartC (AjPStr* pthis, const char* chars);
-AjBool     ajStrTruncate (AjPStr* pthis, ajint pos);
-AjBool     ajStrWhole (const AjPStr thys, ajint begin, ajint end);
-AjBool     ajStrWildPrefix (AjPStr* str);
-AjBool     ajStrWrap (AjPStr* pthis, ajint width);
-AjBool     ajStrWrapLeft (AjPStr* pthis, ajint width, ajint left);
-AjBool     ajStrUncomment (AjPStr* text);
-AjBool     ajStrUncommentStart (AjPStr* text);
-char*      ajStrYN (AjBool boule);
+void       ajStrTraceFull (const AjPStr thys);
+void       ajStrTraceTitle (const AjPStr thys, const char* title);
+
+/* exit */
+
+void       ajStrExit (void);
+
+/* === string iterator === */
+
+/* constructors */
+
+AjIStr     ajStrIterNew (const AjPStr thys);
+AjIStr     ajStrIterNewBack (const AjPStr thys);
+
+/* destructors */
+
+void       ajStrIterDel (AjIStr *iter);
+
+/* tests */
+
+AjBool     ajStrIterDone(const AjIStr iter);
+AjBool     ajStrIterDoneBack(const AjIStr iter);
+
+/* resets */
+
+void       ajStrIterBegin(AjIStr iter);
+void       ajStrIterEnd(AjIStr iter);
+
+/* attributes */
+
+const char* ajStrIterGetC(const AjIStr iter);
+char       ajStrIterGetK(const AjIStr iter);
+
+/* modifiers */
+
+void       ajStrIterPutK(AjIStr iter, char chr);
+
+/* stepping */
+
+AjIStr     ajStrIterNext (AjIStr iter);
+AjIStr     ajStrIterNextBack (AjIStr iter);
+
+/* === string token parser === */
+
+/* constructors */
+
+AjPStrTok  ajStrTokenNewC(const AjPStr str, const char* txtdelim);
+AjPStrTok  ajStrTokenNewS(const AjPStr str, const AjPStr strdelim);
+
+/* destructors */
+
+void       ajStrTokenDel(AjPStrTok* Ptoken);
+
+/* assignment */
+
+AjBool     ajStrTokenAssign(AjPStrTok* Ptoken, const AjPStr str);
+AjBool     ajStrTokenAssignC(AjPStrTok* Ptoken, const AjPStr str,
+			     const char* txtdelim);
+AjBool     ajStrTokenAssignS(AjPStrTok* Ptoken, const AjPStr str,
+			     const AjPStr strdelim);
+
+/* reset */
+
+void       ajStrTokenReset(AjPStrTok* Ptoken);
+
+/* debug */
+
+void       ajStrTokenTrace(const AjPStrTok token);
+
+/* parsing */
+
+AjBool     ajStrTokenNextFind(AjPStrTok* Ptoken, AjPStr* Pstr);
+AjBool     ajStrTokenNextFindC(AjPStrTok* Ptoken, const char* strdelim,
+			       AjPStr* Pstr);
+AjBool     ajStrTokenNextParse(AjPStrTok* Ptoken, AjPStr* Pstr);
+AjBool     ajStrTokenNextParseC(AjPStrTok* Ptoken, const char* txtdelim,
+				AjPStr* Pstr);
+AjBool     ajStrTokenNextParseS(AjPStrTok* Ptoken, const AjPStr strdelim,
+				AjPStr* Pstr);
+AjBool     ajStrTokenRestParse(AjPStrTok* Ptoken, AjPStr* Pstr);
+
+
+
+
+AjBool     ajStrTruncate (AjPStr* Pstr, ajint pos);
+
+/* =====================================================================
+** Deprecated functions - renamed or replaced
+** The __deprecated tag is used by the gcc compiler to report calls
+** for other compilers it is defined as an empty string (i.e. removed)
+** ===================================================================== */
+
+void       __deprecated ajCharFree (char** txt);
+char       __deprecated *ajCharNew (const AjPStr thys);
+char       __deprecated *ajCharNewL (size_t size);
+char       __deprecated *ajCharNewLS (size_t size, const AjPStr thys);
+ajint      __deprecated ajCharPos (const char* txt, ajint ipos);
+void       __deprecated ajCharToLower (char *txt);
+void       __deprecated ajCharToUpper (char *txt);
+
+AjBool     __deprecated ajStrApp  (AjPStr* pthis, const AjPStr src);
+AjBool     __deprecated ajStrAppC (AjPStr* pthis, const char *txt);
+AjBool     __deprecated ajStrAppCI (AjPStr* pthis, const char *txt, size_t i);
+AjBool     __deprecated ajStrAppK (AjPStr* pthis, const char chr);
+AjBool     __deprecated ajStrAppKI (AjPStr* pthis, const char chr,
+				    ajint number);
+AjBool     __deprecated ajStrAppSub (AjPStr* pthis, const AjPStr src,
+				     ajint begin, ajint end);
+void       __deprecated ajStrArrayDel (AjPStr** pthis);
+AjBool     __deprecated ajStrAss   (AjPStr* pthis, AjPStr str); /* not const */
+AjBool     __deprecated ajStrAssC  (AjPStr* pthis, const char* txt);
+AjBool     __deprecated ajStrAssCI (AjPStr* pthis, const char* txt, size_t i);
+AjBool     __deprecated ajStrAssCL (AjPStr* pthis, const char* txt, size_t i);
+AjBool     __deprecated ajStrAssI  (AjPStr* pthis, const AjPStr str, size_t i);
+AjBool     __deprecated ajStrAssK  (AjPStr* pthis, const char text);
+AjBool     __deprecated ajStrAssL  (AjPStr* pthis, const AjPStr str, size_t i);
+AjBool     __deprecated ajStrAssS  (AjPStr* pthis, const AjPStr str);
+AjBool     __deprecated ajStrAssSub  (AjPStr* pthis, const AjPStr str,
+				      ajint begin, ajint end);
+AjBool     __deprecated ajStrAssSubC (AjPStr* pthis, const char* txt,
+				      ajint begin, ajint end);
+AjBool     __deprecated ajStrBlock (AjPStr* pthis, ajint blksize);
+char       __deprecated ajStrChar (const AjPStr thys, ajint pos);
+AjBool     __deprecated ajStrChomp (AjPStr* pthis);
+AjBool     __deprecated ajStrChompC (AjPStr* pthis, const char* delim);
+AjBool     __deprecated ajStrChompEnd (AjPStr* pthis);
+AjBool     __deprecated ajStrChop  (AjPStr* pthis);
+AjBool     __deprecated ajStrClean (AjPStr* s);
+AjBool     __deprecated ajStrCleanWhite (AjPStr* s);
+AjBool     __deprecated ajStrClear (AjPStr* pthis);
+int        __deprecated ajStrCmp(const void* str, const void* str2);
+int        __deprecated ajStrCmpCase(const AjPStr str, const AjPStr str2);
+int        __deprecated ajStrCmpCaseCC (const char* str1, const char* str2);
+int        __deprecated ajStrCmpO  (const AjPStr thys, const AjPStr anoth);
+int        __deprecated ajStrCmpWild(const AjPStr str, const AjPStr str2);
+int        __deprecated ajStrCmpWildCC (const char* str, const char* text);
+AjBool     __deprecated ajStrConvert   (AjPStr* pthis, const AjPStr oldc,
+					const AjPStr newc);
+AjBool     __deprecated ajStrConvertCC (AjPStr* pthis, const char* oldc,
+					const char* newc);
+AjBool     __deprecated ajStrCopy (AjPStr* pthis, AjPStr str); /* not const */
+AjBool     __deprecated ajStrCopyC (AjPStr* pthis, const char* str);
+ajint      __deprecated ajStrCountC (const AjPStr thys, const char* str);
+ajint      __deprecated ajStrCountK (const AjPStr thys, char ch);
+AjBool     __deprecated ajStrCut(AjPStr* pthis, ajint begin, ajint end);
+void       __deprecated ajStrDegap(AjPStr* pthis);
+AjBool     __deprecated ajStrDelReuse (AjPStr* pthis);
+AjBool     __deprecated ajStrDelim (AjPStr* pthis, AjPStrTok *ptoken,
+				    const char *delim);
+AjPStr     __deprecated ajStrDup (AjPStr thys);
+void       __deprecated ajStrFill (AjPStr* pthis, ajint count, char fill);
+ajint      __deprecated ajStrFind(const AjPStr str, const AjPStr str2);
+ajint      __deprecated ajStrFindCase(const AjPStr str, const AjPStr str2);
+ajint      __deprecated ajStrFindK  (const AjPStr thys, const char chr);
+void       __deprecated ajStrFix (AjPStr *pthys);
+void       __deprecated ajStrFixI (AjPStr *pthys, ajint ilen);
+AjBool     __deprecated ajStrFromDoubleE(AjPStr* Pstr, double val,
+					 ajint precision);
+AjBool     __deprecated ajStrInsert(AjPStr* Pstr, ajint pos,
+				    const AjPStr str );
+AjBool     __deprecated ajStrIsSpace (const AjPStr thys);
+AjBool     __deprecated ajStrKeepAlphaC (AjPStr* pthis, const char* chars);
+AjBool     __deprecated ajStrKeepC (AjPStr* pthis, const char* chars);
+ajint       __deprecated ajStrLen (const AjPStr thys);
+ajint      __deprecated ajStrListToArray(const AjPStr str, AjPStr **array);
+AjBool     __deprecated ajStrMatchCaseCC (const char* thys, const char* text);
+AjBool     __deprecated ajStrMatchCC     (const char* thys, const char* text);
+AjBool     __deprecated ajStrMatchWildCC (const char* str, const char* text);
+AjBool     __deprecated ajStrMatchWildCO (const char* str, const AjPStr wild);
+AjBool     __deprecated ajStrMatchWord   (const AjPStr str, const AjPStr text);
+AjBool     __deprecated ajStrMatchWordCC (const char* str, const char* text);
+AjBool     __deprecated ajStrMod (AjPStr* pthis);
+AjBool     __deprecated ajStrModL (AjPStr* pthis, size_t size);
+AjBool     __deprecated ajStrModMinL (AjPStr* pthis, size_t size);
+AjPStr     __deprecated ajStrNewL (size_t size);
+AjBool     __deprecated ajStrMatch(const AjPStr str, const AjPStr str2);
+AjBool     __deprecated ajStrMatchCase(const AjPStr str, const AjPStr str2);
+AjBool     __deprecated ajStrMatchWild(const AjPStr str, const AjPStr str2);
+int        __deprecated ajStrNCmpC(const AjPStr str, const char* txt,
+				   ajint len);
+ajint 	   __deprecated ajStrNCmpCaseCC (const char* str1, const char* str2,
+					 ajint len);
+ajint      __deprecated ajStrNCmpO (const AjPStr thys, const AjPStr anoth,
+				    ajint n);
+AjPStr     __deprecated ajStrNewCL (const char *txt, size_t size);
+AjPStr     __deprecated ajStrNewCIL (const char *txt, ajint len, size_t size);
+const AjPStr __deprecated ajStrNull(void);
+AjBool     __deprecated ajStrParentheses(const AjPStr s);
+ajint      __deprecated ajStrPos  (const AjPStr thys, ajint ipos);
+ajint      __deprecated ajStrPosI (const AjPStr thys, ajint imin, ajint ipos);
+ajint      __deprecated ajStrPosII (ajint ilen, ajint imin, ajint ipos);
+AjBool     __deprecated ajStrPrefix(const AjPStr str, const AjPStr str2);
+AjBool     __deprecated ajStrPrefixCase(const AjPStr str, const AjPStr str2);
+AjBool     __deprecated ajStrPrefixCaseCC (const char *str, const char* pref);
+AjBool     __deprecated ajStrPrefixCaseCO (const char* thys,
+					   const AjPStr pref);
+AjBool     __deprecated ajStrPrefixCC (const char *str, const char* pref);
+AjBool     __deprecated ajStrPrefixCO (const char *str, const AjPStr thys);
+void       __deprecated ajStrQuote(AjPStr *s);
+AjBool     __deprecated ajStrReplace  (AjPStr* pthis, ajint pos1,
+			  const AjPStr overwrite, ajint len);
+AjBool     __deprecated ajStrReplaceC (AjPStr* pthis, ajint pos1,
+			  const char* overwrite, ajint len);
+AjBool     __deprecated ajStrReplaceK (AjPStr* pthis, ajint pos1,
+			  char overwrite, ajint len);
+AjBool     __deprecated ajStrReplaceS( AjPStr* pthis,
+				       ajint begin, const AjPStr overwrite);
+ajint      __deprecated ajStrRef(const AjPStr thys);
+void       __deprecated ajStrRemoveCharsC(AjPStr* thys, const char *strng);
+void       __deprecated ajStrRemoveNewline(AjPStr* pthis);
+AjBool     __deprecated ajStrRev (AjPStr* pthis);
+ajint      __deprecated ajStrRFindC (const AjPStr thys, const char *text);
+ajint      __deprecated ajStrRoom(const AjPStr thys);
+AjBool     __deprecated ajStrSet  (AjPStr* pthis, const AjPStr str);
+AjBool     __deprecated ajStrSetC  (AjPStr* pthis, const char* str);
+ajint      __deprecated ajStrSize (const AjPStr thys);
+const char __deprecated *ajStrStr (const AjPStr thys);
+char       __deprecated *ajStrStrMod (AjPStr* thys);
+AjBool     __deprecated ajStrSub (AjPStr* pthis, ajint begin, ajint len);
+AjBool     __deprecated ajStrSubstitute   (AjPStr* pthis, const AjPStr replace,
+			      const AjPStr putin);
+AjBool     __deprecated ajStrSubstituteCC (AjPStr* pthis, const char* replace,
+			      const char* putin);
+AjBool     __deprecated ajStrSubstituteKK (AjPStr* pthis, char replace,
+			      char putin);
+AjBool     __deprecated ajStrSuffix(const AjPStr str, const AjPStr str2);
+AjBool     __deprecated ajStrSuffixCC (const char *str, const char* suff);
+AjBool     __deprecated ajStrSuffixCO (const char *str, const AjPStr suff);
+AjBool     __deprecated ajStrToLower (AjPStr* pthis);
+AjBool     __deprecated ajStrToLowerII(AjPStr* pthis, ajint begin, ajint end);
+AjBool     __deprecated ajStrToTitle (AjPStr* pthis);
+AjBool     __deprecated ajStrToUpper (AjPStr* pthis);
+AjBool     __deprecated ajStrToUpperII(AjPStr* pthis, ajint begin, ajint end);
+AjBool     __deprecated ajStrTrim  (AjPStr* pthis, ajint num);
+AjBool     __deprecated ajStrTruncate(AjPStr* Pstr, ajint pos);
+AjBool     __deprecated ajStrUncomment (AjPStr* text);
+AjBool     __deprecated ajStrUncommentStart (AjPStr* text);
+AjBool     __deprecated ajStrWildPrefix (AjPStr* str);
+AjBool     __deprecated ajStrWrap (AjPStr* pthis, ajint width);
+AjBool     __deprecated ajStrWrapLeft (AjPStr* pthis, ajint width, ajint left);
+
+
+
+
+AjIStr     __deprecated ajStrIter (const AjPStr thys);
+AjIStr     __deprecated ajStrIterBack (const AjPStr thys);
+AjBool     __deprecated ajStrIterBackDone(AjIStr iter);
+AjIStr     __deprecated ajStrIterBackNext (AjIStr iter);
+void       __deprecated ajStrIterFree (AjIStr *iter);
+AjBool     __deprecated ajStrIterMore(AjIStr iter);
+AjBool     __deprecated ajStrIterMoreBack(AjIStr iter);
+
+
+AjPStr     __deprecated ajStrTok (const AjPStr thys);
+AjPStr     __deprecated ajStrTokC (const AjPStr thys, const char* delim);
+AjPStr     __deprecated ajStrTokCC (const char* thys, const char* delim);
+AjBool     __deprecated ajStrToken (AjPStr* pthis, AjPStrTok *ptoken,
+				    const char *delim);
+AjBool     __deprecated ajStrTokenAss (AjPStrTok *ptok, const AjPStr thys,
+			  const char *delim);
+void       __deprecated ajStrTokenClear (AjPStrTok *token);
+ajint      __deprecated ajStrTokenCount(const AjPStr line, const char *delim);
+ajint      __deprecated ajStrTokenCountR(const AjPStr line, const char *delim);
+AjPStrTok  __deprecated ajStrTokenInit (const AjPStr thys, const char *delim);
+AjBool     __deprecated ajStrTokenRest (AjPStr* pthis, AjPStrTok* ptoken);
+void       __deprecated ajStrTokenTrace (const AjPStrTok tok);
+
+/*#define    MAJSTRLEN(str) str->Len*/
+const char __deprecated *MAJSTRSTR(const AjPStr thys);
+ajint __deprecated MAJSTRLEN(const AjPStr thys);
+ajint __deprecated MAJSTRSIZE(const AjPStr thys);
+ajint __deprecated MAJSTRREF(const AjPStr thys);
+
+/*
+** End of prototype definitions
+*/
+
+
+/*#define    MAJSTRREF(str) str->Use*/
+/*#define    MAJSTRSIZE(str) str->Res*/
+/*#define    MAJSTRSUBK(str,pos,c) str->Ptr[pos]=c*/
+/*#define    MAJSTRSTR(str) str->Ptr*/
 
 #endif
 
