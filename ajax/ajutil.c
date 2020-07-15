@@ -24,9 +24,14 @@
 
 #include "ajax.h"
 #include <stdarg.h>
+#ifdef WIN32
+#include "win32.h"
+#include <winsock2.h>
+#include <lmcons.h> /* for UNLEN */
+#else
 #include <pwd.h>
 #include <unistd.h>
-
+#endif
 
 
 
@@ -49,16 +54,30 @@ static ajint utilBigendCalled = 0;
 
 void ajExit(void)
 {
+#ifdef WIN32
+    WSACleanup();
+#endif
     ajDebug("\nFinal Summary\n=============\n\n");
     ajLogInfo();
-    ajStrExit();
-    ajRegExit();
     ajTableExit();
     ajListExit();
     ajFileExit();
     ajFeatExit();
+    ajSeqExit();
+    ajAlignExit();
+    ajReportExit();
     ajAcdExit(ajFalse);
     ajNamExit();
+    ajSysExit();
+    ajCallExit();
+    ajBaseExit();
+    ajCodExit();
+    ajTrnExit();
+    ajMeltExit();
+    ajTimeExit();
+    ajRegExit();
+    ajArrExit();
+    ajStrExit();
     ajMemExit();
     ajMessExit();     /* clears data for ajDebug - do this last!!!  */
     exit(0);
@@ -125,26 +144,29 @@ ajint ajExitAbort(void)
 
 void ajLogInfo(void)
 {
-    static AjPFile logf;
-    static AjPStr logfile = NULL;
-    static AjPStr uids    = NULL;
+    AjPFile logf;
+    AjPStr logfname = NULL;
+    AjPStr uids    = NULL;
     AjPTime today = NULL;
 
     today = ajTimeTodayF("log");
     
-    if(ajNamGetValueC("logfile", &logfile))
+    if(ajNamGetValueC("logfile", &logfname))
     {
-	logf = ajFileNewApp(logfile);
+	logf = ajFileNewApp(logfname);
 	if(!logf)
 	    return;
 
 	ajUtilUid(&uids),
-	ajFmtPrintF(logf, "%s\t%S\t%D\n",
-		    ajAcdProgram(),
+	ajFmtPrintF(logf, "%S\t%S\t%D\n",
+		    ajAcdGetProgram(),
 		    uids,
 		    today);
+	ajStrDel(&uids);
+	ajStrDel(&logfname);
 	ajFileClose(&logf);
     }
+
 
     AJFREE(today);
 
@@ -165,6 +187,7 @@ void ajLogInfo(void)
 
 AjBool ajUtilUid(AjPStr* dest)
 {
+#ifndef WIN32
     ajint uid;
     struct passwd* pwd;
 
@@ -173,7 +196,7 @@ AjBool ajUtilUid(AjPStr* dest)
     uid = getuid();
     if(!uid)
     {
-	ajStrAssC(dest, "");
+	ajStrAssignC(dest, "");
 	return ajFalse;
     }
 
@@ -181,15 +204,33 @@ AjBool ajUtilUid(AjPStr* dest)
     pwd = getpwuid(uid);
     if(!pwd)
     {
-	ajStrAssC(dest, "");
+	ajStrAssignC(dest, "");
 	return ajFalse;
     }
 
     ajDebug("  pwd: '%s'\n", pwd->pw_name);
 
-    ajStrAssC(dest, pwd->pw_name);
+    ajStrAssignC(dest, pwd->pw_name);
 
     return ajTrue;
+
+#else	/* WIN32 */
+    char nameBuf[UNLEN+1];
+    DWORD nameLen = UNLEN+1;
+
+    ajDebug("ajUtilUid\n");
+
+    if (GetUserName(nameBuf, &nameLen))
+    {
+	ajDebug("  pwd: '%s'\n", nameBuf);
+	ajStrAssC (dest, nameBuf);
+	return ajTrue;
+    }
+
+    ajStrAssC (dest, "");
+
+    return ajFalse;
+#endif
 }
 
 

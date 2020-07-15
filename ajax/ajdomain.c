@@ -7,7 +7,7 @@
 ** Includes functions for reading SCOP and CATH parsable files and for 
 ** reading and writing dcf (domain classification file) format.
 **
-** @author: Copyright (C) 2004 Jon Ison (jison@hgmp.mrc.ac.uk)
+** @author Copyright (C) 2004 Jon Ison (jison@hgmp.mrc.ac.uk)
 ** @version 1.0 
 ** @@
 ** 
@@ -141,7 +141,7 @@ typedef struct AjSScopdes
 
 
 
-/*@datastatic AjPCathDom*******************************************************
+/* @datastatic AjPCathDom *****************************************************
 **
 ** Nucleus CathDom object
 **
@@ -177,7 +177,7 @@ typedef struct AjSCathDom
 
 
 
-/*@datastatic AjPCathName******************************************************
+/* @datastatic AjPCathName ****************************************************
 **
 ** Nucleus CathName object
 **
@@ -273,7 +273,7 @@ static AjPScopcla domainScopclaNew(ajint chains)
 
     if(chains)
     {
-	ret->Chain = ajCharNewL(chains);
+	ret->Chain = ajCharNewRes(chains);
 	AJCNEW0(ret->Start,chains);
 	AJCNEW0(ret->End,chains);
 	for(i=0; i<chains; i++)
@@ -335,7 +335,7 @@ static AjPScopdes domainScopdesNew(void)
 
 static AjPScopcla domainScopclaRead(AjPFile inf, const AjPStr entry)
 {
-    return domainScopclaReadC(inf,ajStrStr(entry));
+    return domainScopclaReadC(inf,ajStrGetPtr(entry));
 }
 
 
@@ -356,7 +356,7 @@ static AjPScopcla domainScopclaRead(AjPFile inf, const AjPStr entry)
 
 static AjPScopdes domainScopdesRead(AjPFile inf, const AjPStr entry)
 {
-    return domainScopdesReadC(inf,ajStrStr(entry));
+    return domainScopdesReadC(inf,ajStrGetPtr(entry));
 }
 
 
@@ -402,8 +402,8 @@ static AjPScopdes domainScopdesReadC(AjPFile inf, const char *entry)
     
 
     /* Read up to the correcty entry (line) */
-    ajStrAssC(&tentry,entry);
-    ajStrToUpper(&tentry);
+    ajStrAssignC(&tentry,entry);
+    ajStrFmtUpper(&tentry);
     
     while((ok=ajFileReadLine(inf,&line)))
     {
@@ -414,7 +414,7 @@ static AjPScopdes domainScopdesReadC(AjPFile inf, const char *entry)
 	if(*(line->Ptr) == '#')
 	    continue;
 	
-	if(ajStrMatchWild(sunidstr,tentry))
+	if(ajStrMatchWildS(sunidstr,tentry))
 	    break;
     }
     
@@ -444,7 +444,7 @@ static AjPScopdes domainScopdesReadC(AjPFile inf, const char *entry)
     ajRegSubI(rexp,3,&tmp);
     ajRegSubI(rexp,4,&tmp);
     ajRegPost(rexp,&ret->Desc);
-    ajStrClean(&ret->Desc);
+    ajStrRemoveWhite(&ret->Desc);
 
     return ret;
 }
@@ -510,8 +510,8 @@ static AjPScopcla domainScopclaReadC(AjPFile inf, const char *entry)
     
 
     /* Read up to the correcty entry (line) */
-    ajStrAssC(&tentry,entry);
-    ajStrToUpper(&tentry);
+    ajStrAssignC(&tentry,entry);
+    ajStrFmtUpper(&tentry);
     
     while((ok=ajFileReadLine(inf,&line)))
     {
@@ -522,7 +522,7 @@ static AjPScopcla domainScopclaReadC(AjPFile inf, const char *entry)
 	if(*scopid->Ptr == '#')
 	    continue;
 		
-	if(ajStrMatchWild(scopid,tentry))
+	if(ajStrMatchWildS(scopid,tentry))
 	    break;
     }
     
@@ -535,24 +535,24 @@ static AjPScopcla domainScopclaReadC(AjPFile inf, const char *entry)
 	return NULL;
 
     /* Count chains and allocate Scopcla object */
-    n = ajStrTokenCount(chains,",");
+    n = ajStrParseCountC(chains,",");
     ret = domainScopclaNew(n);
 
-    ajStrToUpper(&scopid);
-    ajStrAssS(&ret->Entry,scopid);
+    ajStrFmtUpper(&scopid);
+    ajStrAssignS(&ret->Entry,scopid);
 
-    ajStrToUpper(&pdbid);
-    ajStrAssS(&ret->Pdb,pdbid);
+    ajStrFmtUpper(&pdbid);
+    ajStrAssignS(&ret->Pdb,pdbid);
 
-    ajStrToUpper(&sccs);
-    ajStrAssS(&ret->Sccs,sccs);
+    ajStrFmtUpper(&sccs);
+    ajStrAssignS(&ret->Sccs,sccs);
 
-    handle = ajStrTokenInit(chains,",");
+    handle = ajStrTokenNewC(chains,",");
     for(i=0;i<n;++i)
     {
-	ajStrToken(&token,&handle,NULL);
+	ajStrTokenNextParse(&handle,&token);
 	    	    
-	p = ajStrStr(token);
+	p = ajStrGetPtr(token);
 	if(sscanf(p,"%d-%d",&from,&to)==2)
 	{
 	    ret->Chain[i]='.';
@@ -565,36 +565,36 @@ static AjPScopcla domainScopclaReadC(AjPFile inf, const char *entry)
 	    ajFmtPrintS(&ret->End[i],"%d",to);
 	    ret->Chain[i]=c;
 	}
-	else if(ajStrChar(token,1)==':')
+	else if(ajStrGetCharPos(token,1)==':')
 	{
-	    ajStrAssC(&ret->Start[i],".");
-	    ajStrAssC(&ret->End[i],".");
-	    ret->Chain[i]=*ajStrStr(token);
+	    ajStrAssignC(&ret->Start[i],".");
+	    ajStrAssignC(&ret->End[i],".");
+	    ret->Chain[i]=*ajStrGetPtr(token);
 	}
 	else if(ajRegExec(exp,token))
 	{
 	    ajRegSubI(exp,1,&str);
-	    ajStrAssS(&ret->Start[i],str);
+	    ajStrAssignS(&ret->Start[i],str);
 	    ajRegSubI(exp,2,&str);
-	    ret->Chain[i] = *ajStrStr(str);
+	    ret->Chain[i] = *ajStrGetPtr(str);
 	    ajRegSubI(exp,3,&str);
-	    ajStrAssS(&ret->End[i],str);
+	    ajStrAssignS(&ret->End[i],str);
 	}
-	else if(ajStrChar(token,0)=='-')
+	else if(ajStrGetCharFirst(token)=='-')
 	{
 	    ret->Chain[i]='.';
-	    ajStrAssC(&ret->Start[i],".");
-	    ajStrAssC(&ret->End[i],".");
+	    ajStrAssignC(&ret->Start[i],".");
+	    ajStrAssignC(&ret->End[i],".");
 	}
 	else
 	    ajFatal("Unparseable chain line [%S]\n",chains);
     }
-    ajStrTokenClear(&handle);
+    ajStrTokenDel(&handle);
 	      
 	      
     /* Read SCOP sunid's from classification string */
-    bhandle = ajStrTokenInit(class,",\n");
-    while(ajStrToken(&token,&bhandle,NULL))
+    bhandle = ajStrTokenNewC(class,",\n");
+    while(ajStrTokenNextParse(&bhandle,&token))
     {
 	if(ajStrPrefixC(token,"cl"))
 	    ajFmtScanS(token, "cl=%d", &ret->Class);
@@ -611,7 +611,7 @@ static AjPScopcla domainScopclaReadC(AjPFile inf, const char *entry)
 	else if(ajStrPrefixC(token,"px"))
 	    ajFmtScanS(token, "px=%d", &ret->Domdat);
     }
-    ajStrTokenClear(&bhandle);
+    ajStrTokenDel(&bhandle);
 
     return ret;
 }	
@@ -808,7 +808,7 @@ static ajint domainCathNameBinSearch(const AjPStr id, const AjPCathName *arr,
     {
         m=(l+h)>>1;
 
-        if((c=ajStrCmpCase(id, arr[m]->Id)) < 0) 
+        if((c=ajStrCmpCaseS(id, arr[m]->Id)) < 0) 
 	    h=m-1;
         else if(c>0) 
 	    l=m+1;
@@ -850,7 +850,7 @@ static ajint domainCathDomBinSearch(const AjPStr id, const AjPCathDom *arr,
     {
         m=(l+h)>>1;
 
-        if((c=ajStrCmpCase(id, arr[m]->DomainID)) < 0) 
+        if((c=ajStrCmpCaseS(id, arr[m]->DomainID)) < 0) 
 	    h=m-1;
         else if(c>0) 
 	    l=m+1;
@@ -1025,7 +1025,7 @@ static ajint domainSortNameId(const void *cath1, const void *cath2)
     p = (*(AjPCathName*)cath1);
     q = (*(AjPCathName*)cath2);
     
-    return ajStrCmpO(p->Id, q->Id);
+    return ajStrCmpS(p->Id, q->Id);
 }
 
 
@@ -1051,7 +1051,7 @@ static ajint domainSortDomainID(const void *DomID1, const void *DomID2)
     p = (*(AjPCathDom*)DomID1);
     q = (*(AjPCathDom*)DomID2);
     
-    return ajStrCmpO(p->DomainID, q->DomainID);
+    return ajStrCmpS(p->DomainID, q->DomainID);
 
 }
 
@@ -1152,7 +1152,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 
     AjPStr Search_DomainIDPtr = NULL;  /* temp search string used to search 
 					  CathDomList. */
-    AjPStr StrTokPtr       = NULL;
+    const AjPStr StrTokPtr  = NULL;
     
     
     AjPCathDom *CathDomArray   = NULL; /* Array to hold sorted CathDomList  */
@@ -1233,36 +1233,36 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
     	CathNamePtr = domainCathNameNew();
 	
 	/*1st token is classification index e.g 0002.0160 */
-	handle = ajStrTokenInit (CathNameLine, " \t");
-	ajStrToken(&(CathNamePtr)->Id, &handle, " \t");
+	handle = ajStrTokenNewC(CathNameLine, " \t");
+	ajStrTokenNextParseC(&handle, " \t", &(CathNamePtr)->Id);
 
 	
 	/*2nd token is domain code and should be discarded */
-	ajStrToken(&tmptok, &handle, " \t");
+	ajStrTokenNextParseC(&handle, " \t", &tmptok);
 
 	
 	/*3rd token is classification text */
-	ajStrTokenRest(&(CathNamePtr)->Desc, &handle);
+	ajStrTokenRestParse(&handle, &(CathNamePtr)->Desc);
 	if(CathNamePtr->Desc->Ptr[0]==':')
-	    ajStrTrim(&(CathNamePtr)->Desc, 1);
+	    ajStrCutStart(&(CathNamePtr)->Desc, 1);
 
-	ajStrTokenClear(&handle);
+	ajStrTokenDel(&handle);
 	
 
 	/*
-	StrTokPtr = ajStrTok(CathNameLine);		
-	ajStrAssS(&(CathNamePtr)->Id, StrTokPtr);
-	StrTokPtr = ajStrTok(NULL);		
+	StrTokPtr = ajStrParseWhite(CathNameLine);		
+	ajStrAssignS(&(CathNamePtr)->Id, StrTokPtr);
+	StrTokPtr = ajStrParseWhite(NULL);		
 	ajStrTokenRest(&StrTokPtr, NULL);
-	ajStrAssS(&(CathNamePtr)->Desc, StrTokPtr);
+	ajStrAssignS(&(CathNamePtr)->Desc, StrTokPtr);
 	if(CathNamePtr->Desc->Ptr[0]==':')
 	    ajStrTrim(&(CathNamePtr)->Desc, 1);
 	    */
 
 	/*
 	ajFmtScanS(CathNameLine, "%S", &(CathNamePtr)->Id); 
-	ajStrAssSub(&(CathNamePtr)->Desc, CathNameLine, 28, -1); 
-	ajStrChomp(&(CathNamePtr)->Desc);
+	ajStrAssignSubS(&(CathNamePtr)->Desc, CathNameLine, 28, -1); 
+	ajStrTrimWhite(&(CathNamePtr)->Desc);
 	if(CathNamePtr->Desc->Ptr[0]==':')
 	    ajStrTrim(&(CathNamePtr)->Desc, 1);
 	    */
@@ -1292,11 +1292,11 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
     {	
 	/*1st token is DomainID e.g 1cuk00*/
 	/* ajStrTok goes through each element of line*/
-	StrTokPtr = ajStrTok(CathDomLine);		
+	StrTokPtr = ajStrParseWhite(CathDomLine);		
         
 	/* Remove last num from string (0). Assign StrTokPtr to temp ptr 
 	   tmpDomainID e.g. 1cuk0 */
-	ajStrAssSub(&tmpDomainID, StrTokPtr, 0,4); 
+	ajStrAssignSubS(&tmpDomainID, StrTokPtr, 0,4); 
 	
 
 	/*
@@ -1304,12 +1304,12 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	fflush(stdout);
 	*/
 
-	StrTokPtr = ajStrTok(NULL);	/*2nd token is no. of domains*/
+	StrTokPtr = ajStrParseWhite(NULL);	/*2nd token is no. of domains*/
 	/* Assign value of StrTokPtr (no. of domains) to tmpStringDomPtr */ 
-	ajStrAssS(&tmpStringDomPtr, StrTokPtr); 
+	ajStrAssignS(&tmpStringDomPtr, StrTokPtr); 
 	/* Remove first character (index 0 = the letter D) from 
 	   tmpStringDomPtr and give to tmpDomInt */
-	ajStrAssSub(&tmpNumDomPtr, tmpStringDomPtr, 1,2); 
+	ajStrAssignSubS(&tmpNumDomPtr, tmpStringDomPtr, 1,2); 
 	ajStrToInt(tmpNumDomPtr, &tmpDomInt);
 	
 
@@ -1322,13 +1322,13 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	/* Number of domains expressed as Int and assigned to tmpDomInt*/
 	
 	/*3rd token is no. of fragments, don't need this*/ 
-	ajStrTok(NULL);			
+	ajStrParseWhite(NULL);			
 	
 	
 	for (d=1; d<=tmpDomInt; d++)	/* For each domain */
 	{
 	    /* Get the number of segments */
-	    StrTokPtr = ajStrTok(NULL); /* Token= no. of segments*/
+	    StrTokPtr = ajStrParseWhite(NULL); /* Token= no. of segments*/
 
 /*	    ajFmtPrint("StrTokPtr : %S\n", StrTokPtr);
 	    fflush(stdout); */
@@ -1344,14 +1344,14 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	    /* Converts value of d to a string */	
 	    ajStrFromInt(&NDomAsString, d); 
 	    if(d>1)
-		ajStrChop(&tmpDomainID);
+		ajStrCutEnd(&tmpDomainID, 1);
 	    
 		
 	    /* Append no. of domains as a string (NDomAsString) onto end 
 	       of tmpDomainID */
-	    ajStrApp(&tmpDomainID, NDomAsString); 
+	    ajStrAppendS(&tmpDomainID, NDomAsString); 
 	    /* Assign tmpDomainID to DomainID element in CathDom object */
-	    ajStrAssS(&(CathDomPtr->DomainID), tmpDomainID); 
+	    ajStrAssignS(&(CathDomPtr->DomainID), tmpDomainID); 
 	    
 	    
 	    
@@ -1360,24 +1360,24 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 		/* get Start and End residue numbers for each segment */ 
 		/* nth (starting at token no. 5) token is Chain of
                    starting residue*/
-		ajStrTok(NULL);		
+		ajStrParseWhite(NULL);		
 		/* (n+1)th token is start of segment res number */
-		StrTokPtr = ajStrTok(NULL); 
-		ajStrAssS(&(CathDomPtr->Start[s]), StrTokPtr);
+		StrTokPtr = ajStrParseWhite(NULL); 
+		ajStrAssignS(&(CathDomPtr->Start[s]), StrTokPtr);
 		    
 		/* Assign Start res no. to Start element in AjPCathDom */
 		/*error- ajStrToInt(StrTokPtr, &(CathDomPtr->Start[s]));*/ 
 		/* (n+2)th token is "-" */
-		ajStrTok(NULL);		
+		ajStrParseWhite(NULL);		
 		/* (n+3)th token is Chain of ending residue*/
-		ajStrTok(NULL);		
+		ajStrParseWhite(NULL);		
 		/* (n+4)th token is end of segment res number */
-		StrTokPtr = ajStrTok(NULL); 
-		ajStrAssS(&(CathDomPtr->End[s]), StrTokPtr);
+		StrTokPtr = ajStrParseWhite(NULL); 
+		ajStrAssignS(&(CathDomPtr->End[s]), StrTokPtr);
 		    
 		/* Assign End res no. to Start element in AjPCathDom */
 		/*error-   ajStrToInt(StrTokPtr, &(CathDomPtr->End[s]));*/ 
-		ajStrTok(NULL);		/* (n+5)th token is "-" */
+		ajStrParseWhite(NULL);		/* (n+5)th token is "-" */
 
 	    }
 
@@ -1436,7 +1436,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 
 	    
 	    /* Assign DomainId from CathDom to Cath objects */ 	   
-	    ajStrAssS(&(CathPtr->DomainID), 
+	    ajStrAssignS(&(CathPtr->DomainID), 
 		      CathDomArray[idxCathDom]->DomainID); 
 	    /* Assign number of segments to NSegment element in Cath object */
 	    (CathPtr->NSegment) = (CathDomArray[idxCathDom]->NSegment); 
@@ -1454,10 +1454,10 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 		/* get Start and End residue numbers for each segment */ 
 
 		/* Assign value of start from CathDom to CathPtr */
-		ajStrAssS(&(CathPtr->Start[s]), 
+		ajStrAssignS(&(CathPtr->Start[s]), 
 			  CathDomArray[idxCathDom]->Start[s]); 
 		/* Assign value of end from CathDom to CathPtr */
-		ajStrAssS(&(CathPtr->End[s]), 
+		ajStrAssignS(&(CathPtr->End[s]), 
 			  CathDomArray[idxCathDom]->End[s]); 
 			
 	    }      
@@ -1474,7 +1474,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	    CathPtr = ajCathNew(single_seg); 
 	    
 	    /* Assign DomainId from Search_DomainIDPtr */
-	    ajStrAssS(&(CathPtr->DomainID), Search_DomainIDPtr); 
+	    ajStrAssignS(&(CathPtr->DomainID), Search_DomainIDPtr); 
 	    
 	    /* Assign the number of segments as 1 */
 	    /* Assign number of segments to NSegment element in Cath 
@@ -1483,8 +1483,8 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	               
 		  
 	    /* get Start and End residue numbers for each segment */ 
-	    ajStrAssC(&(CathPtr->Start[0]), ".");
-	    ajStrAssC(&(CathPtr->End[0]), ".");
+	    ajStrAssignC(&(CathPtr->Start[0]), ".");
+	    ajStrAssignC(&(CathPtr->End[0]), ".");
 
 	    /* Assign value of start to "." */ 
 	    /*urrggh! ((CathPtr->Start[0]) = ".");*/
@@ -1495,13 +1495,13 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 
 
 	/* Extract Pdb code from DomainId */
-	ajStrAssSub(&(CathPtr->Pdb), CathPtr->DomainID, 0,3);
+	ajStrAssignSubS(&(CathPtr->Pdb), CathPtr->DomainID, 0,3);
 	
 	/* Extract chain identifer from DomainId */
-	CathPtr->Chain=ajStrChar(CathPtr->DomainID, 4);
+	CathPtr->Chain=ajStrGetCharPos(CathPtr->DomainID, 4);
 		    
 	/* ajStrChar char from string */
-	/* error-ajStrAssSub(&(CathPtr->Chain), CathPtr->DomainID, 4,4);*/
+	/* error-ajStrAssignSubS(&(CathPtr->Chain), CathPtr->DomainID, 4,4);*/
 	
         /* Extract length of domain from string */
 	/* Take the 9th element of line and assign to Length in Cath object */
@@ -1542,13 +1542,13 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	if ( idxCathName != -1)		/*match found*/
         {
 	    /* Extract Superfamily string and write into AJPCath */
-            ajStrAssS(&(CathPtr->Superfamily),
+            ajStrAssignS(&(CathPtr->Superfamily),
 		      (CathNameArray[idxCathName]->Desc)); 
         }
         else				/*no match found*/
         {
             /* Write Superfamily string as a '.'  */
-	    ajStrAssC(&(CathPtr->Superfamily), ".");
+	    ajStrAssignC(&(CathPtr->Superfamily), ".");
 	    
 	    /*error	    (CathPtr->Superfamily) = "."); */
         }               
@@ -1569,12 +1569,12 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	if ( idxCathName != -1)		/*match found*/
         {
 	    /* Extract Topology string  and write into AJPCath*/
-	    ajStrAssS(&(CathPtr->Topology), CathNameArray[idxCathName]->Desc);
+	    ajStrAssignS(&(CathPtr->Topology), CathNameArray[idxCathName]->Desc);
         }
         else				/*no match found*/
         {
             /* Write topology as a '.'  */
-	    ajStrAssC(&(CathPtr->Topology), ".");
+	    ajStrAssignC(&(CathPtr->Topology), ".");
 	    /*error	    CathPtr->Topology) = "."); */
         }                         
 
@@ -1616,13 +1616,13 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	if ( idxCathName != -1 )	/*match found*/
         {
 	    /* Extract Architecture string and write into AJPCath*/
-	    ajStrAssS(&(CathPtr->Architecture), 
+	    ajStrAssignS(&(CathPtr->Architecture), 
 		      CathNameArray[idxCathName]->Desc);
         }
         else				/*no match found*/
         {
             /* Write architecture as a '.' */
-	    ajStrAssC(&(CathPtr->Architecture), ".");
+	    ajStrAssignC(&(CathPtr->Architecture), ".");
 	    /*error	    (CathPtr->Architecture) = "."); */
         }    
 
@@ -1647,12 +1647,12 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	if ( idxCathName != -1)		/*match found*/
         {
 	    /* Extract Class string and write into AJPCath*/
-	    ajStrAssS(&(CathPtr->Class), CathNameArray[idxCathName]->Desc);
+	    ajStrAssignS(&(CathPtr->Class), CathNameArray[idxCathName]->Desc);
         }
         else				/*no match found*/
         {
             /* Write class as a '.' */
-	    ajStrAssC(&(CathPtr->Class), ".");
+	    ajStrAssignC(&(CathPtr->Class), ".");
 	    /*error	    (CathPtr->Class) = "."); */
         }    
 
@@ -1775,8 +1775,8 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
     SeqPdb  = ajStrNew();
 
     
-    ajStrAssC(&tentry,entry);    
-    ajStrToUpper(&tentry);	   
+    ajStrAssignC(&tentry,entry);    
+    ajStrFmtUpper(&tentry);	   
     
     while((ok=ajFileReadLine(inf,&line)))
     {
@@ -1785,7 +1785,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	
 	ajFmtScanS(line, "%*S %S", &stmp);
 	
-	if(ajStrMatchWild(stmp,tentry))
+	if(ajStrMatchWildS(stmp,tentry))
 	    break;
     }
 
@@ -1807,43 +1807,43 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	
 
 	if(ajStrPrefixC(line,"ID"))
-	    ajStrAssS(&domainID,str);
+	    ajStrAssignS(&domainID,str);
 	else if(ajStrPrefixC(line,"EN"))
-	    ajStrAssS(&pdb,str);
+	    ajStrAssignS(&pdb,str);
 	else if(ajStrPrefixC(line,"CL"))
-	    ajStrAssS(&class,str);
+	    ajStrAssignS(&class,str);
 	else if(ajStrPrefixC(line,"AR"))
 	{
-	    ajStrAssS(&architecture,str);
+	    ajStrAssignS(&architecture,str);
 	    while(ajFileReadLine(inf,&line))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&architecture,ajStrStr(line)+3);
+		ajStrAppendC(&architecture,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&architecture);
+	    ajStrRemoveWhite(&architecture);
 	}
 	else if(ajStrPrefixC(line,"TP"))
 	{
-	    ajStrAssS(&topology,str);
+	    ajStrAssignS(&topology,str);
 	    while(ajFileReadLine(inf,&line))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&topology,ajStrStr(line)+3);
+		ajStrAppendC(&topology,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&topology);
+	    ajStrRemoveWhite(&topology);
 	}
 	else if(ajStrPrefixC(line,"SF"))
 	{
-	    ajStrAssS(&superfamily,str);
+	    ajStrAssignS(&superfamily,str);
 	    while(ajFileReadLine(inf,&line))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&superfamily,ajStrStr(line)+3);
+		ajStrAppendC(&superfamily,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&superfamily);
+	    ajStrRemoveWhite(&superfamily);
 	}
 	else if(ajStrPrefixC(line,"NR"))  
 	{
@@ -1853,17 +1853,17 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	{
 	    ajStrToInt(str,&n);
 	    (ret) = ajCathNew(n);
-	    ajStrAssS(&(ret)->DomainID,domainID);
-	    ajStrAssS(&(ret)->Pdb,pdb);
-	    ajStrAssS(&(ret)->Class,class);
-	    ajStrAssS(&(ret)->Architecture,architecture);
-	    ajStrAssS(&(ret)->Topology, topology);
-	    ajStrAssS(&(ret)->Superfamily,superfamily);
+	    ajStrAssignS(&(ret)->DomainID,domainID);
+	    ajStrAssignS(&(ret)->Pdb,pdb);
+	    ajStrAssignS(&(ret)->Class,class);
+	    ajStrAssignS(&(ret)->Architecture,architecture);
+	    ajStrAssignS(&(ret)->Topology, topology);
+	    ajStrAssignS(&(ret)->Superfamily,superfamily);
 	    ret->Length = Length;
-	    ajStrAssS(&(ret)->Acc,Acc);
-	    ajStrAssS(&(ret)->Spr,Spr);
-	    ajStrAssS(&(ret)->SeqPdb,SeqPdb);
-	    ajStrAssS(&(ret)->SeqSpr,SeqSpr);
+	    ajStrAssignS(&(ret)->Acc,Acc);
+	    ajStrAssignS(&(ret)->Spr,Spr);
+	    ajStrAssignS(&(ret)->SeqPdb,SeqPdb);
+	    ajStrAssignS(&(ret)->SeqSpr,SeqSpr);
 	}
 	else if(ajStrPrefixC(line,"CN"))
 	    ajFmtScanS(line, "%*S %*c%d", &idx);
@@ -1872,28 +1872,28 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 	    if(!ajRegExec(exp2,str))
 		return NULL;
 	    ajRegSubI(exp2,1,&stmp);
-	    (ret)->Chain = *ajStrStr(stmp);
+	    (ret)->Chain = *ajStrGetPtr(stmp);
 	    ajRegSubI(exp2,2,&str);
-	    ajStrAssC(&(ret)->Start[idx-1],ajStrStr(str)); 
+	    ajStrAssignC(&(ret)->Start[idx-1],ajStrGetPtr(str)); 
 
 	    ajRegSubI(exp2,3,&str);
-	    ajStrAssC(&(ret)->End[idx-1],ajStrStr(str)); 
+	    ajStrAssignC(&(ret)->End[idx-1],ajStrGetPtr(str)); 
 
 	}
 	/* Sequence from pdb file */
 	else if(ajStrPrefixC(line,"DS"))
 	{
 	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
-		ajStrAppC(&SeqPdb,ajStrStr(line));
-	    ajStrCleanWhite(&SeqPdb);
+		ajStrAppendC(&SeqPdb,ajStrGetPtr(line));
+	    ajStrRemoveWhiteExcess(&SeqPdb);
 	    continue;
 	}
 	/* Sequence from swissprot */
 	else if(ajStrPrefixC(line,"SQ"))
 	{
 	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
-		ajStrAppC(&SeqSpr,ajStrStr(line));
-	    ajStrCleanWhite(&SeqSpr);
+		ajStrAppendC(&SeqSpr,ajStrGetPtr(line));
+	    ajStrRemoveWhiteExcess(&SeqSpr);
 	    continue;
 	}
 	
@@ -2119,8 +2119,8 @@ AjPList   ajScopReadAllRawNew(AjPFile claf, AjPFile desf, AjBool omit)
 	}
 	
 	tmp = ajScopNew(cla->N);
-	ajStrAssS(&tmp->Entry, cla->Entry);
-	ajStrAssS(&tmp->Pdb, cla->Pdb);
+	ajStrAssignS(&tmp->Entry, cla->Entry);
+	ajStrAssignS(&tmp->Pdb, cla->Pdb);
 
 	tmp->Sunid_Class       = cla->Class;
 	tmp->Sunid_Fold        = cla->Fold;
@@ -2132,28 +2132,28 @@ AjPList   ajScopReadAllRawNew(AjPFile claf, AjPFile desf, AjBool omit)
 
 
 	idx = domainScopdesBinSearch(cla->Class,  desarr, dim);
-	ajStrAssS(&tmp->Class, desarr[idx]->Desc);
+	ajStrAssignS(&tmp->Class, desarr[idx]->Desc);
 
 	idx = domainScopdesBinSearch(cla->Fold,  desarr, dim);
-	ajStrAssS(&tmp->Fold, desarr[idx]->Desc);
+	ajStrAssignS(&tmp->Fold, desarr[idx]->Desc);
 
 	idx = domainScopdesBinSearch(cla->Superfamily,  desarr, dim);
-	ajStrAssS(&tmp->Superfamily, desarr[idx]->Desc);
+	ajStrAssignS(&tmp->Superfamily, desarr[idx]->Desc);
 
 	idx = domainScopdesBinSearch(cla->Family,  desarr, dim);
-	ajStrAssS(&tmp->Family, desarr[idx]->Desc);
+	ajStrAssignS(&tmp->Family, desarr[idx]->Desc);
 
 	idx = domainScopdesBinSearch(cla->Domain,  desarr, dim);
-	ajStrAssS(&tmp->Domain, desarr[idx]->Desc);
+	ajStrAssignS(&tmp->Domain, desarr[idx]->Desc);
 
 	idx = domainScopdesBinSearch(cla->Source,  desarr, dim);
-	ajStrAssS(&tmp->Source, desarr[idx]->Desc);
+	ajStrAssignS(&tmp->Source, desarr[idx]->Desc);
 
 	for(i=0;i<cla->N;++i)
 	{
 	    tmp->Chain[i] = cla->Chain[i];
-	    ajStrAssS(&tmp->Start[i], cla->Start[i]);
-	    ajStrAssS(&tmp->End[i], cla->End[i]);	    
+	    ajStrAssignS(&tmp->Start[i], cla->Start[i]);
+	    ajStrAssignS(&tmp->End[i], cla->End[i]);	    
 	}
 	
 
@@ -2312,7 +2312,7 @@ AjPScop ajScopNew(ajint chains)
 
     if(chains)
     {
-	ret->Chain=ajCharNewL(chains);
+	ret->Chain=ajCharNewRes(chains);
 	AJCNEW0(ret->Start,chains);
 	AJCNEW0(ret->End,chains);
 	for(i=0; i<chains; i++)
@@ -2359,9 +2359,9 @@ AjPDomain ajDomainReadNew(AjPFile inf, const AjPStr entry)
     AJNEW0(ret);
 
     if(type == ajSCOP)
-	ret->Scop = ajScopReadCNew(inf,ajStrStr(entry));
+	ret->Scop = ajScopReadCNew(inf,ajStrGetPtr(entry));
     else
-	ret->Cath = ajCathReadCNew(inf,ajStrStr(entry));
+	ret->Cath = ajCathReadCNew(inf,ajStrGetPtr(entry));
     
     return ret;
 }
@@ -2388,7 +2388,7 @@ AjPScop ajScopReadNew(AjPFile inf, const AjPStr entry)
 {
     AjPScop ret = NULL;
     
-    ret = ajScopReadCNew(inf,ajStrStr(entry));
+    ret = ajScopReadCNew(inf,ajStrGetPtr(entry));
     
     return ret;
 }
@@ -2533,8 +2533,8 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 
 
     
-    ajStrAssC(&tentry,entry);
-    ajStrToUpper(&tentry);
+    ajStrAssignC(&tentry,entry);
+    ajStrFmtUpper(&tentry);
     
     while((ok=ajFileReadLine(inf,&line)))
     {
@@ -2544,14 +2544,35 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	if(!ajRegExec(exp1,line))
 	    return NULL;
 	ajRegPost(exp1,&stmp);
-	if(ajStrMatchWild(stmp,tentry))
+	if(ajStrMatchWildS(stmp,tentry))
 	    break;
     }
 
     
     if(!ok)
+    {
+	ajRegFree(&exp1);
+	ajRegFree(&exp2);
+	ajStrDel(&line);
+	ajStrDel(&str);
+	ajStrDel(&xentry);
+	ajStrDel(&source);
+	ajStrDel(&class);
+	ajStrDel(&fold);
+	ajStrDel(&super);
+	ajStrDel(&family);
+	ajStrDel(&domain);
+	ajStrDel(&pdb);
+	ajStrDel(&tentry);
+	ajStrDel(&stmp);
+	ajStrDel(&Acc);
+	ajStrDel(&Spr);
+	ajStrDel(&SeqPdb);
+	ajStrDel(&SeqSpr);
+	ajStrDel(&sse);
+	ajStrDel(&sss);
 	return NULL;
-    
+    }    
     
     while(ok && (!ajStrPrefixC(line,"//")))
     {
@@ -2561,7 +2582,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	    continue;
 	}
 	/* Empty line */
-	if(!(MAJSTRLEN(line)))
+	if(!(MAJSTRGETLEN(line)))
 	{
 	    ok = ajFileReadLine(inf,&line);
 	    continue;
@@ -2571,75 +2592,75 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	ajRegPost(exp1,&str);
 
 	if(ajStrPrefixC(line,"ID"))
-	    ajStrAssS(&xentry,str);
+	    ajStrAssignS(&xentry,str);
 	else if(ajStrPrefixC(line,"EN"))
-	    ajStrAssS(&pdb,str);
+	    ajStrAssignS(&pdb,str);
 	else if(ajStrPrefixC(line,"OS"))
-	    ajStrAssS(&source,str);
+	    ajStrAssignS(&source,str);
 	else if(ajStrPrefixC(line,"CL"))
-	    ajStrAssS(&class,str);
+	    ajStrAssignS(&class,str);
 	else if(ajStrPrefixC(line,"FO"))
 	{
-	    ajStrAssS(&fold,str);
+	    ajStrAssignS(&fold,str);
 	    while((ok=ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&fold,ajStrStr(line)+3);
+		ajStrAppendC(&fold,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&fold);
+	    ajStrRemoveWhite(&fold);
 	}
 	else if(ajStrPrefixC(line,"SF"))
 	{
-	    ajStrAssS(&super,str);
+	    ajStrAssignS(&super,str);
 	    while((ok=ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&super,ajStrStr(line)+3);
+		ajStrAppendC(&super,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&super);
+	    ajStrRemoveWhite(&super);
 	}
 	else if(ajStrPrefixC(line,"FA"))
 	{
-	    ajStrAssS(&family,str);
+	    ajStrAssignS(&family,str);
 	    while((ok=ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&family,ajStrStr(line)+3);
+		ajStrAppendC(&family,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&family);
+	    ajStrRemoveWhite(&family);
 	}
 	else if(ajStrPrefixC(line,"DO"))
 	{
-	    ajStrAssS(&domain,str);
+	    ajStrAssignS(&domain,str);
 	    while((ok=ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
-		ajStrAppC(&domain,ajStrStr(line)+3);
+		ajStrAppendC(&domain,ajStrGetPtr(line)+3);
 	    }
-	    ajStrClean(&domain);
+	    ajStrRemoveWhite(&domain);
 	}
 	else if(ajStrPrefixC(line,"NC"))
 	{
 	    ajStrToInt(str,&n);
 	    (ret) = ajScopNew(n);
-	    ajStrAssS(&(ret)->Entry,xentry);
-	    ajStrAssS(&(ret)->Pdb,pdb);
-	    ajStrAssS(&(ret)->Source,source);
-	    ajStrAssS(&(ret)->Class,class);
-	    ajStrAssS(&(ret)->Fold,fold);
-	    ajStrAssS(&(ret)->Domain,domain);
-	    ajStrAssS(&(ret)->Superfamily,super);
-	    ajStrAssS(&(ret)->Family,family);
-	    ajStrAssS(&(ret)->Acc,Acc);
-	    ajStrAssS(&(ret)->Spr,Spr);
-	    ajStrAssS(&(ret)->Sse,sse);
-            ajStrAssS(&(ret)->Sss,sss);
-	    ajStrAssS(&(ret)->SeqPdb,SeqPdb);
-	    ajStrAssS(&(ret)->SeqSpr,SeqSpr);
+	    ajStrAssignS(&(ret)->Entry,xentry);
+	    ajStrAssignS(&(ret)->Pdb,pdb);
+	    ajStrAssignS(&(ret)->Source,source);
+	    ajStrAssignS(&(ret)->Class,class);
+	    ajStrAssignS(&(ret)->Fold,fold);
+	    ajStrAssignS(&(ret)->Domain,domain);
+	    ajStrAssignS(&(ret)->Superfamily,super);
+	    ajStrAssignS(&(ret)->Family,family);
+	    ajStrAssignS(&(ret)->Acc,Acc);
+	    ajStrAssignS(&(ret)->Spr,Spr);
+	    ajStrAssignS(&(ret)->Sse,sse);
+            ajStrAssignS(&(ret)->Sss,sss);
+	    ajStrAssignS(&(ret)->SeqPdb,SeqPdb);
+	    ajStrAssignS(&(ret)->SeqSpr,SeqSpr);
 	    (ret)->Sunid_Class = Sunid_Class;
 	    (ret)->Sunid_Fold = Sunid_Fold;
 	    (ret)->Sunid_Superfamily = Sunid_Superfamily;
@@ -2652,7 +2673,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	}
 	else if(ajStrPrefixC(line,"CN"))
 	{
-	    p = ajStrStr(str);
+	    p = ajStrGetPtr(str);
 	    sscanf(p,"[%d]",&idx);
 	}
 	else if(ajStrPrefixC(line,"CH"))
@@ -2660,28 +2681,28 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	    if(!ajRegExec(exp2,str))
 		return NULL;
 	    ajRegSubI(exp2,1,&stmp);
-	    (ret)->Chain[idx-1] = *ajStrStr(stmp);
+	    (ret)->Chain[idx-1] = *ajStrGetPtr(stmp);
 	    ajRegSubI(exp2,2,&str);
-	    ajStrAssC(&(ret)->Start[idx-1],ajStrStr(str)); 
+	    ajStrAssignC(&(ret)->Start[idx-1],ajStrGetPtr(str)); 
 
 	    ajRegSubI(exp2,3,&str);
-	    ajStrAssC(&(ret)->End[idx-1],ajStrStr(str)); 
+	    ajStrAssignC(&(ret)->End[idx-1],ajStrGetPtr(str)); 
 
 	}
 	/* Sequence from pdb file */
 	else if(ajStrPrefixC(line,"DS"))
 	{
 	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
-		ajStrAppC(&SeqPdb,ajStrStr(line));
-	    ajStrCleanWhite(&SeqPdb);
+		ajStrAppendC(&SeqPdb,ajStrGetPtr(line));
+	    ajStrRemoveWhiteExcess(&SeqPdb);
 	    continue;
 	}
 	/* Sequence from swissprot */
 	else if(ajStrPrefixC(line,"SQ"))
 	{
 	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
-		ajStrAppC(&SeqSpr,ajStrStr(line));
-	    ajStrCleanWhite(&SeqSpr);
+		ajStrAppendC(&SeqSpr,ajStrGetPtr(line));
+	    ajStrRemoveWhiteExcess(&SeqSpr);
 	    continue;
 	}
 	
@@ -2701,8 +2722,8 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	else if(ajStrPrefixC(line,"SS"))
 	{
 	    while((ok=ajFileReadLine(inf,&line)) && !ajStrPrefixC(line,"XX"))
-		ajStrAppC(&sss,ajStrStr(line));
-	    ajStrCleanWhite(&sss);
+		ajStrAppendC(&sss,ajStrGetPtr(line));
+	    ajStrRemoveWhiteExcess(&sss);
 	    continue;
 	}
 
@@ -2978,26 +2999,26 @@ AjBool ajCathCopy(AjPCath *to, const AjPCath from)
 	(*to) = ajCathNew(from->NSegment);
     
 
-    ajStrAssS(&(*to)->DomainID, from->DomainID);
-    ajStrAssS(&(*to)->Pdb, from->Pdb);
-    ajStrAssS(&(*to)->Class, from->Class);
-    ajStrAssS(&(*to)->Architecture, from->Architecture);
-    ajStrAssS(&(*to)->Topology, from->Topology);
-    ajStrAssS(&(*to)->Superfamily, from->Superfamily);
+    ajStrAssignS(&(*to)->DomainID, from->DomainID);
+    ajStrAssignS(&(*to)->Pdb, from->Pdb);
+    ajStrAssignS(&(*to)->Class, from->Class);
+    ajStrAssignS(&(*to)->Architecture, from->Architecture);
+    ajStrAssignS(&(*to)->Topology, from->Topology);
+    ajStrAssignS(&(*to)->Superfamily, from->Superfamily);
 
     (*to)->Length = from->Length;
     (*to)->Chain  = from->Chain;
 
     for(x=0; x<from->NSegment; x++)
     {
-	ajStrAssS(&(*to)->Start[x], from->Start[x]);	
-	ajStrAssS(&(*to)->End[x], from->End[x]);	
+	ajStrAssignS(&(*to)->Start[x], from->Start[x]);	
+	ajStrAssignS(&(*to)->End[x], from->End[x]);	
     }
     
-    ajStrAssS(&(*to)->Acc, from->Acc);
-    ajStrAssS(&(*to)->Spr, from->Spr);
-    ajStrAssS(&(*to)->SeqPdb, from->SeqPdb);
-    ajStrAssS(&(*to)->SeqSpr, from->SeqSpr);
+    ajStrAssignS(&(*to)->Acc, from->Acc);
+    ajStrAssignS(&(*to)->Spr, from->Spr);
+    ajStrAssignS(&(*to)->SeqPdb, from->SeqPdb);
+    ajStrAssignS(&(*to)->SeqSpr, from->SeqSpr);
     (*to)->Startd = from->Startd;
     (*to)->Endd   = from->Endd;
 
@@ -3040,28 +3061,28 @@ AjBool ajScopCopy(AjPScop *to, const AjPScop from)
 	(*to) = ajScopNew(from->N);
     
 
-    ajStrAssS(&(*to)->Entry, from->Entry);
-    ajStrAssS(&(*to)->Pdb, from->Pdb);
-    ajStrAssS(&(*to)->Class, from->Class);
-    ajStrAssS(&(*to)->Fold, from->Fold);
-    ajStrAssS(&(*to)->Superfamily, from->Superfamily);
-    ajStrAssS(&(*to)->Family, from->Family);
-    ajStrAssS(&(*to)->Domain, from->Domain);
-    ajStrAssS(&(*to)->Source, from->Source);
-    ajStrAssS(&(*to)->Sse, from->Sse);
-    ajStrAssS(&(*to)->Sss, from->Sss);
+    ajStrAssignS(&(*to)->Entry, from->Entry);
+    ajStrAssignS(&(*to)->Pdb, from->Pdb);
+    ajStrAssignS(&(*to)->Class, from->Class);
+    ajStrAssignS(&(*to)->Fold, from->Fold);
+    ajStrAssignS(&(*to)->Superfamily, from->Superfamily);
+    ajStrAssignS(&(*to)->Family, from->Family);
+    ajStrAssignS(&(*to)->Domain, from->Domain);
+    ajStrAssignS(&(*to)->Source, from->Source);
+    ajStrAssignS(&(*to)->Sse, from->Sse);
+    ajStrAssignS(&(*to)->Sss, from->Sss);
 
     for(x=0; x<from->N; x++)
     {
 	(*to)->Chain[x] = from->Chain[x];
-	ajStrAssS(&(*to)->Start[x], from->Start[x]);	
-	ajStrAssS(&(*to)->End[x], from->End[x]);	
+	ajStrAssignS(&(*to)->Start[x], from->Start[x]);	
+	ajStrAssignS(&(*to)->End[x], from->End[x]);	
     }
     
-    ajStrAssS(&(*to)->Acc, from->Acc);
-    ajStrAssS(&(*to)->Spr, from->Spr);
-    ajStrAssS(&(*to)->SeqPdb, from->SeqPdb);
-    ajStrAssS(&(*to)->SeqSpr, from->SeqSpr);
+    ajStrAssignS(&(*to)->Acc, from->Acc);
+    ajStrAssignS(&(*to)->Spr, from->Spr);
+    ajStrAssignS(&(*to)->SeqPdb, from->SeqPdb);
+    ajStrAssignS(&(*to)->SeqSpr, from->SeqSpr);
     (*to)->Startd = from->Startd;
     (*to)->Endd   = from->Endd;
 
@@ -3165,7 +3186,7 @@ ajint ajScopMatchScopid(const void *hit1, const void *hit2)
     p = (*(AjPScop*)hit1);
     q = (*(AjPScop*)hit2);
     
-    return ajStrCmpO(p->Entry, q->Entry);
+    return ajStrCmpS(p->Entry, q->Entry);
 }
 
 
@@ -3193,7 +3214,7 @@ ajint ajScopMatchPdbId(const void *hit1, const void *hit2)
     p = (*(AjPScop*)hit1);
     q = (*(AjPScop*)hit2);
     
-    return ajStrCmpO(p->Pdb, q->Pdb);
+    return ajStrCmpS(p->Pdb, q->Pdb);
 }
 
 
@@ -3221,7 +3242,7 @@ ajint ajCathMatchPdbId(const void *hit1, const void *hit2)
     p = (*(AjPCath*)hit1);
     q = (*(AjPCath*)hit2);
     
-    return ajStrCmpO(p->Pdb, q->Pdb);
+    return ajStrCmpS(p->Pdb, q->Pdb);
 }
 
 
@@ -3463,7 +3484,7 @@ ajint ajDomainGetN(const AjPDomain obj)
 ** structures (which of course must first have been sorted). This is a 
 ** case-insensitive search.
 **
-** @param [r] arr [const AjPScop*]    Array of AjPScop objects
+** @param [r] arr [AjPScop const *]    Array of AjPScop objects
 ** @param [r] siz [ajint]       Size of array
 ** @param [r] id  [const AjPStr]      Search term
 **
@@ -3473,7 +3494,7 @@ ajint ajDomainGetN(const AjPDomain obj)
 **                         Scop objects.
 ** @@
 ****************************************************************************/
-ajint ajScopArrFindScopid(const AjPScop *arr, ajint siz, const AjPStr id)
+ajint ajScopArrFindScopid(AjPScop const *arr, ajint siz, const AjPStr id)
 
 {
     int l;
@@ -3488,7 +3509,7 @@ ajint ajScopArrFindScopid(const AjPScop *arr, ajint siz, const AjPStr id)
     {
         m = (l+h)>>1;
 
-        if((c = ajStrCmpCase(id, arr[m]->Entry)) < 0) 
+        if((c = ajStrCmpCaseS(id, arr[m]->Entry)) < 0) 
 	    h = m-1;
         else if(c>0) 
 	    l = m+1;
@@ -3509,7 +3530,7 @@ ajint ajScopArrFindScopid(const AjPScop *arr, ajint siz, const AjPStr id)
 ** objects (which of course must first have been sorted). This is a 
 ** case-insensitive search.
 **
-** @param [r] arr [const AjPScop*]    Array of Scop objects
+** @param [r] arr [AjPScop const *]    Array of Scop objects
 ** @param [r] siz [ajint]       Size of array
 ** @param [r] id  [ajint]       Search term
 **
@@ -3520,7 +3541,7 @@ ajint ajScopArrFindScopid(const AjPScop *arr, ajint siz, const AjPStr id)
 ** @@
 ****************************************************************************/
 
-ajint ajScopArrFindSunid(const AjPScop *arr, ajint siz, ajint id)
+ajint ajScopArrFindSunid(AjPScop const *arr, ajint siz, ajint id)
 {
     int l;
     int m;
@@ -3553,7 +3574,7 @@ ajint ajScopArrFindSunid(const AjPScop *arr, ajint siz, ajint id)
 ** objects (which of course must first have been sorted). This is a 
 ** case-insensitive search.
 **
-** @param [r] arr [const AjPScop*]    Array of AjPScop objects
+** @param [r] arr [AjPScop const*]    Array of AjPScop objects
 ** @param [r] siz [ajint]       Size of array
 ** @param [r] id  [const AjPStr]      Search term
 **
@@ -3564,7 +3585,7 @@ ajint ajScopArrFindSunid(const AjPScop *arr, ajint siz, ajint id)
 ** @@
 ****************************************************************************/
 
-ajint ajScopArrFindPdbid(const AjPScop *arr, ajint siz, const AjPStr id)
+ajint ajScopArrFindPdbid(AjPScop const *arr, ajint siz, const AjPStr id)
 {
     int l;
     int m;
@@ -3578,7 +3599,7 @@ ajint ajScopArrFindPdbid(const AjPScop *arr, ajint siz, const AjPStr id)
     {
         m = (l+h)>>1;
 
-        if((c=ajStrCmpCase(id, arr[m]->Pdb)) < 0) 
+        if((c=ajStrCmpCaseS(id, arr[m]->Pdb)) < 0) 
 	    h = m-1;
         else if(c>0) 
 	    l = m+1;
@@ -3599,7 +3620,7 @@ ajint ajScopArrFindPdbid(const AjPScop *arr, ajint siz, const AjPStr id)
 ** structures (which of course must first have been sorted). This is a 
 ** case-insensitive search.
 **
-** @param [r] arr [const AjPCath*]    Array of AjPCath objects
+** @param [r] arr [AjPCath const*]    Array of AjPCath objects
 ** @param [r] siz [ajint]       Size of array
 ** @param [r] id  [const AjPStr]      Search term
 **
@@ -3610,7 +3631,7 @@ ajint ajScopArrFindPdbid(const AjPScop *arr, ajint siz, const AjPStr id)
 ** @@
 ****************************************************************************/
 
-ajint ajCathArrFindPdbid(const AjPCath *arr, ajint siz, const AjPStr id)
+ajint ajCathArrFindPdbid(AjPCath const *arr, ajint siz, const AjPStr id)
 {
     int l;
     int m;
@@ -3624,7 +3645,7 @@ ajint ajCathArrFindPdbid(const AjPCath *arr, ajint siz, const AjPStr id)
     {
         m=(l+h)>>1;
 
-        if((c=ajStrCmpCase(id, arr[m]->Pdb)) < 0) 
+        if((c=ajStrCmpCaseS(id, arr[m]->Pdb)) < 0) 
 	    h = m-1;
         else if(c>0) 
 	    l = m+1;
@@ -3701,11 +3722,18 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
     AjPResidue  res2        = NULL;
 /*    AjPResidue *resarr      = NULL; */
 
+
+
+    if(!errf || !scop || !pdb || !outf)
+      ajFatal("Bad args passed to ajPdbWriteDomain");
+
+
     /* Intitialise strings */
     seq    = ajStrNew();
     tmpseq = ajStrNew();
     tmpstr = ajStrNew();
     
+
 
 
     /* Check for unknown or zero-length chains */
@@ -3734,6 +3762,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	    return ajFalse;
 	}
     
+
 
     /* Write header info. to domain coordinate file */
     ajFmtPrintF(outf, "%-5s%S\n", "ID", scop->Entry);
@@ -3786,7 +3815,6 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	}
 		
 
-
 	/*
 	** If end of domain is unspecified 
 	** then assign end to last residue in chain
@@ -3829,14 +3857,14 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 		    */
 		    if(!found_start && !nostart)		
 		    {
-			ajStrAssS(&tmpstr, scop->Start[z]);
-			ajStrAppK(&tmpstr, '*');
+			ajStrAssignS(&tmpstr, scop->Start[z]);
+			ajStrAppendK(&tmpstr, '*');
 			
 			/* Start position found  */
-		        /*if(!ajStrCmpCase(res->Pdb, scop->Start[z])) */
-			if(ajStrMatchWild(res->Pdb, tmpstr))
+		        /*if(!ajStrCmpCaseS(res->Pdb, scop->Start[z])) */
+			if(ajStrMatchWildS(res->Pdb, tmpstr))
 			{
-			    if(!ajStrMatch(res->Pdb, scop->Start[z]))
+			    if(!ajStrMatchS(res->Pdb, scop->Start[z]))
 			    {
 				ajWarn("Domain start found by wildcard "
 				       "match only "
@@ -3856,20 +3884,22 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 		    }
 
 
+
+
 		    /*
 		    ** The end position was specified, but has not 
 		    ** been found yet
 		    */
 		    if(!found_end && !noend)		
 		    {
-			ajStrAssS(&tmpstr, scop->End[z]);
-			ajStrAppK(&tmpstr, '*');
+			ajStrAssignS(&tmpstr, scop->End[z]);
+			ajStrAppendK(&tmpstr, '*');
 
 			/* End position found */
-			/*if(!ajStrCmpCase(res->Pdb, scop->End[z])) */
-			if(ajStrMatchWild(res->Pdb, tmpstr))
+			/*if(!ajStrCmpCaseS(res->Pdb, scop->End[z])) */
+			if(ajStrMatchWildS(res->Pdb, tmpstr))
 			{
-			    if(!ajStrMatch(res->Pdb, scop->End[z]))
+			    if(!ajStrMatchS(res->Pdb, scop->End[z]))
 			    {
 				ajWarn("Domain end found by wildcard "
 				       "match only "
@@ -3889,6 +3919,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 		}
 	    }
 	}
+
 	
 	/* Diagnostics if start position was not found */
 	if(!found_start)		
@@ -3919,8 +3950,9 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	
 
 	/* Write <seq> string here */
-	ajStrAssSub(&tmpseq, pdb->Chains[chn-1]->Seq, start-1, end-1);
-	ajStrApp(&seq, tmpseq);
+	ajStrAssignSubS(&tmpseq, pdb->Chains[chn-1]->Seq, start-1, end-1);
+	ajStrAppendS(&seq, tmpseq);
+
 
 
 	/* Free the iterator */
@@ -3941,6 +3973,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	if(id == ' ')
 	    id = '.';
     }
+
     
     /* Write sequence to domain coordinate file */
     ajFmtPrintF(outf, "XX\n");	
@@ -3950,7 +3983,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
     ajFmtPrintF(outf, "%-5sID %c; NR %d; NL 0; NH %d; NE %d; NS %d; NT %d;\n", 
 		"IN", 
 		id,
-		ajStrLen(seq),
+		ajStrGetLen(seq),
 		pdb->Chains[chn-1]->numHelices, 
 		pdb->Chains[chn-1]->numStrands, 
 		pdb->Chains[chn-1]->numSheets, 
@@ -3959,12 +3992,13 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
     ajFmtPrintF(outf, "%-5sID %c; NRES %d; NL 0; NH %d; NE %d;\n", 
 		"IN", 
 		id,
-		ajStrLen(seq),
+		ajStrGetLen(seq),
 		pdb->Chains[chn-1]->numHelices, 
 		pdb->Chains[chn-1]->numStrands);
     ajFmtPrintF(outf, "XX\n");	
     ajSeqWriteXyz(outf, seq, "SQ");
     ajFmtPrintF(outf, "XX\n");	
+
 
     
     /* Write residue list to domain coordinate file */        
@@ -4014,14 +4048,14 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 		/* Start position was specified */
 		if(!nostart)
 		{
-		    ajStrAssS(&tmpstr, scop->Start[z]);
-		    ajStrAppK(&tmpstr, '*');
+		    ajStrAssignS(&tmpstr, scop->Start[z]);
+		    ajStrAppendK(&tmpstr, '*');
 
 		    /* Start position found */
-		    /*if(!ajStrCmpCase(res->Pdb, scop->Start[z])) */
-		    if(ajStrMatchWild(res->Pdb, tmpstr))		    
+		    /*if(!ajStrCmpCaseS(res->Pdb, scop->Start[z])) */
+		    if(ajStrMatchWildS(res->Pdb, tmpstr))		    
 		    {
-			if(!ajStrMatch(res->Pdb, scop->Start[z]))
+			if(!ajStrMatchS(res->Pdb, scop->Start[z]))
 			{
 			    ajWarn("Domain start found by wildcard match only "
 				   "in ajPdbWriteDomain");
@@ -4049,14 +4083,14 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	     */
 	    if(!found_end && !noend)
 	    {
-		ajStrAssS(&tmpstr, scop->End[z]);
-		ajStrAppK(&tmpstr, '*');
+		ajStrAssignS(&tmpstr, scop->End[z]);
+		ajStrAppendK(&tmpstr, '*');
 
 		/* End position found */
-		/*if(!ajStrCmpCase(res->Pdb, scop->End[z])) */
-		if(ajStrMatchWild(res->Pdb, tmpstr))
+		/*if(!ajStrCmpCaseS(res->Pdb, scop->End[z])) */
+		if(ajStrMatchWildS(res->Pdb, tmpstr))
 		{
-		    if(!ajStrMatch(res->Pdb, scop->End[z]))
+		    if(!ajStrMatchS(res->Pdb, scop->End[z]))
 		    {
 			ajWarn("Domain end found by wildcard match only "
 			       "in ajPdbWriteDomain");
@@ -4127,7 +4161,6 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 
 	ajListIterFree(&iter);			
     } 	
-    
 
 
     /* Write atom list to domain coordinate file */        
@@ -4184,7 +4217,8 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 
 	    /*	if(atm->Mod!=1 || atm->Type!='P')
 		break; */
-	    
+
+
 	    
 	    /* The start position has not been found yet */
 	    if(!found_start)
@@ -4192,16 +4226,16 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 		/* Start position was specified */
 		if(!nostart)
 		{
-		    ajStrAssS(&tmpstr, scop->Start[z]);
-		    ajStrAppK(&tmpstr, '*');
+		    ajStrAssignS(&tmpstr, scop->Start[z]);
+		    ajStrAppendK(&tmpstr, '*');
 
 		    /* Start position found */
-		    /*if(!ajStrCmpCase(atm->Pdb, scop->Start[z])) */
-		    if(ajStrMatchWild(atm->Pdb, tmpstr))      
-/*		    if(ajStrMatchWild(resarr[atm->Idx-1]->Pdb, tmpstr))	 */
+		    /*if(!ajStrCmpCaseS(atm->Pdb, scop->Start[z])) */
+		    if(ajStrMatchWildS(atm->Pdb, tmpstr))      
+/*		    if(ajStrMatchWildS(resarr[atm->Idx-1]->Pdb, tmpstr))	 */
 		    {
-			if(!ajStrMatch(atm->Pdb, scop->Start[z])) 
-			/* if(!ajStrMatch(resarr[atm->Idx-1]->Pdb, scop->Start[z])) */
+			if(!ajStrMatchS(atm->Pdb, scop->Start[z])) 
+			/* if(!ajStrMatchS(resarr[atm->Idx-1]->Pdb, scop->Start[z])) */
 			{
 			    ajWarn("Domain start found by wildcard match only "
 				   "in ajPdbWriteDomain");
@@ -4229,16 +4263,16 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	    */
 	    if(!found_end && !noend)
 	    {
-		ajStrAssS(&tmpstr, scop->End[z]);
-		ajStrAppK(&tmpstr, '*');
+		ajStrAssignS(&tmpstr, scop->End[z]);
+		ajStrAppendK(&tmpstr, '*');
 
 		/* End position found */
-		/*if(!ajStrCmpCase(atm->Pdb, scop->End[z])) */
-		 if(ajStrMatchWild(atm->Pdb, tmpstr)) 
-		     /* if(ajStrMatchWild(resarr[atm->Idx-1]->Pdb, tmpstr)) */
+		/*if(!ajStrCmpCaseS(atm->Pdb, scop->End[z])) */
+		 if(ajStrMatchWildS(atm->Pdb, tmpstr)) 
+		     /* if(ajStrMatchWildS(resarr[atm->Idx-1]->Pdb, tmpstr)) */
 		{
-		     if(!ajStrMatch(atm->Pdb, scop->End[z]))  
-        	 /* if(!ajStrMatch(resarr[atm->Idx-1]->Pdb, scop->End[z])) */
+		     if(!ajStrMatchS(atm->Pdb, scop->End[z]))  
+        	 /* if(!ajStrMatchS(resarr[atm->Idx-1]->Pdb, scop->End[z])) */
 		    {
 			ajWarn("Domain end found by wildcard match only "
 			       "in ajPdbWriteDomain");
@@ -4258,6 +4292,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	    else if(atm->Idx != finalrn && !noend)
 		break;
 	    
+
 
 	    /* Print out coordinate line */
 	    ajFmtPrintF(outf, "%-5s%-5d%-5d%-5c%-5d%-6S%-2c%-6S%-2c%-6S"
@@ -4286,6 +4321,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
     } 	
 
 
+
     /* Write last line in file */
     ajFmtPrintF(outf, "//\n");    
     
@@ -4296,6 +4332,8 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
     ajStrDel(&seq);
     ajStrDel(&tmpseq);
     ajStrDel(&tmpstr);    
+
+
 
     return ajTrue;
 }
@@ -4337,12 +4375,12 @@ AjBool ajCathWrite(AjPFile outf, const AjPCath obj)
 
     tmp = ajStrNew();
 
-    ajStrAssS(&tmp, obj->DomainID);
-    ajStrToUpper(&tmp);
+    ajStrAssignS(&tmp, obj->DomainID);
+    ajStrFmtUpper(&tmp);
     ajFmtPrintF(outf,"ID   %S\nXX\n",tmp);
     
-    ajStrAssS(&tmp, obj->Pdb);
-    ajStrToUpper(&tmp);
+    ajStrAssignS(&tmp, obj->Pdb);
+    ajStrFmtUpper(&tmp);
     ajFmtPrintF(outf,"EN   %S\nXX\n",tmp);
     ajFmtPrintF(outf,"TY   CATH\nXX\n");    
     ajFmtPrintF(outf,"CI   %d CL; %d AR; %d TP; %d SF; %d FA; %d NI;"
@@ -4360,7 +4398,7 @@ AjBool ajCathWrite(AjPFile outf, const AjPCath obj)
     ajFmtPrintSplit(outf,obj->Superfamily,"SF   ",75," \t\n\r");
     ajFmtPrintF(outf, "XX\n");
 
-    if(ajStrLen(obj->SeqPdb))
+    if(ajStrGetLen(obj->SeqPdb))
     {
 	ajFmtPrintF(outf,"XX\n");
 	ajSeqWriteXyz(outf, obj->SeqPdb, "DS");		
@@ -4385,13 +4423,13 @@ AjBool ajCathWrite(AjPFile outf, const AjPCath obj)
     */
 
 
-    if(ajStrLen(obj->Acc))
+    if(ajStrGetLen(obj->Acc))
 	ajFmtPrintF(outf,"XX\nAC   %S\n",obj->Acc);    
 
-    if(ajStrLen(obj->Spr))
+    if(ajStrGetLen(obj->Spr))
 	ajFmtPrintF(outf,"XX\nSP   %S\n",obj->Spr);
 
-    if(ajStrLen(obj->SeqSpr))
+    if(ajStrGetLen(obj->SeqSpr))
     {
 	ajFmtPrintF(outf, "XX\n%-5s%d START; %d END;\n", "RA", obj->Startd,
 		    obj->Endd);
@@ -4503,19 +4541,19 @@ AjBool ajScopWrite(AjPFile outf, const AjPScop obj)
     ajFmtPrintSplit(outf,obj->Domain,"DO   ",75," \t\n\r");;
     ajFmtPrintF(outf,"XX\nOS   %S\n",obj->Source);
 
-    if(ajStrLen(obj->SeqPdb))
+    if(ajStrGetLen(obj->SeqPdb))
     {
 	ajFmtPrintF(outf,"XX\n");
 	ajSeqWriteXyz(outf, obj->SeqPdb, "DS");		
     }	
 
-    if(ajStrLen(obj->Acc))
+    if(ajStrGetLen(obj->Acc))
 	ajFmtPrintF(outf,"XX\nAC   %S\n",obj->Acc);    
 
-    if(ajStrLen(obj->Spr))
+    if(ajStrGetLen(obj->Spr))
 	ajFmtPrintF(outf,"XX\nSP   %S\n",obj->Spr);
 
-    if(ajStrLen(obj->SeqSpr))
+    if(ajStrGetLen(obj->SeqSpr))
     {
 	ajFmtPrintF(outf, "XX\n%-5s%d START; %d END;\n", "RA", obj->Startd,
 		    obj->Endd);
@@ -4524,13 +4562,13 @@ AjBool ajScopWrite(AjPFile outf, const AjPScop obj)
     }
     
     
-    if(ajStrLen(obj->Sse))
+    if(ajStrGetLen(obj->Sse))
         ajFmtPrintF(outf,"XX\nSE   %S\n",obj->Sse); 
 
-    if(ajStrLen(obj->Sss))
+    if(ajStrGetLen(obj->Sss))
 	ajFmtPrintF(outf,"XX\n");
     
-    if(ajStrLen(obj->Sss))
+    if(ajStrGetLen(obj->Sss))
 	ajSeqWriteXyz(outf, obj->Sss, "SS");
 
 
@@ -4582,8 +4620,7 @@ AjBool ajScopWrite(AjPFile outf, const AjPScop obj)
 
 ajint ajDomainDCFType(AjPFile inf)
 {
-    AjBool  ok          = ajFalse;
-    ajlong  offset      = 0.0;
+    ajlong  offset      = 0;
     static  AjPStr line = NULL;
     static  AjPStr tmp  = NULL;	
 
@@ -4597,7 +4634,7 @@ ajint ajDomainDCFType(AjPFile inf)
     
     offset = ajFileTell(inf);
     
-    while((ok=ajFileReadLine(inf,&line)))
+    while((ajFileReadLine(inf,&line)))
     {
 	if(!ajStrPrefixC(line,"TY   "))
 	    continue;

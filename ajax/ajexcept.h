@@ -19,8 +19,9 @@ extern "C"
 ** @@
 ******************************************************************************/
 
-typedef struct Except_T {
-	char *reason;
+typedef struct Except_T
+{
+    char *reason;
 } Except_T;
 
 /* @data Except_Frame ********************************************************
@@ -35,12 +36,13 @@ typedef struct Except_T {
 ** @@
 ******************************************************************************/
 
-typedef struct Except_Frame {
-	jmp_buf env;
-	struct Except_Frame *prev;
-	const char *file;
-	ajint line;
-	const Except_T *exception;
+typedef struct Except_Frame
+{
+    jmp_buf env;
+    struct Except_Frame *prev;
+    const char *file;
+    ajint line;
+    const Except_T *exception;
 } Except_Frame;
 
 enum { Except_entered=0, Except_raised,
@@ -50,7 +52,16 @@ extern Except_Frame *Except_stack;
 
 extern const Except_T Assert_Failed;
 
+/*
+** Prototype definitions
+*/
+
 void ajExceptRaise(const Except_T *e, const char *file, ajint line);
+
+/*
+** End of prototype definitions
+*/
+
 #define AJRAISE(e) ajExceptRaise(&(e), __FILE__, __LINE__)
 #define AJRERAISE ajExceptRaise(Except_frame.exception, \
 	Except_frame.file, Except_frame.line)

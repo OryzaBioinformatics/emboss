@@ -171,9 +171,9 @@ typedef struct AjSScophit
 **
 ** Ajax Scopalg object.
 **
-** Holds data associated with a structure alignment that is generated 
-** by the EMBOSS applications scopalign.  Now adapted to hold CATH domain
-** data also by addition of Type, Architecture and Topology elements.
+** Holds data associated with a structure alignment.
+** Now adapted to hold CATH domain data also by addition of Type, 
+** Architecture and Topology elements.
 **
 ** AjPScopalg is implemented as a pointer to a C data structure.
 **
@@ -240,12 +240,18 @@ typedef struct AjSScopalg
 
 
 
-void          ajDmxDummyFunction(void);
+
 
 
 /* ======================================================================= */
 /* =========================== Scophit object ============================ */
 /* ======================================================================= */
+
+/*
+** Prototype definitions
+*/
+
+void          ajDmxDummyFunction(void);
 AjPScophit    ajDmxScophitNew(void);
 void          ajDmxScophitDel(AjPScophit *pthis);
 void          ajDmxScophitDelWrap(const void  **ptr);
@@ -290,10 +296,9 @@ AjPScopalg    ajDmxScopalgNew(ajint n);
 void          ajDmxScopalgDel(AjPScopalg *pthis);
 ajint         ajDmxScopalgGetseqs(const AjPScopalg thys, AjPStr **arr);
 
-
-
-
-
+/*
+** End of prototype definitions
+*/
 
 #endif
 

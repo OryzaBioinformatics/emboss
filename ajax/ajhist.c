@@ -31,6 +31,7 @@
 #include "limits.h"
 #include "float.h"
 
+
 ajint aj_hist_mark=GRAPH_HIST;
 
 
@@ -205,11 +206,11 @@ void ajHistDisplay(const AjPHist hist)
 	ajGraphOpenPlot(hist->graph, 1);
 	ajGraphPlenv(hist->xmin-percent5, hist->xmax+percent5, min,
 		     max*((float)1.025), aj_hist_mark);
-	ajGraphLabel(ajStrStr(hist->xaxis) ,
-		     ajStrStr(hist->yaxisleft) ,
-		     ajStrStr(hist->title)," ");
+	ajGraphLabel(ajStrGetPtr(hist->xaxis) ,
+		     ajStrGetPtr(hist->yaxisleft) ,
+		     ajStrGetPtr(hist->title)," ");
 
-	ajGraphLabelYRight(ajStrStr(hist->yaxisright));
+	ajGraphLabelYRight(ajStrGetPtr(hist->yaxisright));
     }
     else 
 	ajGraphOpenPlot(hist->graph, hist->numofsets);
@@ -269,9 +270,9 @@ void ajHistDisplay(const AjPHist hist)
 	    num = 0;
 	    tot=0.0;
 	    data = hist->hists[i]->data;
-	    ajGraphLabel(ajStrStr(hist->hists[i]->xaxis) ,
-			 ajStrStr(hist->hists[i]->yaxis) ,
-			 ajStrStr(hist->hists[i]->title)," ");
+	    ajGraphLabel(ajStrGetPtr(hist->hists[i]->xaxis) ,
+			 ajStrGetPtr(hist->hists[i]->yaxis) ,
+			 ajStrGetPtr(hist->hists[i]->title)," ");
 	    
 	    for(j=0;j<hist->numofdatapoints;j++)
 	    {
@@ -433,10 +434,10 @@ AjPHist ajHistNew(ajint numofsets, ajint numofpoints)
 					    side by side */
     hist->bins = 0;
     hist->BaW  = AJFALSE;
-    ajStrSetC(&hist->title,"");
-    ajStrSetC(&hist->xaxis,"");
-    ajStrSetC(&hist->yaxisleft,"");
-    ajStrSetC(&hist->yaxisright,"");
+    ajStrAssignEmptyC(&hist->title,"");
+    ajStrAssignEmptyC(&hist->xaxis,"");
+    ajStrAssignEmptyC(&hist->yaxisleft,"");
+    ajStrAssignEmptyC(&hist->yaxisright,"");
 
     AJCNEW0(hist->hists,numofsets);
     for(i=0;i<numofsets; i++)
@@ -504,7 +505,7 @@ void ajHistSetMultiTitle(AjPHist hist, ajint index, const AjPStr title)
 	      hist->numofdatapoints-1,index);
 	return;
     }
-    ajStrAssS(&hist->hists[index]->title, title);
+    ajStrAssignS(&hist->hists[index]->title, title);
 
     return;
 }
@@ -531,7 +532,7 @@ void ajHistSetMultiTitleC(AjPHist hist, ajint index, const char *title)
 	      hist->numofdatapoints-1,index);
 	return;
     }
-    ajStrAssC(&hist->hists[index]->title,title);
+    ajStrAssignC(&hist->hists[index]->title,title);
 
     return;
 }
@@ -558,7 +559,7 @@ void ajHistSetMultiXTitle(AjPHist hist, ajint index, const AjPStr title)
 	      hist->numofdatapoints-1,index);
 	return;
     }
-    ajStrAssS(&hist->hists[index]->xaxis, title);
+    ajStrAssignS(&hist->hists[index]->xaxis, title);
 
     return;
 }
@@ -585,7 +586,7 @@ void ajHistSetMultiXTitleC(AjPHist hist, ajint index, const char *title)
 	      hist->numofdatapoints-1,index);
 	return;
     }
-    ajStrAssC(&hist->hists[index]->xaxis,title);
+    ajStrAssignC(&hist->hists[index]->xaxis,title);
 
     return;
 }
@@ -612,7 +613,7 @@ void ajHistSetMultiYTitle(AjPHist hist, ajint index, const AjPStr title)
 	      hist->numofdatapoints-1,index);
 	return;
     }
-    ajStrAssS(&hist->hists[index]->yaxis, title);
+    ajStrAssignS(&hist->hists[index]->yaxis, title);
 
     return;
 }
@@ -639,7 +640,7 @@ void ajHistSetMultiYTitleC(AjPHist hist, ajint index, const char *title)
 	      hist->numofdatapoints-1,index);
 	return;
     }
-    ajStrAssC(&hist->hists[index]->yaxis,title);
+    ajStrAssignC(&hist->hists[index]->yaxis,title);
 
     return;
 }
@@ -723,7 +724,7 @@ void ajHistCopyData(AjPHist hist, ajint index, const PLFLT *data)
 
 void ajHistSetTitleC(AjPHist hist, const char* strng)
 {
-    ajStrAssC(&hist->title,strng);
+    ajStrAssignC(&hist->title,strng);
 
     return;
 }
@@ -743,7 +744,7 @@ void ajHistSetTitleC(AjPHist hist, const char* strng)
 
 void ajHistSetXAxisC(AjPHist hist, const char* strng)
 {
-    ajStrAssC(&hist->xaxis,strng);
+    ajStrAssignC(&hist->xaxis,strng);
 
     return;
 }
@@ -763,7 +764,7 @@ void ajHistSetXAxisC(AjPHist hist, const char* strng)
 
 void ajHistSetYAxisLeftC(AjPHist hist, const char* strng)
 {
-    ajStrAssC(&hist->yaxisleft,strng);
+    ajStrAssignC(&hist->yaxisleft,strng);
 
     return;
 }
@@ -783,7 +784,7 @@ void ajHistSetYAxisLeftC(AjPHist hist, const char* strng)
 
 void ajHistSetYAxisRightC(AjPHist hist, const char* strng)
 {
-    ajStrAssC(&hist->yaxisright,strng);
+    ajStrAssignC(&hist->yaxisright,strng);
 
     return;
 }

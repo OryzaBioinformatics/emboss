@@ -59,6 +59,7 @@ static char *messErrorFile;
 static AjBool fileDebug      = 0;
 static AjPFile fileDebugFile = NULL;
 static AjPStr fileDebugName  = NULL;
+static char* messErrMess = NULL;
 
 static char* messGetFilename(const char *path);
 
@@ -989,7 +990,6 @@ char* ajMessCaughtMessage(void)
 
 char* ajMessSysErrorText(void)
 {
-    static char* errmess = 0;
     char *mess;
 
     if(errno)
@@ -998,12 +998,11 @@ char* ajMessSysErrorText(void)
 	mess = ajFmtString(SYSERR_OK, errno, strerror(errno));
       
     /* must make copy - will be used when mess* calls itself */
-    if(errmess)
-	AJFREE(errmess);
-    errmess = ajSysStrdup(mess);
+    AJFREE(messErrMess);
+    messErrMess = ajSysStrdup(mess);
 
     AJFREE(mess);
-    return errmess;
+    return messErrMess;
 }
 
 
@@ -1216,6 +1215,8 @@ void ajMessSetErr(const char *filename, ajint line_num)
     messageG.filename = ajSysStrdup(messGetFilename(filename));
 
     messageG.line_num = line_num;
+
+    ajUtilCatch();
 
     return;
 }
@@ -1574,7 +1575,7 @@ void ajDebug(const char* fmt, ...)
 	fileDebug = acdDebug;
 	if(fileDebug)
 	{
-	    ajFmtPrintS(&fileDebugName, "%s.dbg", ajStrStr(acdProgram));
+	    ajFmtPrintS(&fileDebugName, "%s.dbg", ajStrGetPtr(acdProgram));
 	    fileDebugFile = ajFileNewOut(fileDebugName);
 	    if(!fileDebugFile)
 		ajFatal("Cannot open debug file %S",fileDebugName);
@@ -1639,39 +1640,96 @@ FILE* ajDebugFile(void)
 ajint ajUserGet(AjPStr* pthis, const char* fmt, ...)
 {
     AjPStr thys;
-    char *cp;
+    const char *cp;
+    char *buff;
     va_list args;
+    ajint ipos;
+    ajint isize;
+    ajint ilen;
+    ajint jlen;
+    ajint fileBuffSize = ajFileBuffSize();
 
     va_start(args, fmt);
     ajFmtVError(fmt, args);
     va_end(args);
 
-    /* Must be > 1, reserved for fgets!! */
-    ajStrModL(pthis,ajFileBuffSize());
-    thys = pthis ? *pthis : 0;
+    ajStrSetRes(pthis, fileBuffSize);
+    buff  = ajStrGetuniquePtr(pthis);
+    thys = *pthis;
+    isize = ajStrGetRes(thys);
+    ilen  = 0;
+    ipos  = 0;
+    
 
     ajDebug("ajUserGet buffer len: %d res: %d ptr: %x\n",
-	     ajStrLen(thys), ajStrSize(thys), thys->Ptr);
+	     ajStrGetLen(thys), ajStrGetRes(thys), thys->Ptr);
 
-    cp = fgets(thys->Ptr, thys->Res, stdin);
+    if(feof(stdin))
+	ajFatal("END-OF-FILE reading from user\n");
 
-    if(!cp)
-    {				/* EOF or error */
-	if(feof(stdin))
-	    ajFatal("END-OF-FILE reading from user\n");
-	else
-	    ajFatal("Error reading from user\n");
-    }
-
-    thys->Len = strlen(thys->Ptr);
-    if(thys->Ptr[thys->Len-1] == '\n')
+    while(buff)
     {
-	thys->Ptr[--thys->Len] = '\0';
-    }
-    else
-	ajErr("ajUserGet no newline seen\n");
 
-    return thys->Len;
+#ifndef __ppc__
+	cp = fgets(&buff[ipos], isize, stdin);
+#else
+	cp = ajSysFgets(&buff[ipos], isize, stdin);
+#endif
+
+        if(!cp && !ipos)
+	{
+	    if(feof(stdin))
+		ajFatal("END-OF-FILE reading from user\n");
+	    else
+		ajFatal("Error reading from user\n");
+	}
+
+	jlen = strlen(&buff[ipos]);
+	ilen += jlen;
+
+	/*
+	 ** We need to read again if:
+	 ** We have read the entire buffer
+	 ** and we don't have a newline at the end
+	 ** (must be careful about that - we may just have read enough)
+	 */
+	ajStrSetValidLen(pthis, ilen);
+	thys = *pthis;
+	if((jlen == (isize-1)) &&
+	   (ajStrGetCharLast(thys) != '\n'))
+	{
+	    ajStrSetRes(pthis, ajStrGetRes(thys)+fileBuffSize);
+	    thys = *pthis;
+	    ajDebug("more to do: jlen: %d ipos: %d isize: %d ilen: %d "
+		    "Size: %d\n",
+		    jlen, ipos, isize, ilen, ajStrGetRes(thys));
+	    ipos += jlen;
+	    buff = ajStrGetuniquePtr(pthis);
+	    isize = ajStrGetRes(thys) - ipos;
+	    ajDebug("expand to: ipos: %d isize: %d Size: %d\n",
+		    ipos, isize, ajStrGetRes(thys));
+
+	}
+	else
+	    buff = NULL;
+    }
+    
+    ajStrSetValidLen(pthis, ilen);
+
+    if(ajStrGetCharLast(*pthis) == '\n')
+	ajStrCutEnd(pthis, 1);
+
+    /* PC files have \r\n Macintosh files have just \r : this fixes both */
+
+    if(ajStrGetCharLast(*pthis) == '\r')
+    {
+	/*ajDebug("Remove carriage-return characters from PC-style files\n");*/
+	ajStrCutEnd(pthis, 1);
+    }
+
+    ajStrTrimWhite(pthis);
+
+    return ajStrGetLen(*pthis);
 }
 
 
@@ -1689,6 +1747,7 @@ void ajMessExit(void)
 {
     ajFileClose(&fileDebugFile);
     ajStrDel(&fileDebugName);
+    AJFREE(messErrMess);
 
     return;
 }

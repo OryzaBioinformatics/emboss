@@ -21,12 +21,15 @@
 ** Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-#include "ajmath.h"
+#include "ajax.h"
+
 #include <math.h>
 #include <time.h>
 #include <float.h>
 #include <stdlib.h>
+#ifndef WIN32
 #include <sys/time.h>
+#endif
 
 
 
@@ -283,7 +286,9 @@ void ajRandomSeed(void)
     
     double x = 0.0;
     ajint seed;
+#ifndef WIN32
     struct timeval tv;
+#endif
     AjPStr timestr = NULL;
     
     /*
@@ -304,8 +309,13 @@ void ajRandomSeed(void)
     }
     else
     {
+#ifndef WIN32
 	gettimeofday(&tv,NULL);
 	seed = (tv.tv_usec % 9999)+1;
+#else
+	/* Needs looking at to try to get usec resolution */
+	seed = (ajint) ((time(0) % 9999) + 1);
+#endif
     }
 
 
@@ -467,7 +477,11 @@ static void spcrc64calctab(unsigned long long *crctab)
 	v = (unsigned long long)i;
 	for(j=0;j<8;++j)
 	    if(v&1)
+#ifndef WIN32
 		v = 0xd800000000000000ULL ^ (v>>1);
+#else
+		v = 0xd800000000000000 ^ (v>>1);
+#endif
 	    else
 		v >>= 1;
 	crctab[i] = v;
@@ -502,12 +516,80 @@ unsigned long long ajSp64Crc(const AjPStr thys)
 	++initialised;
     }
 
+#ifndef WIN32
     crc = 0ULL;
-    p = ajStrStr(thys);
-    len = ajStrLen(thys);
+#else
+    crc = 0U;
+#endif
+    p = ajStrGetPtr(thys);
+    len = ajStrGetLen(thys);
     
     for(i=0;i<len;++i)
 	crc = crctab[(crc ^ (unsigned long long)p[i]) & 0xff] ^ (crc>>8);
 
     return crc;
 }
+
+/* @func ajMathPos ************************************************************
+**
+** Converts a string position into a true position. If ipos is negative,
+** it is counted from the end of the string rather than the beginning.
+**
+** @param [r] len [ajint] String length.
+** @param [r] ipos [ajint] Position (0 start, negative from the end).
+** @return [ajint] string position between 0 and (length minus 1).
+** @@
+******************************************************************************/
+
+ajint ajMathPos(ajint len, ajint ipos)
+{
+    return ajMathPosI(len, 0, ipos);
+}
+
+
+
+
+/* @func ajMathPosI ***********************************************************
+**
+** Converts a position into a true position. If ipos is negative,
+** it is counted from the end of the string rather than the beginning.
+**
+** imin is a minimum relative position.
+** Usually this is the start position when the end of a range
+** is being tested.
+**
+** @param [r] len [ajint] maximum length.
+** @param [r] imin [ajint] Start position (0 start, no negative values).
+** @param [r] ipos [ajint] Position (0 start, negative from the end).
+** @return [ajint] string position between 0 and (length minus 1).
+** @@
+******************************************************************************/
+
+ajint ajMathPosI(ajint len, ajint imin, ajint ipos)
+{
+    ajint jpos;
+
+    if(ipos < 0)
+	jpos = len + ipos;
+    else
+	jpos = ipos;
+
+    if(jpos >= len)
+    {
+	ajUtilCatch();
+	/* ajDebug("strPosII ilen: %d imin: %d ipos: %d jpos: %d\n",
+		ilen, imin, ipos, jpos); */
+    }
+
+    if(jpos >= len)
+	jpos = len - 1;
+
+    if(jpos < imin)
+	jpos = imin;
+
+    return jpos;
+}
+
+
+
+

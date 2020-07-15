@@ -42,7 +42,18 @@ extern "C"
 AJGRAPH_Y_INVERT_TICK + AJGRAPH_X_INVERT_TICK + AJGRAPH_Y_TICK + \
 AJGRAPH_X_TICK + AJGRAPH_X_LABEL + AJGRAPH_Y_LABEL + AJGRAPH_TITLE )
 
+#ifndef WIN32
 extern ajint aj_hist_mark;
+#else
+#ifdef AJAXDLL_EXPORTS
+__declspec(dllexport) ajint aj_hist_mark;
+#else
+__declspec(dllimport) ajint aj_hist_mark;
+#endif
+#endif
+
+
+
 
 /* @data AjPHistData **********************************************************
 **
@@ -87,7 +98,7 @@ typedef struct AjSHistData {
 ** @attr yaxisleft [AjPStr] y axis title
 ** @attr yaxisright [AjPStr] second y axis title for right side
 ** @attr graph [AjPGraph] Graph
-** @attr hists [AjPHistData*] Hiostogram bin data
+** @attr hists [AjPHistData*] Histogram bin data
 ** @@
 ******************************************************************************/
 
@@ -109,6 +120,13 @@ typedef struct AjSHist {
 } AjOHist;
 #define AjPHist AjOHist*
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 void    ajHistClose (void);
 void    ajHistCopyData (AjPHist hist, ajint index, const PLFLT *data);
 void    ajHistDelete (AjPHist* hist);
@@ -129,6 +147,10 @@ void    ajHistSetTitleC (AjPHist hist, const char* strng);
 void    ajHistSetXAxisC (AjPHist hist, const char* strng);
 void    ajHistSetYAxisLeftC (AjPHist hist,const  char* strng);
 void    ajHistSetYAxisRightC (AjPHist hist, const char* strng);
+
+/*
+** End of prototype definitions
+*/
 
 #endif /* ajhist_h */
 

@@ -31,9 +31,28 @@ AjIUB aj_base_iubS[256];	/* Base letters and their alternatives */
 ajint aj_base_table[256];	/* Base letter numerical codes         */
 float aj_base_prob[32][32];     /* Assym base probability matches      */
 
-
+char iubbases[] = "XACMGRSVTWYHKDBN";
 
 AjBool aj_base_I = 0;
+
+
+
+/* @func ajBaseCodes *******************************************************
+**
+** Returns a string of matching base codes
+**
+** @param [r] ibase [ajint] Original base code
+**
+** @return [const AjPStr] Base codes
+******************************************************************************/
+
+const AjPStr ajBaseCodes(ajint ibase)
+{
+    if(!aj_base_I)
+	ajBaseInit();
+
+    return  aj_base_iubS[ibase].list;
+}
 
 
 
@@ -71,7 +90,37 @@ ajint ajAZToInt(ajint c)
 
 ajint ajIntToAZ(ajint n)
 {
+    if(n>25)
+	return (ajint) '*';
+    if(n<0)
+	return (ajint) '*';
+
     return(n+(ajint)'A');
+}
+
+
+
+
+/* @func ajBinToAZ ************************************************************
+**
+** Converts a binary OR'd representation of an IUB base where A=1, C=2,
+** G=4 and T=8 into an ambiguous DNA base code (uses T rather than U).
+**
+** Uses the base table set up by ajBaseInit
+**
+** @param  [r] c [ajint] character to convert
+**
+** @return [char] Ambiguous DNA base code
+******************************************************************************/
+
+char ajBinToAZ(ajint c)
+{
+    if(c<0)
+	return 'N';
+    if(c>15)
+	return 'N';
+
+    return (iubbases[c]);
 }
 
 
@@ -130,10 +179,10 @@ char ajAZToBinC(char c)
 ** Uses the Ebases.iub file
 ** Is initialised if necessary from other AJAX functions.
 **
-** @return [void]
+** @return [AjBool] True on success
 ******************************************************************************/
 
-void ajBaseInit(void)
+AjBool ajBaseInit(void)
 {
     AjPFile bfptr  = NULL;
     AjPStr  bfname = NULL;
@@ -146,6 +195,7 @@ void ajBaseInit(void)
     ajint k;
 
     ajint c;
+    ajint qc;
 
     ajint l1;
     ajint l2;
@@ -158,7 +208,7 @@ void ajBaseInit(void)
     const char *q;
 
     if(aj_base_I)
-	return;
+	return ajTrue;
 
 
     for(i=0;i<256;++i)
@@ -170,12 +220,12 @@ void ajBaseInit(void)
 
     code = ajStrNew();
     list = ajStrNew();
-    ajStrAssC(&code,"");
-    ajStrAssC(&list,"ACGT");
+    ajStrAssignC(&code,"");
+    ajStrAssignC(&list,"ACGT");
 
 
     bfname = ajStrNew();
-    ajStrAssC(&bfname,IUBFILE);
+    ajStrAssignC(&bfname,IUBFILE);
     ajFileDataNew(bfname, &bfptr);
     if(!bfptr) ajFatal("Ebases.iub file not found\n");
 
@@ -185,24 +235,23 @@ void ajBaseInit(void)
 
     while(ajFileGets(bfptr, &line))
     {
-	p = ajStrStr(line);
+	p = ajStrGetPtr(line);
 	if(*p=='#' || *p=='!' || *p=='\n')
 	    continue;
 	p = ajSysStrtok(p," \t\r");
-	ajStrAssC(&code,p);
+	ajStrAssignC(&code,p);
 	p=ajSysStrtok(NULL," \t\r");
 	if(sscanf(p,"%d",&n)!=1)
 	    ajFatal("Bad format IUB file");
 	p = ajSysStrtok(NULL," \t\r");
-	ajStrAssC(&list,p);
-	q = ajStrStr(code);
-	p = ajStrStr(list);
-	ajStrAssC(&aj_base_iubS[toupper((ajint) *q)].code,q);
-	ajStrAssC(&aj_base_iubS[toupper((ajint) *q)].list,p);
-	ajStrAssC(&aj_base_iubS[tolower((ajint) *q)].code,q);
-	ajStrAssC(&aj_base_iubS[tolower((ajint) *q)].list,p);
-	aj_base_table[toupper((ajint) *q)] = n;
-	aj_base_table[tolower((ajint) *q)] = n;
+	ajStrAssignC(&list,p);
+	qc = (ajint) ajStrGetCharFirst(code);
+	ajStrAssignS(&aj_base_iubS[toupper(qc)].code,code);
+	ajStrAssignS(&aj_base_iubS[toupper(qc)].list,list);
+	ajStrAssignS(&aj_base_iubS[tolower(qc)].code,code);
+	ajStrAssignS(&aj_base_iubS[tolower(qc)].list,list);
+	aj_base_table[toupper(qc)] = n;
+	aj_base_table[tolower(qc)] = n;
     }
 
     ajStrDel(&code);
@@ -219,7 +268,7 @@ void ajBaseInit(void)
 	for(j=0;j<32;++j)
 	{
 	    y = ajIntToAZ(j);
-	    if(!(l1=ajStrLen(aj_base_iubS[x].code)))
+	    if(!(l1=ajStrGetLen(aj_base_iubS[x].code)))
 	    {
 		aj_base_prob[i][j]=0.0;
 		continue;
@@ -228,8 +277,8 @@ void ajBaseInit(void)
 		ajFatal("Bad IUB letter");
 
 
-	    p = ajStrStr(aj_base_iubS[x].list);
-	    q = ajStrStr(aj_base_iubS[y].list);
+	    p = ajStrGetPtr(aj_base_iubS[x].list);
+	    q = ajStrGetPtr(aj_base_iubS[y].list);
 	    l1 = strlen(p);
 	    l2 = strlen(q);
 	    for(k=0,c=0;k<l1;++k)
@@ -243,7 +292,7 @@ void ajBaseInit(void)
 
     aj_base_I = ajTrue;
 
-    return;
+    return aj_base_I;
 }
 
 
@@ -274,6 +323,58 @@ AjBool  ajBaseAa1ToAa3(char aa1, AjPStr *aa3)
     if((idx=ajAZToInt(aa1))>25)
 	return ajFalse;
 
-    ajStrAssC(aa3, tab[idx]);
+    ajStrAssignC(aa3, tab[idx]);
     return ajTrue;
+}
+
+
+
+/* @func ajBaseProb **********************************************************
+**
+** Returns an element of the base match probability array
+**
+** @param [r] base1 [ajint] First base offset
+** @param [r] base2 [ajint] Second base offset
+**
+** @return [float] Base probability value
+** @@
+******************************************************************************/
+float  ajBaseProb(ajint base1, ajint base2)
+{
+    ajint b1;
+    ajint b2;
+
+    b1 = base1;
+    b2 = base2;
+
+    if(b1<0)b1=0;
+    if(b1>31)b1=31;
+    if(b2<0)b2=0;
+    if(b2>31)b2=31;
+
+    return aj_base_prob[b1][b2];
+}
+
+
+
+
+/* @func ajBaseExit ***********************************************************
+**
+** Cleans up sequence base processing internal memory
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajBaseExit(void)
+{
+    ajint i;
+
+    for(i=0;i<256;++i)
+    {
+	ajStrDel(&aj_base_iubS[i].code);
+	ajStrDel(&aj_base_iubS[i].list);
+    }
+    
+    return;
 }

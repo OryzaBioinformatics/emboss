@@ -31,28 +31,29 @@
 #define RNAMELTFILE "Erna.melt"
 #define MAXMELTSAVE 10000
 
-AjMelt aj_m_table[256];
-AjBool aj_melt_I = 0;
+static AjMelt meltTable[256];
+static AjBool meltInitDone = AJFALSE;
 
-ajint aj_melt_savesize   = 0;
-AjBool aj_melt_saveinit  = 0;
-AjBool aj_melt_saveshift = 1;
+static ajint aj_melt_savesize   = 0;
+static AjBool aj_melt_saveinit  = 0;
+static AjBool aj_melt_saveshift = 1;
+
+static AjBool danBaseInit = AJFALSE;
 
 
-
-
-/* @func ajMeltInit ***********************************************************
+/* @func ajMeltInit **********************************************************
 **
 ** Initialises melt entropies, enthalpies and energies. Different data
 ** files are read for DNA or RNA heteroduplex. Also sets optional flag
 ** for array saving of the above.
 **
-** @param  [r] type [const AjPStr] Pointer to a "dna" or "rna" string
+** @param  [r] isdna [AjBool] true for DNA, false for RNA
 ** @param  [r]  savesize [ajint] Size of array to save, or zero if none
 ** @return [void] Number of energies to save
 ******************************************************************************/
 
-void ajMeltInit(const AjPStr type, ajint savesize)
+
+void ajMeltInit(AjBool isdna, ajint savesize)
 {
     AjPFile mfptr;
     AjPStr  mfname = NULL;
@@ -79,36 +80,30 @@ void ajMeltInit(const AjPStr type, ajint savesize)
     aj_melt_savesize = savesize;
     aj_melt_saveinit = ajFalse;
 
-    if(aj_melt_I)
+    if(meltInitDone)
 	return;
 
     mfname = ajStrNew();
 
-    if(!ajStrCmpC(type, "rna"))
-    {
-	ajStrSetC(&mfname,RNAMELTFILE);
-	ajFileDataNew(mfname, &mfptr);
-    }
+    if(isdna)
+	ajStrAssignEmptyC(&mfname,DNAMELTFILE);
+    else
+	ajStrAssignEmptyC(&mfname,RNAMELTFILE);
 
-    if(!ajStrCmpC(type, "dna"))
-    {
-	ajStrSetC(&mfname,DNAMELTFILE);
-	ajFileDataNew(mfname, &mfptr);
-    }
-
+    ajFileDataNew(mfname, &mfptr);
     if(!mfptr)
-	ajFatal("Entropy/enthalpy/energy file not found\n");
+	ajFatal("Entropy/enthalpy/energy file '%S' not found\n",
+		mfname);
 
-    pair  = ajStrNew();
     pair1 = ajStrNew();
     pair2 = ajStrNew();
-    acgt  = ajStrNew();
     line  = ajStrNew();
 
-    ajStrAssC(&pair,"AA");
-    ajStrAssC(&acgt,"ACGT");
-    p = ajStrStrMod(&pair);
-    q = ajStrStr(acgt);
+    ajStrAssignC(&pair,"AA");
+    ajStrAssignC(&acgt,"ACGT");
+
+    p = ajStrGetuniquePtr(&pair);
+    q = ajStrGetPtr(acgt);
 
     for(i=0,k=0;i<4;++i)
     {
@@ -116,21 +111,21 @@ void ajMeltInit(const AjPStr type, ajint savesize)
 	for(j=0;j<4;++j)
 	{
 	    *(p+1) = *(q+j);
-	    aj_m_table[k++].pair = ajStrNewC(p);
+	    meltTable[k++].pair = ajStrNewC(p);
 	}
     }
 
 
     while(ajFileGets(mfptr, &line))
     {
-	p = ajStrStrMod(&line);
+	p = ajStrGetuniquePtr(&line);
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
 
 	p = ajSysStrtok(p," \t\n\r");
-	ajStrAssC(&pair1,p);
+	ajStrAssignC(&pair1,p);
 	p = ajSysStrtok(NULL," \t\n\r");
-	ajStrAssC(&pair2,p);
+	ajStrAssignC(&pair2,p);
 	p = ajSysStrtok(NULL," \t\n\r");
 	if(sscanf(p,"%f",&enthalpy)!=1)
 	    ajFatal("No enthalpy found");
@@ -144,20 +139,20 @@ void ajMeltInit(const AjPStr type, ajint savesize)
 	got1 = got2 = ajFalse;
 
 	for(k=0;k<16;++k)
-	    if(!ajStrCmpO(aj_m_table[k].pair,pair1))
+	    if(!ajStrCmpS(meltTable[k].pair,pair1))
 	    {
-		aj_m_table[k].enthalpy = enthalpy;
-		aj_m_table[k].entropy  = entropy;
-		aj_m_table[k].energy   = energy;
+		meltTable[k].enthalpy = enthalpy;
+		meltTable[k].entropy  = entropy;
+		meltTable[k].energy   = energy;
 		got1 = ajTrue;
 	    }
 
 	for(k=0;k<16;++k)
-	    if(!ajStrCmpO(aj_m_table[k].pair,pair2))
+	    if(!ajStrCmpS(meltTable[k].pair,pair2))
 	    {
-		aj_m_table[k].enthalpy = enthalpy;
-		aj_m_table[k].entropy  = entropy;
-		aj_m_table[k].energy   = energy;
+		meltTable[k].enthalpy = enthalpy;
+		meltTable[k].entropy  = entropy;
+		meltTable[k].energy   = energy;
 		got2 = ajTrue;
 	    }
 
@@ -177,7 +172,7 @@ void ajMeltInit(const AjPStr type, ajint savesize)
 
     ajFileClose(&mfptr);
 
-    aj_melt_I = ajTrue;
+    meltInitDone = ajTrue;
 
     return;
 }
@@ -209,28 +204,28 @@ float ajProbScore(const AjPStr seq1, const AjPStr seq2, ajint len)
     const char *q;
 
 
-    mlen = (ajStrLen(seq1) < ajStrLen(seq2)) ? ajStrLen(seq1) :
-	ajStrLen(seq2);
+    mlen = (ajStrGetLen(seq1) < ajStrGetLen(seq2)) ? ajStrGetLen(seq1) :
+	ajStrGetLen(seq2);
 
     if(len > 0)
 	mlen = (mlen < len) ? mlen : len;
 
-    if(!aj_base_I)
-	ajBaseInit();
+    if(!danBaseInit)
+	danBaseInit = ajBaseInit();
 
     score = 0.0;
     if(!mlen)
 	return score;
 
     score = 1.0;
-    p = ajStrStr(seq1);
-    q = ajStrStr(seq2);
+    p = ajStrGetPtr(seq1);
+    q = ajStrGetPtr(seq2);
 
     for(i=0; i<mlen; ++i)
     {
 	x = ajAZToInt(*(p+i));
 	y = ajAZToInt(*(q+i));
-	score *= aj_base_prob[x][y];
+	score *= ajBaseProb(x,y);
     }
 
     return score;
@@ -259,7 +254,6 @@ float ajProbScore(const AjPStr seq1, const AjPStr seq2, ajint len)
 float ajMeltEnergy(const AjPStr strand, ajint len, ajint shift, AjBool isDNA,
 		   AjBool maySave, float *enthalpy, float *entropy)
 {
-    AjPStr fname;
     AjPStr line;
     ajint i;
     ajint j;
@@ -275,20 +269,7 @@ float ajMeltEnergy(const AjPStr strand, ajint len, ajint shift, AjBool isDNA,
     static float saveEnergy[MAXMELTSAVE];
 
 
-    if(!aj_melt_I)
-    {
-	if(isDNA)
-	{
-	    fname = ajStrNewC("dna");
-	    ajMeltInit(fname,len);
-	}
-	else
-	{
-	    fname = ajStrNewC("rna");
-	    ajMeltInit(fname,len);
-	}
-	ajStrDel(&fname);
-    }
+    ajMeltInit(isDNA,len);
 
     if (maySave == ajFalse)
 	aj_melt_saveshift = ajFalse;
@@ -333,7 +314,7 @@ float ajMeltEnergy(const AjPStr strand, ajint len, ajint shift, AjBool isDNA,
     }
 
     line = ajStrNew();
-    p = ajStrStr(strand);
+    p = ajStrGetPtr(strand);
 
     while(ipos < len-1)
     {
@@ -346,22 +327,22 @@ float ajMeltEnergy(const AjPStr strand, ajint len, ajint shift, AjBool isDNA,
 
 	for(j=0;j<16;++j)
 	{
-	    ajStrAssSubC(&line,p+ipos,0,1);
-	    ident = ajProbScore(aj_m_table[j].pair, line, 2);
+	    ajStrAssignSubC(&line,p+ipos,0,1);
+	    ident = ajProbScore(meltTable[j].pair, line, 2);
 
 	    if(ident>0.9)
 	    {
 		if(doShift)
 		{
-		    saveEnergy[ipos]   += (ident * aj_m_table[j].energy);
-		    saveEntropy[ipos]  += (ident * aj_m_table[j].entropy);
-		    saveEnthalpy[ipos] += (ident * aj_m_table[j].enthalpy);
+		    saveEnergy[ipos]   += (ident * meltTable[j].energy);
+		    saveEntropy[ipos]  += (ident * meltTable[j].entropy);
+		    saveEnthalpy[ipos] += (ident * meltTable[j].enthalpy);
 		}
 		else
 		{
-		    energy    += (ident * aj_m_table[j].energy);
-		    *entropy  += (ident * aj_m_table[j].entropy);
-		    *enthalpy += (ident * aj_m_table[j].enthalpy);
+		    energy    += (ident * meltTable[j].energy);
+		    *entropy  += (ident * meltTable[j].entropy);
+		    *enthalpy += (ident * meltTable[j].enthalpy);
 		}
 	    }
 	}
@@ -414,9 +395,9 @@ float ajTm(const AjPStr strand, ajint len, ajint shift, float saltconc,
     double LogDNA;
 
 
-    R      = 1.987;		       /* molar gas constant (cal/c * mol) */
+    R      = (float) 1.987;	       /* molar gas constant (cal/c * mol) */
     LogDNA = R * (float)log((double)(DNAconc/4000000000.0));	     /* nM */
-    To = 273.15;
+    To = (float) 273.15;
 
     ajMeltEnergy(strand, len, shift, isDNA, ajFalse, &sumEnthalpy,
 			&sumEntropy);
@@ -457,7 +438,7 @@ float ajMeltGC(const AjPStr strand, ajint len)
     const char *p;
     double count;
 
-    p=ajStrStr(strand);
+    p=ajStrGetPtr(strand);
     count = 0.0;
 
     for(i=0;i<len;++i)
@@ -481,7 +462,7 @@ float ajMeltGC(const AjPStr strand, ajint len)
 ** Calculates melt energy for use with programs like prima
 **
 ** Giving this routine the complete sequence on the first call and
-** setting aj_melt_I to false will initialise the energy, entropy
+** setting meltInitDone to false will initialise the energy, entropy
 ** and enthalpy arrays. Subsequent calls will not look at the
 ** sequence directly.
 **
@@ -499,11 +480,9 @@ float ajMeltGC(const AjPStr strand, ajint len)
 ******************************************************************************/
 
 float ajMeltEnergy2(const char *strand, ajint pos, ajint len, AjBool isDNA,
-		    float *enthalpy, float *entropy, float **saveentr,
-		    float **saveenth, float **saveener)
+		    float *enthalpy, float *entropy,
+		    float **saveentr, float **saveenth, float **saveener)
 {
-    AjPStr fname = NULL;
-
     ajint i;
     ajint j;
 
@@ -514,46 +493,28 @@ float ajMeltEnergy2(const char *strand, ajint pos, ajint len, AjBool isDNA,
 
     limit = len-1;
 
-    if(!aj_melt_I)
+    ajMeltInit(isDNA,len);
+
+    line = ajStrNew();
+
+    for(i=0;i<limit;++i)
     {
-	if(isDNA)
+	for(j=0;j<16;++j)
 	{
-	    fname = ajStrNewC("dna");
-	    ajMeltInit(fname,len);
-	}
-	else
-	{
-	    fname = ajStrNewC("rna");
-	    ajMeltInit(fname,len);
-	}
-	ajStrDel(&fname);
-
-	AJCNEW0 (*saveentr, limit);
-	AJCNEW0 (*saveenth, limit);
-	AJCNEW0 (*saveener, limit);
-
-	line = ajStrNew();
-
-	for(i=0;i<limit;++i)
-	{
-	    for(j=0;j<16;++j)
+	    ajStrAssignSubC(&line,strand+i,0,1);
+	    ident = ajProbScore(meltTable[j].pair,line,2);
+	    if(ident>.9)
 	    {
-		ajStrAssSubC(&line,strand+i,0,1);
-		ident = ajProbScore(aj_m_table[j].pair,line,2);
-		if(ident>.9)
-		{
-		    (*saveentr)[i] += (ident * aj_m_table[j].entropy);
-		    (*saveenth)[i] += (ident * aj_m_table[j].enthalpy);
-		    (*saveener)[i] += (ident * aj_m_table[j].energy);
-		}
+		(*saveentr)[i] += (ident * meltTable[j].entropy);
+		(*saveenth)[i] += (ident * meltTable[j].enthalpy);
+		(*saveener)[i] += (ident * meltTable[j].energy);
 	    }
 	}
-
-	ajStrDel(&line);
-	aj_melt_I = ajTrue;
     }
+    
+    ajStrDel(&line);
 
-    energy = *enthalpy = *entropy = (float)0.0;
+    energy = *enthalpy = *entropy = 0.0;
 
 
     for(i=0;i<limit;++i)
@@ -579,22 +540,23 @@ float ajMeltEnergy2(const char *strand, ajint pos, ajint len, AjBool isDNA,
 ** @param  [r] saltconc [float] mM salt concentration
 ** @param  [r] DNAconc [float] nM DNA concentration
 ** @param  [r] isDNA [AjBool] DNA or RNA
+** @param  [w] saveentr [float **] entropy save array
+** @param  [w] saveenth [float **] enthalpy save array
+** @param  [w] saveener [float **] energy save array
 **
 ** @return [float] Melt temperature
 ******************************************************************************/
 
 float ajTm2(const char *strand, ajint pos, ajint len, float saltconc,
-	    float DNAconc, AjBool isDNA)
+	    float DNAconc, AjBool isDNA,
+	    float **saveentr, float **saveenth, float **saveener)
 {
-    static float *saveentr;
-    static float *saveenth;
-    static float *saveener;
     double entropy;
     double enthalpy;
     double dTm;
     float  Tm;
-    static float sumEntropy;
-    static float sumEnthalpy;
+    float sumEntropy;
+    float sumEnthalpy;
     float To;
     float R;
     double LogDNA;
@@ -602,12 +564,12 @@ float ajTm2(const char *strand, ajint pos, ajint len, float saltconc,
 
 
     /* LogSalt = 16.6 * (float) (log10((double) (saltconc/1000.0))); */ /* mM */
-    R = 1.987;		 /* molar gas constant (cal/c * mol)        */
+    R = (float) 1.987;		 /* molar gas constant (cal/c * mol)        */
     LogDNA = R * (float)log((double)(DNAconc/4000000000.0)); /* nM */
-    To = 273.15;
+    To = (float) 273.15;
 
     ajMeltEnergy2(strand, pos, len, isDNA, &sumEnthalpy,
-		  &sumEntropy, &saveentr, &saveenth, &saveener);
+		  &sumEntropy, saveentr, saveenth, saveener);
 
     entropy = -10.8 - sumEntropy;
 
@@ -668,4 +630,26 @@ float ajProdTm(float gc, float saltconc, ajint len)
 float ajAnneal(float tmprimer, float tmproduct)
 {
     return ((float).7*tmproduct)-(float)14.9+((float).3*tmprimer);
+}
+
+
+
+
+
+/* @func ajMeltExit ***********************************************************
+**
+** Cleans up DNA melting processing internal memory
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajMeltExit(void)
+{
+    ajint i;
+
+    for(i=0;i<256;i++)
+	ajStrDel(&meltTable[i].pair);
+
+    return;
 }

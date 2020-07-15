@@ -99,10 +99,18 @@ typedef struct {
 
 /* The functions */
 
+/*
+** Prototype definitions
+*/
+
 extern int pcre_regcomp(regex_t *, const char *, int);
 extern int pcre_regexec(const regex_t *, const char *, size_t, regmatch_t *, int);
 extern size_t pcre_regerror(int, const regex_t *, char *, size_t);
 extern void pcre_regfree(regex_t *);
+
+/*
+** End of prototype definitions
+*/
 
 #ifdef __cplusplus
 }   /* extern "C" */

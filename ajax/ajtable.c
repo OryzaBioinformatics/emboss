@@ -31,11 +31,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "ajmem.h"
-#include "ajassert.h"
-#include "ajtable.h"
-#include "ajstr.h"
-#include "ajmess.h"
+#include "ajax.h"
 
 
 
@@ -460,8 +456,6 @@ void ajTableMap(AjPTable table,
 
     if(!table)
 	return;
-    if(!apply)
-	return;
 
     stamp = table->timestamp;
     for(i = 0; i < table->size; i++)
@@ -503,8 +497,6 @@ void ajTableMapDel(AjPTable table,
     struct binding *p;
 
     if(!table)
-	return;
-    if(!apply)
 	return;
 
     stamp = table->timestamp;
@@ -770,7 +762,7 @@ ajuint ajStrTableHashCase(const void* key, ajuint hashsize)
     ajuint hash;
 
     str = (AjPStr) key;
-    s   = ajStrStr(str);
+    s   = ajStrGetPtr(str);
 
     for(hash = 0; *s; s++)
 	hash = (hash * 127 + toupper((ajint)*s)) % hashsize;
@@ -824,7 +816,7 @@ ajuint ajStrTableHash(const void* key, ajuint hashsize)
     ajuint hash;
 
     str = (AjPStr) key;
-    s   = ajStrStr(str);
+    s   = ajStrGetPtr(str);
 
     for(hash = 0; *s; s++)
 	hash = (hash * 127 + *s) % hashsize;
@@ -855,7 +847,7 @@ ajint ajStrTableCmpCaseC(const void* x, const void* y)
     sx = (const char*) x;
     sy = (const char*) y;
 
-    return (ajint)ajStrCmpCaseCC(sx, sy);
+    return (ajint)ajCharCmpCase(sx, sy);
 }
 
 
@@ -881,7 +873,7 @@ ajint ajStrTableCmpCase(const void* x, const void* y)
     sx = (AjPStr) x;
     sy = (AjPStr) y;
 
-    return (ajint)ajStrCmpCase(sx, sy);
+    return (ajint)ajStrCmpCaseS(sx, sy);
 }
 
 
@@ -931,7 +923,7 @@ ajint ajStrTableCmp(const void* x, const void* y)
     sx = (AjPStr) x;
     sy = (AjPStr) y;
 
-    return (ajint)ajStrCmpO(sx, sy);
+    return (ajint)ajStrCmpS(sx, sy);
 }
 
 

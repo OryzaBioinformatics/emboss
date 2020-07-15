@@ -63,6 +63,13 @@ typedef struct AjSTable {
 
 #define AjPTable AjOTable*
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 void       ajTableExit(void);
 AjPTable   ajTableNew (ajint hint,
 		       ajint cmp(const void *x, const void *y),
@@ -102,6 +109,10 @@ AjPTable   ajStrTableNewCaseC (ajint hint);
 void       ajStrTablePrint  (const AjPTable table);
 void       ajStrTablePrintC (const AjPTable table);
 void       ajStrTableTrace (const AjPTable table);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

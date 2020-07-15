@@ -28,6 +28,9 @@
 
 
 
+
+#ifndef WIN32
+
 /* @func assert ***************************************************************
 **
 ** The assert() macro inserts diagnostics into programs.
@@ -41,3 +44,5 @@ void (assert)(ajint e)
 {
     assert(e);
 }
+
+#endif

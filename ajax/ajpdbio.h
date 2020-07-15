@@ -36,6 +36,9 @@ extern "C"
 
 
 
+/*
+** Prototype definitions
+*/
 
 /* ======================================================================= */
 /* =========================== Pdb object ================================ */
@@ -57,8 +60,9 @@ AjBool  ajPdbWriteDomainRecordRaw(ajint mode, const AjPPdb pdb, ajint mod,
 				  const AjPScop scop,
 				  AjPFile outf, AjPFile errf);
 
-
-
+/*
+** End of prototype definitions
+*/
 
 #endif
 

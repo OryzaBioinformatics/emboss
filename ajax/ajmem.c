@@ -24,12 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ajdefine.h"
-#include "ajassert.h"
-#include "ajexcept.h"
-#include "ajmem.h"
-
-extern void ajDebug(char *fmt, ...);
+#include "ajax.h"
 
 static const Except_T Mem_Failed =
 {
@@ -134,6 +129,7 @@ void* ajMemCalloc(ajlong count, ajlong nbytes,
 {
     void *ptr;
 
+    if(count <= 0) ajUtilCatch();
     assert(count > 0);
     assert(nbytes > 0);
 
@@ -259,7 +255,7 @@ void* ajMemResize(void* ptr, ajlong nbytes,
 
     if(ptr == NULL)
     {
-	ptr = ajMemAlloc(nbytes, file, line, nofail);
+	ptr = ajMemCalloc0(nbytes, 1, file, line, nofail);
 	return ptr;
     }
 

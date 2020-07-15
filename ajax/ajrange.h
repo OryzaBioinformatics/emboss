@@ -6,6 +6,9 @@ extern "C"
 #ifndef ajrange_h
 #define ajrange_h
 
+
+
+
 /* @data AjPRange *************************************************************
 **
 ** Data structure for AJAX sequence range specifications
@@ -49,13 +52,23 @@ typedef struct AjSRange
 #define AjPRange AjORange*
 
 
+
+
+/*
+** Prototype definitions
+*/
+
 AjBool    ajRangeBegin (AjPRange thys, ajint begin);
 AjBool    ajRangeChange(AjPRange thys, ajint element, ajint start, ajint end);
 AjPRange  ajRangeCopy(const AjPRange src);
 AjBool    ajRangeDefault(const AjPRange thys, const AjPSeq s);
 void      ajRangeDel(AjPRange *thys);
 AjPRange  ajRangeFile(const AjPStr name);
+AjPRange  ajRangeFileLimits(const AjPStr name, ajint imin, ajint imax,
+			   ajint minsize, ajint size);
 AjPRange  ajRangeGet(const AjPStr s);
+AjPRange  ajRangeGetLimits(const AjPStr str, ajint imin, ajint imax,
+			   ajint minsize, ajint size);
 AjPRange  ajRangeNewI(ajint n);
 ajint     ajRangeNumber(const AjPRange thys);
 AjBool    ajRangeOrdered (const AjPRange thys);
@@ -81,6 +94,10 @@ AjBool    ajRangeStrToLower (const AjPRange thys, AjPStr *str);
 AjBool    ajRangeText(const AjPRange thys, ajint element, AjPStr * text);
 AjBool    ajRangeValues(const AjPRange thys, ajint element,
 			ajint *start, ajint *end);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

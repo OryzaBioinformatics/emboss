@@ -205,6 +205,7 @@ typedef struct AjSAtom
 ** @use ajResidueSSEnv  Assigns secondary structure environment of a residue.
 ** @@
 ******************************************************************************/
+
 typedef struct AjSResidue
 {
     ajint    Mod;
@@ -437,6 +438,7 @@ typedef struct AjSPdb
 **
 ** @@
 ****************************************************************************/
+
 typedef struct AjSHetent
 {
     AjPStr   abv;   
@@ -479,6 +481,7 @@ typedef struct AjSHetent
 **
 ** @@
 ****************************************************************************/
+
 typedef struct AjSHet
 {
     ajint         n;   
@@ -518,6 +521,7 @@ typedef struct AjSHet
 ** 
 ** @@
 ****************************************************************************/
+
 typedef struct AjSVdwres
 {
     char     Id1;     
@@ -559,6 +563,7 @@ typedef struct AjSVdwres
 **
 ** @@
 ****************************************************************************/
+
 typedef struct AjSVdwall
 {
     ajint       N;    
@@ -624,6 +629,7 @@ typedef struct AjSVdwall
 **
 ** @@
 ****************************************************************************/
+
 typedef struct AjSCmap
 {
     ajint     Type;
@@ -709,6 +715,9 @@ typedef struct AjSPdbtosp
 
 
 
+/*
+** Prototype definitions
+*/
 
 
 /* ======================================================================= */
@@ -899,9 +908,9 @@ AjPPdbtosp   ajPdbtospReadCNew(AjPFile inf, const char *entry);
 AjPList      ajPdbtospReadAllNew(AjPFile inf);
 AjBool       ajPdbtospWrite(AjPFile outf, const AjPList list);
 
-
-
-
+/*
+** End of prototype definitions
+*/
 
 #endif
 

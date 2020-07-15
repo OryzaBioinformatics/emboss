@@ -6,13 +6,18 @@ extern "C"
 #ifndef ajnam_h
 #define ajnam_h
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 AjBool ajNamDatabase(const AjPStr name);
-AjBool ajNamDbAccess (const AjPStr dbname, const AjPSeqQuery qry,
-		      AjPStr* method);
 AjBool ajNamDbDetails (const AjPStr name, AjPStr* type, AjBool* id,
 		       AjBool* qry, AjBool* all,
-		       AjPStr* comment, AjPStr* release);
-AjBool ajNamDbGetAlias (const AjPStr dbname, AjPStr* dbalias);
+		       AjPStr* comment, AjPStr* release,
+		       AjPStr* methods, AjPStr* defined);
 AjBool ajNamDbGetDbalias (const AjPStr dbname, AjPStr* dbalias);
 AjBool ajNamDbGetUrl (const AjPStr dbname, AjPStr* url);
 AjBool ajNamDbData (AjPSeqQuery qry);
@@ -48,6 +53,19 @@ AjBool ajNamRsAttrValueC(const char *name, const char *attribute,
 AjBool ajNamRsListValue(const AjPStr name, AjPStr *value);
 AjBool ajNamSetControl (const char* optionName);
 void   ajNamVariables (void); /* "" "" may want to delete later */
+
+/*
+** End of prototype definitions
+*/
+
+#endif
+
+#ifdef WIN32
+#ifdef AJAXDLL_EXPORTS
+__declspec(dllexport) const char* EMBOSSWINROOT_ENVVAR;
+#else
+__declspec(dllimport) const char* EMBOSSWINROOT_ENVVAR;
+#endif
 #endif
 
 #ifdef __cplusplus

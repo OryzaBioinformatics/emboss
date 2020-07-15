@@ -13,6 +13,9 @@ enum AjETreeType {ajETreeAny, ajETreeStr};
 
 #define AjPTreeNode AjOTreeNode*
 
+
+
+
 /* @data AjPTree **************************************************************
 **
 ** Tree data object. Trees are simple linked nodes with back pointers.
@@ -47,6 +50,13 @@ typedef struct AjSTree {
 
 #define AjPTree AjOTree*
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 AjBool  ajTreeAddData(AjPTree thys, void* data);
 AjPTree ajTreeAddNode(AjPTree thys);
 AjPTree ajTreeAddSubNode(AjPTree thys);
@@ -55,20 +65,24 @@ AjPTree ajTreeCopy(const AjPTree thys);
 void    ajTreeDel(AjPTree* pthis);
 void    ajTreeExit(void);
 void    ajTreeFree(AjPTree* pthis);
-AjBool  ajTreeGetData(AjPTree thys, void** data);
 ajint   ajTreeLength(const AjPTree thys);
 void    ajTreeMap(AjPTree thys, void apply(void** x, void* cl), void* cl);
 AjPTree ajTreeNew(void);
 AjPTree ajTreestrCopy(const AjPTree thys);
 void    ajTreestrDel(AjPTree* pthis);
 void    ajTreestrFree(AjPTree* pthis);
+ajint   ajTreestrLength(const AjPTree thys);
 void    ajTreestrMap(AjPTree thys, void apply(AjPStr* x, void* cl), void* cl);
 AjPTree ajTreestrNew(void);
 ajint   ajTreestrToArray(const AjPTree thys, AjPStr** array);
 ajint   ajTreeToArray(const AjPTree thys, void*** array);
 void    ajTreeTrace(const AjPTree thys);
 
-void    ajTreeDummyFunction();
+void    ajTreeDummyFunction(void);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

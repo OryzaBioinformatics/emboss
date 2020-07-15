@@ -42,6 +42,9 @@ typedef struct AjSPhyloDist
 
 #define AjPPhyloDist AjOPhyloDist*
 
+
+
+
 /* @data AjPPhyloFreq *********************************************************
 **
 ** Ajax phylogeny frequencies.
@@ -98,6 +101,9 @@ typedef struct AjSPhyloFreq
 
 #define AjPPhyloFreq AjOPhyloFreq*
 
+
+
+
 /* @data AjPPhyloProp *********************************************************
 **
 ** Ajax phylogeny properties: weights, ancestral states, factors.
@@ -141,6 +147,9 @@ typedef struct AjSPhyloProp
 
 #define AjPPhyloProp AjOPhyloProp*
 
+
+
+
 /* @data AjPPhyloState ********************************************************
 **
 ** Ajax discrete state data.
@@ -172,6 +181,9 @@ typedef struct AjSPhyloState
 } AjOPhyloState;
 
 #define AjPPhyloState AjOPhyloState*
+
+
+
 
 /* @data AjPPhyloTree *********************************************************
 **
@@ -207,6 +219,12 @@ typedef struct AjSPhyloTree
 #define AjPPhyloTree AjOPhyloTree*
 
 
+
+
+/*
+** Prototype definitions
+*/
+
 void           ajPhyloDistDel (AjPPhyloDist* pthis);
 AjPPhyloDist   ajPhyloDistNew (void);
 AjPPhyloDist   ajPhyloDistRead (const AjPStr filename, ajint size,
@@ -236,6 +254,10 @@ void           ajPhyloTreeDel (AjPPhyloTree* pthis);
 AjPPhyloTree   ajPhyloTreeNew (void);
 AjPPhyloTree*  ajPhyloTreeRead (const AjPStr filename, ajint size);
 void           ajPhyloTreeTrace (const AjPPhyloTree thys);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

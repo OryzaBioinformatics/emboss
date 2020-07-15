@@ -4,10 +4,11 @@ extern "C"
 #endif
 
 
-
-
 #ifndef aj3dvector_h
 #define aj3dvector_h
+
+
+
 
 /* @data AjP3dVector *********************************************************
 **
@@ -55,29 +56,35 @@ typedef struct AjS3dVector
 /* =================== All functions in alphabetical order ================= */
 /* ========================================================================= */
 
-/* aj3dvector.h () $Date: 2004/07/14 15:36:49 $                    DJC Oct03 */
+/*
+** Prototype definitions
+*/
 
-float       aj3dVectorAngle(const AjP3dVector ajp3dVectorFirst,
-			    const AjP3dVector ajp3dVectorSecond);
-void        aj3dVectorBetweenPoints(AjP3dVector ajp3dVectorBetweenPoints,
-				    float startX, float startY,
-				    float startZ, float endX, float endY,
+float       aj3dVectorAngle(const AjP3dVector first,
+			    const AjP3dVector fecond);
+void        aj3dVectorBetweenPoints(AjP3dVector betweenPoints,
+				    float X, float Y,
+				    float Z, float endX, float endY,
 				    float endZ);
 AjP3dVector aj3dVectorCreate(float fX, float fY, float fZ);
-void        aj3dVectorCrossProduct(const AjP3dVector ajp3dVectorFirst,
-				   const AjP3dVector ajp3dVectorSecond,
-				   AjP3dVector ajp3dVectorCrossProduct);
-float       aj3dVectorDihedralAngle(const AjP3dVector ajp3dVectorA,
-				    const AjP3dVector ajp3dVectorB,
-				    const AjP3dVector ajp3dVectorC);
-void        aj3dVectorDel(AjP3dVector* ajp3dVectorToBeDestroyed);
-float       aj3dVectorDotProduct(const AjP3dVector ajp3dVectorFirst,
-				 const AjP3dVector ajp3dVectorSecond);
-float       aj3dVectorLength(const AjP3dVector ajp3dVectorToBeSized);
+void        aj3dVectorCrossProduct(const AjP3dVector first,
+				   const AjP3dVector second,
+				   AjP3dVector crossproduct);
+float       aj3dVectorDihedralAngle(const AjP3dVector veca,
+				    const AjP3dVector vecb,
+				    const AjP3dVector vecc);
+void        aj3dVectorDel(AjP3dVector* pthys);
+float       aj3dVectorDotProduct(const AjP3dVector first,
+				 const AjP3dVector second);
+float       aj3dVectorLength(const AjP3dVector thys);
 AjP3dVector aj3dVectorNew(void);
-void        aj3dVectorSum(const AjP3dVector ajp3dVectorFirst,
-			  const AjP3dVector ajp3dVectorSecond,
-			  AjP3dVector ajp3dVectorSum);
+void        aj3dVectorSum(const AjP3dVector first,
+			  const AjP3dVector second,
+			  AjP3dVector sum);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

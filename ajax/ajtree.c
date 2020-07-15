@@ -40,11 +40,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "ajstr.h"
-#include "ajassert.h"
-#include "ajmem.h"
-#include "ajtree.h"
-#include "ajmess.h"
+#include "ajax.h"
 
 static ajint treeNewCnt     = 0;
 static ajint treeDelCnt     = 0;
@@ -439,7 +435,7 @@ ajint ajTreestrToArray(const AjPTree thys, AjPStr** array)
 ** @return [void]
 ******************************************************************************/
 
-void ajTreeDummyFunction()
+void ajTreeDummyFunction(void)
 {
 
     return;

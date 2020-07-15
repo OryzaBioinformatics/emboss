@@ -32,6 +32,9 @@
 #include <string.h>
 
 #ifndef HAVE_MEMMOVE
+/* @header memmove ************************************************************
+**
+******************************************************************************/
 static void* memmove (void *dst, const void* src, size_t len)
 {
     return (void *)bcopy (src, dst, len);
@@ -39,6 +42,27 @@ static void* memmove (void *dst, const void* src, size_t len)
 #endif
 
 #define RESERVED_SIZE 32
+
+static ajlong arrAlloc     = 0;
+static ajlong arr2dAlloc   = 0;
+static ajlong arr3dAlloc   = 0;
+static ajlong arrFree      = 0;
+static ajlong arr2dFree      = 0;
+static ajlong arr3dFree      = 0;
+static ajlong arrFreeCount = 0;
+static ajlong arr2dFreeCount = 0;
+static ajlong arr3dFreeCount = 0;
+static ajlong arrCount     = 0;
+static ajlong arr2dCount     = 0;
+static ajlong arr3dCount     = 0;
+static ajlong arrTotal     = 0;
+static ajlong arr2dTotal     = 0;
+static ajlong arr3dTotal     = 0;
+static ajlong arrResize    = 0;
+static ajlong arr2dResize    = 0;
+static ajlong arr3dResize    = 0;
+static AjPRegexp floatRegNum = NULL;
+
 
 static AjBool ajChararrResize(AjPChar *thys, ajint elem);
 static AjBool ajIntResize(AjPInt *thys, ajint elem);
@@ -77,6 +101,9 @@ AjPChar ajChararrNew(void)
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
+    arrTotal++;
+    arrAlloc += RESERVED_SIZE*sizeof(char);
+
     return thys;
 }
 
@@ -104,6 +131,9 @@ AjPChar ajChararrNewL(ajint size)
     thys->Ptr = AJALLOC0(size*sizeof(char));
     thys->Len = 0;
     thys->Res = (ajint)size;
+
+    arrTotal++;
+    arrAlloc += size*sizeof(char);
 
     return thys;
 }
@@ -133,6 +163,8 @@ void ajChararrDel(AjPChar *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arrFreeCount++;
 
     return;
 }
@@ -246,6 +278,9 @@ AjPInt ajIntNew(void)
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
+    arrTotal++;
+    arrAlloc += RESERVED_SIZE*sizeof(ajint);
+
     return thys;
 }
 
@@ -273,6 +308,11 @@ AjPInt ajIntNewL(ajint size)
     thys->Len = 0;
     thys->Res = (ajint)size;
 
+    arrTotal++;
+    arrAlloc += size*sizeof(ajint);
+
+    ajDebug("ajIntNewL size %d*%d %d\n",
+	    size, sizeof(ajint), size*sizeof(ajint));
     return thys;
 }
 
@@ -301,6 +341,8 @@ void ajIntDel(AjPInt *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arrFreeCount++;
 
     return;
 }
@@ -456,8 +498,11 @@ static AjBool ajChararrResize(AjPChar *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajChararrResize %d (%d) -> %d (%d)\n",
+	    (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -474,6 +519,8 @@ static AjBool ajChararrResize(AjPChar *thys, ajint size)
 
 
     ajChararrDel(&p);
+
+    arrResize++;
 
     return ajTrue;
 }
@@ -508,8 +555,11 @@ static AjBool ajIntResize(AjPInt *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s    = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajIntResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -526,6 +576,8 @@ static AjBool ajIntResize(AjPInt *thys, ajint size)
 
 
     ajIntDel(&p);
+
+    arrResize++;
 
     return ajTrue;
 }
@@ -590,6 +642,9 @@ AjPFloat ajFloatNew(void)
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
+    arrTotal++;
+    arrAlloc += RESERVED_SIZE*sizeof(float);
+
     return thys;
 }
 
@@ -616,6 +671,9 @@ AjPFloat ajFloatNewL(ajint size)
     thys->Ptr = AJALLOC0(size*sizeof(float));
     thys->Len = 0;
     thys->Res = (ajint)size;
+
+    arrTotal++;
+    arrAlloc += size*sizeof(float);
 
     return thys;
 }
@@ -645,6 +703,8 @@ void ajFloatDel(AjPFloat *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arrFreeCount++;
 
     return;
 }
@@ -745,8 +805,11 @@ static AjBool ajFloatResize(AjPFloat *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajFloatResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -763,6 +826,8 @@ static AjBool ajFloatResize(AjPFloat *thys, ajint size)
 
 
     ajFloatDel(&p);
+
+    arrResize++;
 
     return ajTrue;
 }
@@ -827,6 +892,9 @@ AjPDouble ajDoubleNew(void)
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
+    arrTotal++;
+    arrAlloc += RESERVED_SIZE*sizeof(double);
+
     return thys;
 }
 
@@ -854,6 +922,9 @@ AjPDouble ajDoubleNewL(ajint size)
     thys->Ptr = AJALLOC0(size*sizeof(double));
     thys->Len = 0;
     thys->Res = (ajint)size;
+
+    arrTotal++;
+    arrAlloc += size*sizeof(double);
 
     return thys;
 }
@@ -883,6 +954,8 @@ void ajDoubleDel(AjPDouble *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arrFreeCount++;
 
     return;
 }
@@ -982,8 +1055,11 @@ static AjBool ajDoubleResize(AjPDouble *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajDoubleResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -1000,6 +1076,8 @@ static AjBool ajDoubleResize(AjPDouble *thys, ajint size)
 
 
     ajDoubleDel(&p);
+
+    arrResize++;
 
     return ajTrue;
 }
@@ -1064,6 +1142,9 @@ AjPShort ajShortNew(void)
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
+    arrTotal++;
+    arrAlloc += RESERVED_SIZE*sizeof(short);
+
     return thys;
 }
 
@@ -1090,6 +1171,9 @@ AjPShort ajShortNewL(ajint size)
     thys->Ptr = AJALLOC0(size*sizeof(short));
     thys->Len = 0;
     thys->Res = (ajint)size;
+
+    arrTotal++;
+    arrAlloc += size*sizeof(short);
 
     return thys;
 }
@@ -1119,6 +1203,8 @@ void ajShortDel(AjPShort *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arrFreeCount++;
 
     return;
 }
@@ -1218,8 +1304,11 @@ static AjBool ajShortResize(AjPShort *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajShortResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -1236,6 +1325,8 @@ static AjBool ajShortResize(AjPShort *thys, ajint size)
 
 
     ajShortDel(&p);
+
+    arrResize++;
 
     return ajTrue;
 }
@@ -1300,6 +1391,9 @@ AjPLong ajLongNew(void)
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
 
+    arrTotal++;
+    arrAlloc += RESERVED_SIZE*sizeof(ajlong);
+
     return thys;
 }
 
@@ -1326,6 +1420,9 @@ AjPLong ajLongNewL(ajint size)
     thys->Ptr = AJALLOC0(size*sizeof(ajlong));
     thys->Len = 0;
     thys->Res = (ajint)size;
+
+    arrTotal++;
+    arrAlloc += size*sizeof(ajlong);
 
     return thys;
 }
@@ -1355,6 +1452,8 @@ void ajLongDel(AjPLong *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arrFreeCount++;
 
     return;
 }
@@ -1454,8 +1553,11 @@ static AjBool ajLongResize(AjPLong *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajLongResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -1472,6 +1574,8 @@ static AjBool ajLongResize(AjPLong *thys, ajint size)
 
 
     ajLongDel(&p);
+
+    arrResize++;
 
     return ajTrue;
 }
@@ -1532,28 +1636,29 @@ ajlong ajLongLen(const AjPLong thys)
 
 AjBool ajFloatParse (const AjPStr str, AjPFloat* array)
 {
-    static AjPRegexp numexp = NULL;
-
     ajint i = 0;
     float t = 0.0;
 
-    static AjPStr tmpstr = NULL;
-    static AjPStr numstr = NULL;
+    AjPStr tmpstr = NULL;
+    AjPStr numstr = NULL;
 
-    if (!numexp)
-	numexp = ajRegCompC ("[+-]?[0-9.]+");
+    if (!floatRegNum)
+	floatRegNum = ajRegCompC ("[+-]?[0-9.]+");
 
-    ajStrAssS (&tmpstr, str);
+    ajStrAssignS(&tmpstr, str);
 
-    while (ajRegExec (numexp, tmpstr))
+    while (ajRegExec (floatRegNum, tmpstr))
     {
-	ajRegSubI (numexp, 0, &numstr);
-	ajRegPost (numexp, &tmpstr);
+	ajRegSubI (floatRegNum, 0, &numstr);
+	ajRegPost (floatRegNum, &tmpstr);
 	ajDebug ("array [%d] '%S'\n", i, numstr);
 	ajStrToFloat (numstr, &t);
 	ajFloatPut(array,i,t);
 	i++;
     }
+
+    ajStrDel(&numstr);
+    ajStrDel(&tmpstr);
 
     if (!i)
 	return ajFalse;
@@ -1582,7 +1687,7 @@ void ajFloatStr (const AjPFloat array, ajint precision, AjPStr* str)
     for (i=0; i < array->Len; i++)
     {
 	if (i)
-	    ajStrAppK (str, ' ');
+	    ajStrAppendK(str, ' ');
 	ajFmtPrintAppS (str, "%.*f", precision, ajFloatGet(array,i));
     }
     return;
@@ -1636,23 +1741,23 @@ ajint ajArrCommaList(const AjPStr s, AjPStr **a)
     ajint i;
 
 
-    n = ajStrTokenCount(s,",\n");
+    n = ajStrParseCountC(s,",\n");
     if(!n)
 	return 0;
 
     AJCNEW(*a, n);
 
     x = ajStrNew();
-    t = ajStrTokenInit(s,",\n");
+    t = ajStrTokenNewC(s,",\n");
 
     for(i=0;i<n;++i)
     {
-	ajStrToken(&x,&t,",\n");
-	(*a)[i] = ajStrNewC(ajStrStr(x));
+	ajStrTokenNextParseC(&t,",\n", &x);
+	(*a)[i] = ajStrNewS(x);
     }
 
     ajStrDel(&x);
-    ajStrTokenClear(&t);
+    ajStrTokenDel(&t);
 
     return n;
 }
@@ -1683,18 +1788,18 @@ double* ajArrDoubleLine(const AjPStr line, const char *delim, ajint cols,
     ajint i;
 
 
-    t = ajStrTokenInit(line, delim);
+    t = ajStrTokenNewC(line, delim);
     tmp = ajStrNew();
     ncols = (endcol-startcol)+1;
     AJCNEW(ret, ncols);
 
     for(i=0;i<startcol-1;++i)
-	if(!ajStrToken(&tmp,&t,delim))
+	if(!ajStrTokenNextParseC(&t,delim,&tmp))
 	    ajFatal("Token missing");
 
     for(i=0;i<ncols;++i)
     {
-	if(!ajStrToken(&tmp,&t,delim))
+	if(!ajStrTokenNextParseC(&t,delim,&tmp))
 	    ajFatal("Token missing");
 
 	if(!ajStrToDouble(tmp,&ret[i]))
@@ -1702,7 +1807,7 @@ double* ajArrDoubleLine(const AjPStr line, const char *delim, ajint cols,
     }
 
     ajStrDel(&tmp);
-    ajStrTokenClear(&t);
+    ajStrTokenDel(&t);
 
     return ret;
 }
@@ -1733,19 +1838,19 @@ ajint* ajArrIntLine(const AjPStr line, const char *delim, ajint cols,
     ajint i;
 
 
-    t     = ajStrTokenInit(line, delim);
+    t     = ajStrTokenNewC(line, delim);
     tmp   = ajStrNew();
     ncols = (endcol-startcol)+1;
 
     AJCNEW(ret, ncols);
 
     for(i=0;i<startcol-1;++i)
-	if(!ajStrToken(&tmp,&t,delim))
+	if(!ajStrTokenNextParseC(&t,delim,&tmp))
 	    ajFatal("Token missing");
 
     for(i=0;i<ncols;++i)
     {
-	if(!ajStrToken(&tmp,&t,delim))
+	if(!ajStrTokenNextParseC(&t,delim,&tmp))
 	    ajFatal("Token missing");
 
 	if(!ajStrToInt(tmp,&ret[i]))
@@ -1753,7 +1858,7 @@ ajint* ajArrIntLine(const AjPStr line, const char *delim, ajint cols,
     }
 
     ajStrDel(&tmp);
-    ajStrTokenClear(&t);
+    ajStrTokenDel(&t);
 
     return ret;
 }
@@ -1785,23 +1890,23 @@ float* ajArrFloatLine(const AjPStr line, const char *delim, ajint cols,
     AjPStr tmpline = NULL;
 
     tmpline = ajStrNew();
-    ajStrAssS(&tmpline,line);
+    ajStrAssignS(&tmpline,line);
     
-    ajStrClean(&tmpline);
+    ajStrRemoveWhite(&tmpline);
 
-    t     = ajStrTokenInit(tmpline, delim);
+    t     = ajStrTokenNewC(tmpline, delim);
     tmp   = ajStrNew();
     ncols = (endcol-startcol)+1;
 
     AJCNEW(ret, ncols);
 
     for(i=0;i<startcol-1;++i)
-	if(!ajStrToken(&tmp,&t,delim))
+	if(!ajStrTokenNextParseC(&t,delim,&tmp))
 	    ajFatal("Token missing");
 
     for(i=0;i<ncols;++i)
     {
-	if(!ajStrToken(&tmp,&t,delim))
+	if(!ajStrTokenNextParseC(&t,delim,&tmp))
 	    ajFatal("Token missing");
 
 	if(!ajStrToFloat(tmp,&ret[i]))
@@ -1810,7 +1915,7 @@ float* ajArrFloatLine(const AjPStr line, const char *delim, ajint cols,
 
     ajStrDel(&tmp);
     ajStrDel(&tmpline);
-    ajStrTokenClear(&t);
+    ajStrTokenDel(&t);
 
     return ret;
 }
@@ -1840,6 +1945,9 @@ AjPInt2d ajInt2dNew(void)
 
     for(i=0;i<RESERVED_SIZE;++i)
 	thys->Ptr[i] = NULL;
+
+    arr2dTotal++;
+    arr2dAlloc += RESERVED_SIZE;
 
     return thys;
 }
@@ -1873,6 +1981,47 @@ AjPInt2d ajInt2dNewL(ajint size)
     for(i=0;i<size;++i)
 	thys->Ptr[i] = NULL;
 
+    arr2dAlloc++;
+
+    return thys;
+}
+
+
+
+
+/* @func ajInt2dNewLL *********************************************************
+**
+** Constructor given an initial reserved size in both dimensions
+**
+** @param [r] size [ajint] Reserved size 1st dim
+** @param [r] size2 [ajint] Reserved size 2nd dim
+** @return [AjPInt2d] Pointer to an empty integer 2d array struct of
+**                    specified size.
+** @category new [AjPInt2d] Constructor with reserved size
+** @@
+******************************************************************************/
+
+AjPInt2d ajInt2dNewLL(ajint size, ajint size2)
+{
+    AjPInt2d thys;
+    ajint i;
+
+    size = ajRound(size,RESERVED_SIZE);
+
+    AJNEW0(thys);
+    thys->Ptr = AJALLOC0(size*sizeof(AjPInt*));
+    thys->Len = 0;
+    thys->Res = (ajint)size;
+
+    for(i=0;i<size;++i)
+        thys->Ptr[i] = ajIntNewL(size2);
+
+    arr2dAlloc++;
+
+    ajDebug("ajInt2dNewLL %d*%d %d; %d*%d*%d %d\n",
+	    size, sizeof(AjPInt*),
+	    size*sizeof(AjPInt*),
+	    size, size2, sizeof(ajint), size*size2*sizeof(ajint));
     return thys;
 }
 
@@ -1907,6 +2056,9 @@ void ajInt2dDel(AjPInt2d *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arr2dFreeCount++;
+
     return;
 }
 
@@ -2021,8 +2173,11 @@ static AjBool ajInt2dResize(AjPInt2d *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s    = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajInt2dResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -2048,6 +2203,8 @@ static AjBool ajInt2dResize(AjPInt2d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
+
+    arr2dResize++;
 
     return ajTrue;
 }
@@ -2209,6 +2366,9 @@ void ajInt3dDel(AjPInt3d *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arr3dFreeCount++;
+
     return;
 }
 
@@ -2326,8 +2486,11 @@ static AjBool ajInt3dResize(AjPInt3d *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajInt3dResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -2353,6 +2516,8 @@ static AjBool ajInt3dResize(AjPInt3d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
+
+    arr3dResize++;
 
     return ajTrue;
 }
@@ -2540,6 +2705,9 @@ void ajFloat2dDel(AjPFloat2d *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arr2dFreeCount++;
+
     return;
 }
 
@@ -2654,8 +2822,11 @@ static AjBool ajFloat2dResize(AjPFloat2d *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s    = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajFloat2dResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -2681,6 +2852,8 @@ static AjBool ajFloat2dResize(AjPFloat2d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
+
+    arr2dResize++;
 
     return ajTrue;
 }
@@ -2841,6 +3014,9 @@ void ajFloat3dDel(AjPFloat3d *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arr3dFreeCount++;
+
     return;
 }
 
@@ -2958,8 +3134,11 @@ static AjBool ajFloat3dResize(AjPFloat3d *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajFloat3dResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -2985,6 +3164,8 @@ static AjBool ajFloat3dResize(AjPFloat3d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
+
+    arr3dResize++;
 
     return ajTrue;
 }
@@ -3171,6 +3352,9 @@ void ajDouble2dDel(AjPDouble2d *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arr2dFreeCount++;
+
     return;
 }
 
@@ -3285,8 +3469,11 @@ static AjBool ajDouble2dResize(AjPDouble2d *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajDouble2dResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -3312,6 +3499,8 @@ static AjBool ajDouble2dResize(AjPDouble2d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
+
+    arr2dResize++;
 
     return ajTrue;
 }
@@ -3473,6 +3662,8 @@ void ajDouble3dDel(AjPDouble3d *thys)
 
     *thys = NULL;
 
+    arr3dFreeCount++;
+
     return;
 }
 
@@ -3590,8 +3781,11 @@ static AjBool ajDouble3dResize(AjPDouble3d *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajDouble3dResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -3617,6 +3811,8 @@ static AjBool ajDouble3dResize(AjPDouble3d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
+
+    arr3dResize++;
 
     return ajTrue;
 }
@@ -3803,6 +3999,9 @@ void ajShort2dDel(AjPShort2d *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arr2dFreeCount++;
+
     return;
 }
 
@@ -3917,8 +4116,11 @@ static AjBool ajShort2dResize(AjPShort2d *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajShort2dResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -3944,6 +4146,8 @@ static AjBool ajShort2dResize(AjPShort2d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
+
+    arr2dResize++;
 
     return ajTrue;
 }
@@ -4104,6 +4308,9 @@ void ajShort3dDel(AjPShort3d *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arr3dFreeCount++;
+
     return;
 }
 
@@ -4221,8 +4428,11 @@ static AjBool ajShort3dResize(AjPShort3d *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajShort3dResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -4248,6 +4458,8 @@ static AjBool ajShort3dResize(AjPShort3d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
+
+    arr3dResize++;
 
     return ajTrue;
 }
@@ -4435,6 +4647,8 @@ void ajLong2dDel(AjPLong2d *thys)
 
     *thys = NULL;
 
+    arr2dFreeCount++;
+
     return;
 }
 
@@ -4549,8 +4763,11 @@ static AjBool ajLong2dResize(AjPLong2d *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajLong2dResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -4576,6 +4793,8 @@ static AjBool ajLong2dResize(AjPLong2d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
+
+    arr2dResize++;
 
     return ajTrue;
 }
@@ -4736,6 +4955,9 @@ void ajLong3dDel(AjPLong3d *thys)
     AJFREE(*thys);
 
     *thys = NULL;
+
+    arr3dFreeCount++;
+
     return;
 }
 
@@ -4853,8 +5075,11 @@ static AjBool ajLong3dResize(AjPLong3d *thys, ajint size)
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
-    if(s == clen)
+    if(s <= clen)
 	return ajFalse;
+
+    ajDebug("ajLong3dResize %d (%d) -> %d (%d)\n",
+            (*thys)->Len, clen, size, s);
 
     p = *thys;
 
@@ -4880,6 +5105,8 @@ static AjBool ajLong3dResize(AjPLong3d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
+
+    arr3dResize++;
 
     return ajTrue;
 }
@@ -4971,4 +5198,41 @@ ajlong*** ajLong3dLong(const AjPLong3d thys)
     }
 
     return array;
+}
+
+
+
+/* @func ajArrExit ***********************************************************
+**
+** Cleanup of array handling internals, and debug report of memory use
+**
+** @return [void]
+******************************************************************************/
+
+void ajArrExit(void)
+{
+
+    ajRegFree(&floatRegNum);
+
+    ajDebug("Array usage (bytes): %Ld allocated, %Ld freed, %Ld in use\n",
+            arrAlloc, arrFree,
+            (arrAlloc - arrFree));
+    ajDebug("Array usage (number): %Ld allocated, %Ld freed, %Ld resized, %Ld in use\n",
+            arrTotal, arrFreeCount, arrResize, arrCount);
+
+    ajDebug("Array usage 2D (bytes): %Ld allocated, %Ld freed, %Ld in use\n",
+            arr2dAlloc, arr2dFree,
+            (arr2dAlloc - arr2dFree));
+    ajDebug("Array usage 2D (number): %Ld allocated, %Ld freed, %Ld resized, %Ld in use\n",
+            arr2dTotal, arr2dFreeCount, arr2dResize, arr2dCount);
+
+    ajDebug("Array usage 3D (bytes): %Ld allocated, %Ld freed, %Ld in use\n",
+            arr3dAlloc, arr3dFree,
+            (arr3dAlloc - arr3dFree));
+    ajDebug("Array usage 3D (number): %Ld allocated, %Ld freed, %Ld resized, %Ld in use\n",
+            arr3dTotal, arr3dFreeCount, arr3dResize, arr3dCount);
+
+
+
+    return;
 }

@@ -9,9 +9,21 @@ extern "C"
 #include "ajax.h"
 typedef void* (*CallFunc)(const char *name, va_list args);
 
-void callRegister(const char *name, CallFunc func);
 
-void* call(const char *name, ...);
+
+
+/*
+** Prototype definitions
+*/
+
+void  ajCallRegister(const char *name, CallFunc func);
+
+void* ajCall(const char *name, ...);
+void  ajCallExit(void);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

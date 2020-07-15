@@ -15,7 +15,7 @@ extern "C"
 #define HAVE64
 #endif
 
-#if !defined(AJ_LinuxLF) && !defined(AJ_SolarisLF) && !defined(AJ_IRIXLF) && !defined(AJ_AIXLF) && !defined(AJ_HPUXLF) && !defined(AJ_MACOSXLF) && !defined(AJ_FreeBSDLF)
+#if !defined(AJ_LinuxLF) && !defined(AJ_SolarisLF) && !defined(AJ_IRIXLF) && !defined(AJ_AIXLF) && !defined(AJ_HPUXLF) && !defined(AJ_MACOSXLF) && !defined(AJ_FreeBSDLF) && !defined(WIN32)
 typedef int ajint;
 typedef long ajlong;
 typedef unsigned int ajuint;
@@ -118,6 +118,22 @@ typedef unsigned long long ajulong;
 #define __int64 long long
 #endif
 
+#ifdef WIN32
+typedef int ajint;
+typedef long ajlong;       /* May need to make this long long. */
+typedef unsigned int ajuint;
+typedef short ajshort;
+typedef unsigned short ajushort;
+typedef unsigned long long ajulong;
+#endif
+
+
+#endif
+
+#ifdef __GNUC__
+#define __deprecated __attribute__((deprecated))
+#else
+#define __deprecated
 #endif
 
 #ifdef __cplusplus

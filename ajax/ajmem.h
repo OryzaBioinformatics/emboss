@@ -15,6 +15,13 @@ extern "C"
 #define ajMemMove(d,s,l) memmove(d,s,l)
 #endif
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 void *ajMemAlloc (ajlong nbytes,
 	const char *file, ajint line, AjBool nofail);
 void *ajMemCalloc(ajlong count, ajlong nbytes,
@@ -30,6 +37,11 @@ ajint *ajMemArrI (size_t size);
 float *ajMemArrF (size_t size);
 void ajMemStat (const char* title);
 void ajMemExit (void);
+
+/*
+** End of prototype definitions
+*/
+
 
 #define AJALLOC(nbytes) \
 	ajMemAlloc((nbytes), __FILE__, __LINE__, AJFALSE)

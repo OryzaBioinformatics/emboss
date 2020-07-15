@@ -8,6 +8,21 @@ extern "C"
 
 #include "ajarch.h"
 
+#ifndef WIN32
+#define SLASH_CHAR   '/'
+#define SLASH_STRING "/"
+#define CURRENT_DIR  "./"
+#define UP_DIR       "../"
+#define PATH_SEPARATOR ":"
+#else
+#define SLASH_CHAR   '\\'
+#define SLASH_STRING "\\"
+#define CURRENT_DIR  ".\\"
+#define UP_DIR       "..\\"
+#define PATH_SEPARATOR ";"
+#endif
+
+
 #define NPOS (size_t) (-1)
 /* const size_t NPOS = (size_t) (-1);*/ /* maximum size_t value */
 
@@ -38,8 +53,9 @@ typedef ajint AjBool;
 **
 ** Status code returned with bit fields.
 **
-** Intended as a general return code for functions, but so far only
-** used by ajAcdInit because in most cases AjBool is enough.
+** Intended as a general return code for functions, but currently unused
+** because AjBool is enough. Indicates OK, info,
+** warning, error and fatal returns
 **
 ** @attr typedef [ajint] Value
 ** @@

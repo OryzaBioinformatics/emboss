@@ -26,17 +26,29 @@ typedef struct AjSTime {
 #define AjPTime AjOTime*
 #define AjPDate AjODate*a
 
-AjBool  ajTimeLocal(const time_t timer, AjPTime thys);
-AjPTime ajTimeToday (void);
-AjPTime ajTimeTodayF (const char* timefmt);
+
+
+
+/*
+** Prototype definitions
+*/
+
+void          ajTimeExit(void);
+AjBool        ajTimeLocal(const time_t timer, AjPTime thys);
+AjPTime       ajTimeToday (void);
+AjPTime       ajTimeTodayF (const char* timefmt);
 const AjPTime ajTimeTodayRef (void);
 const AjPTime ajTimeTodayRefF (const char* timefmt);
-void    ajTimeTrace (const AjPTime thys);
-AjPTime ajTimeSet( const char *timefmt, ajint mday, ajint mon, ajint year) ;
-AjBool  ajTimeSetC(AjPTime thys, const char* timestr);
-AjPTime ajTimeNew(void);
-void    ajTimeDel(AjPTime *thys);
+void          ajTimeTrace (const AjPTime thys);
+AjPTime       ajTimeSet(const char *timefmt,
+			ajint mday, ajint mon, ajint year) ;
+AjBool        ajTimeSetS(AjPTime thys, const char* timestr);
+AjPTime       ajTimeNew(void);
+void          ajTimeDel(AjPTime *thys);
 
+/*
+** End of prototype definitions
+*/
 
 #endif
 

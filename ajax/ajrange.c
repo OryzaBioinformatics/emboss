@@ -129,7 +129,7 @@ AjPRange ajRangeCopy(const AjPRange src)
 	{
 	    thys->start[i] = src->start[i];
 	    thys->end[i] = src->end[i];
-	    ajStrAssS(&thys->text[i], src->text[i]);
+	    ajStrAssignS(&thys->text[i], src->text[i]);
 	}
     }
 
@@ -162,6 +162,8 @@ AjPRange ajRangeCopy(const AjPRange src)
 void ajRangeDel(AjPRange *thys)
 {
     ajint i;
+
+    if(!*thys) return;
 
     if((*thys)->n > 0)
     {
@@ -200,12 +202,35 @@ void ajRangeDel(AjPRange *thys)
 ** @@
 ******************************************************************************/
 
- AjPRange ajRangeGet(const AjPStr str)
+AjPRange ajRangeGet(const AjPStr str)
+{
+    return ajRangeGetLimits(str, INT_MIN, INT_MAX, 0, 0);
+}
+
+
+
+/* @func ajRangeGetLimits *****************************************************
+**
+** Create a range object from a string
+**
+** @param [r] str [const AjPStr] range string
+** @param [r] imin [ajint] Minimum value
+** @param [r] imax [ajint] Maximum value
+** @param [r] minsize [ajint] Minimum number of values
+** @param [r] size [ajint] Required number of values, zero for unlimited
+**
+** @return [AjPRange] range object
+** @category new [AjPRange] Create a range object from a string
+** @@
+******************************************************************************/
+
+AjPRange ajRangeGetLimits(const AjPStr str, ajint imin, ajint imax,
+			   ajint minsize, ajint size)
 {
     AjPRange ret = NULL;
-    static AjPStr c1 = NULL;
-    static AjPStr c2 = NULL;
-    static AjPStr c3 = NULL;
+    AjPStr c1 = NULL;
+    AjPStr c2 = NULL;
+    AjPStr c3 = NULL;
     static AjPStr s   =NULL;
     const char *cp;
     char *p;
@@ -220,26 +245,26 @@ void ajRangeDel(AjPRange *thys)
                    " \t\n\r!@#$%^&*()_-+=|\\~`{[}]:;\"'<,>.?/";
     char *digit="0123456789";
 
-    ajStrAssS(&s, str);
+    ajStrAssignS(&s, str);
 
     /* clean up the ranges string */
-    ajStrChomp(&s);
+    ajStrTrimWhite(&s);
 
     /* is this a file of ranges? (does it start with a '@' ?) */
-    if(*(ajStrStr(s)) == '@')
+    if(*(ajStrGetPtr(s)) == '@')
     {
 	/* knock off the '@' */
-	ajStrSub(&s, 1, ajStrLen(s));
-       ret = ajRangeFile(s);
+	ajStrKeepRange(&s, 1, ajStrGetLen(s));
+	ret = ajRangeFileLimits(s, imin, imax, minsize, size);
     }
     else
     {
 	/* get some copies of the string for parsing with strtok */
-	ajStrAssS(&c1, s);
-	ajStrAssS(&c2, s);
-	ajStrAssS(&c3, s);
+	ajStrAssignS(&c1, s);
+	ajStrAssignS(&c2, s);
+	ajStrAssignS(&c3, s);
 
-	cp = ajStrStr(c1);
+	cp = ajStrGetPtr(c1);
 	p = ajSysStrtok(cp, nondigit);
 
 	n = 0;
@@ -259,10 +284,26 @@ void ajRangeDel(AjPRange *thys)
 		ajWarn("Odd integer(s) in range specification [%d]",n);
 		return NULL;
 	    }
+
+	    if(size)
+	    {
+		if(n != size)
+		{
+		    ajWarn("Range specification requires exactly %d pairs",
+			   size);
+		    return NULL;
+		}
+	    }
+	    else if (n < minsize)
+	    {
+		ajWarn("Range specification requires at least %d pairs",
+		       minsize);
+		return NULL;
+	    }
 	    ret=ajRangeNewI((e=n>>1));
 
 	    /* get the pairs of numbers and put them in the AjPRange object */
-	    cp = ajStrStr(c2);
+	    cp = ajStrGetPtr(c2);
 	    p = ajSysStrtok(cp, nondigit);
 	    if(!sscanf(p,"%d",&f))
 	    {
@@ -285,6 +326,21 @@ void ajRangeDel(AjPRange *thys)
 		ajRangeDel(&ret);
 		return NULL;
 	    }
+
+	    if (f < imin)
+	    {
+		ajWarn("From range [%d] less than minimum [%d]",f,imin);
+		ajRangeDel(&ret);
+		return NULL;
+	    }
+
+	    if (t > imax)
+	    {
+		ajWarn("To range [%d] greater than maximum [%d]",t,imax);
+		ajRangeDel(&ret);
+		return NULL;
+	    }
+
 	    ret->start[0]=f;
 	    ret->end[0]=t;
 
@@ -317,7 +373,7 @@ void ajRangeDel(AjPRange *thys)
 	    }
 
 	    /* now get any strings after the pairs of ranges */
-	    cp = ajStrStr(c3);
+	    cp = ajStrGetPtr(c3);
 	    if(!isdigit((ajint)*cp))
 	    {
 		doneone = ajTrue;
@@ -340,20 +396,34 @@ void ajRangeDel(AjPRange *thys)
 		p = ajSysStrtok(NULL, digit);
 		if(p)
 		{
-		    ajStrAssC(&(ret->text[i]), p);
-		    ajStrChomp(&(ret->text[i]));
+		    ajStrAssignC(&(ret->text[i]), p);
+		    ajStrTrimWhite(&(ret->text[i]));
 		}
 	    }
 	}
 	else
+	{
+	    if(size)
+	    {
+		ajWarn("Range specification requires exactly %d pairs",
+		       size);
+		return NULL;
+	    }
+	    else if (0 < minsize)
+	    {
+		ajWarn("Range specification requires at least %d pairs",
+		       minsize);
+		return NULL;
+	    }
 	    ret=ajRangeNewI(0);
+	}
 
-	ajStrDelReuse(&c1);
-	ajStrDelReuse(&c2);
-	ajStrDelReuse(&c3);
+	ajStrDel(&c1);
+	ajStrDel(&c2);
+	ajStrDel(&c3);
     }
 
-    ajStrDelReuse(&s);
+    ajStrDel(&s);
 
     return ret;
 }
@@ -390,6 +460,43 @@ void ajRangeDel(AjPRange *thys)
 
 AjPRange ajRangeFile(const AjPStr name)
 {
+    return ajRangeFileLimits(name, 1, INT_MAX, 0, 0);
+}
+
+/* @func ajRangeFileLimits ****************************************************
+**
+** Load a range object from a file
+**
+** The format of the range file is:
+** Comment lines start with '#' in the first column.
+** Comment lines and blank lines are ignored.
+** The line may start with white-space.
+** There are two positive numbers per line separated by white-space.
+** The second number must be greater or equal to the first number.
+** There is optional text after the two numbers.
+** White-space before or after the text is removed.
+**
+** e.g.:
+**
+** # this is my set of ranges
+** 12	23
+**  4	5	this is like 12-23, but smaller
+** 67	10348	interesting region
+**
+** @param [r] name [const AjPStr] range file name
+** @param [r] imin [ajint] Minimum value
+** @param [r] imax [ajint] Maximum value
+** @param [r] minsize [ajint] Minimum number of values
+** @param [r] size [ajint] Required number of values, zero for unlimited
+**
+** @return [AjPRange] range object
+** @category new [AjPRange] Create a range object from a file
+** @@
+******************************************************************************/
+
+AjPRange ajRangeFileLimits(const AjPStr name, ajint imin, ajint imax,
+			   ajint minsize, ajint size)
+{
     AjPRange ret = NULL;
     AjPFile infile;
     AjPStr line   = NULL;
@@ -420,11 +527,11 @@ AjPRange ajRangeFile(const AjPStr name)
 
     while(ajFileReadLine(infile, &line))
     {
-	ajStrChomp(&line);
+	ajStrTrimWhite(&line);
 	
 	if(!ajStrFindC(line, "#"))
 	    continue;
-	if(!ajStrLen(line))
+	if(!ajStrGetLen(line))
 	    continue;
 	
 	/*
@@ -435,15 +542,15 @@ AjPRange ajRangeFile(const AjPStr name)
 	 ** ajRange)
 	 */
 
-	tokens = ajStrTokenInit(line, whiteSpace);
+	tokens = ajStrTokenNewC(line, whiteSpace);
 	
 	one = ajStrNew();
-	ajStrToken(&one, &tokens, NULL);
+	ajStrTokenNextParse(&tokens, &one);
 	ajListstrPushApp(onelist, one);
 	
 	two = ajStrNew();
-	ajStrToken(&two, &tokens, NULL);
-	if(ajStrLen(two))
+	ajStrTokenNextParse(&tokens, &two);
+	if(ajStrGetLen(two))
 	    ajListstrPushApp(twolist, two);
 	else
 	{
@@ -453,17 +560,33 @@ AjPRange ajRangeFile(const AjPStr name)
 	
 	/* get any remaining text and store in temporary list */
 	text = ajStrNew();
-	ajStrToken(&text, &tokens, notSpace);
-	ajStrChomp(&text);
+	ajStrTokenNextParseC(&tokens, notSpace, &text);
+	ajStrTrimWhite(&text);
 	ajListstrPushApp(textlist, text);
 	
-	ajStrTokenClear( &tokens);	
+	ajStrTokenDel( &tokens);	
     }
     
     /* now we know how many pairs of numbers to store, create ajRange object */
     n  = ajListstrLength(onelist);
+    if(size)
+    {
+	if(n != size)
+	{
+	    ajWarn("Range specification requires exactly %d pairs",
+		   size);
+	    return NULL;
+	}
+    }
+    else if (n < minsize)
+    {
+	ajWarn("Range specification requires at least %d pairs",
+	       minsize);
+	return NULL;
+    }
     ret = ajRangeNewI(n);
-    
+
+
     /* populate ajRange object from lists and check numbers are valid */
     for(k = 0; k < n; k++)
     {
@@ -493,7 +616,23 @@ AjPRange ajRangeFile(const AjPStr name)
 	    ajRangeDel(&ret);
 	    return NULL;
 	}
-	
+
+	if (numone < imin)
+	{
+	    ajWarn("From range [%d] less than minimum [%d]",
+		   numone,imin);
+	    ajRangeDel(&ret);
+	    return NULL;
+	}
+
+	if (numtwo > imax)
+	{
+	    ajWarn("To range [%d] greater than maximum [%d]",
+		   numtwo,imax);
+	    ajRangeDel(&ret);
+	    return NULL;
+	}
+
 	ret->start[k] = numone;
 	ret->end[k]   = numtwo;
 
@@ -590,7 +729,7 @@ AjBool ajRangeText(const AjPRange thys, ajint element, AjPStr * text)
 	return ajFalse;
 
     if(thys->text[element])
-	ajStrAssS(text,thys->text[element]);
+	ajStrAssignS(text,thys->text[element]);
     else
 	*text = ajStrNew();
 
@@ -711,7 +850,7 @@ AjBool ajRangeSeqExtractList(const AjPRange thys,
 	    if(!ajRangeValues(thys,i,&st,&en))
 		continue;
 	    str = ajStrNew();
-	    ajStrAppSub(&str, ajSeqStr(seq), st-1, en-1);
+	    ajStrAppendSubS(&str, ajSeqStr(seq), st-1, en-1);
 	    ajListstrPushApp(outliststr, str);
 	}
     }
@@ -762,10 +901,10 @@ AjBool ajRangeSeqExtract(const AjPRange thys, AjPSeq seq)
 	    result = ajTrue;
 	    if(!ajRangeValues(thys,i,&st,&en))
 	       continue;
-	    ajStrAppSub(&outstr, ajSeqStr(seq), st-1, en-1);
+	    ajStrAppendSubS(&outstr, ajSeqStr(seq), st-1, en-1);
 	    ajDebug("Range [%d] %d..%d '%S'\n", i, st, en, outstr);
 	}
-	ajSeqReplace(seq, outstr);
+	ajSeqAssignSeqS(seq, outstr);
 	ajStrDel(&outstr);
     }
 
@@ -823,13 +962,13 @@ AjBool ajRangeSeqStuff(const AjPRange thys, AjPSeq seq)
 	    len = en-st;
 
 	    for(j=lasten; j<st; j++)
-		ajStrAppC(&outstr, " ");
+		ajStrAppendC(&outstr, " ");
 
-	    ajStrAppSub(&outstr, ajSeqStr(seq), lastst, lastst+len);
+	    ajStrAppendSubS(&outstr, ajSeqStr(seq), lastst, lastst+len);
 	    lastst = lastst+len+1;
 	    lasten = en+1;
 	}
-	ajSeqReplace(seq, outstr);
+	ajSeqAssignSeqS(seq, outstr);
 	ajStrDel(&outstr);
     }
 
@@ -877,21 +1016,21 @@ AjBool ajRangeSeqMask(const AjPRange thys, const AjPStr maskchar, AjPSeq seq)
 	    --en;
 
 	    /* cut out the region */
-	    ajStrCut(&str, st, en);
+	    ajStrCutRange(&str, st, en);
 
 	    /* replace the region with the mask character */
 	    for(j=st; j<=en; ++j)
-		ajStrInsert(&str, st, maskchar);
+		ajStrInsertS(&str, st, maskchar);
 	}
-	ajSeqReplace(seq, str);
+	ajSeqAssignSeqS(seq, str);
 	ajStrDel(&str);
     }
     else
     {
 	str = ajStrNew();
-	for(j=0; j<=ajStrLen(str); ++j)
-	    ajStrInsert(&str, j, maskchar);
-	ajSeqReplace(seq, str);
+	for(j=0; j<=ajStrGetLen(str); ++j)
+	    ajStrInsertS(&str, j, maskchar);
+	ajSeqAssignSeqS(seq, str);
 	ajStrDel(&str);
     }
 
@@ -942,19 +1081,19 @@ AjBool ajRangeSeqToLower(const AjPRange thys, AjPSeq seq)
 	    --en;
 
 	    /* extract the region and lowercase */
-	    ajStrAppSub(&substr, seqstr, st, en);
-	    ajStrToLower(&substr);
+	    ajStrAppendSubS(&substr, seqstr, st, en);
+	    ajStrFmtLower(&substr);
 
 	    /* remove and replace the lowercased region */
-	    ajStrCut(&str, st, en);
-	    ajStrInsert(&str, st, substr);
-	    ajStrClear(&substr);        
+	    ajStrCutRange(&str, st, en);
+	    ajStrInsertS(&str, st, substr);
+	    ajStrSetClear(&substr);        
 	}
 	ajStrDel(&substr);
     }
     else
     {
-	ajSeqToLower(seq);
+	ajSeqFmtLower(seq);
     }
 
     
@@ -999,7 +1138,7 @@ AjBool ajRangeStrExtractList(const AjPRange thys,
 	result = ajTrue;
 	ajRangeValues(thys,i,&st,&en);
         str = ajStrNew();
-	ajStrAppSub(&str, instr, st-1, en-1);
+	ajStrAppendSubS(&str, instr, st-1, en-1);
 	ajListstrPushApp(outliststr, str);
     }
 
@@ -1044,13 +1183,13 @@ AjBool ajRangeStrExtract(const AjPRange thys, const AjPStr instr,
 	{
 	    result = ajTrue;
 	    ajRangeValues(thys,i,&st,&en);
-	    ajStrAppSub(outstr, instr, st-1, en-1);
+	    ajStrAppendSubS(outstr, instr, st-1, en-1);
 	    ajDebug("Range [%d] %d..%d '%S'\n", i, st, en, *outstr);
 	}
     }
     else
     {
-	ajStrAssS(outstr, instr);
+	ajStrAssignS(outstr, instr);
     }
 
     return result;
@@ -1102,9 +1241,9 @@ AjBool ajRangeStrStuff(const AjPRange thys, const AjPStr instr, AjPStr *outstr)
 	len = en-st;
 
         for(j=lasten; j<st; j++)
-	    ajStrAppC(outstr, " ");
+	    ajStrAppendC(outstr, " ");
 
-	ajStrAppSub(outstr, instr, lastst, lastst+len);
+	ajStrAppendSubS(outstr, instr, lastst, lastst+len);
         lastst = lastst+len+1;
         lasten = en+1;
     }
@@ -1149,11 +1288,11 @@ AjBool ajRangeStrMask(const AjPRange thys, const AjPStr maskchar, AjPStr *str)
 	--en;
 
 	/* cut out the region */
-	ajStrCut(str, st, en);
+	ajStrCutRange(str, st, en);
 
 	/* replace the region with the mask character */
 	for(j=st; j<=en; ++j)
-	    ajStrInsert(str, st, maskchar);
+	    ajStrInsertS(str, st, maskchar);
     }
 
     return result;
@@ -1197,13 +1336,13 @@ AjBool ajRangeStrToLower(const AjPRange thys, AjPStr *str)
 	--en;
 
 	/* extract the region and lowercase */
-	ajStrAppSub(&substr, *str, st, en);
-	ajStrToLower(&substr);
+	ajStrAppendSubS(&substr, *str, st, en);
+	ajStrFmtLower(&substr);
 
 	/* remove and replace the lowercased region */
-	ajStrCut(str, st, en);
-        ajStrInsert(str, st, substr);
-	ajStrClear(&substr);        
+	ajStrCutRange(str, st, en);
+        ajStrInsertS(str, st, substr);
+	ajStrSetClear(&substr);        
     }
 
     ajStrDel(&substr);
@@ -1353,8 +1492,8 @@ AjBool ajRangeDefault(const AjPRange thys, const AjPSeq s)
 	return ajTrue;
 
     if(thys->n==1 &&
-       thys->start[0]==ajSeqBegin(s) &&
-       thys->end[0]==ajSeqEnd(s))
+       thys->start[0]==ajSeqGetBegin(s) &&
+       thys->end[0]==ajSeqGetEnd(s))
 	return ajTrue;
 
     return ajFalse;

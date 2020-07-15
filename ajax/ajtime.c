@@ -22,11 +22,10 @@
 ** Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-#include "ajax.h"
-#include "ajtime.h"
+
 #include <time.h>
 
-
+#include "ajax.h"
 
 
 /* @datastatic TimePFormat ****************************************************
@@ -49,6 +48,7 @@ typedef struct TimeSFormat
 #define TimePFormat TimeOFormat*
 
 
+static AjPTime timeTodayData = NULL;
 
 
 static TimeOFormat timeFormat[] =  /* formats for strftime */
@@ -61,6 +61,7 @@ static TimeOFormat timeFormat[] =  /* formats for strftime */
     {"daytime", "%d-%b-%Y %H:%M"},
     {"log", "%a %b %d %H:%M:%S %Y"},
     {"report", "%a %b %d %Y %H:%M:%S"},
+    {"dbindex", "%d/%m/%y"},
     { NULL, NULL}
 };
 
@@ -141,7 +142,7 @@ static char* TimeFormat(const char *timefmt)
     char *format = NULL ;
 
     for(i=0; timeFormat[i].Name; i++)
-	if(ajStrMatchCaseCC(timefmt, timeFormat[i].Name))
+	if(ajCharMatchCaseC(timefmt, timeFormat[i].Name))
 	{
 	    ok = ajTrue;
 	    break;
@@ -207,20 +208,19 @@ AjPTime ajTimeTodayF(const char* timefmt)
 
 const AjPTime ajTimeTodayRefF(const char* timefmt)
 {
-    static AjPTime thys = NULL;
     time_t tim;
     
     tim = time(0);
 
-    if(!thys)
-	AJNEW0(thys);
+    if(!timeTodayData)
+	AJNEW0(timeTodayData);
 
-    if(!ajTimeLocal(tim,thys))
+    if(!ajTimeLocal(tim,timeTodayData))
         return NULL;
 
-    thys->format = TimeFormat(timefmt);
+    timeTodayData->format = TimeFormat(timefmt);
 
-    return thys;
+    return timeTodayData;
 }
 
 
@@ -343,7 +343,7 @@ AjBool ajTimeLocal(const time_t timer, AjPTime thys)
 
     if(ajNamGetValueC("timetoday", &timestr))
     {
-	if(ajTimeSetS(thys, ajStrStr(timestr)))
+	if(ajTimeSetS(thys, ajStrGetPtr(timestr)))
 	{
 	    ajStrDel(&timestr);
 	    return ajTrue;
@@ -351,7 +351,7 @@ AjBool ajTimeLocal(const time_t timer, AjPTime thys)
 	ajStrDel(&timestr);
     }
 
-#ifdef __ppc__
+#if defined(__ppc__) || defined(WIN32)
     result = localtime(&timer);
     if(!result)
 	return ajFalse;
@@ -413,5 +413,24 @@ void ajTimeDel(AjPTime *thys)
     AJFREE(*thys);
     *thys = NULL;
     
+    return;
+}
+
+
+
+
+
+/* @func ajTimeExit ***********************************************************
+**
+** Cleans up time processing internal memory
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajTimeExit(void)
+{
+    ajTimeDel(&timeTodayData);
+
     return;
 }

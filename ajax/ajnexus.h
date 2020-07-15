@@ -362,6 +362,12 @@ typedef struct AjSNexus {
 } AjONexus;
 #define AjPNexus AjONexus*
 
+
+
+/*
+** Prototype definitions
+*/
+
 void     ajNexusDel(AjPNexus* pthys);
 ajint    ajNexusGetNtaxa(const AjPNexus thys);
 AjPStr*  ajNexusGetTaxa(const AjPNexus thys);
@@ -369,6 +375,11 @@ AjPStr*  ajNexusGetSequences(AjPNexus thys);
 AjPNexus ajNexusNew(void);
 AjPNexus ajNexusParse(AjPFileBuff buff);
 void     ajNexusTrace(const AjPNexus thys);
+
+/*
+** End of prototype definitions
+*/
+
 #endif
 
 #ifdef __cplusplus

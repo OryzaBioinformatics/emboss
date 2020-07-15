@@ -17,17 +17,27 @@ struct AjIUB
 };
 
 
-extern AjBool aj_base_I;
-extern float aj_base_prob[][32];
 
 
-extern  void ajBaseInit(void);
-AjBool  ajBaseAa1ToAa3(char aa1, AjPStr *aa3);
+/*
+** Prototype definitions
+*/
 
-extern ajint  ajAZToInt(ajint c);
-extern ajint  ajAZToBin(ajint c);
-extern char ajAZToBinC(char c);
-extern ajint  ajIntToAZ(ajint n);
+AjBool        ajBaseAa1ToAa3(char aa1, AjPStr *aa3);
+const AjPStr  ajBaseCodes(ajint ibase);
+void          ajBaseExit(void);
+AjBool        ajBaseInit(void);
+float         ajBaseProb(ajint base1, ajint base2);
+
+ajint         ajAZToInt(ajint c);
+ajint         ajAZToBin(ajint c);
+char          ajAZToBinC(char c);
+char          ajBinToAZ(ajint c);
+ajint         ajIntToAZ(ajint n);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

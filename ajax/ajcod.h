@@ -55,6 +55,11 @@ typedef struct AjSCod
 #define AjPCod AjOCod*
 
 
+
+/*
+** Prototype definitions
+*/
+
 void         ajCodAssCode(AjPCod thys, ajint geneticcode);
 void         ajCodAssDesc(AjPCod thys, const AjPStr desc);
 void         ajCodAssDescC(AjPCod thys, const char* desc);
@@ -68,9 +73,9 @@ void         ajCodAssSpecies(AjPCod thys, const AjPStr species);
 void         ajCodAssSpeciesC(AjPCod thys, const char* species);
 void         ajCodAssName(AjPCod thys, const AjPStr name);
 void         ajCodAssNameC(AjPCod thys, const char* name);
-void         ajCodAss(AjPCod thys);
-void         ajCodAssC(AjPCod thys);
 void         ajCodBacktranslate(AjPStr *b, const AjPStr a, const AjPCod thys);
+void         ajCodBacktranslateAmbig(AjPStr *b, const AjPStr a,
+				     const AjPCod thys);
 ajint        ajCodBase(ajint c);
 double       ajCodCai(const AjPCod cod, const AjPStr str);
 double*      ajCodCaiW(const AjPCod cod);
@@ -90,6 +95,8 @@ const AjPStr ajCodGetDesc(const AjPCod thys);
 const char*  ajCodGetDescC(const AjPCod thys);
 const AjPStr ajCodGetDivision(const AjPCod thys);
 const char*  ajCodGetDivisionC(const AjPCod thys);
+void         ajCodExit(void);
+void         ajCodGetCodonlist(const AjPCod cod, AjPList list);
 const AjPStr ajCodGetName(const AjPCod thys);
 const char*  ajCodGetNameC(const AjPCod thys);
 ajint        ajCodGetNumcds(const AjPCod thys);
@@ -109,6 +116,11 @@ void 	     ajCodWrite(AjPCod thys, AjPFile outf);
 void 	     ajCodWriteOut( const AjPCod thys, AjPOutfile outf);
 ajint        ajCodOutFormat(const AjPStr name);
 void         ajCodPrintFormat(AjPFile outf, AjBool full);
+
+/*
+** End of prototype definitions
+*/
+
 #endif
 
 #ifdef __cplusplus

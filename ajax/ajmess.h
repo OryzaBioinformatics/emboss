@@ -13,6 +13,7 @@ extern "C"
 #define ajmess_h
 
 #include <stdarg.h>
+#include <setjmp.h>
 
 extern AjBool acdDebugSet;
 extern AjBool acdDebugBuffer;
@@ -43,9 +44,17 @@ extern AjOError AjErrorLevel;
 
 #define SUBDIR_DELIMITER_STR "\\"
 
+
+
 typedef void (*AjMessVoidRoutine)(void) ;
 typedef void (*AjMessOutRoutine)(const char*) ;
 
+
+
+
+/*
+** Prototype definitions
+*/
 
 AjMessVoidRoutine ajMessRegBeep (AjMessVoidRoutine func) ;
 AjMessOutRoutine  ajMessRegCrash (AjMessOutRoutine func) ;
@@ -115,41 +124,48 @@ void              ajVErr (const char *format, va_list args) ; /* error message
 								 and
 								 write to log
 								 file */
+void              ajVUser(const char *format, va_list args);
 void              ajVWarn (const char *format, va_list args) ; /* warning
 								  message */
 void              ajWarn (const char *format, ...); /* warning message */
+
+                                                  /* abort - but see below */
+
+/* ask for data satisfying format get results via freecard() */
+
+char*             ajMessSysErrorText (void) ;
+/* wrapped system error message for use in ajMesserror/crash() */
+
+ajint             ajMessErrorCount (void);
+/* return numbers of error so far */
+
+/**** routines to catch crashes if necessary, e.g. when dumping ****/
+
+
+
+char*             ajMessCaughtMessage (void) ;
+
+void              ajMessInvokeDebugger(void);
+
+/* if a setjmp() stack context is set using ajMessCatch*() then rather than
+** exiting or giving an error message, ajMessCrash() and messError() will
+** longjmp() back to the context.
+** ajMessCatch*() return the previous value. Use argument = 0 to reset.
+** ajMessCaughtMessage() can be called from the jumped-to routine to get
+** the error message that would have been printed.
+*/
+
+/*
+** End of prototype definitions
+*/
+
+
+
 
 #define ajMessCrash   ajMessSetErr(__FILE__, __LINE__), ajMessCrashFL
 #define ajMessCrashCode ajMessSetErr(__FILE__, __LINE__), ajMessCrashCodeFL
 #define ajFatal   ajMessSetErr(__FILE__, __LINE__), ajMessCrashFL
 #define ajVFatal   ajMessSetErr(__FILE__, __LINE__), ajMessVCrashFL
-                                                  /* abort - but see below */
-AjBool            ajMessQuery (const char *text,...); /* ask yes/no question */
-AjBool            ajMessPrompt (const char *prompt, const char *dfault,
-				const char *fmt) ;
-        /* ask for data satisfying format get results via freecard() */
-
-char*             ajMessSysErrorText (void) ;
-        /* wrapped system error message for use in ajMesserror/crash() */
-
-ajint             ajMessErrorCount (void);
-        /* return numbers of error so far */
-
-/**** routines to catch crashes if necessary, e.g. when dumping ****/
-
-#include <setjmp.h>
-
-const jmp_buf*          ajMessCatchCrash (const jmp_buf* ) ;
-const jmp_buf*          ajMessCatchError (const jmp_buf* ) ;
-char*             ajMessCaughtMessage (void) ;
-
-  /* if a setjmp() stack context is set using ajMessCatch*() then rather than
-     exiting or giving an error message, ajMessCrash() and messError() will
-     longjmp() back to the context.
-     ajMessCatch*() return the previous value. Use argument = 0 to reset.
-     ajMessCaughtMessage() can be called from the jumped-to routine to get
-     the error message that would have been printed.
-  */
 
 
 #endif /* defined(DEF_REGULAR_H) */

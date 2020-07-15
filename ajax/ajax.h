@@ -12,6 +12,7 @@ extern "C"
 #ifndef ajax_h
 #define ajax_h
 
+#include <stdio.h>
 
 #include "ajarch.h"
 
@@ -23,8 +24,8 @@ extern "C"
 
 #include "ajassert.h"
 #include "ajdefine.h"
-#include "ajtime.h"
 #include "ajstr.h"
+#include "ajtime.h"
 #include "ajfile.h"
 #include "ajnexus.h"
 #include "ajfeat.h"
@@ -67,11 +68,13 @@ extern "C"
 #include "ajdomain.h"
 #include "ajpdbio.h"
 #include "ajdmx.h"
+#include "ajpat.h"
 #include "ajacd.h"
 #include "ajcall.h"
 #include "ajjava.h"
 #include "ajgraphxml.h"
 #include "ajvector.h"
+#include "ajdom.h"
 
 #endif
 

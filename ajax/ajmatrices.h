@@ -63,10 +63,18 @@ typedef struct AjSMatrixf {
 } AjOMatrixf;
 #define AjPMatrixf AjOMatrixf*
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 AjIntArray*   ajMatrixArray (const AjPMatrix thys);
 void          ajMatrixChar (const AjPMatrix thys, ajint i, AjPStr *label);
 AjPSeqCvt     ajMatrixCvt (const AjPMatrix thys);
 void          ajMatrixDel (AjPMatrix *thys);
+AjPStr        ajMatrixGetCodes(const AjPMatrix thys);
 const AjPStr  ajMatrixName (const AjPMatrix thys);
 AjPMatrix     ajMatrixNew (const AjPPStr codes, ajint n,
 			   const AjPStr filename);
@@ -82,16 +90,21 @@ AjFloatArray* ajMatrixfArray (const AjPMatrixf thys);
 void          ajMatrixfChar (const AjPMatrixf thys, ajint i, AjPStr *label);
 AjPSeqCvt     ajMatrixfCvt (const AjPMatrixf thys);
 void          ajMatrixfDel (AjPMatrixf *thys);
+AjPStr        ajMatrixfGetCodes(const AjPMatrixf thys);
 const AjPStr  ajMatrixfName (const AjPMatrixf thys);
 AjPMatrixf    ajMatrixfNew (const AjPPStr codes, ajint n,
 			    const AjPStr filename);
-AjPMatrixf ajMatrixfNewAsym(const AjPPStr codes, ajint n, 
-			    const AjPPStr rcodes, ajint rn, 
-			    const AjPStr filename);
+AjPMatrixf    ajMatrixfNewAsym(const AjPPStr codes, ajint n, 
+			       const AjPPStr rcodes, ajint rn, 
+			       const AjPStr filename);
 AjBool        ajMatrixfSeqNum (const AjPMatrixf thys, const AjPSeq seq,
 			       AjPStr* numseq);
 AjBool        ajMatrixfRead (AjPMatrixf* pthis, const AjPStr filename);
 ajint         ajMatrixfSize (const AjPMatrixf thys);
+
+/*
+** End of prototype definitions
+*/
 
 #endif
 

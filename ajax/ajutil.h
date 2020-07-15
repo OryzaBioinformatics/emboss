@@ -6,6 +6,13 @@ extern "C"
 #ifndef ajutil_h
 #define ajutil_h
 
+
+
+
+/*
+** Prototype definitions
+*/
+
 void   ajExit (void);
 ajint  ajExitAbort (void);
 ajint  ajExitBad (void);
@@ -19,6 +26,11 @@ void   ajUtilRevInt(ajint* sval);
 void   ajUtilRevShort(short* ival);
 void   ajUtilRevLong(ajlong* lval);
 AjBool ajUtilUid (AjPStr* dest);
+
+/*
+** End of prototype definitions
+*/
+
 #endif
 
 #ifdef __cplusplus

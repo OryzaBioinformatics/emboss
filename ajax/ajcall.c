@@ -1,6 +1,4 @@
-#include "ajcall.h"
-#include "ajgraph.h"
-#include "ajstr.h"
+#include "ajax.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -15,7 +13,7 @@
 ** are changed.
 */
 
-static AjPTable calls = NULL;
+static AjPTable callTable = NULL;
 
 static ajint callCmpStr(const void *x, const void *y);
 static unsigned callStrHash(const void *key, unsigned hashsize);
@@ -71,7 +69,7 @@ static unsigned callStrHash(const void *key, unsigned hashsize)
 
 
 
-/* @func callRegister *********************************************************
+/* @func ajCallRegister *******************************************************
 **
 ** Create hash value pair using the name and function.
 **
@@ -81,17 +79,17 @@ static unsigned callStrHash(const void *key, unsigned hashsize)
 ** @@
 ******************************************************************************/
 
-void callRegister(const char *name, CallFunc func)
+void ajCallRegister(const char *name, CallFunc func)
 {
     void *rec;
 
-    if(!calls)
-	calls = ajTableNew(0, callCmpStr,callStrHash);
+    if(!callTable)
+	callTable = ajTableNew(0, callCmpStr,callStrHash);
 
-    rec = ajTableGet(calls, name);	/* does it exist already */
+    rec = ajTableGet(callTable, name);	/* does it exist already */
 
     if(!rec)
-	ajTablePut(calls, name, (void *) func);
+	ajTablePut(callTable, name, (void *) func);
 
     return;
 }
@@ -99,7 +97,7 @@ void callRegister(const char *name, CallFunc func)
 
 
 
-/* @func call *****************************************************************
+/* @func ajCall ***************************************************************
 **
 ** Call a function by its name. If it does not exist then give
 ** an error message saying so.
@@ -109,20 +107,20 @@ void callRegister(const char *name, CallFunc func)
 ** @return [void*] NULL if function call not found.
 ** @@
 ******************************************************************************/
-void* call(const char *name, ...)
+void* ajCall(const char *name, ...)
 {
     va_list args;
     CallFunc rec;
     void *retval = NULL;
 
-    if(!calls)
+    if(!callTable)
     {
-	ajMessCrash("Graphics calls not registered. "
-		    "Use ajGraphInit in main function first",name);
+	ajMessCrash("Calls to %s not registered. For graphics devices use "
+		    "ajGraphInit in main function first",name);
 	return retval;
     }
 
-    rec = (CallFunc) ajTableGet(calls, name);
+    rec = (CallFunc) ajTableGet(callTable, name);
 
     if(rec)
     {
@@ -135,4 +133,18 @@ void* call(const char *name, ...)
 		    "Use ajGraphInit in main function first",name);
 
     return retval;
+}
+
+/* @func ajCallExit ***********************************************************
+**
+** Cleans up calls register internal memory
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajCallExit(void)
+{
+    ajTableFree(&callTable);
+    return;
 }
