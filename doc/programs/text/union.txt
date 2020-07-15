@@ -25,13 +25,13 @@ Usage
    Here is a sample session with union
 
    The file 'cds.list' contains a list of the regions making up the
-   coding sequence of 'embl:hsfau':
+   coding sequence of 'embl:x65923':
 
 
 % union 
 Reads sequence fragments and builds one sequence
 Input (gapped) sequence(s): @cds.list
-output sequence [hsfau1.fasta]: 
+output sequence [x65921.fasta]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -111,10 +111,10 @@ Input file format
 
   File: cds.list
 
-tembl-id:HSFAU1[782:856]
-tembl-id:HSFAU1[951:1095]
-tembl-id:HSFAU1[1557:1612]
-tembl-id:HSFAU1[1787:1912]
+tembl-id:X65921[782:856]
+tembl-id:X65921[951:1095]
+tembl-id:X65921[1557:1612]
+tembl-id:X65921[1787:1912]
 
    You may find the program yank useful for creating List files.
 
@@ -122,9 +122,9 @@ Output file format
 
   Output files for usage example
 
-  File: hsfau1.fasta
+  File: x65921.fasta
 
->HSFAU1 X65921.1 H.sapiens fau 1 gene
+>X65921 X65921.1 H.sapiens fau 1 gene
 atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
 gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
 gtgctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggag

@@ -1,7 +1,7 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hsa203yc1.primersearch</h3>
+<p><h3>File: z52466.primersearch</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 
@@ -17,7 +17,7 @@ Primer name D1S2893
 
 Primer name D1S2660
 Amplimer 1
-	Sequence: HSA203YC1 Z52466 
+	Sequence: Z52466 Z52466 
 	H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
 	CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
 	AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
@@ -27,7 +27,7 @@ Amplimer 1
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: hsa203yc1.primersearch</h3>
+<p><h3>File: z52466.primersearch</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 
@@ -43,13 +43,13 @@ Primer name D1S2893
 
 Primer name D1S2660
 Amplimer 1
-	Sequence: HSA203YC1 Z52466 
+	Sequence: Z52466 Z52466 
 	H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
 	CACACATGCACATGCAC hits forward strand at 49 with 2 mismatches
 	AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
 	Amplimer length: 239 bp
 Amplimer 2
-	Sequence: HSA203YC1 Z52466 
+	Sequence: Z52466 Z52466 
 	H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
 	CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
 	AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches

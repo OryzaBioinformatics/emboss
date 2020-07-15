@@ -988,7 +988,7 @@ does two things:
 Regular expression search of a protein sequence
 Input protein sequence(s): <b>tsw:*_rat</b>
 Regular expression pattern: <b>IA[QWF]A</b>
-Output report [100k_rat.preg]: <b></b>
+Output report [edd1_rat.preg]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -1137,22 +1137,22 @@ Output report [100k_rat.preg]: <b></b>
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: 100k_rat.preg</h3>
+<p><h3>File: edd1_rat.preg</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: preg
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: preg
 #    -sequence "tsw:*_rat"
 #    -pattern "IA[QWF]A"
 # Report_format: seqtable
-# Report_file: 100k_rat.preg
+# Report_file: edd1_rat.preg
 ########################################
 
 #=======================================
 #
-# Sequence: 100K_RAT     from: 1   to: 889
+# Sequence: EDD1_RAT     from: 1   to: 920
 # HitCount: 1
 #
 # Pattern: IA[QWF]A
@@ -1160,13 +1160,26 @@ Output report [100k_rat.preg]: <b></b>
 #=======================================
 
   Start     End Pattern_name Sequence
-    390     393 regex1       IAQA
+    421     424 regex1       IAQA
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ARF3_RAT     from: 1   to: 181
+# HitCount: 0
+#
+# Pattern: IA[QWF]A
+#
+#=======================================
+
+  Start     End Pattern_name Sequence
 
 #---------------------------------------
 #---------------------------------------
 
 #---------------------------------------
-# Total_sequences: 1
+# Total_sequences: 2
 # Total_hitcount: 1
 #---------------------------------------
 </pre>

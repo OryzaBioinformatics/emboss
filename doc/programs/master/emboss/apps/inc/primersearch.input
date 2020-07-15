@@ -19,14 +19,12 @@ D1S2660 cacacatgcacatgcac       agtgacaccagcaggg
 <p><h3>Database entry: tembl:z52466</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HSA203YC1  standard; DNA; STS; 389 BP.
+ID   Z52466; SV 1; linear; genomic DNA; STS; HUM; 389 BP.
 XX
 AC   Z52466;
 XX
-SV   Z52466.1
-XX
 DT   18-MAR-1996 (Rel. 47, Created)
-DT   23-MAR-1996 (Rel. 47, Last updated, Version 3)
+DT   09-SEP-2004 (Rel. 81, Last updated, Version 4)
 XX
 DE   H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1;
 DE   single read.
@@ -36,7 +34,8 @@ KW   microsatellite marker; repeat polymorphism; STS.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-389
@@ -48,25 +47,29 @@ RL   Jean.Weissenbach@genethon.fr
 XX
 RN   [2]
 RP   1-389
-RX   MEDLINE; 96176476.
+RX   DOI; 10.1038/380152a0.
+RX   PUBMED; 8600387.
 RA   Dib C., Faure S., Fizames C., Samson D., Drouot N., Vignal A.,
 RA   Millasseau P., Marc S., Hazan J., Seboun E., Lathrop M., Gyapay G.,
 RA   Morissette J., Weissenbach J.;
 RT   "A comprehensive genetic map of the human genome based on 5,264
 RT   microsatellites";
-RL   Nature 380:152-154(1996).
+RL   Nature 380(6570):152-154(1996).
+XX
+DR   GDB; 606855.
 XX
 CC   full automatic;
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..389
-FT                   /chromosome="1"
-FT                   /db_xref="taxon:9606"
-FT                   /note="cloning vector is M13mp18"
 FT                   /organism="Homo sapiens"
-FT                   /cell_line="CEPH 134702"
+FT                   /chromosome="1"
+FT                   /mol_type="genomic DNA"
 FT                   /clone_lib="genomic DNA"
+FT                   /cell_line="CEPH 134702"
+FT                   /note="cloning vector is M13mp18"
+FT                   /db_xref="taxon:9606"
 XX
 SQ   Sequence 389 BP; 118 A; 124 C; 86 G; 57 T; 4 other;
      agctgtgtgc acacaacatg anggggcaca catgcacatg cacacatgcc cacatgcata        60

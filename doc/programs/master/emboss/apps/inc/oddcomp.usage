@@ -11,7 +11,7 @@ Find protein sequence regions with a biased composition
 Input protein sequence(s): <b>tsw:*</b>
 Program compseq output file: <b>oddcomp.comp</b>
 Window size to consider (e.g. 30 aa) [30]: <b></b>
-Output file [100k_rat.oddcomp]: <b>out.odd</b>
+Output file [edd1_rat.oddcomp]: <b>out.odd</b>
 
 </pre></td></tr></table><p>
 <p>

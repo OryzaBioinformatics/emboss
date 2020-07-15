@@ -67,11 +67,11 @@ primary exons.
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>cpgreport tembl:rnu68037 </b>
+% <b>cpgreport tembl:u68037 </b>
 Reports all CpG rich regions
 CpG score [17]: <b></b>
-Output file [rnu68037.cpgreport]: <b></b>
-Features output [rnu68037.gff]: <b></b>
+Output file [u68037.cpgreport]: <b></b>
+Features output [u68037.gff]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -210,16 +210,14 @@ Any DNA sequence USA.
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:rnu68037' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:u68037' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:rnu68037</h3>
+<p><h3>Database entry: tembl:u68037</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   RNU68037   standard; RNA; ROD; 1218 BP.
+ID   U68037; SV 1; linear; mRNA; STD; ROD; 1218 BP.
 XX
 AC   U68037;
-XX
-SV   U68037.1
 XX
 DT   23-SEP-1996 (Rel. 49, Created)
 DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
@@ -230,7 +228,8 @@ KW   .
 XX
 OS   Rattus norvegicus (Norway rat)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Rattus.
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
 XX
 RN   [1]
 RP   1-1218
@@ -246,19 +245,23 @@ RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
 RL   Biochemistry &amp; Molecular Biology, Merck Frosst Center for Therapeutic
 RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
 XX
-DR   SWISS-PROT; P70597; PE21_RAT.
-XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..1218
-FT                   /db_xref="taxon:10116"
 FT                   /organism="Rattus norvegicus"
 FT                   /strain="Sprague-Dawley"
+FT                   /mol_type="mRNA"
+FT                   /db_xref="taxon:10116"
 FT   CDS             1..1218
 FT                   /codon_start=1
-FT                   /db_xref="SWISS-PROT:P70597"
-FT                   /note="family 1 G-protein coupled receptor"
 FT                   /product="EP1 prostanoid receptor"
+FT                   /note="family 1 G-protein coupled receptor"
+FT                   /db_xref="GOA:P70597"
+FT                   /db_xref="InterPro:IPR000276"
+FT                   /db_xref="InterPro:IPR000708"
+FT                   /db_xref="InterPro:IPR001244"
+FT                   /db_xref="InterPro:IPR008365"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
 FT                   /protein_id="AAB07735.1"
 FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFSM
 FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTAG
@@ -302,34 +305,34 @@ SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: rnu68037.cpgreport</h3>
+<p><h3>File: u68037.cpgreport</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 
 
-CPGREPORT of RNU68037 from 1 to 1218
+CPGREPORT of U68037 from 1 to 1218
 
 Sequence              Begin    End Score        CpG   %CG  CG/GC
-RNU68037                 12     13    17          1 100.0    -
-RNU68037                 47     48    17          1 100.0    -
-RNU68037                 96   1032   630         87  66.1   0.65
-RNU68037               1072   1100    26          3  62.1   0.00
-RNU68037               1139   1140    17          1 100.0    -
-RNU68037               1183   1193    26          2  72.7   2.00
+U68037                   12     13    17          1 100.0    -
+U68037                   47     48    17          1 100.0    -
+U68037                   96   1032   630         87  66.1   0.65
+U68037                 1072   1100    26          3  62.1   0.00
+U68037                 1139   1140    17          1 100.0    -
+U68037                 1183   1193    26          2  72.7   2.00
 </pre>
 </td></tr></table><p>
-<p><h3>File: rnu68037.gff</h3>
+<p><h3>File: u68037.gff</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
 ##date 2006-07-15
-##Type DNA RNU68037
-RNU68037	cpgreport	misc_feature	12	13	17.000	+	.	Sequence "RNU68037.1"
-RNU68037	cpgreport	misc_feature	47	48	17.000	+	.	Sequence "RNU68037.2"
-RNU68037	cpgreport	misc_feature	96	1032	630.000	+	.	Sequence "RNU68037.3"
-RNU68037	cpgreport	misc_feature	1072	1100	26.000	+	.	Sequence "RNU68037.4"
-RNU68037	cpgreport	misc_feature	1139	1140	17.000	+	.	Sequence "RNU68037.5"
-RNU68037	cpgreport	misc_feature	1183	1193	26.000	+	.	Sequence "RNU68037.6"
+##Type DNA U68037
+U68037	cpgreport	misc_feature	12	13	17.000	+	.	Sequence "U68037.1"
+U68037	cpgreport	misc_feature	47	48	17.000	+	.	Sequence "U68037.2"
+U68037	cpgreport	misc_feature	96	1032	630.000	+	.	Sequence "U68037.3"
+U68037	cpgreport	misc_feature	1072	1100	26.000	+	.	Sequence "U68037.4"
+U68037	cpgreport	misc_feature	1139	1140	17.000	+	.	Sequence "U68037.5"
+U68037	cpgreport	misc_feature	1183	1193	26.000	+	.	Sequence "U68037.6"
 </pre>
 </td></tr></table><p>
 <p>

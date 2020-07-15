@@ -6,10 +6,10 @@
 
 % <b>merger </b>
 Merge two overlapping sequences
-Input sequence: <b>tembl:eclacy</b>
-Second sequence: <b>tembl:eclaca</b>
-Output alignment [eclacy.merger]: <b></b>
-output sequence [eclacy.fasta]: <b></b>
+Input sequence: <b>tembl:v00295</b>
+Second sequence: <b>tembl:x51872</b>
+Output alignment [v00295.merger]: <b></b>
+output sequence [v00295.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

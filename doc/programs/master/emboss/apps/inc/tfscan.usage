@@ -6,7 +6,7 @@
 
 % <b>tfscan </b>
 Scans DNA sequences for transcription factors
-Input nucleotide sequence(s): <b>tembl:hsfos</b>
+Input nucleotide sequence(s): <b>tembl:k00650</b>
 Transcription Factor Class
          F : fungi
          I : insect
@@ -16,7 +16,7 @@ Transcription Factor Class
          C : Custom
 Select class [V]: <b>v</b>
 Number of mismatches [0]: <b></b>
-Output file [hsfos.tfscan]: <b></b>
+Output file [k00650.tfscan]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

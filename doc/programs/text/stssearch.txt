@@ -26,9 +26,9 @@ Usage
 
 % stssearch 
 Search a DNA database for matches with a set of STS primers
-Input nucleotide sequence(s): tembl:eclac*
+Input nucleotide sequence(s): @eclac.list
 Primer pairs file: lac.primers
-Output file [eclac.stssearch]: 
+Output file [j01636.stssearch]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -83,8 +83,22 @@ Input file format
 
   Input files for usage example
 
-   'tembl:eclac*' is a sequence entry in the example nucleic acid
-   database 'tembl'
+  File: eclac.list
+
+#Formerly ECLAC
+tembl:J01636
+
+#Formerly ECLACA
+tembl:X51872
+
+#Formerly ECLACI
+tembl:V00294
+
+#Formerly ECLACY
+tembl:V00295
+
+#Formerly ECLACZ
+tembl:V00296
 
   File: lac.primers
 
@@ -105,26 +119,26 @@ Output file format
 
   Output files for usage example
 
-  File: eclac.stssearch
+  File: j01636.stssearch
 
-ECLAC: PrimA PrimerA matched at 532
-ECLAC: (rev) PrimA PrimerB matched at 689
-ECLAC: PrimB PrimerA matched at 5743
-ECLAC: (rev) PrimB PrimerB matched at 5942
-ECLAC: PrimC PrimerA matched at 2954
-ECLAC: (rev) PrimC PrimerB matched at 3069
-ECLAC: PrimD PrimerA matched at 1074
-ECLAC: (rev) PrimD PrimerB matched at 1261
-ECLAC: PrimE PrimerA matched at 1074
-ECLACA: PrimB PrimerA matched at 98
-ECLACA: (rev) PrimB PrimerB matched at 297
-ECLACI: PrimA PrimerA matched at 484
-ECLACI: (rev) PrimA PrimerB matched at 641
-ECLACI: PrimD PrimerA matched at 1026
-ECLACI: PrimE PrimerA matched at 1026
-ECLACY: PrimB PrimerA matched at 1439
-ECLACZ: PrimC PrimerA matched at 1668
-ECLACZ: (rev) PrimC PrimerB matched at 1783
+J01636: PrimA PrimerA matched at 532
+J01636: (rev) PrimA PrimerB matched at 689
+J01636: PrimB PrimerA matched at 5743
+J01636: (rev) PrimB PrimerB matched at 5942
+J01636: PrimC PrimerA matched at 2954
+J01636: (rev) PrimC PrimerB matched at 3069
+J01636: PrimD PrimerA matched at 1074
+J01636: (rev) PrimD PrimerB matched at 1261
+J01636: PrimE PrimerA matched at 1074
+X51872: PrimB PrimerA matched at 98
+X51872: (rev) PrimB PrimerB matched at 297
+V00294: PrimA PrimerA matched at 484
+V00294: (rev) PrimA PrimerB matched at 641
+V00294: PrimD PrimerA matched at 1026
+V00294: PrimE PrimerA matched at 1026
+V00295: PrimB PrimerA matched at 1439
+V00296: PrimC PrimerA matched at 1668
+V00296: (rev) PrimC PrimerB matched at 1783
 
    The output file consists of one line per match. This consists of:
 

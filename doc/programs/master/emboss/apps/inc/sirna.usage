@@ -6,9 +6,9 @@
 
 % <b>sirna </b>
 Finds siRNA duplexes in mRNA
-Input nucleotide sequence(s): <b>tembl:hsfau</b>
-Output report [hsfau.sirna]: <b></b>
-output sequence(s) [hsfau.fasta]: <b></b>
+Input nucleotide sequence(s): <b>tembl:x65923</b>
+Output report [x65923.sirna]: <b></b>
+output sequence(s) [x65923.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -24,9 +24,9 @@ Show the first two bases of the 23 base target region in brackets. These do not 
 
 % <b>sirna -context </b>
 Finds siRNA duplexes in mRNA
-Input nucleotide sequence(s): <b>tembl:hsfau</b>
-Output report [hsfau.sirna]: <b></b>
-output sequence(s) [hsfau.fasta]: <b></b>
+Input nucleotide sequence(s): <b>tembl:x65923</b>
+Output report [x65923.sirna]: <b></b>
+output sequence(s) [x65923.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

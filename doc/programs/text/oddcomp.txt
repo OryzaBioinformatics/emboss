@@ -59,7 +59,7 @@ Find protein sequence regions with a biased composition
 Input protein sequence(s): tsw:*
 Program compseq output file: oddcomp.comp
 Window size to consider (e.g. 30 aa) [30]: 
-Output file [100k_rat.oddcomp]: out.odd
+Output file [edd1_rat.oddcomp]: out.odd
 
    Go to the input files for this example
    Go to the output files for this example
@@ -195,7 +195,7 @@ Output file format
 # The Expected frequencies are taken from the file: ../../data/oddcomp.comp
 #
 #       Word size: 2
-        CB1B_FUGRU
+        CNR1B_FUGRU
         CO9_FUGRU
         FOS_FUGRU
         RS7_FUGRU

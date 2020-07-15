@@ -101,10 +101,10 @@ the best results with a set of poor quality EST test sequences.
 
 % <b>merger </b>
 Merge two overlapping sequences
-Input sequence: <b>tembl:eclacy</b>
-Second sequence: <b>tembl:eclaca</b>
-Output alignment [eclacy.merger]: <b></b>
-output sequence [eclacy.fasta]: <b></b>
+Input sequence: <b>tembl:v00295</b>
+Second sequence: <b>tembl:x51872</b>
+Output alignment [v00295.merger]: <b></b>
+output sequence [v00295.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -314,16 +314,14 @@ nucleic acid.)
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:eclacy' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:v00295' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:eclacy</h3>
+<p><h3>Database entry: tembl:v00295</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   ECLACY     standard; DNA; PRO; 1500 BP.
+ID   V00295; SV 1; linear; genomic DNA; STD; PRO; 1500 BP.
 XX
 AC   V00295;
-XX
-SV   V00295.1
 XX
 DT   09-JUN-1982 (Rel. 01, Created)
 DT   07-JUL-1995 (Rel. 44, Last updated, Version 4)
@@ -333,19 +331,16 @@ XX
 KW   membrane protein.
 XX
 OS   Escherichia coli
-OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
-OC   Escherichia.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
 RP   1-1500
-RX   MEDLINE; 80120651.
+RX   DOI; 10.1038/283541a0.
+RX   PUBMED; 6444453.
 RA   Buechel D.E., Gronenborn B., Mueller-Hill B.;
 RT   "Sequence of the lactose permease gene";
-RL   Nature 283:541-545(1980).
-XX
-DR   SWISS-PROT; P00722; BGAL_ECOLI.
-DR   SWISS-PROT; P02920; LACY_ECOLI.
-DR   SWISS-PROT; P07464; THGA_ECOLI.
+RL   Nature 283(5747):541-545(1980).
 XX
 CC   lacZ is a beta-galactosidase and lacA is transacetylase.
 CC   KST ECO.LACY
@@ -353,19 +348,34 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..1500
-FT                   /db_xref="taxon:562"
 FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
 FT   CDS             &lt;1..54
 FT                   /codon_start=1
-FT                   /db_xref="SWISS-PROT:P00722"
+FT                   /transl_table=11
 FT                   /note="reading frame (lacZ)"
-FT                   /transl_table=11
-FT                   /protein_id="CAA23570.1"
-FT                   /translation="FQLSAGRYHYQLVWCQK"
-FT   CDS             106..1359
-FT                   /db_xref="SWISS-PROT:P02920"
-FT                   /note="reading frame (lacY)"
-FT                   /transl_table=11
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="PDB:1BGL"
+FT                   /db_xref="PDB:1BGM"
+FT                   /db_xref="PDB:1DP0"
+FT                   /db_xref="PDB:1F49"
+FT                   /db_xref="PDB:1F4A"
+FT                   /db_xref="PDB:1F4H"
+FT                   /db_xref="PDB:1GHO"
+FT                   /db_xref="PDB:1HN1"
+FT                   /db_xref="PDB:1JYN"
+FT                   /db_xref="PDB:1JYV"
+FT                   /db_xref="PDB:1JYW"
+FT                   /db_xref="PDB:1JYX"
+FT                   /db_xref="PDB:1JYY"
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   /db_xref="PDB:2CFP"
+FT                   /db_xref="PDB:2CFQ"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
 FT                   /protein_id="CAA23571.1"
 FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
 FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNIL
@@ -376,9 +386,14 @@ FT                   IINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCFKYITSQ
 FT                   FEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGFTLISVFT
 FT                   LSGPGPLSLLRRQVNEVA"
 FT   CDS             1423..&gt;1500
-FT                   /db_xref="SWISS-PROT:P07464"
-FT                   /note="reading frame (lacA)"
 FT                   /transl_table=11
+FT                   /note="reading frame (lacA)"
+FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="PDB:1KQA"
+FT                   /db_xref="PDB:1KRR"
+FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="PDB:1KRV"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
 FT                   /protein_id="CAA23572.1"
 FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKR"
 XX
@@ -411,14 +426,12 @@ SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
 //
 </pre>
 </td></tr></table><p>
-<p><h3>Database entry: tembl:eclaca</h3>
+<p><h3>Database entry: tembl:x51872</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   ECLACA     standard; DNA; PRO; 1832 BP.
+ID   X51872; SV 1; linear; genomic DNA; STD; PRO; 1832 BP.
 XX
 AC   X51872;
-XX
-SV   X51872.1
 XX
 DT   17-APR-1990 (Rel. 23, Created)
 DT   05-JUL-1999 (Rel. 60, Last updated, Version 5)
@@ -428,38 +441,42 @@ XX
 KW   lac operon; lacA gene; lacY gene; thiogalactoside transacetylase.
 XX
 OS   Escherichia coli
-OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
-OC   Escherichia.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
 RC   (1-1832)
 RP   1-1832
-RX   MEDLINE; 86016712.
+RX   PUBMED; 3901000.
 RA   Hediger M.A, Johnson D.F., Nierlich D.P., Zabin I.;
-RT   "DNA sequence of the lactose operon: The lacA gene and the transcriptional
-RT   termination region";
-RL   Proc. Natl. Acad. Sci. U.S.A. 82:6414-6418(1985).
-XX
-DR   REMTREMBL; CAA36161; CAA36161.
-DR   SWISS-PROT; P07464; THGA_ECOLI.
+RT   "DNA sequence of the lactose operon: the lacA gene and the transcriptional
+RT   termination region.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 82(19):6414-6418(1985).
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..1832
-FT                   /db_xref="taxon:562"
 FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
 FT   CDS             &lt;1..18
 FT                   /codon_start=1
-FT                   /db_xref="REMTREMBL:CAA36161"
 FT                   /transl_table=11
 FT                   /product="lacY gene product"
 FT                   /protein_id="CAA36161.1"
 FT                   /translation="VNEVA"
 FT   CDS             82..693
-FT                   /db_xref="SWISS-PROT:P07464"
 FT                   /transl_table=11
-FT                   /product="thiogalactoside transacetylase"
 FT                   /gene="lacA"
+FT                   /product="thiogalactoside transacetylase"
+FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="InterPro:IPR001451"
+FT                   /db_xref="InterPro:IPR011004"
+FT                   /db_xref="PDB:1KQA"
+FT                   /db_xref="PDB:1KRR"
+FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="PDB:1KRV"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
 FT                   /protein_id="CAA36162.1"
 FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKRLRGKTLMYEFNHSHPSEVE
 FT                   KRESLIKEMFATVGENAWVEPPVYFSYGSNIHIGRNFYANFNLTIVDDYTVTIGDNVLI
@@ -557,24 +574,24 @@ uppercase.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: eclacy.merger</h3>
+<p><h3>File: v00295.merger</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: merger
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: merger
-#    -asequence tembl:eclacy
-#    -bsequence tembl:eclaca
+#    -asequence tembl:v00295
+#    -bsequence tembl:x51872
 # Align_format: simple
-# Report_file: eclacy.merger
+# Report_file: v00295.merger
 ########################################
 
 #=======================================
 #
 # Aligned_sequences: 2
-# 1: ECLACY
-# 2: ECLACA
+# 1: V00295
+# 2: X51872
 # Matrix: EDNAFULL
 # Gap_penalty: 50.0
 # Extend_penalty: 5.0
@@ -588,89 +605,89 @@ uppercase.
 #
 #=======================================
 
-ECLACY             1 ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaa     50
+V00295             1 ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaa     50
                                                                        
-ECLACA             1 --------------------------------------------------      0
+X51872             1 --------------------------------------------------      0
 
-ECLACY            51 ataataataaccgggcaggccatgtctgcccgtatttcgcgtaaggaaat    100
+V00295            51 ataataataaccgggcaggccatgtctgcccgtatttcgcgtaaggaaat    100
                                                                        
-ECLACA             1 --------------------------------------------------      0
+X51872             1 --------------------------------------------------      0
 
-ECLACY           101 ccattatgtactatttaaaaaacacaaacttttggatgttcggtttattc    150
+V00295           101 ccattatgtactatttaaaaaacacaaacttttggatgttcggtttattc    150
                                                                        
-ECLACA             1 --------------------------------------------------      0
+X51872             1 --------------------------------------------------      0
 
-ECLACY           151 tttttcttttacttttttatcatgggagcctacttcccgtttttcccgat    200
+V00295           151 tttttcttttacttttttatcatgggagcctacttcccgtttttcccgat    200
                                                                        
-ECLACA             1 --------------------------------------------------      0
+X51872             1 --------------------------------------------------      0
 
-ECLACY           201 ttggctacatgacatcaaccatatcagcaaaagtgatacgggtattattt    250
+V00295           201 ttggctacatgacatcaaccatatcagcaaaagtgatacgggtattattt    250
                                                                        
-ECLACA             1 --------------------------------------------------      0
+X51872             1 --------------------------------------------------      0
 
-ECLACY           251 ttgccgctatttctctgttctcgctattattccaaccgctgtttggtctg    300
+V00295           251 ttgccgctatttctctgttctcgctattattccaaccgctgtttggtctg    300
                                                                        
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
                                                                        
-ECLACA          1310 ctggcgtaaccgccgttaatcagaccgaagtaaacacccagcgtccacgc   1359
+X51872          1310 ctggcgtaaccgccgttaatcagaccgaagtaaacacccagcgtccacgc   1359
 
-ECLACY          1501 --------------------------------------------------   1500
+V00295          1501 --------------------------------------------------   1500
                                                                        
-ECLACA          1360 gcggggagtgaataccacgcgaaccggagtggttgttgtcttgtgggaag   1409
+X51872          1360 gcggggagtgaataccacgcgaaccggagtggttgttgtcttgtgggaag   1409
 
-ECLACY          1501 --------------------------------------------------   1500
+V00295          1501 --------------------------------------------------   1500
                                                                        
-ECLACA          1410 aggcgacctcgcgggcgctttgccaccaccaggcaaagagcgcaacaacg   1459
+X51872          1410 aggcgacctcgcgggcgctttgccaccaccaggcaaagagcgcaacaacg   1459
 
-ECLACY          1501 --------------------------------------------------   1500
+V00295          1501 --------------------------------------------------   1500
                                                                        
-ECLACA          1460 gcaggcagcgccaccaggcgagtgtttgataccaggtttcgctatgttga   1509
+X51872          1460 gcaggcagcgccaccaggcgagtgtttgataccaggtttcgctatgttga   1509
 
-ECLACY          1501 --------------------------------------------------   1500
+V00295          1501 --------------------------------------------------   1500
                                                                        
-ECLACA          1510 actaaccagggcgttatggcggcaccaagcccaccgccgcccatcagagc   1559
+X51872          1510 actaaccagggcgttatggcggcaccaagcccaccgccgcccatcagagc   1559
 
-ECLACY          1501 --------------------------------------------------   1500
+V00295          1501 --------------------------------------------------   1500
                                                                        
-ECLACA          1560 cgcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtt   1609
+X51872          1560 cgcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtt   1609
 
-ECLACY          1501 --------------------------------------------------   1500
+V00295          1501 --------------------------------------------------   1500
                                                                        
-ECLACA          1610 taatcaccgaagcatcaccgcctgaatgatgccgatccccaccccaccaa   1659
+X51872          1610 taatcaccgaagcatcaccgcctgaatgatgccgatccccaccccaccaa   1659
 
-ECLACY          1501 --------------------------------------------------   1500
+V00295          1501 --------------------------------------------------   1500
                                                                        
-ECLACA          1660 gcagtgcgctgctaagcagcagcgcactttgcgggtaaagctcacgcatc   1709
+X51872          1660 gcagtgcgctgctaagcagcagcgcactttgcgggtaaagctcacgcatc   1709
 
-ECLACY          1501 --------------------------------------------------   1500
+V00295          1501 --------------------------------------------------   1500
                                                                        
-ECLACA          1710 aatgcaccgacggcaatcagcaacagactgatggcgacactgcgacgttc   1759
+X51872          1710 aatgcaccgacggcaatcagcaacagactgatggcgacactgcgacgttc   1759
 
-ECLACY          1501 --------------------------------------------------   1500
+V00295          1501 --------------------------------------------------   1500
                                                                        
-ECLACA          1760 gctgacatgctgatgaagccagcttccggccagcgccagcccgcccatgg   1809
+X51872          1760 gctgacatgctgatgaagccagcttccggccagcgccagcccgcccatgg   1809
 
-ECLACY          1501 -----------------------   1500
+V00295          1501 -----------------------   1500
                                             
-ECLACA          1810 taaccaccggcagagcggtcgac   1832
+X51872          1810 taaccaccggcagagcggtcgac   1832
 
 
 #---------------------------------------
 #
-# Conflicts:          ECLACY          ECLACA
+# Conflicts:          V00295          X51872
 #              position base   position base Using
 # 
 #
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-<p><h3>File: eclacy.fasta</h3>
+<p><h3>File: v00295.fasta</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;ECLACY V00295.1 E. coli lacY gene (codes for lactose permease).
+&gt;V00295 V00295.1 E. coli lacY gene (codes for lactose permease).
 ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaaataataataa
 ccgggcaggccatgtctgcccgtatttcgcgtaaggaaatccattatgtactatttaaaa
 aacacaaacttttggatgttcggtttattctttttcttttacttttttatcatgggagcc

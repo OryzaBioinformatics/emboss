@@ -107,9 +107,9 @@ splicing (CT/AC consensus). The overall best alignment is reported.
 
 % <b>est2genome </b>
 Align EST and genomic DNA sequences
-Spliced EST nucleotide sequence(s): <b>tembl:hs989235</b>
-Unspliced genomic nucleotide sequence: <b>tembl:hsnfg9</b>
-Output file [hs989235.est2genome]: <b></b>
+Spliced EST nucleotide sequence(s): <b>tembl:h45989</b>
+Unspliced genomic nucleotide sequence: <b>tembl:z69719</b>
+Output file [h45989.est2genome]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -400,16 +400,14 @@ finished sequence.
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:hs989235' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:h45989' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:hs989235</h3>
+<p><h3>Database entry: tembl:h45989</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HS989235   standard; RNA; EST; 495 BP.
+ID   H45989; SV 1; linear; mRNA; EST; HUM; 495 BP.
 XX
 AC   H45989;
-XX
-SV   H45989.1
 XX
 DT   18-NOV-1995 (Rel. 45, Created)
 DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
@@ -421,7 +419,8 @@ KW   EST.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-495
@@ -432,7 +431,10 @@ RA   Wohldmann P., Wilson R.;
 RT   "The WashU-Merck EST Project";
 RL   Unpublished.
 XX
-DR   RZPD; IMAGp998F03326; IMAGp998F03326.
+DR   GDB; 3839990.
+DR   GDB; 4193257.
+DR   RZPD; IMAGp998F03326.
+DR   UNILIB; 555; 300.
 XX
 CC   On May 8, 1995 this sequence version replaced gi:800819.
 CC   Contact: Wilson RK
@@ -454,9 +456,13 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..495
-FT                   /db_xref="taxon:9606"
-FT                   /db_xref="ESTLIB:300"
-FT                   /db_xref="RZPD:IMAGp998F03326"
+FT                   /organism="Homo sapiens"
+FT                   /lab_host="DH10B (ampicillin resistant)"
+FT                   /mol_type="mRNA"
+FT                   /sex="Male"
+FT                   /dev_stage="55-year old"
+FT                   /clone_lib="Soares adult brain N2b5HB55Y"
+FT                   /clone="IMAGE:177794"
 FT                   /note="Organ: brain; Vector: pT7T3D (Pharmacia) with a
 FT                   modified polylinker; Site_1: Not I; Site_2: Eco RI; 1st
 FT                   strand cDNA was primed with a Not I - oligo(dT) primer [5'
@@ -474,12 +480,9 @@ FT                   tissues representing the following areas of the brain:
 FT                   frontal, parietal, temporal and occipital cortex from the
 FT                   left and right hemispheres, subcortical white matter, basal
 FT                   ganglia, thalamus, cerebellum, midbrain, pons and medulla."
-FT                   /sex="Male"
-FT                   /organism="Homo sapiens"
-FT                   /clone="IMAGE:177794"
-FT                   /clone_lib="Soares adult brain N2b5HB55Y"
-FT                   /dev_stage="55-year old"
-FT                   /lab_host="DH10B (ampicillin resistant)"
+FT                   /db_xref="taxon:9606"
+FT                   /db_xref="RZPD:IMAGp998F03326"
+FT                   /db_xref="UNILIB:555"
 XX
 SQ   Sequence 495 BP; 73 A; 135 C; 169 G; 104 T; 14 other;
      ccggnaagct cancttggac caccgactct cgantgnntc gccgcgggag ccggntggan        60
@@ -494,59 +497,59 @@ SQ   Sequence 495 BP; 73 A; 135 C; 169 G; 104 T; 14 other;
 //
 </pre>
 </td></tr></table><p>
-<p><h3>Database entry: tembl:hsnfg9</h3>
+<p><h3>Database entry: tembl:z69719</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HSNFG9     standard; DNA; HUM; 33760 BP.
+ID   Z69719; SV 1; linear; genomic DNA; STD; HUM; 33760 BP.
 XX
 AC   Z69719;
 XX
-SV   Z69719.1
-XX
 DT   26-FEB-1996 (Rel. 46, Created)
-DT   22-NOV-1999 (Rel. 61, Last updated, Version 3)
+DT   18-JAN-2007 (Rel. 90, Last updated, Version 6)
 XX
-DE   Human DNA sequence from cosmid NFG9 from a contig from the tip of the short
-DE   arm of chromosome 16, spanning 2Mb of 16p13.3. Contains Interleukin 9
-DE   Receptor Pseudogene, repeat polymorphism, ESTs, CpG islands and endogenous
-DE   retroviral DNA.
+DE   Human DNA sequence from clone XX-CNFG9 on chromosome 16
 XX
-KW   16p13.3; CpG island; Interleukin 9 Receptor Pseudogene;
-KW   repeat polymorphism.
+KW   C16orf33; HTG; POLR3K; RHBDF1.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-33760
 RA   Kershaw J.;
 RT   ;
-RL   Submitted (22-FEB-1996) to the EMBL/GenBank/DDBJ databases.
-RL   Sanger Centre, Hinxton, Cambridgeshire, CB10 1RQ, England. E-mail enquires:
-RL   humquery@sanger.ac.uk
+RL   Submitted (16-JAN-2007) to the EMBL/GenBank/DDBJ databases.
+RL   Wellcome Trust Sanger Institute, Hinxton, Cambridgeshire, CB10 1SA, UK.
+RL   E-mail enquiries: vega@sanger.ac.uk Clone requests:
+RL   clonerequest@sanger.ac.uk
 XX
-CC   IMPORTANT:  This sequence is not the entire insert of clone
-CC   NFG9.  It may be shorter because we only sequence overlapping
-CC   sections once, or longer because we arrange for a small
-CC   overlap between neighbouring submissions.
+DR   EMBL-JOIN; Z69720.
+DR   GDB; 11502921.
 XX
-CC   The true left end of clone NFG9 is at 1 in this sequence.
-CC   The true left end of clone RA36 is at 25872.
-XX
-CC   NFG9 is from a 280kb clone contig extending from the telomere of 16p.
-CC   Higgs D.R., Flint J. unpublished. MRC Molecular Haematology Unit,
-CC   Institute of Molecular Medicine, Oxford.
-CC   NFG9 is from the library CV007K. Choo et al.,(1986) Gene 46. 277-286.
+CC   -------------- Genome Center
+CC   Center: Wellcome Trust Sanger Institute
+CC   Center code: SC
+CC   Web site: http://www.sanger.ac.uk
+CC   Contact: vega@sanger.ac.uk
+CC   --------------
+CC   
+CC   This sequence was finished as follows unless otherwise noted: all regions
+CC   were either double-stranded or sequenced with an alternate chemistry or
+CC   covered by high quality data (i.e., phred quality &gt;= 30); an attempt was
+CC   made to resolve all sequencing problems, such as compressions and repeats;
+CC   all regions were covered by at least one subclone; and the assembly was
+CC   confirmed by restriction digest, except on the rare occasion of the clone
+CC   being a YAC.
+CC   
+CC   The following abbreviations are used to associate primary accession
+CC   numbers given in the feature table with their source databases:
+CC   Em:, EMBL; Sw:, SWISSPROT; Tr:, TREMBL; Wp:, WORMPEP;
+CC   Information on the WORMPEP database can be found at
+CC   http://www.sanger.ac.uk/Projects/C_elegans/wormpep
 XX
 FH   Key             Location/Qualifiers
-FH
-FT   source          1..33760
-FT                   /chromosome="16"
-FT                   /db_xref="taxon:9606"
-FT                   /organism="Homo sapiens"
-FT                   /map="16p13.3"
-FT                   /clone_lib="CV007K"
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -612,31 +615,31 @@ FT                   /clone_lib="CV007K"
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hs989235.est2genome</h3>
+<p><h3>File: h45989.est2genome</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Note Best alignment is between forward est and forward genome, but splice sites imply REVERSED GENE
-Exon       163  91.8 25685 25874 HSNFG9           1   193 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
--Intron    -20   0.0 25875 26278 HSNFG9      
-Exon       207  98.1 26279 26492 HSNFG9         194   407 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
--Intron    -20   0.0 26493 27390 HSNFG9      
-Exon        63  86.4 27391 27476 HSNFG9         408   494 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Exon       163  91.8 25685 25874 Z69719           1   193 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+-Intron    -20   0.0 25875 26278 Z69719      
+Exon       207  98.1 26279 26492 Z69719         194   407 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+-Intron    -20   0.0 26493 27390 Z69719      
+Exon        63  86.4 27391 27476 Z69719         408   494 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
 
-Span       393  93.6 25685 27476 HSNFG9           1   494 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Span       393  93.6 25685 27476 Z69719           1   494 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
 
-Segment     14  83.3 25685 25702 HSNFG9           1    18 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
-Segment     28  85.7 25703 25737 HSNFG9          20    54 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
-Segment      4 100.0 25738 25741 HSNFG9          56    59 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
-Segment     13 100.0 25742 25754 HSNFG9          61    73 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
-Segment      4 100.0 25756 25759 HSNFG9          74    77 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
-Segment    110  97.4 25760 25874 HSNFG9          79   193 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
-Segment     37 100.0 26279 26315 HSNFG9         194   230 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
-Segment    162  98.8 26317 26480 HSNFG9         231   394 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
-Segment     12 100.0 26481 26492 HSNFG9         396   407 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
-Segment     16 100.0 27391 27406 HSNFG9         408   423 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
-Segment     10  91.7 27407 27418 HSNFG9         425   436 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
-Segment     19  95.2 27419 27439 HSNFG9         438   458 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
-Segment     24  80.6 27441 27476 HSNFG9         459   494 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     14  83.3 25685 25702 Z69719           1    18 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     28  85.7 25703 25737 Z69719          20    54 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment      4 100.0 25738 25741 Z69719          56    59 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     13 100.0 25742 25754 Z69719          61    73 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment      4 100.0 25756 25759 Z69719          74    77 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment    110  97.4 25760 25874 Z69719          79   193 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     37 100.0 26279 26315 Z69719         194   230 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment    162  98.8 26317 26480 Z69719         231   394 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     12 100.0 26481 26492 Z69719         396   407 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     16 100.0 27391 27406 Z69719         408   423 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     10  91.7 27407 27418 Z69719         425   436 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     19  95.2 27419 27439 Z69719         438   458 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     24  80.6 27441 27476 Z69719         459   494 H45989        yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
 </pre>
 </td></tr></table><p>
 <p>

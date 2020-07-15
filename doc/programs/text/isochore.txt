@@ -44,7 +44,7 @@ Command line arguments
   [-outfile]           outfile    [*.isochore] Output file name
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png)
+                                  tekt, tek, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -window             integer    [1000] Window size (Integer 1 or more)
@@ -108,14 +108,12 @@ Input file format
 
   Database entry: tembl:AF129756
 
-ID   AF129756   standard; DNA; HUM; 184666 BP.
+ID   AF129756; SV 1; linear; genomic DNA; STD; HUM; 184666 BP.
 XX
 AC   AF129756;
 XX
-SV   AF129756.1
-XX
 DT   12-MAR-1999 (Rel. 59, Created)
-DT   29-OCT-1999 (Rel. 61, Last updated, Version 2)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 5)
 XX
 DE   Homo sapiens MSH55 gene, partial cds; and CLIC1, DDAH, G6b, G6c, G5b, G6d,
 DE   G6e, G6f, BAT5, G5b, CSK2B, BAT4, G4, Apo M, BAT3, BAT2, AIF-1, 1C7, LST-1
@@ -127,16 +125,27 @@ XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
 ;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
+RP   1-184666
+RX   DOI; 10.1101/gr.1736803.
+RX   PUBMED; 14656967.
+RA   Xie T., Rowen L., Aguado B., Ahearn M.E., Madan A., Qin S., Campbell R.D.,
+RA   Hood L.;
+RT   "Analysis of the gene-dense major histocompatibility complex class III
+RT   region and its comparison to mouse";
+RL   Genome Res. 13(12):2621-2636(2003).
+XX
+RN   [2]
 RP   1-184666
 RA   Rowen L., Madan A., Qin S., Shaffer T., James R., Ratcliffe A., Abbasi N.,
 RA   Dickhoff R., Loretz C., Madan A., Dors M., Young J., Lasky S., Hood L.;
 RT   "Sequence of the human major histocompatibility complex class III region";
 RL   Unpublished.
 XX
-RN   [2]
+RN   [3]
 RP   1-184666
 RA   Rowen L.;
 RT   ;
@@ -145,22 +154,13 @@ RL   Department of Molecular Biotechnology, Box 357730 University of Washington
 ,
 RL   Seattle, WA 98195, USA
 XX
-RN   [3]
+RN   [4]
 RP   1-184666
 RA   Rowen L.;
 RT   ;
 RL   Submitted (28-OCT-1999) to the EMBL/GenBank/DDBJ databases.
 RL   Multimegabase Sequencing Center, University of Washington, PO Box 357730,
 RL   Seattle, WA 98195, USA
-XX
-DR   EPD; EP11158; HS_TNFA.
-DR   EPD; EP11159; HS_TNFB.
-DR   SPTREMBL; O00452; O00452.
-DR   SPTREMBL; O14931; O14931.
-DR   SPTREMBL; O95866; O95866.
-DR   SPTREMBL; O95868; O95868.
-DR   SPTREMBL; O95869; O95869.
-DR   SPTREMBL; O95870; O95870.
 
 
   [Part of this file has been deleted for brevity]

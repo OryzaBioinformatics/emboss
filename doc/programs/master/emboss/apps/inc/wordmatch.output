@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: wordmatch
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: wordmatch
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -21,9 +21,9 @@
 # 2: HBB_HUMAN
 #=======================================
 
-     5 HBA_HUMAN       +       58..62       HBB_HUMAN       +       63..67
-     4 HBA_HUMAN       +       14..17       HBB_HUMAN       +       15..18
-     4 HBA_HUMAN       +      116..119      HBB_HUMAN       +      121..124
+     5 HBA_HUMAN       +       59..63       HBB_HUMAN       +       64..68
+     4 HBA_HUMAN       +       15..18       HBB_HUMAN       +       16..19
+     4 HBA_HUMAN       +      117..120      HBB_HUMAN       +      122..125
 
 #---------------------------------------
 #---------------------------------------
@@ -35,9 +35,9 @@
 ##gff-version 2.0
 ##date 2006-07-15
 ##Type Protein HBA_HUMAN
-HBA_HUMAN	wordmatch	misc_feature	58	62	1.000	+	.	Sequence "HBA_HUMAN.1" ; note "HBB_HUMAN"
-HBA_HUMAN	wordmatch	misc_feature	14	17	1.000	+	.	Sequence "HBA_HUMAN.2" ; note "HBB_HUMAN"
-HBA_HUMAN	wordmatch	misc_feature	116	119	1.000	+	.	Sequence "HBA_HUMAN.3" ; note "HBB_HUMAN"
+HBA_HUMAN	wordmatch	misc_feature	59	63	1.000	+	.	Sequence "HBA_HUMAN.1" ; note "HBB_HUMAN"
+HBA_HUMAN	wordmatch	misc_feature	15	18	1.000	+	.	Sequence "HBA_HUMAN.2" ; note "HBB_HUMAN"
+HBA_HUMAN	wordmatch	misc_feature	117	120	1.000	+	.	Sequence "HBA_HUMAN.3" ; note "HBB_HUMAN"
 </pre>
 </td></tr></table><p>
 <p><h3>File: HBB_HUMAN.gff</h3>
@@ -46,8 +46,8 @@ HBA_HUMAN	wordmatch	misc_feature	116	119	1.000	+	.	Sequence "HBA_HUMAN.3" ; note
 ##gff-version 2.0
 ##date 2006-07-15
 ##Type Protein HBB_HUMAN
-HBB_HUMAN	wordmatch	misc_feature	63	67	1.000	+	.	Sequence "HBB_HUMAN.1" ; note "HBA_HUMAN"
-HBB_HUMAN	wordmatch	misc_feature	15	18	1.000	+	.	Sequence "HBB_HUMAN.2" ; note "HBA_HUMAN"
-HBB_HUMAN	wordmatch	misc_feature	121	124	1.000	+	.	Sequence "HBB_HUMAN.3" ; note "HBA_HUMAN"
+HBB_HUMAN	wordmatch	misc_feature	64	68	1.000	+	.	Sequence "HBB_HUMAN.1" ; note "HBA_HUMAN"
+HBB_HUMAN	wordmatch	misc_feature	16	19	1.000	+	.	Sequence "HBB_HUMAN.2" ; note "HBA_HUMAN"
+HBB_HUMAN	wordmatch	misc_feature	122	125	1.000	+	.	Sequence "HBB_HUMAN.3" ; note "HBA_HUMAN"
 </pre>
 </td></tr></table><p>

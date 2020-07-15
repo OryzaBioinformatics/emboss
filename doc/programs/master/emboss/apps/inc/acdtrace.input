@@ -2,54 +2,77 @@
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tsw:act1_fugru' is a sequence entry in the example protein database 'tsw'
+'tsw:actb1_fugru' is a sequence entry in the example protein database 'tsw'
 <p>
-<p><h3>Database entry: tsw:act1_fugru</h3>
+<p><h3>Database entry: tsw:actb1_fugru</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   ACT1_FUGRU     STANDARD;      PRT;   375 AA.
-AC   P53484;
-DT   01-OCT-1996 (REL. 34, CREATED)
-DT   01-OCT-1996 (REL. 34, LAST SEQUENCE UPDATE)
-DT   01-OCT-1996 (REL. 34, LAST ANNOTATION UPDATE)
-DE   ACTIN, CYTOPLASMIC 1 (BETA-ACTIN 1).
-OS   FUGU RUBRIPES (JAPANESE PUFFERFISH) (TAKIFUGU RUBRIPES).
-OC   EUKARYOTA; METAZOA; CHORDATA; VERTEBRATA; PISCES; GNATHOSTOMATA;
-OC   OSTEICHTHYES; ACTINOPTERYGII; TETRAODONTIFORMES.
+ID   ACTB1_FUGRU             Reviewed;         375 AA.
+AC   P68142; P53484;
+DT   25-OCT-2004, integrated into UniProtKB/Swiss-Prot.
+DT   25-OCT-2004, sequence version 1.
+DT   20-MAR-2007, entry version 16.
+DE   Actin, cytoplasmic 1 (Beta-actin A).
+GN   Name=ACTB-A;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
 RN   [1]
-RP   SEQUENCE FROM N.A.
-RX   MEDLINE; 96275651.
-RA   VENKATESH B., TAY B.H., ELGAR G., BRENNER S.;
-RL   J. MOL. BIOL. 259:655-665(1996).
-CC   -!- FUNCTION: ACTINS ARE HIGHLY CONSERVED PROTEINS THAT ARE INVOLVED
-CC       IN VARIOUS TYPES OF CELL MOTILITY AND ARE UBIQUITOUSLY EXPRESSED
-CC       IN ALL EUKARYOTIC CELLS.
-CC   -!- SUBUNIT: POLYMERIZATION OF GLOBULAR ACTIN (G-ACTIN) LEADS TO A
-CC       STRUCTURAL FILAMENT (F-ACTIN) IN THE FORM OF A TWO-STRANDED
-CC       HELIX. EACH ACTIN CAN BIND TO 4 OTHERS.
-CC   -!- SUBCELLULAR LOCATION: CYTOPLASMIC.
-CC   -!- TISSUE SPECIFICITY: WIDELY DISTRIBUTED. NOT EXPRESSED IN SKELETAL
-CC       MUSCLE.
-CC   -!- IN VERTEBRATES 3 MAIN GROUPS OF ACTIN ISOFORMS, ALPHA, BETA AND
-CC       GAMMA HAVE BEEN IDENTIFIED. THE ALPHA ACTINS ARE FOUND IN MUSCLE
-CC       TISSUES AND ARE A MAJOR CONSTITUENT OF THE CONTRACTILE APPARATUS.
-CC       THE BETA AND GAMMA ACTINS CO-EXISTS IN MOST CELL TYPES AS
-CC       COMPONENTS OF THE CYTOSKELETON AND AS MEDIATORS OF INTERNAL CELL
-CC       MOTILITY.
-CC   -!- THERE ARE THREE DIFFERENT BETA-CYTOPLASMIC ACTINS IN FUGU
-CC       RUBRIPES.
-DR   EMBL; U37499; G1335821; -.
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND TISSUE SPECIFICITY.
+RX   MEDLINE=96275651; PubMed=8683572; DOI=10.1006/jmbi.1996.0347;
+RA   Venkatesh B., Tay B.H., Elgar G., Brenner S.;
+RT   "Isolation, characterization and evolution of nine pufferfish (Fugu
+RT   rubripes) actin genes.";
+RL   J. Mol. Biol. 259:655-665(1996).
+CC   -!- FUNCTION: Actins are highly conserved proteins that are involved
+CC       in various types of cell motility and are ubiquitously expressed
+CC       in all eukaryotic cells.
+CC   -!- SUBUNIT: Polymerization of globular actin (G-actin) leads to a
+CC       structural filament (F-actin) in the form of a two-stranded helix.
+CC       Each actin can bind to 4 others.
+CC   -!- SUBCELLULAR LOCATION: Cytoplasm.
+CC   -!- TISSUE SPECIFICITY: Widely distributed. Not expressed in skeletal
+CC       muscle.
+CC   -!- MISCELLANEOUS: In vertebrates 3 main groups of actin isoforms,
+CC       alpha, beta and gamma have been identified. The alpha actins are
+CC       found in muscle tissues and are a major constituent of the
+CC       contractile apparatus. The beta and gamma actins coexist in most
+CC       cell types as components of the cytoskeleton and as mediators of
+CC       internal cell motility.
+CC   -!- MISCELLANEOUS: There are three different beta-cytoplasmic actins
+CC       in Fugu rubripes.
+CC   -!- SIMILARITY: Belongs to the actin family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; U37499; AAC59889.1; -; Genomic_DNA.
+DR   PIR; S71124; S71124.
+DR   HSSP; P02570; 1HLU.
+DR   SMR; P68142; 4-371.
+DR   Ensembl; NEWSINFRUG00000152503; Fugu rubripes.
+DR   InterPro; IPR004001; Actin.
+DR   InterPro; IPR004000; Actin_like.
+DR   PANTHER; PTHR11937; Actin_like; 1.
+DR   Pfam; PF00022; Actin; 1.
+DR   PRINTS; PR00190; ACTIN.
+DR   SMART; SM00268; ACTIN; 1.
 DR   PROSITE; PS00406; ACTINS_1; 1.
 DR   PROSITE; PS00432; ACTINS_2; 1.
 DR   PROSITE; PS01132; ACTINS_ACT_LIKE; 1.
-KW   MULTIGENE FAMILY; STRUCTURAL PROTEIN; METHYLATION; ACETYLATION;
-KW   CYTOSKELETON.
-FT   PROPEP        1      1       REMOVED IN MATURE FORM (BY SIMILARITY).
-FT   CHAIN         2    375       ACTIN, CYTOPLASMIC 1.
-FT   MOD_RES       1      1       ACETYLATION (BY SIMILARITY).
-FT   MOD_RES       2      2       ACETYLATION (BY SIMILARITY).
-FT   MOD_RES      73     73       METHYLATION (BY SIMILARITY).
-SQ   SEQUENCE   375 AA;  41766 MW;  3A0543DF CRC32;
+KW   Acetylation; ATP-binding; Cytoskeleton; Methylation;
+KW   Nucleotide-binding; Structural protein.
+FT   PROPEP        1      1       Removed in mature form (By similarity).
+FT                                /FTId=PRO_0000000808.
+FT   CHAIN         2    375       Actin, cytoplasmic 1.
+FT                                /FTId=PRO_0000000809.
+FT   MOD_RES       1      1       N-acetylmethionine (By similarity).
+FT   MOD_RES       2      2       N-acetylglutamate (By similarity).
+FT   MOD_RES      73     73       Tele-methylhistidine (By similarity).
+SQ   SEQUENCE   375 AA;  41767 MW;  9C505616D33E9495 CRC64;
      MEDEIAALVV DNGSGMCKAG FAGDDAPRAV FPSIVGRPRH QGVMVGMGQK DSYVGDEAQS
      KRGILTLKYP IEHGIVTNWD DMEKIWHHTF YNELRVAPEE HPVLLTEAPL NPKANREKMT
      QIMFETFNTP AMYVAIQAVL SLYASGRTTG IVMDSGDGVT HTVPIYEGYA LPHAILRLDL

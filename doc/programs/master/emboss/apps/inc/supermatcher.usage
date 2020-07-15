@@ -4,11 +4,11 @@
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>supermatcher tembl:ec* tembl:eclac -word 50  </b>
+% <b>supermatcher @eclac.list tembl:j01636 -word 50  </b>
 Match large sequences against one or more other sequences
 Gap opening penalty [10.0]: <b></b>
 Gap extension penalty [0.5]: <b>3.0</b>
-Output alignment [eclac.supermatcher]: <b></b>
+Output alignment [j01636.supermatcher]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

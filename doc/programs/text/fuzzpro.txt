@@ -28,7 +28,7 @@ Usage
 Protein pattern search
 Input protein sequence(s): tsw:*
 Search pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-Output report [100k_rat.fuzzpro]: 
+Output report [edd1_rat.fuzzpro]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -185,21 +185,21 @@ Output file format
 
   Output files for usage example
 
-  File: 100k_rat.fuzzpro
+  File: edd1_rat.fuzzpro
 
 ########################################
 # Program: fuzzpro
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: fuzzpro
 #    -sequence "tsw:*"
 #    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"
 # Report_format: seqtable
-# Report_file: 100k_rat.fuzzpro
+# Report_file: edd1_rat.fuzzpro
 ########################################
 
 #=======================================
 #
-# Sequence: ACT1_FUGRU     from: 1   to: 375
+# Sequence: ACTB1_FUGRU     from: 1   to: 375
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -214,7 +214,7 @@ Output file format
 #---------------------------------------
 #=======================================
 #
-# Sequence: ACT2_FUGRU     from: 1   to: 375
+# Sequence: ACTB_OREMO     from: 1   to: 375
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -229,7 +229,7 @@ Output file format
 #---------------------------------------
 #=======================================
 #
-# Sequence: ACT3_FUGRU     from: 1   to: 375
+# Sequence: ACTB2_FUGRU     from: 1   to: 375
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -244,7 +244,7 @@ Output file format
 #---------------------------------------
 #=======================================
 #
-# Sequence: ACTC_FUGRU     from: 1   to: 377
+# Sequence: ACTSA_FUGRU     from: 1   to: 377
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -259,7 +259,7 @@ Output file format
 #---------------------------------------
 #=======================================
 #
-# Sequence: ACTS_FUGRU     from: 1   to: 377
+# Sequence: ACTS_OREMO     from: 1   to: 377
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -274,7 +274,7 @@ Output file format
 #---------------------------------------
 #=======================================
 #
-# Sequence: ACTT_FUGRU     from: 1   to: 377
+# Sequence: ACTSB_FUGRU     from: 1   to: 377
 # HitCount: 1
 #
 # Pattern_name Mismatch Pattern
@@ -289,8 +289,8 @@ Output file format
 #---------------------------------------
 
 #---------------------------------------
-# Total_sequences: 6
-# Total_hitcount: 6
+# Total_sequences: 8
+# Total_hitcount: 8
 #---------------------------------------
 
 Data files

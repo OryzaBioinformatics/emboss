@@ -409,21 +409,21 @@ Usage
 
 % seqret 
 Reads and writes (returns) sequences
-Input (gapped) sequence(s): tembl:hsfau
-output sequence(s) [hsfau.fasta]: 
+Input (gapped) sequence(s): tembl:x65923
+output sequence(s) [x65923.fasta]: 
 
    Go to the input files for this example
    Go to the output files for this example
 
    Example 2
 
-   Read all entries in the database 'tembl' that start with 'hs' and
+   Read all entries in the database 'tembl' that start with 'ab' and
    write them to a file. In this example the specification is all done in
    the command line and to stop Unix getting confused by the '*'
    character, it has to have a backslash ('\') before it:
 
 
-% seqret tembl:hs\*  hsall.seq 
+% seqret tembl:ab\*  aball.seq 
 Reads and writes (returns) sequences
 
    Go to the output files for this example
@@ -440,8 +440,8 @@ Reads and writes (returns) sequences
 
 % seqret -feature 
 Reads and writes (returns) sequences
-Input (gapped) sequence(s): tembl:hsfau
-output sequence(s) [hsfau.fasta]: embl::hsfau.embl
+Input (gapped) sequence(s): tembl:x65923
+output sequence(s) [x65923.fasta]: embl::x65923.embl
 
    Go to the output files for this example
 
@@ -452,10 +452,10 @@ output sequence(s) [hsfau.fasta]: embl::hsfau.embl
 
 % seqret 
 Reads and writes (returns) sequences
-Input (gapped) sequence(s): tembl:hsfau
-output sequence(s) [hsfau.fasta]: stdout
+Input (gapped) sequence(s): tembl:x65923
+output sequence(s) [x65923.fasta]: stdout
 
->HSFAU X65923.1 H.sapiens fau mRNA
+>X65923 X65923.1 H.sapiens fau mRNA
 ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
 agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
 cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
@@ -473,8 +473,8 @@ tctaataaaaaagccacttagttcagtcaaaaaaaaaa
 
 % seqret -osf gcg 
 Reads and writes (returns) sequences
-Input (gapped) sequence(s): tembl:hsfau
-output sequence(s) [hsfau.gcg]: 
+Input (gapped) sequence(s): tembl:x65923
+output sequence(s) [x65923.gcg]: 
 
    Go to the output files for this example
 
@@ -484,9 +484,9 @@ output sequence(s) [hsfau.gcg]:
    USA on the command line.
 
 
-% seqret -outseq gcg::hsfau.gcg 
+% seqret -outseq gcg::x65923.gcg 
 Reads and writes (returns) sequences
-Input (gapped) sequence(s): tembl:hsfau
+Input (gapped) sequence(s): tembl:x65923
 
    Example 7
 
@@ -496,8 +496,8 @@ Input (gapped) sequence(s): tembl:hsfau
 
 % seqret 
 Reads and writes (returns) sequences
-Input (gapped) sequence(s): tembl:hsfau
-output sequence(s) [hsfau.fasta]: gcg::hsfau.gcg
+Input (gapped) sequence(s): tembl:x65923
+output sequence(s) [x65923.fasta]: gcg::x65923.gcg
 
    Example 8
 
@@ -506,8 +506,8 @@ output sequence(s) [hsfau.fasta]: gcg::hsfau.gcg
 
 % seqret -srev 
 Reads and writes (returns) sequences
-Input (gapped) sequence(s): tembl:hsfau
-output sequence(s) [hsfau.fasta]: 
+Input (gapped) sequence(s): tembl:x65923
+output sequence(s) [x65923.fasta]: 
 
    Go to the output files for this example
 
@@ -519,8 +519,8 @@ output sequence(s) [hsfau.fasta]:
 
 % seqret -sbegin 5 -send 25 
 Reads and writes (returns) sequences
-Input (gapped) sequence(s): tembl:hsfau
-output sequence(s) [hsfau.fasta]: 
+Input (gapped) sequence(s): tembl:x65923
+output sequence(s) [x65923.fasta]: 
 
    Go to the output files for this example
 
@@ -532,21 +532,23 @@ output sequence(s) [hsfau.fasta]:
 
 % seqret -sbegin 5 -send -5 
 Reads and writes (returns) sequences
-Input (gapped) sequence(s): tembl:hsfau
-output sequence(s) [hsfau.fasta]: 
+Input (gapped) sequence(s): tembl:x65923
+output sequence(s) [x65923.fasta]: 
 
    Go to the output files for this example
 
    Example 11
 
-   Read all entries in the database 'tembl' that start with 'hs' and
-   write them to a file:
+   Read all entries in the database 'tembl' that start with 'h' and write
+   them to a file:
 
 
 % seqret 
 Reads and writes (returns) sequences
-Input (gapped) sequence(s): tembl:hs*
-output sequence(s) [hs989235.fasta]: hsall.seq
+Input (gapped) sequence(s): tembl:h*
+output sequence(s) [h45989.fasta]: hall.seq
+
+   Go to the output files for this example
 
 Command line arguments
 
@@ -612,19 +614,17 @@ Input file format
 
   Input files for usage example
 
-   'tembl:hsfau' is a sequence entry in the example nucleic acid database
-   'tembl'
+   'tembl:x65923' is a sequence entry in the example nucleic acid
+   database 'tembl'
 
-  Database entry: tembl:hsfau
+  Database entry: tembl:x65923
 
-ID   HSFAU      standard; RNA; HUM; 518 BP.
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
 XX
 AC   X65923;
 XX
-SV   X65923.1
-XX
 DT   13-MAY-1992 (Rel. 31, Created)
-DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
 XX
 DE   H.sapiens fau mRNA
 XX
@@ -633,7 +633,8 @@ XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
 ;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-518
@@ -645,31 +646,35 @@ RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
 XX
 RN   [2]
 RP   1-518
-RX   MEDLINE; 93368957.
+RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
 RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
 RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
-RL   Oncogene 8:2537-2546(1993).
+RL   Oncogene 8(9):2537-2546(1993).
 XX
-DR   SWISS-PROT; P35544; UBIM_HUMAN.
-DR   SWISS-PROT; Q05472; RS30_HUMAN.
+DR   H-InvDB; HIT000322806.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..518
-FT                   /chromosome="11q"
-FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
-FT                   /tissue_type="placenta"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
 FT                   /clone_lib="cDNA"
 FT                   /clone="pUIA 631"
-FT                   /map="13"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
 FT   misc_feature    57..278
 FT                   /note="ubiquitin like part"
 FT   CDS             57..458
-FT                   /db_xref="SWISS-PROT:P35544"
-FT                   /db_xref="SWISS-PROT:Q05472"
 FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
 G
@@ -721,9 +726,9 @@ Output file format
 
   Output files for usage example
 
-  File: hsfau.fasta
+  File: x65923.fasta
 
->HSFAU X65923.1 H.sapiens fau mRNA
+>X65923 X65923.1 H.sapiens fau mRNA
 ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
 agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
 cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
@@ -736,145 +741,176 @@ tctaataaaaaagccacttagttcagtcaaaaaaaaaa
 
   Output files for usage example 2
 
-  File: hsall.seq
+  File: aball.seq
 
->HS989235 H45989.1 yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA cl
-one IMAGE:177794 3', mRNA sequence.
-ccggnaagctcancttggaccaccgactctcgantgnntcgccgcgggagccggntggan
-aacctgagcgggactggnagaaggagcagagggaggcagcacccggcgtgacggnagtgt
-gtggggcactcaggccttccgcagtgtcatctgccacacggaaggcacggccacgggcag
-gggggtctatgatcttctgcatgcccagctggcatggccccacgtagagtggnntggcgt
-ctcggtgctggtcagcgacacgttgtcctggctgggcaggtccagctcccggaggacctg
-gggcttcagcttcccgtagcgctggctgcagtgacggatgctcttgcgctgccatttctg
-ggtgctgtcactgtccttgctcactccaaaccagttcggcggtccccctgcggatggtct
-gtgttgatggacgtttgggctttgcagcaccggccgccgagttcatggtngggtnaagag
-atttgggttttttcn
->HSCAD5 X59796.1 H.sapiens mRNA for cadherin-5
-ctccactcacgctcagccctggacggacaggcagtccaacggaacagaaacatccctcag
-cccacaggcacgatctgttcctcctgggaagatgcagaggctcatgatgctcctcgccac
-atcgggcgcctgcctgggcctgctggcagtggcagcagtggcagcagcaggtgctaaccc
-tgcccaacgggacacccacagcctgctgcccacccaccggcgccaaaagagagattggat
-ttggaaccagatgcacattgatgaagagaaaaacacctcacttccccatcatgtaggcaa
-gatcaagtcaagcgtgagtcgcaagaatgccaagtacctgctcaaaggagaatatgtggg
-caaggtcttccgggtcgatgcagagacaggagacgtgttcgccattgagaggctggaccg
-ggagaatatctcagagtaccacctcactgctgtcattgtggacaaggacactggcgaaaa
-cctggagactccttccagcttcaccatcaaagttcatgacgtgaacgacaactggcctgt
-gttcacgcatcggttgttcaatgcgtccgtgcctgagtcgtcggctgtggggacctcagt
-catctctgtgacagcagtggatgcagacgaccccactgtgggagaccacgcctctgtcat
-gtaccaaatcctgaaggggaaagagtattttgccatcgataattctggacgtattatcac
-aataacgaaaagcttggaccgagagaagcaggccaggtatgagatcgtggtggaagcgcg
-agatgcccagggcctccggggggactcgggcacggccaccgtgctggtcactctgcaaga
-catcaatgacaacttccccttcttcacccagaccaagtacacatttgtcgtgcctgaaga
-cacccgtgtgggcacctctgtgggctctctgtttgttgaggacccagatgagccccagaa
-ccggatgaccaagtacagcatcttgcggggcgactaccaggacgctttcaccattgagac
-aaaccccgcccacaacgagggcatcatcaagcccatgaagcctctggattatgaatacat
-ccagcaatacagcttcatagtcgaggccacagaccccaccatcgacctccgatacatgag
-ccctcccgcgggaaacagagcccaggtcattatcaacatcacagatgtggacgagccccc
-cattttccagcagcctttctaccacttccagctgaaggaaaaccagaagaagcctctgat
-tggcacagtgctggccatggaccctgatgcggctaggcatagcattggatactccatccg
-caggaccagtgacaagggccagttcttccgagtcacaaaaaagggggacatttacaatga
-gaaagaactggacagagaagtctacccctggtataacctgactgtggaggccaaagaact
-ggattccactggaacccccacaggaaaagaatccattgtgcaagtccacattgaagtttt
-ggatgagaatgacaatgccccggagtttgccaagccctaccagcccaaagtgtgtgagaa
-cgctgtccatggccagctggtcctgcagatctccgcaatagacaaggacataacaccacg
-aaacgtgaagttcaaattcatcttgaatactgagaacaactttaccctcacggataatca
-cgataacacggccaacatcacagtcaagtatgggcagtttgaccgggagcataccaaggt
-ccacttcctacccgtggtcatctcagacaatgggatgccaagtcgcacgggcaccagcac
-gctgaccgtggccgtgtgcaagtgcaacgagcagggcgagttcaccttctgcgaggatat
-ggccgcccaggtgggcgtgagcatccaggcagtggtagccatcttactctgcatcctcac
-catcacagtgatcaccctgctcatcttcctgcggcggcggctccggaagcaggcccgcgc
-gcacggcaagagcgtgccggagatccacgagcagctggtcacctacgacgaggagggcgg
-cggcgagatggacaccaccagctacgatgtgtcggtgctcaactcggtgcgccgcggcgg
-ggccaagcccccgcggcccgcgctggacgcccggccttccctctatgcgcaggtgcagaa
-gccaccgaggcacgcgcctggggcacacggagggcccggggagatggcagccatgatcga
-ggtgaagaaggacgaggcggaccacgacggcgacggccccccctacgacacgctgcacat
-ctacggctacgagggctccgagtccatagccgagtccctcagctccctgggcaccgactc
+>AB009602 AB009602.1 Schizosaccharomyces pombe mRNA for MET1 homolog, partial c
+ds.
+gttcgatgcctaaaataccttcttttgtccctacacagaccacagttttcctaatggctt
+tacaccgactagaaattcttgtgcaagcactaattgaaagcggttggcctagagtgttac
+cggtttgtatagctgagcgcgtctcttgccctgatcaaaggttcattttctctactttgg
+aagacgttgtggaagaatacaacaagtacgagtctctcccccctggtttgctgattactg
+gatacagttgtaatacccttcgcaacaccgcgtaactatctatatgaattattttccctt
+tattatatgtagtaggttcgtctttaatcttcctttagcaagtcttttactgttttcgac
+ctcaatgttcatgttcttaggttgttttggataatatgcggtcagtttaatcttcgttgt
+ttcttcttaaaatatttattcatggtttaatttttggtttgtacttgttcaggggccagt
+tcattatttactctgtttgtatacagcagttcttttatttttagtatgattttaatttaa
+aacaattctaatggtcaaaaa
+>AB000095 AB000095.1 Homo sapiens mRNA for hepatocyte growth factor activator i
+nhibitor, complete cds.
+cggccgagcccagctctccgagcaccgggtcggaagccgcgacccgagccgcgcaggaag
+ctgggaccggaacctcggcggacccggccccacccaactcacctgcgcaggtcaccagca
+ccctcggaacccagaggcccgcgctctgaaggtgacccccctggggaggaaggcgatggc
+ccctgcgaggacgatggcccgcgcccgcctcgccccggccggcatccctgccgtcgcctt
+gtggcttctgtgcacgctcggcctccagggcacccaggccgggccaccgcccgcgccccc
+tgggctgcccgcgggagccgactgcctgaacagctttaccgccggggtgcctggcttcgt
+gctggacaccaacgcctcggtcagcaacggagctaccttcctggagtcccccaccgtgcg
+ccggggctgggactgcgtgcgcgcctgctgcaccacccagaactgcaacttggcgctagt
+ggagctgcagcccgaccgcggggaggacgccatcgccgcctgcttcctcatcaactgcct
+ctacgagcagaacttcgtgtgcaagttcgcgcccagggagggcttcatcaactacctcac
+gagggaagtgtaccgctcctaccgccagctgcggacccagggctttggagggtctgggat
+ccccaaggcctgggcaggcatagacttgaaggtacaaccccaggaacccctggtgctgaa
+ggatgtggaaaacacagattggcgcctactgcggggtgacacggatgtcagggtagagag
+gaaagacccaaaccaggtggaactgtggggactcaaggaaggcacctacctgttccagct
+gacagtgactagctcagaccacccagaggacacggccaacgtcacagtcactgtgctgtc
+caccaagcagacagaagactactgcctcgcatccaacaaggtgggtcgctgccggggctc
+tttcccacgctggtactatgaccccacggagcagatctgcaagagtttcgtttatggagg
+ctgcttgggcaacaagaacaactaccttcgggaagaagagtgcattctagcctgtcgggg
+tgtgcaaggcccctccatggaaaggcgccatccagtgtgctctggcacctgtcagcccac
+ccagttccgctgcagcaatggctgctgcatcgacagtttcctggagtgtgacgacacccc
+caactgccccgacgcctccgacgaggctgcctgtgaaaaatacacgagtggctttgacga
+gctccagcgcatccatttccccagtgacaaagggcactgcgtggacctgccagacacagg
+actctgcaaggagagcatcccgcgctggtactacaaccccttcagcgaacactgcgcccg
+ctttacctatggtggttgttatggcaacaagaacaactttgaggaagagcagcagtgcct
+cgagtcttgtcgcggcatctccaagaaggatgtgtttggcctgaggcgggaaatccccat
+tcccagcacaggctctgtggagatggctgtcgcagtgttcctggtcatctgcattgtggt
+ggtggtagccatcttgggttactgcttcttcaagaaccagagaaaggacttccacggaca
+ccaccaccacccaccacccacccctgccagctccactgtctccactaccgaggacacgga
+gcacctggtctataaccacaccacccggcccctctgagcctgggtctcaccggctctcac
+ctggccctgcttcctgcttgccaaggcagaggcctgggctgggaaaaactttggaaccag
+actcttgcctgtttcccaggcccactgtgcctcagagaccagggctccagcccctcttgg
+agaagtctcagctaagctcacgtcctgagaaagctcaaaggtttggaaggagcagaaaac
+ccttgggccagaagtaccagactagatggacctgcctgcataggagtttggaggaagttg
+gagttttgtttcctctgttcaaagctgcctgtccctaccccatggtgctaggaagaggag
+tggggtggtgtcagaccctggaggccccaaccctgtcctcccgagctcctcttccatgct
+gtgcgcccagggctgggaggaaggacttccctgtgtagtttgtgctgtaaagagttgctt
+tttgtttatttaatgctgtggcatgggtgaagaggaggggaagaggcctgtttggcctct
+ctgtcctctcttcctcttcccccaagattgagctctctgcccttgatcagccccaccctg
 
 
   [Part of this file has been deleted for brevity]
 
-aacaaaaaaagagaatgttacaccaatatccttgatgaacatcgatgcaaaaatcctcaa
-taaaatactggcaaactgaatccagcagcacatcaaaaagcttatcctccatgatcaagt
-gggcttcatccctgccatgcaaggctggttcaacatacgaaatcaataaacataatccag
-catataaacagaaccaaagacacaaaccatatgattatctcaatagatgcagaaaaggcc
-tttgacaaaattcaacaatgcttcatgctaaaaactctcaataaattaggtattgatggg
-acatatctcaaaataataagagctatctatgacaaacccacagccaatatcatactgagt
-ggacaaaaactggaagcattccctttgaaaactggcacaaggcagggatgccctctctca
-ccactcctattcaacatagtgttggaagttctggccagggcaatcaggcaggagaaggaa
-ataaagggcattcaattaggaaaagaggaaggtgaaattgtccctgtttgcagatgacat
-gattgtatatctagaaaaccccattgtctcagcccaaaatctccttaagctgataagcaa
-cttcagcaaagtctcaggatataaaatcagtgtgcaaaaatcacaagtattcctatgcac
-caataacagacaaacagagagccaaatcatgagtgaactcccattcacaattgcttcaaa
-gagaataaaatacctaggaatccaacttacaagggatgtgaaggacctcttcaaggagaa
-ctacaaaccactgctcaatgaaataaaagaggatacaaacaaatggaagaacattccatg
-cttatgggtaggaagaatcatatcgtgaaaatggtcatactgcccaaggtaatttataga
-ttcaatgccatccccatcaagctaccaatgactttcttcacagaactggaaaaaactact
-ttaaagttcatatggaatcaaaaaagagcccacatcaccaaggcaatcctaagccaaaag
-aacaaagctggaggcatcacgctacctgacttcaaactatactacaatgctacggtaacc
-aaaacagcatggtactggtaccaaaacagagatctagaccaatggaacagaacagagccc
-tcagaaataatgccgcatatctacaactatccgatctttgacaaacctgagagaaacaag
-caatggggaaaggattccctatttaataaatggtgctgggaaaactggctagccatatgt
-agaaagctgaaactggatccttccttacaccttatacaaaaattaattcaagatggatta
-aagacttaaacattagacctaaaaccataaaaaccctagaaaaaaacctaggcaatacca
-ttcaggacataggcatgggcaaggacttcatgtctaaaacaccaaaacgaatggcaacaa
-aagacaaaatggacaaacgggatctaattaaactaaagagcttctgcacagctaaagaaa
-ctaccatcagagtgaacaggcaacctacaaaatgggagaaaatttttgcaatctactcat
-ctgacaaagggctaatatccagaatctacaatgaactcaaacaaatttacaagaaaaaac
-aaacaaccccatcaaaaagtgggcaaaggatatgaacagacacttctcaaaagaagacat
-ttatgtaatcaaaaaacacatgaaaaaatgctcatcatcactagccatcagagaaatgca
-aatcaaaaccacaatgagataccatctcacaccagttagaatggcgatcattaaaaagtc
-aggaaacaacaggtgctggagaggatgtggagaaacaggaacaacttttacactgttggt
-gggactgtaaactagttcaaccattgcggaagtcagtgtggcaattcctcaggaatctag
-aactagaaataccatttgacccagccatcccattactgggtagatacccaaaggattata
-aatcatgctgctataaagacacatgcacacgtatgtttattgcagcactattcacaatag
-caaagacttggaaccaacccaaatgtccaacaacgatagattggattaagaaaatgtggc
-acatatacaccatggaatactatgcagccataaaaaatgatgagttcatgtcctttgtag
-ggacatggatgaagctggaaactatcattctcagcaaactatcacaaggacaataaacca
-aacaccgcatgttctcactcataggtgggaattgaacaatgagaacacatggacacatga
-agaggaacatcacactctggggactgttatggggtggggggcaggggcagggatagcact
-aggagatatacctaatgctaaatgacgagttaatgggtgcagcacaccaacatggcacat
-gtatacatatataacaaacctgccgttgtgcacatgtaccctaaaacttgaagtataata
-ataaaaaaaagttatcctattaaaactgatctcacacatccgtagagccattatcaagtc
-tttctctttgaaacagacagaaatttagtgttttctcagtcagttaac
->HSA203YC1 Z52466.1 H.sapiens (D1S2660) DNA segment containing (CA) repeat; clo
-ne AFMa203yc1; single read.
-agctgtgtgcacacaacatganggggcacacatgcacatgcacacatgcccacatgcata
-tgcacacacacacacacacacacacacacattcatgcccaagcacgcccaccctcatgtc
-tcaccatgtgcacataacacacagtcacatataccctggcacacatgcccacatgcagac
-acgaaacacaggcccacgnttncatgcacacaggtatgggcacacataccatgcacacat
-aangacaaataccaggccagacatgatttgcccctgctggtgtcactgttaagtgtgaca
-gacaagcagaggacacacacccacctgggacgcggggcttcaggagagaggcagacctaa
-tagggcccggattcggggctggggaggct
+nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+nnnnnnnnntcctgtcctcccgtccatcctctgttcccgggttctcctgcccctttccct
+ccccttcctcctcctccatggcctcttcgcctgcccatgctctgtgtgtattgcaggttt
+cccagttcatggcgtgtgaggagctgcccccgggggccccagagcttccccaagaaggcc
+ccacacgacgcctctccctaccgggccagctgggggccctcacctcccagcccctgcaca
+gacacggctcggacccgggcagttagtggggctgcccagtgtggacacgt
+>AB000360 AB000360.1 Homo sapiens PIGC gene, complete cds.
+ggatccctgctgcagagggggtaacggtgtctggcttgccaagcaatatttgttgtggtc
+tatcatggaagaaataaagtcgggcaatatgaattttttttttctcaaatttgccggatg
+gctgtggtgtttctgactcttagttttctcattgtgaaaaaggaatgattatcttcttcg
+atcctctcaagagtttccttgttttgagtagattgatagctctttaaaggatgctaagct
+cagctaatggaagaagagtctagtttctttgaggctttgattttggttaaactatagagc
+tcatacctttctgtatggtgcagcttactattgtctttggattggtaacttaaaaaatac
+aaataacatgcctttgagaaccaataaaaactatggatattatccctataaatttacaca
+aatccagatataagcatgcaatgtgatatacctaagggatatgtgaaccactgagttaag
+aactgctttagagggagatacaatgtgagacacaggctttgggataagactttggtttga
+atcctggctctgctctgttaccttagggcaaagttacttaagcatcttgaatctcagctt
+ttttaccaaagcaggactaatactaacttacaaggtggtgaggattaagtgaaagaagat
+acataaggcacttagcacatagtaggtactcaataagcgatagctaacagatgtctatta
+ttattcaaggaattataattttcaaatctgaaatgcagttttaatgtcccataaggtgac
+taccacatacatttttctcagacttttagtaaactgagttgatttgactttatctcagta
+ctactcttgacctttcacaactttcgtaggttcacagtctctctttttctaggaacttgg
+ctgtgttgtcctgcctcagagacaaattcatctattgtaggcctagcccctgcctttgaa
+aacaaggaaaggttggtagaacatcaacacagcatggaatttccagggaggtctcatttc
+aaaacttcataaagaacaagaaccacctggacttctgtgagggcgatgattaaactggcc
+tgagtttgaatgaaaggataatgtatgctcaacctgtgactaacaccaaggaggtcaagt
+ggcagaaggtcttgtatgagcgacagccctttcctgataactatgtggaccggcgattcc
+tggaagagctccggaaaaacatccatgctcggaaataccaatattgggctgtggtatttg
+agtccagtgtggtgatccagcagctgtgcagtgtttgtgtttttgtggttatctggtggt
+atatggatgagggtcttctggccccccattggcttttagggactggcctggcttcttcac
+tgattgggtatgttttgtttgatctcattgatggaggtgaagggcggaagaagagtgggc
+agacccggtgggctgacctgaagagtgccctagtcttcattactttcacttatgggtttt
+caccagtgctgaagacccttacagagtctgtcagcactgacaccatctatgccatgtcag
+tcttcatgctgttaggccatctcatcttttttgactatggtgccaatgctgccattgtat
+ccagcacactatccttgaacatggccatctttgcttctgtatgcttggcatcacgtcttc
+cccggtccctgcatgccttcatcatggtgacatttgccattcagatttttgccctgtggc
+ccatgttgcagaagaaactaaaggcatgtactccccggagctatgtgggggtcacactgc
+tttttgcattttcagccgtgggaggcctactgtccattagtgctgtgggagccgtactct
+ttgcccttctgctgatgtctatctcatgtctgtgttcattctacctcattcgcttgcagc
+tttttaaagaaaacattcatgggccttgggatgaagctgaaatcaaggaagacttgtcca
+ggttcctcagttaaattaggacatccattacattattaaagcaagctgatagattagcct
+cctaactagtatagaacttaaagacagagttccattctggaagcagcatgtcattgtggt
+aagagaatagagatcaaaaccaaaaaaaatgaaccaaaggcttgggtggtgagggtgctt
+atcctttctgttattttgtagatgaaaaaactttctggggacctcttgaattacatgctg
+taacatatgaagtgatgtggtttctattaaaaaaataacacatccatcaagttgtctcat
+gatttttccataaacaggaggcagacagaggggcatgaagagtgaagtaagtgtgtgtgt
+gtgtgtgtgtgtgtgtaaagtcacttctttctacccttttcaatgtgctaatgctctttt
+atttatctagggctcaaatcttagaacacagggtgctatgctcagttttgttgcccaaga
+tcacagaattggttacttaaccttgactcagagtttctaccttgttcttagggaagcata
+tcacaactaattgcaaagcagagtgtgatgtgtcacaataagcagaatgctagggggaat
+tc
 
   Output files for usage example 3
 
-  File: hsfau.embl
+  File: x65923.embl
 
-ID   HSFAU      standard; DNA; UNC; 518 BP.
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
+XX
 AC   X65923;
-SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
+XX
 DE   H.sapiens fau mRNA
+XX
 KW   fau gene.
+XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
 ;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM.
+XX
+RN   [2]
+RP   1-518
+RX   PUBMED; 8395683.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8(9):2537-2546(1993).
+XX
+DR   H-InvDB; HIT000322806.
+XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..518
-FT                   /chromosome="11q"
-FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
-FT                   /tissue_type="placenta"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
 FT                   /clone_lib="cDNA"
 FT                   /clone="pUIA 631"
-FT                   /map="13"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
 FT   misc_feature    57..278
 FT                   /note="ubiquitin like part"
 FT   CDS             57..458
-FT                   /db_xref="SWISS-PROT:P35544"
-FT                   /db_xref="SWISS-PROT:Q05472"
 FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
 G
@@ -887,6 +923,7 @@ FT   misc_feature    279..458
 FT                   /note="S30 part"
 FT   polyA_signal    484..489
 FT   polyA_site      509
+XX
 SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
      ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
 0
@@ -910,13 +947,13 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 
   Output files for usage example 5
 
-  File: hsfau.gcg
+  File: x65923.gcg
 
 !!NA_SEQUENCE 1.0
 
 H.sapiens fau mRNA
 
-HSFAU  Length: 518  Type: N  Check: 2981 ..
+X65923  Length: 518  Type: N  Check: 2981 ..
 
    1 ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc
 
@@ -942,9 +979,9 @@ HSFAU  Length: 518  Type: N  Check: 2981 ..
 
   Output files for usage example 8
 
-  File: hsfau.fasta
+  File: x65923.fasta
 
->HSFAU X65923.1 H.sapiens fau mRNA
+>X65923 X65923.1 H.sapiens fau mRNA
 ttttttttttgactgaactaagtggcttttttattagagaaagccagaattacaaaagac
 ttaagagttggcattggggcccttcttcttgccaaaggtgggcacaacgttgacaaagcg
 ccggttgtactgcatccgccgcttagcccgacctgtcttcttcttcttcttctcctgttt
@@ -957,16 +994,16 @@ gtcccagctaccgcgaagatggagtcgagaaagaggaa
 
   Output files for usage example 9
 
-  File: hsfau.fasta
+  File: x65923.fasta
 
->HSFAU X65923.1 H.sapiens fau mRNA
+>X65923 X65923.1 H.sapiens fau mRNA
 tctttctcgactccatcttcg
 
   Output files for usage example 10
 
-  File: hsfau.fasta
+  File: x65923.fasta
 
->HSFAU X65923.1 H.sapiens fau mRNA
+>X65923 X65923.1 H.sapiens fau mRNA
 tctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagct
 ctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgccca
 gatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcct
@@ -976,6 +1013,22 @@ tggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagac
 aggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccacctt
 tggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctcta
 ataaaaaagccacttagttcagtcaaaaaa
+
+  Output files for usage example 11
+
+  File: hall.seq
+
+>H45989 H45989.1 yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clon
+e IMAGE:177794 3', mRNA sequence.
+ccggnaagctcancttggaccaccgactctcgantgnntcgccgcgggagccggntggan
+aacctgagcgggactggnagaaggagcagagggaggcagcacccggcgtgacggnagtgt
+gtggggcactcaggccttccgcagtgtcatctgccacacggaaggcacggccacgggcag
+gggggtctatgatcttctgcatgcccagctggcatggccccacgtagagtggnntggcgt
+ctcggtgctggtcagcgacacgttgtcctggctgggcaggtccagctcccggaggacctg
+gggcttcagcttcccgtagcgctggctgcagtgacggatgctcttgcgctgccatttctg
+ggtgctgtcactgtccttgctcactccaaaccagttcggcggtccccctgcggatggtct
+gtgttgatggacgtttgggctttgcagcaccggccgccgagttcatggtngggtnaagag
+atttgggttttttcn
 
 Data files
 

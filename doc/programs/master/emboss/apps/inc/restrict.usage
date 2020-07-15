@@ -6,10 +6,10 @@
 
 % <b>restrict </b>
 Finds restriction enzyme cleavage sites
-Input nucleotide sequence(s): <b>tembl:hsfau</b>
+Input nucleotide sequence(s): <b>tembl:x65923</b>
 Minimum recognition site length [4]: <b></b>
 Comma separated enzyme list [all]: <b></b>
-Output report [hsfau.restrict]: <b></b>
+Output report [x65923.restrict]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -25,10 +25,10 @@ This gives the lengths of the restriction fragments produced by cutting with all
 
 % <b>restrict -fragments </b>
 Finds restriction enzyme cleavage sites
-Input nucleotide sequence(s): <b>tembl:hsfau</b>
+Input nucleotide sequence(s): <b>tembl:x65923</b>
 Minimum recognition site length [4]: <b></b>
 Comma separated enzyme list [all]: <b></b>
-Output report [hsfau.restrict]: <b></b>
+Output report [x65923.restrict]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -44,10 +44,10 @@ This gives the lengths of the restriction fragments created by cutting with just
 
 % <b>restrict -solofragment </b>
 Finds restriction enzyme cleavage sites
-Input nucleotide sequence(s): <b>tembl:hsfau</b>
+Input nucleotide sequence(s): <b>tembl:x65923</b>
 Minimum recognition site length [4]: <b></b>
 Comma separated enzyme list [all]: <b></b>
-Output report [hsfau.restrict]: <b></b>
+Output report [x65923.restrict]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

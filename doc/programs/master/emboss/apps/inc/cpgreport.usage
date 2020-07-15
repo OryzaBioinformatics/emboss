@@ -4,11 +4,11 @@
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>cpgreport tembl:rnu68037 </b>
+% <b>cpgreport tembl:u68037 </b>
 Reports all CpG rich regions
 CpG score [17]: <b></b>
-Output file [rnu68037.cpgreport]: <b></b>
-Features output [rnu68037.gff]: <b></b>
+Output file [u68037.cpgreport]: <b></b>
+Features output [u68037.gff]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

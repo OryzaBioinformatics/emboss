@@ -6,8 +6,8 @@
 
 % <b>showfeat </b>
 Show features of a sequence.
-Input sequence(s): <b>tembl:hsfau1</b>
-Output file [hsfau1.showfeat]: <b></b>
+Input sequence(s): <b>tembl:x65921</b>
+Output file [x65921.showfeat]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -23,8 +23,8 @@ Display 'joined' features on one line with positions:
 
 % <b>showfeat -sort join -pos </b>
 Show features of a sequence.
-Input sequence(s): <b>tembl:hsfau1</b>
-Output file [hsfau1.showfeat]: <b></b>
+Input sequence(s): <b>tembl:x65921</b>
+Output file [x65921.showfeat]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -40,8 +40,8 @@ Display just positions and names of CDS features - this can be used as a regions
 
 % <b>showfeat -matchtype CDS -width 0 -noid -nodesc -noscale -pos  </b>
 Show features of a sequence.
-Input sequence(s): <b>tembl:hsfau1</b>
-Output file [hsfau1.showfeat]: <b></b>
+Input sequence(s): <b>tembl:x65921</b>
+Output file [x65921.showfeat]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

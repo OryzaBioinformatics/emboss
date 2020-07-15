@@ -94,12 +94,12 @@ Usage
 
 % coderet 
 Extract CDS, mRNA and translations from feature tables
-Input nucleotide sequence(s): tembl:X03487
-Output file [hsferg1.coderet]: 
-Coding nucleotide output sequence(s) (optional) [hsferg1.cds]: 
-Messenger RNA nucleotide output sequence(s) (optional) [hsferg1.mrna]: 
-Translated coding protein output sequence(s) (optional) [hsferg1.prot]: 
-Non-coding nucleotide output sequence(s) (optional) [hsferg1.noncoding]: 
+Input nucleotide sequence(s): tembl:x03487
+Output file [x03487.coderet]: 
+Coding nucleotide output sequence(s) (optional) [x03487.cds]: 
+Messenger RNA nucleotide output sequence(s) (optional) [x03487.mrna]: 
+Translated coding protein output sequence(s) (optional) [x03487.prot]: 
+Non-coding nucleotide output sequence(s) (optional) [x03487.noncoding]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -112,9 +112,10 @@ Non-coding nucleotide output sequence(s) (optional) [hsferg1.noncoding]:
 % coderet -nocds -notranslation -norest 
 Extract CDS, mRNA and translations from feature tables
 Input nucleotide sequence(s): tembl:X03487
-Output file [hsferg1.coderet]: 
-Messenger RNA nucleotide output sequence(s) (optional) [hsferg1.mrna]: 
+Output file [x03487.coderet]: 
+Messenger RNA nucleotide output sequence(s) (optional) [x03487.mrna]: 
 
+   Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
@@ -225,19 +226,17 @@ Input file format
 
   Input files for usage example
 
-   'tembl:X03487' is a sequence entry in the example nucleic acid
+   'tembl:x03487' is a sequence entry in the example nucleic acid
    database 'tembl'
 
-  Database entry: tembl:X03487
+  Database entry: tembl:x03487
 
-ID   HSFERG1    standard; DNA; HUM; 512 BP.
+ID   X03487; SV 1; linear; genomic DNA; STD; HUM; 512 BP.
 XX
 AC   X03487;
 XX
-SV   X03487.1
-XX
 DT   02-JUL-1986 (Rel. 09, Created)
-DT   04-APR-1995 (Rel. 43, Last updated, Version 2)
+DT   24-AUG-2005 (Rel. 84, Last updated, Version 3)
 XX
 DE   Human apoferritin H gene exon 1
 XX
@@ -246,24 +245,27 @@ XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
 ;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-512
-RX   MEDLINE; 86120367.
+RX   DOI; 10.1093/nar/14.2.721.
+RX   PUBMED; 3003694.
 RA   Costanzo F., Colombo M., Staempfli S., Santoro C., Marone M., Frank R.,
 RA   Delius H., Cortese R.;
 RT   "Structure of gene and pseudogenes of human apoferritin H";
-RL   Nucleic Acids Res. 14:721-736(1986).
+RL   Nucleic Acids Res. 14(2):721-736(1986).
 XX
-DR   EPD; EP11112; HS_FRIH.
-DR   SWISS-PROT; P02794; FRIH_HUMAN.
+DR   EPD; EP11112; HS_FTH1.
+DR   RFAM; RF00037.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..512
-FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
 FT   misc_feature    65..70
 FT                   /note="GGGCGG box"
 FT   misc_feature    103..108
@@ -276,9 +278,113 @@ FT   mRNA            179..500
 FT                   /note="exon 1"
 FT   CDS             join(387..500,X03488.1:50..196,X03488.1:453..578,
 FT                   X03488.1:674..838)
-FT                   /db_xref="SWISS-PROT:P02794"
-FT                   /label=apoh_cds
 FT                   /product="apoferritin H subunit"
+FT                   /db_xref="GDB:120617"
+FT                   /db_xref="GOA:P02794"
+FT                   /db_xref="HGNC:3976"
+FT                   /db_xref="InterPro:IPR001519"
+FT                   /db_xref="InterPro:IPR008331"
+FT                   /db_xref="InterPro:IPR009040"
+FT                   /db_xref="InterPro:IPR009078"
+FT                   /db_xref="InterPro:IPR012347"
+FT                   /db_xref="PDB:1FHA"
+FT                   /db_xref="PDB:2FHA"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P02794"
+FT                   /protein_id="CAA27205.1"
+FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDR
+D
+FT                   DVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMEC
+A
+FT                   LHLEKNVNQSLLELHKLATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAP
+E
+FT                   SGLAEYLFDKHTLGDSDNES"
+FT   intron          501..>512
+FT                   /note="intron I"
+XX
+SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
+     agnncaaacc tnagctccgc cagagcgcgc gaggcctcca gcggccgccc ctcccccaca        6
+0
+     gcaggggcgg ggntcccgcg cccaccggaa ggagcgggct cggggcgggc ggcgctgatt       12
+0
+     ggccggggcg ggcctgacgc cgacgcggct ataagagacc acaagcgacc cgcagggcca       18
+0
+     gacgttcttc gccgagagtc gtcggggttt cctgcttcaa cagtgcttgg acggaacccg       24
+0
+     gcgctcgttc cccaccccgg ccggccgccc atagccagcc ctccgtcgac ctcttcaccg       30
+0
+     caccctcgga ctgccccaag gcccccgccg ccgctccagc gccgcgcagc caccgccgcc       36
+0
+     gccgccgcct ctccttagtc gccgccatga cgaccgcgtc cacctcgcag gtgcgccaga       42
+0
+     actaccacca ggactcagag gccgccatca accgccagat caacctggag ctctacgcct       48
+0
+     cctacgttta cctgtccatg gtgagcgcgg gc                                     51
+2
+//
+
+  Input files for usage example 2
+
+  Database entry: tembl:X03487
+
+ID   X03487; SV 1; linear; genomic DNA; STD; HUM; 512 BP.
+XX
+AC   X03487;
+XX
+DT   02-JUL-1986 (Rel. 09, Created)
+DT   24-AUG-2005 (Rel. 84, Last updated, Version 3)
+XX
+DE   Human apoferritin H gene exon 1
+XX
+KW   ferritin.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+XX
+RN   [1]
+RP   1-512
+RX   DOI; 10.1093/nar/14.2.721.
+RX   PUBMED; 3003694.
+RA   Costanzo F., Colombo M., Staempfli S., Santoro C., Marone M., Frank R.,
+RA   Delius H., Cortese R.;
+RT   "Structure of gene and pseudogenes of human apoferritin H";
+RL   Nucleic Acids Res. 14(2):721-736(1986).
+XX
+DR   EPD; EP11112; HS_FTH1.
+DR   RFAM; RF00037.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..512
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT   misc_feature    65..70
+FT                   /note="GGGCGG box"
+FT   misc_feature    103..108
+FT                   /note="GGGCGG box"
+FT   misc_feature    126..131
+FT                   /note="GGGCGG box"
+FT   promoter        150..154
+FT                   /note="put. TATA box"
+FT   mRNA            179..500
+FT                   /note="exon 1"
+FT   CDS             join(387..500,X03488.1:50..196,X03488.1:453..578,
+FT                   X03488.1:674..838)
+FT                   /product="apoferritin H subunit"
+FT                   /db_xref="GDB:120617"
+FT                   /db_xref="GOA:P02794"
+FT                   /db_xref="HGNC:3976"
+FT                   /db_xref="InterPro:IPR001519"
+FT                   /db_xref="InterPro:IPR008331"
+FT                   /db_xref="InterPro:IPR009040"
+FT                   /db_xref="InterPro:IPR009078"
+FT                   /db_xref="InterPro:IPR012347"
+FT                   /db_xref="PDB:1FHA"
+FT                   /db_xref="PDB:2FHA"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P02794"
 FT                   /protein_id="CAA27205.1"
 FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDR
 D
@@ -333,7 +439,7 @@ Output file format
 
   Output files for usage example
 
-  File: hsferg1.cds
+  File: x03487.cds
 
 >x03487_cds_1
 atgacgaccgcgtccacctcgcaggtgcgccagaactaccaccaggactcagaggccgcc
@@ -347,7 +453,7 @@ gagcaggtgaaagccatcaaagaattgggtgaccacgtgaccaacttgcgcaagatggga
 gcgcccgaatctggcttggcggaatatctctttgacaagcacaccctgggagacagtgat
 aatgaaagctaa
 
-  File: hsferg1.mrna
+  File: x03487.mrna
 
 >x03487_mrna_1
 cagacgttcttcgccgagagtcgtcggggtttcctgcttcaacagtgcttggacggaacc
@@ -357,7 +463,7 @@ ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
 gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
 ctcctacgtttacctgtccatg
 
-  File: hsferg1.prot
+  File: x03487.prot
 
 >x03487_pro_1
 MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRDDVALKNFAKYFLHQS
@@ -365,7 +471,7 @@ HEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECALHLEKNVNQSLLELHK
 LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
 NES
 
-  File: hsferg1.noncoding
+  File: x03487.noncoding
 
 >x03487_noncoding_1
 agnncaaacctnagctccgccagagcgcgcgaggcctccagcggccgcccctcccccaca
@@ -374,19 +480,19 @@ ggccggggcgggcctgacgccgacgcggctataagagaccacaagcgacccgcagggc
 >x03487_noncoding_501
 gtgagcgcgggc
 
-  File: hsferg1.coderet
+  File: x03487.coderet
 
    CDS  mRNA non-c Trans Total Sequence
  ===== ===== ===== ===== ===== ========
-     1     1     2     1     5 HSFERG1
+     1     1     2     1     5 X03487
 
   Output files for usage example 2
 
-  File: hsferg1.coderet
+  File: x03487.coderet
 
   mRNA Total Sequence
  ===== ===== ========
-     1     1 HSFERG1
+     1     1 X03487
 
 Data files
 

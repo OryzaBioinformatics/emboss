@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: tmap
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: tmap
 #    [-sequences] ../../data/opsd.msf
 #    -outfile tmap.res

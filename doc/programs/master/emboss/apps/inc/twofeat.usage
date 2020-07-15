@@ -6,13 +6,13 @@ Without the -twoout option the output report contains just one feature for every
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>twofeat tembl:hsfau </b>
+% <b>twofeat tembl:x65923 </b>
 Finds neighbouring pairs of features in sequences
 Type of first feature [*]: <b>polyA_signal</b>
 Type of second feature [*]: <b>polyA_site</b>
 The minimum distance between the features [0]: <b>10</b>
 The maximum distance between the features [0]: <b>50</b>
-Output report [hsfau.twofeat]: <b></b>
+Output report [x65923.twofeat]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -26,13 +26,13 @@ The -twoout option makes the output report give the pairs of features found. The
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>twofeat -twoout -rformat gff tembl:hsfau </b>
+% <b>twofeat -twoout -rformat gff tembl:x65923 </b>
 Finds neighbouring pairs of features in sequences
 Type of first feature [*]: <b>polyA_signal</b>
 Type of second feature [*]: <b>polyA_site</b>
 The minimum distance between the features [0]: <b>10</b>
 The maximum distance between the features [0]: <b>50</b>
-Output report [hsfau.twofeat]: <b></b>
+Output report [x65923.twofeat]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

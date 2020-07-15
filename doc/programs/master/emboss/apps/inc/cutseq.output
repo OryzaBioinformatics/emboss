@@ -4,7 +4,7 @@
 <p><h3>File: gatta2.seq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;PAAMIR X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+&gt;X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 ggtaccgctcgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgatcta
 cctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcacagg
 agaggaaacggatgggatcgcaccaggagcggccgctgatcggcctgctgttctccgaaa
@@ -50,7 +50,7 @@ cgag
 <p><h3>File: jsh.seq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;PAAMIR X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+&gt;X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 tgctcgatcaccaccagccgggcgacgggaactgcacgatctacctggcgagcctggagc
 acgagcgggttcgcttcgtacggcgctgagcgacagtcacaggagaggaaacggatggga
 tcgcaccaggagcggccgctgatcggcctgctgttctccgaaaccggcgtcaccgccgat
@@ -95,6 +95,6 @@ tattcgcttttacctatctgtgggtggccgccaaccagttcctcgag
 <p><h3>File: starta.seq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;PAAMIR X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+&gt;X13776 X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 </pre>
 </td></tr></table><p>

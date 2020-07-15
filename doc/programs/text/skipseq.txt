@@ -31,9 +31,9 @@ Usage
 
 % skipseq 
 Reads and writes (returns) sequences, skipping first few
-Input (gapped) sequence(s): tembl:eclac*
+Input (gapped) sequence(s): @eclac.list
 Number of sequences to skip at start [0]: 
-output sequence(s) [eclac.fasta]: 
+output sequence(s) [j01636.fasta]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -45,8 +45,8 @@ output sequence(s) [eclac.fasta]:
 
 % skipseq -skip 1 
 Reads and writes (returns) sequences, skipping first few
-Input (gapped) sequence(s): tembl:eclac*
-output sequence(s) [eclac.fasta]: 
+Input (gapped) sequence(s): @eclac.list
+output sequence(s) [j01636.fasta]: 
 
    Go to the output files for this example
 
@@ -115,8 +115,22 @@ Input file format
 
   Input files for usage example
 
-   'tembl:eclac*' is a sequence entry in the example nucleic acid
-   database 'tembl'
+  File: eclac.list
+
+#Formerly ECLAC
+tembl:J01636
+
+#Formerly ECLACA
+tembl:X51872
+
+#Formerly ECLACI
+tembl:V00294
+
+#Formerly ECLACY
+tembl:V00295
+
+#Formerly ECLACZ
+tembl:V00296
 
    See the documentation for seqret to see the full range of things that
    you can do when reading and writing sequences.
@@ -128,9 +142,9 @@ Output file format
 
   Output files for usage example
 
-  File: eclac.fasta
+  File: j01636.fasta
 
->ECLAC J01636.1 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+>J01636 J01636.1 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
 caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
 gtctcttatcagaccgtttcccgcgtggtgaaccaggccagccacgtttctgcgaaaacg
@@ -238,9 +252,9 @@ tgtcaaaaataataataa
 
   Output files for usage example 2
 
-  File: eclac.fasta
+  File: j01636.fasta
 
->ECLACA X51872.1 Escherichia coli lacA gene for thiogalactoside transacetylase
+>X51872 X51872.1 Escherichia coli lacA gene for thiogalactoside transacetylase
 gtgaatgaagtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccgaccaaca
 tatcataacggagtgatcgcattgaacatgccaatgaccgaaagaataagagcaggcaag
 ctatttaccgatatgtgcgaaggcttaccggaaaaaagacttcgtgggaaaacgttaatg
@@ -272,7 +286,7 @@ gcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaagcagca
 gcgcactttgcgggtaaagctcacgcatcaatgcaccgacggcaatcagcaacagactga
 tggcgacactgcgacgttcgctgacatgctgatgaagccagcttccggccagcgccagcc
 cgcccatggtaaccaccggcagagcggtcgac
->ECLACI V00294.1 E. coli laci gene (codes for the lac repressor).
+>V00294 V00294.1 E. coli laci gene (codes for the lac repressor).
 ccggaagagagtcaattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgca
 gagtatgccggtgtctcttatcagaccgtttcccgcgtggtgaaccaggccagccacgtt
 tctgcgaaaacgcgggaaaaagtggaagcggcgatggcggagctgaattacattcccaac

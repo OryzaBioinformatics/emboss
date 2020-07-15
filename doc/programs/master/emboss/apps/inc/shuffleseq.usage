@@ -8,8 +8,8 @@ This makes two randomised copies of the input sequence:
 
 % <b>shuffleseq -shuffle 2 </b>
 Shuffles a set of sequences maintaining composition
-Input sequence(s): <b>tembl:mmam</b>
-output sequence(s) [mmam.fasta]: <b></b>
+Input sequence(s): <b>tembl:L48662</b>
+output sequence(s) [l48662.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

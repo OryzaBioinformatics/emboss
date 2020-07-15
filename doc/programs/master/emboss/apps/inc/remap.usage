@@ -8,10 +8,10 @@ This example uses only a small region of the input sequence to save space. This 
 
 % <b>remap -notran -sbeg 1 -send 60 </b>
 Display sequence with restriction sites, translation etc.
-Input nucleotide sequence(s): <b>tembl:eclac</b>
+Input nucleotide sequence(s): <b>tembl:j01636</b>
 Comma separated enzyme list [all]: <b>taqi,bsu6i,acii,bsski</b>
 Minimum recognition site length [4]: <b></b>
-Output file [eclac.remap]: <b></b>
+Output file [j01636.remap]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -27,10 +27,10 @@ This is an example where all enzymes in the REBASE database are used, (but only 
 
 % <b>remap -notran -sbeg 1 -send 60 </b>
 Display sequence with restriction sites, translation etc.
-Input nucleotide sequence(s): <b>tembl:eclac</b>
+Input nucleotide sequence(s): <b>tembl:j01636</b>
 Comma separated enzyme list [all]: <b></b>
 Minimum recognition site length [4]: <b></b>
-Output file [eclac.remap]: <b></b>
+Output file [j01636.remap]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -46,10 +46,10 @@ This is an example where all enzymes in the REBASE database are used but the -li
 
 % <b>remap -notran -sbeg 1 -send 60 -nolimit </b>
 Display sequence with restriction sites, translation etc.
-Input nucleotide sequence(s): <b>tembl:eclac</b>
+Input nucleotide sequence(s): <b>tembl:j01636</b>
 Comma separated enzyme list [all]: <b></b>
 Minimum recognition site length [4]: <b></b>
-Output file [eclac.remap]: <b></b>
+Output file [j01636.remap]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -65,10 +65,10 @@ This shows the 'flat' format: This is run with a small test version of the restr
 
 % <b>remap -notran -sbeg 1 -send 60 -flat </b>
 Display sequence with restriction sites, translation etc.
-Input nucleotide sequence(s): <b>tembl:eclac</b>
+Input nucleotide sequence(s): <b>tembl:j01636</b>
 Comma separated enzyme list [all]: <b></b>
 Minimum recognition site length [4]: <b></b>
-Output file [eclac.remap]: <b></b>
+Output file [j01636.remap]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

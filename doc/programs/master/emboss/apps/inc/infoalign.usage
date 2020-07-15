@@ -114,7 +114,7 @@ Output file [globins.infoalign]: <b></b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>infoalign -auto tembl:eclac* -out test.out </b>
+% <b>infoalign -auto @eclac.list -out test.out </b>
 
 </pre></td></tr></table><p>
 <p>
@@ -126,7 +126,7 @@ Output file [globins.infoalign]: <b></b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>infoalign -auto tembl:eclacz -out test.out </b>
+% <b>infoalign -auto tembl:v00296 -out test.out </b>
 
 </pre></td></tr></table><p>
 <p>

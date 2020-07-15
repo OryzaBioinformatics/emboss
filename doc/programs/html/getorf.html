@@ -60,8 +60,8 @@ investigating.
 
 % <b>getorf -minsize 300 </b>
 Finds and extracts open reading frames (ORFs)
-Input nucleotide sequence(s): <b>tembl:eclaci</b>
-protein output sequence(s) [eclaci.orf]: <b></b>
+Input nucleotide sequence(s): <b>tembl:v00294</b>
+protein output sequence(s) [v00294.orf]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -296,16 +296,14 @@ protein output sequence(s) [eclaci.orf]: <b></b>
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:eclaci' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:v00294' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:eclaci</h3>
+<p><h3>Database entry: tembl:v00294</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   ECLACI     standard; DNA; PRO; 1113 BP.
+ID   V00294; SV 1; linear; genomic DNA; STD; PRO; 1113 BP.
 XX
 AC   V00294;
-XX
-SV   V00294.1
 XX
 DT   09-JUN-1982 (Rel. 01, Created)
 DT   10-FEB-1999 (Rel. 58, Last updated, Version 2)
@@ -315,29 +313,45 @@ XX
 KW   DNA binding protein; repressor.
 XX
 OS   Escherichia coli
-OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
-OC   Escherichia.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
 RP   1-1113
-RX   MEDLINE; 78246991.
+RX   DOI; 10.1038/274765a0.
+RX   PUBMED; 355891.
 RA   Farabaugh P.J.;
 RT   "Sequence of the lacI gene";
-RL   Nature 274:765-769(1978).
-XX
-DR   SWISS-PROT; P03023; LACI_ECOLI.
+RL   Nature 274(5673):765-769(1978).
 XX
 CC   KST ECO.LACI
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..1113
-FT                   /db_xref="taxon:562"
 FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
 FT   CDS             31..1113
-FT                   /db_xref="SWISS-PROT:P03023"
-FT                   /note="reading frame"
 FT                   /transl_table=11
+FT                   /note="reading frame"
+FT                   /db_xref="GOA:P03023"
+FT                   /db_xref="PDB:1CJG"
+FT                   /db_xref="PDB:1EFA"
+FT                   /db_xref="PDB:1JWL"
+FT                   /db_xref="PDB:1JYE"
+FT                   /db_xref="PDB:1JYF"
+FT                   /db_xref="PDB:1L1M"
+FT                   /db_xref="PDB:1LBG"
+FT                   /db_xref="PDB:1LBH"
+FT                   /db_xref="PDB:1LBI"
+FT                   /db_xref="PDB:1LCC"
+FT                   /db_xref="PDB:1LCD"
+FT                   /db_xref="PDB:1LQC"
+FT                   /db_xref="PDB:1LTP"
+FT                   /db_xref="PDB:1TLF"
+FT                   /db_xref="PDB:2BJC"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P03023"
 FT                   /protein_id="CAA23569.1"
 FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAEL
 FT                   NYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGV
@@ -384,14 +398,14 @@ longer than the minimum size, which defaults to 30 bases (i.e. 10 amino acids).
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: eclaci.orf</h3>
+<p><h3>File: v00294.orf</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;ECLACI_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
+&gt;V00294_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
 GHRSHCDAGCQRSDGAGRNARHYRVRAARWCGYLGSGIRRYRRQLMLYPAVNHHQTGFSP
 AGANQRGPLAATLSGPGGEGQSAVARLTGEKKNHPGAQYANRLSPRVGRFINAAGTTGFP
 TGKRAV
-&gt;ECLACI_2 [1 - 1110] E. coli laci gene (codes for the lac repressor).
+&gt;V00294_2 [1 - 1110] E. coli laci gene (codes for the lac repressor).
 PEESQFRVVNVKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPN
 RVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGVEACKAA
 VHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSHEDGTRLG
@@ -399,7 +413,7 @@ VEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSAMSGFQQTM
 QMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSCYIPPSTTIK
 QDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPRALADSLMQLA
 RQVSRLESGQ*
-&gt;ECLACI_3 [465 - 49] (REVERSE SENSE) E. coli laci gene (codes for the lac repressor).
+&gt;V00294_3 [465 - 49] (REVERSE SENSE) E. coli laci gene (codes for the lac repressor).
 RRNISAGSFHSNGILVIQRIVNDQPTDALREKIVHRRFTGFDAASFYHRHHHAGTQLIGA
 RFNRRDNLRRRVQGQTGGGNANQQRLFARQLLCHAVGNVIQLRHRRFHFFPRFRRNVAGL
 VHHAGNGLIRDTGILCDIV

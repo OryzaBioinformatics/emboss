@@ -118,109 +118,109 @@ Input file format
 
   Database entry: tsw:laci_ecoli
 
-ID   LACI_ECOLI     STANDARD;      PRT;   360 AA.
-AC   P03023; P71309; Q47338; O09196;
-DT   21-JUL-1986 (Rel. 01, Created)
-DT   01-NOV-1997 (Rel. 35, Last sequence update)
-DT   15-DEC-1998 (Rel. 37, Last annotation update)
-DE   LACTOSE OPERON REPRESSOR.
-GN   LACI.
+ID   LACI_ECOLI              Reviewed;         360 AA.
+AC   P03023; O09196; P71309; Q2MC79; Q47338;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   19-JUL-2003, sequence version 3.
+DT   20-MAR-2007, entry version 87.
+DE   Lactose operon repressor.
+GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
 OS   Escherichia coli.
-OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
-OC   Escherichia.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
+OX   NCBI_TaxID=562;
 RN   [1]
-RP   SEQUENCE FROM N.A.
-RX   MEDLINE; 78246991.
-RA   FARABAUGH P.J.;
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=78246991; PubMed=355891; DOI=10.1038/274765a0;
+RA   Farabaugh P.J.;
 RT   "Sequence of the lacI gene.";
 RL   Nature 274:765-769(1978).
 RN   [2]
-RP   SEQUENCE FROM N.A.
-RC   STRAIN=K12 / MG1655;
-RX   MEDLINE; 97426617.
-RA   BLATTNER F.R., PLUNKETT G. III, BLOCH C.A., PERNA N.T., BURLAND V.,
-RA   RILEY M., COLLADO-VIDES J., GLASNER F.D., RODE C.K., MAYHEW G.F.,
-RA   GREGOR J., DAVIS N.W., KIRKPATRICK H.A., GOEDEN M.A., ROSE D.J.,
-RA   MAU B., SHAO Y.;
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Chen J., Matthews K.K.S.M.;
+RL   Submitted (MAY-1991) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Marsh S.;
+RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / MG1655 / ATCC 47076;
+RA   Chung E., Allen E., Araujo R., Aparicio A.M., Davis K., Duncan M.,
+RA   Federspiel N., Hyman R., Kalman S., Komp C., Kurdi O., Lew H., Lin D.,
+RA   Namath A., Oefner P., Roberts D., Schramm S., Davis R.W.;
+RT   "Sequence of minutes 4-25 of Escherichia coli.";
+RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / MG1655 / ATCC 47076;
+RX   MEDLINE=97426617; PubMed=9278503; DOI=10.1126/science.277.5331.1453;
+RA   Blattner F.R., Plunkett G. III, Bloch C.A., Perna N.T., Burland V.,
+RA   Riley M., Collado-Vides J., Glasner J.D., Rode C.K., Mayhew G.F.,
+RA   Gregor J., Davis N.W., Kirkpatrick H.A., Goeden M.A., Rose D.J.,
+RA   Mau B., Shao Y.;
 RT   "The complete genome sequence of Escherichia coli K-12.";
 RL   Science 277:1453-1474(1997).
-RN   [3]
-RP   SEQUENCE FROM N.A.
-RC   STRAIN=K12 / MG1655;
-RA   DUNCAN M., ALLEN E., ARAUJO R., APARICIO A.M., CHUNG E., DAVIS K.,
-RA   FEDERSPIEL N., HYMAN R., KALMAN S., KOMP C., KURDI O., LEW H.,
-RA   LIN D., NAMATH A., OEFNER P., ROBERTS D., SCHRAMM S., DAVIS R.W.;
-RL   Submitted (NOV-1996) to the EMBL/GenBank/DDBJ databases.
-RN   [4]
-RP   SEQUENCE FROM N.A.
-RA   CHEN J., MATTHEWS K.K.S.M.;
-RL   Submitted (MAY-1991) to the EMBL/GenBank/DDBJ databases.
-RN   [5]
-RP   SEQUENCE FROM N.A.
-RA   MARSH S.;
-RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
 RN   [6]
-RP   SEQUENCE OF 1-147; 159-230 AND 233-360.
-RX   MEDLINE; 76091932.
-RA   BEYREUTHER K., ADLER K., FANNING E., MURRAY C., KLEMM A., GEISLER N.;
-RT   "Amino-acid sequence of lac repressor from Escherichia coli.
-RT   Isolation, sequence analysis and sequence assembly of tryptic
-RT   peptides and cyanogen-bromide fragments.";
-RL   Eur. J. Biochem. 59:491-509(1975).
-RN   [7]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / W3110 / ATCC 27325 / DSM 5911;
+RX   PubMed=16738553; DOI=10.1038/msb4100049;
+RA   Hayashi K., Morooka N., Yamamoto Y., Fujita K., Isono K., Choi S.,
+RA   Ohtsubo E., Baba T., Wanner B.L., Mori H., Horiuchi T.;
+RT   "Highly accurate genome sequences of Escherichia coli K-12 strains
 
 
   [Part of this file has been deleted for brevity]
 
-CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
-CC   the European Bioinformatics Institute.  There are no  restrictions on  its
-CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
-CC   modified and this statement is not removed.  Usage  by  and for commercial
-CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
-CC   or send an email to license@isb-sib.ch).
-CC   --------------------------------------------------------------------------
-DR   EMBL; V00294; CAA23569.1; -.
-DR   EMBL; J01636; AAA24052.1; -.
-DR   EMBL; AE000141; AAC73448.1; -.
-DR   EMBL; U73857; AAB18069.1; ALT_INIT.
-DR   EMBL; X58469; CAA41383.1; -.
-DR   EMBL; U86347; AAB47270.1; ALT_INIT.
-DR   EMBL; U72488; AAB36549.1; -.
-DR   EMBL; U78872; AAB37348.1; -.
-DR   EMBL; U78873; AAB37351.1; -.
-DR   EMBL; U78874; AAB37354.1; -.
-DR   PIR; A03558; RPECL.
-DR   PIR; S02540; S02540.
-DR   PDB; 1LCC; 31-JAN-94.
-DR   PDB; 1LCD; 31-JAN-94.
-DR   PDB; 1LTP; 31-OCT-93.
-DR   PDB; 1TLF; 31-JUL-95.
-DR   PDB; 1LBG; 11-JUL-96.
-DR   PDB; 1LBH; 11-JUL-96.
-DR   PDB; 1LBI; 11-JUL-96.
-DR   PDB; 1LQC; 12-FEB-97.
-DR   ECO2DBASE; H039.0; 6TH EDITION.
-DR   ECOGENE; EG10525; LACI.
-DR   PFAM; PF00356; lacI; 1.
-DR   PFAM; PF00532; Peripla_BP_like; 1.
-DR   PROSITE; PS00356; HTH_LACI_FAMILY; 1.
-KW   Transcription regulation; DNA-binding; Repressor; 3D-structure.
-FT   DNA_BIND      6     25       H-T-H MOTIF.
-FT   MUTAGEN      17     17       Y->H: BROADENING OF SPECIFICITY.
-FT   MUTAGEN      22     22       R->N: RECOGNIZE AN OPERATOR VARIANT.
-FT   VARIANT     282    282       Y -> D (IN T41 MUTANT).
-FT   CONFLICT    286    286       S -> L (IN AAA24052, REF. 2, 4 AND 5).
-FT   HELIX         6     13
-FT   TURN         14     14
-FT   HELIX        17     24
-FT   HELIX        32     44
-FT   TURN         49     50
-SQ   SEQUENCE   360 AA;  38564 MW;  4CA5A1D6 CRC32;
+DR   Pfam; PF00532; Peripla_BP_1; 1.
+DR   PRINTS; PR00036; HTHLACI.
+DR   SMART; SM00354; HTH_LACI; 1.
+DR   PROSITE; PS00356; HTH_LACI_1; 1.
+DR   PROSITE; PS50932; HTH_LACI_2; 1.
+KW   3D-structure; Complete proteome; Direct protein sequencing;
+KW   DNA-binding; Repressor; Transcription; Transcription regulation.
+FT   CHAIN         1    360       Lactose operon repressor.
+FT                                /FTId=PRO_0000107963.
+FT   DOMAIN        1     58       HTH lacI-type.
+FT   DNA_BIND      6     25       H-T-H motif.
+FT   VARIANT     282    282       Y -> D (in T41 mutant).
+FT   MUTAGEN      17     17       Y->H: Broadening of specificity.
+FT   MUTAGEN      22     22       R->N: Recognizes an operator variant.
+FT   CONFLICT    286    286       L -> S (in Ref. 1, 4 and 7).
+FT   STRAND       63     69
+FT   HELIX        74     89
+FT   STRAND       93     98
+FT   STRAND      101    103
+FT   HELIX       104    115
+FT   TURN        116    118
+FT   STRAND      122    126
+FT   HELIX       130    139
+FT   TURN        140    142
+FT   STRAND      145    150
+FT   STRAND      154    156
+FT   STRAND      158    161
+FT   HELIX       163    177
+FT   STRAND      181    186
+FT   HELIX       192    207
+FT   STRAND      213    217
+FT   HELIX       222    234
+FT   STRAND      240    246
+FT   HELIX       247    259
+FT   TURN        265    267
+FT   STRAND      268    271
+FT   HELIX       277    281
+FT   STRAND      282    284
+FT   STRAND      287    290
+FT   HELIX       293    308
+FT   STRAND      314    319
+FT   STRAND      322    324
+FT   HELIX       354    356
+SQ   SEQUENCE   360 AA;  38590 MW;  347A8DEE92D736CB CRC64;
      MKPVTLYDVA EYAGVSYQTV SRVVNQASHV SAKTREKVEA AMAELNYIPN RVAQQLAGKQ
      SLLIGVATSS LALHAPSQIV AAIKSRADQL GASVVVSMVE RSGVEACKAA VHNLLAQRVS
      GLIINYPLDD QDAIAVEAAC TNVPALFLDV SDQTPINSII FSHEDGTRLG VEHLVALGHQ
      QIALLAGPLS SVSARLRLAG WHKYLTRNQI QPIAEREGDW SAMSGFQQTM QMLNEGIVPT
-     AMLVANDQMA LGAMRAITES GLRVGADISV VGYDDTEDSS CYIPPSTTIK QDFRLLGQTS
+     AMLVANDQMA LGAMRAITES GLRVGADISV VGYDDTEDSS CYIPPLTTIK QDFRLLGQTS
      VDRLLQLSQG QAVKGNQLLP VSLVKRKTTL APNTQTASPR ALADSLMQLA RQVSRLESGQ
 //
 
@@ -232,12 +232,12 @@ Output file format
 
 PEPSTATS of LACI_ECOLI from 1 to 360
 
-Molecular weight = 38563.97             Residues = 360
-Average Residue Weight  = 107.122       Charge   = 1.5
+Molecular weight = 38590.05             Residues = 360
+Average Residue Weight  = 107.195       Charge   = 1.5
 Isoelectric Point = 6.8820
 A280 Molar Extinction Coefficient  = 21620
 A280 Extinction Coefficient 1mg/ml = 0.56
-Improbability of expression in inclusion bodies = 0.670
+Improbability of expression in inclusion bodies = 0.660
 
 Residue         Number          Mole%           DayhoffStat
 A = Ala         44              12.222          1.421
@@ -251,14 +251,14 @@ H = His         7               1.944           0.972
 I = Ile         18              5.000           1.111
 J = ---         0               0.000           0.000
 K = Lys         11              3.056           0.463
-L = Leu         40              11.111          1.502
+L = Leu         41              11.389          1.539
 M = Met         10              2.778           1.634
 N = Asn         12              3.333           0.775
 O = ---         0               0.000           0.000
 P = Pro         14              3.889           0.748
 Q = Gln         28              7.778           1.994
 R = Arg         19              5.278           1.077
-S = Ser         33              9.167           1.310
+S = Ser         32              8.889           1.270
 T = Thr         19              5.278           0.865
 U = ---         0               0.000           0.000
 V = Val         34              9.444           1.431
@@ -268,12 +268,12 @@ Y = Tyr         8               2.222           0.654
 Z = Glx         0               0.000           0.000
 
 Property        Residues                Number          Mole%
-Tiny            (A+C+G+S+T)             121             33.611
-Small           (A+B+C+D+G+N+P+S+T+V)   198             55.000
-Aliphatic       (A+I+L+V)               136             37.778
+Tiny            (A+C+G+S+T)             120             33.333
+Small           (A+B+C+D+G+N+P+S+T+V)   197             54.722
+Aliphatic       (A+I+L+V)               137             38.056
 Aromatic        (F+H+W+Y)               21               5.833
-Non-polar       (A+C+F+G+I+L+M+P+V+W+Y) 199             55.278
-Polar           (D+E+H+K+N+Q+R+S+T+Z)   161             44.722
+Non-polar       (A+C+F+G+I+L+M+P+V+W+Y) 200             55.556
+Polar           (D+E+H+K+N+Q+R+S+T+Z)   160             44.444
 Charged         (B+D+E+H+K+R+Z)         69              19.167
 Basic           (H+K+R)                 37              10.278
 Acidic          (B+D+E+Z)               32               8.889

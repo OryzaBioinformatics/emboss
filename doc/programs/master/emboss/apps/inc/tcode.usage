@@ -6,9 +6,9 @@
 
 % <b>tcode </b>
 Fickett TESTCODE statistic to identify protein-coding DNA
-Input nucleotide sequence(s): <b>tembl:hsfau1</b>
+Input nucleotide sequence(s): <b>tembl:x65921</b>
 Length of sliding window [200]: <b></b>
-Output report [hsfau1.tcode]: <b></b>
+Output report [x65921.tcode]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -24,7 +24,7 @@ Produce a graphical plot
 
 % <b>tcode -plot -graph cps </b>
 Fickett TESTCODE statistic to identify protein-coding DNA
-Input nucleotide sequence(s): <b>tembl:hsfau1</b>
+Input nucleotide sequence(s): <b>tembl:x65921</b>
 Length of sliding window [200]: <b></b>
 
 Created tcode.ps

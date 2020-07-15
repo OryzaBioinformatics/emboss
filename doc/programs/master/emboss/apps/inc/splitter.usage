@@ -6,7 +6,7 @@ Split a sequence into sub-sequences of 10,000 bases (the default size) with no o
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>splitter tembl:AP000504 ap000504.split </b>
+% <b>splitter tembl:BA000025 ba000025.split </b>
 Split a sequence into (overlapping) smaller sequences
 
 </pre></td></tr></table><p>
@@ -21,7 +21,7 @@ Split a sequence into sub-sequences of 50,000 bases with an overlap of 3,000 bas
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>splitter tembl:AP000504 ap000504.split -size=50000 -over=3000 </b>
+% <b>splitter tembl:BA000025 ba000025.split -size=50000 -over=3000 </b>
 Split a sequence into (overlapping) smaller sequences
 
 </pre></td></tr></table><p>

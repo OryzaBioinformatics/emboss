@@ -35,7 +35,7 @@ Usage
    and proceeding to the end):
 
 
-% transeq tembl:paamir amir.pep 
+% transeq tembl:x13776 amir.pep 
 Translate nucleic acid sequences
 
    Go to the input files for this example
@@ -46,7 +46,7 @@ Translate nucleic acid sequences
    To translate a sequence in the second frame:
 
 
-% transeq tembl:paamir amir.pep -frame=2 
+% transeq tembl:x13776 amir.pep -frame=2 
 Translate nucleic acid sequences
 
    Go to the output files for this example
@@ -57,7 +57,7 @@ Translate nucleic acid sequences
    (starting at the last frame 1 codon and proceeding to the start):
 
 
-% transeq tembl:paamir amir.pep -frame=-1 
+% transeq tembl:x13776 amir.pep -frame=-1 
 Translate nucleic acid sequences
 
    Go to the output files for this example
@@ -67,7 +67,7 @@ Translate nucleic acid sequences
    To translate a sequence in all three forward frames:
 
 
-% transeq tembl:paamir amir.pep -frame=F 
+% transeq tembl:x13776 amir.pep -frame=F 
 Translate nucleic acid sequences
 
    Go to the output files for this example
@@ -77,7 +77,7 @@ Translate nucleic acid sequences
    To translate a sequence in all three reverse frames:
 
 
-% transeq tembl:paamir amir.pep -frame=R 
+% transeq tembl:x13776 amir.pep -frame=R 
 Translate nucleic acid sequences
 
    Go to the output files for this example
@@ -87,7 +87,7 @@ Translate nucleic acid sequences
    To translate a sequence in all six forward and reverse frames:
 
 
-% transeq tembl:paamir amir.pep -frame=6 
+% transeq tembl:x13776 amir.pep -frame=6 
 Translate nucleic acid sequences
 
    Go to the output files for this example
@@ -98,7 +98,7 @@ Translate nucleic acid sequences
    coding sequences:
 
 
-% transeq tembl:paamir amir.pep -reg=2-45,67-201,328-509 
+% transeq tembl:x13776 amir.pep -reg=2-45,67-201,328-509 
 Translate nucleic acid sequences
 
    Go to the output files for this example
@@ -233,27 +233,25 @@ Input file format
 
   Input files for usage example
 
-   'tembl:paamir' is a sequence entry in the example nucleic acid
+   'tembl:x13776' is a sequence entry in the example nucleic acid
    database 'tembl'
 
-  Database entry: tembl:paamir
+  Database entry: tembl:x13776
 
-ID   PAAMIR     standard; DNA; PRO; 2167 BP.
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
 XX
-SV   X13776.1
-XX
 DT   19-APR-1989 (Rel. 19, Created)
-DT   17-FEB-1997 (Rel. 50, Last updated, Version 22)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
 XX
 DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 XX
 KW   aliphatic amidase regulator; amiC gene; amiR gene.
 XX
 OS   Pseudomonas aeruginosa
-OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae; Pseudomonas
-.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
 XX
 RN   [1]
 RP   1167-2167
@@ -265,21 +263,22 @@ RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
 XX
 RN   [2]
 RP   1167-2167
-RX   MEDLINE; 89211409.
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
 RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomona
 s
 RT   aeruginosa";
-RL   FEBS Lett. 246:39-43(1989).
+RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
-RX   MEDLINE; 91317707.
+RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
 RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
 RT   product.";
-RL   J. Bacteriol. 173:4914-4921(1991).
+RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
 RP   1-2167
@@ -289,16 +288,16 @@ RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
 .
 XX
-DR   SWISS-PROT; P10932; AMIR_PSEAE.
-DR   SWISS-PROT; P27017; AMIC_PSEAE.
-DR   SWISS-PROT; Q51417; AMIS_PSEAE.
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
 
 
   [Part of this file has been deleted for brevity]
 
-FT                   phenotype"
 FT                   /replace=""
-FT                   /gene="amiC"
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
 FT   misc_feature    1
 FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653
@@ -602,7 +601,7 @@ Output file format
 
   File: amir.pep
 
->PAAMIR_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR*SACCSP
 KPASPPISSARTRMAHCSRSSN*TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGG
@@ -622,7 +621,7 @@ PRX
 
   File: amir.pep
 
->PAAMIR_2 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_2 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR*ATVTGEETDGIAPGAAADRPAVLR
 NRRHRRYRALARVWRIARGRATEPRGRRRRSPDRNAVPGPRRRPGPLSAVRRGLHSQPGG
@@ -642,7 +641,7 @@ LE
 
   File: amir.pep
 
->PAAMIR_4 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_4 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 SRNWLAATHR*VKANSRVSAPAFSEPCPAAAEKIR*NATQALSTPTRKLITATSRPLILP
 SNQTALRNSTAPTYSRTSPSMMTIPLLLLFWSARIAQADGSFPSNS*AIFRIGSRRFIAS
@@ -662,7 +661,7 @@ GT
 
   File: amir.pep
 
->PAAMIR_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR*SACCSP
 KPASPPISSARTRMAHCSRSSN*TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGG
@@ -677,7 +676,7 @@ CPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGPDQPGQGVADAAPWLGRARGAPAP
 VAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ*QEGYRHHAGTGSAVRWRGAVSQCRL
 VAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSRAGLAEGRSADPAIRFYLSVGGRQPV
 PRX
->PAAMIR_2 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_2 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR*ATVTGEETDGIAPGAAADRPAVLR
 NRRHRRYRALARVWRIARGRATEPRGRRRRSPDRNAVPGPRRRPGPLSAVRRGLHSQPGG
@@ -692,7 +691,7 @@ AHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDEREAHQHL
 SREAMKRREPILKIAQELLGNEPSA*AIRADQNNNKRGIVIMLGLVLLYVGAVLFLNAVW
 LLGKISGREVAVINFLVGVLSACVAFYLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQF
 LE
->PAAMIR_3 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_3 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 YRWPSICSITTSRATGTARSTWRAWSTSGFASYGAERQSQERKRMGSHQERPLIGLLFSE
 TGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGV
@@ -712,7 +711,7 @@ SX
 
   File: amir.pep
 
->PAAMIR_4 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_4 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 SRNWLAATHR*VKANSRVSAPAFSEPCPAAAEKIR*NATQALSTPTRKLITATSRPLILP
 SNQTALRNSTAPTYSRTSPSMMTIPLLLLFWSARIAQADGSFPSNS*AIFRIGSRRFIAS
@@ -727,7 +726,7 @@ GESGTPPAAHCSGSAPDRRRRCSANTRSPRRGSGSRAARRRARPPASPPCACATCSSPRG
 TVPPGCE*SPRRTADSGPGRRRGPGTAFRSGDRRRRPRGSVARPRAMRHTRASARYRR*R
 RFRRTAGRSAAAPGAIPSVSSPVTVAQRRTKRTRSCSRLAR*IVQFPSPGWW*SSRCSAS
 GT
->PAAMIR_5 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_5 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 LEELVGGHPQIGKSE*QGQRSGLQRALPGCCGKDQVERDAGAQHADQEVDHRHLPTADLA
 QQPDGIEKQHRANVQQNQSQHDDDTPLVIVLVGPDRSGGRLVSQQLLSDLQDRLAPLHRF
@@ -742,7 +741,7 @@ WRIRYAASGALFWFGAGPP*TMFGEYSKPS*GVG*QSSASARSTTGITALRVCDM*QPTR
 NRTPRLRMKSSAHSR*RSGSPPGSWDSVSIGRPPTPPSRFSCSTASNAPYACERSISAVT
 PVSENSRPISGRSWCDPIRFLSCDCRSAPYEANPLVLQARQVDRAVPVARLVVIEQMLGQ
 RYX
->PAAMIR_6 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_6 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 RGTGWRPPTDR*KRIAGSALRPSASPARLLRKRSGRTRRRRSARRPGS*SPPPPDR*SCP
 ATRRH*ETAPRQRTAEPVPA**RYPSCYCSGRPGSLRRTARFPATPERSSGSARAASSLP
@@ -762,7 +761,7 @@ VP
 
   File: amir.pep
 
->PAAMIR_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR*SACCSP
 KPASPPISSARTRMAHCSRSSN*TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGG
@@ -777,7 +776,7 @@ CPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGPDQPGQGVADAAPWLGRARGAPAP
 VAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ*QEGYRHHAGTGSAVRWRGAVSQCRL
 VAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSRAGLAEGRSADPAIRFYLSVGGRQPV
 PRX
->PAAMIR_2 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_2 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR*ATVTGEETDGIAPGAAADRPAVLR
 NRRHRRYRALARVWRIARGRATEPRGRRRRSPDRNAVPGPRRRPGPLSAVRRGLHSQPGG
@@ -792,7 +791,7 @@ AHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDEREAHQHL
 SREAMKRREPILKIAQELLGNEPSA*AIRADQNNNKRGIVIMLGLVLLYVGAVLFLNAVW
 LLGKISGREVAVINFLVGVLSACVAFYLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQF
 LE
->PAAMIR_3 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_3 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 YRWPSICSITTSRATGTARSTWRAWSTSGFASYGAERQSQERKRMGSHQERPLIGLLFSE
 TGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGV
@@ -807,7 +806,7 @@ PTGCCLCWYRRGASARKWRS*SRRPSSSRTASPARPGSTRPRCC*CSAMAGTSARRTSTC
 RGKR*SGASRS*RSLRSCWETSRPPERSGPTRTITRGVSSSCWDWFCCTLARCCFSMPSG
 CWARSAVGRWR*STSWSAC*APASRST*SFPQQPGRAR*RPER*PCYSLLPICGWPPTSS
 SX
->PAAMIR_4 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_4 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 SRNWLAATHR*VKANSRVSAPAFSEPCPAAAEKIR*NATQALSTPTRKLITATSRPLILP
 SNQTALRNSTAPTYSRTSPSMMTIPLLLLFWSARIAQADGSFPSNS*AIFRIGSRRFIAS
@@ -822,7 +821,7 @@ GESGTPPAAHCSGSAPDRRRRCSANTRSPRRGSGSRAARRRARPPASPPCACATCSSPRG
 TVPPGCE*SPRRTADSGPGRRRGPGTAFRSGDRRRRPRGSVARPRAMRHTRASARYRR*R
 RFRRTAGRSAAAPGAIPSVSSPVTVAQRRTKRTRSCSRLAR*IVQFPSPGWW*SSRCSAS
 GT
->PAAMIR_5 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_5 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 LEELVGGHPQIGKSE*QGQRSGLQRALPGCCGKDQVERDAGAQHADQEVDHRHLPTADLA
 QQPDGIEKQHRANVQQNQSQHDDDTPLVIVLVGPDRSGGRLVSQQLLSDLQDRLAPLHRF
@@ -837,7 +836,7 @@ WRIRYAASGALFWFGAGPP*TMFGEYSKPS*GVG*QSSASARSTTGITALRVCDM*QPTR
 NRTPRLRMKSSAHSR*RSGSPPGSWDSVSIGRPPTPPSRFSCSTASNAPYACERSISAVT
 PVSENSRPISGRSWCDPIRFLSCDCRSAPYEANPLVLQARQVDRAVPVARLVVIEQMLGQ
 RYX
->PAAMIR_6 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_6 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 RGTGWRPPTDR*KRIAGSALRPSASPARLLRKRSGRTRRRRSARRPGS*SPPPPDR*SCP
 ATRRH*ETAPRQRTAEPVPA**RYPSCYCSGRPGSLRRTARFPATPERSSGSARAASSLP
@@ -857,7 +856,7 @@ VP
 
   File: amir.pep
 
->PAAMIR_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
+>X13776_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 VPLAEHLLDHHQPGEASLEHERVRFVRR*ATVTGEETDGIAPGAAADRPAVLRNRRHRRY
 VRRGLHSQPGGTVPRGLLHVAHAQGGDAGGRARRRAALLPDPLRGLRVFAEHRLRRSGAE
@@ -1056,7 +1055,7 @@ Notes
 
    The alternative way of generating the reverse translation frames used
    by some people is that frame -1 is made by taking the frame '1' of the
-   reverse complement. There is no correspondance betwen the codons used
+   reverse complement. There is no correspondence between the codons used
    in frame 1 and -1, 2 and -2, 3 and -3; the codons used change with the
    length modulus 3.
 
@@ -1069,9 +1068,6 @@ Notes
    reverse complement the sequence and then start translating at the
    first frame in the resulting sequence, then use the '-alternative'
    qualifier.
-
-   (Reverse sense translations are a biological nonsense, really, but can
-   be very useful in practice.)
 
 References
 

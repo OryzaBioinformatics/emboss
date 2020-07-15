@@ -6,7 +6,7 @@
 
 % <b>banana -nooutfile -graph ps </b>
 Bending and curvature plot in B-DNA
-Input nucleotide sequence: <b>tembl:rnu68037</b>
+Input nucleotide sequence: <b>tembl:u68037</b>
 
 Created banana.ps
 
@@ -22,7 +22,7 @@ Created banana.ps
 
 % <b>banana -graph data </b>
 Bending and curvature plot in B-DNA
-Input nucleotide sequence: <b>tembl:rnu68037</b>
+Input nucleotide sequence: <b>tembl:u68037</b>
 
 Created banana1.dat
 Created banana2.dat

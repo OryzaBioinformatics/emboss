@@ -44,9 +44,9 @@ Usage
 
 % sixpack 
 Display a DNA sequence with 6-frame translation and ORFs
-Input nucleotide sequence: tembl:paamir
-Output file [paamir.sixpack]: 
-protein output sequence(s) [paamir.fasta]: 
+Input nucleotide sequence: tembl:x13776
+Output file [x13776.sixpack]: 
+protein output sequence(s) [x13776.fasta]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -190,27 +190,25 @@ Input file format
 
   Input files for usage example
 
-   'tembl:paamir' is a sequence entry in the example nucleic acid
+   'tembl:x13776' is a sequence entry in the example nucleic acid
    database 'tembl'
 
-  Database entry: tembl:paamir
+  Database entry: tembl:x13776
 
-ID   PAAMIR     standard; DNA; PRO; 2167 BP.
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
 XX
-SV   X13776.1
-XX
 DT   19-APR-1989 (Rel. 19, Created)
-DT   17-FEB-1997 (Rel. 50, Last updated, Version 22)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
 XX
 DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 XX
 KW   aliphatic amidase regulator; amiC gene; amiR gene.
 XX
 OS   Pseudomonas aeruginosa
-OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae; Pseudomonas
-.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
 XX
 RN   [1]
 RP   1167-2167
@@ -222,21 +220,22 @@ RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
 XX
 RN   [2]
 RP   1167-2167
-RX   MEDLINE; 89211409.
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
 RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomona
 s
 RT   aeruginosa";
-RL   FEBS Lett. 246:39-43(1989).
+RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
-RX   MEDLINE; 91317707.
+RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
 RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
 RT   product.";
-RL   J. Bacteriol. 173:4914-4921(1991).
+RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
 RP   1-2167
@@ -246,16 +245,16 @@ RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
 .
 XX
-DR   SWISS-PROT; P10932; AMIR_PSEAE.
-DR   SWISS-PROT; P27017; AMIC_PSEAE.
-DR   SWISS-PROT; Q51417; AMIS_PSEAE.
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
 
 
   [Part of this file has been deleted for brevity]
 
-FT                   phenotype"
 FT                   /replace=""
-FT                   /gene="amiC"
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
 FT   misc_feature    1
 FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653
@@ -347,9 +346,9 @@ Output file format
 
   Output files for usage example
 
-  File: paamir.sixpack
+  File: x13776.sixpack
 
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
 
@@ -454,52 +453,52 @@ Total ORFs in frame 6 :    15
 Total ORFs :    67
 ##############################
 
-  File: paamir.fasta
+  File: x13776.fasta
 
->PAAMIR_1_ORF1  Translation of PAAMIR in frame 1, ORF 1, threshold 1, 53aa
+>X13776_1_ORF1  Translation of X13776 in frame 1, ORF 1, threshold 1, 53aa
 GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR
->PAAMIR_1_ORF2  Translation of PAAMIR in frame 1, ORF 2, threshold 1, 28aa
+>X13776_1_ORF2  Translation of X13776 in frame 1, ORF 2, threshold 1, 28aa
 SACCSPKPASPPISSARTRMAHCSRSSN
->PAAMIR_1_ORF3  Translation of PAAMIR in frame 1, ORF 3, threshold 1, 52aa
+>X13776_1_ORF3  Translation of X13776 in frame 1, ORF 3, threshold 1, 52aa
 TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGGYGSSWAATCRTRARR
->PAAMIR_1_ORF4  Translation of PAAMIR in frame 1, ORF 4, threshold 1, 43aa
+>X13776_1_ORF4  Translation of X13776 in frame 1, ORF 4, threshold 1, 43aa
 CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT
->PAAMIR_1_ORF5  Translation of PAAMIR in frame 1, ORF 5, threshold 1, 23aa
+>X13776_1_ORF5  Translation of X13776 in frame 1, ORF 5, threshold 1, 23aa
 FATTASGWCSSARTTSIRGKATM
->PAAMIR_1_ORF6  Translation of PAAMIR in frame 1, ORF 6, threshold 1, 72aa
+>X13776_1_ORF6  Translation of X13776 in frame 1, ORF 6, threshold 1, 72aa
 CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTRRAPTWSSPPWWAPAPPSCIAPSPV
 ATATAGGRRSPA
->PAAMIR_1_ORF7  Translation of PAAMIR in frame 1, ORF 7, threshold 1, 357aa
+>X13776_1_ORF7  Translation of X13776 in frame 1, ORF 7, threshold 1, 357aa
 PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR
 PCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR
 SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
 GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
 RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
 DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
->PAAMIR_1_ORF8  Translation of PAAMIR in frame 1, ORF 8, threshold 1, 88aa
+>X13776_1_ORF8  Translation of X13776 in frame 1, ORF 8, threshold 1, 88aa
 QEGYRHHAGTGSAVRWRGAVSQCRLVAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSR
 AGLAEGRSADPAIRFYLSVGGRQPVPRX
->PAAMIR_2_ORF1  Translation of PAAMIR in frame 2, ORF 1, threshold 1, 35aa
+>X13776_2_ORF1  Translation of X13776 in frame 2, ORF 1, threshold 1, 35aa
 VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR
->PAAMIR_2_ORF2  Translation of PAAMIR in frame 2, ORF 2, threshold 1, 252aa
+>X13776_2_ORF2  Translation of X13776 in frame 2, ORF 2, threshold 1, 252aa
 ATVTGEETDGIAPGAAADRPAVLRNRRHRRYRALARVWRIARGRATEPRGRRRRSPDRNA
 VPGPRRRPGPLSAVRRGLHSQPGGTVPRGLLHVAHAQGGDAGGRARRRAALLPDPLRGLR
 VFAEHRLRRSGAEPEQCAAGGVPDSPLRRAGGVHRLGLHLSAGKQPCDAPPVSPARRHGA
 RGNLHSAVSLRRRLAARRRAHLPGARRRGLLHRGGHRHRRAVSRHRPSLRRRQAAADRQP
 DHQRGGGGEDGE
->PAAMIR_2_ORF3  Translation of PAAMIR in frame 2, ORF 3, threshold 1, 125aa
+>X13776_2_ORF3  Translation of X13776 in frame 2, ORF 3, threshold 1, 125aa
 RGRGAGGGRALLLQHRYARQPGLRPGLPWFLPGERDHHRLGRGGLLADLVARPRRAGRRQ
 LAGGRRAAAPVRHRHRRATGAGPGGAPEQPQPPVFAHRGNRCARRVPGPLAVARTDSPRP
 LCRRA
->PAAMIR_2_ORF4  Translation of PAAMIR in frame 2, ORF 4, threshold 1, 210aa
+>X13776_2_ORF4  Translation of X13776 in frame 2, ORF 4, threshold 1, 210aa
 PRRLVRQHGRGTAPMSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPP
 EAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVI
 TQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDERE
 AHQHLSREAMKRREPILKIAQELLGNEPSA
->PAAMIR_2_ORF5  Translation of PAAMIR in frame 2, ORF 5, threshold 1, 96aa
+>X13776_2_ORF5  Translation of X13776 in frame 2, ORF 5, threshold 1, 96aa
 AIRADQNNNKRGIVIMLGLVLLYVGAVLFLNAVWLLGKISGREVAVINFLVGVLSACVAF
 YLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQFLE
->PAAMIR_3_ORF1  Translation of PAAMIR in frame 3, ORF 1, threshold 1, 429aa
+>X13776_3_ORF1  Translation of X13776 in frame 3, ORF 1, threshold 1, 429aa
 YRWPSICSITTSRATGTARSTWRAWSTSGFASYGAERQSQERKRMGSHQERPLIGLLFSE
 TGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGV
 RFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLI
@@ -511,47 +510,47 @@ FSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLY
   [Part of this file has been deleted for brevity]
 
 SEPMNTTRSP
->PAAMIR_5_ORF11  Translation of PAAMIR in frame 5, ORF 11, threshold 1, 19aa
+>X13776_5_ORF11  Translation of X13776 in frame 5, ORF 11, threshold 1, 19aa
 WRIRYAASGALFWFGAGPP
->PAAMIR_5_ORF12  Translation of PAAMIR in frame 5, ORF 12, threshold 1, 10aa
+>X13776_5_ORF12  Translation of X13776 in frame 5, ORF 12, threshold 1, 10aa
 TMFGEYSKPS
->PAAMIR_5_ORF13  Translation of PAAMIR in frame 5, ORF 13, threshold 1, 3aa
+>X13776_5_ORF13  Translation of X13776 in frame 5, ORF 13, threshold 1, 3aa
 GVG
->PAAMIR_5_ORF14  Translation of PAAMIR in frame 5, ORF 14, threshold 1, 20aa
+>X13776_5_ORF14  Translation of X13776 in frame 5, ORF 14, threshold 1, 20aa
 QSSASARSTTGITALRVCDM
->PAAMIR_5_ORF15  Translation of PAAMIR in frame 5, ORF 15, threshold 1, 19aa
+>X13776_5_ORF15  Translation of X13776 in frame 5, ORF 15, threshold 1, 19aa
 QPTRNRTPRLRMKSSAHSR
->PAAMIR_5_ORF16  Translation of PAAMIR in frame 5, ORF 16, threshold 1, 107aa
+>X13776_5_ORF16  Translation of X13776 in frame 5, ORF 16, threshold 1, 107aa
 RSGSPPGSWDSVSIGRPPTPPSRFSCSTASNAPYACERSISAVTPVSENSRPISGRSWCD
 PIRFLSCDCRSAPYEANPLVLQARQVDRAVPVARLVVIEQMLGQRYX
->PAAMIR_6_ORF1  Translation of PAAMIR in frame 6, ORF 1, threshold 1, 11aa
+>X13776_6_ORF1  Translation of X13776 in frame 6, ORF 1, threshold 1, 11aa
 RGTGWRPPTDR
->PAAMIR_6_ORF2  Translation of PAAMIR in frame 6, ORF 2, threshold 1, 36aa
+>X13776_6_ORF2  Translation of X13776 in frame 6, ORF 2, threshold 1, 36aa
 KRIAGSALRPSASPARLLRKRSGRTRRRRSARRPGS
->PAAMIR_6_ORF3  Translation of PAAMIR in frame 6, ORF 3, threshold 1, 7aa
+>X13776_6_ORF3  Translation of X13776 in frame 6, ORF 3, threshold 1, 7aa
 SPPPPDR
->PAAMIR_6_ORF4  Translation of PAAMIR in frame 6, ORF 4, threshold 1, 8aa
+>X13776_6_ORF4  Translation of X13776 in frame 6, ORF 4, threshold 1, 8aa
 SCPATRRH
->PAAMIR_6_ORF5  Translation of PAAMIR in frame 6, ORF 5, threshold 1, 14aa
+>X13776_6_ORF5  Translation of X13776 in frame 6, ORF 5, threshold 1, 14aa
 ETAPRQRTAEPVPA
->PAAMIR_6_ORF6  Translation of PAAMIR in frame 6, ORF 6, threshold 1, 61aa
+>X13776_6_ORF6  Translation of X13776 in frame 6, ORF 6, threshold 1, 61aa
 RYPSCYCSGRPGSLRRTARFPATPERSSGSARAASSLPATGAGAPRARPSHGAASATPWP
 G
->PAAMIR_6_ORF7  Translation of PAAMIR in frame 6, ORF 7, threshold 1, 23aa
+>X13776_6_ORF7  Translation of X13776 in frame 6, ORF 7, threshold 1, 23aa
 SGPGRRCGPGAARSSASASPFPR
->PAAMIR_6_ORF8  Translation of PAAMIR in frame 6, ORF 8, threshold 1, 18aa
+>X13776_6_ORF8  Translation of X13776 in frame 6, ORF 8, threshold 1, 18aa
 CAAPIPAQAAPGGHRAAG
->PAAMIR_6_ORF9  Translation of PAAMIR in frame 6, ORF 9, threshold 1, 8aa
+>X13776_6_ORF9  Translation of X13776 in frame 6, ORF 9, threshold 1, 8aa
 SRRGTPAR
->PAAMIR_6_ORF10  Translation of PAAMIR in frame 6, ORF 10, threshold 1, 16aa
+>X13776_6_ORF10  Translation of X13776 in frame 6, ORF 10, threshold 1, 16aa
 SARAPRGFRTPPAPPG
->PAAMIR_6_ORF11  Translation of PAAMIR in frame 6, ORF 11, threshold 1, 22aa
+>X13776_6_ORF11  Translation of X13776 in frame 6, ORF 11, threshold 1, 22aa
 CAESRRRAAQRSRRGGHSGKCW
->PAAMIR_6_ORF12  Translation of PAAMIR in frame 6, ORF 12, threshold 1, 32aa
+>X13776_6_ORF12  Translation of X13776 in frame 6, ORF 12, threshold 1, 32aa
 RPRPPARRRLPAAASTGAPNNRCGSAARPGRR
->PAAMIR_6_ORF13  Translation of PAAMIR in frame 6, ORF 13, threshold 1, 5aa
+>X13776_6_ORF13  Translation of X13776 in frame 6, ORF 13, threshold 1, 5aa
 PPPAG
->PAAMIR_6_ORF14  Translation of PAAMIR in frame 6, ORF 14, threshold 1, 407aa
+>X13776_6_ORF14  Translation of X13776 in frame 6, ORF 14, threshold 1, 407aa
 GPAPATRAGCRAASWRSWERSPAHAGGPVVEVMHDDIRVGANRFGRLPADLEHAARIDFR
 DARRQAAVVVLALHPDRPLWRVDVDVVQVPLHVFHPPVACGLRGAAEQQGLPVGRLGPGG
 DGRVLREETMAGLDEGPAGGRIDAGEVRRDHHLPLCHVTLHLRHLRLAGGQAGDRRPPAV
@@ -559,7 +558,7 @@ AVATGDGAIQLGGAGAHHGGEDHVGARLVDALDGALQVVVGGIQRNVDFLEHRAAVLAIQ
 VAHHMVAFPRIDVVRADEHHPLAVVANQVRRQRRTVLVRRRTAVDDVRRILEALVGGRVA
 EQRVGALDHRHHRLARVRHVAAHEEPYPPVANEVLGAQPIAVRVAAGVLGQRFDRATADA
 ALAVQLLDREQCAIRVRALDIGGDAGFGEQQADQRPLLVRSHPFPLL
->PAAMIR_6_ORF15  Translation of PAAMIR in frame 6, ORF 15, threshold 1, 39aa
+>X13776_6_ORF15  Translation of X13776 in frame 6, ORF 15, threshold 1, 39aa
 LSLSAVRSEPARAPGSPGRSCSSRRPAGGDRADARPAVP
 
 Data files

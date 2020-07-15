@@ -6,9 +6,9 @@
 
 % <b>silent </b>
 Silent mutation restriction enzyme scan
-Input nucleotide sequence: <b>tembl:hsfau</b>
+Input nucleotide sequence: <b>tembl:x65923</b>
 Comma separated enzyme list [all]: <b>ecori,hindiii</b>
-Output report [hsfau.silent]: <b></b>
+Output report [x65923.silent]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

@@ -1,10 +1,10 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hsfau.rev</h3>
+<p><h3>File: x65923.rev</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;HSFAU X65923.1 H.sapiens fau mRNA
+&gt;X65923 X65923.1 H.sapiens fau mRNA
 ttttttttttgactgaactaagtggcttttttattagagaaagccagaattacaaaagac
 ttaagagttggcattggggcccttcttcttgccaaaggtgggcacaacgttgacaaagcg
 ccggttgtactgcatccgccgcttagcccgacctgtcttcttcttcttcttctcctgttt
@@ -19,10 +19,10 @@ gtcccagctaccgcgaagatggagtcgagaaagaggaa
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: hsfau.rev</h3>
+<p><h3>File: x65923.rev</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;HSFAU X65923.1 H.sapiens fau mRNA
+&gt;X65923 X65923.1 H.sapiens fau mRNA
 aaggagaaagagctgaggtagaagcgccatcgaccctggcggcaagtcagcggttatacg
 tcgagaaacaggcgcgggtcctcgatgtgtggaagctccactggccggtcctttgccagc
 gggtctagttccgagtacatcggagtgacctcccgtaacggggccttctagttcagcacg
@@ -37,10 +37,10 @@ agattattttttcggtgaatcaagtcagtttttttttt
 
 <a name="output.3"></a>
 <h3>Output files for usage example 3</h3>
-<p><h3>File: hsfau.rev</h3>
+<p><h3>File: x65923.rev</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;HSFAU X65923.1 H.sapiens fau mRNA
+&gt;X65923 X65923.1 H.sapiens fau mRNA
 aaaaaaaaaactgacttgattcaccgaaaaaataatctctttcggtcttaatgttttctg
 aattctcaaccgtaaccccgggaagaagaacggtttccacccgtgttgcaactgtttcgc
 ggccaacatgacgtaggcggcgaatcgggctggacagaagaagaagaagaagaggacaaa

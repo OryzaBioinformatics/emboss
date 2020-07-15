@@ -59,7 +59,7 @@ Usage
 
 % msbar 
 Mutate sequence beyond all recognition
-Input sequence(s): tembl:eclac
+Input sequence(s): tembl:j01636
 Number of times to perform the mutation operations [1]: 5
 Point mutation operations
          0 : None
@@ -88,7 +88,7 @@ Codon mutation operations
          5 : Duplications
          6 : Moves
 Types of codon mutations to perform [0]: 
-output sequence(s) [eclac.fasta]: 
+output sequence(s) [j01636.fasta]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -211,19 +211,17 @@ Input file format
 
   Input files for usage example
 
-   'tembl:eclac' is a sequence entry in the example nucleic acid database
-   'tembl'
+   'tembl:j01636' is a sequence entry in the example nucleic acid
+   database 'tembl'
 
-  Database entry: tembl:eclac
+  Database entry: tembl:j01636
 
-ID   ECLAC      standard; DNA; PRO; 7477 BP.
+ID   J01636; SV 1; linear; genomic DNA; STD; PRO; 7477 BP.
 XX
 AC   J01636; J01637; K01483; K01793;
 XX
-SV   J01636.1
-XX
 DT   30-NOV-1990 (Rel. 26, Created)
-DT   04-MAR-2000 (Rel. 63, Last updated, Version 7)
+DT   09-SEP-2004 (Rel. 81, Last updated, Version 8)
 XX
 DE   E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 XX
@@ -233,26 +231,26 @@ KW   lacZ gene; mutagenesis; palindrome; promoter region;
 KW   thiogalactoside acetyltransferase.
 XX
 OS   Escherichia coli
-OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
-OC   Escherichia.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
 RP   1243-1266
-RX   MEDLINE; 74055539.
+RX   PUBMED; 4587255.
 RA   Gilbert W., Maxam A.;
 RT   "The nucleotide sequence of the lac operator";
-RL   Proc. Natl. Acad. Sci. U.S.A. 70:3581-3584(1973).
+RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3581-3584(1973).
 XX
 RN   [2]
 RP   1246-1308
-RX   MEDLINE; 74055540.
+RX   PUBMED; 4587256.
 RA   Maizels N.M.;
 RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
 RT   transcribed from the UV5 promoter mutant of Escherichia coli";
-RL   Proc. Natl. Acad. Sci. U.S.A. 70:3585-3589(1973).
+RL   Proc. Natl. Acad. Sci. U.S.A. 70(12):3585-3589(1973).
 XX
 RN   [3]
-RX   MEDLINE; 74174501.
+RX   PUBMED; 4598642.
 RA   Gilbert W., Maizels N., Maxam A.;
 RT   "Sequences of controlling regions of the lactose operon";
 RL   Cold Spring Harb. Symp. Quant. Biol. 38:845-855(1974).
@@ -260,12 +258,14 @@ XX
 RN   [4]
 RA   Gilbert W., Gralla J., Majors A.J., Maxam A.;
 RT   "Lactose operator sequences and the action of lac repressor";
-RL   (in) Sund H., Blauer G. (eds.);
+RL   (in) Sund H., Blauer G. (Eds.);
 RL   PROTEIN-LIGAND INTERACTIONS:193-207;
 RL   Walter de Gruyter, New York (1975)
 XX
 RN   [5]
 RP   1146-1282
+RX   PUBMED; 1088926.
+RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
 
 
   [Part of this file has been deleted for brevity]
@@ -376,9 +376,9 @@ Output file format
 
   Output files for usage example
 
-  File: eclac.fasta
+  File: j01636.fasta
 
->ECLAC J01636.1 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+>J01636 J01636.1 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
 caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
 gtctcttatcagaccgtttcccgcgtggtgaaccaggccagccacgtttctgcgaaaacg

@@ -2,19 +2,17 @@
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:hsfos' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:k00650' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:hsfos</h3>
+<p><h3>Database entry: tembl:k00650</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HSFOS      standard; DNA; HUM; 6210 BP.
+ID   K00650; SV 1; linear; genomic DNA; STD; HUM; 6210 BP.
 XX
 AC   K00650; M16287;
 XX
-SV   K00650.1
-XX
 DT   26-JUL-1991 (Rel. 28, Created)
-DT   02-JUL-1999 (Rel. 60, Last updated, Version 3)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 4)
 XX
 DE   Human fos proto-oncogene (c-fos), complete cds.
 XX
@@ -22,18 +20,20 @@ KW   c-myc proto-oncogene; fos oncogene; proto-oncogene.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-4165
-RX   MEDLINE; 83221560.
+RX   PUBMED; 6574479.
 RA   van Straaten F., Muller R., Curran T., Van Beveren C., Verma I.M.;
 RT   "Complete nucleotide sequence of a human c-onc gene: deduced amino acid
 RT   sequence of the human c-fos protein";
 RL   Proc. Natl. Acad. Sci. U.S.A. 80(11):3183-3187(1983).
 XX
 RN   [2]
-RX   MEDLINE; 86028185.
+RX   DOI; 10.1016/0092-8674(85)90285-5.
+RX   PUBMED; 2414012.
 RA   Treisman R.;
 RT   "Transient accumulation of c-fos RNA following serum stimulation requires a
 RT   conserved 5' element and c-fos 3' sequences";
@@ -41,14 +41,12 @@ RL   Cell 42(3):889-902(1985).
 XX
 RN   [3]
 RP   4166-6210
-RX   MEDLINE; 87217118.
+RX   PUBMED; 3555978.
 RA   Verma I.M., Deschamps J., Van Beveren C., Sassone-Corsi P.;
 RT   "Human fos gene";
 RL   Cold Spring Harb. Symp. Quant. Biol. 51:0-0(0).
 XX
 DR   EPD; EP11145; HS_FOS.
-DR   GDB; 119917; FOS.
-DR   SWISS-PROT; P01100; FOS_HUMAN.
 DR   TRANSFAC; R00458; HS$CFOS_01.
 DR   TRANSFAC; R00459; HS$CFOS_02.
 DR   TRANSFAC; R00460; HS$CFOS_03.
@@ -57,6 +55,8 @@ DR   TRANSFAC; R00463; HS$CFOS_06.
 DR   TRANSFAC; R00464; HS$CFOS_07.
 DR   TRANSFAC; R00465; HS$CFOS_08.
 DR   TRANSFAC; R00466; HS$CFOS_09.
+DR   TRANSFAC; R00467; HS$CFOS_10.
+DR   TRANSFAC; R00468; HS$CFOS_11.
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

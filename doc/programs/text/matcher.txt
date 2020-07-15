@@ -177,218 +177,218 @@ Input file format
 
   Database entry: tsw:hba_human
 
-ID   HBA_HUMAN      STANDARD;      PRT;   141 AA.
-AC   P01922;
-DT   21-JUL-1986 (Rel. 01, Created)
-DT   21-JUL-1986 (Rel. 01, Last sequence update)
-DT   15-JUL-1999 (Rel. 38, Last annotation update)
-DE   HEMOGLOBIN ALPHA CHAIN.
-GN   HBA1 AND HBA2.
-OS   Homo sapiens (Human), Pan troglodytes (Chimpanzee), and
-OS   Pan paniscus (Pygmy chimpanzee) (Bonobo).
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+ID   HBA_HUMAN               Reviewed;         142 AA.
+AC   P69905; P01922; Q96KF1; Q9NYR7;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 2.
+DT   03-APR-2007, entry version 41.
+DE   Hemoglobin subunit alpha (Hemoglobin alpha chain) (Alpha-globin).
+GN   Name=HBA1;
+GN   and
+GN   Name=HBA2;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
 RN   [1]
-RP   SEQUENCE FROM N.A. (ALPHA-1).
-RX   MEDLINE; 81088339.
-RA   MICHELSON A.M., ORKIN S.H.;
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (HBA1).
+RX   MEDLINE=81088339; PubMed=7448866; DOI=10.1016/0092-8674(80)90347-5;
+RA   Michelson A.M., Orkin S.H.;
 RT   "The 3' untranslated regions of the duplicated human alpha-globin
 RT   genes are unexpectedly divergent.";
 RL   Cell 22:371-377(1980).
 RN   [2]
-RP   SEQUENCE FROM N.A. (ALPHA-2).
-RX   MEDLINE; 81175088.
-RA   LIEBHABER S.A., GOOSSENS M.J., KAN Y.W.;
-RT   "Cloning and complete nucleotide sequence of human 5'-alpha-globin
-RT   gene.";
-RL   Proc. Natl. Acad. Sci. U.S.A. 77:7054-7058(1980).
-RN   [3]
-RP   SEQUENCE FROM N.A. (ALPHA-2).
-RX   MEDLINE; 80137531.
-RA   WILSON J.T., WILSON L.B., REDDY V.B., CAVALLESCO C., GHOSH P.K.,
-RA   DERIEL J.K., FORGET B.G., WEISSMAN S.M.;
+RP   NUCLEOTIDE SEQUENCE [MRNA] (HBA2).
+RX   MEDLINE=80137531; PubMed=6244294;
+RA   Wilson J.T., Wilson L.B., Reddy V.B., Cavallesco C., Ghosh P.K.,
+RA   Deriel J.K., Forget B.G., Weissman S.M.;
 RT   "Nucleotide sequence of the coding portion of human alpha globin
 RT   messenger RNA.";
 RL   J. Biol. Chem. 255:2807-2815(1980).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (HBA2).
+RX   MEDLINE=81175088; PubMed=6452630;
+RA   Liebhaber S.A., Goossens M.J., Kan Y.W.;
+RT   "Cloning and complete nucleotide sequence of human 5'-alpha-globin
+RT   gene.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 77:7054-7058(1980).
 RN   [4]
-RP   SEQUENCE FROM N.A. (ALPHA-1 AND ALPHA-2).
-RA   FLINT J., HIGGS D.R.;
-RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   PubMed=6946451;
+RA   Orkin S.H., Goff S.C., Hechtman R.L.;
+RT   "Mutation in an intervening sequence splice junction in man.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 78:5041-5045(1981).
 RN   [5]
-RP   SEQUENCE.
-RA   BRAUNITZER G., GEHRING-MULLER R., HILSCHMANN N., HILSE K., HOBOM G.,
-RA   RUDLOFF V., WITTMANN-LIEBOLD B.;
-RT   "The constitution of normal adult human haemoglobin.";
-RL   Hoppe-Seyler's Z. Physiol. Chem. 325:283-286(1961).
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND VARIANT LYS-32.
+RX   MEDLINE=21303311; PubMed=11410421;
+RA   Zhao Y., Xu X.;
+RT   "Alpha2(CD31 AGG-->AAG, Arg-->Lys) causing non-deletional alpha-
+RT   thalassemia in a Chinese family with HbH disease.";
+RL   Haematologica 86:541-542(2001).
 RN   [6]
-RP   SEQUENCE.
-RA   HILL R.J., KONIGSBERG W.;
-RT   "The structure of human hemoglobin: IV. The chymotryptic digestion of
-RT   the alpha chain of human hemoglobin.";
-RL   J. Biol. Chem. 237:3151-3156(1962).
-RN   [7]
 
 
   [Part of this file has been deleted for brevity]
 
-FT                                /FTId=VAR_002841.
-FT   VARIANT     130    130       A -> D (IN YUDA; O2 AFFINITY DOWN).
+FT                                /FTId=VAR_002840.
+FT   VARIANT     131    131       A -> D (in Yuda; O(2) affinity down).
 FT                                /FTId=VAR_002842.
-FT   VARIANT     131    131       S -> P (IN QUESTEMBERT; HIGHLY UNSTABLE;
-FT                                CAUSES ALPHA-THALASSEMIA).
+FT   VARIANT     131    131       A -> P (in Sun Prairie; unstable).
+FT                                /FTId=VAR_002841.
+FT   VARIANT     132    132       S -> P (in Questembert; highly unstable;
+FT                                causes alpha-thalassemia).
 FT                                /FTId=VAR_002843.
-FT   VARIANT     133    133       S -> R (IN VAL DE MARNE; O2 AFFINITY UP).
+FT   VARIANT     134    134       S -> R (in Val de Marne; O(2) affinity
+FT                                up).
 FT                                /FTId=VAR_002844.
-FT   VARIANT     135    135       V -> E (IN PAVIE).
+FT   VARIANT     136    136       V -> E (in Pavie).
 FT                                /FTId=VAR_002845.
-FT   VARIANT     136    136       L -> M (IN CHICAGO).
+FT   VARIANT     137    137       L -> M (in Chicago).
 FT                                /FTId=VAR_002846.
-FT   VARIANT     136    136       L -> P (IN BIBBA; UNSTABLE;
-FT                                CAUSES ALPHA-THALASSEMIA).
+FT   VARIANT     137    137       L -> P (in Bibba; unstable; causes alpha-
+FT                                thalassemia).
 FT                                /FTId=VAR_002847.
-FT   VARIANT     138    138       S -> P (IN ATTLEBORO; O2 AFFINITY UP).
+FT   VARIANT     139    139       S -> P (in Attleboro; O(2) affinity up).
 FT                                /FTId=VAR_002848.
-FT   VARIANT     139    139       K -> E (IN HANAKAMI; O2 AFFINITY UP).
+FT   VARIANT     140    140       K -> E (in Hanamaki; O(2) affinity up).
 FT                                /FTId=VAR_002849.
-FT   VARIANT     139    139       K -> T (IN TOKONAME; O2 AFFINITY UP).
+FT   VARIANT     140    140       K -> T (in Tokoname; O(2) affinity up).
 FT                                /FTId=VAR_002850.
-FT   VARIANT     140    140       Y -> H (IN ROUEN; O2 AFFINITY UP).
+FT   VARIANT     141    141       Y -> H (in Rouen; O(2) affinity up).
 FT                                /FTId=VAR_002851.
-FT   VARIANT     141    141       R -> C (IN NUNOBIKI; O2 AFFINITY UP).
+FT   VARIANT     142    142       R -> C (in Nunobiki; O(2) affinity up).
 FT                                /FTId=VAR_002852.
-FT   VARIANT     141    141       R -> L (IN LEGNANO; O2 AFFINITY UP).
-FT                                /FTId=VAR_002853.
-FT   VARIANT     141    141       R -> H (IN SURESNES; O2 AFFINITY UP).
+FT   VARIANT     142    142       R -> H (in Suresnes; O(2) affinity up).
 FT                                /FTId=VAR_002854.
-FT   VARIANT     141    141       R -> P (IN SINGAPORE).
+FT   VARIANT     142    142       R -> L (in Legnano; O(2) affinity up).
+FT                                /FTId=VAR_002853.
+FT   VARIANT     142    142       R -> P (in Singapore).
 FT                                /FTId=VAR_002855.
-FT   HELIX         4     35
+FT   HELIX         4     15
+FT   HELIX        16     20
+FT   HELIX        21     35
 FT   HELIX        37     42
-FT   TURN         44     45
-FT   TURN         50     51
 FT   HELIX        53     71
-FT   TURN         72     74
+FT   HELIX        73     75
 FT   HELIX        76     79
-FT   TURN         80     80
 FT   HELIX        81     89
-FT   TURN         90     91
-FT   TURN         95     95
 FT   HELIX        96    112
 FT   TURN        114    116
 FT   HELIX       119    136
 FT   TURN        137    139
-SQ   SEQUENCE   141 AA;  15126 MW;  5EC7DB1E CRC32;
-     VLSPADKTNV KAAWGKVGAH AGEYGAEALE RMFLSFPTTK TYFPHFDLSH GSAQVKGHGK
-     KVADALTNAV AHVDDMPNAL SALSDLHAHK LRVDPVNFKL LSHCLLVTLA AHLPAEFTPA
-     VHASLDKFLA SVSTVLTSKY R
+SQ   SEQUENCE   142 AA;  15258 MW;  15E13666573BBBAE CRC64;
+     MVLSPADKTN VKAAWGKVGA HAGEYGAEAL ERMFLSFPTT KTYFPHFDLS HGSAQVKGHG
+     KKVADALTNA VAHVDDMPNA LSALSDLHAH KLRVDPVNFK LLSHCLLVTL AAHLPAEFTP
+     AVHASLDKFL ASVSTVLTSK YR
 //
 
   Database entry: tsw:hbb_human
 
-ID   HBB_HUMAN      STANDARD;      PRT;   146 AA.
-AC   P02023;
-DT   21-JUL-1986 (Rel. 01, Created)
-DT   21-JUL-1986 (Rel. 01, Last sequence update)
-DT   15-JUL-1999 (Rel. 38, Last annotation update)
-DE   HEMOGLOBIN BETA CHAIN.
-GN   HBB.
-OS   Homo sapiens (Human), Pan troglodytes (Chimpanzee), and
-OS   Pan paniscus (Pygmy chimpanzee) (Bonobo).
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+ID   HBB_HUMAN               Reviewed;         147 AA.
+AC   P68871; P02023; Q13852; Q14481; Q14510; Q45KT0; Q6FI08; Q8IZI1;
+AC   Q9BX96; Q9UCP8; Q9UCP9;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 2.
+DT   20-MAR-2007, entry version 43.
+DE   Hemoglobin subunit beta (Hemoglobin beta chain) (Beta-globin).
+GN   Name=HBB;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
 RN   [1]
-RP   SEQUENCE.
-RC   SPECIES=HUMAN;
-RA   BRAUNITZER G., GEHRING-MULLER R., HILSCHMANN N., HILSE K., HOBOM G.,
-RA   RUDLOFF V., WITTMANN-LIEBOLD B.;
-RT   "The constitution of normal adult human haemoglobin.";
-RL   Hoppe-Seyler's Z. Physiol. Chem. 325:283-286(1961).
-RN   [2]
-RP   SEQUENCE FROM N.A.
-RC   SPECIES=HUMAN;
-RX   MEDLINE; 81064667.
-RA   LAWN R.M., EFSTRATIADIS A., O'CONNELL C., MANIATIS T.;
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=81064667; PubMed=6254664; DOI=10.1016/0092-8674(80)90428-6;
+RA   Lawn R.M., Efstratiadis A., O'Connell C., Maniatis T.;
 RT   "The nucleotide sequence of the human beta-globin gene.";
 RL   Cell 21:647-651(1980).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=77126403; PubMed=1019344;
+RA   Marotta C., Forget B., Cohen-Solal M., Weissman S.M.;
+RT   "Nucleotide sequence analysis of coding and noncoding regions of human
+RT   beta-globin mRNA.";
+RL   Prog. Nucleic Acid Res. Mol. Biol. 19:165-175(1976).
 RN   [3]
-RP   SEQUENCE OF 121-146 FROM N.A.
-RC   SPECIES=HUMAN;
-RX   MEDLINE; 85205333.
-RA   LANG K.M., SPRITZ R.A.;
-RT   "Cloning specific complete polyadenylylated 3'-terminal cDNA
-RT   segments.";
-RL   Gene 33:191-196(1985).
+RP   NUCLEOTIDE SEQUENCE.
+RA   Lu L., Hu Z.H., Du C.S., Fu Y.S.;
+RT   "DNA sequence of the human beta-globin gene isolated from a healthy
+RT   Chinese.";
+RL   Submitted (JUN-1997) to the EMBL/GenBank/DDBJ databases.
 RN   [4]
-RP   X-RAY CRYSTALLOGRAPHY (2.5 ANGSTROMS) OF DEOXYHEMOGLOBIN.
-RC   SPECIES=HUMAN;
-RX   MEDLINE; 76027820.
-RA   FERMI G.;
-RT   "Three-dimensional fourier synthesis of human deoxyhaemoglobin at
-RT   2.5-A resolution: refinement of the atomic model.";
-RL   J. Mol. Biol. 97:237-256(1975).
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT DURHAM-N.C. PRO-115.
+RC   TISSUE=Blood;
+RA   Kutlar F., Abboud M., Leithner C., Holley L., Brisco J., Kutlar A.;
+RT   "Electrophoretically silent, very unstable, thalassemic mutation at
+RT   codon 114 of beta globin (hemoglobin Durham-N.C.) detected by cDNA
+RT   sequencing of mRNA, from a Russian women.";
+RL   Submitted (AUG-1999) to the EMBL/GenBank/DDBJ databases.
 RN   [5]
-RP   SEQUENCE.
-RC   SPECIES=P.TROGLODYTES;
-RX   MEDLINE; 66071496.
-RA   RIFKIN D.B., KONIGSBERG W.;
-RT   "The characterization of the tryptic peptides from the hemoglobin of
-RT   the chimpanzee (Pan troglodytes).";
-RL   Biochim. Biophys. Acta 104:457-461(1965).
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT LOUISVILLE LEU-43.
+RC   TISSUE=Blood;
+RA   Kutlar F., Harbin J., Brisco J., Kutlar A.;
+RT   "Rapid detection of electrophoretically silent, unstable human
+RT   hemoglobin 'Louisville', (Beta; Phe 42 Leu/TTT to CTT) by cDNA
+RT   sequencing of mRNA.";
+RL   Submitted (JAN-1999) to the EMBL/GenBank/DDBJ databases.
 RN   [6]
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT TY GARD GLN-125.
 
 
   [Part of this file has been deleted for brevity]
 
-FT   VARIANT     140    140       A -> T (IN ST JACQUES: O2 AFFINITY UP).
+FT   VARIANT     141    141       A -> T (in St Jacques: O(2) affinity up).
 FT                                /FTId=VAR_003081.
-FT   VARIANT     140    140       A -> V (IN PUTTELANGE; POLYCYTHEMIA;
-FT                                O2 AFFINITY UP).
+FT   VARIANT     141    141       A -> V (in Puttelange; polycythemia; O(2)
+FT                                affinity up).
 FT                                /FTId=VAR_003082.
-FT   VARIANT     141    141       L -> R (IN OLMSTED; UNSTABLE).
+FT   VARIANT     142    142       L -> R (in Olmsted; unstable).
 FT                                /FTId=VAR_003083.
-FT   VARIANT     142    142       A -> D (IN OHIO; O2 AFFINITY UP).
+FT   VARIANT     143    143       A -> D (in Ohio; O(2) affinity up).
 FT                                /FTId=VAR_003084.
-FT   VARIANT     143    143       H -> D (IN RANCHO MIRAGE).
+FT   VARIANT     144    144       H -> D (in Rancho Mirage).
 FT                                /FTId=VAR_003085.
-FT   VARIANT     143    143       H -> Q (IN LITTLE ROCK; O2 AFFINITY UP).
-FT                                /FTId=VAR_003086.
-FT   VARIANT     143    143       H -> P (IN SYRACUSE; O2 AFFINITY UP).
+FT   VARIANT     144    144       H -> P (in Syracuse; O(2) affinity up).
 FT                                /FTId=VAR_003087.
-FT   VARIANT     143    143       H -> R (IN ABRUZZO; O2 AFFINITY UP).
+FT   VARIANT     144    144       H -> Q (in Little Rock; O(2) affinity
+FT                                up).
+FT                                /FTId=VAR_003086.
+FT   VARIANT     144    144       H -> R (in Abruzzo; O(2) affinity up).
 FT                                /FTId=VAR_003088.
-FT   VARIANT     144    144       K -> E (IN MITO; O2 AFFINITY UP).
+FT   VARIANT     145    145       K -> E (in Mito; O(2) affinity up).
 FT                                /FTId=VAR_003089.
-FT   VARIANT     145    145       Y -> C (IN RAINIER; O2 AFFINITY UP).
+FT   VARIANT     146    146       Y -> C (in Rainier; O(2) affinity up).
 FT                                /FTId=VAR_003090.
-FT   VARIANT     145    145       Y -> H (IN BETHESDA; O2 AFFINITY UP).
+FT   VARIANT     146    146       Y -> H (in Bethesda; O(2) affinity up).
 FT                                /FTId=VAR_003091.
-FT   VARIANT     146    146       H -> D (IN HIROSHIMA; O2 AFFINITY UP).
+FT   VARIANT     147    147       H -> D (in Hiroshima; O(2) affinity up).
 FT                                /FTId=VAR_003092.
-FT   VARIANT     146    146       H -> L (IN COWTOWN; O2 AFFINITY UP).
+FT   VARIANT     147    147       H -> L (in Cowtown; O(2) affinity up).
 FT                                /FTId=VAR_003093.
-FT   VARIANT     146    146       H -> P (IN YORK; O2 AFFINITY UP).
+FT   VARIANT     147    147       H -> P (in York; O(2) affinity up).
 FT                                /FTId=VAR_003094.
-FT   VARIANT     146    146       H -> Q (IN KODAIRA; O2 AFFINITY UP).
+FT   VARIANT     147    147       H -> Q (in Kodaira; O(2) affinity up).
 FT                                /FTId=VAR_003095.
 FT   HELIX         5     15
-FT   TURN         16     17
-FT   HELIX        20     34
+FT   TURN         20     22
+FT   HELIX        23     34
 FT   HELIX        36     41
 FT   HELIX        43     45
-FT   HELIX        51     55
-FT   TURN         56     56
-FT   HELIX        58     75
-FT   TURN         76     77
-FT   HELIX        78     94
-FT   TURN         95     96
-FT   TURN        100    100
-FT   HELIX       101    121
-FT   HELIX       124    142
-FT   TURN        143    144
-SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
-     VHLTPEEKSA VTALWGKVNV DEVGGEALGR LLVVYPWTQR FFESFGDLST PDAVMGNPKV
-     KAHGKKVLGA FSDGLAHLDN LKGTFATLSE LHCDKLHVDP ENFRLLGNVL VCVLAHHFGK
-     EFTPPVQAAY QKVVAGVANA LAHKYH
+FT   HELIX        51     56
+FT   HELIX        58     76
+FT   TURN         77     79
+FT   HELIX        81     93
+FT   TURN         94     96
+FT   HELIX       101    118
+FT   HELIX       119    121
+FT   HELIX       124    141
+FT   HELIX       143    145
+SQ   SEQUENCE   147 AA;  15998 MW;  A31F6D621C6556A1 CRC64;
+     MVHLTPEEKS AVTALWGKVN VDEVGGEALG RLLVVYPWTQ RFFESFGDLS TPDAVMGNPK
+     VKAHGKKVLG AFSDGLAHLD NLKGTFATLS ELHCDKLHVD PENFRLLGNV LVCVLAHHFG
+     KEFTPPVQAA YQKVVAGVAN ALAHKYH
 //
 
 Output file format
@@ -416,7 +416,7 @@ Output file format
 
 ########################################
 # Program: matcher
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: matcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -442,23 +442,23 @@ Output file format
 #
 #=======================================
 
-              10        20        30        40         50
+             10        20        30        40         50
 HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH
        :.: .:. : : ::::  .  : : ::: :. . .: :. .:  : :::
 HBB_HU LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST
-             10          20        30        40        50
+            10          20        30        40        50
 
-                    60        70        80        90
+                   60        70        80        90
 HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP
             :. .:: :::::  : .. .::.:..    . ::.::  :: :::
 HBB_HU PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP
-               60        70        80        90       100
+              60        70        80        90       100
 
-         100       110       120       130       140
+        100       110       120       130       140
 HBA_HU VNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKY
         ::.:: . :.  :: :   :::: : :.  : .: :.  :  ::
 HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
-              110       120       130       140
+             110       120       130       140
 
 
 #---------------------------------------
@@ -470,7 +470,7 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 
 ########################################
 # Program: matcher
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: matcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -497,23 +497,23 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 #
 #=======================================
 
-              10        20        30        40         50
+             10        20        30        40         50
 HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH
        :.: .:. : : ::::  .  : : ::: :. . .: :. .:  : :::
 HBB_HU LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST
-             10          20        30        40        50
+            10          20        30        40        50
 
-                    60        70        80        90
+                   60        70        80        90
 HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP
             :. .:: :::::  : .. .::.:..    . ::.::  :: :::
 HBB_HU PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP
-               60        70        80        90       100
+              60        70        80        90       100
 
-         100       110       120       130       140
+        100       110       120       130       140
 HBA_HU VNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKY
         ::.:: . :.  :: :   :::: : :.  : .: :.  :  ::
 HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
-              110       120       130       140
+             110       120       130       140
 
 
 #=======================================
@@ -539,11 +539,11 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 #
 #=======================================
 
-             120
+            120
 HBA_HU HLPAEFTPAVHA
        ::  :   :: :
 HBB_HU HLTPEEKSAVTA
-              10
+             10
 
 
 #=======================================
@@ -564,11 +564,11 @@ HBB_HU HLTPEEKSAVTA
 #
 #=======================================
 
-            10        20
+           10        20
 HBA_HU PADKTNVKAAWGKVGAHAGEY
        :      :   :   : : .:
 HBB_HU PVQAAYQKVVAGVANALAHKY
-          130       140
+         130       140
 
 
 #---------------------------------------

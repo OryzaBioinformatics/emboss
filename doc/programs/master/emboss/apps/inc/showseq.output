@@ -1,10 +1,10 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-Note that although we asked for the sequence display to end at position '100', it has displayed the sequence up to the end of the line - position '120'.  This is a feature of this program to make the display of things like restriction enzyme cutting sites easier.  <p><h3>File: paamir.showseq </h3>
+Note that although we asked for the sequence display to end at position '100', it has displayed the sequence up to the end of the line - position '120'.  This is a feature of this program to make the display of things like restriction enzyme cutting sites easier.  <p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
 
@@ -27,10 +27,10 @@ regulation
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: paamir.showseq </h3>
+<p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
 
@@ -47,7 +47,7 @@ regulation
 
 <a name="output.3"></a>
 <h3>Output files for usage example 3</h3>
-<p><h3>File: paamir.showseq </h3>
+<p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
           ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
@@ -62,35 +62,41 @@ regulation
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 RS24_FUGRU
-40S RIBOSOMAL PROTEIN S24.
+40S ribosomal protein S24.
 
                    10        20        30        40        50        60        
           ----:----|----:----|----:----|----:----|----:----|----:----|
           MAATVTVATALPMTAALLGALGMVVAVLHPGLATVPLTGIAGLLALMTLTTPAVVPVPGP
           esshaharhryhehsreelryleaasaeirlylharyhllrlyelyeyyhhrsaahahlh
           tnprlrlgrgsetrnguungsntllplusoysarlosruegusuastrsrroplleleye
+          |===========================================================
+          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
 
                    70        80        90        100       110       120       
           ----:----|----:----|----:----|----:----|----:----|----:----|
           ATGPGGGLTTGPAMVTASLATALLAGPLHALAAHGLPGLLLTSALGALGALAAMLLVAGT
           rhlhlllyhhlhleayseesylyyslryirelrilehlyyyherylrylrysreyyarlh
           grneyyysrryeatlrpruprassnuossguagsyueusssrrgsngsugsngtsslgyr
+          ============================================================
+          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
 
                    130       
           ----:----|--
           LLASVGASLLLA
           yylealleyyys
           ssarlyarsssp
+          ===========|
+          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
 
 </pre>
 </td></tr></table><p>
 
 <a name="output.5"></a>
 <h3>Output files for usage example 5</h3>
-<p><h3>File: paamir.showseq </h3>
+<p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
         1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 60
@@ -101,10 +107,10 @@ regulation
 
 <a name="output.6"></a>
 <h3>Output files for usage example 6</h3>
-<p><h3>File: paamir.showseq </h3>
+<p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
       123 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 182
@@ -115,10 +121,10 @@ regulation
 
 <a name="output.7"></a>
 <h3>Output files for usage example 7</h3>
-<p><h3>File: paamir.showseq </h3>
+<p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
           ggtaccgctggccgagcatctgctCGATCACCACCAGCCGGGCGAcgggaactgcacgat
@@ -129,10 +135,10 @@ regulation
 
 <a name="output.8"></a>
 <h3>Output files for usage example 8</h3>
-<p><h3>File: paamir.showseq </h3>
+<p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
 
@@ -159,10 +165,10 @@ regulation
 
 <a name="output.9"></a>
 <h3>Output files for usage example 9</h3>
-<p><h3>File: paamir.showseq </h3>
+<p><h3>File: x13776.showseq </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
 

@@ -144,9 +144,9 @@ Anything in between these two values is uncertain.
 
 % <b>tcode </b>
 Fickett TESTCODE statistic to identify protein-coding DNA
-Input nucleotide sequence(s): <b>tembl:hsfau1</b>
+Input nucleotide sequence(s): <b>tembl:x65921</b>
 Length of sliding window [200]: <b></b>
-Output report [hsfau1.tcode]: <b></b>
+Output report [x65921.tcode]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -162,7 +162,7 @@ Produce a graphical plot
 
 % <b>tcode -plot -graph cps </b>
 Fickett TESTCODE statistic to identify protein-coding DNA
-Input nucleotide sequence(s): <b>tembl:hsfau1</b>
+Input nucleotide sequence(s): <b>tembl:x65921</b>
 Length of sliding window [200]: <b></b>
 
 Created tcode.ps
@@ -191,7 +191,7 @@ Created tcode.ps
 *  -outfile            report     [*.tcode] Output report file name
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png)
+                                  tekt, tek, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -302,7 +302,7 @@ Created tcode.ps
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -363,19 +363,17 @@ and the data tables.
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:hsfau1' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:x65921' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:hsfau1</h3>
+<p><h3>Database entry: tembl:x65921</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HSFAU1     standard; DNA; HUM; 2016 BP.
+ID   X65921; SV 1; linear; genomic DNA; STD; HUM; 2016 BP.
 XX
 AC   X65921; S45242;
 XX
-SV   X65921.1
-XX
 DT   13-MAY-1992 (Rel. 31, Created)
-DT   21-JUL-1993 (Rel. 36, Last updated, Version 5)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 7)
 XX
 DE   H.sapiens fau 1 gene
 XX
@@ -383,7 +381,8 @@ KW   fau 1 gene.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-2016
@@ -395,29 +394,30 @@ RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
 RN   [2]
 RP   1-2016
-RX   MEDLINE; 92412144.
+RX   DOI; 10.1016/0006-291X(92)91286-Y.
+RX   PUBMED; 1326960.
 RA   Kas K., Michiels L., Merregaert J.;
 RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
-RL   Biochem. Biophys. Res. Commun. 187:927-933(1992).
+RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
-DR   SWISS-PROT; P35544; UBIM_HUMAN.
-DR   SWISS-PROT; Q05472; RS30_HUMAN.
+DR   GDB; 191789.
+DR   GDB; 191790.
+DR   GDB; 354872.
+DR   GDB; 4590236.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
 FT                   /clone_lib="CML cosmid"
 FT                   /clone="15.1"
+FT                   /db_xref="taxon:9606"
 FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
 FT                   /gene="fau 1"
 FT   exon            408..504
 FT                   /number=1
-FT   intron          505..773
-FT                   /number=1
-FT   exon            774..856
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -532,21 +532,21 @@ red horizontal line.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hsfau1.tcode</h3>
+<p><h3>File: x65921.tcode</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: tcode
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: tcode
-#    -sequence tembl:hsfau1
+#    -sequence tembl:x65921
 # Report_format: table
-# Report_file: hsfau1.tcode
+# Report_file: x65921.tcode
 ########################################
 
 #=======================================
 #
-# Sequence: HSFAU1     from: 1   to: 2016
+# Sequence: X65921     from: 1   to: 2016
 # HitCount: 606
 #
 # Fickett TESTCODE statistic
@@ -647,7 +647,7 @@ red horizontal line.
 <h3>Output files for usage example 2</h3>
 <p><h3>Graphics File: tcode.ps</h3>
 <p><img src="tcode.2.tcode.gif" alt="[tcode results]">
-<p><h3>File: hsfau1.tcode</h3>
+<p><h3>File: x65921.tcode</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 </pre>

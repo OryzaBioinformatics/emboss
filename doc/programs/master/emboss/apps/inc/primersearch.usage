@@ -8,7 +8,7 @@
 Searches DNA sequences for matches with primer pairs
 Primer pairs file: <b>primers</b>
 Allowed percent mismatch [0]: <b></b>
-Whitehead primer3_core program output file [hsa203yc1.primersearch]: <b></b>
+Whitehead primer3_core program output file [z52466.primersearch]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -26,7 +26,7 @@ Here we run the same example but allowing 20% mismatch between the primers and t
 Searches DNA sequences for matches with primer pairs
 Primer pairs file: <b>primers</b>
 Allowed percent mismatch [0]: <b>20</b>
-Whitehead primer3_core program output file [hsa203yc1.primersearch]: <b></b>
+Whitehead primer3_core program output file [z52466.primersearch]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

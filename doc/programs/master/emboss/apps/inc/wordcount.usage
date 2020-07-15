@@ -4,9 +4,9 @@
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>wordcount tembl:rnu68037 -wordsize=3 </b>
+% <b>wordcount tembl:u68037 -wordsize=3 </b>
 Counts words of a specified size in a DNA sequence
-Output file [rnu68037.wordcount]: <b></b>
+Output file [u68037.wordcount]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

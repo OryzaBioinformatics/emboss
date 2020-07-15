@@ -4,9 +4,9 @@
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>seqretsplit tembl:hsfa* </b>
+% <b>seqretsplit tembl:m1190* </b>
 Reads and writes (returns) sequences in individual files
-output sequence(s) [hsfau.fasta]: <b></b>
+output sequence(s) [m11903.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

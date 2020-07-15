@@ -117,7 +117,7 @@ Usage
    Here is a sample session with showseq
 
 
-% showseq tembl:paamir -sbeg 1 -send 100 
+% showseq tembl:x13776 -sbeg 1 -send 100 
 Display a sequence with features, translation etc..
 Things to display
          0 : Enter your own list of things to display
@@ -130,7 +130,7 @@ Things to display
          7 : Restriction enzyme map
          8 : Baroque
 Display format [2]: 
-Output file [paamir.showseq]: 
+Output file [x13776.showseq]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -145,7 +145,7 @@ Output file [paamir.showseq]:
    things: 'b,s,t,c', we will output the sequence in the following way:
 
 
-% showseq tembl:paamir -sbeg 1 -send 120 
+% showseq tembl:x13776 -sbeg 1 -send 120 
 Display a sequence with features, translation etc..
 Things to display
          0 : Enter your own list of things to display
@@ -175,7 +175,7 @@ Specify your own things to display
         -R : Restriction enzyme cut sites in reverse sense
          A : Annotation
 Enter a list of things to display [B,N,T,S,A,F]: b,s,t,c
-Output file [paamir.showseq]: 
+Output file [x13776.showseq]: 
 
    Go to the output files for this example
 
@@ -184,9 +184,9 @@ Output file [paamir.showseq]:
    Display only the sequence:
 
 
-% showseq tembl:paamir -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S 
+% showseq tembl:x13776 -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S 
 Display a sequence with features, translation etc..
-Output file [paamir.showseq]: 
+Output file [x13776.showseq]: 
 
    Go to the output files for this example
 
@@ -208,9 +208,9 @@ Output file [rs24_fugru.showseq]:
    Number the sequence lines in the margin:
 
 
-% showseq tembl:paamir -sbeg 1 -send 100 -format 1 -number 
+% showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -number 
 Display a sequence with features, translation etc..
-Output file [paamir.showseq]: 
+Output file [x13776.showseq]: 
 
    Go to the output files for this example
 
@@ -219,9 +219,9 @@ Output file [paamir.showseq]:
    Start the numbering at a specified value ('123' in this case):
 
 
-% showseq tembl:paamir -sbeg 1 -send 100 -format 1 -number -offset 123 
+% showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -number -offset 123 
 Display a sequence with features, translation etc..
-Output file [paamir.showseq]: 
+Output file [x13776.showseq]: 
 
    Go to the output files for this example
 
@@ -231,10 +231,10 @@ Output file [paamir.showseq]:
    the sequence to be lowercase).
 
 
-% showseq tembl:paamir -sbeg 1 -send 100 -format 1 -slower -upper '25-45,101-20
+% showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '25-45,101-20
 3,333-362' 
 Display a sequence with features, translation etc..
-Output file [paamir.showseq]: 
+Output file [x13776.showseq]: 
 
    Go to the output files for this example
 
@@ -243,9 +243,9 @@ Output file [paamir.showseq]:
    Translate selected regions:
 
 
-% showseq tembl:paamir -sbeg 1 -send 120 -format 4 -trans 25-49,66-76 
+% showseq tembl:x13776 -sbeg 1 -send 120 -format 4 -trans 25-49,66-76 
 Display a sequence with features, translation etc..
-Output file [paamir.showseq]: 
+Output file [x13776.showseq]: 
 
    Go to the output files for this example
 
@@ -254,10 +254,10 @@ Output file [paamir.showseq]:
    Add your own annotation to the display:
 
 
-% showseq tembl:paamir -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26
+% showseq tembl:x13776 -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26
  binding site 15-15 SNP' 
 Display a sequence with features, translation etc..
-Output file [paamir.showseq]: 
+Output file [x13776.showseq]: 
 
    Go to the output files for this example
 
@@ -608,27 +608,25 @@ Input file format
 
   Input files for usage example
 
-   'tembl:paamir' is a sequence entry in the example nucleic acid
+   'tembl:x13776' is a sequence entry in the example nucleic acid
    database 'tembl'
 
-  Database entry: tembl:paamir
+  Database entry: tembl:x13776
 
-ID   PAAMIR     standard; DNA; PRO; 2167 BP.
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
 XX
-SV   X13776.1
-XX
 DT   19-APR-1989 (Rel. 19, Created)
-DT   17-FEB-1997 (Rel. 50, Last updated, Version 22)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
 XX
 DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 XX
 KW   aliphatic amidase regulator; amiC gene; amiR gene.
 XX
 OS   Pseudomonas aeruginosa
-OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae; Pseudomonas
-.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
 XX
 RN   [1]
 RP   1167-2167
@@ -640,21 +638,22 @@ RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
 XX
 RN   [2]
 RP   1167-2167
-RX   MEDLINE; 89211409.
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
 RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomona
 s
 RT   aeruginosa";
-RL   FEBS Lett. 246:39-43(1989).
+RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
-RX   MEDLINE; 91317707.
+RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
 RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
 RT   product.";
-RL   J. Bacteriol. 173:4914-4921(1991).
+RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
 RP   1-2167
@@ -664,16 +663,16 @@ RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
 .
 XX
-DR   SWISS-PROT; P10932; AMIR_PSEAE.
-DR   SWISS-PROT; P27017; AMIC_PSEAE.
-DR   SWISS-PROT; Q51417; AMIS_PSEAE.
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
 
 
   [Part of this file has been deleted for brevity]
 
-FT                   phenotype"
 FT                   /replace=""
-FT                   /gene="amiC"
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
 FT   misc_feature    1
 FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653
@@ -768,25 +767,40 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 
   Database entry: tsw:rs24_fugru
 
-ID   RS24_FUGRU     STANDARD;      PRT;   132 AA.
+ID   RS24_FUGRU              Reviewed;         132 AA.
 AC   O42387;
-DT   15-JUL-1998 (REL. 36, CREATED)
-DT   15-JUL-1998 (REL. 36, LAST SEQUENCE UPDATE)
-DT   15-JUL-1998 (REL. 36, LAST ANNOTATION UPDATE)
-DE   40S RIBOSOMAL PROTEIN S24.
-GN   RPS24.
-OS   FUGU RUBRIPES (JAPANESE PUFFERFISH) (TAKIFUGU RUBRIPES).
-OC   EUKARYOTA; METAZOA; CHORDATA; VERTEBRATA; PISCES; GNATHOSTOMATA;
-OC   OSTEICHTHYES; ACTINOPTERYGII; TETRAODONTIFORMES.
+DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
+DT   01-JAN-1998, sequence version 1.
+DT   20-MAR-2007, entry version 25.
+DE   40S ribosomal protein S24.
+GN   Name=RPS24;
+OS   Fugu rubripes (Japanese pufferfish) (Takifugu rubripes).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei;
+OC   Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes;
+OC   Tetradontoidea; Tetraodontidae; Takifugu.
+OX   NCBI_TaxID=31033;
 RN   [1]
-RP   SEQUENCE FROM N.A.
-RA   CROSIO C., CECCONI F., GIORGI M., AMALDI F., MARIOTTINI P.;
-RL   SUBMITTED (SEP-1997) TO EMBL/GENBANK/DDBJ DATA BANKS.
-CC   -!- SIMILARITY: BELONGS TO THE S24E FAMILY OF RIBOSOMAL PROTEINS.
-DR   EMBL; AJ001398; E339629; -.
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RA   Crosio C., Cecconi F., Giorgi M., Amaldi F., Mariottini P.;
+RL   Submitted (SEP-1997) to the EMBL/GenBank/DDBJ databases.
+CC   -!- SIMILARITY: Belongs to the ribosomal protein S24e family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AJ001398; CAA04728.1; -; Genomic_DNA.
+DR   Ensembl; NEWSINFRUG00000143641; Fugu rubripes.
+DR   LinkHub; O42387; -.
+DR   InterPro; IPR001976; Ribosomal_S24E.
+DR   PANTHER; PTHR10496; Ribosomal_S24E; 1.
+DR   Pfam; PF01282; Ribosomal_S24e; 1.
+DR   ProDom; PD006052; Ribosomal_S24E; 1.
 DR   PROSITE; PS00529; RIBOSOMAL_S24E; 1.
-KW   RIBOSOMAL PROTEIN.
-SQ   SEQUENCE   132 AA;  15305 MW;  BCF9EB31 CRC32;
+KW   Ribonucleoprotein; Ribosomal protein.
+FT   CHAIN         1    132       40S ribosomal protein S24.
+FT                                /FTId=PRO_0000137627.
+SQ   SEQUENCE   132 AA;  15305 MW;  DC437F60F20C14F5 CRC64;
      MNDTVTVRTR KFMTNRLLQR KQMVVDVLHP GKATVPKTEI REKLAKMYKT TPDVVFVFGF
      RTQFGGGKTT GFAMVYDSLD YAKKNEPKHR LARHGLFEKK KTSRKQRKER KNRMKKVRGT
      KKASVGASKK KD
@@ -882,9 +896,9 @@ Output file format
    line - position '120'. This is a feature of this program to make the
    display of things like restriction enzyme cutting sites easier.
 
-  File: paamir.showseq
+  File: x13776.showseq
 
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
 
@@ -904,9 +918,9 @@ regulation
 
   Output files for usage example 2
 
-  File: paamir.showseq
+  File: x13776.showseq
 
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
 
@@ -920,7 +934,7 @@ regulation
 
   Output files for usage example 3
 
-  File: paamir.showseq
+  File: x13776.showseq
 
           ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
           ctacctggcgagcctggagcacgagcgggttcgcttcgta
@@ -930,31 +944,37 @@ regulation
   File: rs24_fugru.showseq
 
 RS24_FUGRU
-40S RIBOSOMAL PROTEIN S24.
+40S ribosomal protein S24.
 
                    10        20        30        40        50        60
           ----:----|----:----|----:----|----:----|----:----|----:----|
           MAATVTVATALPMTAALLGALGMVVAVLHPGLATVPLTGIAGLLALMTLTTPAVVPVPGP
           esshaharhryhehsreelryleaasaeirlylharyhllrlyelyeyyhhrsaahahlh
           tnprlrlgrgsetrnguungsntllplusoysarlosruegusuastrsrroplleleye
+          |===========================================================
+          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
 
                    70        80        90        100       110       120
           ----:----|----:----|----:----|----:----|----:----|----:----|
           ATGPGGGLTTGPAMVTASLATALLAGPLHALAAHGLPGLLLTSALGALGALAAMLLVAGT
           rhlhlllyhhlhleayseesylyyslryirelrilehlyyyherylrylrysreyyarlh
           grneyyysrryeatlrpruprassnuossguagsyueusssrrgsngsugsngtsslgyr
+          ============================================================
+          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
 
                    130
           ----:----|--
           LLASVGASLLLA
           yylealleyyys
           ssarlyarsssp
+          ===========|
+          chain ftid="PRO_0000137627" note="40S ribosomal protein S24"
 
   Output files for usage example 5
 
-  File: paamir.showseq
+  File: x13776.showseq
 
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
         1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 60
@@ -962,9 +982,9 @@ regulation
 
   Output files for usage example 6
 
-  File: paamir.showseq
+  File: x13776.showseq
 
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
       123 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 182
@@ -972,9 +992,9 @@ regulation
 
   Output files for usage example 7
 
-  File: paamir.showseq
+  File: x13776.showseq
 
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
           ggtaccgctggccgagcatctgctCGATCACCACCAGCCGGGCGAcgggaactgcacgat
@@ -982,9 +1002,9 @@ regulation
 
   Output files for usage example 8
 
-  File: paamir.showseq
+  File: x13776.showseq
 
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
 
@@ -1008,9 +1028,9 @@ regulation
 
   Output files for usage example 9
 
-  File: paamir.showseq
+  File: x13776.showseq
 
-PAAMIR
+X13776
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
 

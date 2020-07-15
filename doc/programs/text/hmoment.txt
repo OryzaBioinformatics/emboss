@@ -59,7 +59,7 @@ Command line arguments
                                   format, or reference (input USA)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png)
+                                  tekt, tek, none, data, xterm, png, gif)
 *  -outfile            outfile    [*.hmoment] Output file name
 
    Additional (Optional) qualifiers:
@@ -131,110 +131,110 @@ Input file format
 
   Database entry: tsw:hbb_human
 
-ID   HBB_HUMAN      STANDARD;      PRT;   146 AA.
-AC   P02023;
-DT   21-JUL-1986 (Rel. 01, Created)
-DT   21-JUL-1986 (Rel. 01, Last sequence update)
-DT   15-JUL-1999 (Rel. 38, Last annotation update)
-DE   HEMOGLOBIN BETA CHAIN.
-GN   HBB.
-OS   Homo sapiens (Human), Pan troglodytes (Chimpanzee), and
-OS   Pan paniscus (Pygmy chimpanzee) (Bonobo).
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+ID   HBB_HUMAN               Reviewed;         147 AA.
+AC   P68871; P02023; Q13852; Q14481; Q14510; Q45KT0; Q6FI08; Q8IZI1;
+AC   Q9BX96; Q9UCP8; Q9UCP9;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 2.
+DT   20-MAR-2007, entry version 43.
+DE   Hemoglobin subunit beta (Hemoglobin beta chain) (Beta-globin).
+GN   Name=HBB;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
 RN   [1]
-RP   SEQUENCE.
-RC   SPECIES=HUMAN;
-RA   BRAUNITZER G., GEHRING-MULLER R., HILSCHMANN N., HILSE K., HOBOM G.,
-RA   RUDLOFF V., WITTMANN-LIEBOLD B.;
-RT   "The constitution of normal adult human haemoglobin.";
-RL   Hoppe-Seyler's Z. Physiol. Chem. 325:283-286(1961).
-RN   [2]
-RP   SEQUENCE FROM N.A.
-RC   SPECIES=HUMAN;
-RX   MEDLINE; 81064667.
-RA   LAWN R.M., EFSTRATIADIS A., O'CONNELL C., MANIATIS T.;
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=81064667; PubMed=6254664; DOI=10.1016/0092-8674(80)90428-6;
+RA   Lawn R.M., Efstratiadis A., O'Connell C., Maniatis T.;
 RT   "The nucleotide sequence of the human beta-globin gene.";
 RL   Cell 21:647-651(1980).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=77126403; PubMed=1019344;
+RA   Marotta C., Forget B., Cohen-Solal M., Weissman S.M.;
+RT   "Nucleotide sequence analysis of coding and noncoding regions of human
+RT   beta-globin mRNA.";
+RL   Prog. Nucleic Acid Res. Mol. Biol. 19:165-175(1976).
 RN   [3]
-RP   SEQUENCE OF 121-146 FROM N.A.
-RC   SPECIES=HUMAN;
-RX   MEDLINE; 85205333.
-RA   LANG K.M., SPRITZ R.A.;
-RT   "Cloning specific complete polyadenylylated 3'-terminal cDNA
-RT   segments.";
-RL   Gene 33:191-196(1985).
+RP   NUCLEOTIDE SEQUENCE.
+RA   Lu L., Hu Z.H., Du C.S., Fu Y.S.;
+RT   "DNA sequence of the human beta-globin gene isolated from a healthy
+RT   Chinese.";
+RL   Submitted (JUN-1997) to the EMBL/GenBank/DDBJ databases.
 RN   [4]
-RP   X-RAY CRYSTALLOGRAPHY (2.5 ANGSTROMS) OF DEOXYHEMOGLOBIN.
-RC   SPECIES=HUMAN;
-RX   MEDLINE; 76027820.
-RA   FERMI G.;
-RT   "Three-dimensional fourier synthesis of human deoxyhaemoglobin at
-RT   2.5-A resolution: refinement of the atomic model.";
-RL   J. Mol. Biol. 97:237-256(1975).
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT DURHAM-N.C. PRO-115.
+RC   TISSUE=Blood;
+RA   Kutlar F., Abboud M., Leithner C., Holley L., Brisco J., Kutlar A.;
+RT   "Electrophoretically silent, very unstable, thalassemic mutation at
+RT   codon 114 of beta globin (hemoglobin Durham-N.C.) detected by cDNA
+RT   sequencing of mRNA, from a Russian women.";
+RL   Submitted (AUG-1999) to the EMBL/GenBank/DDBJ databases.
 RN   [5]
-RP   SEQUENCE.
-RC   SPECIES=P.TROGLODYTES;
-RX   MEDLINE; 66071496.
-RA   RIFKIN D.B., KONIGSBERG W.;
-RT   "The characterization of the tryptic peptides from the hemoglobin of
-RT   the chimpanzee (Pan troglodytes).";
-RL   Biochim. Biophys. Acta 104:457-461(1965).
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT LOUISVILLE LEU-43.
+RC   TISSUE=Blood;
+RA   Kutlar F., Harbin J., Brisco J., Kutlar A.;
+RT   "Rapid detection of electrophoretically silent, unstable human
+RT   hemoglobin 'Louisville', (Beta; Phe 42 Leu/TTT to CTT) by cDNA
+RT   sequencing of mRNA.";
+RL   Submitted (JAN-1999) to the EMBL/GenBank/DDBJ databases.
 RN   [6]
+RP   NUCLEOTIDE SEQUENCE, AND VARIANT TY GARD GLN-125.
 
 
   [Part of this file has been deleted for brevity]
 
-FT   VARIANT     140    140       A -> T (IN ST JACQUES: O2 AFFINITY UP).
+FT   VARIANT     141    141       A -> T (in St Jacques: O(2) affinity up).
 FT                                /FTId=VAR_003081.
-FT   VARIANT     140    140       A -> V (IN PUTTELANGE; POLYCYTHEMIA;
-FT                                O2 AFFINITY UP).
+FT   VARIANT     141    141       A -> V (in Puttelange; polycythemia; O(2)
+FT                                affinity up).
 FT                                /FTId=VAR_003082.
-FT   VARIANT     141    141       L -> R (IN OLMSTED; UNSTABLE).
+FT   VARIANT     142    142       L -> R (in Olmsted; unstable).
 FT                                /FTId=VAR_003083.
-FT   VARIANT     142    142       A -> D (IN OHIO; O2 AFFINITY UP).
+FT   VARIANT     143    143       A -> D (in Ohio; O(2) affinity up).
 FT                                /FTId=VAR_003084.
-FT   VARIANT     143    143       H -> D (IN RANCHO MIRAGE).
+FT   VARIANT     144    144       H -> D (in Rancho Mirage).
 FT                                /FTId=VAR_003085.
-FT   VARIANT     143    143       H -> Q (IN LITTLE ROCK; O2 AFFINITY UP).
-FT                                /FTId=VAR_003086.
-FT   VARIANT     143    143       H -> P (IN SYRACUSE; O2 AFFINITY UP).
+FT   VARIANT     144    144       H -> P (in Syracuse; O(2) affinity up).
 FT                                /FTId=VAR_003087.
-FT   VARIANT     143    143       H -> R (IN ABRUZZO; O2 AFFINITY UP).
+FT   VARIANT     144    144       H -> Q (in Little Rock; O(2) affinity
+FT                                up).
+FT                                /FTId=VAR_003086.
+FT   VARIANT     144    144       H -> R (in Abruzzo; O(2) affinity up).
 FT                                /FTId=VAR_003088.
-FT   VARIANT     144    144       K -> E (IN MITO; O2 AFFINITY UP).
+FT   VARIANT     145    145       K -> E (in Mito; O(2) affinity up).
 FT                                /FTId=VAR_003089.
-FT   VARIANT     145    145       Y -> C (IN RAINIER; O2 AFFINITY UP).
+FT   VARIANT     146    146       Y -> C (in Rainier; O(2) affinity up).
 FT                                /FTId=VAR_003090.
-FT   VARIANT     145    145       Y -> H (IN BETHESDA; O2 AFFINITY UP).
+FT   VARIANT     146    146       Y -> H (in Bethesda; O(2) affinity up).
 FT                                /FTId=VAR_003091.
-FT   VARIANT     146    146       H -> D (IN HIROSHIMA; O2 AFFINITY UP).
+FT   VARIANT     147    147       H -> D (in Hiroshima; O(2) affinity up).
 FT                                /FTId=VAR_003092.
-FT   VARIANT     146    146       H -> L (IN COWTOWN; O2 AFFINITY UP).
+FT   VARIANT     147    147       H -> L (in Cowtown; O(2) affinity up).
 FT                                /FTId=VAR_003093.
-FT   VARIANT     146    146       H -> P (IN YORK; O2 AFFINITY UP).
+FT   VARIANT     147    147       H -> P (in York; O(2) affinity up).
 FT                                /FTId=VAR_003094.
-FT   VARIANT     146    146       H -> Q (IN KODAIRA; O2 AFFINITY UP).
+FT   VARIANT     147    147       H -> Q (in Kodaira; O(2) affinity up).
 FT                                /FTId=VAR_003095.
 FT   HELIX         5     15
-FT   TURN         16     17
-FT   HELIX        20     34
+FT   TURN         20     22
+FT   HELIX        23     34
 FT   HELIX        36     41
 FT   HELIX        43     45
-FT   HELIX        51     55
-FT   TURN         56     56
-FT   HELIX        58     75
-FT   TURN         76     77
-FT   HELIX        78     94
-FT   TURN         95     96
-FT   TURN        100    100
-FT   HELIX       101    121
-FT   HELIX       124    142
-FT   TURN        143    144
-SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
-     VHLTPEEKSA VTALWGKVNV DEVGGEALGR LLVVYPWTQR FFESFGDLST PDAVMGNPKV
-     KAHGKKVLGA FSDGLAHLDN LKGTFATLSE LHCDKLHVDP ENFRLLGNVL VCVLAHHFGK
-     EFTPPVQAAY QKVVAGVANA LAHKYH
+FT   HELIX        51     56
+FT   HELIX        58     76
+FT   TURN         77     79
+FT   HELIX        81     93
+FT   TURN         94     96
+FT   HELIX       101    118
+FT   HELIX       119    121
+FT   HELIX       124    141
+FT   HELIX       143    145
+SQ   SEQUENCE   147 AA;  15998 MW;  A31F6D621C6556A1 CRC64;
+     MVHLTPEEKS AVTALWGKVN VDEVGGEALG RLLVVYPWTQ RFFESFGDLS TPDAVMGNPK
+     VKAHGKKVLG AFSDGLAHLD NLKGTFATLS ELHCDKLHVD PENFRLLGNV LVCVLAHHFG
+     KEFTPPVQAA YQKVVAGVAN ALAHKYH
 //
 
 Output file format
@@ -254,111 +254,111 @@ Output file format
 
   File: hbb_human.hmoment
 
-HMOMENT of HBB_HUMAN from 1 to 146
+HMOMENT of HBB_HUMAN from 1 to 147
 
 Window: 10 Angle: 100 Max uH: 0.714
 Position        uH
-1               0.091
-2               0.216
-3               0.208
-4               0.123
-5               0.211
-6               0.194
-7               0.185
-8               0.169
-9               0.312
-10              0.292
-11              0.185
-12              0.092
-13              0.050
-14              0.164
-15              0.245
-16              0.187
-17              0.130
-18              0.262
-19              0.396
-20              0.317
-21              0.342
-22              0.492
-23              0.508
-24              0.517
-25              0.418
-26              0.416
-27              0.350
-28              0.292
-29              0.196
-30              0.102
-31              0.288
-32              0.314
-33              0.442
-34              0.560
-35              0.464
-36              0.577
-37              0.584
-38              0.676
-39              0.714
-40              0.670
-41              0.462
-42              0.369
-43              0.221
-44              0.176
-45              0.073
-46              0.058
+1               0.086
+2               0.091
+3               0.216
+4               0.208
+5               0.123
+6               0.211
+7               0.194
+8               0.185
+9               0.169
+10              0.312
+11              0.292
+12              0.185
+13              0.092
+14              0.050
+15              0.164
+16              0.245
+17              0.187
+18              0.130
+19              0.262
+20              0.396
+21              0.317
+22              0.342
+23              0.492
+24              0.508
+25              0.517
+26              0.418
+27              0.416
+28              0.350
+29              0.292
+30              0.196
+31              0.102
+32              0.288
+33              0.314
+34              0.442
+35              0.560
+36              0.464
+37              0.577
+38              0.584
+39              0.676
+40              0.714
+41              0.670
+42              0.462
+43              0.369
+44              0.221
+45              0.176
+46              0.073
 
 
   [Part of this file has been deleted for brevity]
 
-87              0.179
-88              0.201
-89              0.065
-90              0.041
-91              0.110
-92              0.181
-93              0.261
-94              0.312
-95              0.200
-96              0.263
-97              0.369
-98              0.310
-99              0.362
-100             0.495
-101             0.585
-102             0.450
-103             0.488
-104             0.547
-105             0.315
-106             0.311
-107             0.252
-108             0.187
-109             0.215
-110             0.295
-111             0.425
-112             0.303
-113             0.421
-114             0.528
-115             0.487
-116             0.436
-117             0.501
-118             0.532
-119             0.409
-120             0.447
-121             0.308
-122             0.383
-123             0.252
-124             0.361
-125             0.374
-126             0.314
-127             0.219
-128             0.310
-129             0.361
-130             0.439
-131             0.433
-132             0.507
-133             0.336
-134             0.344
-135             0.207
-136             0.234
-137             0.299
+88              0.179
+89              0.201
+90              0.065
+91              0.041
+92              0.110
+93              0.181
+94              0.261
+95              0.312
+96              0.200
+97              0.263
+98              0.369
+99              0.310
+100             0.362
+101             0.495
+102             0.585
+103             0.450
+104             0.488
+105             0.547
+106             0.315
+107             0.311
+108             0.252
+109             0.187
+110             0.215
+111             0.295
+112             0.425
+113             0.303
+114             0.421
+115             0.528
+116             0.487
+117             0.436
+118             0.501
+119             0.532
+120             0.409
+121             0.447
+122             0.308
+123             0.383
+124             0.252
+125             0.361
+126             0.374
+127             0.314
+128             0.219
+129             0.310
+130             0.361
+131             0.439
+132             0.433
+133             0.507
+134             0.336
+135             0.344
+136             0.207
+137             0.234
+138             0.299
 
 Data files
 

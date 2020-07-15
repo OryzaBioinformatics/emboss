@@ -136,7 +136,7 @@ Try setting the '-explain' option.
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>eprimer3 tembl:hsfau1 hsfau.eprimer3 -explain </b>
+% <b>eprimer3 tembl:x65921 x65921.eprimer3 -explain </b>
 Picks PCR primers and hybridization oligos
 
 </pre></td></tr></table><p>
@@ -1225,19 +1225,17 @@ The scoring system is as for the Maximum Complementarity argument. In the exampl
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:hsfau1' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:x65921' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:hsfau1</h3>
+<p><h3>Database entry: tembl:x65921</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HSFAU1     standard; DNA; HUM; 2016 BP.
+ID   X65921; SV 1; linear; genomic DNA; STD; HUM; 2016 BP.
 XX
 AC   X65921; S45242;
 XX
-SV   X65921.1
-XX
 DT   13-MAY-1992 (Rel. 31, Created)
-DT   21-JUL-1993 (Rel. 36, Last updated, Version 5)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 7)
 XX
 DE   H.sapiens fau 1 gene
 XX
@@ -1245,7 +1243,8 @@ KW   fau 1 gene.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-2016
@@ -1257,29 +1256,30 @@ RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
 RN   [2]
 RP   1-2016
-RX   MEDLINE; 92412144.
+RX   DOI; 10.1016/0006-291X(92)91286-Y.
+RX   PUBMED; 1326960.
 RA   Kas K., Michiels L., Merregaert J.;
 RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
-RL   Biochem. Biophys. Res. Commun. 187:927-933(1992).
+RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
-DR   SWISS-PROT; P35544; UBIM_HUMAN.
-DR   SWISS-PROT; Q05472; RS30_HUMAN.
+DR   GDB; 191789.
+DR   GDB; 191790.
+DR   GDB; 354872.
+DR   GDB; 4590236.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
 FT                   /clone_lib="CML cosmid"
 FT                   /clone="15.1"
+FT                   /db_xref="taxon:9606"
 FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
 FT                   /gene="fau 1"
 FT   exon            408..504
 FT                   /number=1
-FT   intron          505..773
-FT                   /number=1
-FT   exon            774..856
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -1346,11 +1346,11 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hsfau.eprimer3</h3>
+<p><h3>File: x65921.eprimer3</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 
-# EPRIMER3 RESULTS FOR HSFAU1
+# EPRIMER3 RESULTS FOR X65921
 
 # FORWARD PRIMER STATISTICS:
 # considered 16422
@@ -1466,33 +1466,33 @@ but it must be set up on your system and on your path.
 
 <p>
 The Whitehead Institute program that is run by this program is available from:
-http://www-genome.wi.mit.edu/genome_software/other/primer3.html
+http://primer3.sourceforge.net/
 <br>
-(Then see the link 'Get release 0.9')
+(Then see the link Download and then 'Release 1.1')
 <p>
 
-The version that is run by this program is 3.0.9
+The version that is run by this program is 3.1.1
 currently available from:
-http://www-genome.wi.mit.edu/ftp/distribution/software/primer3_0_9_test.tar.gz
 
-The Whitehead Institute's primer3 program is:
-<br>
- Copyright (c) 1996,1997,1998
-<br>
-        Whitehead Institute for Biomedical Research. All rights reserved.
 
+The Whitehead Institute's primer3 program is
+<br>
+
+We request but do not require that use of this software be cited in
+publications as
 <p>
 
-The Whitehead Institute requests that use of this software be cited in
-publications as:
-
+Steve Rozen and Helen J. Skaletsky (2000)
+Primer3 on the WWW for general users and for biologist programmers.
+In: Krawetz S, Misener S (eds)
+Bioinformatics Methods and Protocols: Methods in Molecular Biology.
+Humana Press, Totowa, NJ, pp 365-386
 <p>
 
-Steve Rozen, Helen J. Skaletsky (1996,1997,1998)
-<br>
-   Primer3. Code available at
-<br>
-   http://www-genome.wi.mit.edu/genome_software/other/primer3.html
+Source code available at http://fokker.wi.mit.edu/primer3/.
+The paper above is available at
+http://jura.wi.mit.edu/rozen/papers/rozen-and-skaletsky-2000-primer3.pdf
+
 <H2>
     References
 </H2>
@@ -1509,10 +1509,10 @@ None.
     Diagnostic Error Messages
 </H2>
 
-The message: "EMBOSS An error in eprimer3.c at line 315: The program
+The message: "EMBOSS An error in eprimer3.c at line 346: The program
 'primer3_core' must be on the path.  It is part of the 'primer3'
 package, available from the Whitehead Institute.  See:
-http://www-genome.wi.mit.edu/" is output if you do not have the
+http://primer3.sourceforge.net/" is output if you do not have the
 Whitehead Institute's primer3 program set up and on your path. 
 
 <H2>

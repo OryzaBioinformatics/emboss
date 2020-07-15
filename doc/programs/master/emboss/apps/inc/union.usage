@@ -1,6 +1,6 @@
 <b>Here is a sample session with union</b>
 <p>
-The file 'cds.list' contains a list of the regions making up the coding sequence of 'embl:hsfau': 
+The file 'cds.list' contains a list of the regions making up the coding sequence of 'embl:x65923': 
 <p>
 
 <p>
@@ -9,7 +9,7 @@ The file 'cds.list' contains a list of the regions making up the coding sequence
 % <b>union </b>
 Reads sequence fragments and builds one sequence
 Input (gapped) sequence(s): <b>@cds.list</b>
-output sequence [hsfau1.fasta]: <b></b>
+output sequence [x65921.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

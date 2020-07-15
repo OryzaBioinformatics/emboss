@@ -1,14 +1,14 @@
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          sequence   Nucleotide sequence filename and optional
                                   format, or reference (input USA)
+   -cfile              codon      Codon usage file
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png)
+                                  tekt, tek, none, data, xterm, png, gif)
 *  -outfile            outfile    [*.syco] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -cfile              codon      Codon usage file
    -window             integer    [30] Averaging window (Any integer value)
    -uncommon           boolean    [N] Show common codon usage
    -minimum            float      [.15] Minimum value for a common codon

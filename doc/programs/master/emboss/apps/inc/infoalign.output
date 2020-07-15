@@ -200,11 +200,11 @@ msf::../../data/globins.msf:LGB2_LUPLU	LGB2_LUPLU    153	153	0	0	21	28	104	86.27
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 # USA             Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Weight	Description
-tembl-id:ECLAC    ECLAC         7477	7477	0	0	374	0	7103	94.997993	1.000000	E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
-tembl-id:ECLACA   ECLACA        1832	1832	0	0	374	0	1458	79.585152	1.000000	Escherichia coli lacA gene for thiogalactoside transacetylase
-tembl-id:ECLACI   ECLACI        1113	1113	0	0	302	0	811	72.866127	1.000000	E. coli laci gene (codes for the lac repressor).
-tembl-id:ECLACY   ECLACY        1500	1500	0	0	336	0	1164	77.599998	1.000000	E. coli lacY gene (codes for lactose permease).
-tembl-id:ECLACZ   ECLACZ        3078	3078	0	0	373	0	2705	87.881744	1.000000	E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+tembl-id:J01636   J01636        7477	7477	0	0	374	0	7103	94.997993	1.000000	E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+tembl-id:X51872   X51872        1832	1832	0	0	374	0	1458	79.585152	1.000000	Escherichia coli lacA gene for thiogalactoside transacetylase
+tembl-id:V00294   V00294        1113	1113	0	0	302	0	811	72.866127	1.000000	E. coli laci gene (codes for the lac repressor).
+tembl-id:V00295   V00295        1500	1500	0	0	336	0	1164	77.599998	1.000000	E. coli lacY gene (codes for lactose permease).
+tembl-id:V00296   V00296        3078	3078	0	0	373	0	2705	87.881744	1.000000	E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
 </pre>
 </td></tr></table><p>
 
@@ -214,6 +214,6 @@ tembl-id:ECLACZ   ECLACZ        3078	3078	0	0	373	0	2705	87.881744	1.000000	E. c
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 # USA             Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Weight	Description
-tembl-id:ECLACZ   ECLACZ        3078	3078	0	0	3078	0	0	0.000000	1.000000	E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+tembl-id:V00296   V00296        3078	3078	0	0	3078	0	0	0.000000	1.000000	E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
 </pre>
 </td></tr></table><p>

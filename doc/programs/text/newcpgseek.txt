@@ -50,9 +50,9 @@ Usage
 
 % newcpgseek 
 Reports CpG rich regions
-Input nucleotide sequence(s): tembl:rnu68037
+Input nucleotide sequence(s): tembl:u68037
 CpG score [17]: 
-Output file [rnu68037.newcpgseek]: 
+Output file [u68037.newcpgseek]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -109,16 +109,14 @@ Input file format
 
   Input files for usage example
 
-   'tembl:rnu68037' is a sequence entry in the example nucleic acid
+   'tembl:u68037' is a sequence entry in the example nucleic acid
    database 'tembl'
 
-  Database entry: tembl:rnu68037
+  Database entry: tembl:u68037
 
-ID   RNU68037   standard; RNA; ROD; 1218 BP.
+ID   U68037; SV 1; linear; mRNA; STD; ROD; 1218 BP.
 XX
 AC   U68037;
-XX
-SV   U68037.1
 XX
 DT   23-SEP-1996 (Rel. 49, Created)
 DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
@@ -130,7 +128,8 @@ XX
 OS   Rattus norvegicus (Norway rat)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
 ;
-OC   Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Rattus.
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
 XX
 RN   [1]
 RP   1-1218
@@ -146,19 +145,23 @@ RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
 RL   Biochemistry & Molecular Biology, Merck Frosst Center for Therapeutic
 RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
 XX
-DR   SWISS-PROT; P70597; PE21_RAT.
-XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..1218
-FT                   /db_xref="taxon:10116"
 FT                   /organism="Rattus norvegicus"
 FT                   /strain="Sprague-Dawley"
+FT                   /mol_type="mRNA"
+FT                   /db_xref="taxon:10116"
 FT   CDS             1..1218
 FT                   /codon_start=1
-FT                   /db_xref="SWISS-PROT:P70597"
-FT                   /note="family 1 G-protein coupled receptor"
 FT                   /product="EP1 prostanoid receptor"
+FT                   /note="family 1 G-protein coupled receptor"
+FT                   /db_xref="GOA:P70597"
+FT                   /db_xref="InterPro:IPR000276"
+FT                   /db_xref="InterPro:IPR000708"
+FT                   /db_xref="InterPro:IPR001244"
+FT                   /db_xref="InterPro:IPR008365"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P70597"
 FT                   /protein_id="AAB07735.1"
 FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFS
 M
@@ -225,11 +228,11 @@ Output file format
 
   Output files for usage example
 
-  File: rnu68037.newcpgseek
+  File: u68037.newcpgseek
 
 
 
-NEWCPGSEEK of RNU68037 from 1 to 1218
+NEWCPGSEEK of U68037 from 1 to 1218
 with score > 17
 
  Begin    End  Score        CpG  %CG  CG/GC

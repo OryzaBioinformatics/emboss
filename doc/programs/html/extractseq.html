@@ -59,7 +59,7 @@ Extract the region from position 10 to 20:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractseq tembl:hsfau result.seq -regions '10-20' </b>
+% <b>extractseq tembl:x65923 result.seq -regions '10-20' </b>
 Extract regions from a sequence
 
 </pre></td></tr></table><p>
@@ -74,7 +74,7 @@ Extract the regions 10 to 20, 30 to 45, 533 to 537:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractseq tembl:hsfau1 result2.seq -regions '10-20 30-45 533-537' </b>
+% <b>extractseq tembl:x65921 result2.seq -regions '10-20 30-45 533-537' </b>
 Extract regions from a sequence
 
 </pre></td></tr></table><p>
@@ -89,10 +89,10 @@ Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractseq tembl:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdout </b>
+% <b>extractseq tembl:x65921 -reg "782..856,951..1095,1557..1612,1787..1912" stdout </b>
 Extract regions from a sequence
 
->HSFAU1 X65921.1 H.sapiens fau 1 gene
+>X65921 X65921.1 H.sapiens fau 1 gene
 atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
 gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
 gtgctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggag
@@ -113,19 +113,19 @@ Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912 all to separate o
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractseq tembl:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdout -separate </b>
+% <b>extractseq tembl:x65921 -reg "782..856,951..1095,1557..1612,1787..1912" stdout -separate </b>
 Extract regions from a sequence
 
->HSFAU1_782_856 H.sapiens fau 1 gene
+>X65921_782_856 H.sapiens fau 1 gene
 atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
 gtcgcccagatcaag
->HSFAU1_951_1095 H.sapiens fau 1 gene
+>X65921_951_1095 H.sapiens fau 1 gene
 gctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctggcaggc
 gcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgactaccctg
 gaagtagcaggccgcatgcttggag
->HSFAU1_1557_1612 H.sapiens fau 1 gene
+>X65921_1557_1612 H.sapiens fau 1 gene
 gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag
->HSFAU1_1787_1912 H.sapiens fau 1 gene
+>X65921_1787_1912 H.sapiens fau 1 gene
 gtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcggatgcagtac
 aaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccccaatgccaac
 tcttaa
@@ -285,19 +285,17 @@ Examples of region specifications are:
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:x65923' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:hsfau</h3>
+<p><h3>Database entry: tembl:x65923</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HSFAU      standard; RNA; HUM; 518 BP.
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
 XX
 AC   X65923;
 XX
-SV   X65923.1
-XX
 DT   13-MAY-1992 (Rel. 31, Created)
-DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
 XX
 DE   H.sapiens fau mRNA
 XX
@@ -305,7 +303,8 @@ KW   fau gene.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-518
@@ -317,31 +316,35 @@ RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
 XX
 RN   [2]
 RP   1-518
-RX   MEDLINE; 93368957.
+RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
 RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
 RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
-RL   Oncogene 8:2537-2546(1993).
+RL   Oncogene 8(9):2537-2546(1993).
 XX
-DR   SWISS-PROT; P35544; UBIM_HUMAN.
-DR   SWISS-PROT; Q05472; RS30_HUMAN.
+DR   H-InvDB; HIT000322806.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..518
-FT                   /chromosome="11q"
-FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
-FT                   /tissue_type="placenta"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
 FT                   /clone_lib="cDNA"
 FT                   /clone="pUIA 631"
-FT                   /map="13"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
 FT   misc_feature    57..278
 FT                   /note="ubiquitin like part"
 FT   CDS             57..458
-FT                   /db_xref="SWISS-PROT:P35544"
-FT                   /db_xref="SWISS-PROT:Q05472"
 FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
@@ -369,17 +372,15 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 
 <a name="input.2"></a>
 <h3>Input files for usage example 2</h3>
-<p><h3>Database entry: tembl:hsfau1</h3>
+<p><h3>Database entry: tembl:x65921</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HSFAU1     standard; DNA; HUM; 2016 BP.
+ID   X65921; SV 1; linear; genomic DNA; STD; HUM; 2016 BP.
 XX
 AC   X65921; S45242;
 XX
-SV   X65921.1
-XX
 DT   13-MAY-1992 (Rel. 31, Created)
-DT   21-JUL-1993 (Rel. 36, Last updated, Version 5)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 7)
 XX
 DE   H.sapiens fau 1 gene
 XX
@@ -387,7 +388,8 @@ KW   fau 1 gene.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-2016
@@ -399,29 +401,30 @@ RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
 RN   [2]
 RP   1-2016
-RX   MEDLINE; 92412144.
+RX   DOI; 10.1016/0006-291X(92)91286-Y.
+RX   PUBMED; 1326960.
 RA   Kas K., Michiels L., Merregaert J.;
 RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
-RL   Biochem. Biophys. Res. Commun. 187:927-933(1992).
+RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
-DR   SWISS-PROT; P35544; UBIM_HUMAN.
-DR   SWISS-PROT; Q05472; RS30_HUMAN.
+DR   GDB; 191789.
+DR   GDB; 191790.
+DR   GDB; 354872.
+DR   GDB; 4590236.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
 FT                   /clone_lib="CML cosmid"
 FT                   /clone="15.1"
+FT                   /db_xref="taxon:9606"
 FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
 FT                   /gene="fau 1"
 FT   exon            408..504
 FT                   /number=1
-FT   intron          505..773
-FT                   /number=1
-FT   exon            774..856
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -527,7 +530,7 @@ The output is a normal sequence file.
 <p><h3>File: result.seq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;HSFAU X65923.1 H.sapiens fau mRNA
+&gt;X65923 X65923.1 H.sapiens fau mRNA
 ctcgactccat
 </pre>
 </td></tr></table><p>
@@ -537,7 +540,7 @@ ctcgactccat
 <p><h3>File: result2.seq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;HSFAU1 X65921.1 H.sapiens fau 1 gene
+&gt;X65921 X65921.1 H.sapiens fau 1 gene
 tccctctcgatacactcgggacaagttagggc
 </pre>
 </td></tr></table><p>

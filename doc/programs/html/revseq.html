@@ -42,13 +42,13 @@ complement of the sequence.
 </H2>
 <b>Here is a sample session with revseq</b>
 <p>
-To create the reverse complement (reverse sense) of 'tembl:hsfau' in the file 'hsfau.rev': 
+To create the reverse complement (reverse sense) of 'tembl:x65923' in the file 'x65923.rev': 
 <p>
 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>revseq tembl:hsfau hsfau.rev </b>
+% <b>revseq tembl:x65923 x65923.rev </b>
 Reverse and complement a sequence
 
 </pre></td></tr></table><p>
@@ -57,13 +57,13 @@ Reverse and complement a sequence
 <p>
 <b>Example 2</b>
 <p>
-To create the complement of 'tembl:hsfau' in the file 'hsfau.rev': 
+To create the complement of 'tembl:x65923' in the file 'x65923.rev': 
 <p>
 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>revseq tembl:hsfau hsfau.rev -norev </b>
+% <b>revseq tembl:x65923 x65923.rev -norev </b>
 Reverse and complement a sequence
 
 </pre></td></tr></table><p>
@@ -72,13 +72,13 @@ Reverse and complement a sequence
 <p>
 <b>Example 3</b>
 <p>
-To create the reverse of 'tembl:hsfau' in the file 'hsfau.rev': 
+To create the reverse of 'tembl:x65923' in the file 'x65923.rev': 
 <p>
 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>revseq tembl:hsfau hsfau.rev -nocomp </b>
+% <b>revseq tembl:x65923 x65923.rev -nocomp </b>
 Reverse and complement a sequence
 
 </pre></td></tr></table><p>
@@ -219,19 +219,17 @@ Reverse and complement a sequence
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:x65923' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:hsfau</h3>
+<p><h3>Database entry: tembl:x65923</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HSFAU      standard; RNA; HUM; 518 BP.
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
 XX
 AC   X65923;
 XX
-SV   X65923.1
-XX
 DT   13-MAY-1992 (Rel. 31, Created)
-DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
 XX
 DE   H.sapiens fau mRNA
 XX
@@ -239,7 +237,8 @@ KW   fau gene.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-518
@@ -251,31 +250,35 @@ RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
 XX
 RN   [2]
 RP   1-518
-RX   MEDLINE; 93368957.
+RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
 RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
 RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
-RL   Oncogene 8:2537-2546(1993).
+RL   Oncogene 8(9):2537-2546(1993).
 XX
-DR   SWISS-PROT; P35544; UBIM_HUMAN.
-DR   SWISS-PROT; Q05472; RS30_HUMAN.
+DR   H-InvDB; HIT000322806.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..518
-FT                   /chromosome="11q"
-FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
-FT                   /tissue_type="placenta"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
 FT                   /clone_lib="cDNA"
 FT                   /clone="pUIA 631"
-FT                   /map="13"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
 FT   misc_feature    57..278
 FT                   /note="ubiquitin like part"
 FT   CDS             57..458
-FT                   /db_xref="SWISS-PROT:P35544"
-FT                   /db_xref="SWISS-PROT:Q05472"
 FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
@@ -313,10 +316,10 @@ One or more sequences are written out.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hsfau.rev</h3>
+<p><h3>File: x65923.rev</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;HSFAU X65923.1 H.sapiens fau mRNA
+&gt;X65923 X65923.1 H.sapiens fau mRNA
 ttttttttttgactgaactaagtggcttttttattagagaaagccagaattacaaaagac
 ttaagagttggcattggggcccttcttcttgccaaaggtgggcacaacgttgacaaagcg
 ccggttgtactgcatccgccgcttagcccgacctgtcttcttcttcttcttctcctgttt
@@ -331,10 +334,10 @@ gtcccagctaccgcgaagatggagtcgagaaagaggaa
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: hsfau.rev</h3>
+<p><h3>File: x65923.rev</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;HSFAU X65923.1 H.sapiens fau mRNA
+&gt;X65923 X65923.1 H.sapiens fau mRNA
 aaggagaaagagctgaggtagaagcgccatcgaccctggcggcaagtcagcggttatacg
 tcgagaaacaggcgcgggtcctcgatgtgtggaagctccactggccggtcctttgccagc
 gggtctagttccgagtacatcggagtgacctcccgtaacggggccttctagttcagcacg
@@ -349,10 +352,10 @@ agattattttttcggtgaatcaagtcagtttttttttt
 
 <a name="output.3"></a>
 <h3>Output files for usage example 3</h3>
-<p><h3>File: hsfau.rev</h3>
+<p><h3>File: x65923.rev</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;HSFAU X65923.1 H.sapiens fau mRNA
+&gt;X65923 X65923.1 H.sapiens fau mRNA
 aaaaaaaaaactgacttgattcaccgaaaaaataatctctttcggtcttaatgttttctg
 aattctcaaccgtaaccccgggaagaagaacggtttccacccgtgttgcaactgtttcgc
 ggccaacatgacgtaggcggcgaatcgggctggacagaagaagaagaagaagaggacaaa

@@ -61,9 +61,9 @@ This does not skip any sequences. It is exactly equivalent to seqret:
 
 % <b>skipseq </b>
 Reads and writes (returns) sequences, skipping first few
-Input (gapped) sequence(s): <b>tembl:eclac*</b>
+Input (gapped) sequence(s): <b>@eclac.list</b>
 Number of sequences to skip at start [0]: <b></b>
-output sequence(s) [eclac.fasta]: <b></b>
+output sequence(s) [j01636.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -79,8 +79,8 @@ This skips the first input sequence, writing out the others:
 
 % <b>skipseq -skip 1 </b>
 Reads and writes (returns) sequences, skipping first few
-Input (gapped) sequence(s): <b>tembl:eclac*</b>
-output sequence(s) [eclac.fasta]: <b></b>
+Input (gapped) sequence(s): <b>@eclac.list</b>
+output sequence(s) [j01636.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -214,9 +214,25 @@ output sequence(s) [eclac.fasta]: <b></b>
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
+<p><h3>File: eclac.list</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+#Formerly ECLAC
+tembl:J01636
 
-'tembl:eclac*' is a sequence entry in the example nucleic acid database 'tembl'
-<p>
+#Formerly ECLACA
+tembl:X51872
+
+#Formerly ECLACI
+tembl:V00294
+
+#Formerly ECLACY
+tembl:V00295
+
+#Formerly ECLACZ
+tembl:V00296
+</pre>
+</td></tr></table><p>
 
 <p>
 
@@ -237,10 +253,10 @@ skipped the first few sequences.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: eclac.fasta</h3>
+<p><h3>File: j01636.fasta</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;ECLAC J01636.1 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+&gt;J01636 J01636.1 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
 caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
 gtctcttatcagaccgtttcccgcgtggtgaaccaggccagccacgtttctgcgaaaacg
@@ -350,10 +366,10 @@ tgtcaaaaataataataa
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: eclac.fasta</h3>
+<p><h3>File: j01636.fasta</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;ECLACA X51872.1 Escherichia coli lacA gene for thiogalactoside transacetylase
+&gt;X51872 X51872.1 Escherichia coli lacA gene for thiogalactoside transacetylase
 gtgaatgaagtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccgaccaaca
 tatcataacggagtgatcgcattgaacatgccaatgaccgaaagaataagagcaggcaag
 ctatttaccgatatgtgcgaaggcttaccggaaaaaagacttcgtgggaaaacgttaatg
@@ -385,7 +401,7 @@ gcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaagcagca
 gcgcactttgcgggtaaagctcacgcatcaatgcaccgacggcaatcagcaacagactga
 tggcgacactgcgacgttcgctgacatgctgatgaagccagcttccggccagcgccagcc
 cgcccatggtaaccaccggcagagcggtcgac
-&gt;ECLACI V00294.1 E. coli laci gene (codes for the lac repressor).
+&gt;V00294 V00294.1 E. coli laci gene (codes for the lac repressor).
 ccggaagagagtcaattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgca
 gagtatgccggtgtctcttatcagaccgtttcccgcgtggtgaaccaggccagccacgtt
 tctgcgaaaacgcgggaaaaagtggaagcggcgatggcggagctgaattacattcccaac

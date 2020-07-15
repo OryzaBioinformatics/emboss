@@ -2,16 +2,14 @@
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:hs989235' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:h45989' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:hs989235</h3>
+<p><h3>Database entry: tembl:h45989</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HS989235   standard; RNA; EST; 495 BP.
+ID   H45989; SV 1; linear; mRNA; EST; HUM; 495 BP.
 XX
 AC   H45989;
-XX
-SV   H45989.1
 XX
 DT   18-NOV-1995 (Rel. 45, Created)
 DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
@@ -23,7 +21,8 @@ KW   EST.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-495
@@ -34,7 +33,10 @@ RA   Wohldmann P., Wilson R.;
 RT   "The WashU-Merck EST Project";
 RL   Unpublished.
 XX
-DR   RZPD; IMAGp998F03326; IMAGp998F03326.
+DR   GDB; 3839990.
+DR   GDB; 4193257.
+DR   RZPD; IMAGp998F03326.
+DR   UNILIB; 555; 300.
 XX
 CC   On May 8, 1995 this sequence version replaced gi:800819.
 CC   Contact: Wilson RK
@@ -56,9 +58,13 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..495
-FT                   /db_xref="taxon:9606"
-FT                   /db_xref="ESTLIB:300"
-FT                   /db_xref="RZPD:IMAGp998F03326"
+FT                   /organism="Homo sapiens"
+FT                   /lab_host="DH10B (ampicillin resistant)"
+FT                   /mol_type="mRNA"
+FT                   /sex="Male"
+FT                   /dev_stage="55-year old"
+FT                   /clone_lib="Soares adult brain N2b5HB55Y"
+FT                   /clone="IMAGE:177794"
 FT                   /note="Organ: brain; Vector: pT7T3D (Pharmacia) with a
 FT                   modified polylinker; Site_1: Not I; Site_2: Eco RI; 1st
 FT                   strand cDNA was primed with a Not I - oligo(dT) primer [5'
@@ -76,12 +82,9 @@ FT                   tissues representing the following areas of the brain:
 FT                   frontal, parietal, temporal and occipital cortex from the
 FT                   left and right hemispheres, subcortical white matter, basal
 FT                   ganglia, thalamus, cerebellum, midbrain, pons and medulla."
-FT                   /sex="Male"
-FT                   /organism="Homo sapiens"
-FT                   /clone="IMAGE:177794"
-FT                   /clone_lib="Soares adult brain N2b5HB55Y"
-FT                   /dev_stage="55-year old"
-FT                   /lab_host="DH10B (ampicillin resistant)"
+FT                   /db_xref="taxon:9606"
+FT                   /db_xref="RZPD:IMAGp998F03326"
+FT                   /db_xref="UNILIB:555"
 XX
 SQ   Sequence 495 BP; 73 A; 135 C; 169 G; 104 T; 14 other;
      ccggnaagct cancttggac caccgactct cgantgnntc gccgcgggag ccggntggan        60
@@ -96,59 +99,59 @@ SQ   Sequence 495 BP; 73 A; 135 C; 169 G; 104 T; 14 other;
 //
 </pre>
 </td></tr></table><p>
-<p><h3>Database entry: tembl:hsnfg9</h3>
+<p><h3>Database entry: tembl:z69719</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HSNFG9     standard; DNA; HUM; 33760 BP.
+ID   Z69719; SV 1; linear; genomic DNA; STD; HUM; 33760 BP.
 XX
 AC   Z69719;
 XX
-SV   Z69719.1
-XX
 DT   26-FEB-1996 (Rel. 46, Created)
-DT   22-NOV-1999 (Rel. 61, Last updated, Version 3)
+DT   18-JAN-2007 (Rel. 90, Last updated, Version 6)
 XX
-DE   Human DNA sequence from cosmid NFG9 from a contig from the tip of the short
-DE   arm of chromosome 16, spanning 2Mb of 16p13.3. Contains Interleukin 9
-DE   Receptor Pseudogene, repeat polymorphism, ESTs, CpG islands and endogenous
-DE   retroviral DNA.
+DE   Human DNA sequence from clone XX-CNFG9 on chromosome 16
 XX
-KW   16p13.3; CpG island; Interleukin 9 Receptor Pseudogene;
-KW   repeat polymorphism.
+KW   C16orf33; HTG; POLR3K; RHBDF1.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-33760
 RA   Kershaw J.;
 RT   ;
-RL   Submitted (22-FEB-1996) to the EMBL/GenBank/DDBJ databases.
-RL   Sanger Centre, Hinxton, Cambridgeshire, CB10 1RQ, England. E-mail enquires:
-RL   humquery@sanger.ac.uk
+RL   Submitted (16-JAN-2007) to the EMBL/GenBank/DDBJ databases.
+RL   Wellcome Trust Sanger Institute, Hinxton, Cambridgeshire, CB10 1SA, UK.
+RL   E-mail enquiries: vega@sanger.ac.uk Clone requests:
+RL   clonerequest@sanger.ac.uk
 XX
-CC   IMPORTANT:  This sequence is not the entire insert of clone
-CC   NFG9.  It may be shorter because we only sequence overlapping
-CC   sections once, or longer because we arrange for a small
-CC   overlap between neighbouring submissions.
+DR   EMBL-JOIN; Z69720.
+DR   GDB; 11502921.
 XX
-CC   The true left end of clone NFG9 is at 1 in this sequence.
-CC   The true left end of clone RA36 is at 25872.
-XX
-CC   NFG9 is from a 280kb clone contig extending from the telomere of 16p.
-CC   Higgs D.R., Flint J. unpublished. MRC Molecular Haematology Unit,
-CC   Institute of Molecular Medicine, Oxford.
-CC   NFG9 is from the library CV007K. Choo et al.,(1986) Gene 46. 277-286.
+CC   -------------- Genome Center
+CC   Center: Wellcome Trust Sanger Institute
+CC   Center code: SC
+CC   Web site: http://www.sanger.ac.uk
+CC   Contact: vega@sanger.ac.uk
+CC   --------------
+CC   
+CC   This sequence was finished as follows unless otherwise noted: all regions
+CC   were either double-stranded or sequenced with an alternate chemistry or
+CC   covered by high quality data (i.e., phred quality &gt;= 30); an attempt was
+CC   made to resolve all sequencing problems, such as compressions and repeats;
+CC   all regions were covered by at least one subclone; and the assembly was
+CC   confirmed by restriction digest, except on the rare occasion of the clone
+CC   being a YAC.
+CC   
+CC   The following abbreviations are used to associate primary accession
+CC   numbers given in the feature table with their source databases:
+CC   Em:, EMBL; Sw:, SWISSPROT; Tr:, TREMBL; Wp:, WORMPEP;
+CC   Information on the WORMPEP database can be found at
+CC   http://www.sanger.ac.uk/Projects/C_elegans/wormpep
 XX
 FH   Key             Location/Qualifiers
-FH
-FT   source          1..33760
-FT                   /chromosome="16"
-FT                   /db_xref="taxon:9606"
-FT                   /organism="Homo sapiens"
-FT                   /map="16p13.3"
-FT                   /clone_lib="CV007K"
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

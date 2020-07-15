@@ -45,7 +45,7 @@ Usage
    Here is a sample session with dotpath
 
 
-% dotpath tembl:AF129756 tembl:AP000504 -word 20 -graph cps -overlaps 
+% dotpath tembl:AF129756 tembl:BA000025 -word 20 -graph cps -overlaps 
 Non-overlapping wordmatch dotplot of two sequences
 
 Created dotpath.ps
@@ -63,7 +63,7 @@ Command line arguments
    -wordsize           integer    [4] Word size (Integer 2 or more)
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png)
+                                  tekt, tek, none, data, xterm, png, gif)
 
    Additional (Optional) qualifiers:
    -overlaps           boolean    [N] Displays the overlapping matches (in
@@ -140,14 +140,12 @@ Input file format
 
   Database entry: tembl:AF129756
 
-ID   AF129756   standard; DNA; HUM; 184666 BP.
+ID   AF129756; SV 1; linear; genomic DNA; STD; HUM; 184666 BP.
 XX
 AC   AF129756;
 XX
-SV   AF129756.1
-XX
 DT   12-MAR-1999 (Rel. 59, Created)
-DT   29-OCT-1999 (Rel. 61, Last updated, Version 2)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 5)
 XX
 DE   Homo sapiens MSH55 gene, partial cds; and CLIC1, DDAH, G6b, G6c, G5b, G6d,
 DE   G6e, G6f, BAT5, G5b, CSK2B, BAT4, G4, Apo M, BAT3, BAT2, AIF-1, 1C7, LST-1
@@ -159,16 +157,27 @@ XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
 ;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
+RP   1-184666
+RX   DOI; 10.1101/gr.1736803.
+RX   PUBMED; 14656967.
+RA   Xie T., Rowen L., Aguado B., Ahearn M.E., Madan A., Qin S., Campbell R.D.,
+RA   Hood L.;
+RT   "Analysis of the gene-dense major histocompatibility complex class III
+RT   region and its comparison to mouse";
+RL   Genome Res. 13(12):2621-2636(2003).
+XX
+RN   [2]
 RP   1-184666
 RA   Rowen L., Madan A., Qin S., Shaffer T., James R., Ratcliffe A., Abbasi N.,
 RA   Dickhoff R., Loretz C., Madan A., Dors M., Young J., Lasky S., Hood L.;
 RT   "Sequence of the human major histocompatibility complex class III region";
 RL   Unpublished.
 XX
-RN   [2]
+RN   [3]
 RP   1-184666
 RA   Rowen L.;
 RT   ;
@@ -177,22 +186,13 @@ RL   Department of Molecular Biotechnology, Box 357730 University of Washington
 ,
 RL   Seattle, WA 98195, USA
 XX
-RN   [3]
+RN   [4]
 RP   1-184666
 RA   Rowen L.;
 RT   ;
 RL   Submitted (28-OCT-1999) to the EMBL/GenBank/DDBJ databases.
 RL   Multimegabase Sequencing Center, University of Washington, PO Box 357730,
 RL   Seattle, WA 98195, USA
-XX
-DR   EPD; EP11158; HS_TNFA.
-DR   EPD; EP11159; HS_TNFB.
-DR   SPTREMBL; O00452; O00452.
-DR   SPTREMBL; O14931; O14931.
-DR   SPTREMBL; O95866; O95866.
-DR   SPTREMBL; O95868; O95868.
-DR   SPTREMBL; O95869; O95869.
-DR   SPTREMBL; O95870; O95870.
 
 
   [Part of this file has been deleted for brevity]
@@ -299,32 +299,30 @@ DR   SPTREMBL; O95870; O95870.
 6
 //
 
-  Database entry: tembl:AP000504
+  Database entry: tembl:BA000025
 
-ID   AP000504   standard; DNA; HUM; 100000 BP.
+ID   BA000025; SV 2; linear; genomic DNA; STD; HUM; 2229817 BP.
 XX
-AC   AP000504; BA000025;
+AC   BA000025; AP000502-AP000521;
 XX
-SV   AP000504.1
+DT   09-DEC-2004 (Rel. 82, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 4)
 XX
-DT   28-SEP-1999 (Rel. 61, Created)
-DT   22-AUG-2001 (Rel. 68, Last updated, Version 3)
-XX
-DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section
-DE   3/20.
+DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region.
 XX
 KW   .
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
 ;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
-RP   1-100000
+RP   1-2229817
 RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
 RT   ;
-RL   Submitted (21-SEP-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (21-AUG-2001) to the EMBL/GenBank/DDBJ databases.
 RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
 RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
 RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
@@ -335,127 +333,129 @@ RA   Shiina S., Tamiya G., Oka A., Inoko H.;
 RT   "Homo sapiens 2,229,817bp genomic DNA of 6p21.3 HLA class I region";
 RL   Unpublished.
 XX
-DR   SWISS-PROT; O00299; CLI1_HUMAN.
-DR   SWISS-PROT; O43196; MSH5_HUMAN.
-DR   SWISS-PROT; O95445; APOM_HUMAN.
-DR   SWISS-PROT; O95865; DDH2_HUMAN.
-DR   SWISS-PROT; O95867; NG24_HUMAN.
-DR   SWISS-PROT; P13862; KC2B_HUMAN.
-XX
-CC   This sequence is conducted by Tokai University as a JST sequencing
-CC   Team.
-CC   Principal Investigator: Hidetoshi Inoko Ph.D
-CC   Phone:+81-463-93-1121, Fax:+81-463-94-8884,
-CC   The sequence is submitted by Human Genome Sequencing in ALIS
-CC   project of JST
-CC   Japan Science and Technology Corporation (JST)
-CC   5-3, Yonbancyo, Chiyoda-ku, Tokyo, 102-0081 Japan
-CC   For further infomation about this sequences, please visit our
-CC   sequence archive Web site (http://www-alis.tokyo.jst.go.jp/HGS/top.
+DR   EPD; EP11158; HS_TNF.
+DR   EPD; EP11159; HS_LTA.
+DR   EPD; EP73522; HS_HLA-B.
+DR   EPD; EP73908; HS_GTF2H4.
+DR   EPD; EP73940; HS_NEU1.
+DR   EPD; EP74013; HS_VARS2.
+DR   EPD; EP74203; HS_MRPS18B.
+DR   EPD; EP74346; HS_HLA-E.
+DR   EPD; EP74389; HS_BAT1.
+DR   EPD; EP74485; HS_IER3.
+DR   GDB; 11515913.
+DR   GOA; P59942.
+DR   IMGT/HLA; HLA02629; J*01010102.
+DR   RFAM; RF00017.
+DR   RFAM; RF00019.
+DR   RFAM; RF00026.
+DR   RFAM; RF00100.
+DR   RFAM; RF00137.
+DR   RFAM; RF00276.
 
 
   [Part of this file has been deleted for brevity]
 
-     gggtggatca tgaggtcaag agatcgagac tatcctggct aacatgatga aaccccgtct     9708
+     ttggccccac cccagcatgt ctccaggttc ctctcagccc tggttccttt tggccctgca   222690
 0
-     ctactaaaaa tacaaaaaat tagctgggca tggtggcggg cacctgtagt cccagctact     9714
+     gtcacaatgg gcaacactgt gacgcaccct gtcctgtgtc acagtgtcat acactcaggc   222696
 0
-     cgggaggctg agtcaggaga atggtgtgaa cccaggagac ggagcttgca gtgagctgag     9720
+     tcacattgcc cctaggccac ttgccagcca agggacatgg ccacattttg tgtcttctgc   222702
 0
-     gtcgcaccac tgcactccag cctgggtgat agagcgagac tctgtctcaa aaaaaaaaaa     9726
+     acctcagcct tgctttcaag tgcaggtgat gatggcaccc acgcagaaca aatgttattt   222708
 0
-     aaaaaaaaaa aaaacaaaaa ttagccgggt gtggtggcag gcaacttaat cccagctact     9732
+     gctatcttcg tcgagtttag tcatccaatt ttccaaccct cactgggcaa ggaagagtgt   222714
 0
-     tgggaggcag aggcaggaga atcgtttgaa cctgggaggc ggaggttgaa gagaatagaa     9738
+     ggtttccacc aagaaggcag gatgtcagca gtcacagggg caaccaacag ggaaagccgc   222720
 0
-     gctctgctgg tccagagaag gattgggcca gggctctggg agaccaggga gaaagagggc     9744
+     cggaaaatag accccacagg aagcacaggt gtccagtgga gatgggaacc ctgcagattt   222726
 0
-     acatgtggtc cctgttgact gtgagggtgg gaatctgagg aaggctttgg ctcattgccc     9750
+     gaccgtcttt aagcagatta gagagattac cgttactaac aacttagcca taaaagttta   222732
 0
-     cttgggtttg tccacagcca tccttcccct gcggagtatg tcgaggtgct ccaggagcta     9756
+     ttagctattt tcaaaaagca taaaattatg taatataatt ttttttaaat ttccatcaat   222738
 0
-     cagcggctgg agagtcgcct ccagcccttc ttgcagcgct actacgaggt tctgggtgct     9762
+     acaaaactaa tctgggcact gcaacttccg gtgggcaact gggataggcg gcatcatcag   222744
 0
-     gctgccacca cggactacaa taacaatgtg agccctttga tggccctgcc ctttctcctc     9768
+     gaaggcgagc cctgccgtgc cccatgtgcc agtgccccag atggcggcag cctccccaga   222750
 0
-     agccccagta ctcccaaaac agaacaggct gaaatacaga taactctttc cctccctgga     9774
+     agcaccttgt atctcccctg cacagggcca gggtcccagc ttcccataca ccttctcctg   222756
 0
-     aaaacattgc aacagggcca ggtgcagtgg ctcacgcctg taatcccagc actttgggag     9780
+     ctttttcttt tctgtccttt cctttttcaa taaaccacct gcaaaaaggg aaaaccattc   222762
 0
-     gccaaggtgg gcggatcatc tgagatcggg agtttgagac cagcctggcc aacatggtgc     9786
+     tgaggacaag aaacatgtca atgggaaata cacagttgcc agagggtaaa aggccctgtt   222768
 0
-     aaccccatct ctactgaaaa tataaacatt agctggatgt agtggtgcac acctgtaatc     9792
+     cattctcatt gaaaagctca ggtatttctg ttaaagtctc tccttttact ttaggatgct   222774
 0
-     ccagctactc aggaggctga ggcaggagaa tcgctagaac tcgggaggag ggggttgcag     9798
+     gactcctgcg tccatctcaa cctgggcatc gtgccaccac cttcaagaag agaaaaacta   222780
 0
-     tgagccgaga ttgcactact gcactctagc ctgggtgaca gagcgagact gtctcaaaaa     9804
+     agtagtgctt tgcaaagggg cagcagcatt tctcatttct gaccatgtca ggcacatggc   222786
 0
-     acaaaacaaa acaaaaaaac acacattgca acaaaacaat ttctctctaa acctgtaagt     9810
+     catgcagatg agcaggtggg ggacacaggt gagtctccag acctgctctc ctcccacagt   222792
 0
-     gattttgtcc tcccttacag agaaggtgat aatctttgct gtaagcactg tcctcgtatc     9816
+     acattcttga gtctttttaa acagttgtga aaatgccaca gatgcaagca cctgtgggcc   222798
 0
-     gtaccccttg tgcccctgaa tgaatttaga aaatgtaaag tacaggagat cagtatatga     9822
+     actcccatgg ggaccgttgc acaaggcagt gccactcatt ctcagaacct cctaccatgg   222804
 0
-     tgacttactg attcatagta gtgttttaat aggatgttcc ttatgtgaat aagatataat     9828
+     gctatgctta gtgacccgag gccaagccaa ggaagacgcc agccacaggg tgccatcctc   222810
 0
-     ttatttgcaa agatttggtc tacatgtaaa cttccaagga tataactgaa agttttggag     9834
+     aggggcatgc tgccagcagg ggcaaagtta tccctagcaa caagatacag aaagaaagaa   222816
 0
-     gacatggtat tctcagtagg cattattgct tttattagtg agatggactc cagcttgata     9840
+     aaaaggaagg aaatgtagcc aatgggccgg ttcaggttct tgactttgcc acacaaaaga   222822
 0
-     ttttctgcct ttttgtgttt ggctggttgt gcgcagcacg agggccggga ggaggatcag     9846
+     atttgagagc aagtccaaag taaaagtcag caagagaatt tattgcaaag tgaaagtaca   222828
 0
-     cggttgatca acttggtagg ggagagcctg cgactgctgg gcaacacctt tgttgcactg     9852
+     ctctgacagc tgatcagagc agctgctcaa aagagagaca gtaccctccc ctcacgggag   222834
 0
-     tctgacctgc gctgcaatct ggcctgcacg cccccacgac acctgcatgt ggtccggcct     9858
+     tcttacatga ttattcatga ataggtggga aggggtattg ttttaagcat gttctgtggt   222840
 0
-     atgtctcact acaccacccc catggtgctc cagcaggcag ccattcccat acaggtgggt     9864
+     ctcttgaacg tgcatgcact gtggttgtac atatcagcac acacatctta cgtctcatta   222846
 0
-     tagggggagt ctggcctgag ggagagtgag gggtgttgat agagtgaccc agggtagcta     9870
+     gcatcttaac ttccctctca gagttgtgtt tgctactatt gtaatgagca taggtcagcc   222852
 0
-     ctgggcctga aggaggttag gaaaggagga gactggaaac atggtgatga aggctggaga     9876
+     caaggacact attcatgggt ttctgggctt cctcagatgt ggggatgcct cccttggctc   222858
 0
-     tactttagag gtttatcatg aggttttctt ggttaggctc ttgtattttt ctcacatctg     9882
+     ttctacctct ttgctgcagg atgttctaac cacaagccca ggatatggtt tgcgcactgt   222864
 0
-     cctgtccatc tgtctttttc agatcaatgt gggaaccact gtgaccatga caggaaatgg     9888
+     cgaacagctt gttctctcca tcaacctgac aagtctcttg tttcctttca agggaggctg   222870
 0
-     gactcggccc cccccaactc ccaatgcaga ggcacctccc cctggtcctg ggcaggcctc     9894
+     tgaacaccct atctcactga cctcagaagg acagtacagc agtagccacc atgaccaaaa   222876
 0
-     atccgtggct ccgtcttcta ccaatgtcga gtcctcagct gagggggctc ccccgccagg     9900
+     agatgattcc agaagtgcag gacaactccc tacccagagg ctgtggctgt gcagtaacac   222882
 0
-     tccagctccc ccgccagcca ccagccaccc gagggtcatc cggatttccc accagagtgt     9906
+     accaagaggg gagtccagct ggctctcagg gtgctcacta ccctcatctg ggggcctgga   222888
 0
-     ggaacccgtg gtcatgatgc acatgaacat tcaaggtgag aatagttgct ggcgagaaga     9912
+     ggacgtcaat tcctgagaac gccacgttct agtgagtaga atgaactgag agatacacag   222894
 0
-     gcaggatcag catgatgagg gaggttcatg ctgaggtgtg agggaacagg gtggggaagg     9918
+     caaagctcca catacttttc cttttctttg tgcccgcagt gttcttcatc agtgtgctct   222900
 0
-     gagaggcaca tgctggtggt ggtagcctgg ggaccagagc agaagcttaa gtagacagat     9924
+     cgcttttcag ctactactgt tggctggctg gaaaaaatag aacaatagta aaaattagag   222906
 0
-     gtggggggtg tgggggttgg tttgtctttg gaggtgtgtt tgtgtggtga agggagtacc     9930
+     accagtcttt ggtgatgaag agaaatattg gctacttcca gtattttcta gctttggtta   222912
 0
-     tctccctgtt tagatggagg gaaaggcagg ctttctgatt gggggattat gggcctgaag     9936
+     tggttgcagt tttccagctc accttgtggg gatgaattca gaaaaaagtt acaaattgaa   222918
 0
-     tatgcctgat ctcagaagga tatagttagg ccttggccct acctacctca gggccactgt     9942
+     atgaacatgc cagaagtatt ggctcaaatc aacgttgtcc tattaagcca cttagtgaat   222924
 0
-     ctctgtctcc ctgcccagat tctggcacac agcctggtgg tgttccgagt gctcccactg     9948
+     caaaagaccg cttgttggac tgttaatctc ggtggccaga gaaaggagct gaagaaggtg   222930
 0
-     gccccctggg accccctggt catggccaaa ccctgggtaa gagtgagggc atcagggcag     9954
+     ttgccagatc aggaacaaat aattacagcg gcaatagaaa atggaagacc acttgttcat   222936
 0
-     gctgagctct gggtagagaa agggaagggc tgagtgggtg ggttgaaggg gtccaggttc     9960
+     aaccatttga ataagggcaa ggtgtatgga aacacattat gaactgatat tttcagtttt   222942
 0
-     aaggttacat cagacccgcc ccccaggctc caccctcatc cagctgccct ccctgccccc     9966
+     gtttgcaaga aaatgattaa taaggtgaaa taattgaagt atcacggaag atacattaaa   222948
 0
-     tgagttcatg cacgccgtcg cccaccagat cactcatcag gccatggtgg cagctgttgc     9972
+     aaaaaaaaaa gcctttgtac agtttgctgg agccacagat gtcctactcc agagcagaac   222954
 0
-     ctccgcggcc gcaggtaatg acctggaagg ggaggcttgg gaggtagggc acagtccatg     9978
+     aatgcctgaa tcttcagggt ccatttctgc cgcattcact agcaaccaca aatgtgactt   222960
 0
-     gtggcagctg gctggcaagg gcctggccct cagccctctt cggtctgtct cttctgccac     9984
+     aattttactt tggaaataat gcttacccat tgtgagatgc tgtaatatga accatcatta   222966
 0
-     ccacaggaca gcaggtgcca ggcttcccaa cagctccaac ccgggtggtg attgcccggc     9990
+     catgttaaca tggcacatgg aattttgagt gtctaagtta catttttaga gttgtttctt   222972
 0
-     ccactcctcc acaggctcgg ccttcccatc ctggagggcc cccagtctct gggacactgg     9996
+     agtagccatg tgagtttcca ctccaaaaac acaagctaaa aacttgtttt gagtgaagga   222978
 0
-     tgagcaaggg tcggggagtt ctagtgcgta acagtctagg                          10000
-0
+     catctagggc aaatggtggc tgaaagtgaa tgagatc                            222981
+7
 //
 
 Output file format

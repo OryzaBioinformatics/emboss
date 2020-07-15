@@ -6,9 +6,9 @@
 
 % <b>recoder </b>
 Remove restriction sites but maintain same translation
-Input nucleotide sequence: <b>tembl:hsfau</b>
+Input nucleotide sequence: <b>tembl:x65923</b>
 Comma separated enzyme list [all]: <b>EcoRII</b>
-Output report [hsfau.recoder]: <b></b>
+Output report [x65923.recoder]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

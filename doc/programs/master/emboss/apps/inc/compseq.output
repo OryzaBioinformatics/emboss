@@ -11,7 +11,7 @@
 # word has equal frequency.
 #
 # The input sequences are:
-#	HSFAU
+#	X65923
 
 
 Word size	2
@@ -54,7 +54,7 @@ Other	0		0.0000000	0.0000000	10000000000.0000000
 # word has equal frequency.
 #
 # The input sequences are:
-#	HSFAU
+#	X65923
 
 
 Word size	6
@@ -166,7 +166,7 @@ Other	0		0.0000000	0.0000000	10000000000.0000000
 # The Expected frequencies are taken from the file: ../../data/prev.comp
 #
 # The input sequences are:
-#	HSFAU
+#	X65923
 
 
 Word size	3

@@ -58,9 +58,9 @@ The output for 'recoder' is similar to the format used by 'silent'.
 
 % <b>recoder </b>
 Remove restriction sites but maintain same translation
-Input nucleotide sequence: <b>tembl:hsfau</b>
+Input nucleotide sequence: <b>tembl:x65923</b>
 Comma separated enzyme list [all]: <b>EcoRII</b>
-Output report [hsfau.recoder]: <b></b>
+Output report [x65923.recoder]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -206,19 +206,17 @@ Output report [hsfau.recoder]: <b></b>
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:x65923' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:hsfau</h3>
+<p><h3>Database entry: tembl:x65923</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   HSFAU      standard; RNA; HUM; 518 BP.
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
 XX
 AC   X65923;
 XX
-SV   X65923.1
-XX
 DT   13-MAY-1992 (Rel. 31, Created)
-DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
 XX
 DE   H.sapiens fau mRNA
 XX
@@ -226,7 +224,8 @@ KW   fau gene.
 XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-518
@@ -238,31 +237,35 @@ RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
 XX
 RN   [2]
 RP   1-518
-RX   MEDLINE; 93368957.
+RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
 RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
 RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
-RL   Oncogene 8:2537-2546(1993).
+RL   Oncogene 8(9):2537-2546(1993).
 XX
-DR   SWISS-PROT; P35544; UBIM_HUMAN.
-DR   SWISS-PROT; Q05472; RS30_HUMAN.
+DR   H-InvDB; HIT000322806.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..518
-FT                   /chromosome="11q"
-FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
-FT                   /tissue_type="placenta"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
 FT                   /clone_lib="cDNA"
 FT                   /clone="pUIA 631"
-FT                   /map="13"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
 FT   misc_feature    57..278
 FT                   /note="ubiquitin like part"
 FT   CDS             57..458
-FT                   /db_xref="SWISS-PROT:P35544"
-FT                   /db_xref="SWISS-PROT:Q05472"
 FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
@@ -298,22 +301,22 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hsfau.recoder</h3>
+<p><h3>File: x65923.recoder</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: recoder
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: recoder
-#    -sequence tembl:hsfau
+#    -sequence tembl:x65923
 #    -enzymes EcoRII
 # Report_format: table
-# Report_file: hsfau.recoder
+# Report_file: x65923.recoder
 ########################################
 
 #=======================================
 #
-# Sequence: HSFAU     from: 1   to: 518
+# Sequence: X65923     from: 1   to: 518
 # HitCount: 34
 #
 # KEY:

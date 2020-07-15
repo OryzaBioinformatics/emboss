@@ -4,7 +4,7 @@
 <p><h3>File: result.seq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;HSFAU X65923.1 H.sapiens fau mRNA
+&gt;X65923 X65923.1 H.sapiens fau mRNA
 ctcgactccat
 </pre>
 </td></tr></table><p>
@@ -14,7 +14,7 @@ ctcgactccat
 <p><h3>File: result2.seq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;HSFAU1 X65921.1 H.sapiens fau 1 gene
+&gt;X65921 X65921.1 H.sapiens fau 1 gene
 tccctctcgatacactcgggacaagttagggc
 </pre>
 </td></tr></table><p>

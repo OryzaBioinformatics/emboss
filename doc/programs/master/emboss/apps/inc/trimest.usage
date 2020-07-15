@@ -4,7 +4,7 @@
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>trimest tembl:hsfau hsfau.seq </b>
+% <b>trimest tembl:x65923 x65923.seq </b>
 Trim poly-A tails off EST sequences
 
 </pre></td></tr></table><p>

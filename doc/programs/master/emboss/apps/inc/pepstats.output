@@ -6,12 +6,12 @@
 <pre>
 PEPSTATS of LACI_ECOLI from 1 to 360
 
-Molecular weight = 38563.97  		Residues = 360   
-Average Residue Weight  = 107.122 	Charge   = 1.5   
+Molecular weight = 38590.05  		Residues = 360   
+Average Residue Weight  = 107.195 	Charge   = 1.5   
 Isoelectric Point = 6.8820
 A280 Molar Extinction Coefficient  = 21620   
 A280 Extinction Coefficient 1mg/ml = 0.56      
-Improbability of expression in inclusion bodies = 0.670
+Improbability of expression in inclusion bodies = 0.660
 
 Residue		Number		Mole%		DayhoffStat
 A = Ala		44		12.222 		1.421  	
@@ -25,14 +25,14 @@ H = His		7		1.944  		0.972
 I = Ile		18		5.000  		1.111  	
 J = ---		0		0.000  		0.000  	
 K = Lys		11		3.056  		0.463  	
-L = Leu		40		11.111 		1.502  	
+L = Leu		41		11.389 		1.539  	
 M = Met		10		2.778  		1.634  	
 N = Asn		12		3.333  		0.775  	
 O = ---		0		0.000  		0.000  	
 P = Pro		14		3.889  		0.748  	
 Q = Gln		28		7.778  		1.994  	
 R = Arg		19		5.278  		1.077  	
-S = Ser		33		9.167  		1.310  	
+S = Ser		32		8.889  		1.270  	
 T = Thr		19		5.278  		0.865  	
 U = ---		0		0.000  		0.000  	
 V = Val		34		9.444  		1.431  	
@@ -42,12 +42,12 @@ Y = Tyr		8		2.222  		0.654
 Z = Glx		0		0.000  		0.000  	
 
 Property	Residues		Number		Mole%
-Tiny		(A+C+G+S+T)		121		33.611
-Small		(A+B+C+D+G+N+P+S+T+V)	198		55.000
-Aliphatic	(A+I+L+V)		136		37.778
+Tiny		(A+C+G+S+T)		120		33.333
+Small		(A+B+C+D+G+N+P+S+T+V)	197		54.722
+Aliphatic	(A+I+L+V)		137		38.056
 Aromatic	(F+H+W+Y)		21		 5.833
-Non-polar	(A+C+F+G+I+L+M+P+V+W+Y)	199		55.278
-Polar		(D+E+H+K+N+Q+R+S+T+Z)	161		44.722
+Non-polar	(A+C+F+G+I+L+M+P+V+W+Y)	200		55.556
+Polar		(D+E+H+K+N+Q+R+S+T+Z)	160		44.444
 Charged		(B+D+E+H+K+R+Z)		69		19.167
 Basic		(H+K+R)			37		10.278
 Acidic		(B+D+E+Z)		32		 8.889

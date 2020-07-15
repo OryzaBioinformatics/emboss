@@ -223,9 +223,9 @@ Usage
 
 % sirna 
 Finds siRNA duplexes in mRNA
-Input nucleotide sequence(s): tembl:hsfau
-Output report [hsfau.sirna]: 
-output sequence(s) [hsfau.fasta]: 
+Input nucleotide sequence(s): tembl:x65923
+Output report [x65923.sirna]: 
+output sequence(s) [x65923.fasta]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -239,9 +239,9 @@ output sequence(s) [hsfau.fasta]:
 
 % sirna -context 
 Finds siRNA duplexes in mRNA
-Input nucleotide sequence(s): tembl:hsfau
-Output report [hsfau.sirna]: 
-output sequence(s) [hsfau.fasta]: 
+Input nucleotide sequence(s): tembl:x65923
+Output report [x65923.sirna]: 
+output sequence(s) [x65923.fasta]: 
 
    Go to the output files for this example
 
@@ -375,19 +375,17 @@ Input file format
 
   Input files for usage example
 
-   'tembl:hsfau' is a sequence entry in the example nucleic acid database
-   'tembl'
+   'tembl:x65923' is a sequence entry in the example nucleic acid
+   database 'tembl'
 
-  Database entry: tembl:hsfau
+  Database entry: tembl:x65923
 
-ID   HSFAU      standard; RNA; HUM; 518 BP.
+ID   X65923; SV 1; linear; mRNA; STD; HUM; 518 BP.
 XX
 AC   X65923;
 XX
-SV   X65923.1
-XX
 DT   13-MAY-1992 (Rel. 31, Created)
-DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 11)
 XX
 DE   H.sapiens fau mRNA
 XX
@@ -396,7 +394,8 @@ XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
 ;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-518
@@ -408,31 +407,35 @@ RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
 XX
 RN   [2]
 RP   1-518
-RX   MEDLINE; 93368957.
+RX   PUBMED; 8395683.
 RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
 RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
 RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
-RL   Oncogene 8:2537-2546(1993).
+RL   Oncogene 8(9):2537-2546(1993).
 XX
-DR   SWISS-PROT; P35544; UBIM_HUMAN.
-DR   SWISS-PROT; Q05472; RS30_HUMAN.
+DR   H-InvDB; HIT000322806.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..518
-FT                   /chromosome="11q"
-FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
-FT                   /tissue_type="placenta"
+FT                   /chromosome="11q"
+FT                   /map="13"
+FT                   /mol_type="mRNA"
 FT                   /clone_lib="cDNA"
 FT                   /clone="pUIA 631"
-FT                   /map="13"
+FT                   /tissue_type="placenta"
+FT                   /db_xref="taxon:9606"
 FT   misc_feature    57..278
 FT                   /note="ubiquitin like part"
 FT   CDS             57..458
-FT                   /db_xref="SWISS-PROT:P35544"
-FT                   /db_xref="SWISS-PROT:Q05472"
 FT                   /gene="fau"
+FT                   /db_xref="GDB:135476"
+FT                   /db_xref="GOA:P35544"
+FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="HGNC:3597"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
 G
@@ -484,20 +487,20 @@ Output file format
 
   Output files for usage example
 
-  File: hsfau.sirna
+  File: x65923.sirna
 
 ########################################
 # Program: sirna
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: sirna
-#    -sequence tembl:hsfau
+#    -sequence tembl:x65923
 # Report_format: table
-# Report_file: hsfau.sirna
+# Report_file: x65923.sirna
 ########################################
 
 #=======================================
 #
-# Sequence: HSFAU     from: 1   to: 518
+# Sequence: X65923     from: 1   to: 518
 # HitCount: 85
 #
 # CDS region found in feature table starting at 57
@@ -592,131 +595,131 @@ Output file format
 # Total_hitcount: 85
 #---------------------------------------
 
-  File: hsfau.fasta
+  File: x65923.fasta
 
->HSFAU_308 %GC 50.0 Score 9 H.sapiens fau mRNA
+>X65923_308 %GC 50.0 Score 9 H.sapiens fau mRNA
 aaaagtgagaggtcagactccta
->HSFAU_309 %GC 50.0 Score 9 H.sapiens fau mRNA
+>X65923_309 %GC 50.0 Score 9 H.sapiens fau mRNA
 aaagtgagaggtcagactcctaa
->HSFAU_310 %GC 50.0 Score 9 H.sapiens fau mRNA
+>X65923_310 %GC 50.0 Score 9 H.sapiens fau mRNA
 aagtgagaggtcagactcctaag
->HSFAU_351 %GC 50.0 Score 9 H.sapiens fau mRNA
+>X65923_351 %GC 50.0 Score 9 H.sapiens fau mRNA
 aagaagaagaagacaggtcgggc
->HSFAU_166 %GC 55.0 Score 8 H.sapiens fau mRNA
+>X65923_166 %GC 55.0 Score 8 H.sapiens fau mRNA
 aagatcaagtcgtgctcctggca
->HSFAU_279 %GC 55.0 Score 8 H.sapiens fau mRNA
+>X65923_279 %GC 55.0 Score 8 H.sapiens fau mRNA
 aaagttcatggttccctggcccg
->HSFAU_330 %GC 55.0 Score 8 H.sapiens fau mRNA
+>X65923_330 %GC 55.0 Score 8 H.sapiens fau mRNA
 aaggtggccaaacaggagaagaa
->HSFAU_354 %GC 55.0 Score 8 H.sapiens fau mRNA
+>X65923_354 %GC 55.0 Score 8 H.sapiens fau mRNA
 aagaagaagacaggtcgggctaa
->HSFAU_357 %GC 55.0 Score 8 H.sapiens fau mRNA
+>X65923_357 %GC 55.0 Score 8 H.sapiens fau mRNA
 aagaagacaggtcgggctaagcg
->HSFAU_393 %GC 55.0 Score 8 H.sapiens fau mRNA
+>X65923_393 %GC 55.0 Score 8 H.sapiens fau mRNA
 aaccggcgctttgtcaacgttgt
->HSFAU_253 %GC 60.0 Score 7 H.sapiens fau mRNA
+>X65923_253 %GC 60.0 Score 7 H.sapiens fau mRNA
 aagtagcaggccgcatgcttgga
->HSFAU_280 %GC 60.0 Score 7 H.sapiens fau mRNA
+>X65923_280 %GC 60.0 Score 7 H.sapiens fau mRNA
 aagttcatggttccctggcccgt
->HSFAU_339 %GC 40.0 Score 7 H.sapiens fau mRNA
+>X65923_339 %GC 40.0 Score 7 H.sapiens fau mRNA
 aaacaggagaagaagaagaagaa
->HSFAU_340 %GC 40.0 Score 7 H.sapiens fau mRNA
+>X65923_340 %GC 40.0 Score 7 H.sapiens fau mRNA
 aacaggagaagaagaagaagaag
->HSFAU_348 %GC 40.0 Score 7 H.sapiens fau mRNA
+>X65923_348 %GC 40.0 Score 7 H.sapiens fau mRNA
 aagaagaagaagaagacaggtcg
->HSFAU_375 %GC 60.0 Score 7 H.sapiens fau mRNA
+>X65923_375 %GC 60.0 Score 7 H.sapiens fau mRNA
 aagcggcggatgcagtacaaccg
->HSFAU_408 %GC 60.0 Score 7 H.sapiens fau mRNA
+>X65923_408 %GC 60.0 Score 7 H.sapiens fau mRNA
 aacgttgtgcccacctttggcaa
->HSFAU_429 %GC 60.0 Score 7 H.sapiens fau mRNA
+>X65923_429 %GC 60.0 Score 7 H.sapiens fau mRNA
 aagaagaagggccccaatgccaa
->HSFAU_432 %GC 60.0 Score 7 H.sapiens fau mRNA
+>X65923_432 %GC 60.0 Score 7 H.sapiens fau mRNA
 aagaagggccccaatgccaactc
->HSFAU_435 %GC 60.0 Score 7 H.sapiens fau mRNA
+>X65923_435 %GC 60.0 Score 7 H.sapiens fau mRNA
 aagggccccaatgccaactctta
->HSFAU_488 %GC 40.0 Score 7 H.sapiens fau mRNA
+>X65923_488 %GC 40.0 Score 7 H.sapiens fau mRNA
 aaaaagccacttagttcagtcaa
->HSFAU_489 %GC 40.0 Score 7 H.sapiens fau mRNA
+>X65923_489 %GC 40.0 Score 7 H.sapiens fau mRNA
 aaaagccacttagttcagtcaaa
->HSFAU_490 %GC 40.0 Score 7 H.sapiens fau mRNA
+>X65923_490 %GC 40.0 Score 7 H.sapiens fau mRNA
 aaagccacttagttcagtcaaaa
->HSFAU_491 %GC 40.0 Score 7 H.sapiens fau mRNA
+>X65923_491 %GC 40.0 Score 7 H.sapiens fau mRNA
 aagccacttagttcagtcaaaaa
->HSFAU_129 %GC 55.0 Score 6 H.sapiens fau mRNA
+>X65923_129 %GC 55.0 Score 6 H.sapiens fau mRNA
 aaggctcatgtagcctcactgga
 
 
   [Part of this file has been deleted for brevity]
 
 gaggccctgactaccctggaagt
->HSFAU_259 %GC 60.0 Score 4 H.sapiens fau mRNA
+>X65923_259 %GC 60.0 Score 4 H.sapiens fau mRNA
 caggccgcatgcttggaggtaaa
->HSFAU_266 %GC 40.0 Score 4 H.sapiens fau mRNA
+>X65923_266 %GC 40.0 Score 4 H.sapiens fau mRNA
 catgcttggaggtaaagttcatg
->HSFAU_342 %GC 40.0 Score 4 H.sapiens fau mRNA
+>X65923_342 %GC 40.0 Score 4 H.sapiens fau mRNA
 caggagaagaagaagaagaagac
->HSFAU_347 %GC 40.0 Score 4 H.sapiens fau mRNA
+>X65923_347 %GC 40.0 Score 4 H.sapiens fau mRNA
 gaagaagaagaagaagacaggtc
->HSFAU_359 %GC 60.0 Score 4 H.sapiens fau mRNA
+>X65923_359 %GC 60.0 Score 4 H.sapiens fau mRNA
 gaagacaggtcgggctaagcggc
->HSFAU_111 %GC 55.0 Score 3 H.sapiens fau mRNA
+>X65923_111 %GC 55.0 Score 3 H.sapiens fau mRNA
 gaaacggtcgcccagatcaaggc
->HSFAU_113 %GC 65.0 Score 3 H.sapiens fau mRNA
+>X65923_113 %GC 65.0 Score 3 H.sapiens fau mRNA
 aacggtcgcccagatcaaggctc
->HSFAU_172 %GC 70.0 Score 3 H.sapiens fau mRNA
+>X65923_172 %GC 70.0 Score 3 H.sapiens fau mRNA
 aagtcgtgctcctggcaggcgcg
->HSFAU_443 %GC 35.0 Score 3 H.sapiens fau mRNA
+>X65923_443 %GC 35.0 Score 3 H.sapiens fau mRNA
 caatgccaactcttaagtctttt
->HSFAU_456 %GC 35.0 Score 3 H.sapiens fau mRNA
+>X65923_456 %GC 35.0 Score 3 H.sapiens fau mRNA
 taagtcttttgtaattctggctt
->HSFAU_468 %GC 30.0 Score 3 H.sapiens fau mRNA
+>X65923_468 %GC 30.0 Score 3 H.sapiens fau mRNA
 aattctggctttctctaataaaa
->HSFAU_484 %GC 30.0 Score 3 H.sapiens fau mRNA
+>X65923_484 %GC 30.0 Score 3 H.sapiens fau mRNA
 aataaaaaagccacttagttcag
->HSFAU_108 %GC 60.0 Score 2 H.sapiens fau mRNA
+>X65923_108 %GC 60.0 Score 2 H.sapiens fau mRNA
 caggaaacggtcgcccagatcaa
->HSFAU_135 %GC 60.0 Score 2 H.sapiens fau mRNA
+>X65923_135 %GC 60.0 Score 2 H.sapiens fau mRNA
 catgtagcctcactggagggcat
->HSFAU_139 %GC 60.0 Score 2 H.sapiens fau mRNA
+>X65923_139 %GC 60.0 Score 2 H.sapiens fau mRNA
 tagcctcactggagggcattgcc
->HSFAU_150 %GC 60.0 Score 2 H.sapiens fau mRNA
+>X65923_150 %GC 60.0 Score 2 H.sapiens fau mRNA
 gagggcattgccccggaagatca
->HSFAU_171 %GC 65.0 Score 2 H.sapiens fau mRNA
+>X65923_171 %GC 65.0 Score 2 H.sapiens fau mRNA
 caagtcgtgctcctggcaggcgc
->HSFAU_201 %GC 65.0 Score 2 H.sapiens fau mRNA
+>X65923_201 %GC 65.0 Score 2 H.sapiens fau mRNA
 gaggatgaggccactctgggcca
->HSFAU_204 %GC 65.0 Score 2 H.sapiens fau mRNA
+>X65923_204 %GC 65.0 Score 2 H.sapiens fau mRNA
 gatgaggccactctgggccagtg
->HSFAU_245 %GC 65.0 Score 2 H.sapiens fau mRNA
+>X65923_245 %GC 65.0 Score 2 H.sapiens fau mRNA
 taccctggaagtagcaggccgca
->HSFAU_256 %GC 65.0 Score 2 H.sapiens fau mRNA
+>X65923_256 %GC 65.0 Score 2 H.sapiens fau mRNA
 tagcaggccgcatgcttggaggt
->HSFAU_285 %GC 65.0 Score 2 H.sapiens fau mRNA
+>X65923_285 %GC 65.0 Score 2 H.sapiens fau mRNA
 catggttccctggcccgtgctgg
->HSFAU_338 %GC 35.0 Score 2 H.sapiens fau mRNA
+>X65923_338 %GC 35.0 Score 2 H.sapiens fau mRNA
 caaacaggagaagaagaagaaga
->HSFAU_345 %GC 35.0 Score 2 H.sapiens fau mRNA
+>X65923_345 %GC 35.0 Score 2 H.sapiens fau mRNA
 gagaagaagaagaagaagacagg
->HSFAU_486 %GC 35.0 Score 2 H.sapiens fau mRNA
+>X65923_486 %GC 35.0 Score 2 H.sapiens fau mRNA
 taaaaaagccacttagttcagtc
 
   Output files for usage example 2
 
-  File: hsfau.sirna
+  File: x65923.sirna
 
 ########################################
 # Program: sirna
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: sirna
 #    -context
-#    -sequence tembl:hsfau
+#    -sequence tembl:x65923
 # Report_format: table
-# Report_file: hsfau.sirna
+# Report_file: x65923.sirna
 ########################################
 
 #=======================================
 #
-# Sequence: HSFAU     from: 1   to: 518
+# Sequence: X65923     from: 1   to: 518
 # HitCount: 85
 #
 # The forward sense sequence shows the first 2 bases of

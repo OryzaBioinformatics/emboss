@@ -8,9 +8,9 @@ Here is an example using an increased word size to avoid accidental matches:
 
 % <b>seqmatchall </b>
 All-against-all comparison of a set of sequences
-Input sequence set: <b>tembl:eclac*</b>
+Input sequence set: <b>@eclac.list</b>
 Word size [4]: <b>15</b>
-Output alignment [eclac.seqmatchall]: <b></b>
+Output alignment [j01636.seqmatchall]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

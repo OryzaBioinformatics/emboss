@@ -6,13 +6,13 @@
 
 % <b>newcpgreport </b>
 Report CpG rich areas
-Input nucleotide sequence(s): <b>tembl:rnu68037</b>
+Input nucleotide sequence(s): <b>tembl:u68037</b>
 Window size [100]: <b></b>
 Shift increment [1]: <b></b>
 Minimum Length [200]: <b></b>
 Minimum observed/expected [0.6]: <b></b>
 Minimum percentage [50.]: <b></b>
-Output file [rnu68037.newcpgreport]: <b></b>
+Output file [u68037.newcpgreport]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

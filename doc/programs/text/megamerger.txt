@@ -48,11 +48,11 @@ Usage
    Here is a sample session with megamerger
 
 
-% megamerger tembl:ap000504 tembl:af129756 
+% megamerger tembl:v00295 tembl:v00296 
 Merge two large overlapping nucleic acid sequences
 Word size [20]: 
-output sequence [ap000504.merged]: 
-Output file [ap000504.megamerger]: report
+output sequence [v00295.merged]: 
+Output file [v00295.megamerger]: report
 
    Go to the input files for this example
    Go to the output files for this example
@@ -153,327 +153,305 @@ Input file format
 
   Input files for usage example
 
-   'tembl:ap000504' is a sequence entry in the example nucleic acid
+   'tembl:v00295' is a sequence entry in the example nucleic acid
    database 'tembl'
 
-  Database entry: tembl:ap000504
+  Database entry: tembl:v00295
 
-ID   AP000504   standard; DNA; HUM; 100000 BP.
+ID   V00295; SV 1; linear; genomic DNA; STD; PRO; 1500 BP.
 XX
-AC   AP000504; BA000025;
+AC   V00295;
 XX
-SV   AP000504.1
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   07-JUL-1995 (Rel. 44, Last updated, Version 4)
 XX
-DT   28-SEP-1999 (Rel. 61, Created)
-DT   22-AUG-2001 (Rel. 68, Last updated, Version 3)
+DE   E. coli lacY gene (codes for lactose permease).
 XX
-DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section
-DE   3/20.
+KW   membrane protein.
 XX
-KW   .
-XX
-OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
-RP   1-100000
-RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
-RT   ;
-RL   Submitted (21-SEP-1999) to the EMBL/GenBank/DDBJ databases.
-RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
-RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
-RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
-RL   Tel:81-3-5214-8491, Fax:81-3-5214-8470)
+RP   1-1500
+RX   DOI; 10.1038/283541a0.
+RX   PUBMED; 6444453.
+RA   Buechel D.E., Gronenborn B., Mueller-Hill B.;
+RT   "Sequence of the lactose permease gene";
+RL   Nature 283(5747):541-545(1980).
 XX
-RN   [2]
-RA   Shiina S., Tamiya G., Oka A., Inoko H.;
-RT   "Homo sapiens 2,229,817bp genomic DNA of 6p21.3 HLA class I region";
-RL   Unpublished.
+CC   lacZ is a beta-galactosidase and lacA is transacetylase.
+CC   KST ECO.LACY
 XX
-DR   SWISS-PROT; O00299; CLI1_HUMAN.
-DR   SWISS-PROT; O43196; MSH5_HUMAN.
-DR   SWISS-PROT; O95445; APOM_HUMAN.
-DR   SWISS-PROT; O95865; DDH2_HUMAN.
-DR   SWISS-PROT; O95867; NG24_HUMAN.
-DR   SWISS-PROT; P13862; KC2B_HUMAN.
-XX
-CC   This sequence is conducted by Tokai University as a JST sequencing
-CC   Team.
-CC   Principal Investigator: Hidetoshi Inoko Ph.D
-CC   Phone:+81-463-93-1121, Fax:+81-463-94-8884,
-CC   The sequence is submitted by Human Genome Sequencing in ALIS
-CC   project of JST
-CC   Japan Science and Technology Corporation (JST)
-CC   5-3, Yonbancyo, Chiyoda-ku, Tokyo, 102-0081 Japan
-CC   For further infomation about this sequences, please visit our
-CC   sequence archive Web site (http://www-alis.tokyo.jst.go.jp/HGS/top.
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1500
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             <1..54
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="reading frame (lacZ)"
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="PDB:1BGL"
+FT                   /db_xref="PDB:1BGM"
+FT                   /db_xref="PDB:1DP0"
+FT                   /db_xref="PDB:1F49"
+FT                   /db_xref="PDB:1F4A"
+FT                   /db_xref="PDB:1F4H"
+FT                   /db_xref="PDB:1GHO"
+FT                   /db_xref="PDB:1HN1"
+FT                   /db_xref="PDB:1JYN"
+FT                   /db_xref="PDB:1JYV"
+FT                   /db_xref="PDB:1JYW"
+FT                   /db_xref="PDB:1JYX"
+FT                   /db_xref="PDB:1JYY"
 
 
   [Part of this file has been deleted for brevity]
 
-     gggtggatca tgaggtcaag agatcgagac tatcctggct aacatgatga aaccccgtct     9708
+FT                   /db_xref="PDB:2CFP"
+FT                   /db_xref="PDB:2CFQ"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P02920"
+FT                   /protein_id="CAA23571.1"
+FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSD
+T
+FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNI
+L
+FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMF
+T
+FT                   INNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFRQPK
+L
+FT                   WFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIMFFAP
+L
+FT                   IINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCFKYITS
+Q
+FT                   FEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGFTLISVF
+T
+FT                   LSGPGPLSLLRRQVNEVA"
+FT   CDS             1423..>1500
+FT                   /transl_table=11
+FT                   /note="reading frame (lacA)"
+FT                   /db_xref="GOA:P07464"
+FT                   /db_xref="PDB:1KQA"
+FT                   /db_xref="PDB:1KRR"
+FT                   /db_xref="PDB:1KRU"
+FT                   /db_xref="PDB:1KRV"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P07464"
+FT                   /protein_id="CAA23572.1"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKR"
+XX
+SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
+     ttccagctga gcgccggtcg ctaccattac cagttggtct ggtgtcaaaa ataataataa        6
 0
-     ctactaaaaa tacaaaaaat tagctgggca tggtggcggg cacctgtagt cccagctact     9714
+     ccgggcaggc catgtctgcc cgtatttcgc gtaaggaaat ccattatgta ctatttaaaa       12
 0
-     cgggaggctg agtcaggaga atggtgtgaa cccaggagac ggagcttgca gtgagctgag     9720
+     aacacaaact tttggatgtt cggtttattc tttttctttt acttttttat catgggagcc       18
 0
-     gtcgcaccac tgcactccag cctgggtgat agagcgagac tctgtctcaa aaaaaaaaaa     9726
+     tacttcccgt ttttcccgat ttggctacat gacatcaacc atatcagcaa aagtgatacg       24
 0
-     aaaaaaaaaa aaaacaaaaa ttagccgggt gtggtggcag gcaacttaat cccagctact     9732
+     ggtattattt ttgccgctat ttctctgttc tcgctattat tccaaccgct gtttggtctg       30
 0
-     tgggaggcag aggcaggaga atcgtttgaa cctgggaggc ggaggttgaa gagaatagaa     9738
+     ctttctgaca aactcgggct gcgcaaatac ctgctgtgga ttattaccgg catgttagtg       36
 0
-     gctctgctgg tccagagaag gattgggcca gggctctggg agaccaggga gaaagagggc     9744
+     atgtttgcgc cgttctttat ttttatcttc gggccactgt tacaatacaa cattttagta       42
 0
-     acatgtggtc cctgttgact gtgagggtgg gaatctgagg aaggctttgg ctcattgccc     9750
+     ggatcgattg ttggtggtat ttatctaggc ttttgtttta acgccggtgc gccagcagta       48
 0
-     cttgggtttg tccacagcca tccttcccct gcggagtatg tcgaggtgct ccaggagcta     9756
+     gaggcattta ttgagaaagt cagccgtcgc agtaatttcg aatttggtcg cgcgcggatg       54
 0
-     cagcggctgg agagtcgcct ccagcccttc ttgcagcgct actacgaggt tctgggtgct     9762
+     tttggctgtg ttggctgggc gctgtgtgcc tcgattgtcg gcatcatgtt caccatcaat       60
 0
-     gctgccacca cggactacaa taacaatgtg agccctttga tggccctgcc ctttctcctc     9768
+     aatcagtttg ttttctggct gggctctggc tgtgcactca tcctcgccgt tttactcttt       66
 0
-     agccccagta ctcccaaaac agaacaggct gaaatacaga taactctttc cctccctgga     9774
+     ttcgccaaaa cggatgcgcc ctcttctgcc acggttgcca atgcggtagg tgccaaccat       72
 0
-     aaaacattgc aacagggcca ggtgcagtgg ctcacgcctg taatcccagc actttgggag     9780
+     tcggcattta gccttaagct ggcactggaa ctgttcagac agccaaaact gtggtttttg       78
 0
-     gccaaggtgg gcggatcatc tgagatcggg agtttgagac cagcctggcc aacatggtgc     9786
+     tcactgtatg ttattggcgt ttcctgcacc tacgatgttt ttgaccaaca gtttgctaat       84
 0
-     aaccccatct ctactgaaaa tataaacatt agctggatgt agtggtgcac acctgtaatc     9792
+     ttctttactt cgttctttgc taccggtgaa cagggtacgc gggtatttgg ctacgtaacg       90
 0
-     ccagctactc aggaggctga ggcaggagaa tcgctagaac tcgggaggag ggggttgcag     9798
+     acaatgggcg aattacttaa cgcctcgatt atgttctttg cgccactgat cattaatcgc       96
 0
-     tgagccgaga ttgcactact gcactctagc ctgggtgaca gagcgagact gtctcaaaaa     9804
+     atcggtggga aaaacgccct gctgctggct ggcactatta tgtctgtacg tattattggc      102
 0
-     acaaaacaaa acaaaaaaac acacattgca acaaaacaat ttctctctaa acctgtaagt     9810
+     tcatcgttcg ccacctcagc gctggaagtg gttattctga aaacgctgca tatgtttgaa      108
 0
-     gattttgtcc tcccttacag agaaggtgat aatctttgct gtaagcactg tcctcgtatc     9816
+     gtaccgttcc tgctggtggg ctgctttaaa tatattacca gccagtttga agtgcgtttt      114
 0
-     gtaccccttg tgcccctgaa tgaatttaga aaatgtaaag tacaggagat cagtatatga     9822
+     tcagcgacga tttatctggt ctgtttctgc ttctttaagc aactggcgat gatttttatg      120
 0
-     tgacttactg attcatagta gtgttttaat aggatgttcc ttatgtgaat aagatataat     9828
+     tctgtactgg cgggcaatat gtatgaaagc atcggtttcc agggcgctta tctggtgctg      126
 0
-     ttatttgcaa agatttggtc tacatgtaaa cttccaagga tataactgaa agttttggag     9834
+     ggtctggtgg cgctgggctt caccttaatt tccgtgttca cgcttagcgg ccccggcccg      132
 0
-     gacatggtat tctcagtagg cattattgct tttattagtg agatggactc cagcttgata     9840
+     ctttccctgc tgcgtcgtca ggtgaatgaa gtcgcttaag caatcaatgt cggatgcggc      138
 0
-     ttttctgcct ttttgtgttt ggctggttgt gcgcagcacg agggccggga ggaggatcag     9846
+     gcgacgctta tccgaccaac atatcataac ggagtgatcg cattgaacat gccaatgacc      144
 0
-     cggttgatca acttggtagg ggagagcctg cgactgctgg gcaacacctt tgttgcactg     9852
-0
-     tctgacctgc gctgcaatct ggcctgcacg cccccacgac acctgcatgt ggtccggcct     9858
-0
-     atgtctcact acaccacccc catggtgctc cagcaggcag ccattcccat acaggtgggt     9864
-0
-     tagggggagt ctggcctgag ggagagtgag gggtgttgat agagtgaccc agggtagcta     9870
-0
-     ctgggcctga aggaggttag gaaaggagga gactggaaac atggtgatga aggctggaga     9876
-0
-     tactttagag gtttatcatg aggttttctt ggttaggctc ttgtattttt ctcacatctg     9882
-0
-     cctgtccatc tgtctttttc agatcaatgt gggaaccact gtgaccatga caggaaatgg     9888
-0
-     gactcggccc cccccaactc ccaatgcaga ggcacctccc cctggtcctg ggcaggcctc     9894
-0
-     atccgtggct ccgtcttcta ccaatgtcga gtcctcagct gagggggctc ccccgccagg     9900
-0
-     tccagctccc ccgccagcca ccagccaccc gagggtcatc cggatttccc accagagtgt     9906
-0
-     ggaacccgtg gtcatgatgc acatgaacat tcaaggtgag aatagttgct ggcgagaaga     9912
-0
-     gcaggatcag catgatgagg gaggttcatg ctgaggtgtg agggaacagg gtggggaagg     9918
-0
-     gagaggcaca tgctggtggt ggtagcctgg ggaccagagc agaagcttaa gtagacagat     9924
-0
-     gtggggggtg tgggggttgg tttgtctttg gaggtgtgtt tgtgtggtga agggagtacc     9930
-0
-     tctccctgtt tagatggagg gaaaggcagg ctttctgatt gggggattat gggcctgaag     9936
-0
-     tatgcctgat ctcagaagga tatagttagg ccttggccct acctacctca gggccactgt     9942
-0
-     ctctgtctcc ctgcccagat tctggcacac agcctggtgg tgttccgagt gctcccactg     9948
-0
-     gccccctggg accccctggt catggccaaa ccctgggtaa gagtgagggc atcagggcag     9954
-0
-     gctgagctct gggtagagaa agggaagggc tgagtgggtg ggttgaaggg gtccaggttc     9960
-0
-     aaggttacat cagacccgcc ccccaggctc caccctcatc cagctgccct ccctgccccc     9966
-0
-     tgagttcatg cacgccgtcg cccaccagat cactcatcag gccatggtgg cagctgttgc     9972
-0
-     ctccgcggcc gcaggtaatg acctggaagg ggaggcttgg gaggtagggc acagtccatg     9978
-0
-     gtggcagctg gctggcaagg gcctggccct cagccctctt cggtctgtct cttctgccac     9984
-0
-     ccacaggaca gcaggtgcca ggcttcccaa cagctccaac ccgggtggtg attgcccggc     9990
-0
-     ccactcctcc acaggctcgg ccttcccatc ctggagggcc cccagtctct gggacactgg     9996
-0
-     tgagcaaggg tcggggagtt ctagtgcgta acagtctagg                          10000
+     gaaagaataa gagcaggcaa gctatttacc gatatgtgcg aaggcttacc ggaaaaaaga      150
 0
 //
 
-  Database entry: tembl:af129756
+  Database entry: tembl:v00296
 
-ID   AF129756   standard; DNA; HUM; 184666 BP.
+ID   V00296; SV 1; linear; genomic DNA; STD; PRO; 3078 BP.
 XX
-AC   AF129756;
+AC   V00296;
 XX
-SV   AF129756.1
+DT   13-JUL-1983 (Rel. 03, Created)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 5)
 XX
-DT   12-MAR-1999 (Rel. 59, Created)
-DT   29-OCT-1999 (Rel. 61, Last updated, Version 2)
+DE   E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
 XX
-DE   Homo sapiens MSH55 gene, partial cds; and CLIC1, DDAH, G6b, G6c, G5b, G6d,
-DE   G6e, G6f, BAT5, G5b, CSK2B, BAT4, G4, Apo M, BAT3, BAT2, AIF-1, 1C7, LST-1
-,
-DE   LTB, TNF, and LTA genes, complete cds.
+KW   galactosidase.
 XX
-KW   .
-XX
-OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Escherichia.
 XX
 RN   [1]
-RP   1-184666
-RA   Rowen L., Madan A., Qin S., Shaffer T., James R., Ratcliffe A., Abbasi N.,
-RA   Dickhoff R., Loretz C., Madan A., Dors M., Young J., Lasky S., Hood L.;
-RT   "Sequence of the human major histocompatibility complex class III region";
-RL   Unpublished.
+RP   1-3078
+RX   PUBMED; 6313347.
+RA   Kalnins A., Otto K., Ruether U., Mueller-Hill B.;
+RT   "Sequence of the lacZ gene of Escherichia coli";
+RL   EMBO J. 2(4):593-597(1983).
 XX
 RN   [2]
-RP   1-184666
-RA   Rowen L.;
-RT   ;
-RL   Submitted (22-FEB-1999) to the EMBL/GenBank/DDBJ databases.
-RL   Department of Molecular Biotechnology, Box 357730 University of Washington
-,
-RL   Seattle, WA 98195, USA
+RX   PUBMED; 3038536.
+RA   Zell R., Fritz H.J.;
+RT   "DNA mismatch-repair in Escherichia coli counteracting the hydrolytic
+RT   deamination of 5-methyl-cytosine residues";
+RL   EMBO J. 6(6):1809-1815(1987).
 XX
-RN   [3]
-RP   1-184666
-RA   Rowen L.;
-RT   ;
-RL   Submitted (28-OCT-1999) to the EMBL/GenBank/DDBJ databases.
-RL   Multimegabase Sequencing Center, University of Washington, PO Box 357730,
-RL   Seattle, WA 98195, USA
+CC   Data kindly reviewed (18-MAY-1983) by U. Ruether
 XX
-DR   EPD; EP11158; HS_TNFA.
-DR   EPD; EP11159; HS_TNFB.
-DR   SPTREMBL; O00452; O00452.
-DR   SPTREMBL; O14931; O14931.
-DR   SPTREMBL; O95866; O95866.
-DR   SPTREMBL; O95868; O95868.
-DR   SPTREMBL; O95869; O95869.
-DR   SPTREMBL; O95870; O95870.
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..3078
+FT                   /organism="Escherichia coli"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:562"
+FT   CDS             <1..3072
+FT                   /transl_table=11
+FT                   /note="galactosidase"
+FT                   /db_xref="GOA:P00722"
+FT                   /db_xref="PDB:1BGL"
+FT                   /db_xref="PDB:1BGM"
+FT                   /db_xref="PDB:1DP0"
+FT                   /db_xref="PDB:1F49"
+FT                   /db_xref="PDB:1F4A"
+FT                   /db_xref="PDB:1F4H"
+FT                   /db_xref="PDB:1GHO"
+FT                   /db_xref="PDB:1HN1"
+FT                   /db_xref="PDB:1JYN"
 
 
   [Part of this file has been deleted for brevity]
 
-     aaaccagttt accaccactc ctaacactaa acttaaatct gactctaaat gtaagtccaa    18174
+     gaggcccgca ccgatcgccc ttcccaacag ttgcgcagcc tgaatggcga atggcgcttt       18
 0
-     tctgagccac aagcctaaag ttgaacttta tcctgcttta tgaattattc atccattcct    18180
+     gcctggtttc cggcaccaga agcggtgccg gaaagctggc tggagtgcga tcttcctgag       24
 0
-     ccatttagtg agtatctgcg tgcctaacac atgctgggca ttgtcctaag gcaggaggga    18186
+     gccgatactg tcgtcgtccc ctcaaactgg cagatgcacg gttacgatgc gcccatctac       30
 0
-     catggaggca aagggatcag agaaggtacc agcacctgtg gagcttgtat tccagtgagg    18192
+     accaacgtaa cctatcccat tacggtcaat ccgccgtttg ttcccacgga gaatccgacg       36
 0
-     ccagacggaa aagaaagaaa ctgaagaaga aattggtact atgagaaaat aagacaggct    18198
+     ggttgttact cgctcacatt taatgttgat gaaagctggc tacaggaagg ccagacgcga       42
 0
-     gatgttgtaa gagtggcagg gagctacttt taaatacagt agtcagcaaa atcctctttg    18204
+     attatttttg atggcgttaa ctcggcgttt catctgtggt gcaacgggcg ctgggtcggt       48
 0
-     agtgtttggg tggcactgga gctgagaccc aaatgacaaa aaatagtgac caggtaaaag    18210
+     tacggccagg acagtcgttt gccgtctgaa tttgacctga gcgcattttt acgcgccgga       54
 0
-     tttgggagca aagcatttca ggtaaaggga gcagctactg caaaggctgg aaggcggaac    18216
+     gaaaaccgcc tcgcggtgat ggtgctgcgt tggagtgacg gcagttatct ggaagatcag       60
 0
-     caagctgggg gtgttgacga caaacagaag gccagtgtgg ctggagcaga gagagagact    18222
+     gatatgtggc ggatgagcgg cattttccgt gacgtctcgt tgctgcataa accgactaca       66
 0
-     gggaggcggg tgggagatga ggtcagagag gagggcaggg gccaggtcat gcagggccat    18228
+     caaatcagcg atttccatgt tgccactcgc tttaatgatg atttcagccg cgctgtactg       72
 0
-     gcaagaaggg taaagcctct agatttcatc cagccacagg aagcctttaa aggtcgtcag    18234
+     gaggctgaag ttcagatgtg cggcgagttg cgtgactacc tacgggtaac agtttcttta       78
 0
-     agtgtgtggt gcgtgcgtgt gtgtgtgtgt gtgtgtgtgt gttgcagggg agagaggggg    18240
+     tggcagggtg aaacgcaggt cgccagcggc accgcgcctt tcggcggtga aattatcgat       84
 0
-     agggagagag agagagagag agagaagagg gaggtgagca gaggtgattg gatttttttt    18246
+     gagcgtggtg gttatgccga tcgcgtcaca ctacgtctga acgtcgaaaa cccgaaactg       90
 0
-     tcttttgaca tggtgtcttg ctctgtggcc taggctggag tgcagtggca ccatcatagc    18252
+     tggagcgccg aaatcccgaa tctctatcgt gcggtggttg aactgcacac cgccgacggc       96
 0
-     ccactgcaac ctcaaaacca tgggctcaag tcatccttcc acctcagctt cccaagtatc    18258
+     acgctgattg aagcagaagc ctgcgatgtc ggtttccgcg aggtgcggat tgaaaatggt      102
 0
-     taggactaca ggtgtgtgcc actgtgcctg gctaatttta aaaaatattt taaaattttt    18264
+     ctgctgctgc tgaacggcaa gccgttgctg attcgaggcg ttaaccgtca cgagcatcat      108
 0
-     gttgagacag ggtctatgct gctcaggctg gtctcgaact cctggtttca agtgatctgc    18270
+     cctctgcatg gtcaggtcat ggatgagcag acgatggtgc aggatatcct gctgatgaag      114
 0
-     ccatcttggc ctcccaaagt ttttttttgt tagtttgaga ggcggtttcg ctcgttgccc    18276
+     cagaacaact ttaacgccgt gcgctgttcg cattatccga accatccgct gtggtacacg      120
 0
-     aggctggagt gcaatgactg atctcatctc actgcaacct ctgcctcctg ggttcaagcg    18282
+     ctgtgcgacc gctacggcct gtatgtggtg gatgaagcca atattgaaac ccacggcatg      126
 0
-     attctcctgc ttcagcctcc caagtagctg ggattacagg tgcatgccac cattcccggc    18288
+     gtgccaatga atcgtctgac cgatgatccg cgctggctac cggcgatgag cgaacgcgta      132
 0
-     taattttttg tatttagtag agatggggtt tcaccatgtt agtcaggctg atctcaaact    18294
+     acgcgaatgg tgcagcgcga tcgtaatcac ccgagtgtga tcatctggtc gctggggaat      138
 0
-     cctgacctca ggtgatccgc ctgcctcagc ctcccaaagt tttgggatta caggtgtgag    18300
+     gaatcaggcc acggcgctaa tcacgacgcg ctgtatcgct ggatcaaatc tgtcgatcct      144
 0
-     ccaccatgct gggccagcct cccaaagttt tgggattaca ggcatgagtc accacactgg    18306
+     tcccgcccgg tgcagtatga aggcggcgga gccgacacca cggccaccga tattatttgc      150
 0
-     ccctggattt tttttctttc ttttttttgg agacggagtc tcactctgtt gcccaggctg    18312
+     ccgatgtacg cgcgcgtgga tgaagaccag cccttcccgg ctgtgccgaa atggtccatc      156
 0
-     gagtgcaatg gcgtaatctc agctcactgc aacctctgct gcccgggttc aaacgattct    18318
+     aaaaaatggc tttcgctacc tggagagacg cgcccgctga tcctttgcga atacgcccac      162
 0
-     cctgtcttag cctcctgagt agctgggatt ataggtgcat gccaccatgc ctggctaatt    18324
+     gcgatgggta acagtcttgg cggtttcgct aaatactggc aggcgtttcg tcagtatccc      168
 0
-     tttgtacttt tagtagagaa agtacaccat cttggccagg ctggtctcga actcctgacc    18330
+     cgtttacagg gcggcttcgt ctgggactgg gtggatcagt cgctgattaa atatgatgaa      174
 0
-     tcaggtgatc cacttgcgtc ggcctcccaa agtgctggga ttacaggcgt gagacaccgc    18336
+     aacggcaacc cgtggtcggc ttacggcggt gattttggcg atacgccgaa cgatcgccag      180
 0
-     acccagcctt tttttttttt tttcttttaa gacagaatcg ctctgtcacc caggctggag    18342
+     ttctgtatga acggtctggt ctttgccgac cgcacgccgc atccagcgct gacggaagca      186
 0
-     tgcagtggca caatctcggc tcactgcaac ctctgcctcc caggtttaag caatccacct    18348
+     aaacaccagc agcagttttt ccagttccgt ttatccgggc aaaccatcga agtgaccagc      192
 0
-     atgtcagtct cccaagtagc tgggattata ggtgcatgtc accatgcctg gctaattttt    18354
+     gaatacctgt tccgtcatag cgataacgag ctcctgcact ggatggtggc gctggatggt      198
 0
-     gtacttttag tatagaaagt acaccatgtt ggccaggctg gtcttgaact cctgacctca    18360
+     aagccgctgg caagcggtga agtgcctctg gatgtcgctc cacaaggtaa acagttgatt      204
 0
-     agtgatccgc ctgcctcagc ctcccgaagt gctggaatta cagacatgtg ccactgcacc    18366
+     gaactgcctg aactaccgca gccggagagc gccgggcaac tctggctcac agtacgcgta      210
 0
-     cggcctggtt ttttttttct aagagatgga gtctcacttt tctgcccagg ttggagtgca    18372
+     gtgcaaccga acgcgaccgc atggtcagaa gccgggcaca tcagcgcctg gcagcagtgg      216
 0
-     atggcaccat catagctcac tgcagccttc aactcttggc ctcaggcaat ccttgcacct    18378
+     cgtctggcgg aaaacctcag tgtgacgctc cccgccgcgt cccacgccat cccgcatctg      222
 0
-     tagcctcgca gtgttgggat tacaggcatg agccactgag ccttgcctgg actttttttt    18384
+     accaccagcg aaatggattt ttgcatcgag ctgggtaata agcgttggca atttaaccgc      228
 0
-     ttttttgaga tggcgtctcg ctctgttgcc caggttggag tgctacggca tgatcttggc    18390
+     cagtcaggct ttctttcaca gatgtggatt ggcgataaaa aacaactgct gacgccgctg      234
 0
-     tcactgcaac ttccacctcc caggttcaag cgattctctt gcctcggccc cccgagtagc    18396
+     cgcgatcagt tcacccgtgc accgctggat aacgacattg gcgtaagtga agcgacccgc      240
 0
-     tgggattaca ggcatgcgcc accgtgcctg gctaattttg gtatttttag tagagatagg    18402
+     attgacccta acgcctgggt cgaacgctgg aaggcggcgg gccattacca ggccgaagca      246
 0
-     gtttcatcat gttgggcagg ctggtcttga actcctgacc tcgtgatcca cccacctcgg    18408
+     gcgttgttgc agtgcacggc agatacactt gctgatgcgg tgctgattac gaccgctcac      252
 0
-     cctcccaaag tgctgggatt ataggcatag ccaacgcgcc cagcctggac ttgtttttaa    18414
+     gcgtggcagc atcaggggaa aaccttattt atcagccgga aaacctaccg gattgatggt      258
 0
-     aagatcactg tggctcctgt gtttaggctg gctggtagga gacaggtggc agtggcattg    18420
+     agtggtcaaa tggcgattac cgttgatgtt gaagtggcga gcgatacacc gcatccggcg      264
 0
-     atggtgaaga gaaaatagtg gcagccatgg agatggagag aagtagacaa gtttgggata    18426
+     cggattggcc tgaactgcca gctggcgcag gtagcagagc gggtaaactg gctcggatta      270
 0
-     tattatacat tccaggggta gaaacaacag gactagatga tggattgatg ggtgggagat    18432
+     gggccgcaag aaaactatcc cgaccgcctt actgccgcct gttttgaccg ctgggatctg      276
 0
-     gtagatactg ggagagaagc aggattctga tggatggaaa aactaaaaaa ttctattttg    18438
+     ccattgtcag acatgtatac cccgtacgtc ttcccgagcg aaaacggtct gcgctgcggg      282
 0
-     ggtgtggtaa gtctaagtct attagacatg caagtagaga tgtcactggg cagatacaca    18444
+     acgcgcgaat tgaattatgg cccacaccag tggcgcggcg acttccagtt caacatcagc      288
 0
-     tctggatttc aggggcaagg tccaagctag agaaagaaac ctgggcatgg tcagcatgag    18450
+     cgctacagtc aacagcaact gatggaaacc agccatcgcc atctgctgca cgcggaagaa      294
 0
-     gatggtgttt aaagccatgg aacttatctt gtgcatccct ataagacccc tttgaggcac    18456
+     ggcacatggc tgaatatcga cggtttccat atggggattg gtggcgacga ctcctggagc      300
 0
-     ttgtttcccc tcacaatgga tgcagtgcat cttccattct gaattccaga ggcaacaacc    18462
+     ccgtcagtat cggcggaatt ccagctgagc gccggtcgct accattacca gttggtctgg      306
 0
-     tcctgctcct agaagctaaa ctctccagac ttagtcttct gaattc                   18466
-6
+     tgtcaaaaat aataataa                                                    307
+8
 //
 
 Output file format
@@ -482,228 +460,100 @@ Output file format
 
   File: report
 
-# Report of megamerger of: AP000504 and AF129756
+# Report of megamerger of: V00295 and V00296
 
-AP000504 overlap starts at 1
-AF129756 overlap starts at 6036
+V00295 overlap starts at 1
+V00296 overlap starts at 3019
 
-Using AF129756 1-6035 as the initial sequence
+Using V00296 1-3018 as the initial sequence
 
-Matching region AP000504 1-846 : AF129756 6036-6881
-Length of match: 846
+Matching region V00295 1-60 : V00296 3019-3078
+Length of match: 60
 
-WARNING!
-Mismatch region found:
-Mismatch AP000504 847-847
-Mismatch AF129756 6882-6882
-Mismatch is closer to the ends of AP000504, so use AF129756 in the merged seque
-nce
+V00295 overlap ends at 60
+V00296 overlap ends at 3078
 
-Matching region AP000504 848-1794 : AF129756 6883-7829
-Length of match: 947
+Using V00295 61-1500 as the final sequence
 
-WARNING!
-Mismatch region found:
-Mismatch AP000504 1795-1795
-Mismatch AF129756 7830-7830
-Mismatch is closer to the ends of AP000504, so use AF129756 in the merged seque
-nce
+  File: v00295.merged
 
-Matching region AP000504 1796-2272 : AF129756 7831-8307
-Length of match: 477
-
-WARNING!
-Mismatch region found:
-Mismatch AP000504 2273-2273
-Mismatch AF129756 8307
-Mismatch is closer to the ends of AP000504, so use AF129756 in the merged seque
-nce
-
-Matching region AP000504 2274-2465 : AF129756 8308-8499
-Length of match: 192
-
-WARNING!
-Mismatch region found:
-Mismatch AP000504 2466-2466
-Mismatch AF129756 8500-8500
-Mismatch is closer to the ends of AP000504, so use AF129756 in the merged seque
-nce
-
-Matching region AP000504 2467-2654 : AF129756 8501-8688
-Length of match: 188
-
-WARNING!
-Mismatch region found:
-Mismatch AP000504 2655-2658
-Mismatch AF129756 8688
-
-
-  [Part of this file has been deleted for brevity]
-
-
-WARNING!
-Mismatch region found:
-Mismatch AP000504 95451-95451
-Mismatch AF129756 101481-101481
-Mismatch is closer to the ends of AP000504, so use AF129756 in the merged seque
-nce
-
-Matching region AP000504 95452-96649 : AF129756 101482-102679
-Length of match: 1198
-
-WARNING!
-Mismatch region found:
-Mismatch AP000504 96650-96650
-Mismatch AF129756 102680-102680
-Mismatch is closer to the ends of AP000504, so use AF129756 in the merged seque
-nce
-
-Matching region AP000504 96651-97272 : AF129756 102681-103302
-Length of match: 622
-
-WARNING!
-Mismatch region found:
-Mismatch AP000504 97273-97274
-Mismatch AF129756 103302
-Mismatch is closer to the ends of AP000504, so use AF129756 in the merged seque
-nce
-
-Matching region AP000504 97275-97715 : AF129756 103303-103743
-Length of match: 441
-
-WARNING!
-Mismatch region found:
-Mismatch AP000504 97716-97716
-Mismatch AF129756 103744-103744
-Mismatch is closer to the ends of AP000504, so use AF129756 in the merged seque
-nce
-
-Matching region AP000504 97717-97826 : AF129756 103745-103854
-Length of match: 110
-
-WARNING!
-Mismatch region found:
-Mismatch AP000504 97827-97827
-Mismatch AF129756 103855-103855
-Mismatch is closer to the ends of AP000504, so use AF129756 in the merged seque
-nce
-
-Matching region AP000504 97828-100000 : AF129756 103856-106028
-Length of match: 2173
-
-AP000504 overlap ends at 100000
-AF129756 overlap ends at 106028
-
-Using AF129756 106029-184666 as the final sequence
-
-  File: ap000504.merged
-
->AP000504 AP000504.1 Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I r
-egion, section 3/20.
-gaattctctccctcccatctgtggctgagattaaagatctgcacctgaagcactgaagaa
-tgtgtgggtaattaaattaccctgccgattcctggagatgctgattacctggagatgacc
-tcagagattatcctaaattaactcctacaagacacacattgcagcgggaggtgaggtagg
-ggaaggattgtgcacctgaggctagcaaaggtttccactctgtttagagatgatgtcacc
-agtgcgtttacatttgcgttgtgttcacacattgagtgctactatgtacaagaccatgtg
-tcagacactgaggtaacaggtatagctactagatagagttcatagctatggaggcaagca
-gattcactgactgctaattctaacatgatgtgacagtgcaactagaaaaacataaacaag
-cactatgtgagcacaaagaaggtgcacatcaactccttacaggtacctgtaaaagccaaa
-gggtaacagttggattgcaccttgaagaggatgcacttttttttttttttaagacagaat
-ctcactctgttgcccaggctggagtgcagtggggcaatctgggctcacttcaacctctac
-ctcccgagttcaagcaattctcctgcctcagcctcctgagtagctggtactagaggcatg
-cgccatgatgctgggctaatttttgtattttcggtagacgtgaagtttcaccaagttggc
-caggctggtcttgaactcctgacctcaaatcatccacccacctcagcctcccaaaatgct
-gagactacaggcgtgagccaccgcgcctgacctggatgtaagattttgataggtacagaa
-caaggaaaagactttccaggccgggcacagtggcttatgcctgtaatcccagcactttgg
-gaggccgaggtgggcagatcacgaggtcagcagttcaagaccagcgtggccaacatggtg
-aaatcccatctctactaaaaatacaaaaattagccaggcatggtggtgggtccctgtaat
-cccagctactccggaggctgaggcaggagaattgcttgaacctgggaggtggaggttgca
-gtgagcaaagaccgcgccactgcactccagcctgggtgacagagggagactccgtctcaa
-aaaaaaaaaaaaaagactttccagaaggagcagcataaacacaggcatgacatgtttcca
-taatggcaagtggccctaaatgactagaatataaggtagatccagtaggaaaggacttag
-aaggggctttggaaggtgagtctggaaattaaaactggggtaaacgtgatggaccctgaa
-catcattatactgcttaagatgctaatcttaatcctgaaggtaatgggaaaacctcctaa
-ggtttatgttattttctttctacttaggctatttaaaaagtggagtgacggccaggcgca
-gtgactcatgcctgtaatcccagcactttgggaggccgaggtgggcggatcaccaggagt
-tcgagaccagcctgaccaacatggtgaaaccccgcctctactgaaaatacaaaaattagc
-caggtgtggtggtgggcgcctgtaatcccagctacttgggaggctgaggcagaagaattg
-cttgaacccgggaagtggaggttgcagtgagcagagatcgtgccattgtactccagcctg
-ggcaacaagagcgaaactcagtcacaaaaaaaaaaaaaaaaaaaaaggagtgacatgctt
-agatctctgttttggaatgacaggttttttgtttctagcatcaatccaaggttcatggct
-tgagaaggtgtactgccagcaatgccattaaccagcaaagggaatgcaggaagaggaaca
-gatctggtgggcatcagtttggatgctctgagtttgagctgcctgtgaaaactgcaggtg
-gtgatatgcaattaacattcacatacggagttcaaaactagagacacaaatttgagagtc
-atcacagaaatgtgaagtgtgttttctataactaaagataaccatgctaacatagccatg
-tgttacattagcattttttttttttttgagacggagtctcactctgttgcccaggctgaa
-gtgcagtgcacaatcttggctcactgcaacctccacctcctgggttcaagcgattctcct
-gccttagtctcctgagtagctggaattacaggcacctaccaacacgcttggctaattttt
-gcattttagtagagatggggctttaccatgttggccagctggtctcaaactcctgacctc
-aagtgattcacccaccttggccccccaaagtgctgggattacaggtgtgagccactgtgc
-ccggccttacattttgtgttttttcctgctgcttgtatgtgtgcaagtctgtgtatcatc
-aatgggtatatgtgtacctgcgctgacaacaaaaaatgagatgcatatcagctactacac
-aaagctgttataaggatgaaatgcagttagccagtgctcagtaaagggcagttgctttac
-tactactaggtggggtggtgtatgtgagaatctgtatactgccattagtaggctttagta
-tgtagtgtgcatatggaattcatgcattagtgtgtagtatgtgtgggacccactcacctg
-agcagcttctctccccacttacagtggcatctgttgaggattcctgtgagggataaggca
-gggagtgaacttgttacaaggcagggacagggaatggaatgtgtttatgtgtctaagctg
-aggcatccaggtcagaggtgctggttgttgaggaagctggcctgggagggcacaaaggca
-gccaaagctggtgcctggccacaaatatgagctgggattaccgtacatggagatggggga
-agggatggacactcacagggacacttagccagaaaaatacacaaagcagacctagttaaa
-
-
-  [Part of this file has been deleted for brevity]
-
-accccctaaataaaacttctcctctaccccaacccaaccctgtttctagggctaatcttg
-aaaccagtttaccaccactcctaacactaaacttaaatctgactctaaatgtaagtccaa
-tctgagccacaagcctaaagttgaactttatcctgctttatgaattattcatccattcct
-ccatttagtgagtatctgcgtgcctaacacatgctgggcattgtcctaaggcaggaggga
-catggaggcaaagggatcagagaaggtaccagcacctgtggagcttgtattccagtgagg
-ccagacggaaaagaaagaaactgaagaagaaattggtactatgagaaaataagacaggct
-gatgttgtaagagtggcagggagctacttttaaatacagtagtcagcaaaatcctctttg
-agtgtttgggtggcactggagctgagacccaaatgacaaaaaatagtgaccaggtaaaag
-tttgggagcaaagcatttcaggtaaagggagcagctactgcaaaggctggaaggcggaac
-caagctgggggtgttgacgacaaacagaaggccagtgtggctggagcagagagagagact
-gggaggcgggtgggagatgaggtcagagaggagggcaggggccaggtcatgcagggccat
-gcaagaagggtaaagcctctagatttcatccagccacaggaagcctttaaaggtcgtcag
-agtgtgtggtgcgtgcgtgtgtgtgtgtgtgtgtgtgtgtgttgcaggggagagaggggg
-agggagagagagagagagagagagaagagggaggtgagcagaggtgattggatttttttt
-tcttttgacatggtgtcttgctctgtggcctaggctggagtgcagtggcaccatcatagc
-ccactgcaacctcaaaaccatgggctcaagtcatccttccacctcagcttcccaagtatc
-taggactacaggtgtgtgccactgtgcctggctaattttaaaaaatattttaaaattttt
-gttgagacagggtctatgctgctcaggctggtctcgaactcctggtttcaagtgatctgc
-ccatcttggcctcccaaagtttttttttgttagtttgagaggcggtttcgctcgttgccc
-aggctggagtgcaatgactgatctcatctcactgcaacctctgcctcctgggttcaagcg
-attctcctgcttcagcctcccaagtagctgggattacaggtgcatgccaccattcccggc
-taattttttgtatttagtagagatggggtttcaccatgttagtcaggctgatctcaaact
-cctgacctcaggtgatccgcctgcctcagcctcccaaagttttgggattacaggtgtgag
-ccaccatgctgggccagcctcccaaagttttgggattacaggcatgagtcaccacactgg
-ccctggattttttttctttcttttttttggagacggagtctcactctgttgcccaggctg
-gagtgcaatggcgtaatctcagctcactgcaacctctgctgcccgggttcaaacgattct
-cctgtcttagcctcctgagtagctgggattataggtgcatgccaccatgcctggctaatt
-tttgtacttttagtagagaaagtacaccatcttggccaggctggtctcgaactcctgacc
-tcaggtgatccacttgcgtcggcctcccaaagtgctgggattacaggcgtgagacaccgc
-acccagcctttttttttttttttcttttaagacagaatcgctctgtcacccaggctggag
-tgcagtggcacaatctcggctcactgcaacctctgcctcccaggtttaagcaatccacct
-atgtcagtctcccaagtagctgggattataggtgcatgtcaccatgcctggctaattttt
-gtacttttagtatagaaagtacaccatgttggccaggctggtcttgaactcctgacctca
-agtgatccgcctgcctcagcctcccgaagtgctggaattacagacatgtgccactgcacc
-cggcctggttttttttttctaagagatggagtctcacttttctgcccaggttggagtgca
-atggcaccatcatagctcactgcagccttcaactcttggcctcaggcaatccttgcacct
-tagcctcgcagtgttgggattacaggcatgagccactgagccttgcctggactttttttt
-ttttttgagatggcgtctcgctctgttgcccaggttggagtgctacggcatgatcttggc
-tcactgcaacttccacctcccaggttcaagcgattctcttgcctcggccccccgagtagc
-tgggattacaggcatgcgccaccgtgcctggctaattttggtatttttagtagagatagg
-gtttcatcatgttgggcaggctggtcttgaactcctgacctcgtgatccacccacctcgg
-cctcccaaagtgctgggattataggcatagccaacgcgcccagcctggacttgtttttaa
-aagatcactgtggctcctgtgtttaggctggctggtaggagacaggtggcagtggcattg
-atggtgaagagaaaatagtggcagccatggagatggagagaagtagacaagtttgggata
-tattatacattccaggggtagaaacaacaggactagatgatggattgatgggtgggagat
-gtagatactgggagagaagcaggattctgatggatggaaaaactaaaaaattctattttg
-ggtgtggtaagtctaagtctattagacatgcaagtagagatgtcactgggcagatacaca
-tctggatttcaggggcaaggtccaagctagagaaagaaacctgggcatggtcagcatgag
-gatggtgtttaaagccatggaacttatcttgtgcatccctataagacccctttgaggcac
-ttgtttcccctcacaatggatgcagtgcatcttccattctgaattccagaggcaacaacc
-tcctgctcctagaagctaaactctccagacttagtcttctgaattc
+>V00295 V00295.1 E. coli lacY gene (codes for lactose permease).
+accatgattacggattcactggccgtcgttttacaacgtcgtgactgggaaaaccctggc
+gttacccaacttaatcgccttgcagcacatccccctttcgccagctggcgtaatagcgaa
+gaggcccgcaccgatcgcccttcccaacagttgcgcagcctgaatggcgaatggcgcttt
+gcctggtttccggcaccagaagcggtgccggaaagctggctggagtgcgatcttcctgag
+gccgatactgtcgtcgtcccctcaaactggcagatgcacggttacgatgcgcccatctac
+accaacgtaacctatcccattacggtcaatccgccgtttgttcccacggagaatccgacg
+ggttgttactcgctcacatttaatgttgatgaaagctggctacaggaaggccagacgcga
+attatttttgatggcgttaactcggcgtttcatctgtggtgcaacgggcgctgggtcggt
+tacggccaggacagtcgtttgccgtctgaatttgacctgagcgcatttttacgcgccgga
+gaaaaccgcctcgcggtgatggtgctgcgttggagtgacggcagttatctggaagatcag
+gatatgtggcggatgagcggcattttccgtgacgtctcgttgctgcataaaccgactaca
+caaatcagcgatttccatgttgccactcgctttaatgatgatttcagccgcgctgtactg
+gaggctgaagttcagatgtgcggcgagttgcgtgactacctacgggtaacagtttcttta
+tggcagggtgaaacgcaggtcgccagcggcaccgcgcctttcggcggtgaaattatcgat
+gagcgtggtggttatgccgatcgcgtcacactacgtctgaacgtcgaaaacccgaaactg
+tggagcgccgaaatcccgaatctctatcgtgcggtggttgaactgcacaccgccgacggc
+acgctgattgaagcagaagcctgcgatgtcggtttccgcgaggtgcggattgaaaatggt
+ctgctgctgctgaacggcaagccgttgctgattcgaggcgttaaccgtcacgagcatcat
+cctctgcatggtcaggtcatggatgagcagacgatggtgcaggatatcctgctgatgaag
+cagaacaactttaacgccgtgcgctgttcgcattatccgaaccatccgctgtggtacacg
+ctgtgcgaccgctacggcctgtatgtggtggatgaagccaatattgaaacccacggcatg
+gtgccaatgaatcgtctgaccgatgatccgcgctggctaccggcgatgagcgaacgcgta
+acgcgaatggtgcagcgcgatcgtaatcacccgagtgtgatcatctggtcgctggggaat
+gaatcaggccacggcgctaatcacgacgcgctgtatcgctggatcaaatctgtcgatcct
+tcccgcccggtgcagtatgaaggcggcggagccgacaccacggccaccgatattatttgc
+ccgatgtacgcgcgcgtggatgaagaccagcccttcccggctgtgccgaaatggtccatc
+aaaaaatggctttcgctacctggagagacgcgcccgctgatcctttgcgaatacgcccac
+gcgatgggtaacagtcttggcggtttcgctaaatactggcaggcgtttcgtcagtatccc
+cgtttacagggcggcttcgtctgggactgggtggatcagtcgctgattaaatatgatgaa
+aacggcaacccgtggtcggcttacggcggtgattttggcgatacgccgaacgatcgccag
+ttctgtatgaacggtctggtctttgccgaccgcacgccgcatccagcgctgacggaagca
+aaacaccagcagcagtttttccagttccgtttatccgggcaaaccatcgaagtgaccagc
+gaatacctgttccgtcatagcgataacgagctcctgcactggatggtggcgctggatggt
+aagccgctggcaagcggtgaagtgcctctggatgtcgctccacaaggtaaacagttgatt
+gaactgcctgaactaccgcagccggagagcgccgggcaactctggctcacagtacgcgta
+gtgcaaccgaacgcgaccgcatggtcagaagccgggcacatcagcgcctggcagcagtgg
+cgtctggcggaaaacctcagtgtgacgctccccgccgcgtcccacgccatcccgcatctg
+accaccagcgaaatggatttttgcatcgagctgggtaataagcgttggcaatttaaccgc
+cagtcaggctttctttcacagatgtggattggcgataaaaaacaactgctgacgccgctg
+cgcgatcagttcacccgtgcaccgctggataacgacattggcgtaagtgaagcgacccgc
+attgaccctaacgcctgggtcgaacgctggaaggcggcgggccattaccaggccgaagca
+gcgttgttgcagtgcacggcagatacacttgctgatgcggtgctgattacgaccgctcac
+gcgtggcagcatcaggggaaaaccttatttatcagccggaaaacctaccggattgatggt
+agtggtcaaatggcgattaccgttgatgttgaagtggcgagcgatacaccgcatccggcg
+cggattggcctgaactgccagctggcgcaggtagcagagcgggtaaactggctcggatta
+gggccgcaagaaaactatcccgaccgccttactgccgcctgttttgaccgctgggatctg
+ccattgtcagacatgtataccccgtacgtcttcccgagcgaaaacggtctgcgctgcggg
+acgcgcgaattgaattatggcccacaccagtggcgcggcgacttccagttcaacatcagc
+cgctacagtcaacagcaactgatggaaaccagccatcgccatctgctgcacgcggaagaa
+ggcacatggctgaatatcgacggtttccatatggggattggtggcgacgactcctggagc
+ccgtcagtatcggcggaattccagctgagcgccggtcgctaccattaccagttggtctgg
+tgtcaaaaataataataaccgggcaggccatgtctgcccgtatttcgcgtaaggaaatcc
+attatgtactatttaaaaaacacaaacttttggatgttcggtttattctttttcttttac
+ttttttatcatgggagcctacttcccgtttttcccgatttggctacatgacatcaaccat
+atcagcaaaagtgatacgggtattatttttgccgctatttctctgttctcgctattattc
+caaccgctgtttggtctgctttctgacaaactcgggctgcgcaaatacctgctgtggatt
+attaccggcatgttagtgatgtttgcgccgttctttatttttatcttcgggccactgtta
+caatacaacattttagtaggatcgattgttggtggtatttatctaggcttttgttttaac
+gccggtgcgccagcagtagaggcatttattgagaaagtcagccgtcgcagtaatttcgaa
+tttggtcgcgcgcggatgtttggctgtgttggctgggcgctgtgtgcctcgattgtcggc
+atcatgttcaccatcaataatcagtttgttttctggctgggctctggctgtgcactcatc
+ctcgccgttttactctttttcgccaaaacggatgcgccctcttctgccacggttgccaat
+gcggtaggtgccaaccattcggcatttagccttaagctggcactggaactgttcagacag
+ccaaaactgtggtttttgtcactgtatgttattggcgtttcctgcacctacgatgttttt
+gaccaacagtttgctaatttctttacttcgttctttgctaccggtgaacagggtacgcgg
+gtatttggctacgtaacgacaatgggcgaattacttaacgcctcgattatgttctttgcg
+ccactgatcattaatcgcatcggtgggaaaaacgccctgctgctggctggcactattatg
+tctgtacgtattattggctcatcgttcgccacctcagcgctggaagtggttattctgaaa
+acgctgcatatgtttgaagtaccgttcctgctggtgggctgctttaaatatattaccagc
+cagtttgaagtgcgtttttcagcgacgatttatctggtctgtttctgcttctttaagcaa
+ctggcgatgatttttatgtctgtactggcgggcaatatgtatgaaagcatcggtttccag
+ggcgcttatctggtgctgggtctggtggcgctgggcttcaccttaatttccgtgttcacg
+cttagcggccccggcccgctttccctgctgcgtcgtcaggtgaatgaagtcgcttaagca
+atcaatgtcggatgcggcgcgacgcttatccgaccaacatatcataacggagtgatcgca
+ttgaacatgccaatgaccgaaagaataagagcaggcaagctatttaccgatatgtgcgaa
+ggcttaccggaaaaaaga
 
    A merged sequence is written out.
 

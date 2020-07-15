@@ -4,7 +4,7 @@
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>chaos tembl:eclac -graph cps </b>
+% <b>chaos tembl:j01636 -graph cps </b>
 Create a chaos game representation plot for a sequence
 
 Created chaos.ps

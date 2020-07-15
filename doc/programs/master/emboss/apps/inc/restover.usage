@@ -6,9 +6,9 @@
 
 % <b>restover </b>
 Find restriction enzymes producing specific overhang
-Input nucleotide sequence(s): <b>tembl:hsfau</b>
+Input nucleotide sequence(s): <b>tembl:x65923</b>
 Overlap sequence: <b>cg</b>
-Output file [hsfau.restover]: <b></b>
+Output file [x65923.restover]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

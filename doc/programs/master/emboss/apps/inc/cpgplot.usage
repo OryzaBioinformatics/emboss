@@ -4,14 +4,14 @@
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>cpgplot tembl:rnu68037 -graph cps </b>
+% <b>cpgplot tembl:u68037 -graph cps </b>
 Plot CpG rich areas
 Window size [100]: <b></b>
 Minimum length of an island [200]: <b></b>
 Minimum observed/expected [0.6]: <b></b>
 Minimum percentage [50.]: <b></b>
-Output file [rnu68037.cpgplot]: <b></b>
-Features output [rnu68037.gff]: <b></b>
+Output file [u68037.cpgplot]: <b></b>
+Features output [u68037.gff]: <b></b>
 
 Created cpgplot.ps
 

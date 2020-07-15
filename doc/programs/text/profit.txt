@@ -189,7 +189,9 @@ Output file format
 # PROF scan using simple frequency matrix mymatrix
 # Scores >= threshold 75 (max score 76)
 #
-HBB_HUMAN 21 Percentage: 100
+HBB_HUMAN 22 Percentage: 100
+HBB_PANPA 22 Percentage: 100
+HBB_PANTR 22 Percentage: 100
 
    The ouput is a list of three columns.
 

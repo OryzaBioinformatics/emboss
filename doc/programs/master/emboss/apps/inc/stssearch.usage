@@ -6,9 +6,9 @@
 
 % <b>stssearch </b>
 Search a DNA database for matches with a set of STS primers
-Input nucleotide sequence(s): <b>tembl:eclac*</b>
+Input nucleotide sequence(s): <b>@eclac.list</b>
 Primer pairs file: <b>lac.primers</b>
-Output file [eclac.stssearch]: <b></b>
+Output file [j01636.stssearch]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

@@ -6,9 +6,9 @@
 
 % <b>fuzznuc </b>
 Nucleic acid pattern search
-Input nucleotide sequence(s): <b>tembl:hhtetra</b>
+Input nucleotide sequence(s): <b>tembl:L46634</b>
 Search pattern: <b>AAGCTT</b>
-Output report [hhtetra.fuzznuc]: <b></b>
+Output report [l46634.fuzznuc]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -22,9 +22,9 @@ Output report [hhtetra.fuzznuc]: <b></b>
 
 % <b>fuzznuc </b>
 Nucleic acid pattern search
-Input nucleotide sequence(s): <b>tembl:hhtetra</b>
+Input nucleotide sequence(s): <b>tembl:L46634</b>
 Search pattern: <b>@nucseq.pat</b>
-Output report [hhtetra.fuzznuc]: <b></b>
+Output report [l46634.fuzznuc]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -38,9 +38,9 @@ Output report [hhtetra.fuzznuc]: <b></b>
 
 % <b>fuzznuc -pname test </b>
 Nucleic acid pattern search
-Input nucleotide sequence(s): <b>tembl:hhtetra</b>
+Input nucleotide sequence(s): <b>tembl:L46634</b>
 Search pattern: <b>@nucsimple.pat</b>
-Output report [hhtetra.fuzznuc]: <b></b>
+Output report [l46634.fuzznuc]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -54,9 +54,9 @@ Output report [hhtetra.fuzznuc]: <b></b>
 
 % <b>fuzznuc </b>
 Nucleic acid pattern search
-Input nucleotide sequence(s): <b>tembl:hhtetra</b>
+Input nucleotide sequence(s): <b>tembl:L46634</b>
 Search pattern: <b>@nuc.pat</b>
-Output report [hhtetra.fuzznuc]: <b></b>
+Output report [l46634.fuzznuc]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

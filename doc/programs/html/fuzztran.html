@@ -53,7 +53,7 @@ depending on the complexity of the search pattern specified.
 
 % <b>fuzztran -opt </b>
 Protein pattern search after translation
-Input nucleotide sequence(s): <b>tembl:rnops</b>
+Input nucleotide sequence(s): <b>tembl:Z46957</b>
 Search pattern: <b>RA</b>
 Translation frames
          1 : 1
@@ -86,7 +86,7 @@ Genetic codes
         22 : Scenedesmus obliquus
         23 : Thraustochytrium Mitochondrial
 Code to use [0]: <b></b>
-Output report [rnops.fuzztran]: <b></b>
+Output report [z46957.fuzztran]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -287,19 +287,17 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:rnops' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:Z46957' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:rnops</h3>
+<p><h3>Database entry: tembl:Z46957</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   RNOPS      standard; RNA; ROD; 1493 BP.
+ID   Z46957; SV 1; linear; mRNA; STD; ROD; 1493 BP.
 XX
 AC   Z46957;
 XX
-SV   Z46957.1
-XX
 DT   20-DEC-1994 (Rel. 42, Created)
-DT   27-AUG-1996 (Rel. 49, Last updated, Version 8)
+DT   18-APR-2005 (Rel. 83, Last updated, Version 9)
 XX
 DE   R.norvegicus mRNA for rhodopsin.
 XX
@@ -307,14 +305,17 @@ KW   rhodopsin.
 XX
 OS   Rattus norvegicus (Norway rat)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-OC   Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Rattus.
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea;
+OC   Muridae; Murinae; Rattus.
 XX
 RN   [1]
 RP   1-1493
+RX   DOI; 10.1074/jbc.271.20.11710.
+RX   PUBMED; 8662634.
 RA   Huber A., Sander P.H., Paulsen R.;
 RT   "Phosphorylation of the InaD gene product, a photoreceptor membrane protein
 RT   required for recovery of visual excitation";
-RL   J. Biol. Chem. 271:11710-11717(1996).
+RL   J. Biol. Chem. 271(20):11710-11717(1996).
 XX
 RN   [2]
 RP   1-1493
@@ -324,25 +325,27 @@ RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
 RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
 RL   Karlsruhe, Germany
 XX
-DR   SWISS-PROT; P51489; OPSD_RAT.
+DR   EMBL-ALIGN; ALIGN_000323.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..1493
-FT                   /db_xref="taxon:10116"
 FT                   /organism="Rattus norvegicus"
 FT                   /strain="Sprague-Dawley"
-FT                   /clone="pRO4"
+FT                   /mol_type="mRNA"
 FT                   /dev_stage="adult"
-FT                   /tissue_type="retina"
-FT                   /cell_type="rod"
 FT                   /clone_lib="rat retinal library"
+FT                   /clone="pRO4"
+FT                   /cell_type="rod"
+FT                   /tissue_type="retina"
+FT                   /db_xref="taxon:10116"
 FT   5'UTR           1..83
 FT   CDS             84..1130
-FT                   /citation=[1]
-FT                   /db_xref="SWISS-PROT:P51489"
-FT                   /function="phototransduction"
 FT                   /product="rhodopsin"
+FT                   /function="phototransduction"
+FT                   /db_xref="GOA:P51489"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P51489"
+FT                   /citation=[1]
 FT                   /protein_id="CAA87081.1"
 FT                   /translation="MNGTEGPNFYVPFSNITGVVRSPFEQPQYYLAEPWQFSMLAAYMF
 FT                   LLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYFV
@@ -485,24 +488,24 @@ By default <b>fuzztran</b> writes a 'table' report file.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: rnops.fuzztran</h3>
+<p><h3>File: z46957.fuzztran</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: fuzztran
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: fuzztran
 #    -options
-#    -sequence tembl:rnops
+#    -sequence tembl:Z46957
 #    -pattern RA
 #    -frame f
 # Report_format: table
-# Report_file: rnops.fuzztran
+# Report_file: z46957.fuzztran
 ########################################
 
 #=======================================
 #
-# Sequence: RNOPS     from: 1   to: 1493
+# Sequence: Z46957     from: 1   to: 1493
 # HitCount: 9
 #
 # Pattern_name Mismatch Pattern

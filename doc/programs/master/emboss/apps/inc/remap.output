@@ -1,10 +1,10 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: eclac.remap </h3>
+<p><h3>File: j01636.remap </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-ECLAC
+J01636
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
                                                         BssKI
@@ -52,10 +52,10 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: eclac.remap</h3>
+<p><h3>File: j01636.remap</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-ECLAC
+J01636
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
                                                       Hin6I
@@ -114,10 +114,10 @@ HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI
 
 <a name="output.3"></a>
 <h3>Output files for usage example 3</h3>
-<p><h3>File: eclac.remap</h3>
+<p><h3>File: j01636.remap</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-ECLAC
+J01636
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
                                                       HspAI
@@ -190,10 +190,10 @@ MaeII     NotI
 
 <a name="output.4"></a>
 <h3>Output files for usage example 4</h3>
-<p><h3>File: eclac.remap</h3>
+<p><h3>File: j01636.remap</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-ECLAC
+J01636
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
                                                                   Ksp632I

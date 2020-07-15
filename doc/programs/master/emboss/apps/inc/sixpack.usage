@@ -6,9 +6,9 @@
 
 % <b>sixpack </b>
 Display a DNA sequence with 6-frame translation and ORFs
-Input nucleotide sequence: <b>tembl:paamir</b>
-Output file [paamir.sixpack]: <b></b>
-protein output sequence(s) [paamir.fasta]: <b></b>
+Input nucleotide sequence: <b>tembl:x13776</b>
+Output file [x13776.sixpack]: <b></b>
+protein output sequence(s) [x13776.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

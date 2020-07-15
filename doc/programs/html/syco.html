@@ -55,7 +55,7 @@ It is essential to use the correct codon usage file for the species.
 
 % <b>syco -plot -cfile Epseae.cut </b>
 Synonymous codon usage Gribskov statistic plot
-Input nucleotide sequence: <b>tembl:paamir</b>
+Input nucleotide sequence: <b>tembl:x13776</b>
 Graph type [x11]: <b>ps</b>
 
 Created syco.ps
@@ -74,14 +74,14 @@ Created syco.ps
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          sequence   Nucleotide sequence filename and optional
                                   format, or reference (input USA)
+   -cfile              codon      Codon usage file
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
-                                  tekt, tek, none, data, xterm, png)
+                                  tekt, tek, none, data, xterm, png, gif)
 *  -outfile            outfile    [*.syco] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -cfile              codon      Codon usage file
    -window             integer    [30] Averaging window (Any integer value)
    -uncommon           boolean    [N] Show common codon usage
    -minimum            float      [.15] Minimum value for a common codon
@@ -155,9 +155,16 @@ Created syco.ps
 </tr>
 
 <tr>
+<td>-cfile</td>
+<td>Codon usage file</td>
+<td>Codon usage file in EMBOSS data path</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png, gif</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -182,13 +189,6 @@ Created syco.ps
 <th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
-</tr>
-
-<tr>
-<td>-cfile</td>
-<td>Codon usage file</td>
-<td>Codon usage file in EMBOSS data path</td>
-<td>&nbsp;</td>
 </tr>
 
 <tr>
@@ -234,26 +234,25 @@ Created syco.ps
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 
-'tembl:paamir' is a sequence entry in the example nucleic acid database 'tembl'
+'tembl:x13776' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>Database entry: tembl:paamir</h3>
+<p><h3>Database entry: tembl:x13776</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
-ID   PAAMIR     standard; DNA; PRO; 2167 BP.
+ID   X13776; SV 1; linear; genomic DNA; STD; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
 XX
-SV   X13776.1
-XX
 DT   19-APR-1989 (Rel. 19, Created)
-DT   17-FEB-1997 (Rel. 50, Last updated, Version 22)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 24)
 XX
 DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 XX
 KW   aliphatic amidase regulator; amiC gene; amiR gene.
 XX
 OS   Pseudomonas aeruginosa
-OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae; Pseudomonas.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
 XX
 RN   [1]
 RP   1167-2167
@@ -264,20 +263,21 @@ RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 RN   [2]
 RP   1167-2167
-RX   MEDLINE; 89211409.
+RX   DOI; 10.1016/0014-5793(89)80249-2.
+RX   PUBMED; 2495988.
 RA   Lowe N., Rice P.M., Drew R.E.;
 RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
 RT   aeruginosa";
-RL   FEBS Lett. 246:39-43(1989).
+RL   FEBS Lett. 246(1-2):39-43(1989).
 XX
 RN   [3]
 RP   1-1292
-RX   MEDLINE; 91317707.
+RX   PUBMED; 1907262.
 RA   Wilson S., Drew R.;
 RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
 RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
 RT   product.";
-RL   J. Bacteriol. 173:4914-4921(1991).
+RL   J. Bacteriol. 173(16):4914-4921(1991).
 XX
 RN   [4]
 RP   1-2167
@@ -286,16 +286,16 @@ RT   ;
 RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
-DR   SWISS-PROT; P10932; AMIR_PSEAE.
-DR   SWISS-PROT; P27017; AMIC_PSEAE.
-DR   SWISS-PROT; Q51417; AMIS_PSEAE.
+DR   GOA; Q51417.
+DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
+XX
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-FT                   phenotype"
 FT                   /replace=""
-FT                   /gene="amiC"
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
 FT   misc_feature    1
 FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653

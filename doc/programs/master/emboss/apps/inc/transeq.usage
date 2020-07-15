@@ -6,7 +6,7 @@ To translate a sequence in the first frame (starting at the first base and proce
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>transeq tembl:paamir amir.pep </b>
+% <b>transeq tembl:x13776 amir.pep </b>
 Translate nucleic acid sequences
 
 </pre></td></tr></table><p>
@@ -21,7 +21,7 @@ To translate a sequence in the second frame:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>transeq tembl:paamir amir.pep -frame=2 </b>
+% <b>transeq tembl:x13776 amir.pep -frame=2 </b>
 Translate nucleic acid sequences
 
 </pre></td></tr></table><p>
@@ -36,7 +36,7 @@ To translate a sequence in the first frame in the reverse sense (starting at the
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>transeq tembl:paamir amir.pep -frame=-1 </b>
+% <b>transeq tembl:x13776 amir.pep -frame=-1 </b>
 Translate nucleic acid sequences
 
 </pre></td></tr></table><p>
@@ -51,7 +51,7 @@ To translate a sequence in all three forward frames:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>transeq tembl:paamir amir.pep -frame=F </b>
+% <b>transeq tembl:x13776 amir.pep -frame=F </b>
 Translate nucleic acid sequences
 
 </pre></td></tr></table><p>
@@ -66,7 +66,7 @@ To translate a sequence in all three reverse frames:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>transeq tembl:paamir amir.pep -frame=R </b>
+% <b>transeq tembl:x13776 amir.pep -frame=R </b>
 Translate nucleic acid sequences
 
 </pre></td></tr></table><p>
@@ -81,7 +81,7 @@ To translate a sequence in all six forward and reverse frames:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>transeq tembl:paamir amir.pep -frame=6 </b>
+% <b>transeq tembl:x13776 amir.pep -frame=6 </b>
 Translate nucleic acid sequences
 
 </pre></td></tr></table><p>
@@ -96,7 +96,7 @@ To translate a specific set of regions corresponding to a known set of coding se
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>transeq tembl:paamir amir.pep -reg=2-45,67-201,328-509 </b>
+% <b>transeq tembl:x13776 amir.pep -reg=2-45,67-201,328-509 </b>
 Translate nucleic acid sequences
 
 </pre></td></tr></table><p>

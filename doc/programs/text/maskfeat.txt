@@ -171,14 +171,12 @@ Input file format
 
   Database entry: tembl:ab000360
 
-ID   AB000360   standard; DNA; HUM; 2582 BP.
+ID   AB000360; SV 1; linear; genomic DNA; STD; HUM; 2582 BP.
 XX
 AC   AB000360;
 XX
-SV   AB000360.1
-XX
 DT   27-OCT-1997 (Rel. 53, Created)
-DT   27-OCT-1997 (Rel. 53, Last updated, Version 1)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 3)
 XX
 DE   Homo sapiens PIGC gene, complete cds.
 XX
@@ -187,7 +185,8 @@ XX
 OS   Homo sapiens (human)
 OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
 ;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
 XX
 RN   [1]
 RP   1-2582
@@ -200,29 +199,30 @@ RL   3-1 Yamada-oka, Suita, Osaka 565, Japan
 RL   (E-mail:kohishi@biken.osaka-u.ac.jp, Tel:81-6-879-8329, Fax:81-6-875-5233)
 XX
 RN   [2]
+RX   DOI; 10.1006/geno.1997.4893.
+RX   PUBMED; 9325057.
 RA   Hong Y., Ohishi K., Inoue N., Endo Y., Fujita T., Takeda J., Kinoshita T.;
 RT   "Structures and chromosomal localizations of the
 RT   glycosylphosphatidylinositol synthesis gene PIGC and its pseudogene
 RT   PIGCP1";
-RL   Genomics 44:347-349(1997).
-XX
-DR   SWISS-PROT; Q92535; PIGC_HUMAN.
+RL   Genomics 44(3):347-349(1997).
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2582
-FT                   /chromosome="1"
-FT                   /db_xref="taxon:9606"
-FT                   /sequenced_mol="DNA"
 FT                   /organism="Homo sapiens"
+FT                   /chromosome="1"
 FT                   /map="1q23-q25"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
 FT   exon            808..2266
 FT   CDS             1101..1994
 FT                   /codon_start=1
-FT                   /db_xref="SWISS-PROT:Q92535"
 FT                   /transl_table=1
 FT                   /gene="PIGC"
 FT                   /standard_name="glycosylphosphatidylinositol-synthesis
+FT                   gene"
+FT                   /db_xref="GDB:6045444"
 
 
   [Part of this file has been deleted for brevity]
@@ -230,7 +230,7 @@ FT                   /standard_name="glycosylphosphatidylinositol-synthesis
 FT   variation       2259
 FT                   /replace="t"
 FT   repeat_region   2331..2356
-FT                   /rpt_unit=gt
+FT                   /rpt_unit_seq="gt"
 XX
 SQ   Sequence 2582 BP; 694 A; 494 C; 581 G; 813 T; 0 other;
      ggatccctgc tgcagagggg gtaacggtgt ctggcttgcc aagcaatatt tgttgtggtc        6

@@ -35,7 +35,7 @@ Usage
    with no overlap between the sub-sequences:
 
 
-% splitter tembl:AP000504 ap000504.split 
+% splitter tembl:BA000025 ba000025.split 
 Split a sequence into (overlapping) smaller sequences
 
    Go to the input files for this example
@@ -47,7 +47,7 @@ Split a sequence into (overlapping) smaller sequences
    3,000 bases on each sub-sequence:
 
 
-% splitter tembl:AP000504 ap000504.split -size=50000 -over=3000 
+% splitter tembl:BA000025 ba000025.split -size=50000 -over=3000 
 Split a sequence into (overlapping) smaller sequences
 
    Go to the output files for this example

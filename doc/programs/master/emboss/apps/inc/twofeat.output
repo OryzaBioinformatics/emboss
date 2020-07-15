@@ -1,25 +1,25 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hsfau.twofeat</h3>
+<p><h3>File: x65923.twofeat</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: twofeat
-# Rundate: Sat 15 Jul 2006 12:00:00
+# Rundate: Sun 15 Jul 2007 12:00:00
 # Commandline: twofeat
-#    [-sequence] tembl:hsfau
+#    [-sequence] tembl:x65923
 #    -atype polyA_signal
 #    -btype polyA_site
 #    -minrange 10
 #    -maxrange 50
 # Report_format: table
-# Report_file: hsfau.twofeat
+# Report_file: x65923.twofeat
 ########################################
 
 #=======================================
 #
-# Sequence: HSFAU     from: 1   to: 518
+# Sequence: X65923     from: 1   to: 518
 # HitCount: 1
 #=======================================
 
@@ -38,13 +38,13 @@
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: hsfau.twofeat</h3>
+<p><h3>File: x65923.twofeat</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
 ##date 2006-07-15
-##Type DNA HSFAU
-HSFAU	EMBL	polyA_signal	484	489	0.000	+	.	Sequence "HSFAU.6"
-HSFAU	EMBL	polyA_site	509	509	0.000	+	.	Sequence "HSFAU.7" ; FeatFlags "0x40"
+##Type DNA X65923
+X65923	EMBL	polyA_signal	484	489	0.000	+	.	Sequence "X65923.6"
+X65923	EMBL	polyA_site	509	509	0.000	+	.	Sequence "X65923.7" ; FeatFlags "0x40"
 </pre>
 </td></tr></table><p>

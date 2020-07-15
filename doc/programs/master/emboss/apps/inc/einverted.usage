@@ -4,14 +4,14 @@
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>einverted tembl:hsts1 </b>
+% <b>einverted tembl:d00596 </b>
 Finds DNA inverted repeats
 Gap penalty [12]: <b></b>
 Minimum score threshold [50]: <b></b>
 Match score [3]: <b></b>
 Mismatch score [-4]: <b></b>
-Sanger Centre program inverted output file [hsts1.inv]: <b></b>
-File for sequence of regions of inverted repeats. [hsts1.fasta]: <b></b>
+Sanger Centre program inverted output file [d00596.inv]: <b></b>
+File for sequence of regions of inverted repeats. [d00596.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

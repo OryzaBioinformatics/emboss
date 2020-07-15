@@ -6,7 +6,7 @@
 
 % <b>fuzztran -opt </b>
 Protein pattern search after translation
-Input nucleotide sequence(s): <b>tembl:rnops</b>
+Input nucleotide sequence(s): <b>tembl:Z46957</b>
 Search pattern: <b>RA</b>
 Translation frames
          1 : 1
@@ -39,7 +39,7 @@ Genetic codes
         22 : Scenedesmus obliquus
         23 : Thraustochytrium Mitochondrial
 Code to use [0]: <b></b>
-Output report [rnops.fuzztran]: <b></b>
+Output report [z46957.fuzztran]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

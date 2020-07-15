@@ -8,7 +8,7 @@ This asks for 5 mutations, with point mutations as changes (substitutions), and 
 
 % <b>msbar </b>
 Mutate sequence beyond all recognition
-Input sequence(s): <b>tembl:eclac</b>
+Input sequence(s): <b>tembl:j01636</b>
 Number of times to perform the mutation operations [1]: <b>5</b>
 Point mutation operations
          0 : None
@@ -37,7 +37,7 @@ Codon mutation operations
          5 : Duplications
          6 : Moves
 Types of codon mutations to perform [0]: <b></b>
-output sequence(s) [eclac.fasta]: <b></b>
+output sequence(s) [j01636.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
