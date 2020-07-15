@@ -579,6 +579,7 @@ public class BuildProgramMenu
           new BuildJembossForm(progs.getProgDescription()[i],
                   db,progs.getProgsList()[i],envp,cwd,
                   acdText,withSoap,formPane,mysettings,f);
+          f.repaint();
       }
       
       private int setForm(ActionEvent e, int numProgs, String allAcd[])
