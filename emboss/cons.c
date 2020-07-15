@@ -1,7 +1,7 @@
 /* @source cons application
 **
 ** Calculates a consensus
-** @author: Copyright (C) Tim Carver (tcarver@hgmp.mrc.ac.uk)
+** @author Copyright (C) Tim Carver (tcarver@hgmp.mrc.ac.uk)
 ** @@
 **
 **
@@ -88,11 +88,11 @@ int main(int argc, char **argv)
 
     cons = ajStrNew();
     embConsCalc (seqset, cmpmatrix, nseqs, mlen,
-		 fplural, setcase, identity, &cons);
+		 fplural, setcase, identity, ajFalse, &cons);
 
     /* write out consensus sequence */
     seqo = ajSeqNew();
-    ajSeqAssSeq(seqo,cons);
+    ajSeqAssignSeqS(seqo,cons);
 
     if (ajSeqsetIsNuc(seqset))
       ajSeqSetNuc(seqo);
@@ -100,14 +100,19 @@ int main(int argc, char **argv)
       ajSeqSetProt(seqo);
 
     if(name == NULL)
-	ajSeqAssName(seqo,ajSeqsetGetName(seqset));
+	ajSeqAssignNameS(seqo,ajSeqsetGetName(seqset));
     else
-	ajSeqAssName(seqo,name);
+	ajSeqAssignNameS(seqo,name);
 
     ajSeqWrite(seqout,seqo);
+    ajSeqWriteClose(seqout);
 
     ajStrDel(&cons);
     ajSeqDel(&seqo);
+    ajSeqsetDel(&seqset);
+    ajMatrixDel(&cmpmatrix);
+    ajSeqoutDel(&seqout);
+    ajStrDel(&name);
 
     ajExit ();
 

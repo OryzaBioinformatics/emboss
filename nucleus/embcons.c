@@ -39,13 +39,14 @@
 **                            threshold
 ** @param [r] identity [ajint] number of identical symbols required
 **                             for consesnsus
+** @param [r] gaps [AjBool] Allow gap characters in the consensus
 ** @param [w] cons [AjPStr *] the created consensus sequence
 ** @return [void]
 ******************************************************************************/
 
 void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 		 ajint nseqs, ajint mlen,float fplural,float setcase,
-		 ajint identity, AjPStr *cons)
+		 ajint identity, AjBool gaps, AjPStr *cons)
 {
     ajint i;
     ajint j;
@@ -67,8 +68,9 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
     AjPSeqCvt cvt  = 0;
     AjPFloat score = NULL;
     const char **seqcharptr;
+    char **ptrfree;
     char res;
-    char nocon;
+    char nocon = '-';
 
 
     matrix  = ajMatrixArray(cmpmatrix);
@@ -81,12 +83,10 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 
     score = ajFloatNew();
 
-    nocon = '-';
     if(ajSeqsetIsNuc(seqset))        /* set non-consensus character */
 	nocon = 'N';
     else if ( ajSeqsetIsProt(seqset))
 	nocon = 'X';
-
 
     for(i=0;i<nseqs;i++)		/* get sequence as string */
 	seqcharptr[i] =  ajSeqsetSeq(seqset, i);
@@ -107,7 +107,7 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 	for(i=0;i<nseqs;i++)	      /* generate score for columns */
 	{
 	    m1 = ajSeqCvtK(cvt,seqcharptr[i][k]);
-	    if(m1)
+	    if(m1 || gaps)
 		identical[m1] += ajSeqsetWeight(seqset,i);
 	    for(j=i+1;j<nseqs;j++)
 	    {
@@ -128,6 +128,7 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 	highindex = -1;
 	max  = -(float)INT_MAX;
 	for(i=0;i<nseqs;i++)
+	{
 	    if( ajFloatGet(score,i) > max ||
 	       (ajFloatGet(score,i) == max &&
 		seqcharptr[highindex][k] == '-') )      
@@ -135,18 +136,28 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 		highindex = i;
 		max       = ajFloatGet(score,i);
 	    }
+	}
 
 	for(i=0;i<nseqs;i++)	  /* find +ve matches in the column */
 	{
 	    m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);
 	    if(!matching[m1])
 		for(j=0;j<nseqs;j++)
-		    if( i != j)
-		    {
-			m2 = ajSeqCvtK (cvt, seqcharptr[j][k]);
-			if(m1 && m2 && matrix[m1][m2] > 0)
-			    matching[m1] += ajSeqsetWeight(seqset, j);
-		    }
+		{
+/*
+//		    if( i != j)
+//		    {
+//			m2 = ajSeqCvtK (cvt, seqcharptr[j][k]);
+//			if(m1 && m2 && matrix[m1][m2] > 0)
+//			    matching[m1] += ajSeqsetWeight(seqset, j);
+//		    }
+*/
+		    m2 = ajSeqCvtK (cvt, seqcharptr[j][k]);
+		    if(m1 && m2 && matrix[m1][m2] > 0)
+		      matching[m1] += ajSeqsetWeight(seqset, j);
+		    if(gaps && !m1 && !m2)
+		      matching[m1] += ajSeqsetWeight(seqset, j);
+		}
 	}
 
 
@@ -171,8 +182,10 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 
 	/* plurality check */
         m1 = ajSeqCvtK(cvt,seqcharptr[highindex][k]);
-	if(matching[m1] >= fplural
+/*	if(matching[m1] >= fplural
 	   && seqcharptr[highindex][k] != '-')
+	    res = seqcharptr[highindex][k];*/
+	if(matching[m1] >= fplural)
 	    res = seqcharptr[highindex][k];
 
 	if(matching[m1]<= setcase)
@@ -181,18 +194,20 @@ void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 	if(identity)			/* if just looking for id's */
 	{
 	    j = 0;
-	    for(i=0;i<nseqs;i++)
+	    for(i=0;i<nseqs;i++) {
 		if(matchingmaxindex == ajSeqCvtK(cvt,seqcharptr[i][k]))
 		    j++;
+	    }
 
 	    if(j<identity)
 		res = nocon;
 	}
 
-	ajStrAppK(cons,res);
+	ajStrAppendK(cons,res);
     }
 
-    AJFREE(seqcharptr);
+    ptrfree = (char **) seqcharptr;
+    AJFREE(ptrfree);
     AJFREE(matching);
     AJFREE(identical);
     ajFloatDel(&score);

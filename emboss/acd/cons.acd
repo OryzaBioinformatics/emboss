@@ -9,14 +9,14 @@ section: input [
   type: "page"
 ]
 
-  seqset: sequence  [
+  seqset: sequence [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
     help: "File containing a sequence alignment."
   ]
 
-  matrix: datafile  [
+  matrix: datafile [
     additional: "Y"
     information: "Scoring matrix"
     protein: "$(acdprotein)"
@@ -33,7 +33,7 @@ section: additional [
   type: "page"
 ]
 
-  float: plurality  [
+  float: plurality [
     additional: "Y"
     information: "Plurality check value"
     help: "Set a cut-off for the number of positive matches below
@@ -43,7 +43,7 @@ section: additional [
     expected: "Half the total sequence weighting"
   ]
 
-  integer: identity  [
+  integer: identity [
     additional: "Y"
     information: "Required number of identities at a position"
     help: "Provides the facility of setting the required number of
@@ -54,8 +54,7 @@ section: additional [
     minimum: "0"
   ]
 
-
-  float: setcase  [
+  float: setcase [
     additional: "Y"
     information: "Define a threshold above which the consensus
                   is given in uppercase"
@@ -72,11 +71,11 @@ section: output [
   type: "page"
 ]
 
-  seqout: outseq  [
+  seqout: outseq [
     parameter: "Y"
   ]
 
-  string: name  [
+  string: name [
     additional: "Y"
     default: ""
     information: "Name of the consensus sequence"

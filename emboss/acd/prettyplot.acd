@@ -9,20 +9,19 @@ section: input [
   type: "page"
 ]
 
-  seqset: sequences  [
+  seqset: sequences [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
-    help: "File containing a sequence alignment"
   ]
 
-  matrix: matrixfile  [
+  matrix: matrixfile [
     additional: "Y"
     information: "Matrix file"
     protein: "$(acdprotein)"
     help: "This is the scoring matrix file used when comparing
-           sequences. By default it is the file 'EBLOSUM62' (for proteins)
-           or the file 'EDNAFULL' (for nucleic sequences). These files are
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
   ]
 
@@ -33,7 +32,7 @@ section: additional [
   type: "page"
 ]
 
-  integer: residuesperline  [
+  integer: residuesperline [
     additional: "Y"
     default: "50"
     information: "Number of residues to be displayed on each
@@ -41,7 +40,7 @@ section: additional [
     help: "The number of residues to be displayed on each line"
   ]
 
-  integer: resbreak  [
+  integer: resbreak [
     additional: "Y"
     minimum: "1"
     maximum: "$(residuesperline)"
@@ -50,55 +49,56 @@ section: additional [
     expected: "Same as -residuesperline to give no breaks"
   ]
 
-  boolean: ccolours  [
+  boolean: ccolours [
     additional: "Y"
     default: "Y"
     information: "Colour residues by their consensus value."
   ]
 
-  string: cidentity  [
+  string: cidentity [
     additional: "Y"
     information: "Colour to display identical residues (RED)"
     default: "RED"
     knowntype: "plot colour"
   ]
 
-  string: csimilarity  [
+  string: csimilarity [
     additional: "Y"
     information: "Colour to display similar residues (GREEN)"
     default: "GREEN"
     knowntype: "plot colour"
   ]
 
-  string: cother  [
+  string: cother [
     additional: "Y"
     information: "Colour to display other residues (BLACK)"
     default: "BLACK"
     knowntype: "plot colour"
   ]
 
-  boolean: docolour  [
+  boolean: docolour [
     additional: "Y"
     information: "Colour residues by table oily, amide etc."
     default: "N"
   ]
 
-  boolean: title  [
+  boolean: title [
     additional: "Y"
     information: "Do not display the title"
     default: "Y"
   ]
 
-  string: shade  [
+  string: shade [
     additional: "Y"
     information: "Shading"
     help: "Set to BPLW for normal shading \
+           (black, pale, light, white) \
            so for pair = 1.5,1.0,0.5 and shade = BPLW \
            Residues score Colour \
-           1.5 or over....... BLACK (B) \
-           1.0 to 1.5 ....... BROWN (P) \
-           0.5 to 1.0 ....... WHEAT (L) \
-           under 0.5 ....... WHITE (W) \
+           1.5 or over... BLACK (B) \
+           1.0 to 1.5 ... BROWN (P) \
+           0.5 to 1.0 ... WHEAT (L) \
+           under 0.5 .... WHITE (W) \
            The only four letters allowed are BPLW, in any order."
     default: ""
     maxlength: "4"
@@ -107,15 +107,18 @@ section: additional [
     pattern: "^([BPLW]{4})?$"
   ]
 
-  string: pair  [
+  array: pair [
     additional: "Y"
     information: "Values to represent identical similar
                   related"
     default: "1.5,1.0,0.5"
+    minimum: "0.0"
+    size: "3"
+    sumtest: "N"
     knowntype: "threshold identity similar related"
   ]
 
-  integer: identity  [
+  integer: identity [
     additional: "Y"
     information: "Only match those which are identical in all
                   sequences."
@@ -123,50 +126,50 @@ section: additional [
     minimum: "0"
   ]
 
-  boolean: box  [
+  boolean: box [
     additional: "Y"
     information: "Display prettyboxes"
     default: "Y"
   ]
 
-  boolean: boxcol  [
+  boolean: boxcol [
     additional: "Y"
     information: "Colour the background in the boxes"
     default: "N"
   ]
 
-  string: boxcolval  [
+  string: boxcolval [
     additional: "Y"
     information: "Colour to be used for background. (GREY)"
     default: "GREY"
     knowntype: "plot colour"
   ]
 
-  boolean: name  [
+  boolean: name [
     additional: "Y"
     information: "Display the sequence names"
     default: "Y"
   ]
 
-  integer: maxnamelen  [
+  integer: maxnamelen [
     additional: "Y"
     information: "Margin size for the sequence name."
     default: "10"
   ]
 
-  boolean: number  [
+  boolean: number [
     additional: "Y"
     information: "Display the residue number"
     default: "Y"
   ]
 
-  boolean: listoptions  [
+  boolean: listoptions [
     additional: "Y"
     information: "Display the date and options used"
     default: "Y"
   ]
 
-  float: plurality  [
+  float: plurality [
     additional: "Y"
     information: "Plurality check value (totweight/2)"
     default: "@( $(sequences.totweight) / 2)"
@@ -178,45 +181,52 @@ section: additional [
     type: "frame"
   ]
 
-    boolean: consensus  [
+    boolean: consensus [
       additional: "Y"
       information: "Display the consensus"
       default: "N"
     ]
 
-    boolean: collision  [
+    boolean: collision [
       additional: "Y"
       information: "Allow collisions in calculating consensus"
       default: "Y"
     ]
 
-    integer: alternative  [
+    selection: alternative [
       additional: "Y"
       information: "Use alternative collisions routine"
-      help: "Use alternative collisions routine \
-             0) Normal collision check. (default) \
-             1) checks identical scores with the max score found. So if any
+      values: "0:Normal collision check. (default); 1:Compares
+               identical scores with the max score found. So if any other
+               residue matches the identical score then a collision has
+               occurred.; 2:If another residue has a greater than or equal to
+               matching score and these do not match then a collision has
+               occurred.; 3:Checks all those not in the current consensus.If
+               any of these give a top score for matching or identical scores
+               then a collision has occured."
+      help: "Values are 0:Normal collision check. (default) \
+             1:Compares identical scores with the max score found. So if any
              other residue matches the identical score then a collision has
              occurred. \
-             2) If another residue has a greater than or equal to matching
+             2:If another residue has a greater than or equal to matching
              score and these do not match then a collision has occurred. \
-             3) Checks all those not in the current consensus.If any of these
+             3:Checks all those not in the current consensus.If any of these
              give a top score for matching or identical scores then a
              collision has occured."
       default: "0"
-      minimum: "0"
-      maximum: "3"
+      minimum: "1"
+      maximum: "1"
     ]
 
   endsection: consensussection
 
-  integer: showscore  [
+  integer: showscore [
     additional: "Y"
     information: "Print residue scores"
     default: "-1"
   ]
 
-  boolean: portrait  [
+  boolean: portrait [
     additional: "Y"
     information: "Set page to Portrait"
     default: "N"
@@ -229,7 +239,7 @@ section: output [
   type: "page"
 ]
 
-  graph: graph  [
+  graph: graph [
     standard: "Y"
   ]
 
