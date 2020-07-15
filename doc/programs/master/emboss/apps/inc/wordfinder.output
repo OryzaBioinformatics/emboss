@@ -1,0 +1,118 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: wordfinder.error</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: eclac.wordfinder</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: wordfinder
+# Rundate: Sat 15 Jul 2006 12:00:00
+# Commandline: wordfinder
+#    [-asequence] tembl:eclac
+#    [-bsequence] "tembl:ec*"
+#    -wordlen 50
+#    -gapextend 3.0
+# Align_format: simple
+# Report_file: eclac.wordfinder
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ECLAC
+# 2: ECLAC
+# Matrix: EDNAFULL
+# Gap_penalty: 30.0
+# Extend_penalty: 3.0
+#
+# Length: 7477
+# Identity:    7477/7477 (100.0%)
+# Similarity:  7477/7477 (100.0%)
+# Gaps:           0/7477 ( 0.0%)
+# Score: 37385.0
+# 
+# Wordscore:7477
+# Alignlength:7477
+#
+#=======================================
+
+ECLAC              1 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgccc     50
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC              1 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgccc     50
+
+ECLAC             51 ggaagagagtcaattcagggtggtgaatgtgaaaccagtaacgttatacg    100
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC             51 ggaagagagtcaattcagggtggtgaatgtgaaaccagtaacgttatacg    100
+
+ECLAC            101 atgtcgcagagtatgccggtgtctcttatcagaccgtttcccgcgtggtg    150
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC            101 atgtcgcagagtatgccggtgtctcttatcagaccgtttcccgcgtggtg    150
+
+ECLAC            151 aaccaggccagccacgtttctgcgaaaacgcgggaaaaagtggaagcggc    200
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC            151 aaccaggccagccacgtttctgcgaaaacgcgggaaaaagtggaagcggc    200
+
+ECLAC            201 gatggcggagctgaattacattcccaaccgcgtggcacaacaactggcgg    250
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+ECLAC           3787 tgctgattacgaccgctcacgcgtggcagcatcaggggaaaaccttattt   3836
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACZ          2501 tgctgattacgaccgctcacgcgtggcagcatcaggggaaaaccttattt   2550
+
+ECLAC           3837 atcagccggaaaacctaccggattgatggtagtggtcaaatggcgattac   3886
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACZ          2551 atcagccggaaaacctaccggattgatggtagtggtcaaatggcgattac   2600
+
+ECLAC           3887 cgttgatgttgaagtggcgagcgatacaccgcatccggcgcggattggcc   3936
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACZ          2601 cgttgatgttgaagtggcgagcgatacaccgcatccggcgcggattggcc   2650
+
+ECLAC           3937 tgaactgccagctggcgcaggtagcagagcgggtaaactggctcggatta   3986
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACZ          2651 tgaactgccagctggcgcaggtagcagagcgggtaaactggctcggatta   2700
+
+ECLAC           3987 gggccgcaagaaaactatcccgaccgccttactgccgcctgttttgaccg   4036
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACZ          2701 gggccgcaagaaaactatcccgaccgccttactgccgcctgttttgaccg   2750
+
+ECLAC           4037 ctgggatctgccattgtcagacatgtataccccgtacgtcttcccgagcg   4086
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACZ          2751 ctgggatctgccattgtcagacatgtataccccgtacgtcttcccgagcg   2800
+
+ECLAC           4087 aaaacggtctgcgctgcgggacgcgcgaattgaattatggcccacaccag   4136
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACZ          2801 aaaacggtctgcgctgcgggacgcgcgaattgaattatggcccacaccag   2850
+
+ECLAC           4137 tggcgcggcgacttccagttcaacatcagccgctacagtcaacagcaact   4186
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACZ          2851 tggcgcggcgacttccagttcaacatcagccgctacagtcaacagcaact   2900
+
+ECLAC           4187 gatggaaaccagccatcgccatctgctgcacgcggaagaaggcacatggc   4236
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACZ          2901 gatggaaaccagccatcgccatctgctgcacgcggaagaaggcacatggc   2950
+
+ECLAC           4237 tgaatatcgacggtttccatatggggattggtggcgacgactcctggagc   4286
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACZ          2951 tgaatatcgacggtttccatatggggattggtggcgacgactcctggagc   3000
+
+ECLAC           4287 ccgtcagtatcggcggaattccagctgagcgccggtcgctaccattacca   4336
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACZ          3001 ccgtcagtatcggcggaattccagctgagcgccggtcgctaccattacca   3050
+
+ECLAC           4337 gttggtctggtgtcaaaaataataataa   4364
+                     ||||||||||||||||||||||||||||
+ECLACZ          3051 gttggtctggtgtcaaaaataataataa   3078
+
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,20 @@
+<b>Here is a sample session with wordfinder</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>wordfinder tembl:eclac tembl:ec* -word 50  </b>
+Match large sequences against one or more other sequences
+Gap opening penalty [30.0]: <b></b>
+Gap extension penalty [1.5]: <b>3.0</b>
+Output alignment [eclac.wordfinder]: <b></b>
+Target 1 ECLAC matches 1
+Target 2 ECLACA matches 1
+Target 3 ECLACI matches 1
+Target 4 ECLACY matches 1
+Target 5 ECLACZ matches 1
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
