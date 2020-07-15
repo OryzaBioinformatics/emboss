@@ -23,6 +23,7 @@ section: output [
 
   graph: graph [
     standard: "Y"
+    gdesc: "Chaos game representation"
   ]
 
 endsection: output

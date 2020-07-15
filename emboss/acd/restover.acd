@@ -101,6 +101,7 @@ section: output [
   boolean: html [
     default: "N"
     information: "Create HTML output"
+    outputmodifier: "Y"
   ]
 
   boolean: limit [
@@ -116,11 +117,6 @@ section: output [
   boolean: fragments [
     default: "N"
     information: "Show fragment lengths"
-  ]
-
-  boolean: name [
-    default: "N"
-    information: "Show sequence name"
   ]
 
   outfile: outfile [

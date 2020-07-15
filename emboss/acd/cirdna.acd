@@ -181,6 +181,7 @@ section: output [
 
   graph: graphout [
     standard: "Y"
+    gdesc: "Circular DNA map"
   ]
 
 endsection: output

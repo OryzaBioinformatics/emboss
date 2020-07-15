@@ -10,7 +10,7 @@ section: input [
 
   sequence: sequence [
     parameter: "Y"
-    type: "gapprotein"
+    type: "gapstopprotein"
   ]
 
   codon: cfile [

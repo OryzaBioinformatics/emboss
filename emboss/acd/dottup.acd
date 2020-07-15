@@ -48,11 +48,13 @@ section: output [
 
   graph: graph [
     standard: "@(!$(stretch))"
+    gtitle: "Dottup: $(asequence.usa) vs $(bsequence.usa)"
     gxtitle: "$(bsequence.name)"
     gytitle: "$(asequence.name)"
   ]
 
   xygraph: xygraph [
+    gtitle: "Dottup (stretched): $(asequence.usa) vs $(bsequence.usa)"
     standard: "$(stretch)"
   ]
 

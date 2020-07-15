@@ -55,6 +55,7 @@ section: additional [
     additional: "Y"
     default: "N"
     information: "Show keywords with program documentation"
+    outputmodifier: "Y"
   ]
 
 endsection: additional
@@ -111,6 +112,7 @@ section: advanced [
            colon ':' will be placed between the first and second level of the
            group name if this option is true. Note: This does not apply if
            the group names have been exploded with the 'explode' option."
+    outputmodifier: "Y"
   ]
 
   boolean: gui [
@@ -148,6 +150,7 @@ section: output [
       information: "Format the output for HTML"
       help: "If you are sending the output to a file, this will format
              it for displaying as a table in a WWW document."
+      outputmodifier: "Y"
     ]
 
   endsection: htmlsection
@@ -158,6 +161,7 @@ section: output [
     information: "Output only the group names"
     help: "If you use this option, then only the group names will
            output to the file"
+    outputmodifier: "Y"
   ]
 
   boolean: alphabetic [
@@ -167,6 +171,7 @@ section: output [
     help: "If you use this option, then you will get a single list of
            the program names and descriptions instead of the programs being
            listed in their functional groups."
+    outputmodifier: "Y"
   ]
 
 endsection: output

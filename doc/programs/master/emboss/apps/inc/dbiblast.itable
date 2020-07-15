@@ -58,7 +58,7 @@
 <td>-outfile</td>
 <td>General log output file</td>
 <td>Output file</td>
-<td>&nbsp;</td>
+<td><i>&lt;*&gt;</i>.dbiblast</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

@@ -338,6 +338,7 @@ section: output [
   boolean: html [
     default: "N"
     information: "Use HTML formatting"
+    outputmodifier: "Y"
   ]
 
 endsection: output

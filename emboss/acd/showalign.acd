@@ -164,6 +164,7 @@ section: advanced [
   boolean: html [
     default: "N"
     information: "Use HTML formatting"
+    outputmodifier: "Y"
   ]
 
   range: highlight [

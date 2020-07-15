@@ -74,6 +74,13 @@ section: output [
   type: "page"
 ]
 
+  boolean: allsequences [
+    additional: "Y"
+    information: "Show all sequences in output"
+    default: "N"
+    outputmodifier: "Y"
+  ]
+
   outfile: outfile [
     parameter: "Y"
     knowntype: "vectorstrip output"

@@ -59,6 +59,7 @@ section: output [
 
   graph: graph [
     standard: "Y"
+    gtitle: "Dotpath: $(asequence.usa) vs $(bsequence.usa)"
     gxtitle: "$(bsequence.name)"
     gytitle: "$(asequence.name)"
   ]

@@ -45,7 +45,7 @@ section: additional [
   boolean: source [
     additional: "Y"
     default: "N"
-    information: "Split using source features with /oridif
+    information: "Split using source features with /origid
                   qualifiers"
   ]
 

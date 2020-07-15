@@ -101,7 +101,7 @@ section: output [
     parameter: "Y"
     rformat: "seqtable"
     multiple: "Y"
-    taglist: "float:molwt=Mol_Weight str:cterm str:nterm"
+    taglist: "float:molwt=Mol_Weight str:cterm=Cterm str:nterm=Nterm"
   ]
 
 endsection: output

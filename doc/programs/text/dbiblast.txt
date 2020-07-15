@@ -177,7 +177,7 @@ Output file format
 
 ########################################
 # Program: dbiblast
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Dbname: swnew
 # Release: 0.0
 # Date: 15/07/06

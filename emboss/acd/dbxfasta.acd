@@ -33,7 +33,7 @@ section: input [
   list: idformat [
     standard: "y"
     information: "ID line format"
-    values: "simple+ >ID; idacc+ >ID ACC; gcgid+ >db:ID; gcgidacc+
+    values: "simple+ >ID; idacc+ >ID ACC or >ID (ACC); gcgid+ >db:ID; gcgidacc+
              >db:ID ACC; dbid+ >db ID; ncbi+ | formats;"
     maximum: "1"
     minimum: "1"

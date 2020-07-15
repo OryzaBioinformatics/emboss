@@ -87,6 +87,7 @@ section: output [
 
   xygraph: graph [
     standard: "$(plot)"
+    gdesc: "Fickett testcode plot"
   ]
 
 endsection: output

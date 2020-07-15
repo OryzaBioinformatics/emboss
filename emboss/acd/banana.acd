@@ -29,7 +29,7 @@ section: output [
 
   graph: graph [
     standard: "Y"
-    gtitle: "Bending and curvature plot of $(sequence.name)"
+    gdesc: "Bending and curvature plot"
     nullok: "Y"
   ]
 

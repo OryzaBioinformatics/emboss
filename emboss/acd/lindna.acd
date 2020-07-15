@@ -169,6 +169,7 @@ section: output [
 
   graph: graphout [
     standard: "Y"
+    gdesc: "Linear DNA map"
   ]
 
 endsection: output

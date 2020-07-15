@@ -1,4 +1,3 @@
-
 /* @source dbiflat application
 **
 ** Index flatfile databases
@@ -93,15 +92,15 @@ static AjPList* fdl  = NULL;
 
 static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 				AjBool systemsort, AjPStr* fields,
-				ajint* maxFieldLen, ajint* countfield,
+				ajint* maxFieldLen, ajuint* countfield,
 				ajint *dpos, AjPStr* id, AjPList* acl);
 static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 				   AjBool systemsort, AjPStr* fields,
-				   ajint* maxFieldLen, ajint* countfield,
+				   ajint* maxFieldLen, ajuint* countfield,
 				   ajint *dpos, AjPStr* id, AjPList* acl);
 static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 				  AjBool systemsort, AjPStr* fields,
-				  ajint* maxFieldLen, ajint* countfield,
+				  ajint* maxFieldLen, ajuint* countfield,
 				  ajint *dpos, AjPStr* id, AjPList* acl);
 
 
@@ -114,17 +113,17 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 ** @alias DbiflatSParser
 ** @alias DbiflatOParser
 **
-** @attr Name [char*] Parser name
+** @attr Name [const char*] Parser name
 ** @attr Parser [(AjBool*)] Parser function
 ** @@
 ******************************************************************************/
 
 typedef struct DbiflatSParser
 {
-    char* Name;
+    const char* Name;
     AjBool (*Parser) (AjPFile libr, AjPFile* alistfile,
 		      AjBool systemsort, AjPStr* fields,
-		      ajint* maxFieldLen, ajint* countfield,
+		      ajint* maxFieldLen, ajuint* countfield,
 		      ajint *dpos, AjPStr* id, AjPList* acl);
 } DbiflatOParser;
 #define DbiflatPParser DbiflatOParser*
@@ -143,11 +142,11 @@ static DbiflatOParser parser[] =
 
 
 
-static EmbPEntry dbiflat_NextFlatEntry(AjPFile libr, ajint ifile,
+static EmbPEntry dbiflat_NextFlatEntry(AjPFile libr, ajuint ifile,
 				       const AjPStr idformat,
 				       AjBool systemsort,
 				       AjPStr* fields, ajint* maxFieldLen,
-				       ajint* maxidlen, ajint* countfield,
+				       ajuint* maxidlen, ajuint* countfield,
 				       AjPFile elistfile, AjPFile* alistfile);
 
 
@@ -169,9 +168,9 @@ int main(int argc, char **argv)
     AjBool systemsort;
     AjBool cleanup;
 
-    ajint maxindex;
-    ajint maxidlen = 0;
-    ajint maxlen;
+    ajuint maxindex;
+    ajuint maxidlen = 0;
+    ajuint maxlen;
 
     AjPFile elistfile  = NULL;
     AjPFile* alistfile = NULL;
@@ -192,16 +191,16 @@ int main(int argc, char **argv)
 
     EmbPEntry entry;
 
-    ajint idCount = 0;
-    ajint idDone;
+    ajuint idCount = 0;
+    ajuint idDone;
     AjPList listInputFiles = NULL;
     void ** inputFiles = NULL;
-    ajint nfiles;
-    ajint ifile;
+    ajuint nfiles;
+    ajuint ifile;
 
-    ajint filesize;
+    ajuint filesize;
     short recsize;
-    ajint maxfilelen = 20;
+    ajuint maxfilelen = 20;
     char date[4] =
     {
 	0,0,0,0
@@ -215,14 +214,14 @@ int main(int argc, char **argv)
     AjPStr* divfiles   = NULL;
     ajint* maxFieldLen = NULL;
 
-    ajint ifield  = 0;
-    ajint nfields = 0;
+    ajuint ifield  = 0;
+    ajuint nfields = 0;
 
     AjPFile logfile = NULL;
-    ajint* countField = NULL;
-    ajint* fieldTot = NULL;
-    ajint idCountFile = 0;
-    ajint i;
+    ajuint* countField = NULL;
+    ajuint* fieldTot = NULL;
+    ajuint idCountFile = 0;
+    ajuint i;
 
     embInit("dbiflat", argc, argv);
 
@@ -250,7 +249,7 @@ int main(int argc, char **argv)
 	AJCNEW0(countField, nfields);
 	AJCNEW0(fieldTot, nfields);
 	for(ifield=0; ifield < nfields; ifield++)
-	    maxFieldLen[ifield] = -maxindex;
+	    maxFieldLen[ifield] = (ajint)maxindex * -1; /* -maxindex illegal */
 
 	if(systemsort)
 	    AJCNEW(alistfile, nfields);
@@ -265,7 +264,7 @@ int main(int argc, char **argv)
     if(ajStrMatchC(datestr, "00/00/00"))
 	ajFmtPrintS(&datestr, "%D", ajTimeTodayRefF("dbindex"));
 
-    ajStrRemoveWhiteExcess(&dbname);		/* used for temp filenames */
+    ajStrRemoveWhite(&dbname);		/* used for temp filenames */
     embDbiDateSet(datestr, date);
     idlist = ajListNew();
 
@@ -291,7 +290,7 @@ int main(int argc, char **argv)
     /* process each input file, one at a time */
     for(ifile=0; ifile < nfiles; ifile++)
     {
-	curfilename = (AjPStr) inputFiles[ifile];
+	ajStrAssignS(&curfilename, (AjPStr) inputFiles[ifile]);
 	embDbiFlatOpenlib(curfilename, &libr);
 	ajFileNameTrim(&curfilename);
 	if(ajStrGetLen(curfilename) >= maxfilelen)
@@ -325,6 +324,10 @@ int main(int argc, char **argv)
 	{
 	    embDbiSortClose(&elistfile, alistfile, nfields);
 	    AJFREE(entry);
+	}
+	else
+	{
+	    embDbiEntryDel(&dbiflatEntry);
 	}
 	embDbiLogFile(logfile, curfilename, idCountFile, fields,
 		      countField, nfields);
@@ -361,8 +364,12 @@ int main(int argc, char **argv)
     {
         if(maxindex)
 	    maxlen = maxindex;
-	else
-	    maxlen = maxFieldLen[ifield];
+	{
+	    if(maxFieldLen[ifield] >= 0)
+		maxlen = maxFieldLen[ifield];
+	    else
+		maxlen = - maxFieldLen[ifield];
+	}
 
         if(systemsort)
 	    fieldTot[ifield] = embDbiSortWriteFields(dbname, release,
@@ -385,8 +392,6 @@ int main(int argc, char **argv)
     {
 	embDbiRmEntryFile(dbname, cleanup);
     }
-
-    ajListDel(&listInputFiles);
 
     ajStrDel(&dbname);
     ajStrDel(&release);
@@ -413,9 +418,11 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-	    ajListDel(&fieldList[i]);
+	    ajListMap(fieldList[i], embDbiFieldDelMap, NULL);
+	    ajListFree(&fieldList[i]);
 	}
     }
+
     AJFREE(alistfile);
     AJFREE(fieldList);
     AJFREE(maxFieldLen);
@@ -469,8 +476,10 @@ int main(int argc, char **argv)
 	AJFREE(fdl);
     }
 
-    ajListFree(&idlist);
-    ajListFree(&listInputFiles);
+    ajListMap(idlist, embDbiEntryDelMap, NULL);
+    ajListDel(&idlist);
+    ajListstrFree(&listInputFiles);
+    AJFREE(entryIds);
     ajStrDel(&curfilename);
 
     embExit();
@@ -486,24 +495,24 @@ int main(int argc, char **argv)
 ** Returns next database entry as an EmbPEntry object
 **
 ** @param [u] libr [AjPFile] Database file
-** @param [r] ifile [ajint] File number.
+** @param [r] ifile [ajuint] File number.
 ** @param [r] idformat [const AjPStr] Format to be used
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
 ** @param [u] fields [AjPStr*] Fields to be indexed
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field
-** @param [w] maxidlen [ajint*] Maximum entry ID length
-** @param [w] countfield [ajint*] Number of tokens for each field
+** @param [w] maxidlen [ajuint*] Maximum entry ID length
+** @param [w] countfield [ajuint*] Number of tokens for each field
 ** @param [u] elistfile [AjPFile] entry file
 ** @param [u] alistfile [AjPFile*] field data files array
 ** @return [EmbPEntry] Entry data object.
 ** @@
 ******************************************************************************/
 
-static EmbPEntry dbiflat_NextFlatEntry(AjPFile libr, ajint ifile,
+static EmbPEntry dbiflat_NextFlatEntry(AjPFile libr, ajuint ifile,
 				       const AjPStr idformat,
 				       AjBool systemsort,
 				       AjPStr* fields, ajint* maxFieldLen,
-				       ajint* maxidlen, ajint* countfield,
+				       ajuint* maxidlen, ajuint* countfield,
 				       AjPFile elistfile, AjPFile* alistfile)
 {
     ajint ir;
@@ -595,19 +604,19 @@ static EmbPEntry dbiflat_NextFlatEntry(AjPFile libr, ajint ifile,
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
 ** @param [w] fields [AjPStr*] Fields required
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field
-** @param [w] countfield [ajint*] Number of tokens for each field
+** @param [w] countfield [ajuint*] Number of tokens for each field
 ** @param [w] dpos [ajint*] Byte offset
-** @param [w] id [AjPStr*] ID
-** @param [w] fdl [AjPList*] Lists of field values
+** @param [w] myid [AjPStr*] ID
+** @param [w] myfdl [AjPList*] Lists of field values
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
 static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 				AjBool systemsort, AjPStr* fields,
-				ajint* maxFieldLen, ajint* countfield,
-				ajint* dpos, AjPStr* id,
-				AjPList* fdl)
+				ajint* maxFieldLen, ajuint* countfield,
+				ajint* dpos, AjPStr* myid,
+				AjPList* myfdl)
 {
     AjPStr tmpacnum = NULL;
     char* fd;
@@ -729,24 +738,24 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 	if(lineType == FLATTYPE_ID)
 	{
 	    ajRegExec(regEmblId, rline);
-	    ajRegSubI(regEmblId, 1, id);
-	    ajDebug("++id '%S'\n", *id);
+	    ajRegSubI(regEmblId, 1, myid);
+	    ajDebug("++id '%S'\n", *myid);
 	    ajRegSubI(regEmblId, 3, &tmpfd);
 	    if(svnfield >= 0 && ajStrGetLen(tmpfd))
 	    {
 		ajStrFmtUpper(&tmpfd);
 		ajStrInsertK(&tmpfd, 0, '.');
-		ajStrInsertS(&tmpfd, 0, *id);
-		ajDebug("++sv '%S'\n", tmpfd);
+		ajStrInsertS(&tmpfd, 0, *myid);
+		/*ajDebug("++sv '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[svnfield]);
 
 		countfield[svnfield]++;
 		if(systemsort)
-		    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *id, tmpfd);
+		    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[svnfield], fd);
+		    ajListPushApp(myfdl[svnfield], fd);
 		}
 		svndone = ajTrue;
 	    }
@@ -759,7 +768,7 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 	    {
 		ajRegSubI(regEmblAcc, 1, &tmpfd);
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++acc '%S'\n", tmpfd);
+		/*ajDebug("++acc '%S'\n", tmpfd);*/
 
 		if(!tmpacnum)
 		    ajStrAssignS(&tmpacnum, tmpfd);
@@ -769,9 +778,9 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 		    q = p;
 		    while(isdigit((int)*(--q)));
 		    ++q;
-		    ajStrAssignSubC(&tmpstr,q,0,p-q-1);
+		    ajStrAssignSubC(&tmpstr,q,0,(ajint)(p-q-1));
 		    ajStrToInt(tmpstr,&lo);
-		    fieldwidth = p-q;
+		    fieldwidth = (ajint) (p-q);
 		    ajFmtPrintS(&format,"%%S%%0%dd",fieldwidth);
 
 		    ++p;
@@ -779,7 +788,7 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 		    while(!isdigit((int)*q))
 			++q;
 		    sscanf(q,"%d",&hi);
-		    ajStrAssignSubC(&prefix,p,0,q-p-1);
+		    ajStrAssignSubC(&prefix,p,0,(ajint)(q-p-1));
 	    
 		    if(systemsort)
 		    {
@@ -789,7 +798,7 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 			    embDbiMaxlen(&tmpac, &maxFieldLen[accfield]);
 			    countfield[accfield]++;
 			    ajFmtPrintF(alistfile[accfield],
-					"%S %S\n", *id, tmpac);
+					"%S %S\n", *myid, tmpac);
 			}
 			ajStrDel(&tmpac);
 		    }
@@ -801,7 +810,7 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 			    embDbiMaxlen(&tmpac, &maxFieldLen[accfield]);
 			    countfield[accfield]++;
 			    fd = ajCharNewS(tmpac);
-			    ajListPushApp(fdl[accfield], fd);
+			    ajListPushApp(myfdl[accfield], fd);
 			}
 			ajStrDel(&tmpac);
 		    }
@@ -814,11 +823,11 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 		    countfield[accfield]++;
 		    if(systemsort)
 			ajFmtPrintF(alistfile[accfield],
-				    "%S %S\n", *id, tmpfd);
+				    "%S %S\n", *myid, tmpfd);
 		    else
 		    {
 			fd = ajCharNewS(tmpfd);
-			ajListPushApp(fdl[accfield], fd);
+			ajListPushApp(myfdl[accfield], fd);
 		    }
 		}
 		ajRegPost(regEmblAcc, &tmpline);
@@ -831,16 +840,16 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 	    {
 		ajRegSubI(regEmblWrd, 1, &tmpfd);
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++des '%S'\n", tmpfd);
+		/*ajDebug("++des '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[desfield]);
 
 		countfield[desfield]++;
 		if(systemsort)
-		    ajFmtPrintF(alistfile[desfield], "%S %S\n", *id, tmpfd);
+		    ajFmtPrintF(alistfile[desfield], "%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[desfield], fd);
+		    ajListPushApp(myfdl[desfield], fd);
 		}
 		ajRegPost(regEmblWrd, &tmpline);
 	    }
@@ -852,16 +861,16 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 	    {
 		ajRegSubI(regEmblVer, 1, &tmpfd);
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++sv '%S'\n", tmpfd);
+		/*ajDebug("++sv '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[svnfield]);
 
 		countfield[svnfield]++;
 		if(systemsort)
-		    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *id, tmpfd);
+		    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[svnfield], fd);
+		    ajListPushApp(myfdl[svnfield], fd);
 		}
 		ajRegPost(regEmblVer, &tmpline);
 	    }
@@ -878,16 +887,16 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 		if(!ajStrGetLen(tmpfd))
 		    continue;
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++key '%S'\n", tmpfd);
+		/*ajDebug("++key '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[keyfield]);
 
 		countfield[keyfield]++;
 		if(systemsort)
-		    ajFmtPrintF(alistfile[keyfield], "%S %S\n", *id, tmpfd);
+		    ajFmtPrintF(alistfile[keyfield], "%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[keyfield], fd);
+		    ajListPushApp(myfdl[keyfield], fd);
 		}
 	    }
 	    continue;
@@ -902,16 +911,16 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 		ajStrTrimWhiteEnd(&tmpfd);
 		if(!ajStrGetLen(tmpfd))
 		    continue;
-		ajDebug("++tax '%S'\n", tmpfd);
+		/*ajDebug("++tax '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[taxfield]);
 
 		countfield[taxfield]++;
 		if(systemsort)
-		    ajFmtPrintF(alistfile[taxfield], "%S %S\n", *id, tmpfd);
+		    ajFmtPrintF(alistfile[taxfield], "%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[taxfield], fd);
+		    ajListPushApp(myfdl[taxfield], fd);
 		}
 	    }
 	    continue;
@@ -928,15 +937,16 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 
 	countfield[svnfield]++;
 	if(systemsort)
-	    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *id, tmpfd);
+	    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, tmpfd);
 	else
 	{
 	    fd = ajCharNewS(tmpfd);
-	    ajListPushApp(fdl[svnfield], fd);
+	    ajListPushApp(myfdl[svnfield], fd);
 	}
     }
 
     ajStrDel(&tmpacnum);
+    ajStrDel(&tmpstr);
 
     return ajTrue;
 }
@@ -953,19 +963,19 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
 ** @param [w] fields [AjPStr*] Fields required
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field
-** @param [w] countfield [ajint*] Number of tokens for each field
+** @param [w] countfield [ajuint*] Number of tokens for each field
 ** @param [w] dpos [ajint*] Byte offset
-** @param [w] id [AjPStr*] ID
-** @param [w] fdl [AjPList*] Lists of field values
+** @param [w] myid [AjPStr*] ID
+** @param [w] myfdl [AjPList*] Lists of field values
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
 static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 				   AjBool systemsort, AjPStr* fields,
-				   ajint* maxFieldLen, ajint* countfield,
-				   ajint* dpos, AjPStr* id,
-				   AjPList* fdl)
+				   ajint* maxFieldLen, ajuint* countfield,
+				   ajint* dpos, AjPStr* myid,
+				   AjPList* myfdl)
 {
     ajint lineType  = FLATTYPE_OTHER;
     AjPStr tmpacnum = NULL;
@@ -1062,12 +1072,12 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 
 	    if(lineType != FLATTYPE_OTHER)
 		ajRegPost(regGbType, &tmpline);
-	    ajDebug("++type line %d\n", lineType);
+	    /*ajDebug("++type line %d\n", lineType);*/
 	}
 	else if(lineType != FLATTYPE_OTHER && ajRegExec(regGbMore, rline))
 	{
 	    ajRegPost(regGbMore, &tmpline);
-	    ajDebug("++more line %d\n", lineType);
+	    /*ajDebug("++more line %d\n", lineType);*/
 	}
 	else
 	    lineType = FLATTYPE_OTHER;
@@ -1075,7 +1085,7 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 	if(lineType == FLATTYPE_ID)
 	{
 	    ajRegExec(regGbWrd, tmpline);
-	    ajRegSubI(regGbWrd, 1, id);
+	    ajRegSubI(regGbWrd, 1, myid);
 	    *dpos = ipos;
 	}
 
@@ -1085,16 +1095,16 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 	    {
 		ajRegSubI(regGbWrd, 1, &tmpfd);
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++acc '%S'\n", tmpfd);
+		/*ajDebug("++acc '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[accfield]);
 
 		countfield[accfield]++;
 		if(systemsort)
-		    ajFmtPrintF(alistfile[accfield], "%S %S\n", *id, tmpfd);
+		    ajFmtPrintF(alistfile[accfield], "%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[accfield], fd);
+		    ajListPushApp(myfdl[accfield], fd);
 		}
 		ajRegPost(regGbWrd, &tmpline);
 	    }
@@ -1107,17 +1117,17 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 	    {
 	        ajRegSubI(regGbWrd, 1, &tmpfd);
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++des '%S'\n", tmpfd);
+		/*ajDebug("++des '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[desfield]);
 
 		countfield[desfield]++;
 		if(systemsort)
 		    ajFmtPrintF(alistfile[desfield],
-				"%S %S\n", *id, tmpfd);
+				"%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[desfield], fd);
+		    ajListPushApp(myfdl[desfield], fd);
 		}
 		ajRegPost(regGbWrd, &tmpline);
 	    }
@@ -1134,17 +1144,17 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 		if(!ajStrGetLen(tmpfd))
 		    continue;
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++key '%S'\n", tmpfd);
+		/*ajDebug("++key '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[keyfield]);
 
 		countfield[keyfield]++;
 		if(systemsort)
 		    ajFmtPrintF(alistfile[keyfield],
-				"%S %S\n", *id, tmpfd);
+				"%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[keyfield], fd);
+		    ajListPushApp(myfdl[keyfield], fd);
 		}
 	    }
 	    continue;
@@ -1160,17 +1170,17 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 		if(!ajStrGetLen(tmpfd))
 		    continue;
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++tax '%S'\n", tmpfd);
+		/*ajDebug("++tax '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[taxfield]);
 
 		countfield[taxfield]++;
 		if(systemsort)
 		    ajFmtPrintF(alistfile[taxfield],
-				"%S %S\n", *id, tmpfd);
+				"%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[taxfield], fd);
+		    ajListPushApp(myfdl[taxfield], fd);
 		}
 	    }
 	    continue;
@@ -1182,15 +1192,15 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 	    {
 		ajRegSubI(regGbVer, 1, &tmpfd);
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++ver '%S'\n", tmpfd);
+		/*ajDebug("++ver '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[svnfield]);
 
 		if(systemsort)
-		    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *id, tmpfd);
+		    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[svnfield], fd);
+		    ajListPushApp(myfdl[svnfield], fd);
 		}
 		svndone = ajTrue;
 
@@ -1198,15 +1208,15 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 		if(!ajStrGetLen(tmpfd))
 		    continue;
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++ver gi: '%S'\n", tmpfd);
+		/*ajDebug("++ver gi: '%S'\n", tmpfd);*/
 
 		countfield[svnfield]++;
 		if(systemsort)
-		    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *id, tmpfd);
+		    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[svnfield], fd);
+		    ajListPushApp(myfdl[svnfield], fd);
 		}
 	    }
 	    continue;
@@ -1225,11 +1235,11 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 
 	countfield[svnfield]++;
 	if(systemsort)
-	    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *id, tmpfd);
+	    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, tmpfd);
 	else
 	{
 	    fd = ajCharNewS(tmpfd);
-	    ajListPushApp(fdl[svnfield], fd);
+	    ajListPushApp(myfdl[svnfield], fd);
 	}
     }
 
@@ -1250,19 +1260,19 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
 ** @param [w] fields [AjPStr*] Fields required
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field
-** @param [w] countfield [ajint*] Number of tokens for each field
+** @param [w] countfield [ajuint*] Number of tokens for each field
 ** @param [w] dpos [ajint*] Byte offset
-** @param [w] id [AjPStr*] ID
-** @param [w] fdl [AjPList*] Lists of field values
+** @param [w] myid [AjPStr*] ID
+** @param [w] myfdl [AjPList*] Lists of field values
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
 static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 				  AjBool systemsort, AjPStr* fields,
-				  ajint* maxFieldLen, ajint* countfield,
-				  ajint* dpos, AjPStr* id,
-				  AjPList* fdl)
+				  ajint* maxFieldLen, ajuint* countfield,
+				  ajint* dpos, AjPStr* myid,
+				  AjPList* myfdl)
 {
     ajint lineType = FLATTYPE_OTHER;
     AjPStr tmpacnum = NULL;
@@ -1368,12 +1378,12 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 
 	    if(lineType != FLATTYPE_OTHER)
 		ajRegPost(regRefseqTyp, &tmpline);
-	    ajDebug("++type line %d\n", lineType);
+	    /*ajDebug("++type line %d\n", lineType);*/
 	}
 	else if(lineType != FLATTYPE_OTHER && ajRegExec(regRefseqMore, rline))
 	{
 	    ajRegPost(regRefseqMore, &tmpline);
-	    ajDebug("++more line %d\n", lineType);
+	    /*ajDebug("++more line %d\n", lineType);*/
 	}
 	else
 	    lineType = FLATTYPE_OTHER;
@@ -1381,8 +1391,8 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 	if(lineType == FLATTYPE_ID)    /* use REFSEQ-specific idexp */
 	{
 	    ajRegExec(regRefseqId, tmpline);
-	    ajRegSubI(regRefseqId, 1, id);
-	    ajStrFmtUpper(id);
+	    ajRegSubI(regRefseqId, 1, myid);
+	    ajStrFmtUpper(myid);
 	    *dpos = ipos;
 	}
 
@@ -1392,16 +1402,16 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 	    {
 		ajRegSubI(regRefseqWrd, 1, &tmpfd);
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++acc '%S'\n", tmpfd);
+		/*ajDebug("++acc '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[accfield]);
 
 		countfield[accfield]++;
 		if(systemsort)
-		    ajFmtPrintF(alistfile[accfield], "%S %S\n", *id, tmpfd);
+		    ajFmtPrintF(alistfile[accfield], "%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[accfield], fd);
+		    ajListPushApp(myfdl[accfield], fd);
 		}
 		ajRegPost(regRefseqWrd, &tmpline);
 	    }
@@ -1413,17 +1423,17 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 	    {
 	        ajRegSubI(regRefseqWrd, 1, &tmpfd);
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++des '%S'\n", tmpfd);
+		/*ajDebug("++des '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[desfield]);
 
 		countfield[desfield]++;
 		if(systemsort)
 		    ajFmtPrintF(alistfile[desfield],
-				"%S %S\n", *id, tmpfd);
+				"%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[desfield], fd);
+		    ajListPushApp(myfdl[desfield], fd);
 		}
 		ajRegPost(regRefseqWrd, &tmpline);
 	    }
@@ -1440,17 +1450,17 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 		if(!ajStrGetLen(tmpfd))
 		    continue;
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++key '%S'\n", tmpfd);
+		/*ajDebug("++key '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[keyfield]);
 
 		countfield[keyfield]++;
 		if(systemsort)
 		    ajFmtPrintF(alistfile[keyfield],
-				"%S %S\n", *id, tmpfd);
+				"%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[keyfield], fd);
+		    ajListPushApp(myfdl[keyfield], fd);
 		}
 	    }
 	    continue;
@@ -1465,17 +1475,17 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 		if(!ajStrGetLen(tmpfd))
 		    continue;
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++tax '%S'\n", tmpfd);
+		/*ajDebug("++tax '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[taxfield]);
 
 		countfield[taxfield]++;
 		if(systemsort)
 		    ajFmtPrintF(alistfile[taxfield],
-				"%S %S\n", *id, tmpfd);
+				"%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[taxfield], fd);
+		    ajListPushApp(myfdl[taxfield], fd);
 		}
 	    }
 	    continue;
@@ -1486,30 +1496,30 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 	    {
 		ajRegSubI(regRefseqVer, 1, &tmpfd);
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++ver '%S'\n", tmpfd);
+		/*ajDebug("++ver '%S'\n", tmpfd);*/
 		embDbiMaxlen(&tmpfd, &maxFieldLen[svnfield]);
 
 		countfield[svnfield]++;
 		if(systemsort)
-		    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *id, tmpfd);
+		    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[svnfield], fd);
+		    ajListPushApp(myfdl[svnfield], fd);
 		}
 		svndone = ajTrue;
 
 		ajRegSubI(regRefseqVer, 3, &tmpfd);
 		if(!ajStrGetLen(tmpfd)) continue;
 		ajStrFmtUpper(&tmpfd);
-		ajDebug("++ver gi: '%S'\n", tmpfd);
+		/*ajDebug("++ver gi: '%S'\n", tmpfd);*/
 
 		if(systemsort)
-		    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *id, tmpfd);
+		    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, tmpfd);
 		else
 		{
 		    fd = ajCharNewS(tmpfd);
-		    ajListPushApp(fdl[svnfield], fd);
+		    ajListPushApp(myfdl[svnfield], fd);
 		}
 	    }
 	    continue;
@@ -1528,11 +1538,11 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 
 	countfield[svnfield]++;
 	if(systemsort)
-	    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *id, tmpfd);
+	    ajFmtPrintF(alistfile[svnfield], "%S %S\n", *myid, tmpfd);
 	else
 	{
 	    fd = ajCharNewS(tmpfd);
-	    ajListPushApp(fdl[svnfield], fd);
+	    ajListPushApp(myfdl[svnfield], fd);
 	}
     }
 

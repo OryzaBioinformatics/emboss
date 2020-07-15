@@ -47,6 +47,7 @@ section: output [
 
   graph: graph [
     standard: "Y"
+    gdesc: "Helical wheel"
     gxtitle: "$(sequence.name)"
   ]
 

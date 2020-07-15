@@ -57,12 +57,14 @@ section: output [
   xygraph: graph [
     standard: "$(plot)"
     multiple: "3"
+    gdesc: "Gribskov Codon Plot"
   ]
 
   outfile: outfile [
     standard: "@(!$(plot))"
     knowntype: "syco output"
     nullok: "$(plot)"
+    nulldefault: "$(plot)"
   ]
 
 endsection: output

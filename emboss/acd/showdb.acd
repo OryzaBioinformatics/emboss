@@ -28,6 +28,7 @@ section: additional [
     additional: "Y"
     default: "N"
     information: "Format output as an HTML table"
+    outputmodifier: "Y"
   ]
 
   boolean: protein [
@@ -85,7 +86,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: only [
+  toggle: only [
     default: "N"
     information: "Display the specified columns"
     help: "This is a way of shortening the command line if you only

@@ -61,6 +61,7 @@ section: output [
     additional: "Y"
     default: "N"
     information: "Format output as an HTML table"
+    outputmodifier: "Y"
   ]
 
   boolean: only [

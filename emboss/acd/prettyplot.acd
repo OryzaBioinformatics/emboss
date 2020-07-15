@@ -82,12 +82,6 @@ section: additional [
     default: "N"
   ]
 
-  boolean: title [
-    additional: "Y"
-    information: "Do not display the title"
-    default: "Y"
-  ]
-
   string: shade [
     additional: "Y"
     information: "Shading"
@@ -193,7 +187,7 @@ section: additional [
       default: "Y"
     ]
 
-    selection: alternative [
+    list: alternative [
       additional: "Y"
       information: "Use alternative collisions routine"
       values: "0:Normal collision check. (default); 1:Compares
@@ -241,6 +235,7 @@ section: output [
 
   graph: graph [
     standard: "Y"
+    gdesc: "Pretty plot"
   ]
 
 endsection: output

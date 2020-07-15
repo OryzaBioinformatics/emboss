@@ -149,7 +149,7 @@ Output file format
 
 ########################################
 # Program: dbiflat
-# Rundate: Sat Jul 15 2006 12:00:00
+# Rundate: Sat 15 Jul 2006 12:00:00
 # Dbname: EMBL
 # Release: 0.0
 # Date: 15/07/06
