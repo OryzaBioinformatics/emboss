@@ -70,7 +70,7 @@ DB tpir [ type: P dir: $emboss_tempdata/pir
 # =======
 
 DB tgb [ type: N method: srswww format: genbank
-   url: "http://www.cbr.nrc.ca/srs6bin/cgi-bin/wgetz"
+   url: "http://genius.embnet.dkfz-heidelberg.de/menu/cgi-bin/srs7.1.3.1/wgetz"
    dbalias: genbank
    fields: "sv des org key"
    comment: "Genbank IDs" ]
