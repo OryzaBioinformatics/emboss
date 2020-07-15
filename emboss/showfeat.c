@@ -2,7 +2,7 @@
 **
 ** Show features of a sequence
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 				 ajint end, const AjPStr matchsource,
 				 const AjPStr matchtype, const AjPStr matchtag,
 				 const AjPStr matchvalue,
-				 AjPStr const *sortlist,
+				 const AjPStr sortlist,
 				 ajint width, AjBool collapse,
 				 AjBool forward, AjBool reverse,
 				 AjBool unknown, AjBool strand,
@@ -73,14 +73,14 @@ static void showfeat_AddPos(AjPStr *posout, ajint start, ajint end);
 int main(int argc, char **argv)
 {
 
-    AjPSeqall seqall;
-    AjPFile outfile;
-    AjPSeq seq;
-    AjPStr matchsource;
-    AjPStr matchtype;
-    AjPStr matchtag;
-    AjPStr matchvalue;
-    AjPStr *sortlist;
+    AjPSeqall seqall = NULL;
+    AjPFile outfile = NULL;
+    AjPSeq seq = NULL;
+    AjPStr matchsource = NULL;
+    AjPStr matchtype = NULL;
+    AjPStr matchtag = NULL;
+    AjPStr matchvalue = NULL;
+    AjPStr sortlist = NULL;
     AjBool html;
     AjBool id;
     AjBool description;
@@ -97,12 +97,12 @@ int main(int argc, char **argv)
     AjBool tags;
     AjBool values;
     AjBool stricttags;
-    AjPRange annotation;
+    AjPRange annotation = NULL;
     
     ajint i;
     ajint beg;
     ajint end;
-    AjPStr descriptionline;
+    AjPStr descriptionline = NULL;
 
     embInit("showfeat", argc, argv);
 
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
     matchtype   = ajAcdGetString("matchtype");
     matchtag    = ajAcdGetString("matchtag");
     matchvalue  = ajAcdGetString("matchvalue");
-    sortlist    = ajAcdGetList("sort");
+    sortlist    = ajAcdGetListSingle("sort");
     html        = ajAcdGetBool("html");
     id          = ajAcdGetBool("id");
     description = ajAcdGetBool("description");
@@ -134,29 +134,29 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
     {
 	/* get begin and end positions */
-	beg = ajSeqBegin(seq)-1;
-	end = ajSeqEnd(seq)-1;
+	beg = ajSeqGetBegin(seq)-1;
+	end = ajSeqGetEnd(seq)-1;
 
 	/* do the ID name and description */
 	if(id)
 	{
 	    if(html)
 		ajFmtPrintF(outfile, "<H2>%S</H2>\n",
-			    ajSeqGetName(seq));
+			    ajSeqGetNameS(seq));
 	    else
-		ajFmtPrintF(outfile, "%S\n", ajSeqGetName(seq));
+		ajFmtPrintF(outfile, "%S\n", ajSeqGetNameS(seq));
 	}
 
 	if(description)
 	{
 	    if(html)
 		ajFmtPrintF(outfile, "<H3>%S</H3>\n",
-			    ajSeqGetDesc(seq));
+			    ajSeqGetDescS(seq));
 	    else
 	    {
 		descriptionline = ajStrNew();
-		ajStrAssS(&descriptionline, ajSeqGetDesc(seq));
-		ajStrWrap(&descriptionline, 80);
+		ajStrAssignS(&descriptionline, ajSeqGetDescS(seq));
+		ajStrFmtWrap(&descriptionline, 80);
 		ajFmtPrintF(outfile, "%S\n", descriptionline);
 		ajStrDel(&descriptionline);
 	    }
@@ -174,11 +174,11 @@ int main(int argc, char **argv)
 		ajFmtPrintF(outfile, "=");
 
 	    ajFmtPrintF(outfile, "| ");
-	    if(beg != 0 || end+1 != ajSeqLen(seq))
+	    if(beg != 0 || end+1 != ajSeqGetLen(seq))
 		ajFmtPrintF(outfile, "%d-%d of %d\n", beg+1, end+1,
-			    ajSeqLen(seq));
+			    ajSeqGetLen(seq));
 	    else
-		ajFmtPrintF(outfile, "%d\n", ajSeqLen(seq));
+		ajFmtPrintF(outfile, "%d\n", ajSeqGetLen(seq));
 	}
 
 
@@ -200,8 +200,17 @@ int main(int argc, char **argv)
     }
     
     ajFileClose(&outfile);
-    
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajStrDel(&matchsource);
+    ajStrDel(&matchtype);
+    ajStrDel(&matchtag);
+    ajStrDel(&matchvalue);
+    ajStrDel(&sortlist);
+    ajRangeDel(&annotation);
+    ajStrDel(&descriptionline);
+
+    embExit();
 
     return 0;
 }
@@ -221,7 +230,7 @@ int main(int argc, char **argv)
 ** @param [r] matchtype [const AjPStr] type pattern to display
 ** @param [r] matchtag [const AjPStr] tag pattern to display
 ** @param [r] matchvalue [const AjPStr] tag's value pattern to display
-** @param [r] sortlist [AjPStr const *] type of sorting of features to do
+** @param [r] sortlist [const AjPStr] type of sorting of features to do
 ** @param [r] width [ajint] width of line of features
 ** @param [r] collapse [AjBool] show all features on separate lines
 ** @param [r] forward [AjBool] show forward sense features
@@ -244,7 +253,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 				 ajint end, const AjPStr matchsource,
 				 const AjPStr matchtype, const AjPStr matchtag,
 				 const AjPStr matchvalue,
-				 AjPStr const *sortlist,
+				 const AjPStr sortlist,
 				 ajint width, AjBool collapse,
 				 AjBool forward, AjBool reverse,
 				 AjBool unknown, AjBool strand,
@@ -277,7 +286,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
     AjBool child;	                 /* true if multiple's child */
 
     /* get the feature table of the sequence */
-    feat = ajSeqCopyFeat(seq);
+    feat = ajSeqGetFeatCopy(seq);
     if(!feat)
 	return;
 
@@ -287,19 +296,19 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
     tagsout = ajStrNewC("");
     posout  = ajStrNewC("");
 
-    if(feat->Features)
+    if(ajFeattableSize(feat))
     {
-	if(!ajStrCmpC(sortlist[0], "source"))
+	if(!ajStrCmpC(sortlist, "source"))
 	    /* sort by: sense, source, type, start */
 	    ajListSort(feat->Features, showfeat_CompareFeatSource);
-	else if(!ajStrCmpC(sortlist[0], "start"))
+	else if(!ajStrCmpC(sortlist, "start"))
 	    /* sort by: sense, start, type, source, source */
 	    ajListSort(feat->Features, showfeat_CompareFeatPos);
-	else if(!ajStrCmpC(sortlist[0], "type"))
+	else if(!ajStrCmpC(sortlist, "type"))
 	    /* type */
 	    /* sort by: sense, type, source, start */
 	    ajListSort(feat->Features, showfeat_CompareFeatType);
-	else if(!ajStrCmpC(sortlist[0], "join"))
+	else if(!ajStrCmpC(sortlist, "join"))
             join = ajTrue;
 	/* else - no sort */
 
@@ -327,7 +336,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 
 
 	    /* check that the feature is within the range we wish to display */
-	    if(beg+1 > gf->End || end+1 < gf->Start)
+	    if(beg+1 > ajFeatGetEnd(gf) || end+1 < ajFeatGetStart(gf))
 		continue;
 
             /* ignore remote IDs */
@@ -335,16 +344,16 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
                 continue;
 
 	    /* check that we want to output this sense */
-	    if(!forward && gf->Strand == '+')
+	    if(!forward && ajFeatGetStrand(gf) == '+')
 		continue;
-	    if(!reverse && gf->Strand == '-')
+	    if(!reverse && ajFeatGetStrand(gf) == '-')
 		continue;
-	    if(!unknown && gf->Strand == '\0')
+	    if(!unknown && ajFeatGetStrand(gf) == '\0')
 		continue;
 
 	    /* check that we want to output this match of source, type */
-	    if(!embMiscMatchPattern(gf->Source, matchsource) ||
-	       !embMiscMatchPattern(gf->Type, matchtype) ||
+	    if(!embMiscMatchPattern(ajFeatGetSource(gf), matchsource) ||
+	       !embMiscMatchPattern(ajFeatGetType(gf), matchtype) ||
 	       !showfeat_MatchPatternTags(gf, matchtag, matchvalue,
 					  stricttags, &tagstmp, values))
 		continue;
@@ -358,9 +367,9 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 	     */
 	    if((!collapse ||
 		first ||
-		gf->Strand != strandout ||
-		(source && ajStrCmpCase(gf->Source, sourceout)) ||
-		ajStrCmpCase(gf->Type, typeout))
+		ajFeatGetStrand(gf) != strandout ||
+		(source && ajStrCmpCaseS(ajFeatGetSource(gf), sourceout)) ||
+		ajStrCmpCaseS(ajFeatGetType(gf), typeout))
 	       &&
 	       (!join ||
 		! child ||
@@ -372,13 +381,13 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 				     source, type, tags, position);
 
 		/* reset the strings for the new line */
-		ajStrClear(&lineout);
-		ajStrAppKI(&lineout, ' ', width);
-		ajStrAssS(&sourceout, gf->Source);
-		ajStrAssS(&typeout, gf->Type);
-		strandout = gf->Strand;
-		ajStrClear(&tagsout);
-		ajStrClear(&posout);
+		ajStrSetClear(&lineout);
+		ajStrAppendCountK(&lineout, ' ', width);
+		ajStrAssignS(&sourceout, ajFeatGetSource(gf));
+		ajStrAssignS(&typeout, ajFeatGetType(gf));
+		strandout = ajFeatGetStrand(gf);
+		ajStrSetClear(&tagsout);
+		ajStrSetClear(&posout);
 
 		/* something to output */
 		gotoutput = ajTrue;
@@ -393,14 +402,15 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 	    }
 
 	    /* append current tags to tagsout */
-	    ajStrApp(&tagsout, tagstmp);
-	    ajStrClear(&tagstmp);
+	    ajStrAppendS(&tagsout, tagstmp);
+	    ajStrSetClear(&tagstmp);
 
 	    /* add positions to posout */
-	    showfeat_AddPos(&posout, gf->Start, gf->End);
+	    showfeat_AddPos(&posout, ajFeatGetStart(gf), ajFeatGetEnd(gf));
 
 	    /* write the feature on the line */
-	    showfeat_WriteFeat(lineout, strandout, gf->Start, gf->End, width,
+	    showfeat_WriteFeat(lineout, strandout,
+			       ajFeatGetStart(gf), ajFeatGetEnd(gf), width,
 			       beg, end);
 
 	    first = ajFalse;
@@ -434,7 +444,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 
            /* don't start a new line if collapse and previous text is
               the same */
-                if (!collapse || ajStrCmpCase(ann_text, typeout)) {
+                if (!collapse || ajStrCmpCaseS(ann_text, typeout)) {
 		    if(gotoutput)
                         showfeat_FeatOut(outfile, lineout, strandout,
 					 sourceout, posout,
@@ -442,13 +452,13 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 					 source, type, tags, position);
 
 		    /* reset the strings for the new line */
-		    ajStrClear(&lineout);
-		    ajStrAppKI(&lineout, ' ', width);
-		    ajStrAssC(&sourceout, "Annotation");
-                    ajStrAssS(&typeout, ann_text);
+		    ajStrSetClear(&lineout);
+		    ajStrAppendCountK(&lineout, ' ', width);
+		    ajStrAssignC(&sourceout, "Annotation");
+                    ajStrAssignS(&typeout, ann_text);
 		    strandout = '\0';
-		    ajStrClear(&tagsout);
-		    ajStrClear(&posout);
+		    ajStrSetClear(&tagsout);
+		    ajStrSetClear(&posout);
 		    /* something to output */
 		    gotoutput = ajTrue;
 		}
@@ -521,28 +531,28 @@ static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
     for(i=pos1; i<pos2; i++)
 	if(i >= 0 && i < width)
 	    /* don't overwrite any characters except space */
-	    if(ajStrChar(line,i) == ' ')
-		ajStrReplaceK(&line, i, '-', 1);
+	    if(ajStrGetCharPos(line,i) == ' ')
+		ajStrPasteCountK(&line, i, '-', 1);
 
     /* write the end characters */
     if(pos1 >= 0 && pos1 < width)
     {
 	if(strand == '+')
-	    ajStrReplaceK(&line, pos1, '|', 1);
+	    ajStrPasteCountK(&line, pos1, '|', 1);
 	else if(strand == '-')
-	    ajStrReplaceK(&line, pos1, '<', 1);
+	    ajStrPasteCountK(&line, pos1, '<', 1);
 	else
-	    ajStrReplaceK(&line, pos1, '|', 1);
+	    ajStrPasteCountK(&line, pos1, '|', 1);
     }
 
     if(pos2 >= 0 && pos2 < width)
     {
 	if(strand == '+')
-	    ajStrReplaceK(&line, pos2, '>', 1);
+	    ajStrPasteCountK(&line, pos2, '>', 1);
 	else if(strand == '-')
-	    ajStrReplaceK(&line, pos2, '|', 1);
+	    ajStrPasteCountK(&line, pos2, '|', 1);
 	else
-	    ajStrReplaceK(&line, pos2, '|', 1);
+	    ajStrPasteCountK(&line, pos2, '|', 1);
 
     }
 
@@ -552,7 +562,7 @@ static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
 
 
 
-/* @funcstatic showfeat_FeatOut************************************************
+/* @funcstatic showfeat_FeatOut ***********************************************
 **
 ** Show the sequence features  and source, type, etc.
 ** We guarantee to not have trailing whitespace at the end of a line.
@@ -666,27 +676,27 @@ static ajint showfeat_CompareFeatSource(const void * a, const void * b)
     d = *(AjPFeature *)b;
 
     /* sort by strand */
-    if(c->Strand == d->Strand)
+    if(ajFeatGetStrand(c) == ajFeatGetStrand(d))
     {
 	/* stands are the same, sort by source */
-	val = ajStrCmpCase(c->Source, d->Source);
+	val = ajStrCmpCaseS(ajFeatGetSource(c), ajFeatGetSource(d));
 
 	if(val != 0)
 	    return val;
 
 
 	/* source is the same, sort by type */
-	val = ajStrCmpCase(c->Type, d->Type);
+	val = ajStrCmpCaseS(ajFeatGetType(c), ajFeatGetType(d));
 	if(val != 0)
 	    return val;
 
 
 	/* type is the same, sort by start */
-	return (c->Start - d->Start);
+	return (ajFeatGetStart(c) - ajFeatGetStart(d));
     }
-    else if(c->Strand == '+')
+    else if(ajFeatGetStrand(c) == '+')
 	return -1;
-    else if(c->Strand == '\0' && d->Strand == '-')
+    else if(ajFeatGetStrand(c) == '\0' && ajFeatGetStrand(d) == '-')
 	return -1;
 
     return 1;
@@ -717,24 +727,24 @@ static ajint showfeat_CompareFeatType(const void * a, const void * b)
     d = *(AjPFeature *)b;
 
     /* sort by strand */
-    if(c->Strand == d->Strand)
+    if(ajFeatGetStrand(c) == ajFeatGetStrand(d))
     {
 	/* stands are the same, sort by type */
-	val = ajStrCmpCase(c->Type, d->Type);
+	val = ajStrCmpCaseS(ajFeatGetType(c), ajFeatGetType(d));
 	if(val != 0)
 	    return val;
 
 	/* type is the same, sort by source */
-	val = ajStrCmpCase(c->Source, d->Source);
+	val = ajStrCmpCaseS(ajFeatGetSource(c), ajFeatGetSource(d));
 	if(val != 0)
 	    return val;
 
 	/* source is the same, sort by start */
-	return (c->Start - d->Start);
+	return (ajFeatGetStart(c) - ajFeatGetStart(d));
     }
-    else if(c->Strand == '+')
+    else if(ajFeatGetStrand(c) == '+')
 	return -1;
-    else if(c->Strand == '\0' && d->Strand == '-')
+    else if(ajFeatGetStrand(c) == '\0' && ajFeatGetStrand(d) == '-')
 	return -1;
 
     return 1;
@@ -765,25 +775,25 @@ static ajint showfeat_CompareFeatPos(const void * a, const void * b)
     d = *(AjPFeature *)b;
 
     /* sort by strand */
-    if(c->Strand == d->Strand)
+    if(ajFeatGetStrand(c) == ajFeatGetStrand(d))
     {
 	/* strands are the same, sort by start */
-	val = c->Start - d->Start;
+	val = ajFeatGetStart(c) - ajFeatGetStart(d);
 	if(val != 0)
 	    return val;
 
 	/* starts are the same, sort by type */
-	val = ajStrCmpCase(c->Type, d->Type);
+	val = ajStrCmpCaseS(ajFeatGetType(c), ajFeatGetType(d));
 	if(val != 0)
 	    return val;
 
 	/* type is the same, sort by source */
-	val = ajStrCmpCase(c->Source, d->Source);
+	val = ajStrCmpCaseS(ajFeatGetSource(c), ajFeatGetSource(d));
 	return val;
     }
-    else if(c->Strand == '+')
+    else if(ajFeatGetStrand(c) == '+')
 	return -1;
-    else if(c->Strand == '\0' && d->Strand == '-')
+    else if(ajFeatGetStrand(c) == '\0' && ajFeatGetStrand(d) == '-')
 	return -1;
 
     return 1;
@@ -816,8 +826,8 @@ static AjBool showfeat_MatchPatternTags(const AjPFeature feat,
 					AjPStr *tagstmp, AjBool values)
 {
     AjIList titer;                      /* iterator for feat */
-    static AjPStr tagnam = NULL;        /* tag structure */
-    static AjPStr tagval = NULL;        /* tag structure */
+    AjPStr tagnam = NULL;        /* tag structure */
+    AjPStr tagval = NULL;        /* tag structure */
     AjBool val = ajFalse;               /* returned value */
     AjBool tval;                        /* tags result */
     AjBool vval;                        /* value result */
@@ -844,7 +854,7 @@ static AjBool showfeat_MatchPatternTags(const AjPFeature feat,
 	 ** Else check vpattern
 	 */
 
-        if(!ajStrLen(tagval))
+        if(!ajStrGetLen(tagval))
 	{
             if(!ajStrCmpC(vpattern, "*"))
             	vval = ajTrue;
@@ -861,7 +871,7 @@ static AjBool showfeat_MatchPatternTags(const AjPFeature feat,
 	     ** match of the whole of vpattern
 	     ** without spitting it up into words. 
 	     */
-            vval = (ajStrMatch(tagval, vpattern) ||
+            vval = (ajStrMatchS(tagval, vpattern) ||
 		    embMiscMatchPattern(tagval, vpattern));
 	}
 
@@ -911,7 +921,10 @@ static AjBool showfeat_MatchPatternTags(const AjPFeature feat,
      ** If no match, then clear the tagstmp string
      */
     if(!val)
-        ajStrClear(tagstmp);
+        ajStrSetClear(tagstmp);
+
+    ajStrDel(&tagnam);
+    ajStrDel(&tagval);
 
     return val;
 }
@@ -935,7 +948,7 @@ static void showfeat_AddPos(AjPStr *posout, ajint start, ajint end)
 {
 
     /* if the string already has positions in, separate them with commas */
-    if(ajStrLen(*posout) > 0)
+    if(ajStrGetLen(*posout) > 0)
 	ajFmtPrintAppS(posout, ",");
 
     ajFmtPrintAppS(posout, "%d-%d", start, end);

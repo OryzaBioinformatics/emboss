@@ -1,7 +1,7 @@
 /* @source twofeat application
 **
 ** Finds neighbouring pairs of features in sequences
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -166,7 +166,7 @@ int main(int argc, char **argv)
     /* feature a */
     asource   = ajAcdGetString("asource");
     atype     = ajAcdGetString("atype");
-    asense    = ajAcdGetListI("asense", 1);
+    asense    = ajAcdGetListSingle("asense");
     aminscore = ajAcdGetFloat("aminscore");
     amaxscore = ajAcdGetFloat("amaxscore");
     atag      = ajAcdGetString("atag");
@@ -175,19 +175,19 @@ int main(int argc, char **argv)
     /* feature b */
     bsource   = ajAcdGetString("bsource");
     btype     = ajAcdGetString("btype");
-    bsense    = ajAcdGetListI("bsense", 1);
+    bsense    = ajAcdGetListSingle("bsense");
     bminscore = ajAcdGetFloat("bminscore");
     bmaxscore = ajAcdGetFloat("bmaxscore");
     btag      = ajAcdGetString("btag");
     bvalue    = ajAcdGetString("bvalue");
 
     /* relation */
-    overlap   = ajAcdGetListI("overlap", 1); 
+    overlap   = ajAcdGetListSingle("overlap"); 
     minrange  = ajAcdGetInt("minrange");
     maxrange  = ajAcdGetInt("maxrange");
-    rangetype = ajAcdGetListI("rangetype", 1);
-    sense     = ajAcdGetListI("sense", 1);
-    order     = ajAcdGetListI("order", 1);
+    rangetype = ajAcdGetListSingle("rangetype");
+    sense     = ajAcdGetListSingle("sense");
+    order     = ajAcdGetListSingle("order");
     
     /* output */
     twoout   = ajAcdGetToggle("twoout");
@@ -222,7 +222,7 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
     {
 
-	ajStrAssC(&seqname, ajSeqName(seq));
+	ajStrAssignC(&seqname, ajSeqName(seq));
 	begin = ajSeqallBegin(seqall);
 	end   = ajSeqallEnd(seqall);
 
@@ -343,25 +343,27 @@ static void twofeat_rippledown(const AjPFeattable tabA,
 
     hitlist = ajListNew(); 
     
-    if(tabA && tabA->Features)
+    if(ajFeattableSize(tabA))
     {
         /* For all features in tabA ... */
     	iterA = ajListIterRead(tabA->Features);
     	while(ajListIterMore(iterA))
     	{
     	    gfA = ajListIterNext(iterA);
-            ajDebug("In rippledown gfA=%S %d..%d\n", gfA->Type, gfA->Start,
-		    gfA->End);
+            ajDebug("In rippledown gfA=%S %d..%d\n",
+		    ajFeatGetType(gfA), ajFeatGetStart(gfA),
+		    ajFeatGetEnd(gfA));
 
             /* For all features in tabB ... */
-            if(tabB && tabB->Features) 
+            if(ajFeattableSize(tabB)) 
             {
    	        iterB = ajListIterRead(tabB->Features);
                 while(ajListIterMore(iterB))
                 {
                     gfB = ajListIterNext(iterB);
-                    ajDebug("In rippledown gfB=%S %d..%d\n", gfB->Type,
-			    gfB->Start, gfB->End);
+                    ajDebug("In rippledown gfB=%S %d..%d\n",
+			    ajFeatGetType(gfB), ajFeatGetStart(gfB),
+			    ajFeatGetEnd(gfB));
 
 		    /*
 		    ** check for overlap, minrange, maxrange, rangetype,
@@ -422,8 +424,8 @@ static void twofeat_sort_hits(const AjPList hitlist, AjBool twoout,
     source = ajStrNew();
     type   = ajStrNew();
     	
-    ajStrAssC(&source,"twofeat");
-    ajStrAssS(&type, typeout);
+    ajStrAssignC(&source,"twofeat");
+    ajStrAssignS(&type, typeout);
 
 
     iter = ajListIterRead(hitlist);
@@ -452,16 +454,16 @@ static void twofeat_sort_hits(const AjPList hitlist, AjBool twoout,
             feature = ajFeatNew(outtab, source, type, start, end,
 				score, strand, frame);
 
-            ajFmtPrintS(&tmp, "*startA %d", (detail->gfA)->Start);
+            ajFmtPrintS(&tmp, "*startA %d", ajFeatGetStart(detail->gfA));
             ajFeatTagAdd(feature, NULL, tmp);
 
-            ajFmtPrintS(&tmp, "*endA %d", (detail->gfA)->End);
+            ajFmtPrintS(&tmp, "*endA %d", ajFeatGetEnd(detail->gfA));
             ajFeatTagAdd(feature, NULL, tmp);
 
-            ajFmtPrintS(&tmp, "*startB %d", (detail->gfB)->Start);
+            ajFmtPrintS(&tmp, "*startB %d", ajFeatGetStart(detail->gfB));
             ajFeatTagAdd(feature, NULL, tmp);
 
-            ajFmtPrintS(&tmp, "*endB %d", (detail->gfB)->End);
+            ajFmtPrintS(&tmp, "*endB %d", ajFeatGetEnd(detail->gfB));
             ajFeatTagAdd(feature, NULL, tmp);
 	}
 
@@ -517,7 +519,7 @@ static void twofeat_find_features(const AjPSeq seq, AjPFeattable tab,
     tagsmatch = ajFalse;
 
     /* For all features... */
-    if(seqtab && seqtab->Features) 
+    if(ajFeattableSize(seqtab)) 
     {
     	iter = ajListIterRead(seqtab->Features);
     	while(ajListIterMore(iter))
@@ -533,7 +535,8 @@ static void twofeat_find_features(const AjPSeq seq, AjPFeattable tab,
 				    maxscore, tag, value, &tagsmatch))
 	    {
                 ajDebug("Found feature source=%S type=%S %d..%d\n", 
-                	gf->Source, gf->Type, gf->Start, gf->End);
+                	ajFeatGetSource(gf), ajFeatGetType(gf),
+			ajFeatGetStart(gf), ajFeatGetEnd(gf));
 		/*
 		** could explicitly make a new feature like this, but it
 		** is probably safer to let ajFeatCopy do it automatically
@@ -604,12 +607,12 @@ static AjBool twofeat_MatchFeature(const AjPFeature gf,
      **      for score, maxscore <= minscore
      */
 
-    if(!embMiscMatchPattern(gf->Source, source) ||
-       !embMiscMatchPattern(gf->Type, type) ||
-       (gf->Strand == '+' && sense == -1) ||
-       (gf->Strand == '-' && sense == +1) ||
-       (scoreok && gf->Score < minscore) ||
-       (scoreok && gf->Score > maxscore) ||
+    if(!embMiscMatchPattern(ajFeatGetSource(gf), source) ||
+       !embMiscMatchPattern(ajFeatGetType(gf), type) ||
+       (ajFeatGetStrand(gf) == '+' && sense == -1) ||
+       (ajFeatGetStrand(gf) == '-' && sense == +1) ||
+       (scoreok && ajFeatGetScore(gf) < minscore) ||
+       (scoreok && ajFeatGetScore(gf) > maxscore) ||
        !*tagsmatch)
 	return ajFalse;
 
@@ -663,7 +666,7 @@ static AjBool twofeat_MatchPatternTags(const AjPFeature feat,
 	 ** Else check vpattern
 	 */
 
-        if(!ajStrLen(tagval))
+        if(!ajStrGetLen(tagval))
 	{
             if(!ajStrCmpC(vpattern, "*"))
             	vval = ajTrue;
@@ -768,15 +771,17 @@ static AjBool twofeat_check_match(AjPFeature gfA, AjPFeature gfB,
     ajint tmp1;
     ajint tmp2;
 
-    sA = gfA->Start;
-    eA = gfA->End;
-    sB = gfB->Start;
-    eB = gfB->End;
+    sA = ajFeatGetStart(gfA);
+    eA = ajFeatGetEnd(gfA);
+    sB = ajFeatGetStart(gfB);
+    eB = ajFeatGetEnd(gfB);
 
     *detail = NULL;
 
-    ajDebug("Next gfA=%S %d..%d\n", gfA->Type, gfA->Start, gfA->End);
-    ajDebug("Next gfB=%S %d..%d\n", gfB->Type, gfB->Start, gfB->End);
+    ajDebug("Next gfA=%S %d..%d\n",
+	    ajFeatGetType(gfA), ajFeatGetStart(gfA), ajFeatGetEnd(gfA));
+    ajDebug("Next gfB=%S %d..%d\n",
+	    ajFeatGetType(gfB), ajFeatGetStart(gfB), ajFeatGetEnd(gfB));
 
     /* get distances and absolute distances from each end */
     ss = abs(sA - sB);
@@ -869,12 +874,12 @@ static AjBool twofeat_check_match(AjPFeature gfA, AjPFeature gfB,
 	break;
 
     case SN_SAME:	
-        if(gfA->Strand != gfB->Strand)
+        if(ajFeatGetStrand(gfA) != ajFeatGetStrand(gfB))
 	    return ajFalse;
 	break;
 
     case SN_OPPOSITE:	
-        if(gfA->Strand == gfB->Strand) return ajFalse;
+        if(ajFeatGetStrand(gfA) == ajFeatGetStrand(gfB)) return ajFalse;
 
     default:
         ajFatal("Unknown sense type: %d", sensei);
@@ -913,8 +918,8 @@ static AjBool twofeat_check_match(AjPFeature gfA, AjPFeature gfB,
     */
     if(ss == 0 &&
        ee == 0 &&
-       gfA->Strand == gfB->Strand &&
-       ajStrMatch(gfA->Type, gfB->Type))
+       ajFeatGetStrand(gfA) == ajFeatGetStrand(gfB) &&
+       ajStrMatchS(ajFeatGetType(gfA), ajFeatGetType(gfB)))
     {
         ajDebug("Found match of feature to itself\n");
         return ajFalse;    

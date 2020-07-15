@@ -2,7 +2,7 @@
 **
 ** Display a sequence with restriction cut sites
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** 18 Jan 2000 - GWW - written
 ** @@
 **
@@ -47,9 +47,9 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
 			    const AjPTable retable);
 static void remap_DelTable(AjPTable * table);
 static void remap_read_file_of_enzyme_names(AjPStr *enzymes);
-static int remap_ajStrCmpCase(const void* str1, const void* str2);
-static void remap_ajStrDel(void** str, void* cl);
-static void rebase_RenamePreferred(const AjPList list, const AjPTable table, 
+static int remap_cmpcase(const void* str1, const void* str2);
+static void remap_strdel(void** str, void* cl);
+static void remap_RenamePreferred(const AjPList list, const AjPTable table, 
 				   AjPList newlist);
 static void remap_RestrictPreferred(const AjPList l, const AjPTable t);
 static AjBool remap_Ambiguous(const AjPStr str);
@@ -85,13 +85,12 @@ typedef struct SValue
 
 int main(int argc, char **argv)
 {
-
     ajint begin, end;
     AjPSeqall seqall;
     AjPSeq seq;
     EmbPShow ss;
     AjPFile outfile;
-    AjPStr * tablelist;
+    AjPStr tablename;
     ajint table;
     AjPRange uppercase;
     AjPRange highlight;
@@ -143,7 +142,7 @@ int main(int argc, char **argv)
 
     seqall      = ajAcdGetSeqall("sequence");
     outfile     = ajAcdGetOutfile("outfile");
-    tablelist   = ajAcdGetList("table");
+    tablename   = ajAcdGetListSingle("table");
     uppercase   = ajAcdGetRange("uppercase");
     highlight   = ajAcdGetRange("highlight");
     threeletter = ajAcdGetBool("threeletter");
@@ -179,7 +178,7 @@ int main(int argc, char **argv)
 	ajFatal("Blunt/Sticky end cutters shouldn't both be disabled.");
 
     /* get the number of the genetic code used */
-    ajStrToInt(tablelist[0], &table);
+    ajStrToInt(tablename, &table);
     trnTable = ajTrnNewI(table);
 
     /* read the local file of enzymes names */
@@ -191,17 +190,17 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
     {
 	/* get begin and end positions */
-	begin = ajSeqBegin(seq)-1;
-	end   = ajSeqEnd(seq)-1;
+	begin = ajSeqGetBegin(seq)-1;
+	end   = ajSeqGetEnd(seq)-1;
 
 	/* do the name and description */
 	if(nameseq)
 	{
 	    if(html)
 		ajFmtPrintF(outfile, "<H2>%S</H2>\n",
-				   ajSeqGetName(seq));
+				   ajSeqGetNameS(seq));
 	    else
-		ajFmtPrintF(outfile, "%S\n", ajSeqGetName(seq));
+		ajFmtPrintF(outfile, "%S\n", ajSeqGetNameS(seq));
 	}
 
 	if(description)
@@ -212,12 +211,12 @@ int main(int argc, char **argv)
 	    */
 	    if(html)
 		ajFmtPrintF(outfile, "<H3>%S</H3>\n",
-				   ajSeqGetDesc(seq));
+				   ajSeqGetDescS(seq));
 	    else
 	    {
 		descriptionline = ajStrNew();
-		ajStrAssS(&descriptionline, ajSeqGetDesc(seq));
-		ajStrWrap(&descriptionline, width+margin);
+		ajStrAssignS(&descriptionline, ajSeqGetDescS(seq));
+		ajStrFmtWrap(&descriptionline, width+margin);
 		ajFmtPrintF(outfile, "%S\n", descriptionline);
 		ajStrDel(&descriptionline);
 	    }
@@ -364,7 +363,17 @@ int main(int argc, char **argv)
 
     ajTrnDel(&trnTable);
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajFileClose(&outfile);
+    ajStrDel(&tablename);
+    ajStrDel(&enzymes);
+    ajStrDelarray(&framelist);
+
+    ajRangeDel(&uppercase);
+    ajRangeDel(&highlight);
+
+    embExit();
 
     return 0;
 }
@@ -442,7 +451,7 @@ static void remap_RemoveMinMax(AjPList restrictlist,
 	miter = ajListIterRead(restrictlist);
 	while((m = ajListIterNext(miter)) != NULL)
 	{
-	    ajStrAssS(&key, m->cod);
+	    ajStrAssignS(&key, m->cod);
 
 	    /* increment the count of key */
 	    value = (PValue) ajTableGet(hittable, (const void *)key);
@@ -451,9 +460,9 @@ static void remap_RemoveMinMax(AjPList restrictlist,
 		AJNEW0(value);
 		value->count = 1;
 		value->iso = ajStrNew();
-		ajStrAssS(&(value->iso), m->iso);
+		ajStrAssignS(&(value->iso), m->iso);
 		keyv = ajStrNew();
-		ajStrAssS(&keyv,key);
+		ajStrAssignS(&keyv,key);
 		ajTablePut(hittable, (const void *)keyv, (void *)value);
 	    }
 	    else
@@ -521,7 +530,7 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
     if(ajTableLength(hittable))
     {
         array = ajTableToarray(hittable, NULL);
-        qsort(array, ajTableLength(hittable), 2*sizeof (*array), ajStrCmp);
+        qsort(array, ajTableLength(hittable), 2*sizeof (*array), ajStrVcmp);
 
 	/* enzymes that cut the required number of times */
 	if(html)
@@ -702,21 +711,21 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
     {
         value = (PValue) array[i+1];
         cutname = ajStrNew();
-        ajStrCopy(&cutname, array[i]);
+        ajStrAssignRef(&cutname, array[i]);
         ajListstrPushApp(cutlist, cutname);
 
         /* Add to cutlist all isoschizomers of enzymes that cut */
         ajDebug("Add to cutlist all isoschizomers of enzymes that cut\n");
 
         /* start token to parse isoschizomers names */
-        tok = ajStrTokenInit(value->iso,  tokens);
-        while(ajStrToken(&code, &tok, tokens))
+        tok = ajStrTokenNewC(value->iso,  tokens);
+        while(ajStrTokenNextParseC(&tok, tokens, &code))
         {
             cutname = ajStrNew();
-            ajStrAssS(&cutname, code);
+            ajStrAssignS(&cutname, code);
             ajListstrPushApp(cutlist, cutname);
         }
-        ajStrTokenClear(&tok);
+        ajStrTokenDel(&tok);
     }
     ajStrDel(&code);
     AJFREE(array);
@@ -744,7 +753,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
 	{
 	    isall = ajFalse;
 	    for(i=0; i<ne; ++i)
-		ajStrCleanWhite(&ea[i]);
+		ajStrRemoveWhiteExcess(&ea[i]);
 	}
     }
 
@@ -763,7 +772,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
 	{
             found = AJFALSE;
             for(i=0; i<ne; ++i)
-                if(ajStrMatchCase(ea[i], enz->cod))
+                if(ajStrMatchCaseS(ea[i], enz->cod))
 		{
 		    found = AJTRUE;
                     break;
@@ -811,7 +820,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
 	}
 
 	/* commercially available enzymes have uppercase patterns */
-	p = ajStrStr(enz->pat);
+	p = ajStrGetPtr(enz->pat);
 
          /* 
 	 ** The -commercial qualifier is only used if we are searching
@@ -835,7 +844,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
         ajDebug("RE %S matches all required criteria\n", enz->cod);
 
         code = ajStrNew();
-	ajStrAssS(&code, enz->cod);
+	ajStrAssignS(&code, enz->cod);
 	ajListstrPushApp(nocutlist, code);
     }
     embPatRestrictDel(&enz);
@@ -860,10 +869,10 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
     if(limit)
     {
         newlist = ajListstrNew();
-        rebase_RenamePreferred(nocutlist, retable, newlist);
+        remap_RenamePreferred(nocutlist, retable, newlist);
         ajListstrFree(&nocutlist);
         nocutlist = newlist;
-        ajListUnique(nocutlist, remap_ajStrCmpCase, remap_ajStrDel);
+        ajListUnique(nocutlist, remap_cmpcase, remap_strdel);
     }
 
 
@@ -882,8 +891,8 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
      **  nocutlist item is deleted.
      */
 
-    ajListSort(nocutlist, remap_ajStrCmpCase);
-    ajListSort(cutlist, remap_ajStrCmpCase);
+    ajListSort(nocutlist, remap_cmpcase);
+    ajListSort(cutlist, remap_cmpcase);
 
     citer = ajListIterRead(cutlist);
     niter = ajListIter(nocutlist);
@@ -900,7 +909,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
 
     while(nocutname != NULL && cutname != NULL)
     {
-	i = ajStrCmpCase(cutname, nocutname);
+	i = ajStrCmpCaseS(cutname, nocutname);
 	ajDebug("compare cutname, nocutname: %S %S ", cutname, nocutname);
 	ajDebug("ajStrCmpCase=%d\n", i);
 	if(i == 0)
@@ -945,7 +954,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
     if(html)
 	ajFmtPrintF(outfile, "<PRE>");
 
-    /*  ajListSort(nocutlist, ajStrCmp);*/
+    /*  ajListSort(nocutlist, ajStrVcmp);*/
     niter = ajListIterRead(nocutlist);
     i = 0;
     while((nocutname = (AjPStr)ajListIterNext(niter)) != NULL)
@@ -1014,7 +1023,7 @@ static void remap_read_equiv(AjPFile *equfile, AjPTable *table)
 
     while(ajFileReadLine(*equfile,&line))
     {
-        p = ajStrStr(line);
+        p = ajStrGetPtr(line);
 
         if(!*p || *p=='#' || *p=='!')
             continue;
@@ -1059,15 +1068,15 @@ static void remap_read_file_of_enzyme_names(AjPStr *enzymes)
 	    ajFatal("Cannot open the file of enzyme names: '%S'", enzymes);
 
 	/* blank off the enzyme file name and replace with the enzyme names */
-	ajStrClear(enzymes);
+	ajStrSetClear(enzymes);
 	line = ajStrNew();
 	while(ajFileReadLine(file, &line))
 	{
-	    p = ajStrStr(line);
+	    p = ajStrGetPtr(line);
 	    if(!*p || *p == '#' || *p == '!')
 		continue;
-	    ajStrApp(enzymes, line);
-	    ajStrAppC(enzymes, ",");
+	    ajStrAppendS(enzymes, line);
+	    ajStrAppendC(enzymes, ",");
 	}
 	ajStrDel(&line);
 
@@ -1080,7 +1089,7 @@ static void remap_read_file_of_enzyme_names(AjPStr *enzymes)
 
 
 
-/* @funcstatic remap_ajStrCmpCase *********************************************
+/* @funcstatic remap_cmpcase *********************************************
 **
 ** Compares the value of two strings for use in sorting (e.g. ajListSort)
 ** Case Independent!
@@ -1093,7 +1102,7 @@ static void remap_read_file_of_enzyme_names(AjPStr *enzymes)
 ** @@
 ******************************************************************************/
 
-static int remap_ajStrCmpCase(const void* str1, const void* str2) 
+static int remap_cmpcase(const void* str1, const void* str2) 
 {
     const char* cp;
     const char* cq;
@@ -1120,7 +1129,7 @@ static int remap_ajStrCmpCase(const void* str1, const void* str2)
 
 
 
-/* @funcstatic remap_ajStrDel *********************************************
+/* @funcstatic remap_strdel *********************************************
 **
 ** Deletes a string when called by ajListUnique
 **
@@ -1130,7 +1139,7 @@ static int remap_ajStrCmpCase(const void* str1, const void* str2)
 ** @@
 ******************************************************************************/
 
-static void remap_ajStrDel(void** str, void* cl) 
+static void remap_strdel(void** str, void* cl) 
 {
     ajStrDel((AjPStr*)str);
 
@@ -1140,7 +1149,7 @@ static void remap_ajStrDel(void** str, void* cl)
 
 
 
-/* @funcstatic rebase_RenamePreferred *****************************************
+/* @funcstatic remap_RenamePreferred ******************************************
 **
 ** Iterates through a list of strings
 ** Forteach string it checks if that string occurs as
@@ -1155,7 +1164,7 @@ static void remap_ajStrDel(void** str, void* cl)
 ** @@
 ******************************************************************************/
 
-static void rebase_RenamePreferred(const AjPList list, const AjPTable table, 
+static void remap_RenamePreferred(const AjPList list, const AjPTable table, 
 				   AjPList newlist) 
 {
     AjIList iter = NULL;
@@ -1176,12 +1185,12 @@ static void rebase_RenamePreferred(const AjPList list, const AjPTable table,
         if(value)
 	{
 	    ajDebug("Rename: %S renamed to %S\n", key, value);
-            ajStrAssS(&name, value);
+            ajStrAssignS(&name, value);
 	}
 	else
 	{
 	    ajDebug("Rename: %S not found\n", key);
-	    ajStrAssS(&name, key);
+	    ajStrAssignS(&name, key);
 	}
         ajListstrPushApp(newlist, name);
     }
@@ -1236,40 +1245,40 @@ static void remap_RestrictPreferred(const AjPList l, const AjPTable t)
     	{
     	    newiso = ajStrNew();
 	    /* parse isoschizomer names from m->iso */
-            tok = ajStrTokenInit(m->iso,  tokens);
-            while(ajStrToken(&code, &tok, tokens))
+            tok = ajStrTokenNewC(m->iso,  tokens);
+            while(ajStrTokenNextParseC(&tok, tokens, &code))
             {
-	        if(ajStrLen(newiso) > 0)
-	            ajStrAppC(&newiso, ",");
+	        if(ajStrGetLen(newiso) > 0)
+	            ajStrAppendC(&newiso, ",");
 
 		/* found the prototype name? */
-	        if(!ajStrCmpCase(code, value)) 
+	        if(!ajStrCmpCaseS(code, value)) 
 	        {
-	            ajStrApp(&newiso, m->cod);
+	            ajStrAppendS(&newiso, m->cod);
 	            found = ajTrue;
 	        }
 		else
-	            ajStrApp(&newiso, code);
+	            ajStrAppendS(&newiso, code);
             }
-            ajStrTokenClear(&tok);
+            ajStrTokenDel(&tok);
 
 	    /* if the name was not replaced, then add it in now */
 	    if(!found)
 	    {
-	        if(ajStrLen(newiso) > 0)
-	            ajStrAppC(&newiso, ",");
+	        if(ajStrGetLen(newiso) > 0)
+	            ajStrAppendC(&newiso, ",");
 
-	        ajStrApp(&newiso, m->cod);	
+	        ajStrAppendS(&newiso, m->cod);	
 	    }
 	    
 	    ajDebug("RE: %S -> %S iso=%S newiso=%S\n", m->cod, value,
 		    m->iso, newiso);
 
 	    /* replace the old iso string with the new one */
-	    ajStrAssS(&m->iso, newiso);
+	    ajStrAssignS(&m->iso, newiso);
 
 	    /* rename the enzyme to the prototype name */
-    	    ajStrAssS(&m->cod, value);
+    	    ajStrAssignS(&m->cod, value);
     	}
     }
     
@@ -1295,9 +1304,9 @@ static AjBool remap_Ambiguous(const AjPStr str)
     ajint ipos;
     char chr;
     
-    for (ipos=0; ipos<ajStrLen(str); ipos++) 
+    for (ipos=0; ipos<ajStrGetLen(str); ipos++) 
     {
-    	chr = ajStrChar(str, ipos);
+    	chr = ajStrGetCharPos(str, ipos);
     	if (tolower((int)chr) != 'a' &&
     	    tolower((int)chr) != 'c' &&
     	    tolower((int)chr) != 'g' &&

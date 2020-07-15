@@ -63,14 +63,14 @@ int main(int argc, char **argv)
 
     str = ajStrNew();
 
-    begin = ajSeqBegin(sequence) - 1;
-    end   = ajSeqEnd(sequence) - 1;
+    begin = ajSeqGetBegin(sequence) - 1;
+    end   = ajSeqGetEnd(sequence) - 1;
 
-    ajStrAssSub(&str,ajSeqStr(sequence),begin,end);
+    ajStrAssignSubS(&str,ajSeqGetSeqS(sequence),begin,end);
 
 
-    ajStrToLower(&str);
-    ptr = ajStrStr(str);
+    ajStrFmtLower(&str);
+    ptr = ajStrGetPtr(str);
 
     len = end-begin+1;
 
@@ -148,6 +148,8 @@ int main(int argc, char **argv)
 
 
     ajGraphCloseWin();
+    ajSeqDel(&sequence);
+    ajGraphxyDel(&graph);
     ajStrDel(&str);
 
     ajExit();

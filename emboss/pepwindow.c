@@ -1,7 +1,7 @@
 /* @source pepwindow application
 **
 ** Displays protein hydropathy.
-** @author: Copyright (C) Ian Longden (il@sanger.ac.uk)
+** @author Copyright (C) Ian Longden (il@sanger.ac.uk)
 ** @@
 ** Original program by Jack Kyte and Russell F. Doolittle.
 **
@@ -63,11 +63,11 @@ int main(int argc, char **argv)
     datafile = ajAcdGetDatafile("datafile");
     llen     = ajAcdGetInt("length");
 
-    s1 = ajStrStr(ajSeqStr(seq));
+    s1 = ajStrGetPtr(ajSeqGetSeqS(seq));
 
-    aa0str = ajStrNewL(ajSeqLen(seq)+1);
+    aa0str = ajStrNewRes(ajSeqGetLen(seq)+1);
 
-    graphdata = ajGraphPlpDataNewI(ajSeqLen(seq)-llen);
+    graphdata = ajGraphPlpDataNewI(ajSeqGetLen(seq)-llen);
 
     midpoint = (ajint)((llen+1)/2);
 
@@ -75,16 +75,16 @@ int main(int argc, char **argv)
 
     ajGraphDataAdd(mult,graphdata);
 
-    for(i=0;i<ajSeqLen(seq);i++)
-	ajStrAppK(&aa0str,(char)ajAZToInt(*s1++));
+    for(i=0;i<ajSeqGetLen(seq);i++)
+	ajStrAppendK(&aa0str,(char)ajAZToInt(*s1++));
 
 
     if(!pepwindow_getnakaidata(datafile,&matrix[0]))
-	exit(-1);
+	ajExitBad();
 
-    s1 = ajStrStr(aa0str);
+    s1 = ajStrGetPtr(aa0str);
 
-    for(i=0;i<ajSeqLen(seq)-llen;i++)
+    for(i=0;i<ajSeqGetLen(seq)-llen;i++)
     {
 	total = 0;
 	for(j=0;j<llen;j++)
@@ -102,17 +102,23 @@ int main(int argc, char **argv)
 	s1++;
     }
 
-    ajGraphPlpDataSetMaxima(graphdata,0.,(float)ajSeqLen(seq),min,max);
+    ajGraphPlpDataSetMaxima(graphdata,0.,(float)ajSeqGetLen(seq),min,max);
 
     min = min*1.1;
     max = max*1.1;
 
-    ajGraphPlpDataSetMaxMin(graphdata,0.0,(float)ajSeqLen(seq),min,max);
-    ajGraphxySetMaxMin(mult,0.0,(float)ajSeqLen(seq),min,max);
+    ajGraphPlpDataSetMaxMin(graphdata,0.0,(float)ajSeqGetLen(seq),min,max);
+    ajGraphxySetMaxMin(mult,0.0,(float)ajSeqGetLen(seq),min,max);
 
     ajGraphxyDisplay(mult,AJTRUE);
+    ajGraphxyDel(&mult);
 
-    ajExit();
+    ajFileClose(&datafile);
+    ajSeqDel(&seq);
+
+    ajStrDel(&aa0str);
+
+    embExit();
 
     return 0;
 }
@@ -154,91 +160,90 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
 
     while(ajFileGets(file,&buffer))
     {
-	ptr = ajStrStr(buffer);
+	ptr = ajStrGetPtr(buffer);
 	if(*ptr == 'D')			/* save description */
-	    ajStrAssS(&description, buffer);
+	    ajStrAssignS(&description, buffer);
 	else if(*ptr == 'I')
 	    line = 1;
 	else if(line == 1)
 	{
 	    line++;
-	    ajStrClean(&buffer);
+	    ajStrRemoveWhite(&buffer);
 
-	    token = ajStrTokenInit(buffer,ajStrStr(delim));
+	    token = ajStrTokenNewS(buffer,delim);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[0]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[17]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[13]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[3]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[2]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[16]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[4]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[6]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[7]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[8]);
 
-	    ajStrTokenClear(&token);
+	    ajStrTokenDel(&token);
 	}
 	else if(line == 2)
 	{
 	    line++;
 
-	    ajStrClean(&buffer);
-	    token = ajStrTokenInit(buffer,ajStrStr(delim));
+	    ajStrRemoveWhite(&buffer);
+	    token = ajStrTokenNewS(buffer,delim);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[11]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[10]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[12]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[5]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[15]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[18]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[19]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[22]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[24]);
 
-	    ajStrToken(&buf2,&token,ajStrStr(delim));
+	    ajStrTokenNextParseS(&token,delim,&buf2);
 	    ajStrToFloat(buf2,&matrix[21]);
 
-	    ajStrTokenClear(&token);
+	    ajStrTokenDel(&token);
 	}
     }
-    ajFileClose(&file);
 
     ajStrDel(&buffer);
     ajStrDel(&description);

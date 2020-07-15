@@ -2,7 +2,7 @@
 **
 ** Read and write sequences as a set
 **
-** @author: Copyright (C) Peter Rice
+** @author Copyright (C) Peter Rice
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -45,7 +45,10 @@ int main(int argc, char **argv)
 
     ajSeqWriteClose(seqout);
 
-    ajExit();
+    ajSeqsetDel(&seqset);
+    ajSeqoutDel(&seqout);
+
+    embExit();
 
     return 0;
 }

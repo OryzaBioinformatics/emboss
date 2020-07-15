@@ -1,7 +1,7 @@
 /* @source restover application
  **
  ** Reports restriction enzyme that produce specific overhangs
- ** @author: Copyright (C) Bernd Jagla
+ ** @author Copyright (C) Bernd Jagla
  ** @@ modified source from Alan
  **
  ** This program is free software; you can redistribute it and/or
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 
     seqall    = ajAcdGetSeqall("sequence");
     seqcmp    = ajAcdGetString("seqcomp");
-    ajStrToUpper(&seqcmp);
+    ajStrFmtUpper(&seqcmp);
     outf      = ajAcdGetOutfile("outfile");
 
     /*
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
     l = ajListNew();
 
     if(threeprime)
-	ajStrRev(&seqcmp);
+	ajStrReverse(&seqcmp);
 
     /* read the local file of enzymes names */
     restover_read_file_of_enzyme_names(&enzymes);
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
 	begin = ajSeqallBegin(seqall);
 	end   = ajSeqallEnd(seqall);
 	ajFileSeek(enzfile,0L,0);
-	ajSeqToUpper(seq);
+	ajSeqFmtUpper(seq);
 
 	hits = embPatRestrictMatch(seq,begin,end,enzfile,enzymes,sitelen,
 				   plasmid,ambiguity,min,max,blunt,sticky,
@@ -172,7 +172,7 @@ int main(int argc, char **argv)
 
 	if(hits)
 	{
-	    name = ajStrNewC(ajSeqName(seq));
+	    name = ajStrNewC(ajSeqGetNameC(seq));
 	    restover_printHits(seq, seqcmp, outf,l,name,hits,begin,end,
 			       ambiguity,min,max,plasmid,blunt,sticky,
 			       sitelen,limit,table,alpha,frags,nameit,
@@ -188,8 +188,18 @@ int main(int argc, char **argv)
     ajSeqDel(&seq);
     ajFileClose(&enzfile);
     ajFileClose(&outf);
+    ajFileClose(&dfile);
+    ajFileClose(&enzfile);
+    ajFileClose(&equfile);
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajStrDel(&seqcmp);
+    ajStrDel(&enzymes);
+    ajStrDel(&name);
+
+    ajStrTableFree(&table);
+
+    embExit();
 
     return 0;
 }
@@ -318,33 +328,33 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 	{
 	    value=ajTableGet(table,m->cod);
 	    if(value)
-		ajStrAssS(&m->cod,value);
+		ajStrAssignS(&m->cod,value);
 	}
 
 	if(m->cut2 >= m->cut1)
-	    ajStrAssSub(&overhead, ajSeqStr( seq), m->cut1, m->cut2-1);
+	    ajStrAssignSubS(&overhead, ajSeqGetSeqS( seq), m->cut1, m->cut2-1);
 	else
 	{
-	    ajStrAssSub(&overhead, ajSeqStr( seq), m->cut2, m->cut1-1);
-	    ajStrRev(&overhead);
+	    ajStrAssignSubS(&overhead, ajSeqGetSeqS( seq), m->cut2, m->cut1-1);
+	    ajStrReverse(&overhead);
 	}
 
 	ajDebug("overhead:%S seqcmp:%S\n", overhead, seqcmp);
 
 	/* Print out only those who have the same overhang. */
-	if(ajStrMatchCase(overhead, seqcmp))
+	if(ajStrMatchCaseS(overhead, seqcmp))
 	{
 	    if(html)
 	    {
 		ajFmtPrintF(outf,
 			    "<tr><td>%-d</td><td>%-16s</td><td>%-16s"
 			    "</td><td>%d</td><td>%d</td></tr>\n",
-			    m->start,ajStrStr(m->cod),ajStrStr(m->pat),
+			    m->start,ajStrGetPtr(m->cod),ajStrGetPtr(m->pat),
 			    m->cut1,m->cut2);
 	    }
 	    else
 		ajFmtPrintF(outf,"\t%-d\t%-16s%-16s%d\t%d\t\n",
-			    m->start,ajStrStr(m->cod),ajStrStr(m->pat),
+			    m->start,ajStrGetPtr(m->cod),ajStrGetPtr(m->pat),
 			    m->cut1,m->cut2);
 	}
 
@@ -354,25 +364,25 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 	if(m->cut3 || m->cut4)
 	{
 	    if(m->cut4 >= m->cut3)
-		ajStrAssSub(&overhead, ajSeqStr( seq), m->cut3, m->cut4-1);
+		ajStrAssignSubS(&overhead, ajSeqGetSeqS( seq), m->cut3, m->cut4-1);
 	    else
 	    {
-		ajStrAssSub(&overhead, ajSeqStr( seq), m->cut4, m->cut3-1);
-		ajStrRev(&overhead);
+		ajStrAssignSubS(&overhead, ajSeqGetSeqS( seq), m->cut4, m->cut3-1);
+		ajStrReverse(&overhead);
 	    }
 
-	    if(ajStrMatchCase(overhead, seqcmp))
+	    if(ajStrMatchCaseS(overhead, seqcmp))
 	    {
 		if(html)
 		    ajFmtPrintF(outf,
 				"<tr><td>%-d</td><td>%-16s</td><td>%-16s"
 				"</td><td></td><td></td><td>%d</td><td>%d"
 				"</td></tr>\n",
-				m->start,ajStrStr(m->cod),ajStrStr(m->pat),
+				m->start,ajStrGetPtr(m->cod),ajStrGetPtr(m->pat),
 				m->cut1,m->cut2);
 		else
 		    ajFmtPrintF(outf,"\t%-d\t%-16s%-16s\t\t%d\t%d\t\n",
-				m->start,ajStrStr(m->cod),ajStrStr(m->pat),
+				m->start,ajStrGetPtr(m->cod),ajStrGetPtr(m->pat),
 				m->cut1,m->cut2);
 	    }
 	}
@@ -461,7 +471,7 @@ static void restover_read_equiv(AjPFile equfile, AjPTable table)
 
     while(ajFileReadLine(equfile,&line))
     {
-	p=ajStrStr(line);
+	p=ajStrGetPtr(line);
 	if(!*p || *p=='#' || *p=='!')
 	    continue;
 	p=ajSysStrtok(p," \t\n");
@@ -504,17 +514,17 @@ static void restover_read_file_of_enzyme_names(AjPStr *enzymes)
 	    ajFatal ("Cannot open the file of enzyme names: '%S'", enzymes);
 
 	/* blank off the enzyme file name and replace with the enzyme names */
-	ajStrClear(enzymes);
+	ajStrSetClear(enzymes);
 
 	line = ajStrNew();
 	while(ajFileReadLine(file, &line))
 	{
-	    p = ajStrStr(line);
+	    p = ajStrGetPtr(line);
 	    if (!*p || *p == '#' || *p == '!')
 		continue;
 
-	    ajStrApp(enzymes, line);
-	    ajStrAppC(enzymes, ",");
+	    ajStrAppendS(enzymes, line);
+	    ajStrAppendC(enzymes, ",");
 	}
 	ajStrDel(&line);
 

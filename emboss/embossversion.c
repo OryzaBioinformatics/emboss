@@ -2,7 +2,7 @@
 **
 ** Writes the current EMBOSS version number
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -46,82 +46,82 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outfile,"%s\n", VERSION);
     }
     else {
-	tmpstr = ajStrNewL(128);
+	tmpstr = ajStrNewRes(128);
 
 	if (!ajNamRootPack(&tmpstr))
-	    ajStrAssC(&tmpstr, "(unknown)");
+	    ajStrAssignC(&tmpstr, "(unknown)");
 	ajFmtPrintF(outfile, "PackageName: %S\n", tmpstr);
 
 	if (!ajNamRootVersion(&tmpstr))
-	    ajStrAssC(&tmpstr, "(unknown)");
+	    ajStrAssignC(&tmpstr, "(unknown)");
 	ajFmtPrintF(outfile, "LibraryVersion: %S\n", tmpstr);
 
 	if (!ajNamRootInstall(&tmpstr))
-	    ajStrAssC(&tmpstr, "(unknown)");
+	    ajStrAssignC(&tmpstr, "(unknown)");
 	ajFmtPrintF(outfile, "InstallDirectory: %S\n", tmpstr);
 
 	if (!ajNamRoot(&tmpstr))
-	    ajStrAssC(&tmpstr, "(unknown)");
+	    ajStrAssignC(&tmpstr, "(unknown)");
 	ajFmtPrintF(outfile, "RootDirectory: %S\n", tmpstr);
 	    
 	if (!ajNamRootBase(&tmpstr))
-	    ajStrAssC(&tmpstr, "(unknown)");
+	    ajStrAssignC(&tmpstr, "(unknown)");
 	ajFmtPrintF(outfile, "BaseDirectory: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("acdroot", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_AcdRoot: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("data", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_Data: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("filter", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_Filter: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("format", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_Format: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("graphics", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_Graphics: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("httpversion", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_HttpVersion: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("language", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_Language: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("options", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_Options: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("outdirectory", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_OutDirectory: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("outfeatformat", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_OutFeatFormat: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("outformat", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_OutFormat: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("proxy", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_Proxy: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("stdout", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_Stdout: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("warnrange", &tmpstr))
-	    ajStrAssC(&tmpstr, "(default)");
+	    ajStrAssignC(&tmpstr, "(default)");
 	ajFmtPrintF(outfile, "Emboss_WarnRange: %S\n", tmpstr);
 	    
     }

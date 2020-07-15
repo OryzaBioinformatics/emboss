@@ -2,7 +2,7 @@
 **
 ** Plot test for histograms
 **
-** @author: Copyright (C) Ian Longden
+** @author Copyright (C) Ian Longden
 ** @@
 **
 ** This program is free software; you can redistribute it and/or

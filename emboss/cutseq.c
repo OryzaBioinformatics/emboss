@@ -2,7 +2,7 @@
 **
 ** Removes a specified section from a sequence
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -48,21 +48,23 @@ int main(int argc, char **argv)
     to     = ajAcdGetInt("to")-1;
     seqout = ajAcdGetSeqout("outseq");
 
-    beg = ajSeqBegin(seq)-1;
-    end = ajSeqEnd(seq)-1;
+    beg = ajSeqGetBegin(seq)-1;
+    end = ajSeqGetEnd(seq)-1;
 
     str = ajStrNew();
 
     /* get a COPY of the sequence string */
-    ajStrAssSub(&str, ajSeqStr(seq), beg, end);
-    ajStrCut(&str, from-beg, to-beg);
+    ajStrAssignSubS(&str, ajSeqGetSeqS(seq), beg, end);
+    ajStrCutRange(&str, from-beg, to-beg);
 
-    ajSeqReplace(seq, str);
+    ajSeqAssignSeqS(seq, str);
 
     ajSeqWrite(seqout, seq);
     ajSeqWriteClose(seqout);
 
     ajStrDel(&str);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
 
     ajExit();
     return 0;

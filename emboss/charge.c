@@ -2,7 +2,7 @@
 **
 ** Calculate protein charge within a sliding window
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @modified: David Martin July 2001 (dmartin@hgmp.mrc.ac.uk)
 ** @modified: Alan Bleasby Oct 2001 (ableasby@hgmp.mrc.ac.uk)
 ** @@
@@ -51,8 +51,8 @@ int main(int argc, char **argv)
 
     AjPFloat   chg = NULL;
 
-    AjPFile    outf;
-    AjPFile    cdata;
+    AjPFile    outf = NULL;
+    AjPFile    cdata = NULL;
     AjPStr     str    = NULL;
 
     AjBool     plot;
@@ -110,9 +110,9 @@ int main(int argc, char **argv)
 	ymin = (float)0.;
 	ymax = (float)0.;
 
-	ajStrAssSubC(&str,ajSeqChar(seq),--beg,--end);
-	ajStrToUpper(&str);
-	p = ajStrStr(str);
+	ajStrAssignSubC(&str,ajSeqChar(seq),--beg,--end);
+	ajStrFmtUpper(&str);
+	p = ajStrGetPtr(str);
 
 	if(limit>0)
 	{
@@ -170,8 +170,14 @@ int main(int argc, char **argv)
 
     if(plot)
         ajGraphClose();
-    else
-	ajFileClose(&outf);
+
+    ajSeqDel(&seq);
+    ajSeqallDel(&seqall);
+    ajGraphxyDel(&graph);
+    ajFileClose(&outf);
+    ajFileClose(&cdata);
+
+    ajFloatDel(&chg);
 
     ajStrDel(&str);
 
@@ -226,7 +232,7 @@ static void charge_addgraph(AjPGraph graph, ajint limit, const float *x,
 
     ajFmtPrintS(&st,"CHARGE of %s. Window:%d",sname,window);
     ajGraphPlpDataSetTitle(data,st);
-    ajGraphSetTitleC(graph,ajStrStr(st));
+    ajGraphSetTitleC(graph,ajStrGetPtr(st));
 
     ajGraphPlpDataSetTypeC(data,"2D Plot Float");
     ajFmtPrintS(&st,"Charge");
@@ -270,7 +276,7 @@ static AjPFloat charge_read_amino(AjPFile fp)
 
     while(ajFileReadLine(fp,&line))
     {
-	if(*ajStrStr(line)=='#' || !ajStrLen(line))
+	if(*ajStrGetPtr(line)=='#' || !ajStrGetLen(line))
 	    continue;
 
 	ajFmtScanS(line,"%c%*f%*d%*d%*d%*d%*d%*d%f",&c,&v);

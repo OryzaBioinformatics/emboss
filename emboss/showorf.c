@@ -2,7 +2,7 @@
 **
 ** Pretty translation of DNA sequences for publication
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
     embInit("showorf", argc, argv);
 
     a         = ajAcdGetSeq("sequence");
-    codestr = ajAcdGetListI("table", 1);
+    codestr   = ajAcdGetListSingle("table");
     width     = ajAcdGetInt("width");
     outf      = ajAcdGetOutfile("outfile");
     frames    = ajAcdGetList("frames");
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
     f = frames;
     while(*f)
     {
-	p = ajStrStr(*f);
+	p = ajStrGetPtr(*f);
 	sscanf(p,"%d",&v);
 	if(!v)
 	{
@@ -129,20 +129,20 @@ int main(int argc, char **argv)
     }
 
 
-    beg = ajSeqBegin(a);
-    end = ajSeqEnd(a);
+    beg = ajSeqGetBegin(a);
+    end = ajSeqGetEnd(a);
 
     substr = ajStrNew();
-    ajStrAssSubC(&substr,ajSeqChar(a),beg-1,end-1);
-    len = ajStrLen(substr);
+    ajStrAssignSubC(&substr,ajSeqGetSeqC(a),beg-1,end-1);
+    len = ajStrGetLen(substr);
     
-    revstr = ajStrNewC(ajStrStr(substr));
-    ajSeqReverseStr(&revstr);
+    revstr = ajStrNewC(ajStrGetPtr(substr));
+    ajSeqstrReverse(&revstr);
 
     /* Allocate memory for translations and positions */
     for(i=0;i<6;++i)
     {
-	pseqs[i] = ajStrNewC(ajStrStr(substr));
+	pseqs[i] = ajStrNewC(ajStrGetPtr(substr));
 	AJCNEW(ppos[i], len);
     }
     AJCNEW (ruler, len);
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
     showorf_MakeRuler(len,beg,ruler,npos);
     showorf_CalcProteinPos(ppos,pseqs,len);
     showorf_showTrans(ppos,npos,pseqs,substr,len,mark,ruler,beg,
-		      outf,isrule,isp,isn,width,ajSeqName(a));
+		      outf,isrule,isp,isn,width,ajSeqGetNameC(a));
 
 
     for(i=0;i<6;++i)
@@ -167,7 +167,12 @@ int main(int argc, char **argv)
     ajStrDel(&substr);
     ajCodDel(&codon);
 
-    ajExit();
+    ajSeqDel(&a);
+    ajFileClose(&outf);
+    ajStrDel(&codestr);
+    ajStrDelarray(&frames);
+
+    embExit();
 
     return 0;
 }
@@ -199,7 +204,7 @@ static void showorf_SixTranslate(const AjPStr substr, const AjPStr revstr,
     {
 	showorf_DoTrans(substr, revstr, i, len, pseqs, codon, begin);
 	if(i>2)
-	    ajStrRev(&pseqs[i]);
+	    ajStrReverse(&pseqs[i]);
     }
 
     return;
@@ -240,19 +245,19 @@ static void showorf_DoTrans(const AjPStr s, const AjPStr r, ajint n, ajint len,
 
     if(n<3)
     {
-	p  = ajStrStr(s);
+	p  = ajStrGetPtr(s);
 	po = n%3;
     }
     else
     {
-	p  = ajStrStr(r);
+	p  = ajStrGetPtr(r);
 	po = len%3;
 	po -= n%3;
 	if(po<0)
 	    po += 3;
     }
 
-    for(i=0,q=ajStrStrMod(&pseqs[n]);i<po;++i)
+    for(i=0,q=ajStrGetuniquePtr(&pseqs[n]);i<po;++i)
 	q[i] = ' ';
 
 
@@ -343,7 +348,7 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr const *pseqs,
 	pos = 0;
 	v   = 1;
 
-	p = ajStrStr(pseqs[i]);
+	p = ajStrGetPtr(pseqs[i]);
 	while(p[pos]==' ')
 	    ppos[i][pos++]=0;
 
@@ -387,7 +392,7 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr const *pseqs,
 	pos = len-1;
 	v   = 1;
 
-	p=ajStrStr(pseqs[i]);
+	p=ajStrGetPtr(pseqs[i]);
 	while(p[pos]==' ')
 	    ppos[i][pos--]=0;
 
@@ -531,8 +536,8 @@ static void showorf_showTransb(ajint * const *ppos, const ajint *npos,
 
     if(isrule)
     {
-	ajStrAssSubC(&s,ruler,start,end);
-	ajFmtPrintF(outf,"           %s\n",ajStrStr(s));
+	ajStrAssignSubC(&s,ruler,start,end);
+	ajFmtPrintF(outf,"           %s\n",ajStrGetPtr(s));
     }
 
     if(isn)
@@ -540,8 +545,8 @@ static void showorf_showTransb(ajint * const *ppos, const ajint *npos,
     else
 	ajFmtPrintF(outf,"           ");
 
-    ajStrAssSub(&s,substr,start,end);
-    ajFmtPrintF(outf,"%s ",ajStrStr(s));
+    ajStrAssignSubS(&s,substr,start,end);
+    ajFmtPrintF(outf,"%s ",ajStrGetPtr(s));
 
     if(isn)
 	ajFmtPrintF(outf,"%d",npos[end]);
@@ -607,8 +612,8 @@ static void showorf_showTransb(ajint * const *ppos, const ajint *npos,
 	else
 	    ajFmtPrintF(outf,"        ");
 
-	ajStrAssSub(&s,pseqs[i],start,end);
-	ajFmtPrintF(outf,"%s ",ajStrStr(s));
+	ajStrAssignSubS(&s,pseqs[i],start,end);
+	ajFmtPrintF(outf,"%s ",ajStrGetPtr(s));
 	if(isp && e)
 	    ajFmtPrintF(outf,"%d",e);
 	ajFmtPrintF(outf,"\n");
@@ -676,8 +681,8 @@ static void showorf_showTransb(ajint * const *ppos, const ajint *npos,
 	else
 	    ajFmtPrintF(outf,"        ");
 
-	ajStrAssSub(&s,pseqs[i],start,end);
-	ajFmtPrintF(outf,"%s ",ajStrStr(s));
+	ajStrAssignSubS(&s,pseqs[i],start,end);
+	ajFmtPrintF(outf,"%s ",ajStrGetPtr(s));
 
 	if(isp && e)
 	    ajFmtPrintF(outf,"%d",e);

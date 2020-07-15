@@ -56,7 +56,7 @@ static void ajtest_kim (const AjPStr seqout_name, const AjPSeq subseq)
     AjPSeqout named_seqout = ajSeqoutNewF(seqout_file);
 
     AjPStr format_str = ajStrNew();
-    ajStrAssC(&format_str, "embl");
+    ajStrAssignC(&format_str, "embl");
 
     ajSeqOutSetFormat(named_seqout, format_str);
 

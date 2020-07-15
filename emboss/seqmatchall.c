@@ -2,7 +2,7 @@
 **
 ** All against all comparison of a set of sequences
 **
-** @author: Copyright (C) Ian Longden (guess by ajb)
+** @author Copyright (C) Ian Longden (guess by ajb)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -69,16 +69,16 @@ int main(int argc, char **argv)
     {
 	seq1 = ajSeqsetGetSeq(seqset,i);
 	seq1MatchTable = 0;
-	if(ajSeqLen(seq1) > statwordlen)
+	if(ajSeqGetLen(seq1) > statwordlen)
 	{
 	    if(embWordGetTable(&seq1MatchTable, seq1)) /* get table of words */
 	    {
 		for(j=i+1;j<ajSeqsetSize(seqset);j++)
 		{
 		    seq2 = ajSeqsetGetSeq(seqset,j);
-		    if(ajSeqLen(seq2) > statwordlen)
+		    if(ajSeqGetLen(seq2) > statwordlen)
 		    {
-			matchlist = embWordBuildMatchTable(&seq1MatchTable,
+			matchlist = embWordBuildMatchTable(seq1MatchTable,
 							   seq2, ajTrue);
 			if (ajListLength(matchlist))
 			{
@@ -96,8 +96,10 @@ int main(int argc, char **argv)
     }
 
     ajAlignClose(align);
+    ajAlignDel(&align);
+    ajSeqsetDel(&seqset);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -130,17 +132,17 @@ static void seqmatchall_matchListPrint(void *x,void *cl)
 		(*p).seq1start+1,(*p).seq1start+(*p).length,seq1->Name->Ptr,
 		(*p).seq2start+1,(*p).seq2start+(*p).length,seq2->Name->Ptr);
 */
-    ajStrAssS(&sub1, ajSeqStr(p->sequence));
+    ajStrAssignS(&sub1, ajSeqGetSeqS(p->sequence));
 
-    ajStrAssS(&sub2, ajSeqStr(p->sequence));
+    ajStrAssignS(&sub2, ajSeqGetSeqS(p->sequence));
 
     ajDebug("suba %d..%d %d (%d/%d)\n", 1,
-		p->length, p->seq1start, ajStrLen(sub1),
-	    ajSeqLen(p->sequence));
+		p->length, p->seq1start, ajStrGetLen(sub1),
+	    ajSeqGetLen(p->sequence));
     ajDebug("subb %d..%d %d (%d/%d)\n", 1,
-		p->length, p->seq2start, ajStrLen(sub2),
-	    ajSeqLen(p->sequence));
-    ajAlignDefineCC(align, ajStrStr(sub1), ajStrStr(sub2),
+		p->length, p->seq2start, ajStrGetLen(sub2),
+	    ajSeqGetLen(p->sequence));
+    ajAlignDefineCC(align, ajStrGetPtr(sub1), ajStrGetPtr(sub2),
 		    seq1->Name->Ptr, seq2->Name->Ptr);
     ajAlignSetScoreI(align, p->length);
     /* ungapped so same length for both sequences */

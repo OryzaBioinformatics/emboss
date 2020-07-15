@@ -2,7 +2,7 @@
 **
 ** Plots CpG island areas
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -133,10 +133,10 @@ int main(int argc, char **argv)
 	begin = ajSeqallBegin(seqall);
 	end   = ajSeqallEnd(seqall);
 	strand = ajSeqStrCopy(seq);
-	ajStrToUpper(&strand);
+	ajStrFmtUpper(&strand);
 
-	ajStrAssSubC(&substr,ajStrStr(strand),--begin,--end);
-	len = ajStrLen(substr);
+	ajStrAssignSubC(&substr,ajStrGetPtr(strand),--begin,--end);
+	len = ajStrGetLen(substr);
 
 	if(len > maxarr)
 	{
@@ -158,12 +158,12 @@ int main(int argc, char **argv)
 
 
 	cpgplot_identify(outf, obsexp, xypc, thresh, 0, len, shift,
-			 ajStrStr(bases), ajSeqName(seq), minlen, minobsexp,
+			 ajStrGetPtr(bases), ajSeqName(seq), minlen, minobsexp,
 			 minpc, featout);
 
 
 	cpgplot_plotit(ajSeqName(seq), begin, len, shift, obsexp, xypc, thresh,
-		       ajStrStr(bases), obsexpmax, plstart, plend,
+		       ajStrGetPtr(bases), obsexpmax, plstart, plend,
 		       doobsexp, docg, dopc, mult);
 
 	ajStrDel(&strand);
@@ -177,7 +177,15 @@ int main(int argc, char **argv)
 
     ajSeqDel(&seq);
     ajStrDel(&substr);
+    ajStrDel(&bases);
+
     ajFileClose(&outf);
+    ajSeqallDel(&seqall);
+    ajFeattabOutDel(&featout);
+
+    AJFREE(obsexp);
+    AJFREE(thresh);
+    AJFREE(xypc);
 
     ajExit();
 
@@ -230,12 +238,12 @@ static void cpgplot_findbases(const AjPStr substr, ajint begin, ajint len,
     *obsexpmax = 0.0;
     offset     = window/2;
     *plstart   = offset;
-    q          = ajStrStr(bases);
+    q          = ajStrGetPtr(bases);
 
     for(i=0; i<(len-window+1);i+=shift)
     {
 	j = i+offset;
-	p = ajStrStr(substr) + i;
+	p = ajStrGetPtr(substr) + i;
 	cpgplot_countbases(p, q, window, &cxf, &cyf, &cxpy);
 
 	obs = cxpy;
@@ -677,12 +685,12 @@ static void cpgplot_dumpfeatout(AjPFeattabOut featout, const AjBool *thresh,
     AjPFeature feature;
     float score = 0.0;
 
-    ajStrAssC(&name,seqname);
+    ajStrAssignC(&name,seqname);
 
     feattable = ajFeattableNewDna(name);
 
-    ajStrAssC(&source,"cpgplot");
-    ajStrAssC(&type,"misc_feature");
+    ajStrAssignC(&source,"cpgplot");
+    ajStrAssignC(&type,"misc_feature");
 
 
     island = ajFalse;

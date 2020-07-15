@@ -141,7 +141,7 @@ int main(int argc, char **argv)
 
     embInit("dbxgcg", argc, argv);
 
-    dbtype     = ajAcdGetListI("idformat",1);
+    dbtype     = ajAcdGetListSingle("idformat");
     fieldarray = ajAcdGetList("fields");
     directory  = ajAcdGetDirectoryName("directory");
     indexdir   = ajAcdGetOutdirName("indexoutdir");
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
     {
 	ajListPop(entry->files,(void **) &seqname);
 	refname = ajStrNew();
-	ajStrAssS(&refname,seqname);
+	ajStrAssignS(&refname,seqname);
 	ajFileNameExtC(&seqname,"seq");
 	ajFileNameExtC(&refname,"ref");
 	ajListPushApp(entry->files,(void *)seqname);
@@ -190,7 +190,7 @@ int main(int argc, char **argv)
 	ajListPop(entry->files,(void **)&thysfile);
 	ajListPushApp(entry->files,(void *)thysfile);
 	ajFmtPrintS(&tmpstr,"%S%S",entry->directory,thysfile);
-	printf("Processing file %s\n",MAJSTRSTR(tmpstr));
+	printf("Processing file %s\n",MAJSTRGETPTR(tmpstr));
 	if(!(infs=ajFileNewIn(tmpstr)))
 	    ajFatal("Cannot open input file %S\n",tmpstr);
 
@@ -205,8 +205,8 @@ int main(int argc, char **argv)
 	{
 	    if(entry->do_id)
 	    {
-		ajStrToLower(&entry->id);
-		ajStrAssS(&hyb->key1,entry->id);
+		ajStrFmtLower(&entry->id);
+		ajStrAssignS(&hyb->key1,entry->id);
 		hyb->dbno = i;
 		hyb->offset = entry->fpos;
 		hyb->refoffset = entry->reffpos;
@@ -218,8 +218,8 @@ int main(int argc, char **argv)
 	    {
                 while(ajListPop(entry->ac,(void **)&word))
                 {
-		    ajStrToLower(&word);
-                    ajStrAssS(&hyb->key1,word);
+		    ajStrFmtLower(&word);
+                    ajStrAssignS(&hyb->key1,word);
                     hyb->dbno = i;
 		    hyb->offset = entry->fpos;
 		    hyb->refoffset = entry->reffpos;
@@ -233,8 +233,8 @@ int main(int argc, char **argv)
 	    {
                 while(ajListPop(entry->sv,(void **)&word))
                 {
-		    ajStrToLower(&word);
-                    ajStrAssS(&hyb->key1,word);
+		    ajStrFmtLower(&word);
+                    ajStrAssignS(&hyb->key1,word);
                     hyb->dbno = i;
 		    hyb->offset = entry->fpos;
 		    hyb->refoffset = entry->reffpos;
@@ -248,9 +248,9 @@ int main(int argc, char **argv)
 	    {
                 while(ajListPop(entry->kw,(void **)&word))
                 {
-		    ajStrToLower(&word);
-		    ajStrAssS(&priobj->id,entry->id);
-                    ajStrAssS(&priobj->keyword,word);
+		    ajStrFmtLower(&word);
+		    ajStrAssignS(&priobj->id,entry->id);
+                    ajStrAssignS(&priobj->keyword,word);
                     priobj->treeblock = 0;
                     ajBtreeInsertKeyword(entry->kwcache, priobj);
 		    ajStrDel(&word);
@@ -261,9 +261,9 @@ int main(int argc, char **argv)
 	    {
                 while(ajListPop(entry->de,(void **)&word))
                 {
-		    ajStrToLower(&word);
-		    ajStrAssS(&priobj->id,entry->id);
-                    ajStrAssS(&priobj->keyword,word);
+		    ajStrFmtLower(&word);
+		    ajStrAssignS(&priobj->id,entry->id);
+                    ajStrAssignS(&priobj->keyword,word);
                     priobj->treeblock = 0;
                     ajBtreeInsertKeyword(entry->decache, priobj);
 		    ajStrDel(&word);
@@ -274,9 +274,9 @@ int main(int argc, char **argv)
 	    {
                 while(ajListPop(entry->tx,(void **)&word))
                 {
-		    ajStrToLower(&word);
-		    ajStrAssS(&priobj->id,entry->id);
-                    ajStrAssS(&priobj->keyword,word);
+		    ajStrFmtLower(&word);
+		    ajStrAssignS(&priobj->id,entry->id);
+                    ajStrAssignS(&priobj->keyword,word);
                     priobj->treeblock = 0;
                     ajBtreeInsertKeyword(entry->txcache, priobj);
 		    ajStrDel(&word);
@@ -330,8 +330,12 @@ int main(int argc, char **argv)
 static AjBool dbxgcg_NextEntry(EmbPBtreeEntry entry, AjPFile infs,
 			       AjPFile infr, const AjPStr dbtype)
 {
+    static AjPRegexp splitexp = NULL;
     static AjPStr tmpstr = NULL;
     char *p;
+
+    if(!splitexp)
+	splitexp = ajRegCompC("_0+$");
 
     entry->reffpos = ajFileTell(infr);
     entry->fpos    = ajFileTell(infs);
@@ -343,15 +347,13 @@ static AjBool dbxgcg_NextEntry(EmbPBtreeEntry entry, AjPFile infs,
     ajDebug("id '%S' seqfpos:%d reffpos:%d\n",
 	    entry->id, entry->fpos, entry->reffpos);
 
-    ajStrAssC(&tmpstr,ajStrStr(entry->id));
+    ajStrAssignC(&tmpstr,ajStrGetPtr(entry->id));
 
-    if(ajStrSuffixC(entry->id,"_0") ||
-       ajStrSuffixC(entry->id,"_00") ||
-       ajStrSuffixC(entry->id,"_000"))
+    if(ajRegExec(splitexp, entry->id))
     {
-	p  = strrchr(ajStrStr(tmpstr),'_');
+	p  = strrchr(ajStrGetPtr(tmpstr),'_');
 	*p = '\0';
-	ajStrAssC(&entry->id,ajStrStr(tmpstr));
+	ajStrAssignC(&entry->id,ajStrGetPtr(tmpstr));
     }
 
 
@@ -416,10 +418,10 @@ static ajlong dbxgcg_gcggetent(EmbPBtreeEntry entry, AjPFile infs,
 	sexp = ajRegCompC("^>>>>([^ \t]+)[ \t]+([^ \t]+)[ \t]+([^ \t]+)"
 			  "[ \t]+([^ \t]+)[ \t]+([0-9]+)");
 
-    ajStrAssC(&sline, "");
+    ajStrAssignC(&sline, "");
 
     /* check for seqid first line */
-    while(ajStrChar(sline,0)!='>')
+    while(ajStrGetCharFirst(sline)!='>')
     {
 	if(!ajFileGets(infs, &sline))
 	    return 0;			/* end of file */
@@ -448,13 +450,13 @@ static ajlong dbxgcg_gcggetent(EmbPBtreeEntry entry, AjPFile infs,
     ajDebug("new entry '%S' date:'%S' type:'%S' len:'%S'=%Ld\n",
 	    entry->id, gcgdate, gcgtype, tmpstr, gcglen);
 
-    ajStrAssC(&rline, "");
+    ajStrAssignC(&rline, "");
 
     ajDebug("dbxgcg_gcggetent .ref (%S) %Ld '%S'\n",
 	    dbtype, ajFileTell(infr), rline);
 
     /* check for refid first line */
-    while(ajStrChar(rline,0)!='>')
+    while(ajStrGetCharFirst(rline)!='>')
     {
 	if(!ajFileGets(infr, &rline))
 	{
@@ -475,7 +477,7 @@ static ajlong dbxgcg_gcggetent(EmbPBtreeEntry entry, AjPFile infs,
     ajFileGets(infs, &sline);
 
     /* seek to the end of the sequence; +1 to jump over newline */
-    if(ajStrChar(gcgtype,0)=='2')
+    if(ajStrGetCharFirst(gcgtype)=='2')
     {
 	rblock = (gcglen+3)/4;
 	ajFileSeek(infs,rblock+1,SEEK_CUR);
@@ -550,11 +552,11 @@ static ajlong dbxgcg_pirgetent(EmbPBtreeEntry entry, AjPFile infs,
     if(!pirexp)
 	pirexp = ajRegCompC("^>..;([^ \t\n]+)");
 
-    ajStrAssC(&sline, "");
-    ajStrAssC(&rline, "");
+    ajStrAssignC(&sline, "");
+    ajStrAssignC(&rline, "");
 
     /* skip to seqid first line */
-    while(ajStrChar(sline,0)!='>')
+    while(ajStrGetCharFirst(sline)!='>')
 	if(!ajFileGets(infs, &sline))
 	    return 0;			/* end of file */
 
@@ -564,7 +566,7 @@ static ajlong dbxgcg_pirgetent(EmbPBtreeEntry entry, AjPFile infs,
     ajRegExec(pirexp, sline);
 
     /* skip to refid first line */
-    while(ajStrChar(rline,0)!='>')
+    while(ajStrGetCharFirst(rline)!='>')
 	if(!ajFileGets(infr, &rline))
 	{
 	    ajErr("ref ended before seq"); /* end of file */
@@ -589,7 +591,7 @@ static ajlong dbxgcg_pirgetent(EmbPBtreeEntry entry, AjPFile infs,
     gcglen = 0;
 
     /* seek to the end of the sequence; +1 to jump over newline */
-    while(ajStrChar(sline,0)!='>')
+    while(ajStrGetCharFirst(sline)!='>')
     {
 	spos = ajFileTell(infs);
 	if(!ajFileGets(infs, &sline))
@@ -597,7 +599,7 @@ static ajlong dbxgcg_pirgetent(EmbPBtreeEntry entry, AjPFile infs,
 	    spos = 0;
 	    break;
 	}
-	gcglen += ajStrLen(sline);
+	gcglen += ajStrGetLen(sline);
     }
 
     if(spos)
@@ -650,17 +652,17 @@ static ajlong dbxgcg_gcgappent(AjPFile infr, AjPFile infs,
     if(!testlibstr)
 	testlibstr = ajStrNew();
 
-    ajStrAssS(&tmpstr,*libstr);
+    ajStrAssignS(&tmpstr,*libstr);
 
     ajDebug("dbi_gcgappent '%S'\n", tmpstr);
 
-    p = ajStrStr(tmpstr);
+    p = ajStrGetPtr(tmpstr);
     q = strrchr(p,'_');
     *q = '\0';
 
 
     ajFmtPrintS(&testlibstr, "%s_",p);
-    ilen = ajStrLen(testlibstr);
+    ilen = ajStrGetLen(testlibstr);
 
     isend = ajFalse;
 
@@ -668,7 +670,7 @@ static ajlong dbxgcg_gcgappent(AjPFile infr, AjPFile infs,
     {
         spos = ajFileTell(infs);
 	ajFileGets(infs,&sline);
-	while(strncmp(ajStrStr(sline),">>>>",4))
+	while(strncmp(ajStrGetPtr(sline),">>>>",4))
 	{
 	    spos = ajFileTell(infs);
 	    if(!ajFileGets(infs, &sline))
@@ -684,7 +686,7 @@ static ajlong dbxgcg_gcgappent(AjPFile infr, AjPFile infs,
 	rpos = ajFileTell(infr);
 	ajFileGets(infr, &rline);
 
-	while(ajStrChar(rline,0)!='>')
+	while(ajStrGetCharFirst(rline)!='>')
 	{
 	    rpos = ajFileTell(infr);
 	    if(!ajFileGets(infr, &rline))
@@ -698,8 +700,8 @@ static ajlong dbxgcg_gcgappent(AjPFile infr, AjPFile infs,
 	ajRegExec(rexp, rline);
 	ajRegSubI(rexp, 1, &reflibstr);
 
-	if(ajStrNCmpO(reflibstr, testlibstr, ilen) ||
-	   ajStrNCmpO(seqlibstr, testlibstr, ilen))
+	if(ajStrCmpLenS(reflibstr, testlibstr, ilen) ||
+	   ajStrCmpLenS(seqlibstr, testlibstr, ilen))
 	    isend = ajTrue;
 
 	ajDebug("gcgappent %B test: '%S' seq: '%S' ref: '%S'\n",
@@ -708,7 +710,7 @@ static ajlong dbxgcg_gcgappent(AjPFile infr, AjPFile infs,
 
     ajDebug("gcgappent done at seq: '%S' ref: '%S'\n", seqlibstr, reflibstr);
 
-    ajStrAssC(libstr,p);
+    ajStrAssignC(libstr,p);
 
     ajFileSeek(infr, rpos, 0);
     ajFileSeek(infs, spos, 0);
@@ -772,11 +774,11 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
     rpos = ajFileTell(infr);
     while(ajFileGets(infr, &rline))
     {
-	if(ajStrChar(rline,0) == '>')
+	if(ajStrGetCharFirst(rline) == '>')
 	    break;
 	
         rpos = ajFileTell(infr);
-	ajStrAssS(&tmpstr,rline);
+	ajStrAssignS(&tmpstr,rline);
 
 	if(ajRegExec(typexp, tmpstr))
 	{
@@ -820,10 +822,10 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 		ajDebug("++acc '%S'\n", tmpfd);
 
 		if(!tmpacnum)
-		    ajStrAssS(&tmpacnum, tmpfd);
+		    ajStrAssignS(&tmpacnum, tmpfd);
 
 		str = ajStrNew();
-		ajStrAssS(&str,tmpfd);
+		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->ac,(void *)str);
 
 		ajRegPost(wrdexp, &tmpline);
@@ -838,7 +840,7 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 		ajDebug("++des '%S'\n", tmpfd);
 
 		str = ajStrNew();
-		ajStrAssS(&str,tmpfd);
+		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->de,(void *)str);
 
 		ajRegPost(wrdexp, &tmpline);
@@ -853,7 +855,7 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 		ajDebug("++sv '%S'\n", tmpfd);
 
 		str = ajStrNew();
-		ajStrAssS(&str,tmpfd);
+		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->sv,(void *)str);
 
 		ajRegPost(verexp, &tmpline);
@@ -866,13 +868,13 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 	    {
 		ajRegSubI(phrexp, 1, &tmpfd);
 		ajRegPost(phrexp, &tmpline);
-		ajStrChompEnd(&tmpfd);
-		if(!ajStrLen(tmpfd))
+		ajStrTrimWhiteEnd(&tmpfd);
+		if(!ajStrGetLen(tmpfd))
 		    continue;
 		ajDebug("++key '%S'\n", tmpfd);
 
 		str = ajStrNew();
-		ajStrAssS(&str,tmpfd);
+		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->kw,(void *)str);
 	    }
 	    continue;
@@ -883,13 +885,13 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 	    {
 		ajRegSubI(taxexp, 1, &tmpfd);
 		ajRegPost(taxexp, &tmpline);
-		ajStrChompEnd(&tmpfd);
-		if(!ajStrLen(tmpfd))
+		ajStrTrimWhiteEnd(&tmpfd);
+		if(!ajStrGetLen(tmpfd))
 		    continue;
 		ajDebug("++tax '%S'\n", tmpfd);
 
 		str = ajStrNew();
-		ajStrAssS(&str,tmpfd);
+		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->tx,(void *)str);
 	    }
 	    continue;
@@ -957,11 +959,11 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 
     while(ajFileGets(infr, &rline))
     {
-	if(ajStrChar(rline,0) == '>')
+	if(ajStrGetCharFirst(rline) == '>')
 	    break;
 	
         rpos = ajFileTell(infr);
-	ajStrAssS(&tmpstr,rline);
+	ajStrAssignS(&tmpstr,rline);
 
 	if(ajRegExec(typexp, tmpstr))
 	{
@@ -1006,7 +1008,7 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 		ajDebug("++acc '%S'\n", tmpfd);
 
 		str = ajStrNew();
-		ajStrAssS(&str,tmpfd);
+		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->ac,(void *)str);
 
 		ajRegPost(wrdexp, &tmpline);
@@ -1021,7 +1023,7 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 		ajDebug("++des '%S'\n", tmpfd);
 
 		str = ajStrNew();
-		ajStrAssS(&str,tmpfd);
+		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->de,(void *)str);
 
 		ajRegPost(wrdexp, &tmpline);
@@ -1034,13 +1036,13 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 	    {
 	        ajRegSubI(phrexp, 1, &tmpfd);
 		ajRegPost(phrexp, &tmpline);
-		ajStrChompEnd(&tmpfd);
-		if(!ajStrLen(tmpfd))
+		ajStrTrimWhiteEnd(&tmpfd);
+		if(!ajStrGetLen(tmpfd))
 		    continue;
 		ajDebug("++key '%S'\n", tmpfd);
 
 		str = ajStrNew();
-		ajStrAssS(&str,tmpfd);
+		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->kw,(void *)str);
 	    }
 	    continue;
@@ -1051,13 +1053,13 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 	    {
 	        ajRegSubI(taxexp, 1, &tmpfd);
 		ajRegPost(taxexp, &tmpline);
-		ajStrChompEnd(&tmpfd);
-		if(!ajStrLen(tmpfd))
+		ajStrTrimWhiteEnd(&tmpfd);
+		if(!ajStrGetLen(tmpfd))
 		    continue;
 		ajDebug("++tax '%S'\n", tmpfd);
 
 		str = ajStrNew();
-		ajStrAssS(&str,tmpfd);
+		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->tx,(void *)str);
 	    }
 	    continue;
@@ -1070,16 +1072,16 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 		ajDebug("++ver '%S'\n", tmpfd);
 
 		str = ajStrNew();
-		ajStrAssS(&str,tmpfd);
+		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->sv,(void *)str);
 
 		ajRegSubI(verexp, 3, &tmpfd);
-		if(!ajStrLen(tmpfd))
+		if(!ajStrGetLen(tmpfd))
 		    continue;
 		ajDebug("++ver gi: '%S'\n", tmpfd);
 
 		str = ajStrNew();
-		ajStrAssS(&str,tmpfd);
+		ajStrAssignS(&str,tmpfd);
 		ajListPush(entry->sv,(void *)str);
 	    }
 	    continue;
@@ -1166,17 +1168,17 @@ static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
 	    ajDebug("++des '%S'\n", tmpfd);
 
 	    str = ajStrNew();
-	    ajStrAssS(&str,tmpfd);
+	    ajStrAssignS(&str,tmpfd);
 	    ajListPush(entry->de,(void *)str);
 
 	    ajRegPost(wrdexp, &rline);
 	}
     }
 
-    while(ajStrChar(rline,0)!='>')
+    while(ajStrGetCharFirst(rline)!='>')
     {
         rpos = ajFileTell(infr);
-	ajStrAssS(&tmpstr,rline);
+	ajStrAssignS(&tmpstr,rline);
 
 	if(ajRegExec(acexp, rline))
 	{
@@ -1189,7 +1191,7 @@ static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
 		if(entry->do_accession)
 		{
 		    str = ajStrNew();
-		    ajStrAssS(&str,tmpfd);
+		    ajStrAssignS(&str,tmpfd);
 		    ajListPush(entry->ac,(void *)str);
 		}
 
@@ -1206,10 +1208,10 @@ static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
 		{
 		    ajRegSubI(phrexp, 1, &tmpfd);
 		    ajDebug("++key '%S'\n", tmpfd);
-		    ajStrChompEnd(&tmpfd);
+		    ajStrTrimWhiteEnd(&tmpfd);
 
 		    str = ajStrNew();
-		    ajStrAssS(&str,tmpfd);
+		    ajStrAssignS(&str,tmpfd);
 		    ajListPush(entry->kw,(void *)str);
 
 		    ajRegPost(phrexp, &tmpline);
@@ -1225,11 +1227,11 @@ static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
 		while(ajRegExec(tax2exp, tmpline))
 		{
 		    ajRegSubI(tax2exp, 1, &tmpfd);
-		    ajStrChompEnd(&tmpfd);
+		    ajStrTrimWhiteEnd(&tmpfd);
 		    ajDebug("++tax '%S'\n", tmpfd);
 
 		    str = ajStrNew();
-		    ajStrAssS(&str,tmpfd);
+		    ajStrAssignS(&str,tmpfd);
 		    ajListPush(entry->tx,(void *)str);
 
 		    ajRegPost(tax2exp, &tmpline);

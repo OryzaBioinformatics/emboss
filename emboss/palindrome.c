@@ -2,7 +2,7 @@
 **
 ** Brute force inverted repeat finder. Allows mismatches but not gaps
 **
-** @author: Copyright (C) Mark Faller
+** @author Copyright (C) Mark Faller
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -129,8 +129,8 @@ int main(int argc, char **argv)
 
 	/* write header to file */
 
-	ajFmtPrintF(outfile, "Palindromes of:  %s \n", ajSeqName(sequence));
-	ajFmtPrintF(outfile, "Sequence length is: %d \n", ajSeqLen(sequence));
+	ajFmtPrintF(outfile, "Palindromes of:  %s \n", ajSeqGetNameC(sequence));
+	ajFmtPrintF(outfile, "Sequence length is: %d \n", ajSeqGetLen(sequence));
 	ajFmtPrintF(outfile, "Start at position: %d\nEnd at position: %d\n",
 		    beginPos, endPos);
 	ajFmtPrintF(outfile,"Minimum length of Palindromes is: %d \n", minLen);
@@ -141,21 +141,13 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outfile, "\n\n\n");
 	ajFmtPrintF(outfile, "Palindromes:\n");
 
-	/* check sequence is of type nucleotide else return error */
-	if(!ajSeqIsNuc(sequence))
-	{
-	    ajFmtPrintF(outfile,"Error, sequence must be a "
-			"nucleotide sequence");
-	    ajExit();
-	}
-    
 
 	/* set vars in readiness to enter loop */
-	seqstr = ajStrNewC(ajSeqChar(sequence));
+	seqstr = ajStrNewC(ajSeqGetSeqC(sequence));
 	begin  = beginPos - 1;
 	end    = endPos - 1;
 
-	ajStrToLower(&seqstr); /* make comparisons case independent */
+	ajStrFmtLower(&seqstr); /* make comparisons case independent */
 
 	/* loop to look for inverted repeats */
 	for(current = begin; current < end; current++)
@@ -173,15 +165,15 @@ int main(int argc, char **argv)
 		alln = ajTrue;
 		ic = current;
 		ir = rev;
-		if(ajStrChar(seqstr, ic) ==
-		   ajSeqBaseComp(ajStrChar(seqstr, ir)))
+		if(ajStrGetCharPos(seqstr, ic) ==
+		   ajSeqBaseComp(ajStrGetCharPos(seqstr, ir)))
 		    while(mismatches <= maxmismatches && ic < ir)
 		    {
-			if(ajStrChar(seqstr, ic++) ==
-			   ajSeqBaseComp(ajStrChar(seqstr, ir--)))
+			if(ajStrGetCharPos(seqstr, ic++) ==
+			   ajSeqBaseComp(ajStrGetCharPos(seqstr, ir--)))
 			{
 			    mismatchAtEnd = 0;
-			    if(ajStrChar(seqstr, ic-1) != 'n')
+			    if(ajStrGetCharPos(seqstr, ic-1) != 'n')
 				alln = ajFalse;
 			}
 			else
@@ -278,13 +270,14 @@ int main(int argc, char **argv)
 	ajStrDel(&seqstr);
     
     }
-  
-  
-  
-  
+
     ajFileClose(&outfile);
-  
-    ajExit();
+
+    ajSeqallDel(&seqall);
+    ajSeqDel(&sequence);
+    ajStrDel(&seqstr);
+
+    embExit();
 
     return 0;
 }
@@ -465,25 +458,25 @@ static void palindrome_Print(AjPFile outfile,
     if(pal->forwardEnd - pal->forwardStart > maxLen)
 	return;
 
-    ajFmtPrintF(outfile, "%-5d ", (pal->forwardStart+1));
+    ajFmtPrintF(outfile, "%-8d ", (pal->forwardStart+1));
     for(i = pal->forwardStart; i < pal->forwardEnd; i++)
-	ajFmtPrintF(outfile, "%c", ajStrChar(seq, i));
+	ajFmtPrintF(outfile, "%c", ajStrGetCharPos(seq, i));
 
-    ajFmtPrintF(outfile, " %5d\n      ", pal->forwardEnd);
+    ajFmtPrintF(outfile, " %8d\n         ", pal->forwardEnd);
 
     for(i = pal->forwardStart,
 	j=pal->revStart; i < pal->forwardEnd; i++)
-	if(ajStrChar(seq, i) == ajSeqBaseComp(ajStrChar(seq, j--)))
+	if(ajStrGetCharPos(seq, i) == ajSeqBaseComp(ajStrGetCharPos(seq, j--)))
 	    ajFmtPrintF(outfile, "|");
 	else
 	    ajFmtPrintF(outfile, " ");
 
-    ajFmtPrintF(outfile, "\n%-5d ", (pal->revStart+1));
+    ajFmtPrintF(outfile, "\n%-8d ", (pal->revStart+1));
 
     for(i = pal->revStart; i > pal->revEnd; i--)
-	ajFmtPrintF(outfile, "%c", ajStrChar(seq, i));
+	ajFmtPrintF(outfile, "%c", ajStrGetCharPos(seq, i));
 
-    ajFmtPrintF(outfile, " %5d\n\n", (pal->revEnd+2));
+    ajFmtPrintF(outfile, " %8d\n\n", (pal->revEnd+2));
 
     return;
 }

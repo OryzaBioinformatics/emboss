@@ -1,5 +1,5 @@
 /* @source patmatDB.c
-** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
+** @author Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
 ** @@
 **
 ** Application for pattern matching, one Prosite motif against a
@@ -66,8 +66,8 @@ int main(int argc, char **argv)
     report = ajAcdGetReport("outfile");
 
     temp=ajStrNew();
-    ajStrToUpper(&motif);
-    ajStrAssC(&fthit, "hit");
+    ajStrFmtUpper(&motif);
+    ajStrAssignC(&fthit, "hit");
 
     /*converting the Prosite motif to a reg exps */
     regexp =embPatPrositeToRegExp(motif);
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
     {
 	str = ajSeqStrCopy(seq);
-	ajStrToUpper(&str);
+	ajStrFmtUpper(&str);
 
 	/* comparing the reg exps to sequence for matches. */
 	match 	= embPatMatchFind(regexp, str, ajFalse, ajFalse);
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 
 	for(i=0; i<number; i++)
 	{
-	    seqlength = ajStrLen(str);
+	    seqlength = ajStrGetLen(str);
 
 	    /*returns length from pattern match for index'th item. */
 	    length = embPatMatchGetLen(match, i);
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 	    else
 		zend = end+4;
 
-	    ajStrAssSub(&temp, str, zstart, zend);
+	    ajStrAssignSubS(&temp, str, zstart, zend);
 	}
 
 	if(number)
@@ -142,7 +142,12 @@ int main(int argc, char **argv)
     ajReportClose(report);
     ajReportDel(&report);
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajStrDel(&fthit);
+    ajStrDel(&tmpstr);
+
+    embExit();
 
     return 0;
 }

@@ -1,7 +1,7 @@
 /* @source plotcon application
 **
 ** Plots similarity over the length of a multiple sequence alignment
-** @author: Copyright (C) Tim Carver (tcarver@hgmp.mrc.ac.uk)
+** @author Copyright (C) Tim Carver (tcarver@hgmp.mrc.ac.uk)
 ** @@
 **
 **
@@ -246,6 +246,7 @@ int main(int argc, char **argv)
     ajGraphxyDisplay(graphs,ajTrue);
     
     ajGraphCloseWin();
+    ajGraphxyDel(&graphs);
 
     AJFREE(x);
     AJFREE(y);
@@ -254,7 +255,10 @@ int main(int argc, char **argv)
     ajListDel(&list);
     ajFloat2dDel(&score);
 
-    ajExit ();
+    ajSeqsetDel(&seqset);
+    ajMatrixDel(&cmpmatrix);
+
+    embExit ();
 
     return 0;
 }

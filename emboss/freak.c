@@ -2,7 +2,7 @@
 **
 ** Calculate residue frequencies using sliding window
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -80,8 +80,8 @@ int main(int argc, char **argv)
 
     st = ajStrNew();
 
-    ajStrToUpper(&bases);
-    q = ajStrStr(bases);
+    ajStrFmtUpper(&bases);
+    q = ajStrGetPtr(bases);
 
     while(ajSeqallNext(seqall, &seq))
     {
@@ -89,8 +89,8 @@ int main(int argc, char **argv)
 	end = ajSeqallEnd(seqall);
 
 	str = ajSeqStrCopy(seq);
-	ajStrToUpper(&str);
-	p = ajStrStr(str);
+	ajStrFmtUpper(&str);
+	p = ajStrGetPtr(str);
 
 	c = 0;
 	--pos;
@@ -136,7 +136,7 @@ int main(int argc, char **argv)
 	    fgraph = ajGraphPlpDataNewI(c);
 	    ajGraphSetTitle(graph,ajSeqGetName(seq));
 	    ajFmtPrintS(&st,"From %d to %d. Residues:%s Window:%d Step:%d",
-			pos+1,end+1,ajStrStr(bases),window,step);
+			pos+1,end+1,ajStrGetPtr(bases),window,step);
 	    ajGraphSetSubTitle(graph,st);
 	    ajGraphSetXTitleC(graph,"Position");
 	    ajGraphSetYTitleC(graph,"Frequency");
@@ -162,10 +162,12 @@ int main(int argc, char **argv)
 	ajStrDel(&str);
     }
 
-    if(plot)
-        ajGraphClose();
-    else
-	ajFileClose(&outf);
+    ajGraphClose();
+    ajGraphxyDel(&graph);
+
+    ajFileClose(&outf);
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
 
     ajStrDel(&str);
     ajStrDel(&bases);

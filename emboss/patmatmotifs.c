@@ -1,5 +1,5 @@
 /* @source patmatmotifs.c
-** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
+** @author Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
 ** @@
 ** Application for pattern matching, a sequence against a database of motifs.
 **
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
     embInit("patmatmotifs", argc, argv);
 
-    ajStrAssC(&fthit, "hit");
+    ajStrAssignC(&fthit, "hit");
 
     savereg   = ajStrNew();
     str       = ajStrNew();
@@ -86,11 +86,12 @@ int main(int argc, char **argv)
     full     = ajAcdGetBool("full");
     prune    = ajAcdGetBool("prune");
 
+    ajSeqFmtUpper(sequence);		/* prosite regexs are all upper case */
     tab = ajFeattableNewSeq(sequence);
-    ajStrAssC(&tailstr, "");
+    ajStrAssignC(&tailstr, "");
 
-    seqlength = ajStrLen(str);
-    str       = ajSeqStrCopy(sequence);
+    seqlength = ajStrGetLen(str);
+    str       = ajSeqGetSeqCopyS(sequence);
 
     redatanew = ajStrNewC("PROSITE/prosite.lines");
     docdata   = ajStrNewC("PROSITE/");
@@ -106,11 +107,11 @@ int main(int argc, char **argv)
 
     while(ajFileReadLine(inf, &regexp))
     {
-	p=ajStrStr(regexp);
+	p=ajStrGetPtr(regexp);
 	if(*p && *p!=' ' && *p!='^')
 	{
 	    p=ajSysStrtok(p," ");
-	    ajStrAssC(&name,p);
+	    ajStrAssignC(&name,p);
 	    if(prune)
 		if(ajStrMatchCaseC(name,"myristyl") ||
 		   ajStrMatchCaseC(name,"asn_glycosylation") ||
@@ -124,22 +125,22 @@ int main(int argc, char **argv)
 		    continue;
 		}
 	    p=ajSysStrtok(NULL," ");
-	    ajStrAssC(&accession,p);
+	    ajStrAssignC(&accession,p);
 	}
 
 	if(ajStrPrefixC(regexp, "^"))
 	{
-	    p = ajStrStr(regexp);
+	    p = ajStrGetPtr(regexp);
 
-	    ajStrAssC(&temp,p+1);
-	    ajStrAssC(&savereg,p+1);
+	    ajStrAssignC(&temp,p+1);
+	    ajStrAssignC(&savereg,p+1);
 
 	    match = embPatMatchFind(temp, str, ajFalse, ajFalse);
 	    number = embPatMatchGetNumber(match);
 
 	    for(i=0; i<number; i++)
 	    {
-		seqlength = ajStrLen(str);
+		seqlength = ajStrGetLen(str);
 
 		start = 1+embPatMatchGetStart(match, i);
 
@@ -164,14 +165,14 @@ int main(int argc, char **argv)
 		    zend = end+5;
 
 
-		ajStrAssSub(&temp, str, zstart, zend);
+		ajStrAssignSubS(&temp, str, zstart, zend);
 	    }
 
 
 	    if(full && number)
 	    {
-		ajStrAssC(&redatanew,ajStrStr(docdata));
-		ajStrAppC(&redatanew,ajStrStr(accession));
+		ajStrAssignC(&redatanew,ajStrGetPtr(docdata));
+		ajStrAppendC(&redatanew,ajStrGetPtr(accession));
 		ajFileDataNew(redatanew, &inf2);
 		if(!inf2)
 		    continue;
@@ -196,6 +197,9 @@ int main(int argc, char **argv)
     ajReportSetTail(report,tailstr);
     ajReportWrite(report, tab, sequence);
 
+    ajReportDel(&report);
+    ajFeattableDel(&tab);
+
     ajStrDel(&temp);
     ajStrDel(&regexp);
     ajStrDel(&savereg);
@@ -206,11 +210,15 @@ int main(int argc, char **argv)
     ajStrDel(&redatanew);
     ajStrDel(&accession);
     ajSeqDel(&sequence);
+    ajStrDel(&tailstr);
+    ajStrDel(&fthit);
+    ajStrDel(&name);
+    ajStrDel(&tmpstr);
 
     ajFeattableDel(&tab);
     ajFileClose(&inf);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

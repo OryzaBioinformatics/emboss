@@ -30,19 +30,19 @@ int main (int argc, char **argv)
     sortbytype  = ajAcdGetBool("typesort");
     sortbystart = ajAcdGetBool("startsort");
 
-    ajStrAssC(&name,"seq1");
+    ajStrAssignC(&name,"seq1");
 
     feattable = ajFeattableNew(name);
 
-    ajStrAssC(&source,"demofeature");
+    ajStrAssignC(&source,"demofeature");
     score = 1.0;
 
     for(i=1;i<11;i++)
     {
 	if(i & 1)
-	    ajStrAssC(&type,"CDS");
+	    ajStrAssignC(&type,"CDS");
 	else
-	    ajStrAssC(&type,"misc_feature");
+	    ajStrAssignC(&type,"misc_feature");
 
 	feature = ajFeatNew(feattable, source, type, i, i+10, score, strand,
 			    frame) ;

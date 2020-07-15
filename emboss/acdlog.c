@@ -2,7 +2,7 @@
 **
 ** Log processing of acd files
 **
-** @author: Peter Rice
+** @author Peter Rice
 ** @@
 **
 ** This program is free software; you can redistribute it and/or

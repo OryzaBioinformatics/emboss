@@ -1,7 +1,7 @@
 /* @source printsextract application
 **
 ** Displays and plots nucleic acid duplex melting temperatures
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -154,8 +154,8 @@ static void printsextract_write_code(AjPFile fp, AjPStr *s, AjPStr *c)
 {
     const char *p;
 
-    p = ajStrStr(*s)+4;
-    ajStrAssC(c,p);
+    p = ajStrGetPtr(*s)+4;
+    ajStrAssignC(c,p);
     ajDebug("Reading code %s\n",p);
     ajFmtPrintF(fp,"%s\n",p);
 
@@ -184,16 +184,16 @@ static void printsextract_write_accession(AjPFile inf, AjPFile outf,
 	ajFatal("Premature EOF");
 
     if(!ajStrPrefixC(*s,"gx;"))
-	ajFatal("No accnum (%s)",ajStrStr(*s));
+	ajFatal("No accnum (%s)",ajStrGetPtr(*s));
 
     tmpstr = ajStrNewS(*s);
-    ajStrChomp(&tmpstr);
-    p = ajStrStrMod(&tmpstr)+4;
+    ajStrTrimWhite(&tmpstr);
+    p = ajStrGetuniquePtr(&tmpstr)+4;
     p = strchr(p,';');
     if(p)
 	*p = '\0';
-    ajStrAssC(a,ajStrStr(tmpstr)+4);
-    ajFmtPrintF(outf,"%s\n",ajStrStr(tmpstr)+4);
+    ajStrAssignC(a,ajStrGetPtr(tmpstr)+4);
+    ajFmtPrintF(outf,"%s\n",ajStrGetPtr(tmpstr)+4);
 
     ajStrDel(&tmpstr);
 
@@ -223,9 +223,9 @@ static ajint printsextract_write_sets(AjPFile inf, AjPFile outf, AjPStr *s)
 	ajFatal("Premature EOF");
 
     if(!ajStrPrefixC(*s,"gn;"))
-	ajFatal("No gn; (%s)",ajStrStr(*s));
+	ajFatal("No gn; (%s)",ajStrGetPtr(*s));
 
-    p = ajStrStr(*s);
+    p = ajStrGetPtr(*s);
     n = 1;
     p = strchr(p,(ajint)'(');
     if(!p)
@@ -261,9 +261,9 @@ static void printsextract_write_title(AjPFile inf, AjPFile outf, AjPStr *s)
 	ajFatal("Premature EOF");
 
     if(!ajStrPrefixC(*s,"gt;"))
-	ajFatal("No title (%s)",ajStrStr(*s));
+	ajFatal("No title (%s)",ajStrGetPtr(*s));
 
-    ajFmtPrintF(outf,"%s\n",ajStrStr(*s)+4);
+    ajFmtPrintF(outf,"%s\n",ajStrGetPtr(*s)+4);
 
     return;
 }
@@ -290,9 +290,9 @@ static void printsextract_write_desc(AjPFile inf, AjPStr *s, AjPStr *a,
     AjBool  e;
 
     fname = ajStrNewC("PRINTS/");
-    ajStrApp(&fname,*a);
+    ajStrAppendS(&fname,*a);
     ajFileDataNewWrite(fname,&fp);
-    ajFmtPrintF(fp,"%s\n",ajStrStr(*c));
+    ajFmtPrintF(fp,"%s\n",ajStrGetPtr(*c));
     while((e=ajFileReadLine(inf,s)))
 	if(ajStrPrefixC(*s,"gd;"))
 	    break;
@@ -302,10 +302,10 @@ static void printsextract_write_desc(AjPFile inf, AjPStr *s, AjPStr *a,
 
     while(ajStrPrefixC(*s,"gd;"))
     {
-	if(ajStrLen(*s)<5)
+	if(ajStrGetLen(*s)<5)
 	    ajFmtPrintF(fp,"\n");
 	else
-	    ajFmtPrintF(fp,"%s\n",ajStrStr(*s)+4);
+	    ajFmtPrintF(fp,"%s\n",ajStrGetPtr(*s)+4);
 
 	if(!ajFileReadLine(inf,s))
 	    ajFatal("Premature EOF");
@@ -405,12 +405,12 @@ static void printsextract_getSeqNumbers(AjPFile inf, ajint *cnts,
 	    if(ajStrPrefixC(*s,"gc;"))
 		ajFatal("Missing fl; line");
 	}
-	sscanf(ajStrStr(*s)+4,"%d",&len);
+	sscanf(ajStrGetPtr(*s)+4,"%d",&len);
 	lens[i]=len;
 	ajFileReadLine(inf,s);
 	ajFileReadLine(inf,s);
 	if(!ajStrPrefixC(*s,"fd;"))
-	    ajFatal("Missing fd; line (%s)\n",ajStrStr(*s));
+	    ajFatal("Missing fd; line (%s)\n",ajStrGetPtr(*s));
 
 	c=0;
 	while(ajStrPrefixC(*s,"fd;"))
@@ -477,7 +477,7 @@ static void printsextract_calcMatrices(AjPFile inf, AjPFile outf,
 
 	for(j=0;j<cnts[i];++j)
 	{
-	    p = ajStrStr(*s)+4;
+	    p = ajStrGetPtr(*s)+4;
 	    for(k=0;k<c;++k)
 	    {
 		t = ajAZToInt(*(p+k));
@@ -509,7 +509,7 @@ static void printsextract_calcMatrices(AjPFile inf, AjPFile outf,
 	for(j=0,min=INT_MAX;j<cnts[i];++j)
 	{
 	    fmin = 0;
-	    p = ajStrStr(*s)+4;
+	    p = ajStrGetPtr(*s)+4;
 	    for(k=0;k<c;++k)
 		fmin+=mat[ajAZToInt(*(p+k))][k];
 	    

@@ -2,7 +2,8 @@
 **
 ** Retrieves CDS, mRNA and translations from feature tables
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** Last modified by Jon Ison Thu Jun 29 08:26:08 BST 2006
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -40,9 +41,11 @@ static void coderet_put_seq(const AjPSeq seq, const AjPStr strseq,
 
 int main(int argc, char **argv)
 {
-    AjPSeqall seqall = NULL;
-    AjPSeq seq       = NULL;
-    AjPSeqout seqout = NULL;
+    AjPSeqall seqall      = NULL;
+    AjPSeq seq            = NULL;
+    AjPSeqout seqoutcds   = NULL;
+    AjPSeqout seqoutmrna  = NULL;
+    AjPSeqout seqoutprot  = NULL;
     AjPFile logf     = NULL;
 
     ajint ncds  = 0;
@@ -59,19 +62,13 @@ int main(int argc, char **argv)
     AjPStr *mrnalines = NULL;
     AjPStr *tranlines = NULL;
 
-    AjBool docds  = ajFalse;
-    AjBool domrna = ajFalse;
-    AjBool dotran = ajFalse;
-
     embInit("coderet",argc,argv);
 
     seqall  = ajAcdGetSeqall("seqall");
 
-    domrna = ajAcdGetBool("mrna");
-    docds  = ajAcdGetBool("cds");
-    dotran = ajAcdGetBool("translation");
-
-    seqout = ajAcdGetSeqout("outseq");
+    seqoutcds  = ajAcdGetSeqoutall("cdsoutseq");
+    seqoutmrna = ajAcdGetSeqoutall("mrnaoutseq");
+    seqoutprot = ajAcdGetSeqoutall("translationoutseq");
     logf = ajAcdGetOutfile("outfile");
 
     cds  = ajStrNew();
@@ -83,31 +80,32 @@ int main(int argc, char **argv)
     **  Must get this so that embedded references in the same database
     **  can be resolved
     */
-    ajStrAssS(&usa,ajSeqallGetUsa(seqall));
+    ajStrAssignS(&usa,ajSeqallGetUsa(seqall));
 
-    if(docds)
+    if(seqoutcds)
 	ajFmtPrintF(logf, "   CDS");
 
-    if(domrna)
+    if(seqoutmrna)
 	ajFmtPrintF(logf, "  mRNA");
 
-    if(dotran)
+    if(seqoutprot)
 	ajFmtPrintF(logf, " Trans");
 
     ajFmtPrintF(logf, " Total Sequence\n");
-    if(docds)
+    if(seqoutcds)
 	ajFmtPrintF(logf, " =====");
 
-    if(domrna)
+    if(seqoutmrna)
 	ajFmtPrintF(logf, " =====");
 
-    if(dotran)
+    if(seqoutprot)
 	ajFmtPrintF(logf, " =====");
 
     ajFmtPrintF(logf, " ===== ========\n");
+
     while(ajSeqallNext(seqall,&seq))
     {
-	if(docds)
+	if(seqoutcds)
 	{
 	    ncds = ajFeatGetLocs(seq->TextPtr, &cdslines, "CDS");
 
@@ -119,7 +117,7 @@ int main(int argc, char **argv)
 		    ajWarn("Cannot extract %s\n",ajSeqName(seq));
 		    continue;
 		}
-		coderet_put_seq(seq,cds,i,"cds",0,seqout);
+		coderet_put_seq(seq,cds,i,"cds",0,seqoutcds);
 		ajStrDel(&cdslines[i]);
 	    }
 	    if(ncds)
@@ -127,7 +125,7 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(logf, "%6d", ncds);
 	}
 
-	if(domrna)
+	if(seqoutmrna)
 	{
 	    nmrna = ajFeatGetLocs(seq->TextPtr, &mrnalines, "mRNA");
 
@@ -139,7 +137,7 @@ int main(int argc, char **argv)
 		    ajWarn("Cannot extract %s",ajSeqName(seq));
 		    continue;
 		}
-		coderet_put_seq(seq,mrna,i,"mrna",0,seqout);
+		coderet_put_seq(seq,mrna,i,"mrna",0,seqoutmrna);
 		ajStrDel(&mrnalines[i]);
 	    }
 
@@ -149,13 +147,13 @@ int main(int argc, char **argv)
 	}
 
 
-	if(dotran)
+	if(seqoutprot)
 	{
 	    ntran = ajFeatGetTrans(seq->TextPtr, &tranlines);
 
 	    for(i=0;i<ntran;++i)
 	    {
-		coderet_put_seq(seq,tranlines[i],i,"pro",1,seqout);
+		coderet_put_seq(seq,tranlines[i],i,"pro",1,seqoutprot);
 		ajStrDel(&tranlines[i]);
 	    }
 
@@ -167,12 +165,23 @@ int main(int argc, char **argv)
     }
 
 
-    ajSeqWriteClose(seqout);
+    if(seqoutcds)
+	ajSeqWriteClose(seqoutcds);
+    if(seqoutmrna)
+	ajSeqWriteClose(seqoutmrna);
+    if(seqoutprot)
+	ajSeqWriteClose(seqoutprot);
 
 
     ajStrDel(&cds);
     ajStrDel(&mrna);
     ajStrDel(&usa);
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqoutcds);
+    ajSeqoutDel(&seqoutmrna);
+    ajSeqoutDel(&seqoutprot);
+    ajFileClose(&logf);
 
     ajExit();
 
@@ -206,18 +215,18 @@ static void coderet_put_seq(const AjPSeq seq, const AjPStr strseq,
 
 
     ajFmtPrintS(&fn,"%S_%s_%d",ajSeqGetAcc(seq),name,n+1);
-    ajStrToLower(&fn);
+    ajStrFmtLower(&fn);
 
-    nseq = ajSeqNewL(ajStrLen(strseq));
-    ajSeqAssName(nseq, fn);
-    ajSeqAssEntry(nseq, fn);
+    nseq = ajSeqNewL(ajStrGetLen(strseq));
+    ajSeqAssignNameS(nseq, fn);
+    ajSeqAssignEntryS(nseq, fn);
 
     if(!type)
 	ajSeqSetNuc(nseq);
     else
 	ajSeqSetProt(nseq);
 
-    ajSeqReplace(nseq,strseq);
+    ajSeqAssignSeqS(nseq,strseq);
 
 
     ajSeqWrite(seqout,nseq);

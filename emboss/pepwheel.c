@@ -1,7 +1,7 @@
 /* @source pepwheel application
 **
 ** Displays peptide sequences in a helical representation
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 ** Original program "PEPWHEEL" by Rodrigo Lopez (EGCG)
 **
@@ -114,15 +114,15 @@ int main(int argc, char **argv)
     wheel       = ajAcdGetBool("wheel");
     amphipathic = ajAcdGetToggle("amphipathic");
 
-    ajStrToUpper(&octags);
-    ajStrToUpper(&squares);
-    ajStrToUpper(&diamonds);
+    ajStrFmtUpper(&octags);
+    ajStrFmtUpper(&squares);
+    ajStrFmtUpper(&diamonds);
 
     if(amphipathic)
     {
-	ajStrAssC(&squares,"ACFGILMVWY");
-	ajStrAssC(&diamonds,"");
-	ajStrAssC(&octags,"");
+	ajStrAssignC(&squares,"ACFGILMVWY");
+	ajStrAssignC(&diamonds,"");
+	ajStrAssignC(&octags,"");
     }
 
 
@@ -130,22 +130,22 @@ int main(int argc, char **argv)
     txt    = ajStrNew();
 
 
-    begin = ajSeqBegin(seq);
-    end   = ajSeqEnd(seq);
+    begin = ajSeqGetBegin(seq);
+    end   = ajSeqGetEnd(seq);
     ajDebug("begin: %d end: %d\n", begin, end);
-    strand = ajSeqStrCopy(seq);
+    strand = ajSeqGetSeqCopyS(seq);
 
-    ajStrToUpper(&strand);
-    ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
-    len = ajStrLen(substr);
+    ajStrFmtUpper(&strand);
+    ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
+    len = ajStrGetLen(substr);
 
-    ajFmtPrintS(&txt,"PEPWHEEL of %s from %d to %d",ajSeqName(seq),
+    ajFmtPrintS(&txt,"PEPWHEEL of %s from %d to %d",ajSeqGetNameC(seq),
 		begin,end);
 
     ajGraphOpenWin(graph,xmin,xmax,ymin,ymax);
 
     ajGraphSetFore(AJB_BLACK);
-    ajGraphText(0.0,0.64,ajStrStr(txt),0.5);
+    ajGraphText(0.0,0.64,ajStrGetPtr(txt),0.5);
 
     ajGraphSetFore(AJB_BLACK);
 
@@ -187,9 +187,9 @@ int main(int argc, char **argv)
 			ajGraphLine(x1,y1,x2,y2);
 		    }
 	    }
-	    pepwheel_plotresidue(*(ajStrStr(substr)+lc),radius+resgap,angle,
-				 ajStrStr(squares),ajStrStr(octags),
-				 ajStrStr(diamonds),
+	    pepwheel_plotresidue(*(ajStrGetPtr(substr)+lc),radius+resgap,angle,
+				 ajStrGetPtr(squares),ajStrGetPtr(octags),
+				 ajStrGetPtr(diamonds),
 				 xmin,xmax,ymin,ymax);
 	    ++lc;
 	    if(lc==len)
@@ -200,12 +200,19 @@ int main(int argc, char **argv)
     }
 
     ajGraphCloseWin();
+    ajGraphxyDel(&graph);
 
     ajStrDel(&strand);
-    ajSeqDel(&seq);
     ajStrDel(&substr);
+    ajStrDel(&txt);
 
-    ajExit();
+    ajSeqDel(&seq);
+
+    ajStrDel(&squares);
+    ajStrDel(&diamonds);
+    ajStrDel(&octags);
+
+    embExit();
 
     return 0;
 }

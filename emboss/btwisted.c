@@ -1,8 +1,8 @@
 /* @source btwisted application
 **
 ** Calculates twist in B DNA
-** @author: Copyright (C) David Martin (dmartin@hgmp.mrc.ac.uk)
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) David Martin (dmartin@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -76,8 +76,8 @@ int main(int argc, char **argv)
     angletable  = btwisted_getdinucdata(angles);
     energytable = btwisted_getdinucdata(energies);
 
-    begin = ajSeqBegin(seq);
-    end   = ajSeqEnd(seq);
+    begin = ajSeqGetBegin(seq);
+    end   = ajSeqGetEnd(seq);
 
     len   = end-begin+1;
 
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 
     for(i=begin-1; i<end-1; ++i)
     {
-	ajStrAssSubC(&nucs,dinuc,i,i+1);
+	ajStrAssignSubC(&nucs,dinuc,i,i+1);
 	if(!(valstr = ajTableGet(angletable,(const void *)nucs)))
 	    ajFatal("Incomplete table");
 
@@ -152,15 +152,15 @@ static AjPTable btwisted_getdinucdata(AjPFile inf)
 
     while(ajFileReadLine(inf,&line))
     {
-	if(*ajStrStr(line)=='#')
+	if(*ajStrGetPtr(line)=='#')
 	    continue;
-	token = ajStrTokenInit(line," \n\t\r");
+	token = ajStrTokenNewC(line," \n\t\r");
 	key   = ajStrNew();
-	ajStrToken(&key,&token," \n\t\r");
+	ajStrTokenNextParseC(&token," \n\t\r",&key);
 	valstr = ajStrNew();
-	ajStrToken(&valstr,&token," \n\t\r");
+	ajStrTokenNextParseC(&token," \n\t\r",&valstr);
 	ajTablePut(table,(const void *)key,(void *) valstr);
-	ajStrTokenClear(&token);
+	ajStrTokenDel(&token);
     }
 
 

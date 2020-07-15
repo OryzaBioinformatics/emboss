@@ -8,7 +8,7 @@
 ** "silent". Also, the enzyme reading function was taken
 ** straight out of "silent".
 **
-** @author: Copyright (C) Tim Carver (tcarver@hgmp.mrc.ac.uk)
+** @author Copyright (C) Tim Carver (tcarver@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -30,9 +30,6 @@
 #include <limits.h>
 
 #define IUBFILE "Ebases.iub"
-
-AjIUB aj_base_iubS[256];      /* base letters and their alternatives */
-
 
 
 
@@ -167,23 +164,21 @@ int main(int argc, char **argv)
 
     RStotal=recoder_readRE(&relist,enzymes);      /* read in RE info */
 
-    begin = ajSeqBegin(seq);              /* seq start posn, or 1     */
-    end   = ajSeqEnd(seq);                /* seq end posn, or seq len */
+    begin = ajSeqGetBegin(seq);              /* seq start posn, or 1     */
+    end   = ajSeqGetEnd(seq);                /* seq end posn, or seq len */
     radj  = begin+end+1;                  /* posn adjustment for compl seq */
 
-    aj_base_I= 1;
-
     /* --begin and --end to convert counting from 0-N, not 1-N */
-    ajStrAssSubC(&sstr,ajSeqChar(seq),--begin,--end);
-    ajStrToUpper(&sstr);
+    ajStrAssignSubC(&sstr,ajSeqGetSeqC(seq),--begin,--end);
+    ajStrFmtUpper(&sstr);
 
-    sname = ajSeqGetName(seq);
+    sname = ajSeqGetNameS(seq);
 
-    ajStrAssC(&revcomp,ajStrStr(sstr));	 /* copying seq into revcomp */
-    ajSeqReverseStr(&revcomp);		 /* getting rev complement   */
+    ajStrAssignC(&revcomp,ajStrGetPtr(sstr));	 /* copying seq into revcomp */
+    ajSeqstrReverse(&revcomp);		 /* getting rev complement   */
     start = begin+1;
 
-    feat = ajFeattableNewDna(ajSeqGetName(seq));
+    feat = ajFeattableNewDna(ajSeqGetNameS(seq));
 
     if(sshow)
     {
@@ -315,7 +310,7 @@ static AjPList recoder_rematch(const AjPStr sstr, AjPList relist,
     }
     else                               /* reverse strand */
     {
-	ajStrAssC(&tstr,ajStrStr(sstr)+(end-begin+1)%3);
+	ajStrAssignC(&tstr,ajStrGetPtr(sstr)+(end-begin+1)%3);
 	ajTrnStrFrame(table,tstr,1,&pep);
         if(tshow)
 	{
@@ -330,13 +325,13 @@ static AjPList recoder_rematch(const AjPStr sstr, AjPList relist,
 	                               /* pop off first RE */
 	(void) ajListPop(relist,(void **)&rlp);
         /* ignore unknown cut sites & zero cutters */
-       	if(*ajStrStr(rlp->site)=='?'||!rlp->ncuts)
+       	if(*ajStrGetPtr(rlp->site)=='?'||!rlp->ncuts)
         {
        	     ajListPushApp(relist,(void*)rlp);
        	     continue;
         }
-        ajStrToUpper(&rlp->site);          /* RS to upper case */
-        ajStrAssS(&str,rlp->site);          /* str holds RS pat */
+        ajStrFmtUpper(&rlp->site);          /* RS to upper case */
+        ajStrAssignS(&str,rlp->site);          /* str holds RS pat */
 
 	patlist = ajListNew();             /* list for matches */
 
@@ -429,7 +424,7 @@ static ajint recoder_readRE(AjPList *relist, const AjPStr enzymes)
 	ne=ajArrCommaList(enzymes,&ea);  /* no. of RE's specified */
                                          /* ea points to enzyme list */
         for(i=0;i<ne;++i)
-	    ajStrCleanWhite(&ea[i]);     /* remove all whitespace */
+	    ajStrRemoveWhiteExcess(&ea[i]);     /* remove all whitespace */
         if(ajStrMatchCaseC(ea[0],"all"))
             isall = ajTrue;
         else
@@ -443,15 +438,15 @@ static ajint recoder_readRE(AjPList *relist, const AjPStr enzymes)
      	if(!isall)           /* only select enzymes on command line */
 	{
 	     for(i=0;i<ne;++i)
-		if(ajStrMatchCase(ea[i],rptr->cod))
+		if(ajStrMatchCaseS(ea[i],rptr->cod))
 			break;
 	     if(i==ne)
 		continue;
         }
 
         AJNEW(rinfo);
-        rinfo->code  = ajStrNewC(ajStrStr(rptr->cod));
-  	rinfo->site  = ajStrNewC(ajStrStr(rptr->pat));
+        rinfo->code  = ajStrNewC(ajStrGetPtr(rptr->cod));
+  	rinfo->site  = ajStrNewC(ajStrGetPtr(rptr->pat));
         rinfo->ncuts = rptr->ncuts;
         rinfo->cut1  = rptr->cut1;
         rinfo->cut2  = rptr->cut2;
@@ -588,9 +583,9 @@ static AjPList recoder_checkTrans(const AjPStr dna, const EmbPMatMatch match,
     mpos  = match->start;         /* start posn of match in seq */
     rmpos = radj-mpos-match->len; /* start posn of match in rev seq */
 
-    pseq  = ajStrStrMod(&seq);        /* pointer to start of seq */
+    pseq  = ajStrGetuniquePtr(&seq);        /* pointer to start of seq */
     pseqm = pseq+mpos-(begin+1);  /* pointer to start of match in seq */
-    prs   = ajStrStr(rlp->site);  /* pointer to start of RS pattern */
+    prs   = ajStrGetPtr(rlp->site);  /* pointer to start of RS pattern */
 
     framep=(end-begin+1)%3;       /* where frame starts on reverse strand */
 
@@ -608,7 +603,7 @@ static AjPList recoder_checkTrans(const AjPStr dna, const EmbPMatMatch match,
       s = pseq+x-(x-framep)%3;
 
     table = ajTrnNewI(0);
-    s1 = ajStrNewC(ajStrStr(ajTrnCodonC(table,s)));
+    s1 = ajStrNewC(ajStrGetPtr(ajTrnCodonC(table,s)));
 
     res=ajListNew();
 
@@ -616,18 +611,18 @@ static AjPList recoder_checkTrans(const AjPStr dna, const EmbPMatMatch match,
     for(i=0;i<nb;i++)             /* try out other bases */
     {
       pseq[x] = tbase[i];
-      s2 = ajStrNewC(ajStrStr(ajTrnCodonC(table,s)));
+      s2 = ajStrNewC(ajStrGetPtr(ajTrnCodonC(table,s)));
 
-      if(ajStrMatch(s1,s2))
+      if(ajStrMatchS(s1,s2))
       {
 	  /* if same translation */
           AJNEW(tresult);
           tresult->obase = base;
           tresult->nbase = tbase[i];
-          tresult->code  = ajStrNewC(ajStrStr(rlp->code));
-          tresult->site  = ajStrNewC(ajStrStr(rlp->site));
-          tresult->seqaa = ajStrNewC(ajStrStr(s1));
-          tresult->reaa  = ajStrNewC(ajStrStr(s2));
+          tresult->code  = ajStrNewC(ajStrGetPtr(rlp->code));
+          tresult->site  = ajStrNewC(ajStrGetPtr(rlp->site));
+          tresult->seqaa = ajStrNewC(ajStrGetPtr(s1));
+          tresult->reaa  = ajStrNewC(ajStrGetPtr(s2));
 
           if(!rev)
           {
@@ -660,7 +655,7 @@ static AjPList recoder_checkTrans(const AjPStr dna, const EmbPMatMatch match,
 /* @funcstatic recoder_changebase *********************************************
 **
 ** Use IUB code to return alternative nucleotides to that provided
-** same translation.
+** which result in the same translation.
 **
 ** @param [r] pbase [char] Base
 ** @param [w] tbase [char*] C string with alternative bases
@@ -675,19 +670,13 @@ static ajint recoder_changebase(char pbase, char* tbase)
 	1,1,1,1
     };
     AjIStr splits = NULL;
-    AjPStr bt = NULL;
+    const AjPStr bt = NULL;
     char bs;
     ajint i;
     ajint nb;
-    ajint len;
 
-    ajBaseInit();
-
-    len = ajStrLen(aj_base_iubS[(ajint)pbase].list)-1;
-
-    bt = ajStrNew();
-    ajStrAssI(&bt,aj_base_iubS[(ajint)pbase].list,len);
-    splits = ajStrIter(bt);
+    bt = ajBaseCodes((ajint)pbase);
+    splits = ajStrIterNew(bt);
 
     while(!ajStrIterDone(splits))
     {
@@ -705,7 +694,7 @@ static ajint recoder_changebase(char pbase, char* tbase)
       ajStrIterNext(splits);
     }
 
-    ajStrIterFree(&splits);
+    ajStrIterDel(&splits);
 
     nb = 0;
     for(i=0;i<4;i++)
@@ -723,8 +712,6 @@ static ajint recoder_changebase(char pbase, char* tbase)
         nb++;
       }
     }
-
-    ajStrDel(&bt);
 
     return nb;
 }
@@ -757,9 +744,9 @@ static void recoder_fmt_seq(const char* title, const AjPStr seq,
     ajFmtPrintAppS(tailstr,"%s:\n",title);
     if(num)
     {
-    	p=ajStrStr(seq);
+    	p=ajStrGetPtr(seq);
     	ajFmtPrintAppS(tailstr,"%-7d",start);
-    	tlen=ajStrLen(seq);
+    	tlen=ajStrGetLen(seq);
     	for(i=0; i<tlen ; i++)
     	{
 	    ajFmtPrintAppS(tailstr,"%c",p[i]);
@@ -772,8 +759,8 @@ static void recoder_fmt_seq(const char* title, const AjPStr seq,
     }
     else
     {
-	p=ajStrStr(seq);
-        tlen=ajStrLen(seq);
+	p=ajStrGetPtr(seq);
+        tlen=ajStrGetLen(seq);
         for(i=0; i<tlen ; i++)
         {
 	    ajFmtPrintAppS(tailstr,"%c",p[i]);
@@ -816,14 +803,14 @@ static void recoder_fmt_muts(AjPList muts, AjPFeattable feat, AjBool rev)
 	if (rev)
 	{
 	    sf = ajFeatNewIIRev(feat,
-				res->match, res->match+ajStrLen(res->site)-1);
+				res->match, res->match+ajStrGetLen(res->site)-1);
 	    ajFmtPrintS(&tmpFeatStr, "*dir Rev");
 	    ajFeatTagAdd (sf, NULL, tmpFeatStr);
 	}
 	else
 	{
 	    sf = ajFeatNewII(feat,
-			     res->match, res->match+ajStrLen(res->site)-1);
+			     res->match, res->match+ajStrGetLen(res->site)-1);
 	}
 	ajFmtPrintS(&tmpFeatStr, "*enzyme %S", res->code);
 	ajFeatTagAdd (sf, NULL, tmpFeatStr);

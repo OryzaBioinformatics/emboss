@@ -2,7 +2,7 @@
 **
 ** Get GC content
 **
-** @author: Copyright (C) Richard Bruskievich
+** @author Copyright (C) Richard Bruskievich
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -50,13 +50,19 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
     {
 	ajSeqTrim(seq);
-	seqstr = ajSeqStr(seq);
-	len    = ajSeqLen(seq);
+	seqstr = ajSeqGetSeqS(seq);
+	len    = ajSeqGetLen(seq);
 	pgc    = ajMeltGC(seqstr,len); /* forward strand for now... */
 
-	ajFmtPrintF(outf, "%-12s %5.2f\n", ajSeqName(seq), pgc);
+	ajFmtPrintF(outf, "%-12s %5.2f\n", ajSeqGetNameC(seq), pgc);
     }
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+
+    ajFileClose(&outf);
+
+    embExit();
+
     return 0;
 }

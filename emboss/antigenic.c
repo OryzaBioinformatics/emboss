@@ -1,7 +1,7 @@
 /* @source antigenic application
 **
 ** Displays antigenic sites in proteins
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 ** Original program "ANTIGENIC" by Peter Rice (EGCG 1991)
 ** Prediction of antigenic regions of protein sequences by method of:
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
     substr = ajStrNew();
     sstr   = ajStrNew();
     stmp   = ajStrNew();
-    ajStrAssC(&fthit, "hit");
+    ajStrAssignC(&fthit, "hit");
 
     while(ajSeqallNext(seqall, &seq))
     {
@@ -140,12 +140,12 @@ int main(int argc, char **argv)
 	TabRpt = ajFeattableNewSeq(seq);
 	strand = ajSeqStrCopy(seq);
 
-	ajStrToUpper(&strand);
-	ajStrAssSubC(&substr,ajStrStr(strand),start,stop);
-	ajStrAssSubC(&sstr,ajStrStr(strand),start,stop);
-	len  = ajStrLen(substr);
+	ajStrFmtUpper(&strand);
+	ajStrAssignSubC(&substr,ajStrGetPtr(strand),start,stop);
+	ajStrAssignSubC(&sstr,ajStrGetPtr(strand),start,stop);
+	len  = ajStrGetLen(substr);
 
-	q = p = ajStrStrMod(&substr);
+	q = p = ajStrGetuniquePtr(&substr);
 	for(i=0;i<len;++i,++p)
 	    *p = (char) ajAZToInt(*p);
 
@@ -209,7 +209,7 @@ int main(int argc, char **argv)
 	  ajFmtPrintF(outf,"ANTIGENIC of %s  from: %d  to: %d\n\n",
 		      ajSeqName(seq),begin,end);
 	  ajFmtPrintF(outf,"Length %d residues, score calc from %d to %d\n",
-		      ajSeqLen(seq),fpos+3+begin,lpos+3+begin);
+		      ajSeqGetLen(seq),fpos+3+begin,lpos+3+begin);
 	  ajFmtPrintF(outf,"Reporting all peptides over %d residues\n\n",
 		      minlen);
 	  ajFmtPrintF(outf,
@@ -224,7 +224,7 @@ int main(int argc, char **argv)
 	{
 	  ajFmtPrintF(outf,"Maximum length %d at residues %d->%d\n\n", maxlen,
 		      istart+begin, iend+begin);
-	  ajStrAssSubC(&stmp,ajStrStr(sstr),istart,iend);
+	  ajStrAssignSubC(&stmp,ajStrGetPtr(sstr),istart,iend);
 	  ajFmtPrintF(outf," Sequence:  %S\n",stmp);
 	  ajFmtPrintF(outf,"            |");
 	  antigenic_padit(outf,istart,iend);
@@ -261,7 +261,7 @@ int main(int argc, char **argv)
 		    else
 		      ajFmtPrintF(outf," ");
 		  ajFmtPrintF(outf,"\n");
-		  ajStrAssSubC(&stmp,ajStrStr(sstr),istart,iend);
+		  ajStrAssignSubC(&stmp,ajStrGetPtr(sstr),istart,iend);
 		  ajFmtPrintF(outf," Sequence:  %S\n",stmp);
 		  ajFmtPrintF(outf,"            |");
 		  antigenic_padit(outf,istart,iend);
@@ -307,6 +307,9 @@ int main(int argc, char **argv)
     ajStrDel(&stmp);
     ajStrDel(&sstr);
     ajSeqDel(&seq);
+    ajSeqallDel(&seqall);
+    ajReportDel(&report);
+
     ajStrDel(&strand);
 
     if(outf)
@@ -320,7 +323,10 @@ int main(int argc, char **argv)
     ajIntDel(&hp);
     ajIntDel(&hlen);
 
-    ajReportClose(report);
+
+    ajStrDel(&fthit);
+    ajStrDel(&substr);
+    ajStrDel(&tmpFeatStr);
 
     ajExit();
 
@@ -376,7 +382,7 @@ static void antigenic_readAnti(AjPFloat *agp)
 
     while(ajFileGets(mfptr, &line))
     {
-	p = ajStrStrMod(&line);
+	p = ajStrGetuniquePtr(&line);
 	if(*p=='#' || *p=='!' || *p=='\n')
 	    continue;
 
@@ -384,11 +390,11 @@ static void antigenic_readAnti(AjPFloat *agp)
 	{
 	    if(sscanf(p,"%*s%d%d%d",&Etot,&Stot,&Ptot) != 3)
 		ajErr("Wrong number of fields in totals\n%s",
-			ajStrStr(line));
+			ajStrGetPtr(line));
 	    continue;
 	}
 
-	ajCharToUpper(p);
+	ajCharFmtUpper(p);
 	q = p;
 	q = ajSysStrtok(q," \t");
 	n = ajAZToInt(*q);
@@ -519,14 +525,14 @@ static void antigenic_dumptoFeat(ajint nhits, const AjPInt hp,
 
 
 
-    ajStrAssC(&name,seqname);
+    ajStrAssignC(&name,seqname);
 
     feattable = ajFeattableNewProt(name);
 
-    ajStrAssC(&source,"antigenic");
-    ajStrAssC(&type,"misc_feature");
+    ajStrAssignC(&source,"antigenic");
+    ajStrAssignC(&type,"misc_feature");
 
-    ajStrAssC(&tag,"note");
+    ajStrAssignC(&tag,"note");
 
     for(i=nhits-1;i>-1;--i)
     {

@@ -2,7 +2,7 @@
 **
 ** Generate HTML table version of help from acd files
 **
-** @author: Peter Rice
+** @author Peter Rice
 ** @@
 **
 ** This program is free software; you can redistribute it and/or

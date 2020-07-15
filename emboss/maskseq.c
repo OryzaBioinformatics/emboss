@@ -2,7 +2,7 @@
 **
 ** Mask off regions of a sequence
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -33,11 +33,11 @@
 
 int main(int argc, char **argv)
 {
-    AjPSeq seq;
-    AjPSeqout seqout;
-    AjPRange regions;
-    AjPStr maskchar;
-    AjBool tolower;
+    AjPSeq seq = NULL;
+    AjPSeqout seqout = NULL;
+    AjPRange regions = NULL;
+    AjPStr maskchar = NULL;
+    AjBool dolower = ajFalse;
     AjPStr str = NULL;
     ajint beg;
     ajint end;
@@ -48,30 +48,36 @@ int main(int argc, char **argv)
     seqout   = ajAcdGetSeqout("outseq");
     regions  = ajAcdGetRange("regions");
     maskchar = ajAcdGetString("maskchar");
-    tolower  = ajAcdGetToggle("tolower");
+    dolower  = ajAcdGetToggle("tolower");
 
-    beg = ajSeqBegin(seq)-1;
-    end = ajSeqEnd(seq)-1;
+    beg = ajSeqGetBegin(seq)-1;
+    end = ajSeqGetEnd(seq)-1;
 
 
     /* get the copy of the sequence and the regions */
-    ajStrAssSub(&str, ajSeqStr(seq), beg, end);
+    ajStrAssignSubS(&str, ajSeqGetSeqS(seq), beg, end);
     ajRangeBegin(regions, beg+1);
 
     /*
     ** if the mask character is null or space or 'tower' is True, then
     ** ToLower the regions, else replace with maskseq
     */
-    if(tolower || ajStrLen(maskchar) == 0 || ajStrMatchC(maskchar, " "))
+    if(dolower || ajStrGetLen(maskchar) == 0 || ajStrMatchC(maskchar, " "))
     	ajRangeStrToLower(regions, &str);
     else
         ajRangeStrMask(regions, maskchar, &str);
     
-    ajSeqReplace(seq, str);
+    ajSeqAssignSeqS(seq, str);
     ajSeqWrite(seqout, seq);
     ajSeqWriteClose(seqout);
 
-    ajExit();
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
+    ajRangeDel(&regions);
+    ajStrDel(&maskchar);
+    ajStrDel(&str);
+
+    embExit();
 
     return 0;
 }

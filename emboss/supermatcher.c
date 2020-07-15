@@ -2,7 +2,7 @@
 **
 ** Local alignment of large sequences
 **
-** @author: Copyright (C) Ian Longden
+** @author Copyright (C) Ian Longden
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -62,7 +62,7 @@ typedef struct concatS
 static void supermatcher_matchListOrder(void **x,void *cl);
 static void supermatcher_orderandconcat(AjPList list,AjPList ordered);
 static void supermatcher_removelists(void **x,void *cl);
-static ajint supermatcher_findstartpoints(AjPTable *seq1MatchTable,
+static ajint supermatcher_findstartpoints(AjPTable seq1MatchTable,
 					  const AjPSeq b,
 					  const AjPSeq a, ajint *start1,
 					  ajint *start2, ajint *end1,
@@ -173,35 +173,35 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seq1,&a))
     {
         ajSeqTrim(a);
-	begina = 1 + ajSeqOffset(a);
+	begina = 1 + ajSeqGetOffset(a);
 
-	m = ajStrNewL(1+ajSeqLen(a));
+	m = ajStrNewRes(1+ajSeqGetLen(a));
 
-	lena = ajSeqLen(a);
+	lena = ajSeqGetLen(a);
 
-	ajDebug("Read '%S'\n", ajSeqGetName(a));
+	ajDebug("Read '%S'\n", ajSeqGetNameS(a));
 
 	if(!embWordGetTable(&seq1MatchTable, a)) /* get table of words */
 	    ajErr("Could not generate table for %s\n",
-		  ajSeqName(a));
+		  ajSeqGetNameC(a));
 
 	for(k=0;k<ajSeqsetSize(seq2);k++)
 	{
 	    b      = ajSeqsetGetSeq(seq2, k);
-	    lenb   = ajSeqLen(b);
-	    beginb = 1 + ajSeqOffset(b);
+	    lenb   = ajSeqGetLen(b);
+	    beginb = 1 + ajSeqGetOffset(b);
 
-	    n=ajStrNewL(1+ajSeqLen(b));
+	    n=ajStrNewRes(1+ajSeqGetLen(b));
 
-	    ajDebug("Processing '%S'\n", ajSeqGetName(b));
-	    p = ajSeqChar(a);
-	    q = ajSeqChar(b);
+	    ajDebug("Processing '%S'\n", ajSeqGetNameS(b));
+	    p = ajSeqGetSeqC(a);
+	    q = ajSeqGetSeqC(b);
 
-	    ajStrAssC(&m,"");
-	    ajStrAssC(&n,"");
+	    ajStrAssignC(&m,"");
+	    ajStrAssignC(&n,"");
 
 
-	    if(!supermatcher_findstartpoints(&seq1MatchTable,b,a,
+	    if(!supermatcher_findstartpoints(seq1MatchTable,b,a,
 					     &start1, &start2,
 					     &end1, &end2,
 					     width))
@@ -214,12 +214,13 @@ int main(int argc, char **argv)
 		ajFmtPrintF(errorf,
 			    "No wordmatch start points for "
 			    "%s vs %s. No alignment\n",
-			    ajSeqName(a),ajSeqName(b));
+			    ajSeqGetNameC(a),ajSeqGetNameC(b));
 		ajStrDel(&n);
 		continue;
 	    }
-	    ajDebug("++ %S v %S end1: %d start1: %d\n",
-		    ajSeqGetName(a), ajSeqGetName(b), end1, start1);
+	    ajDebug("++ %S v %S start:%d %d end:%d %d\n",
+		    ajSeqGetNameS(a), ajSeqGetNameS(b),
+		    start1, start2, end1, end2);
 
 	    if(end1-start1 > oldmax)
 	    {
@@ -252,7 +253,7 @@ int main(int argc, char **argv)
 	    if(scoreonly)
 	    {
 		if(outf)
-		    ajFmtPrintF(outf,"%s %s %.2f\n",ajSeqName(a),ajSeqName(b),
+		    ajFmtPrintF(outf,"%s %s %.2f\n",ajSeqGetNameC(a),ajSeqGetNameC(b),
 				score);
 	    }
 	    else
@@ -264,10 +265,10 @@ int main(int argc, char **argv)
 
 		ajDebug("Calling embAlignPrintLocal\n");
 		if(outf)
-		    embAlignPrintLocal(outf,ajSeqChar(a),ajSeqChar(b),
+		    embAlignPrintLocal(outf,ajSeqGetSeqC(a),ajSeqGetSeqC(b),
 				       m,n,start1,start2,
-				       score,1,sub,cvt,ajSeqName(a),
-				       ajSeqName(b),
+				       score,1,sub,cvt,ajSeqGetNameC(a),
+				       ajSeqGetNameC(b),
 				       begina,beginb);
 		embAlignReportLocal(align, a, b,
 				    m,n,start1,start2,
@@ -286,10 +287,18 @@ int main(int argc, char **argv)
 
     }
 
+    AJFREE(path);
+    AJFREE(compass);
+
     ajAlignClose(align);
     ajAlignDel(&align);
+    ajSeqallDel(&seq1);
+    ajSeqDel(&a);
+    ajSeqsetDel(&seq2);
+    ajFileClose(&outf);
+    ajFileClose(&errorf);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -435,7 +444,7 @@ static void supermatcher_findmax(void **x,void *cl)
 **
 ** Undocumented.
 **
-** @param [w] seq1MatchTable [AjPTable*] match table
+** @param [w] seq1MatchTable [AjPTable] match table
 ** @param [r] b [const AjPSeq] second sequence
 ** @param [r] a [const AjPSeq] first sequence
 ** @param [w] start1 [ajint*] start in sequence 1
@@ -447,7 +456,7 @@ static void supermatcher_findmax(void **x,void *cl)
 ** @@
 ******************************************************************************/
 
-static ajint supermatcher_findstartpoints(AjPTable *seq1MatchTable,
+static ajint supermatcher_findstartpoints(AjPTable seq1MatchTable,
 					  const AjPSeq b,
 					  const AjPSeq a, ajint *start1,
 					  ajint *start2, ajint *end1,
@@ -463,10 +472,10 @@ static ajint supermatcher_findstartpoints(AjPTable *seq1MatchTable,
     ajint bega;
     ajint begb;
 
-    amax = ajSeqLen(a)-1;
-    bmax = ajSeqLen(b)-1;
-    bega = ajSeqOffset(a);
-    begb = ajSeqOffset(b);
+    amax = ajSeqGetLen(a)-1;
+    bmax = ajSeqGetLen(b)-1;
+    bega = ajSeqGetOffset(a);
+    begb = ajSeqGetOffset(b);
 
 
     ajDebug("supermatcher_findstartpoints len %d %d off %d %d\n",
@@ -529,7 +538,7 @@ static ajint supermatcher_findstartpoints(AjPTable *seq1MatchTable,
     
     
     ajDebug("supermatcher_findstartpoints has %d..%d [%d] %d..%d [%d]\n",
-	    *start1, *end1, ajSeqLen(a), *start2, *end2, ajSeqLen(b));
+	    *start1, *end1, ajSeqGetLen(a), *start2, *end2, ajSeqGetLen(b));
 
     return 1;
 }

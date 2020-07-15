@@ -2,7 +2,7 @@
 **
 ** Extract regions from a sequence
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** Fri Apr 16 16:47:32 BST 1999 (ajb)
 ** 7 Sept 1999 - GWW rewrote to use ajRange routines.
 ** 15 March 2000 - GWW added '-separate' option
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     AjPRange regions;
     AjPStr newstr = NULL;
     AjBool separate;
-    AjPList strlist;
+    AjPList strlist = NULL;
     ajint nr;
     ajint i;
     ajint st;
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     if(separate)
     {
 	strlist = ajListstrNew();
-	ajRangeStrExtractList(regions, ajSeqStr(seq), strlist);
+	ajRangeStrExtractList(regions, ajSeqGetSeqS(seq), strlist);
 	nr = ajRangeNumber(regions);
 	for(i=0; i<nr; i++)
 	{
@@ -75,20 +75,20 @@ int main(int argc, char **argv)
 	    newseq = ajSeqNew();
 
 	    /* create a name for the new sequence */
-	    ajStrAssS(&name, ajSeqGetName(seq));
-	    ajStrAppC(&name, "_");
+	    ajStrAssignS(&name, ajSeqGetNameS(seq));
+	    ajStrAppendC(&name, "_");
 	    ajStrFromInt(&value, st);
-	    ajStrApp(&name, value);
-	    ajStrAppC(&name, "_");
+	    ajStrAppendS(&name, value);
+	    ajStrAppendC(&name, "_");
 	    ajStrFromInt(&value, en);
-	    ajStrApp(&name, value);
-	    ajSeqAssName(newseq, name);
+	    ajStrAppendS(&name, value);
+	    ajSeqAssignNameS(newseq, name);
 
 	    /* set the sequence description */
-	    ajSeqAssDesc(newseq, ajSeqGetDesc(seq));
+	    ajSeqAssignDescS(newseq, ajSeqGetDescS(seq));
 
 	    /* set the extracted sequence */
-	    ajSeqReplace(newseq, str);
+	    ajSeqAssignSeqS(newseq, str);
 
 	    /* set the type */
 	    if(ajSeqIsNuc(seq))
@@ -114,14 +114,21 @@ int main(int argc, char **argv)
 	**  concatenate all regions from the sequence into the same
 	**  sequence
 	*/
-	ajRangeStrExtract(regions, ajSeqStr(seq), &newstr);
-	ajSeqReplace(seq, newstr);
-	ajStrClear(&newstr);
+	ajRangeStrExtract(regions, ajSeqGetSeqS(seq), &newstr);
+	ajSeqAssignSeqS(seq, newstr);
+	ajStrSetClear(&newstr);
 	ajSeqAllWrite(seqout, seq);
     }
 
 
     ajSeqWriteClose(seqout);
+
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
+
+    ajRangeDel(&regions);
+    ajStrDel(&newstr);
+    ajListstrFree(&strlist);
 
     ajExit();
 

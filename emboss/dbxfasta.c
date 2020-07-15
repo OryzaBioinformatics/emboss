@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 
     embInit("dbxfasta", argc, argv);
 
-    dbtype     = ajAcdGetListI("idformat",1);
+    dbtype     = ajAcdGetListSingle("idformat");
     fieldarray = ajAcdGetList("fields");
     directory  = ajAcdGetDirectoryName("directory");
     indexdir   = ajAcdGetOutdirName("indexoutdir");
@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 	ajListPop(entry->files,(void **)&thysfile);
 	ajListPushApp(entry->files,(void *)thysfile);
 	ajFmtPrintS(&tmpstr,"%S%S",entry->directory,thysfile);
-	printf("Processing file %s\n",MAJSTRSTR(tmpstr));
+	printf("Processing file %s\n",MAJSTRGETPTR(tmpstr));
 	if(!(inf=ajFileNewIn(tmpstr)))
 	    ajFatal("Cannot open input file %S\n",tmpstr);
 	
@@ -135,8 +135,8 @@ int main(int argc, char **argv)
 	{
 	    if(entry->do_id)
 	    {
-		ajStrToLower(&entry->id);
-		ajStrAssS(&hyb->key1,entry->id);
+		ajStrFmtLower(&entry->id);
+		ajStrAssignS(&hyb->key1,entry->id);
 		hyb->dbno = i;
 		hyb->offset = entry->fpos;
 		hyb->dups = 0;
@@ -146,8 +146,8 @@ int main(int argc, char **argv)
 	    if(entry->do_accession)
                 while(ajListPop(entry->ac,(void **)&word))
                 {
-		    ajStrToLower(&word);
-                    ajStrAssS(&hyb->key1,word);
+		    ajStrFmtLower(&word);
+                    ajStrAssignS(&hyb->key1,word);
                     hyb->dbno = i;
 		    hyb->offset = entry->fpos;
 		    hyb->dups = 0;
@@ -158,8 +158,8 @@ int main(int argc, char **argv)
 	    if(entry->do_sv)
                 while(ajListPop(entry->sv,(void **)&word))
                 {
-		    ajStrToLower(&word);
-                    ajStrAssS(&hyb->key1,word);
+		    ajStrFmtLower(&word);
+                    ajStrAssignS(&hyb->key1,word);
                     hyb->dbno = i;
 		    hyb->offset = entry->fpos;
 		    hyb->dups = 0;
@@ -170,9 +170,9 @@ int main(int argc, char **argv)
 	    if(entry->do_description)
                 while(ajListPop(entry->de,(void **)&word))
                 {
-		    ajStrToLower(&word);
-		    ajStrAssS(&priobj->id,entry->id);
-                    ajStrAssS(&priobj->keyword,word);
+		    ajStrFmtLower(&word);
+		    ajStrAssignS(&priobj->id,entry->id);
+                    ajStrAssignS(&priobj->keyword,word);
                     priobj->treeblock = 0;
                     ajBtreeInsertKeyword(entry->decache, priobj);
 		    ajStrDel(&word);
@@ -234,9 +234,9 @@ static AjBool dbxfasta_NextEntry(EmbPBtreeEntry entry, AjPFile inf,
         init = ajTrue;
     }
 
-    ajStrAssC(&line,"");
+    ajStrAssignC(&line,"");
 
-    while(*MAJSTRSTR(line) != '>')
+    while(*MAJSTRGETPTR(line) != '>')
     {
 	entry->fpos = ajFileTell(inf);
 	if(!ajFileReadLine(inf,&line))
@@ -350,7 +350,7 @@ static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
 
     if(!ajRegExec(typeexp,line))
     {
-	ajStrDelReuse(&ac);
+	ajStrDelStatic(&ac);
 	ajDebug("Invalid ID line [%S]",line);
 	return ajFalse;
     }
@@ -360,27 +360,27 @@ static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
     ** using empty values if they are not found
     */
     
-    ajStrAssC(&sv, "");
-    ajStrAssC(&gi, "");
-    ajStrAssC(&de, "");
-    ajStrAssC(&ac, "");
-    ajStrAssC(&entry->id, "");
+    ajStrAssignC(&sv, "");
+    ajStrAssignC(&gi, "");
+    ajStrAssignC(&de, "");
+    ajStrAssignC(&ac, "");
+    ajStrAssignC(&entry->id, "");
 
     switch(idtype)
     {
     case FASTATYPE_SIMPLE:
 	ajRegSubI(typeexp,1,&entry->id);
-	ajStrAssS(&ac,entry->id);
+	ajStrAssignS(&ac,entry->id);
 	ajRegPost(typeexp, &de);
 	break;
     case FASTATYPE_DBID:
 	ajRegSubI(typeexp,1,&entry->id);
-	ajStrAssS(&ac,entry->id);
+	ajStrAssignS(&ac,entry->id);
 	ajRegPost(typeexp, &de);
 	break;
     case FASTATYPE_GCGID:
 	ajRegSubI(typeexp,1,&entry->id);
-	ajStrAssS(&ac,entry->id);
+	ajStrAssignS(&ac,entry->id);
 	ajRegPost(typeexp, &de);
 	break;
     case FASTATYPE_NCBI:
@@ -412,40 +412,40 @@ static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
 	return ajFalse;
     }
 
-    ajStrToLower(&entry->id);
+    ajStrFmtLower(&entry->id);
 
-    if(entry->do_accession && ajStrLen(ac))
+    if(entry->do_accession && ajStrGetLen(ac))
     {
 	str = ajStrNew();
-	ajStrAssS(&str,ac);
+	ajStrAssignS(&str,ac);
 	ajListPush(entry->ac,(void *)str);
     }
 
-    if(ajStrLen(gi))
-	ajStrAssS(&sv,gi);
+    if(ajStrGetLen(gi))
+	ajStrAssignS(&sv,gi);
 
-    if(entry->do_sv && ajStrLen(sv))
+    if(entry->do_sv && ajStrGetLen(sv))
     {
 	str = ajStrNew();
-	ajStrAssS(&str,sv);
+	ajStrAssignS(&str,sv);
 	ajListPush(entry->ac,(void *)str);
     }
     
-    if(entry->do_description && ajStrLen(de))
+    if(entry->do_description && ajStrGetLen(de))
 	while(ajRegExec(wrdexp,de))
 	{
 	    ajRegSubI(wrdexp, 1, &tmpfd);
 	    str = ajStrNew();
-	    ajStrAssS(&str,tmpfd);
+	    ajStrAssignS(&str,tmpfd);
 	    ajListPush(entry->de,(void *)str);
 	    ajRegPost(wrdexp, &de);
 	}
 
 
-    ajStrDelReuse(&ac);
-    ajStrDelReuse(&sv);
-    ajStrDelReuse(&gi);
-    ajStrDelReuse(&de);
+    ajStrDelStatic(&ac);
+    ajStrDelStatic(&sv);
+    ajStrDelStatic(&gi);
+    ajStrDelStatic(&de);
 
     return ajTrue;
 }

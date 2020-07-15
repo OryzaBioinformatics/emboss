@@ -1,8 +1,9 @@
+
 /* @source degapseq application
 **
 ** Remove gaps from sequences
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -47,16 +48,20 @@ int main(int argc, char **argv)
     {
 	/* get a copy of the sequence string */
 	str = ajStrNew();
-	ajStrAssS(&str, ajSeqStr(seq));
+	ajStrAssignS(&str, ajSeqGetSeqS(seq));
 
-	ajStrDegap(&str);
-	ajSeqReplace(seq, str);
+	ajStrRemoveGap(&str);
+	ajSeqAssignSeqS(seq, str);
 	ajStrDel(&str);
 
 	ajSeqAllWrite(seqout, seq);
     }
 
     ajSeqWriteClose(seqout);
+
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
 
     ajExit();
     return 0;

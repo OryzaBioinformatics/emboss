@@ -2,7 +2,7 @@
 **
 ** Plot potential open reading frames
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -67,8 +67,8 @@ int main(int argc, char **argv)
     AjPGraph graph;
     AjPGraphPlpData data;
 
-    float *x[6];
-    float *y[6];
+    float *x[6] = {NULL,NULL,NULL,NULL,NULL,NULL};
+    float *y[6] = {NULL,NULL,NULL,NULL,NULL,NULL};
     AjPInt cnt;
     ajint beg;
     ajint end;
@@ -101,27 +101,27 @@ int main(int argc, char **argv)
     start     = ajAcdGetString("start");
     stop      = ajAcdGetString("stop");
 
-    ajStrToUpper(&start);
-    ajStrToUpper(&stop);
+    ajStrFmtUpper(&start);
+    ajStrFmtUpper(&stop);
 
     nstarts = ajArrCommaList(start,&starts);
     nstops  = ajArrCommaList(stop,&stops);
 
-    beg = ajSeqBegin(seq);
-    end = ajSeqEnd(seq);
+    beg = ajSeqGetBegin(seq);
+    end = ajSeqGetEnd(seq);
 
     str = ajStrNew();
     cnt = ajIntNew();
 
-    ajSeqToUpper(seq);
-    ajStrAssSubC(&str,ajSeqChar(seq),beg-1,end-1);
+    ajSeqFmtUpper(seq);
+    ajStrAssignSubC(&str,ajSeqGetSeqC(seq),beg-1,end-1);
 
-    rev = ajStrNewC(ajStrStr(str));
-    ajSeqReverseStr(&rev);
+    rev = ajStrNewC(ajStrGetPtr(str));
+    ajSeqstrReverse(&rev);
 
     for(i=0;i<6;++i)
     {
-	plotorf_norfs(ajStrStr(str),ajStrStr(rev),i,x,y,&cnt,beg,starts,
+	plotorf_norfs(ajStrGetPtr(str),ajStrGetPtr(rev),i,x,y,&cnt,beg,starts,
 		      nstarts,stops,nstops);
 	data = ajGraphPlpDataNewI(2);
 	data->numofpoints = 0;
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
     ajGraphxySetYEnd(graph,2.0);
     ajGraphSetTitleC(graph,"Potential codons (rectangles)");
     ajGraphxyDisplay(graph,ajTrue);
-
+    ajGraphxyDel(&graph);
 
     ajStrDel(&str);
     ajStrDel(&rev);
@@ -163,8 +163,15 @@ int main(int argc, char **argv)
     for(i=0;i<nstops;++i)
 	ajStrDel(&stops[i]);
     AJFREE(stops);
+    for(i=0;i<6;++i)
+    {
+	AJFREE(x[i]);
+	AJFREE(y[i]);
+    }
 
-    ajExit();
+    ajSeqDel(&seq);
+
+    embExit();
 
     return 0;
 }
@@ -318,7 +325,7 @@ static AjBool plotorf_isin(const char *p, AjPStr const *str, ajint n)
     ret = ajFalse;
 
     for(i=0;i<n && !ret;++i)
-	if(!strncmp(p,ajStrStr(str[i]),3))
+	if(!strncmp(p,ajStrGetPtr(str[i]),3))
 	    ret = ajTrue;
 
     return ret;

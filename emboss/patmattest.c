@@ -57,12 +57,12 @@ int main(int argc, char **argv)
 
     outf = ajAcdGetOutfile("outfile");
 
-    ajStrAssC(&test,"GAATTCCCGGAGATTCCGACTC");
+    ajStrAssignC(&test,"GAATTCCCGGAGATTCCGACTC");
 
 
     for(i=0;i<8;i++)
     {
-	ajStrAssC(&cut,testset[i]);
+	ajStrAssignC(&cut,testset[i]);
 
 	/* Create the regular expression from the plain text */
 	regexp = embPatSeqCreateRegExp(cut,0);
@@ -94,8 +94,8 @@ int main(int argc, char **argv)
 		    embPatMatchGetStart(results,j),
 		    embPatMatchGetLen(results,j));
 	/* get a copy of the string */
-	new = ajStrNewL(results->len[j]);
-	ajStrAssSub(&new,ajSeqStr(seq),embPatMatchGetStart(results,j),
+	new = ajStrNewRes(results->len[j]);
+	ajStrAssignSubS(&new,ajSeqStr(seq),embPatMatchGetStart(results,j),
 		    embPatMatchGetEnd(results,j));
 	ajFmtPrintF(outf,"%S\n",new);
 	ajStrDel(&new);

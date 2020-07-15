@@ -1,7 +1,7 @@
 /* @source demolist application
 **
 ** Demomnstration of how the list functions should be used.
-** @author: Copyright (C) Peter Rice (pmr@sanger.ac.uk)
+** @author Copyright (C) Peter Rice (pmr@sanger.ac.uk)
 ** @@
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -23,12 +23,12 @@
 
 
 
-/* @datastatic gffptr *********************************************************
+/* @datastatic DemolistPgff ***************************************************
 **
 ** demolist struct
 **
-** @alias sgff
-** @alias gff
+** @alias DemolistSgff
+** @alias DemolistOgff
 **
 ** @attr clone [AjPStr] Demolist example struct
 ** @attr source [AjPStr]  Demolist example struct
@@ -38,7 +38,7 @@
 ** @attr score [ajint]  Demolist example struct
 ******************************************************************************/
 
-typedef struct sgff
+typedef struct DemolistSgff
 {
     AjPStr clone;
     AjPStr source;
@@ -46,13 +46,13 @@ typedef struct sgff
     ajint  start;
     ajint  end;
     ajint  score;
-} gff;
-#define gffptr gff*
+} DemolistOgff;
+#define DemolistPgff DemolistOgff*
 
 
 
 
-static gffptr demolist_creategff(const AjPStr line);
+static DemolistPgff demolist_creategff(const AjPStr line);
 static ajint demolist_typecomp(const void *a, const void *b);
 static ajint demolist_startcomp(const void *a, const void *b);
 static void  demolist_dumpOut(void **x, void *cl);
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
     AjPList list = NULL;
     AjPFile gfffile;
     AjPStr  line = NULL;
-    gffptr  gffnew;
+    DemolistPgff  gffnew;
     AjIList iter = NULL;
     void **array = NULL;
     ajint i;
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     iter = ajListIterRead(list);
     while(ajListIterMore(iter))
     {
-	gffnew = (gffptr) ajListIterNext (iter) ;
+	gffnew = (DemolistPgff) ajListIterNext (iter) ;
 	ajUser("%S\t%S\t%S\t%d\t%d\t%d",gffnew->clone,gffnew->source,
 	       gffnew->type,gffnew->start,gffnew->end,gffnew->score);
     }
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
     ia = ajListToArray(list, &array);
     for (i = 0; i < ia; i++)
     {
-	gffnew = (gffptr) array[i];
+	gffnew = (DemolistPgff) array[i];
 	ajUser("%S\t%S\t%S\t%d\t%d\t%d",gffnew->clone,gffnew->source,
 	       gffnew->type,gffnew->start,gffnew->end,gffnew->score);
     }
@@ -150,13 +150,13 @@ int main(int argc, char **argv)
 
 static ajint demolist_typecomp(const void *a, const void *b)
 {
-    gffptr *gfa;
-    gffptr *gfb;
+    DemolistPgff *gfa;
+    DemolistPgff *gfb;
 
-    gfa = (gffptr *) a;
-    gfb = (gffptr *) b;
+    gfa = (DemolistPgff *) a;
+    gfb = (DemolistPgff *) b;
 
-    return ajStrCmp(&(*gfa)->type,&(*gfb)->type);
+    return ajStrVcmp(&(*gfa)->type,&(*gfb)->type);
 }
 
 
@@ -174,11 +174,11 @@ static ajint demolist_typecomp(const void *a, const void *b)
 
 static ajint demolist_startcomp(const void *a, const void *b)
 {
-    gffptr *gfa;
-    gffptr *gfb;
+    DemolistPgff *gfa;
+    DemolistPgff *gfb;
 
-    gfa = (gffptr *) a;
-    gfb = (gffptr *) b;
+    gfa = (DemolistPgff *) a;
+    gfb = (DemolistPgff *) b;
 
     if((*gfa)->start > (*gfb)->start)
 	return 1;
@@ -203,9 +203,9 @@ static ajint demolist_startcomp(const void *a, const void *b)
 
 static void  demolist_dumpOut(void **x, void *cl)
 {
-    gffptr gffnew;
+    DemolistPgff gffnew;
 
-    gffnew = (gffptr)*x;
+    gffnew = (DemolistPgff)*x;
 
     ajUser("%S\t%S\t%S\t%d\t%d\t%d",gffnew->clone,gffnew->source,gffnew->type,
 	   gffnew->start,gffnew->end,gffnew->score);
@@ -228,9 +228,9 @@ static void  demolist_dumpOut(void **x, void *cl)
 
 static void  demolist_freegff (void **x, void *cl)
 {
-    gffptr gffnew;
+    DemolistPgff gffnew;
 
-    gffnew = (gffptr)*x;
+    gffnew = (DemolistPgff)*x;
 
     ajStrDel(&gffnew->clone);
     ajStrDel(&gffnew->type);
@@ -249,14 +249,14 @@ static void  demolist_freegff (void **x, void *cl)
 ** merely passes back a gff struct
 **
 ** @param [r] line [const AjPStr] Undocumented
-** @return [gffptr] Undocumented
+** @return [DemolistPgff] Undocumented
 ** @@
 ******************************************************************************/
 
-static gffptr demolist_creategff(const AjPStr line)
+static DemolistPgff demolist_creategff(const AjPStr line)
 {
     static AjPRegexp gffexp = NULL;
-    gffptr gffnew = NULL;
+    DemolistPgff gffnew = NULL;
     AjPStr temp   = NULL;
 
     if(!gffexp)

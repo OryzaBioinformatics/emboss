@@ -2,7 +2,7 @@
 **
 ** Quick tandem repeat finder
 **
-** @author: Copyright (C) Richard Durbin, J Thierry-Mieg
+** @author Copyright (C) Richard Durbin, J Thierry-Mieg
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -96,29 +96,29 @@ int main(int argc, char **argv)
     thresh    = ajAcdGetInt("threshold");
     maxrepeat = ajAcdGetInt("maxrepeat");
 
-    saveseq = ajSeqNewS(sequence);
+    saveseq = ajSeqNewSeq(sequence);
     tab = ajFeattableNewSeq(saveseq);
 
     ajFmtPrintAppS(&tmpstr, "Threshold: %d\n", thresh);
     ajFmtPrintAppS(&tmpstr, "Maxrepeat: %d\n", maxrepeat);
     ajReportSetHeader(report, tmpstr);
 
-    begin = ajSeqBegin(sequence) - 1;
-    end   = ajSeqEnd(sequence) - 1;
+    begin = ajSeqGetBegin(sequence) - 1;
+    end   = ajSeqGetEnd(sequence) - 1;
 
     substr = ajStrNew();
-    str = ajSeqStrCopy(sequence);
-    ajStrAssSub(&substr,str,begin,end);
-    ajSeqReplace(sequence,substr);
+    str = ajSeqGetSeqCopyS(sequence);
+    ajStrAssignSubS(&substr,str,begin,end);
+    ajSeqAssignSeqS(sequence,substr);
 
     cvt = ajSeqCvtNewText("ACGTN");
     ajSeqNum(sequence, cvt, &tseq);
-    sq = ajStrStrMod(&tseq);
+    sq = ajStrGetuniquePtr(&tseq);
 
     /* careful - sequence can be shorter than the maximum repeat length */
 
-    if((len=ajStrLen(substr)) < maxrepeat)
-      maxrepeat = ajStrLen(substr);
+    if((len=ajStrGetLen(substr)) < maxrepeat)
+      maxrepeat = ajStrGetLen(substr);
 
     for(gap = 1; gap <= maxrepeat; ++gap)
     {
@@ -180,11 +180,18 @@ int main(int argc, char **argv)
     }
 
     ajReportWrite(report, tab, saveseq);
+    ajReportDel(&report);
+    ajFileClose(&outfile);
 
     ajFeattableDel(&tab);
+    ajSeqDel(&sequence);
+    ajSeqDel(&saveseq);
+    ajSeqCvtDel(&cvt);
 
     ajStrDel(&str);
     ajStrDel(&substr);
+    ajStrDel(&tseq);
+    ajStrDel(&tmpstr);
 
     ajExit();
 
@@ -243,7 +250,7 @@ static void equicktandem_report(AjPFeattable tab, ajint begin)
     static AjPStr s = NULL;
 
     if(!rpthit)
-	ajStrAssC(&rpthit, "repeat_region");
+	ajStrAssignC(&rpthit, "repeat_region");
 
     /*
        ajFmtPrintF(outf, "%6d %10d %10d %2d %3d\n",

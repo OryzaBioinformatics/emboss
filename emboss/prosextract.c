@@ -1,5 +1,5 @@
 /* @source prosextract.c
-** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
+** @author Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
 **
 ** Application for extracting relevent lines from the Prosite motif database.
 **
@@ -45,7 +45,8 @@ int main(int argc, char **argv)
 
     AjPStr line  = NULL;
     AjPStr text  = NULL;
-    AjPStr temp  = NULL;
+    AjPStr dirname  = NULL;
+    AjPStr filename = NULL;
     AjPStr id    = NULL;
     AjPStr ac    = NULL;
     AjPStr de    = NULL;
@@ -63,7 +64,7 @@ int main(int argc, char **argv)
 
     embInit("prosextract", argc, argv);
 
-    temp = ajAcdGetDirectoryName("prositedir");
+    dirname = ajAcdGetDirectoryName("prositedir");
 
     line = ajStrNew();
     text = ajStrNew();
@@ -77,10 +78,10 @@ int main(int argc, char **argv)
 
 
     fn=ajStrNew();
-    ajStrAssC(&fn,ajStrStr(temp));
-    ajStrAppC(&fn,"/prosite.dat");
+    ajStrAssignS(&fn,dirname);
+    ajStrAppendC(&fn,"prosite.dat");
     if(!(infdat=ajFileNewIn(fn)))
-	ajFatal("Cannot open file %s",ajStrStr(fn));
+	ajFatal("Cannot open file %S",fn);
     ajStrDel(&fn);
 
 
@@ -101,11 +102,11 @@ int main(int argc, char **argv)
 	    {
 		haspattern = ajTrue;
 		/*save id*/
-		p = ajStrStr(line);
+		p = ajStrGetPtr(line);
 		p = ajSysStrtok(p," \t;");
 		p = ajSysStrtok(NULL," \t;");
-		ajStrAssC(&id,p);
-		ajFmtPrintF(outf, "%s ", ajStrStr(id));
+		ajStrAssignC(&id,p);
+		ajFmtPrintF(outf, "%S ", id);
 		continue;
 	    }
 	    else
@@ -121,41 +122,41 @@ int main(int argc, char **argv)
 
 	if(ajStrPrefixC(line, "AC") )
 	{
-	    p = ajStrStr(line);
+	    p = ajStrGetPtr(line);
 	    p = ajSysStrtok(p, " \t;");
 	    p = ajSysStrtok(NULL, " \t;");
-	    ajStrAssC(&ac,p);
-	    ajFmtPrintF(outf, "%s\n ", ajStrStr(ac));
+	    ajStrAssignC(&ac,p);
+	    ajFmtPrintF(outf, "%S\n ", ac);
 	    continue;
 	}
 
     	if(ajStrPrefixC(line, "DE") )
 	{
-	    p = ajStrStr(line);
+	    p = ajStrGetPtr(line);
 	    p = ajSysStrtok(p, " \t.");
 	    p = ajSysStrtok(NULL, " \t.");
-	    ajStrAssC(&de,p);
-	    ajFmtPrintF(outf, "%s\n ", ajStrStr(de));
+	    ajStrAssignC(&de,p);
+	    ajFmtPrintF(outf, "%S\n ", de);
 	    continue;
 	}
 
 
 	if(ajStrPrefixC(line, "PA"))
 	{
-	    ajStrAssC(&pa,"");
+	    ajStrAssignC(&pa,"");
 
 	    while(ajStrPrefixC(line,"PA"))
 	    {
-		p = ajStrStr(line);
+		p = ajStrGetPtr(line);
 		p = ajSysStrtok(p, " \t.");
 		p = ajSysStrtok(NULL, " \t.");
-		ajStrAppC(&pa,p);
+		ajStrAppendC(&pa,p);
 		ajFileReadLine(infdat, &line);
 	    }
 
-	    ajFmtPrintF(outf, "%s\n", ajStrStr(pa));
+	    ajFmtPrintF(outf, "%S\n", pa);
 	    re = embPatPrositeToRegExp(pa);
-	    ajFmtPrintF(outf, "^%s\n\n", ajStrStr(re));
+	    ajFmtPrintF(outf, "^%S\n\n", re);
 	    ajStrDel(&re);
 	    continue;
 	}
@@ -166,10 +167,10 @@ int main(int argc, char **argv)
 
 
     fn = ajStrNew();
-    ajStrAssC(&fn,ajStrStr(temp));
-    ajStrAppC(&fn,"/prosite.doc");
+    ajStrAssignS(&fn,dirname);
+    ajStrAppendC(&fn,"prosite.doc");
     if(!(infdoc=ajFileNewIn(fn)))
-	ajFatal("Cannot open file %s",ajStrStr(fn));
+	ajFatal("Cannot open file %S",fn);
     ajStrDel(&fn);
 
 
@@ -189,12 +190,12 @@ int main(int argc, char **argv)
 	{
 	    storepos = ajFileTell(infdoc);
 	    /* save out the documentation text to acc numbered outfiles . */
-	    p = ajStrStr(text)+1;
+	    p = ajStrGetPtr(text)+1;
 	    p = ajSysStrtok(p, ";");
-	    ajStrAssC(&temp, ajStrStr(fname));
-	    ajStrAppC(&temp, p);
+	    ajStrAssignS(&filename, fname);
+	    ajStrAppendC(&filename, p);
 
-	    ajFileDataNewWrite(temp, &outs);
+	    ajFileDataNewWrite(filename, &outs);
 	    flag   = ajTrue;
 	    isopen = ajTrue;
 	    continue;
@@ -208,7 +209,7 @@ int main(int argc, char **argv)
 		if(ajStrPrefixC(text,"{END}"))
 		    break;
 
-		ajFmtPrintF(outs, "%s\n", ajStrStr(text));
+		ajFmtPrintF(outs, "%S\n", text);
 	    }
 	    ajFileClose(&outs);
 	    isopen = ajFalse;
@@ -224,7 +225,9 @@ int main(int argc, char **argv)
 
     ajStrDel(&line);
     ajStrDel(&text);
-    ajStrDel(&temp);
+    ajStrDel(&dirname);
+    ajStrDel(&filename);
+
     ajStrDel(&id);
     ajStrDel(&ac);
     ajStrDel(&de);

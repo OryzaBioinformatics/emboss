@@ -2,7 +2,7 @@
 **
 ** Dotplot of two sequences
 **
-** @author: Copyright (C) Ian Longden
+** @author Copyright (C) Ian Longden
 ** @modified: Alan Bleasby. Added non-proportional plot
 ** @@
 **
@@ -92,17 +92,17 @@ int main(int argc, char **argv)
     stretch = ajAcdGetToggle("stretch");
     xygraph = ajAcdGetGraphxy("xygraph");
 
-    begin1 = ajSeqBegin(seq1);
-    begin2 = ajSeqBegin(seq2);
-    end1   = ajSeqEnd(seq1);
-    end2   = ajSeqEnd(seq2);
+    begin1 = ajSeqGetBegin(seq1);
+    begin2 = ajSeqGetBegin(seq2);
+    end1   = ajSeqGetEnd(seq1);
+    end2   = ajSeqGetEnd(seq2);
 
     ajSeqTrim(seq1);
     ajSeqTrim(seq2);
 
     embWordLength(wordlen);
     if(embWordGetTable(&seq1MatchTable, seq1))
-	matchlist = embWordBuildMatchTable(&seq1MatchTable, seq2, ajTrue);
+	matchlist = embWordBuildMatchTable(seq1MatchTable, seq2, ajTrue);
 
 
     if(stretch)
@@ -117,16 +117,16 @@ int main(int argc, char **argv)
 
     /* only get here if stretch is false */
 
-    max= ajSeqLen(seq1);
-    if(ajSeqLen(seq2) > max)
-	max = ajSeqLen(seq2);
+    max= ajSeqGetLen(seq1);
+    if(ajSeqGetLen(seq2) > max)
+	max = ajSeqGetLen(seq2);
 
     xmargin = ymargin = max *0.15;
 
     ajGraphOpenWin(graph, 0.0-ymargin,(max*1.35)+ymargin,
 		   0.0-xmargin,(float)max+xmargin);
 
-    ajGraphTextMid(max*0.5,(ajSeqLen(seq2))+(xmargin*0.5),
+    ajGraphTextMid(max*0.5,(ajSeqGetLen(seq2))+(xmargin*0.5),
 		   ajGraphGetTitleC(graph));
     ajGraphSetCharSize(0.5);
 
@@ -135,9 +135,9 @@ int main(int argc, char **argv)
 
     if(boxit)
     {
-	ajGraphRect(0.0,0.0,(float)ajSeqLen(seq1),(float)ajSeqLen(seq2));
+	ajGraphRect(0.0,0.0,(float)ajSeqGetLen(seq1),(float)ajSeqGetLen(seq2));
 	i = 0;
-	while(acceptableticksx[i]*numbofticks < ajSeqLen(seq1))
+	while(acceptableticksx[i]*numbofticks < ajSeqGetLen(seq1))
 	    i++;
 
 	if(i<=13)
@@ -147,68 +147,74 @@ int main(int argc, char **argv)
 
 	ticklen = xmargin*0.1;
 	onefifth  = xmargin*0.2;
-	ajGraphTextMid((ajSeqLen(seq1))*0.5,0.0-(onefifth*3),
+	ajGraphTextMid((ajSeqGetLen(seq1))*0.5,0.0-(onefifth*3),
 			ajGraphGetYTitleC(graph));
 
-	if(ajSeqLen(seq2)/ajSeqLen(seq1) > 10 )
+	if(ajSeqGetLen(seq2)/ajSeqGetLen(seq1) > 10 )
 	{
 	    /* a lot smaller then just label start and end */
 	    ajGraphLine(0.0,0.0,0.0,0.0-ticklen);
-	    sprintf(ptr,"%d",ajSeqOffset(seq1));
+	    sprintf(ptr,"%d",ajSeqGetOffset(seq1));
 	    ajGraphTextMid( 0.0,0.0-(onefifth),ptr);
 
-	    ajGraphLine((float)(ajSeqLen(seq1)),0.0,
-			(float)ajSeqLen(seq1),0.0-ticklen);
-	    sprintf(ptr,"%d",ajSeqLen(seq1)+ajSeqOffset(seq1));
-	    ajGraphTextMid((float)ajSeqLen(seq1),0.0-(onefifth),ptr);
+	    ajGraphLine((float)(ajSeqGetLen(seq1)),0.0,
+			(float)ajSeqGetLen(seq1),0.0-ticklen);
+	    sprintf(ptr,"%d",ajSeqGetLen(seq1)+ajSeqGetOffset(seq1));
+	    ajGraphTextMid((float)ajSeqGetLen(seq1),0.0-(onefifth),ptr);
 	    
 	}
 	else
-	    for(k=0.0;k<ajSeqLen(seq1);k+=tickgap)
+	    for(k=0.0;k<ajSeqGetLen(seq1);k+=tickgap)
 	    {
 		ajGraphLine(k,0.0,k,0.0-ticklen);
-		sprintf(ptr,"%d",(ajint)k+ajSeqOffset(seq1));
+		sprintf(ptr,"%d",(ajint)k+ajSeqGetOffset(seq1));
 		ajGraphTextMid( k,0.0-(onefifth),ptr);
 	    }
 
 	i = 0;
-	while(acceptableticks[i]*numbofticks < ajSeqLen(seq2))
+	while(acceptableticks[i]*numbofticks < ajSeqGetLen(seq2))
 	    i++;
 
 	tickgap   = acceptableticks[i];
 	ticklen   = ymargin*0.1;
 	onefifth  = ymargin*0.2;
-	ajGraphTextLine(0.0-(onefifth*4),(ajSeqLen(seq2))*0.5,
-			0.0-(onefifth*4),(float)ajSeqLen(seq2),
+	ajGraphTextLine(0.0-(onefifth*4),(ajSeqGetLen(seq2))*0.5,
+			0.0-(onefifth*4),(float)ajSeqGetLen(seq2),
 			ajGraphGetXTitleC(graph),0.5);
 
-	if(ajSeqLen(seq1)/ajSeqLen(seq2) > 10 )
+	if(ajSeqGetLen(seq1)/ajSeqGetLen(seq2) > 10 )
 	{
 	    /* a lot smaller then just label start and end */
 	    ajGraphLine(0.0,0.0,0.0-ticklen,0.0);
-	    sprintf(ptr,"%d",ajSeqOffset(seq2));
+	    sprintf(ptr,"%d",ajSeqGetOffset(seq2));
 	    ajGraphTextEnd( 0.0-(onefifth),0.0,ptr);
 
-	    ajGraphLine(0.0,(float)ajSeqLen(seq2),0.0-ticklen,
-			(float)ajSeqLen(seq2));
-	    sprintf(ptr,"%d",ajSeqLen(seq2)+ajSeqOffset(seq2));
-	    ajGraphTextEnd( 0.0-(onefifth),(float)ajSeqLen(seq2),ptr);
+	    ajGraphLine(0.0,(float)ajSeqGetLen(seq2),0.0-ticklen,
+			(float)ajSeqGetLen(seq2));
+	    sprintf(ptr,"%d",ajSeqGetLen(seq2)+ajSeqGetOffset(seq2));
+	    ajGraphTextEnd( 0.0-(onefifth),(float)ajSeqGetLen(seq2),ptr);
 	}
 	else
-	    for(k=0.0;k<ajSeqLen(seq2);k+=tickgap)
+	    for(k=0.0;k<ajSeqGetLen(seq2);k+=tickgap)
 	    {
 		ajGraphLine(0.0,k,0.0-ticklen,k);
-		sprintf(ptr,"%d",(ajint)k+ajSeqOffset(seq2));
+		sprintf(ptr,"%d",(ajint)k+ajSeqGetOffset(seq2));
 		ajGraphTextEnd( 0.0-(onefifth),k,ptr);
 	    }
     }
 
     ajGraphClose();
+    ajSeqDel(&seq1);
+    ajSeqDel(&seq2);
+    ajGraphxyDel(&graph);
+    ajGraphxyDel(&xygraph);
+
+    embWordFreeTable(&seq1MatchTable);
 
     if(matchlist)
 	embWordMatchListDelete(&matchlist); /* free the match structures */
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -313,10 +319,10 @@ static void dottup_stretchplot(AjPGraph graph, const AjPList matchlist,
     xa[0] = (float)begin1;
     ya[0] = (float)begin2;
 
-    ajGraphSetTitleC(graph,ajStrStr(tit));
+    ajGraphSetTitleC(graph,ajStrGetPtr(tit));
 
-    ajGraphSetXTitleC(graph,ajSeqName(seq1));
-    ajGraphSetYTitleC(graph,ajSeqName(seq2));
+    ajGraphSetXTitleC(graph,ajSeqGetNameC(seq1));
+    ajGraphSetYTitleC(graph,ajSeqGetNameC(seq2));
 
     ajGraphPlpDataSetTypeC(gdata,"2D Plot Float");
     ajGraphPlpDataSetMaxMin(gdata,(float)begin1,(float)end1,(float)begin2,

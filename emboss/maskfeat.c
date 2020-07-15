@@ -2,7 +2,7 @@
 **
 ** Mask off features of a sequence
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -42,9 +42,9 @@ static void maskfeat_StrToLower(AjPStr *str, ajint begin, ajint end);
 int main(int argc, char **argv)
 {
 
-    AjPSeqall seqall;
-    AjPSeq seq;
-    AjPSeqout seqout;
+    AjPSeqall seqall = NULL;
+    AjPSeq seq = NULL;
+    AjPSeqout seqout = NULL;
     AjPStr type;
     AjPStr maskchar;
     AjBool tolower;
@@ -67,7 +67,13 @@ int main(int argc, char **argv)
 
     ajSeqWriteClose(seqout);
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
+    ajStrDel(&type);
+    ajStrDel(&maskchar);
+
+    embExit();
 
     return 0;
 }
@@ -106,40 +112,44 @@ static void maskfeat_FeatSeqMask(AjPSeq seq, const AjPStr type,
     ** want lower-case if 'tolower' or 'maskchar' is null
     ** or it is the SPACE character
     */
-    lower = (tolower || ajStrLen(maskchar) == 0 || ajStrMatchC(maskchar, " "));
+    lower = (tolower ||
+	     ajStrGetLen(maskchar) == 0 ||
+	     ajStrMatchC(maskchar, " "));
 
 
     /* get the feature table of the sequence */
     feat = ajSeqGetFeat(seq);
 
-    ajStrAssS(&str, ajSeqStr(seq));
+    ajStrAssignS(&str, ajSeqGetSeqS(seq));
 
     /* For all features... */
 
-    if(feat && feat->Features)
+    if(feat && ajFeattableSize(feat))
     {
 	iter = ajListIterRead(feat->Features) ;
 	while(ajListIterMore(iter))
 	{
 	    gf = ajListIterNext(iter) ;
-	    tokens = ajStrTokenInit(type, whiteSpace);
-	    while(ajStrToken( &key, &tokens, NULL))
-		if(ajStrMatchWild(gf->Type, key))
+	    tokens = ajStrTokenNewC(type, whiteSpace);
+	    while(ajStrTokenNextParse( &tokens, &key))
+		if(ajStrMatchWildS(ajFeatGetType(gf), key))
 		{
 		    if(lower)
-			maskfeat_StrToLower(&str, gf->Start-1, gf->End-1);
+			maskfeat_StrToLower(&str, ajFeatGetStart(gf)-1,
+					    ajFeatGetEnd(gf)-1);
 		    else
-		        ajStrMask(&str, gf->Start-1, gf->End-1,
-				  *ajStrStr(maskchar));
+		        ajStrMask(&str, ajFeatGetStart(gf)-1,
+				  ajFeatGetEnd(gf)-1,
+				  ajStrGetCharFirst(maskchar));
 		}
 
-	    ajStrTokenClear( &tokens);
+	    ajStrTokenDel( &tokens);
 	    ajStrDel(&key);
 	}
 	ajListIterFree(&iter);
     }
 
-    ajSeqReplace(seq, str);
+    ajSeqAssignSeqS(seq, str);
 
 
     ajStrDel(&str);
@@ -168,12 +178,12 @@ static void maskfeat_StrToLower(AjPStr *str, ajint begin, ajint end)
     AjPStr substr = ajStrNew();
     
     /* extract the region and lowercase */
-    ajStrAppSub(&substr, *str, begin, end);
-    ajStrToLower(&substr);
+    ajStrAppendSubS(&substr, *str, begin, end);
+    ajStrFmtLower(&substr);
 
     /* remove and replace the lowercased region */
-    ajStrCut(str, begin, end);
-    ajStrInsert(str, begin, substr);
+    ajStrCutRange(str, begin, end);
+    ajStrInsertS(str, begin, substr);
                                                          
     ajStrDel(&substr);
 

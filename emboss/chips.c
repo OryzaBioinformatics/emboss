@@ -2,7 +2,7 @@
 **
 ** Calculate codon usage statistics
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -62,8 +62,8 @@ int main(int argc, char **argv)
     {
 	beg = ajSeqallBegin(seqall);
 	end = ajSeqallEnd(seqall);
-	ajStrAssSub(&substr,ajSeqStr(seq),beg-1,end-1);
-	ajStrToUpper(&substr);
+	ajStrAssignSubS(&substr,ajSeqStr(seq),beg-1,end-1);
+	ajStrFmtUpper(&substr);
 	ajCodCountTriplets(codon,substr,&ccnt);
 	if(!sum)
 	{
@@ -86,6 +86,9 @@ int main(int argc, char **argv)
     
     ajFileClose(&outf);
     ajCodDel(&codon);
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajStrDel(&substr);
 
     ajExit();
 

@@ -1,7 +1,7 @@
 /* @source redata application
 **
 ** Reports isoschizomers, references and suppliers for restriction enzymes
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
     suppliers     = ajAcdGetBool("suppliers");
 
 
-    ajStrCleanWhite(&enzyme);
+    ajStrRemoveWhiteExcess(&enzyme);
 
     line    = ajStrNew();
     enzline = ajStrNew();
@@ -112,30 +112,30 @@ int main(int argc, char **argv)
     /* Read the enzyme line */
     while(ajFileReadLine(enzfile,&enzline))
     {
-	p=ajStrStr(enzline);
+	p=ajStrGetPtr(enzline);
 
 	if(*p=='#' || *p=='\n' || *p=='!')
 	    continue;
 	p = ajSysStrtok(p," \t\n");
-	ajStrAssC(&str,p);
+	ajStrAssignC(&str,p);
 /*	while(*p) ++p;
 	*p = ' ';*/
 
-	if(ajStrMatchCase(str,enzyme))
+	if(ajStrMatchCaseS(str,enzyme))
 	    break;
     }
 
     /* Only do the rest if a matching enzyme was found */
-    if(ajStrMatchCase(str,enzyme))
+    if(ajStrMatchCaseS(str,enzyme))
     {
 	ajFmtPrintF(outf,"%S\n\n",str);
-	while(ajStrMatchCase(str,enzyme))
+	while(ajStrMatchCaseS(str,enzyme))
 	{
-	    p = ajStrStr(enzline);
+	    p = ajStrGetPtr(enzline);
 	    p = ajSysStrtok(p," \t\n");
-	    ajStrAssC(&str,p);
+	    ajStrAssignC(&str,p);
 	    p = ajSysStrtok(NULL," \t\n");
-	    ajStrAssC(&line,p);
+	    ajStrAssignC(&line,p);
 	    p = ajSysStrtok(NULL,"\n");
 	    sscanf(p,"%d%d",&len,&ncuts);
 	    if(ncuts==2)
@@ -143,9 +143,9 @@ int main(int argc, char **argv)
 	    else
 		sscanf(p,"%d%d%d%d%d%d%d",&len,&ncuts,&blunt,&cut1,&cut2,
 		       &cut3,&cut4);
-	    ajStrToUpper(&line);
+	    ajStrFmtUpper(&line);
 	    ajFmtPrintF(outf,"Recognition site is %s leaving ",
-			ajStrStr(line));
+			ajStrGetPtr(line));
 	    if(blunt)
 		ajFmtPrintF(outf,"blunt ends\n");
 	    else
@@ -160,19 +160,19 @@ int main(int argc, char **argv)
 	    if(!ajFileReadLine(enzfile,&enzline))
 		break;
 
-	    p = ajStrStr(enzline);
+	    p = ajStrGetPtr(enzline);
 	    p = ajSysStrtok(p," \t\n");
-	    ajStrAssC(&str,p);
+	    ajStrAssignC(&str,p);
 	}
 
 	/* Read the reference file */
 	while(ajFileReadLine(reffile,&line))
 	{
-	    p = ajStrStr(line);
+	    p = ajStrGetPtr(line);
 	    if(*p=='#' || *p=='\n' || *p=='!')
 		continue;
 
-	    if(ajStrMatchCase(line,enzyme))
+	    if(ajStrMatchCaseS(line,enzyme))
 		break;
 
 	    while(!ajStrMatchC(line,"//"))
@@ -180,28 +180,28 @@ int main(int argc, char **argv)
 	}
 
 	ajFileReadLine(reffile,&line);
-	ajFmtPrintF(outf,"Organism: %s\n",ajStrStr(line));
+	ajFmtPrintF(outf,"Organism: %s\n",ajStrGetPtr(line));
 	ajFileReadLine(reffile,&iso);
 
-	if(ajStrLen(iso))
+	if(ajStrGetLen(iso))
 	    ne = ajArrCommaList(iso,&ea);
 	ajFileReadLine(reffile,&line);
 
-	if(ajStrLen(line))
-	    ajFmtPrintF(outf,"Methylated: %s\n",ajStrStr(line));
+	if(ajStrGetLen(line))
+	    ajFmtPrintF(outf,"Methylated: %s\n",ajStrGetPtr(line));
 	ajFileReadLine(reffile,&line);
 
-	if(ajStrLen(line))
-	    ajFmtPrintF(outf,"Source: %s\n",ajStrStr(line));
+	if(ajStrGetLen(line))
+	    ajFmtPrintF(outf,"Source: %s\n",ajStrGetPtr(line));
 
-	if(isoschizomers && ajStrLen(iso))
+	if(isoschizomers && ajStrGetLen(iso))
 	{
 	    ajFmtPrintF(outf,"\nIsoschizomers:\n");
 	    n = 0;
 	    ajFmtPrintF(outf,"   ");
 	    for(i=0;i<ne;++i)
 	    {
-		ajFmtPrintF(outf,"%-12s",ajStrStr(ea[i]));
+		ajFmtPrintF(outf,"%-12s",ajStrGetPtr(ea[i]));
 		if(++n==6)
 		{
 		    ajFmtPrintF(outf,"\n   ");
@@ -212,13 +212,13 @@ int main(int argc, char **argv)
 	}
 	ajFileReadLine(reffile,&line);
 
-	if(suppliers && ajStrLen(line))
+	if(suppliers && ajStrGetLen(line))
 	{
 	    ajFmtPrintF(outf,"\nSuppliers:\n");
-	    p = ajStrStr(line);
+	    p = ajStrGetPtr(line);
 	    while(*p)
 	    {
-		ajStrAssK(&key,*p);
+		ajStrAssignK(&key,*p);
 		value = ajTableGet(t,key);
 		if (value)
 		    ajFmtPrintF(outf,"%S\n",value);
@@ -228,19 +228,19 @@ int main(int argc, char **argv)
 	    }
 	}
 	ajFileReadLine(reffile,&line);
-	if(references && ajStrLen(line))
+	if(references && ajStrGetLen(line))
 	{
-	    p = ajStrStr(line);
+	    p = ajStrGetPtr(line);
 	    sscanf(p,"%d",&n);
 	    ajFmtPrintF(outf,"\nReferences:\n");
 	    for(i=0;i<n;++i)
 	    {
 		ajFileReadLine(reffile,&line);
-		ajFmtPrintF(outf,"%s\n",ajStrStr(line));
+		ajFmtPrintF(outf,"%s\n",ajStrGetPtr(line));
 	    }
 	}
 
-	if(ajStrLen(iso))
+	if(ajStrGetLen(iso))
 	{
 	    for(i=0;i<ne;++i)
 	        ajStrDel(&ea[i]);
@@ -248,7 +248,7 @@ int main(int argc, char **argv)
         }
     }
     else
-	ajFmtPrintF(outf,"Restriction enzyme %s not found\n",ajStrStr(enzyme));
+	ajFmtPrintF(outf,"Restriction enzyme %s not found\n",ajStrGetPtr(enzyme));
 
     ajStrDel(&str);
     ajStrDel(&iso);
@@ -296,7 +296,7 @@ static AjPTable redata_supply_table(AjPFile inf)
 
     while(ajFileReadLine(inf,&line))
     {
-	p = ajStrStr(line);
+	p = ajStrGetPtr(line);
 	q = p;
 
 	if(!*p || *p=='#' || *p=='\n' || *p=='!')

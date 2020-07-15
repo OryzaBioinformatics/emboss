@@ -2,7 +2,7 @@
 **
 ** Backward translation to the most likely DNA sequence
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -49,15 +49,15 @@ int main(int argc, char **argv)
     outf      = ajAcdGetSeqout("outfile");
 
     substr = ajStrNew();
-    beg    = ajSeqBegin(a);
-    end    = ajSeqEnd(a);
-    ajStrAssSubC(&substr,ajSeqChar(a),beg-1,end-1);
+    beg    = ajSeqGetBegin(a);
+    end    = ajSeqGetEnd(a);
+    ajStrAssignSubS(&substr,ajSeqGetSeqS(a),beg-1,end-1);
 
     back = ajStrNew();
     ajCodSetBacktranslate(&codon);
     ajCodBacktranslate(&back,substr,codon);
 
-    ajSeqAssSeq (a, back);
+    ajSeqAssignSeqS (a, back);
     ajSeqSetNuc (a);
 
     ajSeqWrite(outf,a);
@@ -66,6 +66,9 @@ int main(int argc, char **argv)
     ajStrDel(&substr);
     ajSeqWriteClose(outf);
     ajCodDel(&codon);
+
+    ajSeqoutDel(&outf);
+    ajSeqDel(&a);
 
     ajExit();
 

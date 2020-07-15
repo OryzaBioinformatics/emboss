@@ -2,7 +2,7 @@
 **
 ** Information about sequences
 **
-** @author: Copyright (C) Peter Rice
+** @author Copyright (C) Peter Rice
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -36,8 +36,8 @@ int main(int argc, char **argv)
     AjPSeqall seqall;
     AjPFile outf;
     AjPSeq seq = NULL;
-    AjPStr seqstr;
-    AjPStr seqdesc;
+    const AjPStr seqstr;
+    const AjPStr seqdesc;
     ajint len;
     float pgc;
 
@@ -48,19 +48,19 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	seqdesc = ajSeqGetDesc(seq);
-	len     = ajSeqLen(seq);
+	seqdesc = ajSeqGetDescS(seq);
+	len     = ajSeqGetLen(seq);
 
-	ajFmtPrintF(outf, "Sequence \'%s\'\n",     ajSeqName(seq));
+	ajFmtPrintF(outf, "Sequence \'%s\'\n",     ajSeqGetNameC(seq));
 
-	if(!ajStrIsSpace(seqdesc))
+	if(!ajStrIsWhite(seqdesc))
 	    ajFmtPrintF(outf, "Description:\t%S\n", seqdesc );
 
 	if(ajSeqIsNuc(seq))
 	{
 	    ajFmtPrintF(outf, "Type:\t\tDNA\n");
 	    ajFmtPrintF(outf, "Length:\t\t%d basepairs\n", len);
-	    seqstr = ajSeqStr(seq);
+	    seqstr = ajSeqGetSeqS(seq);
 	    pgc = ajMeltGC(seqstr,len);
 	    ajFmtPrintF(outf, "GC Content:\t%-8.4f%%\n", pgc*100.0);
 	}
@@ -76,7 +76,11 @@ int main(int argc, char **argv)
 	}
     }
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajFileClose(&outf);
+    ajSeqDel(&seq);
+
+    embExit();
 
     return 0;
 }

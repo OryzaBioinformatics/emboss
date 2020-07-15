@@ -2,7 +2,7 @@
 **
 ** Alter the name or description of a sequence
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -53,19 +53,19 @@ int main(int argc, char **argv)
     if(append)
     {
 	/* is there a name? */
-	if(ajStrLen(name))
+	if(ajStrGetLen(name))
 	{
-	    ajStrAssS(&temp, ajSeqGetName(seq));
-	    ajStrApp(&temp, name);
-	    ajSeqAssName(seq, temp);
+	    ajStrAssignS(&temp, ajSeqGetNameS(seq));
+	    ajStrAppendS(&temp, name);
+	    ajSeqAssignNameS(seq, temp);
 	}
 
 	/* is there a description? */
-	if(ajStrLen(desc))
+	if(ajStrGetLen(desc))
 	{
-	    ajStrAssS(&temp, ajSeqGetDesc(seq));
-	    ajStrApp(&temp, desc);
-	    ajSeqAssDesc(seq, temp);
+	    ajStrAssignS(&temp, ajSeqGetDescS(seq));
+	    ajStrAppendS(&temp, desc);
+	    ajSeqAssignDescS(seq, temp);
 	}
 
 	/* otherwise, just overwrite the existing values */
@@ -73,16 +73,21 @@ int main(int argc, char **argv)
     else
     {
 	/* is there a name? */
-	if(ajStrLen(name))
-	    ajSeqAssName(seq, name);
+	if(ajStrGetLen(name))
+	    ajSeqAssignNameS(seq, name);
 
 	/* is there a description? */
-	if(ajStrLen(desc))
-	    ajSeqAssDesc(seq, desc);
+	if(ajStrGetLen(desc))
+	    ajSeqAssignDescS(seq, desc);
     }
 
     ajSeqWrite(seqout, seq);
     ajSeqWriteClose(seqout);
+
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
+    ajStrDel(&name);
+    ajStrDel(&desc);
 
     ajExit();
 

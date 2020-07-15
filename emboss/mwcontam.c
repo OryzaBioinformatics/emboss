@@ -3,7 +3,7 @@
 ** Shows contamination molwts (those that are the same in a comma-separated
 ** set of molwt filenames).
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -135,12 +135,12 @@ static void mwcontam_readdata(AjPList files, AjPList **lists,
 
 	while(ajFileReadLine(inf,&line))
 	{
-	    c = *ajStrStr(line);
+	    c = *ajStrGetPtr(line);
 
 	    if(c=='#' || !c || c=='\n')
 		continue;
 
-	    if(sscanf(ajStrStr(line),"%lf",&val)!=1)
+	    if(sscanf(ajStrGetPtr(line),"%lf",&val)!=1)
 		continue;
 	    AJNEW(ptr);
 	    *ptr = val;

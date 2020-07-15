@@ -1,7 +1,7 @@
 /* @source demostring application
 **
-** Demomnstration of how the string functions should be used.
-** @author: Copyright (C) Peter Rice (pmr@sanger.ac.uk)
+** Demonstration of how the string functions should be used.
+** @author Copyright (C) Peter Rice (pmr@sanger.ac.uk)
 ** @@
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -61,12 +61,12 @@ int main(int argc, char **argv)
     ajStrTrace(instr);
 
     ajUser ("Processing '%S'", instr);
-    handle = ajStrTokenInit (instr, " ");
-    ajStrToken (&token, &handle, " ");
+    handle = ajStrTokenNewC(instr, " ");
+    ajStrTokenNextParseC(&handle, " ", &token);
     ajUser ("first token '%S'", token);
-    ajStrTokenRest (&token, &handle);
+    ajStrTokenRestParse(&handle, &token);
     ajUser ("second token '%S'", token);
-    ajStrTokenClear (&handle);
+    ajStrTokenDel(&handle);
 
     /*
      *  nustr will be created using the string constructor functions.  We
@@ -76,23 +76,23 @@ int main(int argc, char **argv)
      *  bytes
      */
 
-    nustr = ajStrNewL(32);
+    nustr = ajStrNewRes(32);
     ajDebug ("\nNewly contructed nustr:\n");
     ajStrTrace(nustr);
 
     /* now we can put something into nustr. */
 
-    ajStrAssC (&nustr, "Hello world");
+    ajStrAssignC(&nustr, "Hello world");
     ajDebug ("\nAssigned nustr:\n");
     ajStrTrace(nustr);
 
     ajUser ("Processing '%S'", nustr);
-    handle = ajStrTokenInit (nustr, " ");
-    ajStrToken (&token, &handle, " ");
+    handle = ajStrTokenNewC(nustr, " ");
+    ajStrTokenNextParseC(&handle, " ", &token);
     ajUser ("first token '%S'", token);
-    ajStrTokenRest (&token, &handle);
+    ajStrTokenRestParse(&handle, &token);
     ajUser ("second token '%S'", token);
-    ajStrTokenClear (&handle);
+    ajStrTokenDel(&handle);
 
     today = ajTimeTodayF("yyyy-mm-dd");
     ajTimeTrace (today);
@@ -107,75 +107,75 @@ int main(int argc, char **argv)
     ajTimeTrace (today);
     ajUser("gff Today is '%D'", today);
 
-    ajStrAssC(&maskstr, "abcdefghijklmnopqrstuvwxyz");
-    ajStrAssS(&masktest, maskstr);
+    ajStrAssignC(&maskstr, "abcdefghijklmnopqrstuvwxyz");
+    ajStrAssignS(&masktest, maskstr);
     maskbegin=0;
     maskend=0;
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
-    ajStrAssC(&maskstr, "abcdefghijklmnopqrstuvwxyz");
-    ajStrAssS(&masktest, maskstr);
+    ajStrAssignC(&maskstr, "abcdefghijklmnopqrstuvwxyz");
+    ajStrAssignS(&masktest, maskstr);
     maskbegin=1;
     maskend=1;
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
-    ajStrAssS(&masktest, maskstr);
+    ajStrAssignS(&masktest, maskstr);
     maskbegin=25;
     maskend=25;
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
-    ajStrAssS(&masktest, maskstr);
+    ajStrAssignS(&masktest, maskstr);
     maskbegin=24;
     maskend=24;
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
-    ajStrAssS(&masktest, maskstr);
+    ajStrAssignS(&masktest, maskstr);
     maskbegin=0;
     maskend=25;
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
-    ajStrAssS(&masktest, maskstr);
+    ajStrAssignS(&masktest, maskstr);
     maskbegin=-1;
     maskend=-1;
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
-    ajStrAssS(&masktest, maskstr);
+    ajStrAssignS(&masktest, maskstr);
     maskbegin=-2;
     maskend=-2;
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
-    ajStrAssS(&masktest, maskstr);
+    ajStrAssignS(&masktest, maskstr);
     maskbegin=26;
     maskend=26;
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
-    ajStrAssS(&masktest, maskstr);
+    ajStrAssignS(&masktest, maskstr);
     maskbegin=30;
     maskend=30;
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
-    ajStrAssS(&masktest, maskstr);
+    ajStrAssignS(&masktest, maskstr);
     maskbegin=-30;
     maskend=30;
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
-    ajStrAssS(&masktest, maskstr);
+    ajStrAssignS(&masktest, maskstr);
     maskbegin=-30;
     maskend=-30;
     ajStrMask(&masktest, maskbegin, maskend, '.');
     ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
-    ajStrAssS(&masktest, maskstr);
+    ajStrAssignS(&masktest, maskstr);
     maskbegin=-25;
     maskend=-2;
     ajStrMask(&masktest, maskbegin, maskend, '.');

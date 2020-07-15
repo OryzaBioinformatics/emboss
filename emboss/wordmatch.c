@@ -2,7 +2,7 @@
 **
 ** Finds matching words  words in DNA sequences
 **
-** @author:
+** @author
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 
     embWordLength(wordlen);
     if(embWordGetTable(&seq1MatchTable, seq1))
-	matchlist = embWordBuildMatchTable(&seq1MatchTable, seq2, ajTrue);
+	matchlist = embWordBuildMatchTable(seq1MatchTable, seq2, ajTrue);
 
     if(matchlist && outf)
 	ajFmtPrintF(outf, "FINALLY length = %d\n",ajListLength(matchlist));
@@ -87,8 +87,8 @@ int main(int argc, char **argv)
     embWordFreeTable(&seq1MatchTable);	/* free table of words */
 
     if(outf)
-	ajFmtPrintF(outf, "%10s %10s Length\n", ajSeqName(seq1),
-		    ajSeqName(seq2));
+	ajFmtPrintF(outf, "%10s %10s Length\n", ajSeqGetNameC(seq1),
+		    ajSeqGetNameC(seq2));
 
     if(matchlist)
     {
@@ -103,9 +103,9 @@ int main(int argc, char **argv)
 	    /* ungapped alignment so same length for both sequences */
 	    ajAlignSetSubRange(align,
 			       start1, 1, len,
-			       ajSeqRev(seq1), ajSeqLen(seq1),
+			       ajSeqIsReversed(seq1), ajSeqGetLen(seq1),
 			       start2, 1, len,
-			       ajSeqRev(seq2), ajSeqLen(seq2));
+			       ajSeqIsReversed(seq2), ajSeqGetLen(seq2));
 	}
 	ajListIterFree(&iter) ;
 
@@ -119,8 +119,14 @@ int main(int argc, char **argv)
 
     ajAlignClose(align);
     ajAlignDel(&align);
+    ajSeqDel(&seq1);
+    ajSeqDel(&seq2);
+    ajFeattableDel(&Tab1);
+    ajFeattableDel(&Tab2);
+    ajFeattabOutDel(&seq1out);
+    ajFeattabOutDel(&seq2out);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

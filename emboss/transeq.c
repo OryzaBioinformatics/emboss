@@ -2,7 +2,7 @@
 **
 ** Translate nucleic acid sequences
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** Mar  4 17:18 1999 (ajb)
 ** Jul 19 19:24 2000 (ajb)
 ** Jun 29 16:50 2001 (gww) use new version of ajTrnSeqOrig
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     AjPSeq pep;
     AjPStr *framelist;
     AjBool frames[6];	/* frames to be translated 1 to 3, -1 to -3 */
-    AjPStr *tablelist;
+    AjPStr tablename;
     ajint table;
     AjPRange regions;
     AjPRange seqregions;
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     seqout    = ajAcdGetSeqoutall("outseq");
     seqall    = ajAcdGetSeqall("sequence");
     framelist = ajAcdGetList("frame");
-    tablelist = ajAcdGetList("table");
+    tablename = ajAcdGetListSingle("table");
     regions   = ajAcdGetRange("regions");
     trim      = ajAcdGetBool("trim");
     clean     = ajAcdGetBool("clean");
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     transeq_GetFrames(framelist, frames);
 
     /* initialise the translation table */
-    ajStrToInt(tablelist[0], &table);
+    ajStrToInt(tablename, &table);
     trnTable = ajTrnNewI(table);
 
     /* shift values of translate region to match -sbegin=n parameter */
@@ -123,8 +123,16 @@ int main(int argc, char **argv)
     ajSeqWriteClose(seqout);
 
     ajTrnDel(&trnTable);
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajSeqDel(&pep);
+    ajStrDelarray(&framelist);
+    ajStrDel(&tablename);
+    ajSeqoutDel(&seqout);
+    ajRangeDel(&regions);
+    ajRangeDel(&seqregions);
 
-    ajExit();
+    embExit();
     return 0;
 }
 
@@ -149,10 +157,10 @@ static void transeq_Trim(AjPSeq seq)
     ajint i;
     ajint len;
 
-    s = ajSeqStrCopy(seq);
-    p = ajStrStrMod(&s);
+    s = ajSeqGetSeqCopyS(seq);
+    p = ajStrGetuniquePtr(&s);
     
-    len = ajStrLen(s)-1;
+    len = ajStrGetLen(s)-1;
 
     for(i=len; i>=0; i--)
     {
@@ -163,8 +171,8 @@ static void transeq_Trim(AjPSeq seq)
     }
 
     if(i < len)
-	ajStrTruncate(&s, i+1);
-    ajSeqReplace(seq, s);
+	ajStrTruncateLen(&s, i+1);
+    ajSeqAssignSeqS(seq, s);
 
     return;
 }
@@ -186,10 +194,10 @@ static void transeq_Clean(AjPSeq seq)
 {
     AjPStr str;
 
-    str = ajSeqStrCopy(seq);
+    str = ajSeqGetSeqCopyS(seq);
 
-    ajStrConvertCC(&str, "*", "X");
-    ajSeqReplace(seq, str);
+    ajStrExchangeSetCC(&str, "*", "X");
+    ajSeqAssignSeqS(seq, str);
 
     return;
 }

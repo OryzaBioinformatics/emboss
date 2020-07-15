@@ -1,7 +1,7 @@
 /* @source tfscan application
 **
 ** Finds transcription factors
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** 12/03/2000: (AJB) Added accession numbers, end points and matching sequence
@@ -87,18 +87,18 @@ int main(int argc, char **argv)
     menu       = ajAcdGetList("menu");
 
     pname = ajStrNew();
-    p=ajStrStr(*menu);
+    p=ajStrGetPtr(*menu);
 
     if(*p=='F')
-	ajStrAssC(&pname,"tffungi");
+	ajStrAssignC(&pname,"tffungi");
     else if(*p=='I')
-	ajStrAssC(&pname,"tfinsect");
+	ajStrAssignC(&pname,"tfinsect");
     else if(*p=='O')
-	ajStrAssC(&pname,"tfother");
+	ajStrAssignC(&pname,"tfother");
     else if(*p=='P')
-	ajStrAssC(&pname,"tfplant");
+	ajStrAssignC(&pname,"tfplant");
     else if(*p=='V')
-	ajStrAssC(&pname,"tfvertebrate");
+	ajStrAssignC(&pname,"tfvertebrate");
     else if(*p=='C')
 	inf = ajAcdGetDatafile("custom");
 
@@ -121,11 +121,11 @@ int main(int argc, char **argv)
     {
 	begin=ajSeqallBegin(seqall);
 	end=ajSeqallEnd(seqall);
-	ajStrAssC(&name,ajSeqName(seq));
+	ajStrAssignC(&name,ajSeqName(seq));
 	strand=ajSeqStrCopy(seq);
 
-	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
-	ajStrToUpper(&substr);
+	ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
+	ajStrFmtUpper(&substr);
 
 	l=ajListNew();
 	atable = ajStrTableNew(1000);
@@ -134,34 +134,34 @@ int main(int argc, char **argv)
 	sum=0;
 	while(ajFileReadLine(inf,&line))
 	{
-	    p = ajStrStr(line);
+	    p = ajStrGetPtr(line);
 
 	    if(!*p || *p=='#' || *p=='\n' || *p=='!')
 		continue;
 
 	    ajFmtScanS(line,"%S%S%S",&pname,&pattern,&acc);
-	    p += ajStrLen(pname);
+	    p += ajStrGetLen(pname);
 	    while(*p && *p==' ')
 		++p;
-	    p += ajStrLen(pattern);
+	    p += ajStrGetLen(pattern);
 	    while(*p && *p==' ')
 		++p;
-	    p += ajStrLen(acc);
+	    p += ajStrGetLen(acc);
 	    while(*p && *p==' ')
 		++p;
 
-	    ajStrAssS(&opattern,pattern);
-	    ajStrAssC(&bf,p);
+	    ajStrAssignS(&opattern,pattern);
+	    ajStrAssignC(&bf,p);
 	    
 	    v = embPatVariablePattern(pattern,substr,pname,l,0,
 				      mismatch,begin);
 	    if(v)
 	    {
-		key = ajStrNewC(ajStrStr(pname));
-		value = ajStrNewC(ajStrStr(acc));
+		key = ajStrNewC(ajStrGetPtr(pname));
+		value = ajStrNewC(ajStrGetPtr(acc));
 		ajTablePut(atable,(const void *)key,(void *)value);
-		key = ajStrNewC(ajStrStr(pname));
-		value = ajStrNewC(ajStrStr(bf));
+		key = ajStrNewC(ajStrGetPtr(pname));
+		value = ajStrNewC(ajStrGetPtr(bf));
 		ajTablePut(btable,(const void *)key,(void *)value);
 	    }
 	    sum += v;
@@ -229,7 +229,7 @@ static void tfscan_print_hits(const AjPStr name, AjPList *l,
     s       = ajStrNew();
     lastnam = ajStrNewC("");
 
-    ajFmtPrintF(outf,"TFSCAN of %s from %d to %d\n\n",ajStrStr(name),
+    ajFmtPrintF(outf,"TFSCAN of %s from %d to %d\n\n",ajStrGetPtr(name),
 		begin,end);
 
     for(i=0;i<hits;++i)
@@ -239,21 +239,22 @@ static void tfscan_print_hits(const AjPStr name, AjPList *l,
 
 
 
-	if((ajStrCmpO(m->seqname,lastnam)) && ajStrLen(lastnam))
+	if((ajStrCmpS(m->seqname,lastnam)) && ajStrGetLen(lastnam)
+	   && ajStrGetLen(s) >= minlength)
 	{
 	    bf  = ajTableGet(btable,(const void *)lastnam);
-	    if(ajStrLen(bf))
+	    if(ajStrGetLen(bf))
 		ajFmtPrintF(outf,"                     %S\n",bf);
 	}
 	
-	ajStrAssS(&lastnam,m->seqname);
+	ajStrAssignS(&lastnam,m->seqname);
 
-	ajStrAssSubC(&s,ajSeqChar(seq),m->start-1,m->start+m->len-2);
+	ajStrAssignSubC(&s,ajSeqChar(seq),m->start-1,m->start+m->len-2);
 
-	if(ajStrLen(s) >= minlength)
-	    ajFmtPrintF(outf,"%-20s %-8s %-5d %-5d %s\n",ajStrStr(m->seqname),
-			ajStrStr(acc),m->start,
-			m->start+m->len-1,ajStrStr(s));
+	if(ajStrGetLen(s) >= minlength)
+	    ajFmtPrintF(outf,"%-20s %-8s %-5d %-5d %s\n",ajStrGetPtr(m->seqname),
+			ajStrGetPtr(acc),m->start,
+			m->start+m->len-1,ajStrGetPtr(s));
 
 	embMatMatchDel(&m);
     }

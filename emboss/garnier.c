@@ -1,7 +1,7 @@
 /* @source garnier application
 **
 ** Secondary structure prediction
-** @author: Copyright (C) Rodrigo Lopez
+** @author Copyright (C) Rodrigo Lopez
 ** @@
 **
 ** The sequence is taken from a ABI trace file and written to a
@@ -395,18 +395,18 @@ int main(int argc, char **argv)
 	TabRpt = ajFeattableNewSeq(seq);
 
 	strand = ajSeqStrCopy(seq);
-	ajStrToUpper(&strand);
+	ajStrFmtUpper(&strand);
 
-	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
-	len = ajStrLen(substr);
+	ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
+	len = ajStrGetLen(substr);
 
 	garnier_report(report, TabRpt, seq, 1, len,
-		       ajStrStrMod(&substr),begin-1,Idc);
+		       ajStrGetuniquePtr(&substr),begin-1,Idc);
 	if(outf)
 	{
-	    ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
+	    ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
 	    garnier_do(outf,0,len,
-		       ajStrStrMod(&substr),ajSeqName(seq),begin-1,Idc);
+		       ajStrGetuniquePtr(&substr),ajSeqName(seq),begin-1,Idc);
 	}
 	ajStrDel(&strand);
 
@@ -418,11 +418,14 @@ int main(int argc, char **argv)
     ajSeqDel(&seq);
     ajStrDel(&substr);
 
-    if(outf)
-	ajFileClose(&outf);
+    ajFileClose(&outf);
     ajReportClose(report);
+    ajReportDel(&report);
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+
+    embExit();
 
     return 0;
 }
@@ -668,10 +671,10 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
 
     if(!strHelix)
     {
-	ajStrAssC(&strHelix, "helix");
-	ajStrAssC(&strExtend, "strand");
-	ajStrAssC(&strTurns, "turn");
-	ajStrAssC(&strCoil, "coil");
+	ajStrAssignC(&strHelix, "helix");
+	ajStrAssignC(&strExtend, "strand");
+	ajStrAssignC(&strTurns, "turn");
+	ajStrAssignC(&strCoil, "coil");
     }
     
     idc = Idc;
@@ -752,7 +755,7 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
 	iarr[k]++;
     }
     
-    ajStrAssC(&tmpStr, "");
+    ajStrAssignC(&tmpStr, "");
     ajFmtPrintAppS(&tmpStr,
 		   "DCH = %d, DCS = %d\n",
 		   dch,dcs);
@@ -806,7 +809,7 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
 
     
     
-    ajStrAssC(&tmpStr, "");
+    ajStrAssignC(&tmpStr, "");
     
     ajFmtPrintAppS(&tmpStr,
 		   " Residue totals: H:%3d   E:%3d   T:%3d   C:%3d\n",

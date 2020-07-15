@@ -2,7 +2,7 @@
 **
 ** Displays a program's help documentation manual
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -23,9 +23,7 @@
 #include "emboss.h"
 
 
-
-
-static void tfm_FindAppDocRoot(AjPStr* docroot);
+static void tfm_FindAppDocRoot(AjPStr* docroot, AjBool html);
 static AjBool tfm_FindAppDoc(const AjPStr program, const AjPStr docroot,
 			     AjBool html, AjPStr* path);
 static void tfm_FixImages(AjPStr *line, const AjPStr path);
@@ -69,14 +67,15 @@ int main(int argc, char **argv)
     docroot = ajStrNew();
     
 
-    tfm_FindAppDocRoot(&docroot);
+    tfm_FindAppDocRoot(&docroot, html);
     
     /* is a search string specified - should be tested in tfm.acd file */
-    if(!ajStrLen(program))
+    if(!ajStrGetLen(program))
 	ajFatal("No program name specified.");
     
     if(!tfm_FindAppDoc(program, docroot, html, &path))
-	ajDie("No documentation found for program '%S'.", program);
+	ajDie("No documentation found in %S for program '%S'.",
+	      docroot,program);
     
     /* outputing to STDOUT and piping through 'more'? */
     if(ajFileStdout(outfile) && more)
@@ -85,12 +84,12 @@ int main(int argc, char **argv)
 	{
 	    shellpager = getenv("PAGER");
 	    if(shellpager)
-		ajStrAssC(&pager,shellpager);
-	    if(!ajStrLen(pager))
-		ajStrAssC(&pager,"more");
+		ajStrAssignC(&pager,shellpager);
+	    if(!ajStrGetLen(pager))
+		ajStrAssignC(&pager,"more");
 	}
 	ajFmtPrintS(&cmd,"%S %S",pager,path);
-	ajSystem(cmd);
+	system(ajStrGetPtr(cmd));
     }
     else
     {
@@ -114,8 +113,10 @@ int main(int argc, char **argv)
     ajStrDel(&pager);
     ajStrDel(&line);
     ajStrDel(&cmd);
-    
-    ajExit();
+    ajStrDel(&program);
+    ajStrDel(&docroot);
+
+    embExit();
 
     return 0;
 }
@@ -128,30 +129,68 @@ int main(int argc, char **argv)
 ** return the path to the program doc directory
 **
 ** @param [w] docroot [AjPStr*] root dir for documentation files
+** @param [r] html [AjBool] whether html required
 ** @@
 ******************************************************************************/
 
-static void tfm_FindAppDocRoot(AjPStr* docroot)
+static void tfm_FindAppDocRoot(AjPStr* docroot, AjBool html)
 {
 
     AjPStr docrootinst = NULL;
+    AjPStr roottmp = NULL;
+    AjPStr tmpstr = NULL;
+    
+    AjBool is_windows = ajFalse;
+#ifdef WIN32
+    is_windows = ajTrue;
+#endif
 
-    ajNamGetValueC("docroot", docroot);
+    docrootinst = ajStrNew();
+    roottmp     = ajStrNew();
+    tmpstr      = ajStrNew();
+    
+    ajDebug("given  docroot '%S'\n", *docroot);
+    ajNamGetValueC("docroot", &roottmp);
+    ajDebug("defined docroot '%S'\n", roottmp);
 
     /* look at EMBOSS doc files */
 
     /* try to open the installed doc directory */
-    if(!ajStrLen(*docroot))
+    if(ajStrGetLen(roottmp))
+	ajStrAssignS(docroot, roottmp);
+    else
     {
 	ajNamRootInstall(&docrootinst);
 	ajFileDirFix(&docrootinst);
-	ajFmtPrintS(docroot, "%Sshare/EMBOSS/doc/",
-		    docrootinst);
+
+	if(is_windows)
+	{
+	    ajFileDirFix(&docrootinst);
+	    ajFmtPrintS(&tmpstr,"%Sdoc",docrootinst);
+	    if(!ajSysIsDirectory(ajStrGetPtr(tmpstr)))
+	    {
+		ajFileDirUp(&docrootinst);
+		ajFileDirUp(&docrootinst);
+	    }
+	    ajStrAppendC(&docrootinst,"doc");
+	}
+	else
+	    ajFmtPrintAppS(&docrootinst, "share%sEMBOSS%sdoc%s",
+			SLASH_STRING,SLASH_STRING,SLASH_STRING);
+
+	ajFileDirFix(&docrootinst);
+
+	if(html)
+	    ajFmtPrintS(docroot,"%Sprograms%shtml%s",docrootinst,SLASH_STRING,
+			SLASH_STRING);
+	else
+	    ajFmtPrintS(docroot,"%Sprograms%stext%s",docrootinst,SLASH_STRING,
+			SLASH_STRING);
     }
     ajFileDirFix(docroot);
-    ajFmtPrintAppS(docroot, "programs/");
+    ajDebug("installed docroot '%S'\n", *docroot);
 
-    if(!ajFileDir(docroot))
+    if(!ajFileDir(docroot) && !is_windows)
     {
 	/*
 	**  if that didn't work then try the doc directory from the
@@ -161,11 +200,21 @@ static void tfm_FindAppDocRoot(AjPStr* docroot)
 	ajFileDirFix(docroot);
 
 	if(ajFileDir(docroot))
-	    ajStrAppC(docroot, "doc/programs/");
+	    ajStrAppendC(docroot, "doc/programs/");
+	if(html)
+	{
+	    ajStrAppendC(docroot, "html/");
+	}
+	else
+	{
+	    ajStrAppendC(docroot, "text/");
+	}
     }
 
+    ajStrDel(&roottmp);
     ajStrDel(&docrootinst);
-
+    ajStrDel(&tmpstr);
+    
     return;
 }
 
@@ -192,21 +241,19 @@ static AjBool tfm_FindAppDoc(const AjPStr program, const AjPStr docroot,
     
     target = ajStrNew();
 
-    ajStrAssS(&target,docroot);
+    ajStrAssignS(&target,docroot);
 
     if(html)
     {
-	ajStrAppC(&target, "html/");
-	ajStrAssS(path, target);
-	ajStrApp(path, program);
-	ajStrAppC(path, ".html");
+	ajStrAssignS(path, target);
+	ajStrAppendS(path, program);
+	ajStrAppendC(path, ".html");
     }
     else
     {
-	ajStrAppC(&target, "text/");
-	ajStrAssS(path, target);
-	ajStrApp(path, program);
-	ajStrAppC(path, ".txt");
+	ajStrAssignS(path, target);
+	ajStrAppendS(path, program);
+	ajStrAppendC(path, ".txt");
     }
 
 
@@ -246,8 +293,8 @@ static void tfm_FixImages(AjPStr *line, const AjPStr path)
 #ifdef __CYGWIN__
     char *root = NULL;
 #endif
-    
-    q = ajStrStr(*line);
+
+    q = ajStrGetPtr(*line);
 
     if(!(p = strstr(q,"<img")))
 	return;
@@ -265,18 +312,18 @@ static void tfm_FixImages(AjPStr *line, const AjPStr path)
 	ajFmtPrintS(&newpath,"%s",root);
 #endif
 
-    ajStrApp(&newpath,path);
+    ajStrAppendS(&newpath,path);
 
-    ajStrAssSubC(&pre,q,0,p-q+4);
+    ajStrAssignSubC(&pre,q,0,p-q+4);
     p += 5;
     while(*p && *p!='"')
     {
-	ajStrAppK(&name,*p);
+	ajStrAppendK(&name,*p);
 	++p;
     }
-    ajStrAssC(&post,p);
+    ajStrAssignC(&post,p);
 
-    ajFmtPrintS(line,"%Sfile://%S/html/%S%S",pre,newpath,name,post);
+    ajFmtPrintS(line,"%Sfile:/%S%S%S",pre,newpath,name,post);
 
     ajStrDel(&newpath);
     ajStrDel(&name);

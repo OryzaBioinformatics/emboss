@@ -2,7 +2,7 @@
 **
 ** Search all databases for an entry name
 **
-** @author: Copyright (C) Alan Bleasby
+** @author Copyright (C) Alan Bleasby
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -51,6 +51,8 @@ int main(int argc, char **argv)
     AjBool showall  = ajFalse;
     AjPStr lnam = NULL;
     AjPStr snam = NULL;
+    AjPStr meth = NULL;
+    AjPStr defnam = NULL;
 
     AjPSeqout seqout = NULL;
 
@@ -61,9 +63,9 @@ int main(int argc, char **argv)
     get     = ajAcdGetToggle("get");
     showall = ajAcdGetBool("showall");
     
-    if(!ajStrLen(entry))
+    if(!ajStrGetLen(entry))
     {
-	ajExit();
+	ajExitBad();
 	return 0;
     }
     
@@ -74,15 +76,18 @@ int main(int argc, char **argv)
     idqry  = ajStrNew();
     seq    = ajSeqNew();
     snam   = ajStrNew();
+    meth   = ajStrNew();
+    defnam = ajStrNew();
     
     ajNamListListDatabases(dblist);
     
     while(ajListPop(dblist,(void **)&lnam))
     {
-	ajStrAssS(&name,lnam);
+	ajStrAssignS(&name,lnam);
 	/* ajStrDel(&lnam); */ /* do not delete - internal ajNam string */
 
-	if(!ajNamDbDetails(name,&type,&id,&qry,&all,&comm,&rel))
+	if(!ajNamDbDetails(name,&type,&id,&qry,&all,&comm,&rel,
+			   &meth, &defnam))
 	    continue;
 
 	if(!id)
@@ -128,12 +133,17 @@ int main(int argc, char **argv)
     ajListDel(&dblist);
     ajStrDel(&type);
     ajStrDel(&comm);
+    ajStrDel(&meth);
+    ajStrDel(&defnam);
     ajStrDel(&rel);
     ajStrDel(&idqry);
     ajStrDel(&snam);
     ajSeqDel(&seq);
-    
-    ajExit();
+    ajStrDel(&entry);
+    ajStrDel(&name);
+    ajFileClose(&outf);
+
+    embExit();
 
     return 0;
 }

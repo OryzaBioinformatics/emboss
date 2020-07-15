@@ -1,7 +1,7 @@
 /* @source shuffleseq application
 **
 ** Randomises sequences maintaining composition
-** @author: Copyright (C) Michael Schmitz (mschmitz@lbl.gov)
+** @author Copyright (C) Michael Schmitz (mschmitz@lbl.gov)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -50,16 +50,20 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
 	for(n=0;n<shuffles;++n)
 	{
-	    seq_str = ajSeqStrCopy(seq);
+	    seq_str = ajSeqGetSeqCopyS(seq);
 	    ajStrRandom(&seq_str);
-	    ajSeqReplace(seq, seq_str);
+	    ajSeqAssignSeqS(seq, seq_str);
 	    ajSeqAllWrite(seqout, seq);
 	    ajStrDel(&seq_str);
 	}
 
     ajSeqWriteClose(seqout);
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
+    ajStrDel(&seq_str);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

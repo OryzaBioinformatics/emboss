@@ -2,7 +2,7 @@
 **
 ** Gribskov statistical plot of synonymous codon usage
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -65,9 +65,9 @@ int main(int argc, char **argv)
     };
 
 
-    float *xarr[3];
-    float *farr[3];
-    ajint *unc[3];
+    float *xarr[3] = {NULL, NULL, NULL};
+    float *farr[3] = {NULL, NULL, NULL};
+    ajint *unc[3]  = {NULL, NULL, NULL};
 
     float sum;
 
@@ -129,15 +129,15 @@ int main(int argc, char **argv)
     substr = ajStrNew();
     tmp    = ajStrNew();
     
-    beg = ajSeqBegin(a);
-    end = ajSeqEnd(a);
-    ajStrAssSubC(&substr,ajSeqChar(a),beg-1,end-1);
+    beg = ajSeqGetBegin(a);
+    end = ajSeqGetEnd(a);
+    ajStrAssignSubC(&substr,ajSeqGetSeqC(a),beg-1,end-1);
     
     
     
-    p   = ajStrStr(substr);
-    len = ajStrLen(substr);
-    ajStrToUpper(&substr);
+    p   = ajStrGetPtr(substr);
+    len = ajStrGetLen(substr);
+    ajStrFmtUpper(&substr);
     
     w = window*3;
     
@@ -155,14 +155,14 @@ int main(int argc, char **argv)
     else
     {
 	ajFmtPrintF(outf,"Insufficient data points\n");
-	ajExit();
+	ajExitBad();
 	return 0;
     }
     
     
     
     if(!plot)
-	ajFmtPrintF(outf,"SYCO of %s from %d to %d\n",ajSeqName(a),beg,
+	ajFmtPrintF(outf,"SYCO of %s from %d to %d\n",ajSeqGetNameC(a),beg,
 		    end);
     
     
@@ -172,7 +172,7 @@ int main(int argc, char **argv)
     for(base=0;base<3;++base)
     {
 	q = p+base;
-	ajStrAssC(&tmp,q);
+	ajStrAssignC(&tmp,q);
 
 	ajCodCalcGribskov(cdup, tmp);
 	startp = (w/2)+base;
@@ -259,8 +259,17 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
     ajCodDel(&codon);
     ajCodDel(&cdup);
-    
-    ajExit();
+    ajSeqDel(&a);
+    ajStrDel(&tmp);
+    ajGraphxyDel(&graph);
+    for(i=0;i<3;i++)
+    {
+	AJFREE(farr[i]);
+	AJFREE(unc[i]);
+	AJFREE(xarr[i]);
+    }
+
+    embExit();
 
     return 0;
 }

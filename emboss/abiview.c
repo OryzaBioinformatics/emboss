@@ -1,7 +1,7 @@
 /* @source abiview application
 **
 ** Display an ABI trace file and write out the sequence.
-** @author: Copyright (C) Tim Carver (tcarver@hgmp.mrc.ac.uk)
+** @author Copyright (C) Tim Carver (tcarver@hgmp.mrc.ac.uk)
 ** @@
 **
 ** The sequence is taken from a ABI trace file and written to a
@@ -127,8 +127,8 @@ int main(int argc, char **argv)
 
     fname = ajStrNewC(ajFileName(fp));
 
-    ajStrToUpper(&baseN);
-    nbases  = ajStrLen(baseN);
+    ajStrFmtUpper(&baseN);
+    nbases  = ajStrGetLen(baseN);
     overlay = !separate;
 
 
@@ -298,18 +298,22 @@ int main(int argc, char **argv)
     if(dseq && !overlay)
 	ajGraphPlpDataDel(&gd5);  /* free seq text mem */
 
-/*    ajGraphxyDel(&graphs);*/
+    ajGraphxyDel(&graphs);
     ajInt2dDel(&trace);
     ajShortDel(&basePositions);
 
     /* write out consensus sequence */
     seqo = ajSeqNew();
-    ajSeqAssName(seqo,fname);
-    ajSeqAssSeq(seqo,nseq);
-    ajSeqSetRange(seqo,base_start,ajSeqEnd(seqo));
+    ajSeqAssignNameS(seqo,fname);
+    ajSeqAssignSeqS(seqo,nseq);
+    ajSeqSetRange(seqo,base_start,ajSeqGetEnd(seqo));
     ajSeqWrite(seqout,seqo);
+    ajSeqWriteClose(seqout);
     ajStrDel(&nseq);
     ajSeqDel(&seqo);
+    ajSeqoutDel(&seqout);
+    ajStrDel(&fname);
+    ajStrDel(&baseN);
 
     ajExit ();
 
@@ -425,7 +429,7 @@ static AjPGraphPlpData abiview_graphTextDisplay(AjPGraph graphs, ajint nstart,
 
     for(i=nstart;i<nstop;i++)
     {
-	*res = ajStrChar(nseq,i);
+	*res = ajStrGetCharPos(nseq,i);
 	colres = abiview_getResColour(*res);
 	ajGraphPlpDataAddText(gdata,(float)i+1.,tmax+75.,colres,res);
     }
@@ -467,7 +471,7 @@ static void abiview_TextDisplay(AjPGraph graphs, ajint nstart, ajint nstop,
     res[1] = '\0';
     for(i=nstart;i<nstop-1;i++)
     {
-	*res = ajStrChar(nseq,i);
+	*res = ajStrGetCharPos(nseq,i);
 	colres = abiview_getResColour(*res);
 	ajGraphAddText(graphs,(float)i+1.,tmax+30.,colres,res);
     }
@@ -499,7 +503,7 @@ static AjBool abiview_drawbase(const char* res, const AjPStr baseN)
 
 
     b = ajStrNew();
-    ajStrAssSubC(&b,res,0,0);
+    ajStrAssignSubC(&b,res,0,0);
 
     for(i=0;i<4;i++)
     {

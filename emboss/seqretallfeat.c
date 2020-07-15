@@ -2,7 +2,7 @@
 **
 ** Read and output sequences and features for many sequences
 **
-** @author: Copyright (C) Peter Rice
+** @author Copyright (C) Peter Rice
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -51,6 +51,10 @@ int main(int argc, char **argv)
     ajSeqWriteClose(seqout);
 
     ajFeatTest();
+
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
 
     ajExit();
 

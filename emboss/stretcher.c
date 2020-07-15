@@ -4,7 +4,7 @@
 ** version 2.0u
 ** Please cite: Myers and Miller, CABIOS (1989)
 **
-** @author: Copyright (C) Ian Longden (il@sanger.ac.uk)
+** @author Copyright (C) Ian Longden (il@sanger.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -179,14 +179,14 @@ int main(int argc, char **argv)
 
     ajSeqTrim(seq0);
     ajSeqTrim(seq1);
-    beg0 = 1 + ajSeqOffset(seq0);
-    beg1 = 1 + ajSeqOffset(seq1);
+    beg0 = 1 + ajSeqGetOffset(seq0);
+    beg1 = 1 + ajSeqGetOffset(seq1);
 
-    ajSeqToUpper(seq0);
-    ajSeqToUpper(seq1);
+    ajSeqFmtUpper(seq0);
+    ajSeqFmtUpper(seq1);
 
-    s1 = ajStrStr(ajSeqStr(seq0));
-    s2 = ajStrStr(ajSeqStr(seq1));
+    s1 = ajStrGetPtr(ajSeqGetSeqS(seq0));
+    s2 = ajStrGetPtr(ajSeqGetSeqS(seq1));
 
     sub = ajMatrixArray(matrix);
     cvt = ajMatrixCvt(matrix);
@@ -196,59 +196,57 @@ int main(int argc, char **argv)
     ** ajMatrixSeqNum(matrix, seq1, &aa1str);
     */
 
-    aa0str = ajStrNewL(2+ajSeqLen(seq0)); /* length + blank + trailing null */
-    aa1str = ajStrNewL(2+ajSeqLen(seq1));
-    ajStrAppK(&aa0str,' ');
-    ajStrAppK(&aa1str,' ');
+    aa0str = ajStrNewRes(2+ajSeqGetLen(seq0)); /* length + blank + trailing null */
+    aa1str = ajStrNewRes(2+ajSeqGetLen(seq1));
+    ajStrAppendK(&aa0str,' ');
+    ajStrAppendK(&aa1str,' ');
 
-    for(i=0;i<ajSeqLen(seq0);i++)
-	ajStrAppK(&aa0str,(char)ajSeqCvtK(cvt, *s1++));
+    for(i=0;i<ajSeqGetLen(seq0);i++)
+	ajStrAppendK(&aa0str,(char)ajSeqCvtK(cvt, *s1++));
 
-    for(i=0;i<ajSeqLen(seq1);i++)
-	ajStrAppK(&aa1str,ajSeqCvtK(cvt, *s2++));
+    for(i=0;i<ajSeqGetLen(seq1);i++)
+	ajStrAppendK(&aa1str,ajSeqCvtK(cvt, *s2++));
 
-    AJCNEW(res,   ajSeqLen(seq0)+ajSeqLen(seq1));
-    AJCNEW(seqc0, ajSeqLen(seq0)+ajSeqLen(seq1));
-    AJCNEW(seqc1, ajSeqLen(seq0)+ajSeqLen(seq1));
+    AJCNEW(res,   ajSeqGetLen(seq0)+ajSeqGetLen(seq1));
+    AJCNEW(seqc0, ajSeqGetLen(seq0)+ajSeqGetLen(seq1));
+    AJCNEW(seqc1, ajSeqGetLen(seq0)+ajSeqGetLen(seq1));
 
-    gscore = stretcher_Ealign(ajStrStr(aa0str),ajStrStr(aa1str),
+    gscore = stretcher_Ealign(ajStrGetPtr(aa0str),ajStrGetPtr(aa1str),
 			      seq0, seq1,
 			      (gdelval-ggapval),ggapval,res,&nres);
 
-    nc = stretcher_Calcons(ajStrStr(aa0str),ajSeqLen(seq0),ajStrStr(aa1str),
-			   ajSeqLen(seq1),res);
+    nc = stretcher_Calcons(ajStrGetPtr(aa0str),ajSeqGetLen(seq0),ajStrGetPtr(aa1str),
+			   ajSeqGetLen(seq1),res);
     percent = (double)nd*100.0/(double)nc;
 
 /*
     seqset = ajSeqsetNew();
-    res0   = ajSeqNewS(seq0);
-    res1   = ajSeqNewS(seq1);
-    ajSeqReplaceC(res0, seqc0);
-    ajSeqReplaceC(res1, seqc1);
+    res0   = ajSeqNewSeq(seq0);
+    res1   = ajSeqNewSeq(seq1);
+    ajSeqAssignSeqC(res0, seqc0);
+    ajSeqAssignSeqC(res1, seqc1);
     ajSeqsetFromPair(seqset, res0, res1);
 
     ajAlignDefine(align, seqset);
 
     ajAlignSetGapI(align, gdelval, ggapval);
     ajAlignSetMatrixInt(align, matrix);
-    ajAlignSetRange(align, beg0, beg0+ajSeqLen(seq0),
-		    ajSeqLen(seq), ajSeqOffset(seq0),
-		    beg1, beg1+ajSeqLen(seq1),
-		    ajSeqLen(seq2), ajSeqOffset(seq1));
+    ajAlignSetRange(align, beg0, beg0+ajSeqGetLen(seq0),
+		    ajSeqGetLen(seq), ajSeqGetOffset(seq0),
+		    beg1, beg1+ajSeqGetLen(seq1),
+		    ajSeqGetLen(seq2), ajSeqGetOffset(seq1));
     ajAlignSetScoreI(align, gscore);
 */
 
-    res0 =  ajSeqNewRangeCI(seqc0, nc, ajSeqOffset(seq0),
-			       ajSeqOffend(seq0),
+    res0 =  ajSeqNewRangeC(seqc0, ajSeqGetOffset(seq0), ajSeqGetOffend(seq0),
 			       ajSeqIsReversed(seq0));
-    ajSeqAssUsa(res0, ajSeqGetUsa(seq0));
-    ajSeqAssName(res0, ajSeqGetName(seq0));
+    ajSeqAssignUsaS(res0, ajSeqGetUsaS(seq0));
+    ajSeqAssignNameS(res0, ajSeqGetNameS(seq0));
 
-    res1 =  ajSeqNewRangeCI(seqc1, nc, ajSeqOffset(seq1),
-			       ajSeqOffend(seq1),
+    res1 =  ajSeqNewRangeC(seqc1, ajSeqGetOffset(seq1), ajSeqGetOffend(seq1),
 			       ajSeqIsReversed(seq1));
-    ajSeqAssUsa(res1, ajSeqGetUsa(seq1));
-    ajSeqAssName(res1, ajSeqGetName(seq1));
+    ajSeqAssignUsaS(res1, ajSeqGetUsaS(seq1));
+    ajSeqAssignNameS(res1, ajSeqGetNameS(seq1));
 
     ajAlignDefineSS(align, res0, res1);
 
@@ -261,9 +259,8 @@ int main(int argc, char **argv)
 
     ajAlignClose(align);
 
-    ajSeqsetDel(&seqset);
     ajAlignDel(&align);
-
+    ajSeqsetDel(&seqset);
 
     AJFREE(res);
     AJFREE(seqc0);
@@ -277,9 +274,14 @@ int main(int argc, char **argv)
 
     ajSeqDel(&res0);
     ajSeqDel(&res1);
+    ajSeqsetDel(&seqset);
+    ajSeqDel(&res0);
+    ajSeqDel(&res1);
+    ajSeqDel(&seq0);
+    ajSeqDel(&seq1);
+    /* ajMatrixDel(&matrix);*/ /* owned by align, deleted by ajAlignDel */
 
-
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -292,7 +294,7 @@ int main(int argc, char **argv)
 static ajint nmax=0;
 
 /* @funcstatic stretcher_Ealign ***********************************************
-**
+**s
 ** Undocumented
 **
 ** @param [r] A [const char*] Sequence A with trailing blank
@@ -313,8 +315,8 @@ static ajint stretcher_Ealign(const char *A,const char *B,
     ajint c;
     ajint ck;
 
-    ajint M = ajSeqLen(seq0);
-    ajint N = ajSeqLen(seq1);
+    ajint M = ajSeqGetLen(seq0);
+    ajint N = ajSeqGetLen(seq1);
 
     /*  if(N > NMAX) return -1;*/	/* Error check */
 
@@ -327,7 +329,7 @@ static ajint stretcher_Ealign(const char *A,const char *B,
 
     if(CC==NULL)
     {
-	nmax = ajSeqLen(seq1);
+	nmax = ajSeqGetLen(seq1);
 	AJCNEW(CC, nmax+1);
 	AJCNEW(DD, nmax+1);
 	AJCNEW(RR, nmax+1);
@@ -335,7 +337,7 @@ static ajint stretcher_Ealign(const char *A,const char *B,
     }
     else if(N > nmax)
     {
-	nmax = ajSeqLen(seq1);
+	nmax = ajSeqGetLen(seq1);
 	AJCRESIZE(CC, nmax+1);
 	AJCRESIZE(DD, nmax+1);
 	AJCRESIZE(RR, nmax+1);
@@ -601,8 +603,8 @@ static ajint stretcher_Calcons(const char *aa0,ajint n0,
     nc = nd = i0 = i1 = op = 0;
     min0 = min1 = 0;
 
-    sq1 = ajStrStr(ajSeqStr(seq0));
-    sq2 = ajStrStr(ajSeqStr(seq1));
+    sq1 = ajStrGetPtr(ajSeqGetSeqS(seq0));
+    sq2 = ajStrGetPtr(ajSeqGetSeqS(seq1));
 
     while(i0 < n0 || i1 < n1)
     {
@@ -673,7 +675,7 @@ static ajint stretcher_CheckScore(const unsigned char *A,
     ajint score;
 
     score = i = j = op = nc1 = 0;
-    while(i < ajSeqLen(seq0) || j < ajSeqLen(seq1))
+    while(i < ajSeqGetLen(seq0) || j < ajSeqGetLen(seq1))
     {
 	op = *S++;
 	if(op == 0)

@@ -120,7 +120,7 @@ int main(int argc, char **argv)
     stmp   = ajStrNew();
     sstr   = ajStrNew();
 
-    ajStrAssC(&fthit, "hit");
+    ajStrAssignC(&fthit, "hit");
 
     sigcleave_readSig(&matrix,prokaryote);
 
@@ -133,16 +133,16 @@ int main(int argc, char **argv)
 
 	TabRpt = ajFeattableNewSeq(seq);
 
-	ajStrAssS(&strand, ajSeqStr(seq));
-	ajStrToUpper(&strand);
-        ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
-        ajStrAssSubC(&sstr,ajStrStr(strand),begin-1,end-1);
-	len    = ajStrLen(substr);
+	ajStrAssignS(&strand, ajSeqStr(seq));
+	ajStrFmtUpper(&strand);
+        ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
+        ajStrAssignSubC(&sstr,ajStrGetPtr(strand),begin-1,end-1);
+	len    = ajStrGetLen(substr);
 
-        q = ajStrStrMod(&substr);
+        q = ajStrGetuniquePtr(&substr);
 	for(i=0;i<len;++i,++q)
 	    *q = (char) ajAZToInt(*q);
-	p = ajStrStr(substr);
+	p = ajStrGetPtr(substr);
 
 	maxsite   = n = 0;
 	maxweight = 0.0;
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
 	        if(j>=0 && j<len)
 		{
 	            ajDebug("j: %d ic: %d aa: '%c'\n",
-			     j, ic, ajStrChar(ajSeqStr(seq), j));
+			     j, ic, ajStrGetCharPos(ajSeqStr(seq), j));
 		    weight += ajFloat2dGet(matrix,(ajint)*(p+j),ic);
 	        }
 		++ic;
@@ -187,7 +187,7 @@ int main(int argc, char **argv)
 	    }
 	}
 
-	ajStrAssC(&headStr, "");
+	ajStrAssignC(&headStr, "");
 	ajFmtPrintAppS(&headStr, "Reporting scores over %.2f", minweight);
 
 	ajReportSetHeader(report, headStr);
@@ -213,10 +213,10 @@ int main(int argc, char **argv)
 	    if(maxsite+pval<0) pval = -maxsite;
 
 	    /* end of signal peptide */
-            ajStrAssSubC(&stmp,ajStrStr(sstr),maxsite+pval,maxsite-1);
+            ajStrAssignSubC(&stmp,ajStrGetPtr(sstr),maxsite+pval,maxsite-1);
 
 	    if(outf)
-		ajFmtPrintF(outf," Sequence:  %s-",ajStrStr(stmp));
+		ajFmtPrintF(outf," Sequence:  %s-",ajStrGetPtr(stmp));
 
 	    if(maxsite+49<len)
 		se = maxsite+49;
@@ -228,14 +228,14 @@ int main(int argc, char **argv)
 			       maxweight);
 
 	    /* start of mature peptide */
-	    ajStrAssSubC(&stmp,ajStrStr(sstr),maxsite,se);
+	    ajStrAssignSubC(&stmp,ajStrGetPtr(sstr),maxsite,se);
 
 	    ajFmtPrintS(&tmpStr, "*mature_peptide %S", stmp);
 
 	    ajFeatTagAdd(gf,  NULL, tmpStr);
 
 	    if(outf)
-		ajFmtPrintF(outf,"%s\n",ajStrStr(stmp));
+		ajFmtPrintF(outf,"%s\n",ajStrGetPtr(stmp));
 	    if(outf)
 		ajFmtPrintF(outf,
 			    "            | (signal)    | (mature peptide)\n");
@@ -268,22 +268,22 @@ int main(int argc, char **argv)
 					"%d\n\n", xweight,isite+begin);
 
 
-			ajStrAssSubC(&stmp,ajStrStr(sstr),isite+pval,isite-1);
+			ajStrAssignSubC(&stmp,ajStrGetPtr(sstr),isite+pval,isite-1);
 			if(outf)
-			    ajFmtPrintF(outf," Sequence:  %s-",ajStrStr(stmp));
+			    ajFmtPrintF(outf," Sequence:  %s-",ajStrGetPtr(stmp));
 			if(isite+49<len) se=isite+49;
 			else se = len-1;
 			gf = ajFeatNewProt(TabRpt, NULL, fthit,
 					   isite+pval+begin, isite+begin-1,
 					   xweight);
 
-			ajStrAssSubC(&stmp,ajStrStr(sstr),isite,se);
+			ajStrAssignSubC(&stmp,ajStrGetPtr(sstr),isite,se);
 			ajFmtPrintS(&tmpStr, "*mature_peptide %S", stmp);
 
 			ajFeatTagAdd(gf,  NULL, tmpStr);
 
 			if(outf)
-			    ajFmtPrintF(outf,"%s\n",ajStrStr(stmp));
+			    ajFmtPrintF(outf,"%s\n",ajStrGetPtr(stmp));
 			if(outf)
 			    ajFmtPrintF(outf,"            | (signal)    |"
 					" (mature peptide)\n");
@@ -299,14 +299,17 @@ int main(int argc, char **argv)
 	ajReportWrite(report, TabRpt, seq);
 
 	ajFeattableDel(&TabRpt);
-	ajStrDelReuse(&strand);
     }
 
+    ajStrDel(&strand);
 
-    ajSeqDel(&seq);
     ajStrDel(&substr);
     ajStrDel(&sstr);
     ajStrDel(&stmp);
+    ajStrDel(&fthit);
+    ajStrDel(&tmpStr);
+    ajStrDel(&headStr);
+    ajStrDel(&tailStr);
 
     ajFloat2dDel(&matrix);
     ajFloatDel(&hwt);
@@ -317,8 +320,11 @@ int main(int argc, char **argv)
 	ajFileClose(&outf);
 
     ajReportClose(report);
+    ajReportDel(&report);
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -377,7 +383,7 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 
     while(ajFileGets(mfptr, &line))
     {
-	p = ajStrStr(line);
+	p = ajStrGetPtr(line);
 
 	if(*p=='#' || *p=='!' || *p=='\n')
 	    continue;
@@ -392,7 +398,7 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 	while((*p!='\n') && (*p<'A' || *p>'Z'))
 	    ++p;
 
-	cols = ajStrTokenCount(line,ajStrStr(delim));
+	cols = ajStrParseCountC(line,ajStrGetPtr(delim));
 
 	if(pass)
 	{
@@ -403,12 +409,12 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 	    if(xcols!=cols)
 		ajFatal("Asymmetric table");
 
-	q = ajStrStr(line);
-	q = ajSysStrtok(q,ajStrStr(delim));
+	q = ajStrGetPtr(line);
+	q = ajSysStrtok(q,ajStrGetPtr(delim));
 
 	d1 = ajAZToInt((char)toupper((ajint)*p));
 	c  = 0;
-	while((q=ajSysStrtok(NULL,ajStrStr(delim))))
+	while((q=ajSysStrtok(NULL,ajStrGetPtr(delim))))
 	{
 	    sscanf(q,"%f",&v);
 	    ajFloat2dPut(matrix,d1,c++,v);

@@ -2,7 +2,7 @@
 **
 ** Return a sequence
 **
-** @author: Copyright (C) Peter Rice
+** @author Copyright (C) Peter Rice
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -52,6 +52,10 @@ int main(int argc, char **argv)
     }
 
     ajSeqWriteClose(seqout);
+
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
 
     ajExit();
 

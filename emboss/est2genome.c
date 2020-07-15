@@ -3,8 +3,8 @@
 ** Richard Mott's est_genome ported into EMBOSS.
 ** See also nucleus/embest.c
 **
-** @author: Copyright (C) Peter Rice, Sanger Centre
-** @author: Copyright (C) Richard Mott, Sanger Centre
+** @author Copyright (C) Peter Rice, Sanger Centre
+** @author Copyright (C) Richard Mott, Sanger Centre
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -163,7 +163,7 @@ int main(int argc, char **argv)
     ** is always in the forward direction.
     */
 
-    modestr = ajAcdGetListI("mode",1);
+    modestr = ajAcdGetListSingle("mode");
 
     if(ajStrMatchC(modestr,"both"))
 	search_mode = BOTH;
@@ -224,220 +224,217 @@ int main(int argc, char **argv)
 
     ajSeqTrim(genome);
 
-    if(ajSeqLen(genome))
-    {
-	/* Make sure theres enough space to hold the genomic AjPSeq */
+    /* Make sure theres enough space to hold the genomic AjPSeq */
 
-	if(megabytes < ajSeqLen(genome)*1.5e-6)
+    if(megabytes < ajSeqGetLen(genome)*1.5e-6)
+    {
+	ajWarn("increasing space from %.3f to %.3f Mb\n",
+	       megabytes, 1.5e-6*ajSeqGetLen(genome));
+	megabytes = 1.5e-6*ajSeqGetLen(genome);
+    }
+
+    /* find the GT/AG splice sites */
+
+    if(splice)
+	splice_sites = embEstFindSpliceSites(genome, 1);
+    else
+	splice_sites = NULL;
+
+    if(search_mode == BOTH && splice)
+	reversed_splice_sites = embEstFindSpliceSites( genome, 0 );
+    else
+	reversed_splice_sites = NULL;
+
+    /* process each est */
+
+    while(ajSeqallNext(estset, &est))
+    {
+	/*
+	 ** if required, make shuffled comparisons
+	 ** to get statistical significance
+	 */
+	ajSeqTrim(est);
+
+	ajDebug("shuffles: %d\n", shuffles);
+	if(shuffles > 0)
 	{
-	    ajWarn("increasing space from %.3f to %.3f Mb\n",
-		   megabytes, 1.5e-6*ajSeqLen(genome));
-	    megabytes = 1.5e-6*ajSeqLen(genome);
+	    AjPSeq shuffled_est;
+	    ajint n;
+	    ajint score;
+	    double mean = 0;
+	    double std  = 0;
+	    EmbPEstAlign sge;
+
+	    shuffled_est = ajSeqNewSeq(est);
+
+	    for(n=0;n<shuffles;n++)
+	    {
+		embEstShuffleSeq(shuffled_est, 1, &seed);
+		sge = embEstAlignNonRecursive(shuffled_est,
+					      genome, match, mismatch,
+					      gap_penalty,
+					      intron_penalty,
+					      splice_penalty,
+					      splice_sites, 0, 0,
+					      DIAGONAL);
+		score = sge->score;
+		ajDebug("%30.30S\n", ajSeqGetSeqS(shuffled_est));
+		ajDebug("%5d score %d seed %d\n", n, score, seed);
+		if(score > max_score)
+		    max_score = score;
+		mean += score;
+		std += score*score;
+		embEstFreeAlign(&sge);
+	    }
+
+	    mean /= shuffles;
+	    std = sqrt((std = shuffles*mean*mean)/(shuffles-1.0));
+	    ajDebug("shuffles: %d max: %d mean: %.2f std dev: %.2f\n",
+		    shuffles, max_score, mean, std);
+	    minscore = max_score+1;
+	    ajSeqDel(&shuffled_est);
 	}
 
-	/* find the GT/AG splice sites */
-
-	if(splice)
-	    splice_sites = embEstFindSpliceSites(genome, 1);
-	else
-	    splice_sites = NULL;
-
-	if(search_mode == BOTH && splice)
-	    reversed_splice_sites = embEstFindSpliceSites( genome, 0 );
-	else
-	    reversed_splice_sites = NULL;
-
-	/* process each est */
-
-	while(ajSeqallNext(estset, &est))
+	if(search_mode != REVERSE_ONLY)
 	{
-	    /*
-	    ** if required, make shuffled comparisons
-	    ** to get statistical significance
-	    */
-	    ajSeqTrim(est);
+	    /* forward strand */
+	    fge = embEstAlignLinearSpace(est, genome, match,
+					 mismatch, gap_penalty,
+					 intron_penalty, splice_penalty,
+					 splice_sites, megabytes);
+	    if(!fge)
+		ajFatal("forward strand alignment failed");
+	}
+	else
+	    fge = NULL;
 
-	    ajDebug("shuffles: %d\n", shuffles);
-	    if(shuffles > 0)
-	    {
-		AjPSeq shuffled_est;
-		ajint n;
-		ajint score;
-		double mean = 0;
-		double std  = 0;
-		EmbPEstAlign sge;
+	if(search_mode != FORWARD_ONLY) /* reverse strand */
+	{
+	    reversed_est = ajSeqNewSeq(est);
+	    ajSeqReverseForce(reversed_est);
+	    
+	    rge = embEstAlignLinearSpace(reversed_est, genome,
+					 match, mismatch, gap_penalty,
+					 intron_penalty, splice_penalty,
+					 splice_sites, megabytes);
+	    if(!rge)
+		ajFatal("reverse strand alignment failed");
+	}
+	else
+	    rge = NULL;
 
-		shuffled_est = ajSeqNewS(est);
-
-		for(n=0;n<shuffles;n++)
-		{
-		    embEstShuffleSeq(shuffled_est, 1, &seed);
-		    sge = embEstAlignNonRecursive(shuffled_est,
-						  genome, match, mismatch,
-						  gap_penalty,
-						  intron_penalty,
-						  splice_penalty,
-						  splice_sites, 0, 0,
-						  DIAGONAL);
-		    score = sge->score;
-		    ajDebug("%30.30S\n", ajSeqStr(shuffled_est));
-		    ajDebug("%5d score %d seed %d\n", n, score, seed);
-		    if(score > max_score)
-			max_score = score;
-		    mean += score;
-		    std += score*score;
-		    embEstFreeAlign(&sge);
-		}
-
-		mean /= shuffles;
-		std = sqrt((std = shuffles*mean*mean)/(shuffles-1.0));
-		ajDebug("shuffles: %d max: %d mean: %.2f std dev: %.2f\n",
-			shuffles, max_score, mean, std);
-		minscore = max_score+1;
-		ajSeqDel(&shuffled_est);
-	    }
-
-	    if(search_mode != REVERSE_ONLY)
-	    {
-		/* forward strand */
-		fge = embEstAlignLinearSpace(est, genome, match,
+	if(search_mode == BOTH)	/* search both strands */
+	{
+	    if(fge->score > rge->score)
+	    {			/* redo forward search with
+				   reversed splice sites */
+		bge = embEstAlignLinearSpace(est, genome, match,
 					     mismatch, gap_penalty,
-					     intron_penalty, splice_penalty,
-					     splice_sites, megabytes);
-		if(!fge)
-		    ajFatal("forward strand alignment failed");
-	    }
-	    else
-		fge = NULL;
+					     intron_penalty,
+					     splice_penalty,
+					     reversed_splice_sites,
+					     megabytes);
 
-	    if(search_mode != FORWARD_ONLY) /* reverse strand */
-	    {
-		reversed_est = ajSeqNewS(est);
-		ajSeqReverseForce(reversed_est);
+		if(bge->score > fge->score) /* probably have a
+					       reversed gene */
+		{
+		    ajFmtPrintF(outfile,
+				"Note Best alignment is between forward "
+				"est and forward genome, but splice "
+				"sites imply REVERSED GENE\n");
+		    est2genome_make_output(outfile, genome, est, bge,
+					   match, mismatch, gap_penalty,
+					   intron_penalty, splice_penalty,
+					   minscore, align, width,
+					   reverse);
 
-		rge = embEstAlignLinearSpace(reversed_est, genome,
-					     match, mismatch, gap_penalty,
-					     intron_penalty, splice_penalty,
-					     splice_sites, megabytes);
-		if(!rge)
-		    ajFatal("reverse strand alignment failed");
-	    }
-	    else
-		rge = NULL;
-
-	    if(search_mode == BOTH)	/* search both strands */
-	    {
-		if(fge->score > rge->score)
-		{			/* redo forward search with
-					   reversed splice sites */
-		    bge = embEstAlignLinearSpace(est, genome, match,
-						 mismatch, gap_penalty,
-						 intron_penalty,
-						 splice_penalty,
-						 reversed_splice_sites,
-						 megabytes);
-
-		    if(bge->score > fge->score) /* probably have a
-						      reversed gene */
-		    {
-			ajFmtPrintF(outfile,
-				    "Note Best alignment is between forward "
-				    "est and forward genome, but splice "
-				    "sites imply REVERSED GENE\n");
-			est2genome_make_output(outfile, genome, est, bge,
-					       match, mismatch, gap_penalty,
-					       intron_penalty, splice_penalty,
-					       minscore, align, width,
-					       reverse);
-
-			if(best == 0)	/* print substandard alignment too */
-			    est2genome_make_output(outfile, genome, est, fge,
-						   match, mismatch,
-						   gap_penalty, intron_penalty,
-						   splice_penalty, minscore,
-						   align, width, reverse);
-		    }
-		    else
-		    {
-			ajFmtPrintF(outfile,
-				    "Note Best alignment is between forward "
-				    "est and forward genome, and splice "
-				    "sites imply forward gene\n");
+		    if(best == 0)	/* print substandard alignment too */
 			est2genome_make_output(outfile, genome, est, fge,
 					       match, mismatch,
 					       gap_penalty, intron_penalty,
 					       splice_penalty, minscore,
 					       align, width, reverse);
-			if(best == 0)
-			    est2genome_make_output(outfile, genome, est, bge,
-						   match, mismatch,
-						   gap_penalty, intron_penalty,
-						   splice_penalty, minscore,
-						   align, width, reverse);
-		    }
 		}
 		else
 		{
-		    bge = embEstAlignLinearSpace(reversed_est,genome,
-						 match, mismatch,
-						 gap_penalty,
-						 intron_penalty,
-						 splice_penalty,
-						 reversed_splice_sites,
-						 megabytes);
-
-		    if(bge->score > rge->score) /* probably have a
-						      reversed gene */
-		    {
-			ajFmtPrintF(outfile,
-				    "Note Best alignment is between "
-				    "reversed est and forward genome, but "
-				    "splice sites imply REVERSED GENE\n");
-			est2genome_make_output(outfile, genome, reversed_est,
-					       bge, match, mismatch,
+		    ajFmtPrintF(outfile,
+				"Note Best alignment is between forward "
+				"est and forward genome, and splice "
+				"sites imply forward gene\n");
+		    est2genome_make_output(outfile, genome, est, fge,
+					   match, mismatch,
+					   gap_penalty, intron_penalty,
+					   splice_penalty, minscore,
+					   align, width, reverse);
+		    if(best == 0)
+			est2genome_make_output(outfile, genome, est, bge,
+					       match, mismatch,
 					       gap_penalty, intron_penalty,
 					       splice_penalty, minscore,
-					       align, width, isreverse);
-			if(best == 0)	/* print substandard alignment too */
-			    est2genome_make_output(outfile, genome,
-						   reversed_est, rge, match,
-						   mismatch, gap_penalty,
-						   intron_penalty,
-						   splice_penalty, minscore,
-						   align, width, isreverse);
-		    }
-		    else
-		    {
-			ajFmtPrintF(outfile,
-				    "Note Best alignment is between reversed "
-				    "est and forward genome, and splice "
-				    "sites imply forward gene\n");
-			est2genome_make_output(outfile, genome, reversed_est,
-					       rge, match, mismatch,
-					       gap_penalty, intron_penalty,
-					       splice_penalty, minscore,
-					       align, width, isreverse);
-
-			if(best == 0)
-			    est2genome_make_output(outfile, genome,
-						   reversed_est, bge, match,
-						   mismatch, gap_penalty,
-						   intron_penalty,
-						   splice_penalty, minscore,
-						   align, width, isreverse);
-		    }
+					       align, width, reverse);
 		}
 	    }
-	    else if(search_mode == FORWARD_ONLY)
+	    else
 	    {
-		ajFmtPrintF(outfile,
-			    "Note requested forward est and forward genome\n");
-		est2genome_make_output(outfile, genome, est, fge,
-				       match, mismatch,
-				       gap_penalty, intron_penalty,
-				       splice_penalty, minscore,
-				       align, width, reverse);
+		bge = embEstAlignLinearSpace(reversed_est,genome,
+					     match, mismatch,
+					     gap_penalty,
+					     intron_penalty,
+					     splice_penalty,
+					     reversed_splice_sites,
+					     megabytes);
 
+		if(bge->score > rge->score) /* probably have a
+					       reversed gene */
+		{
+		    ajFmtPrintF(outfile,
+				"Note Best alignment is between "
+				"reversed est and forward genome, but "
+				"splice sites imply REVERSED GENE\n");
+		    est2genome_make_output(outfile, genome, reversed_est,
+					   bge, match, mismatch,
+					   gap_penalty, intron_penalty,
+					   splice_penalty, minscore,
+					   align, width, isreverse);
+		    if(best == 0)	/* print substandard alignment too */
+			est2genome_make_output(outfile, genome,
+					       reversed_est, rge, match,
+					       mismatch, gap_penalty,
+					       intron_penalty,
+					       splice_penalty, minscore,
+					       align, width, isreverse);
+		}
+		else
+		{
+		    ajFmtPrintF(outfile,
+				"Note Best alignment is between reversed "
+				"est and forward genome, and splice "
+				"sites imply forward gene\n");
+		    est2genome_make_output(outfile, genome, reversed_est,
+					   rge, match, mismatch,
+					   gap_penalty, intron_penalty,
+					   splice_penalty, minscore,
+					   align, width, isreverse);
+
+		    if(best == 0)
+			est2genome_make_output(outfile, genome,
+					       reversed_est, bge, match,
+					       mismatch, gap_penalty,
+					       intron_penalty,
+					       splice_penalty, minscore,
+					       align, width, isreverse);
+		}
+	    }
+	}
+	else if(search_mode == FORWARD_ONLY)
+	{
+	    ajFmtPrintF(outfile,
+			"Note requested forward est and forward genome\n");
+	    est2genome_make_output(outfile, genome, est, fge,
+				   match, mismatch,
+				   gap_penalty, intron_penalty,
+				   splice_penalty, minscore,
+				   align, width, reverse);
 		if(best == 0)
 		    est2genome_make_output(outfile, genome, est, bge,
 					   match, mismatch,
@@ -445,43 +442,46 @@ int main(int argc, char **argv)
 					   splice_penalty, minscore,
 					   align, width, reverse);
 	    }
-	    else if(search_mode == REVERSE_ONLY)
-	    {
-		ajFmtPrintF(outfile,"Note requested reversed est and "
-			    "forward genome\n");
-		est2genome_make_output(outfile, genome, reversed_est,
-				       rge, match, mismatch,
-				       gap_penalty, intron_penalty,
+
+	else if(search_mode == REVERSE_ONLY)
+	{
+	    ajFmtPrintF(outfile,"Note requested reversed est and "
+			"forward genome\n");
+	    est2genome_make_output(outfile, genome, reversed_est,
+				   rge, match, mismatch,
+				   gap_penalty, intron_penalty,
+				   splice_penalty, minscore,
+				   align, width, isreverse);
+	    if( best == 0 )
+		est2genome_make_output(outfile, genome,
+				       reversed_est, bge, match,
+				       mismatch, gap_penalty,
+				       intron_penalty,
 				       splice_penalty, minscore,
 				       align, width, isreverse);
-		if( best == 0 )
-		    est2genome_make_output(outfile, genome,
-					   reversed_est, bge, match,
-					   mismatch, gap_penalty,
-					   intron_penalty,
-					   splice_penalty, minscore,
-					   align, width, isreverse);
-	    }
-
-	    embEstFreeAlign(&bge);
-	    embEstFreeAlign(&rge);
-	    embEstFreeAlign(&fge);
-
-	    /* ajSeqDel(&est); */ /* Clone from seqall: Don't delete */
-	    ajSeqDel(&reversed_est);
 	}
 
-	if(splice_sites)
-	    ajSeqDel(&splice_sites);
+	embEstFreeAlign(&bge);
+	embEstFreeAlign(&rge);
+	embEstFreeAlign(&fge);
 
-	if(reversed_splice_sites)
-	    ajSeqDel(&reversed_splice_sites);
-
-	ajSeqDel(&genome);
-	return 0;
+	/* ajSeqDel(&est); */ /* Clone from seqall: Don't delete */
+	ajSeqDel(&reversed_est);
     }
 
-    return 1;
+    ajSeqDel(&splice_sites);
+
+    ajSeqDel(&reversed_splice_sites);
+
+    ajSeqDel(&genome);
+    ajSeqallDel(&estset);
+    ajSeqDel(&est);
+    ajFileClose(&outfile);
+    ajStrDel(&modestr);
+
+    embExit();
+
+    return 0;
 }
 
 
@@ -529,7 +529,7 @@ static void est2genome_make_output(AjPFile ofile,
 	if(align)
 	{
 	    ajFmtPrintF(ofile, "\n\n%s vs %s:\n",
-			ajSeqName(genome), ajSeqName(est));
+			ajSeqGetNameC(genome), ajSeqGetNameC(est));
 	    embEstPrintAlign(ofile, genome, est, ge, width);
 	}
     }

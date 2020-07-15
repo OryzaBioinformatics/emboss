@@ -2,7 +2,7 @@
 **
 ** Create EMBOSS codon usage files from the CUTG database
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -25,6 +25,23 @@
 #define CODONS 64
 #define TABLE_ESTIMATE 1000
 
+/* @datastatic CutgPValues ****************************************************
+**
+** Codon usage table data values
+**
+** @alias CutgSValues
+** @alias CutgOValues
+**
+** @attr Count [ajint[CODONS]] Number of occurrences for each codon
+**                             in standard order
+** @attr CdsCount [ajint] Number of CDSs counted
+** @attr Division [AjPStr] EMBL/GenBank division
+** @attr Doc [AjPStr] Documentation string
+** @attr Species [AjPStr] Species
+** @attr Warn [ajint] Number of warnings issued
+** @attr Skip [ajint] Number of CDSs skipped
+******************************************************************************/
+
 typedef struct CutgSValues
 {
     ajint Count[CODONS];
@@ -37,7 +54,9 @@ typedef struct CutgSValues
 } CutgOValues;
 #define CutgPValues CutgOValues*
 
-static AjPStr savepid = NULL;
+static AjPStr cutgextractSavepid = NULL;
+static AjPStr cutgextractLine = NULL;
+static AjPStr cutgextractOrg  = NULL;
 
 static char *cutgextract_next(AjPFile inf, const AjPStr wildspecies,
 			      AjPStr* pspecies, AjPStr* pdoc);
@@ -129,14 +148,14 @@ int main(int argc, char **argv)
     allrecords = ajAcdGetBool("allrecords");
 
     ajStrInsertC(&release, 0, "CUTG");
-    ajStrCleanWhite(&release);
+    ajStrRemoveWhiteExcess(&release);
 
     while(ajListPop(flist,(void **)&entry))
     {
-	ajStrAssS(&baseentry, entry);
+	ajStrAssignS(&baseentry, entry);
 	ajFileNameTrim(&baseentry);
 	ajDebug("Testing file '%S'\n", entry);
-	if(!ajStrMatchWild(baseentry,wild))
+	if(!ajStrMatchWildS(baseentry,wild))
 	{
 	    ajStrDel(&entry);
 	    continue;
@@ -153,10 +172,10 @@ int main(int argc, char **argv)
 	while((entryname = cutgextract_next(inf, wildspecies,
 					    &species, &docstr)))
 	{
-	    if(ajStrLen(filename))
-		ajStrAssS(&tmpkey,filename);
+	    if(ajStrGetLen(filename))
+		ajStrAssignS(&tmpkey,filename);
 	    else
-		ajStrAssC(&tmpkey,entryname);
+		ajStrAssignC(&tmpkey,entryname);
 
 	    /* See if organism is already in the table */
 	    value = ajTableGet(table,tmpkey);
@@ -164,8 +183,8 @@ int main(int argc, char **argv)
 	    {
 		key = ajStrNewS(tmpkey);
 		AJNEW0(value);
-		ajStrAssS(&value->Species,species);
-		ajStrAssS(&value->Division, division);
+		ajStrAssignS(&value->Species,species);
+		ajStrAssignS(&value->Division, division);
 		ajTablePut(table,(const void *)key,(void *)value);
 	    }
 	    for(k=0;k<3;k++)
@@ -186,7 +205,7 @@ int main(int argc, char **argv)
 		       value->Count[0] - savecount[0],
 		       value->Count[1] - savecount[1],
 		       value->Count[2] - savecount[2],
-		       savepid);
+		       cutgextractSavepid);
 	    }
 	}
 	ajStrDel(&entry);
@@ -217,7 +236,7 @@ int main(int argc, char **argv)
 	}
 	ajCodCalculateUsage(codon,sum);
 
-	ajStrAppC(&key, ".cut");
+	ajStrAppendC(&key, ".cut");
 	if(allrecords)
 	{
 	    if(value->Warn)
@@ -263,6 +282,24 @@ int main(int argc, char **argv)
 
     ajTableFree(&table);
     ajListDel(&flist);
+    ajStrDel(&wild);
+    ajStrDel(&release);
+    ajStrDel(&wildspecies);
+    ajStrDel(&filename);
+    ajFileClose(&logf);
+
+    ajStrDel(&cutgextractSavepid);
+    ajStrDel(&cutgextractLine);
+    ajStrDel(&cutgextractOrg);
+
+    ajStrDel(&fname);
+    ajStrDel(&tmpkey);
+    ajStrDel(&species);
+    ajStrDel(&docstr);
+    ajStrDel(&division);
+    ajStrDel(&baseentry);
+
+    ajStrTableFree(&table);
 
     ajExit();
 
@@ -301,8 +338,6 @@ int main(int argc, char **argv)
 static char* cutgextract_next(AjPFile inf, const AjPStr wildspecies,
 			      AjPStr* pspecies, AjPStr* pdoc)
 {
-    static AjPStr line = NULL;
-    static AjPStr org  = NULL;
     AjPStrTok handle    = NULL;
     AjPStr token = NULL;
     ajint i;
@@ -311,30 +346,30 @@ static char* cutgextract_next(AjPFile inf, const AjPStr wildspecies,
     char c;
     AjBool done = ajFalse;
 
-    if(!line)
-    {
-	line = ajStrNew();
-	org  = ajStrNew();
-    }
+    if(!cutgextractLine)
+	cutgextractLine = ajStrNew();
 
-    ajStrAssC(&line,"");
-    ajStrAssC(pdoc,"");
+    if(!cutgextractOrg)
+	cutgextractOrg  = ajStrNew();
+
+    ajStrAssignC(&cutgextractLine,"");
+    ajStrAssignC(pdoc,"");
     while (!done)
     {
 
-	while(*ajStrStr(line) != '>')
-	    if(!ajFileReadLine(inf,&line))
+	while(ajStrGetCharFirst(cutgextractLine) != '>')
+	    if(!ajFileReadLine(inf,&cutgextractLine))
 		return NULL;
 
-	handle = ajStrTokenInit(line,"\\\n\t\r");
+	handle = ajStrTokenNewC(cutgextractLine,"\\\n\t\r");
 	for(i=0;i<7;++i) {
-	    ajStrToken(&token,&handle,"\\\n\t\r");
+	    ajStrTokenNextParseC(&handle,"\\\n\t\r",&token);
 	    if(i==5)
 	    {
-		ajStrAssC(&org,"E");
-		ajStrApp(&org, token);
-		ajStrAssS(pspecies, token);
-		if(ajStrMatchWild(token,wildspecies))
+		ajStrAssignC(&cutgextractOrg,"E");
+		ajStrAppendS(&cutgextractOrg, token);
+		ajStrAssignS(pspecies, token);
+		if(ajStrMatchWildS(token,wildspecies))
 		{
 		    done = ajTrue;
 		}
@@ -343,54 +378,54 @@ static char* cutgextract_next(AjPFile inf, const AjPStr wildspecies,
 	    switch(i)
 	    {
 	    case 0:
-		ajStrAppC(pdoc, "#ID ");
-		ajStrApp(pdoc, token);
-		ajStrAppC(pdoc, "\n");
+		ajStrAppendC(pdoc, "#ID ");
+		ajStrAppendS(pdoc, token);
+		ajStrAppendC(pdoc, "\n");
 		break;
 	    case 1:
-		ajStrAppC(pdoc, "#AC ");
-		ajStrApp(pdoc, token);
-		ajStrAppC(pdoc, "\n");
+		ajStrAppendC(pdoc, "#AC ");
+		ajStrAppendS(pdoc, token);
+		ajStrAppendC(pdoc, "\n");
 		break;
 	    case 2:
-		ajStrAppC(pdoc, "#FT ");
-		ajStrApp(pdoc, token);
-		ajStrAppC(pdoc, "\n");
+		ajStrAppendC(pdoc, "#FT ");
+		ajStrAppendS(pdoc, token);
+		ajStrAppendC(pdoc, "\n");
 		break;
 	    case 3:
-		ajStrAppC(pdoc, "#FL ");
-		ajStrApp(pdoc, token);
-		ajStrAppC(pdoc, "\n");
+		ajStrAppendC(pdoc, "#FL ");
+		ajStrAppendS(pdoc, token);
+		ajStrAppendC(pdoc, "\n");
 		break;
 	    case 4:
-		ajStrAppC(pdoc, "#PI ");
-		ajStrApp(pdoc, token);
-		ajStrAppC(pdoc, "\n");
-		ajStrAssS(&savepid, token);
+		ajStrAppendC(pdoc, "#PI ");
+		ajStrAppendS(pdoc, token);
+		ajStrAppendC(pdoc, "\n");
+		ajStrAssignS(&cutgextractSavepid, token);
 		break;
 	    case 5:
-		ajStrAppC(pdoc, "#OS ");
-		ajStrApp(pdoc, token);
-		ajStrAppC(pdoc, "\n");
+		ajStrAppendC(pdoc, "#OS ");
+		ajStrAppendS(pdoc, token);
+		ajStrAppendC(pdoc, "\n");
 		break;
 	    case 6:
-		ajStrAppC(pdoc, "#DE ");
-		ajStrApp(pdoc, token);
-		ajStrAppC(pdoc, "\n");
+		ajStrAppendC(pdoc, "#DE ");
+		ajStrAppendS(pdoc, token);
+		ajStrAppendC(pdoc, "\n");
 		break;
 	    default:
 		break;
 	    }
 	}
 
-	ajStrTokenClear(&handle);
+	ajStrTokenDel(&handle);
 	if(!done)
-	    if(!ajFileReadLine(inf,&line))
+	    if(!ajFileReadLine(inf,&cutgextractLine))
 		return NULL;
     }
 
-    len = ajStrLen(org);
-    p   = ajStrStrMod(&org);
+    len = ajStrGetLen(cutgextractOrg);
+    p   = ajStrGetuniquePtr(&cutgextractOrg);
     for(i=0;i<len;++i)
     {
 	c = p[i];
@@ -441,8 +476,8 @@ static ajint cutgextract_readcodons(AjPFile inf, AjBool allrecords,
 	16,15,57,59,60,58,24,25,34,33,39,40,20,19,11,12,
 	10, 9,63,62, 8, 7,14,13,21,23,22,32,61, 1, 0, 2
     };
-    static AjPStr line  = NULL;
-    static AjPStr value = NULL;
+    AjPStr line  = NULL;
+    AjPStr value = NULL;
     ajint thiscount[64];
 
     AjPStrTok token = NULL;
@@ -461,15 +496,19 @@ static ajint cutgextract_readcodons(AjPFile inf, AjBool allrecords,
 	ajFatal("Premature end of file");
 
 
-    token = ajStrTokenInit(line," \n\t\r");
+    token = ajStrTokenNewC(line," \n\t\r");
     for(i=0;i<CODONS;++i)
     {
-	ajStrToken(&value,&token," \n\t\r");
+	ajStrTokenNextParseC(&token," \n\t\r",&value);
 	ajStrToInt(value,&n);
 	thiscount[cutidx[i]] = n;
 	if(i>60)
 	    nstops += n;
     }
+
+    ajStrDel(&line);
+    ajStrDel(&value);
+    ajStrTokenDel(&token);
 
     if(!allrecords)
 	if(nstops > 1)
@@ -479,8 +518,6 @@ static ajint cutgextract_readcodons(AjPFile inf, AjBool allrecords,
     {
 	count[i] += thiscount[i];
     }	
-
-    ajStrTokenClear(&token);
 
     return nstops;
 }

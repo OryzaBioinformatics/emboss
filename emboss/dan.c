@@ -1,7 +1,7 @@
 /* @source dan application
 **
 ** Displays and plots nucleic acid duplex melting temperatures
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** Contributions from Michael Schmitz
 ** @@
 **
@@ -92,10 +92,10 @@ int main(int argc, char **argv)
     AjPStr strand = NULL;
     ajint len;
 
-    static float *xa;
-    static float *ta;
-    static float *tpa;
-    static float *cga;
+    static float *xa = NULL;
+    static float *ta = NULL;
+    static float *tpa = NULL;
+    static float *cga = NULL;
     static ajint npoints;
     ajint n;
 
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
     if(!doplot)
     {
 	mintemp = 0.0;
-	mult = NULL;
+	ajGraphxyDel(&mult);
     }
 
 
@@ -146,8 +146,8 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
     {
 	npoints = 0;
-	strand  = ajSeqStrCopy(seq);
-	len     = ajStrLen(strand);
+	strand  = ajSeqGetSeqCopyS(seq);
+	len     = ajStrGetLen(strand);
 	begin   = ajSeqallBegin(seqall);
 	end     = ajSeqallEnd(seqall);
 
@@ -156,9 +156,9 @@ int main(int argc, char **argv)
 	if(!doplot)
 	    if(outf)
 		ajFmtPrintF(outf,"DAN of: %s   from: %d  to: %d\n\n",
-			    ajSeqName(seq), begin, end);
+			    ajSeqGetNameC(seq), begin, end);
 
-	ajStrToUpper(&strand);
+	ajStrFmtUpper(&strand);
 
 
 	n=ajRound(len,shift);
@@ -191,17 +191,20 @@ int main(int argc, char **argv)
 	ajFeattableDel(&TabRpt);
     }
 
-    if(mult)
-    {
+    /*if(mult)*/
 	ajGraphCloseWin();
-	ajGraphxyDel(&mult);
-    }
 
+    ajGraphxyDel(&mult);
+    ajFileClose(&outf);
+
+    ajSeqallDel(&seqall);
+    ajFileClose(&outf);
+    ajReportDel(&report);
+    ajFeattableDel(&TabRpt);
+    ajGraphxyDel(&mult);
     ajSeqDel(&seq);
-    if(outf)
-	ajFileClose(&outf);
 
-    ajReportClose(report);
+    ajStrDel(&strand);
 
     ajExit();
     return 0;
@@ -247,7 +250,6 @@ static void dan_findgc(const AjPStr strand, ajint begin, ajint end,
 		       float ta[], float tpa[], float cga[], ajint *np)
 {
     static AjBool initialised = 0;
-    AjPStr type   = NULL;
     AjPStr substr = NULL;
     float  fwindow;
     ajint    i;
@@ -268,13 +270,7 @@ static void dan_findgc(const AjPStr strand, ajint begin, ajint end,
 
     if(!initialised)
     {
-	type = ajStrNew();
-	if(isDNA)
-	    ajStrAssC(&type,"dna");
-	else
-	    ajStrAssC(&type,"rna");
-	ajMeltInit(type, window);
-	ajStrDel(&type);
+	ajMeltInit(isDNA, window);
     }
 
     fwindow  = (float) window;
@@ -286,7 +282,7 @@ static void dan_findgc(const AjPStr strand, ajint begin, ajint end,
     {
 	ibegin = i;
 	iend   = i + window -1;
-	ajStrAssSubC(&substr, ajStrStr(strand), ibegin, iend);
+	ajStrAssignSubC(&substr, ajStrGetPtr(strand), ibegin, iend);
 
 	xa[*np]  = (float)(i+1);
 	ta[*np]  = ajTm(substr, (iend-ibegin)+1, shift, salt, dna, isDNA);
@@ -304,7 +300,7 @@ static void dan_findgc(const AjPStr strand, ajint begin, ajint end,
 
 	if(!doplot)
 	{
-	    ajFmtPrintF(outf,"%4d %s",ibegin+1,ajStrStr(substr));
+	    ajFmtPrintF(outf,"%4d %s",ibegin+1,ajStrGetPtr(substr));
 	    if(iend-ibegin+1 > 40)
 		ajFmtPrintF(outf,"...");
 	    if(dothermo)
@@ -382,9 +378,8 @@ static void dan_reportgc(AjPReport report,
 {
 
     AjPFeature gf = NULL;
-    static AjPStr tmpStr = NULL;
+    AjPStr tmpStr = NULL;
     static AjBool initialised = 0;
-    AjPStr type   = NULL;
     AjPStr substr = NULL;
     float  fwindow;
     ajint    i;
@@ -402,21 +397,15 @@ static void dan_reportgc(AjPReport report,
     ajint begin;
     ajint end;
 
-    begin = ajSeqBegin(seq);
-    end   = ajSeqEnd(seq);
+    begin = ajSeqGetBegin(seq);
+    end   = ajSeqGetEnd(seq);
 
     --begin;
     --end;
 
     if(!initialised)
     {
-	type = ajStrNew();
-	if(isDNA)
-	    ajStrAssC(&type,"dna");
-	else
-	    ajStrAssC(&type,"rna");
-	ajMeltInit(type, window);
-	ajStrDel(&type);
+	ajMeltInit(isDNA, window);
     }
 
     fwindow  = (float) window;
@@ -428,7 +417,7 @@ static void dan_reportgc(AjPReport report,
     {
 	ibegin = i;
 	iend = i + window -1;
-	ajStrAssSub(&substr, ajSeqStr(seq), ibegin, iend);
+	ajStrAssignSubS(&substr, ajSeqGetSeqS(seq), ibegin, iend);
 
 	xa[*np]  = (float)(i+1);
 	ta[*np]  = ajTm(substr, (iend-ibegin)+1, shift, salt, dna, isDNA);
@@ -482,6 +471,7 @@ static void dan_reportgc(AjPReport report,
     }
 
     ajStrDel(&substr);
+    ajStrDel(&tmpStr);
 
     return;
 }
@@ -552,7 +542,7 @@ static void dan_plotit(const AjPSeq seq, const float *xa, const float *ta,
     ajGraphxySetXLabel(graphs,ajTrue);
     ajGraphxySetYLabel(graphs,ajTrue);
 
-    ajGraphSetTitleC(graphs,ajSeqName(seq));
+    ajGraphSetTitleC(graphs,ajSeqGetNameC(seq));
     ajGraphSetXTitleC(graphs,"Base number");
     ajGraphSetYTitleC(graphs,"Melt temp (C)");
 

@@ -2,7 +2,7 @@
 **
 ** Trim ambiguous bits off the ends of sequences
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -89,21 +89,24 @@ int main(int argc, char **argv)
 	    end = trimseq_trim(seq, 0, isnuc, window, percent, strict, star)
 		- 1;
 	else
-	    end = ajSeqLen(seq)-1;
+	    end = ajSeqGetLen(seq)-1;
 
 	/* get a COPY of the sequence string */
-	ajStrAssS(&str, ajSeqStr(seq));
+	ajStrAssignS(&str, ajSeqGetSeqS(seq));
 
-	ajStrSub(&str, start, end);
-	ajSeqReplace(seq, str);
+	ajStrKeepRange(&str, start, end);
+	ajSeqAssignSeqS(seq, str);
 	ajSeqAllWrite(seqout, seq);
     }
 
     ajSeqWriteClose(seqout);
 
     ajStrDel(&str);
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -123,7 +126,7 @@ int main(int argc, char **argv)
 ** @param [r] strict [AjBool] trim off all IUPAC ambiguity codes, not just X, N
 ** @param [r] star [AjBool] trim off asterisks in proteins
 ** @return [ajint] position to trim to or -1
-**                 or ajSeqLen(seq) if no bad characters were found
+**                 or ajSeqGetLen(seq) if no bad characters were found
 ** @@
 ******************************************************************************/
 
@@ -178,18 +181,18 @@ static ajint trimseq_trim(const AjPSeq seq,
     if(sense)
     {
 	a = 0;
-	z = ajSeqLen(seq) - window;
+	z = ajSeqGetLen(seq) - window;
 	inc = 1;
 	leroy_brown = -1;
 	suspect = -1;
     }
     else
     {
-	a = ajSeqLen(seq)-1;
+	a = ajSeqGetLen(seq)-1;
 	z = window;
 	inc = -1;
-	leroy_brown = ajSeqLen(seq);
-	suspect = ajSeqLen(seq);
+	leroy_brown = ajSeqGetLen(seq);
+	suspect = ajSeqGetLen(seq);
     }
 
     /*
@@ -198,7 +201,7 @@ static ajint trimseq_trim(const AjPSeq seq,
     **/
     for(; a != z; a += inc)
     {
-	c = (ajSeqChar(seq))[a];
+	c = (ajSeqGetSeqC(seq))[a];
 	if(gang[(ajint)c] || c == '.' || c == '-' || c == '~' || c == ' ')
 	    /* trim if bad character or a gap character at the end */
 	    leroy_brown = a;		/* want to trim down to here */
@@ -212,7 +215,7 @@ static ajint trimseq_trim(const AjPSeq seq,
 	/* look in the window */
 	for(count = 0, look = 0; look < window && look > -window; look += inc)
 	{
-	    c = (ajSeqChar(seq))[a+look];
+	    c = (ajSeqGetSeqC(seq))[a+look];
 	    if(gang[(ajint)c])
 	    {
 		/* count the bad characters */
@@ -245,7 +248,7 @@ static ajint trimseq_trim(const AjPSeq seq,
     */
     for(a = leroy_brown+inc; a != z; a += inc)
     {
-	c = (ajSeqChar(seq))[a];
+	c = (ajSeqGetSeqC(seq))[a];
 	if(c == '.' || c == '-' || c == '~' || c == ' ')
 	    /* trim if we have a gap character at the end */
 	    leroy_brown = a;		/* want to trim down to here */

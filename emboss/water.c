@@ -1,7 +1,7 @@
 /* @source water application
 **
 ** True Smith-Waterman best local alignment
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -106,13 +106,13 @@ int main(int argc, char **argv)
     sub = ajMatrixfArray(matrix);
     cvt = ajMatrixfCvt(matrix);
     
-    begina=ajSeqBegin(a)+ajSeqOffset(a);
+    begina=ajSeqGetBegin(a)+ajSeqGetOffset(a);
     
     while(ajSeqallNext(seqall,&b))
     {
-	lena = ajSeqLen(a);
+	lena = ajSeqGetLen(a);
 	ajSeqTrim(b);
-	lenb = ajSeqLen(b);
+	lenb = ajSeqGetLen(b);
 
 	len = lena*lenb;
 
@@ -130,13 +130,13 @@ int main(int argc, char **argv)
 	    maxarr=len;
 	}
 
-	beginb=ajSeqBegin(b)+ajSeqOffset(b);
+	beginb=ajSeqGetBegin(b)+ajSeqGetOffset(b);
 
-	p = ajSeqChar(a);
-	q = ajSeqChar(b);
+	p = ajSeqGetSeqC(a);
+	q = ajSeqGetSeqC(b);
 
-	ajStrAssC(&m,"");
-	ajStrAssC(&n,"");
+	ajStrAssignC(&m,"");
+	ajStrAssignC(&n,"");
 
 	embAlignPathCalcSW(p,q,lena,lenb,gapopen,gapextend,path,sub,cvt,
 			   compass,show);
@@ -185,8 +185,11 @@ int main(int argc, char **argv)
     ajStrDel(&m);
     ajStrDel(&ss);
     ajStrDel(&tmpstr);
-    
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&a);
+    ajSeqDel(&b);
+
+    embExit();
 
     return 0;
 }

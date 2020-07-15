@@ -5,7 +5,7 @@
 ** Please cite:
 ** X. Huang and W. Miller (1991) Adv. Appl. Math. 12:373-381
 **
-** @author: Copyright (C) Ian Longden (il@sanger.ac.uk)
+** @author Copyright (C) Ian Longden (il@sanger.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -318,36 +318,39 @@ int main(int argc, char **argv)
       each residue in the sequence
     */
 
-    ajSeqToUpper(seq);
-    ajSeqToUpper(seq2);
+    ajSeqFmtUpper(seq);
+    ajSeqFmtUpper(seq2);
 
-    s1 = ajStrStr(ajSeqStr(seq));
-    s2 = ajStrStr(ajSeqStr(seq2));
+    s1 = ajStrGetPtr(ajSeqGetSeqS(seq));
+    s2 = ajStrGetPtr(ajSeqGetSeqS(seq2));
 
     sub = ajMatrixArray(matrix);
     cvt = ajMatrixCvt(matrix);
 
 
-    aa0str = ajStrNewL(2+ajSeqLen(seq)); /* length + blank + trailing null */
-    aa1str = ajStrNewL(2+ajSeqLen(seq2));
-    ajStrAppK(&aa0str,' ');
-    ajStrAppK(&aa1str,' ');
+    aa0str = ajStrNewRes(2+ajSeqGetLen(seq)); /* length + blank + trailing null */
+    aa1str = ajStrNewRes(2+ajSeqGetLen(seq2));
+    ajStrAppendK(&aa0str,' ');
+    ajStrAppendK(&aa1str,' ');
 
-    for(i=0;i<ajSeqLen(seq);i++)
-	ajStrAppK(&aa0str,(char)ajSeqCvtK(cvt, *s1++));
+    for(i=0;i<ajSeqGetLen(seq);i++)
+	ajStrAppendK(&aa0str,(char)ajSeqCvtK(cvt, *s1++));
 
-    for(i=0;i<ajSeqLen(seq2);i++)
-	ajStrAppK(&aa1str,ajSeqCvtK(cvt, *s2++));
+    for(i=0;i<ajSeqGetLen(seq2);i++)
+	ajStrAppendK(&aa1str,ajSeqCvtK(cvt, *s2++));
 
-    matcher_Sim(align, ajStrStr(aa0str),ajStrStr(aa1str),
+    matcher_Sim(align, ajStrGetPtr(aa0str),ajStrGetPtr(aa1str),
 		seq,seq2,
 		K,(gdelval-ggapval),ggapval,
-		ajSeqOffset(seq), ajSeqOffset(seq2), 2);
+		ajSeqGetOffset(seq), ajSeqGetOffset(seq2), 2);
 
     ajStrDel(&aa0str);
     ajStrDel(&aa1str);
 
-    ajExit();
+    ajSeqDel(&seq);
+    ajSeqDel(&seq2);
+
+    embExit();
 
     return 0;
 }
@@ -407,11 +410,11 @@ static void matcher_Sim(AjPAlign align,
     ajint max0;
     ajint max1;
 
-    seq0len = ajSeqLen(seq0);
-    seq1len = ajSeqLen(seq1);
+    seq0len = ajSeqGetLen(seq0);
+    seq1len = ajSeqGetLen(seq1);
 
     /* allocate space for consensus */
-    i =(AJMIN(ajSeqLen(seq0),ajSeqLen(seq1)))*2;
+    i =(AJMIN(ajSeqGetLen(seq0),ajSeqGetLen(seq1)))*2;
     AJCNEW(seqc0,i);
     AJCNEW(seqc1,i);
 
@@ -492,24 +495,22 @@ static void matcher_Sim(AjPAlign align,
 	ajDebug("Matcher min: %d %d max: %d %d beg: %d %d nc: %d\n",
 		min0, min1, max0, max1, beg0, beg1, nc);
 	ajDebug("Matcher offsets: %d %d end: %d %d len: %d %d alen: %d %d\n",
-		ajSeqOffset(seq0), ajSeqOffset(seq1),
-		ajSeqOffend(seq0), ajSeqOffend(seq1),
-		ajSeqLen(seq0), ajSeqLen(seq1),
+		ajSeqGetOffset(seq0), ajSeqGetOffset(seq1),
+		ajSeqGetOffend(seq0), ajSeqGetOffend(seq1),
+		ajSeqGetLen(seq0), ajSeqGetLen(seq1),
 		strlen(seqc0), strlen(seqc1));
 	ajDebug("Matcher seqc0: %s\n", seqc0);
 	ajDebug("Matcher seqc1: %s\n", seqc1);
 
-	res0 = ajSeqNewRangeCI(seqc0, nc, min0+beg0,
-			       ajSeqOffend(seq0) + ajSeqLen(seq0) - max0,
+	res0 = ajSeqNewRangeC(seqc0, min0+beg0, ajSeqGetOffend(seq0) + ajSeqGetLen(seq0) - max0,
 			       ajSeqIsReversed(seq0));
-	ajSeqAssUsa(res0, ajSeqGetUsa(seq0));
-	ajSeqAssName(res0, ajSeqGetName(seq0));
+	ajSeqAssignUsaS(res0, ajSeqGetUsaS(seq0));
+	ajSeqAssignNameS(res0, ajSeqGetNameS(seq0));
 
-	res1 = ajSeqNewRangeCI(seqc1, nc, min1+beg1,
-			       ajSeqOffend(seq1) + ajSeqLen(seq1) - max1,
+	res1 = ajSeqNewRangeC(seqc1, min1+beg1, ajSeqGetOffend(seq1) + ajSeqGetLen(seq1) - max1,
 			       ajSeqIsReversed(seq1));
-	ajSeqAssName(res1, ajSeqGetName(seq1));
-	ajSeqAssUsa(res1, ajSeqGetUsa(seq1));
+	ajSeqAssignNameS(res1, ajSeqGetNameS(seq1));
+	ajSeqAssignUsaS(res1, ajSeqGetUsaS(seq1));
 
 	ajAlignDefineSS(align, res0, res1);
 
@@ -551,7 +552,7 @@ static void matcher_Sim(AjPAlign align,
     AJFREE(YY);
     AJFREE(S);
 
-    for(i=1; i<ajSeqLen(seq);i++)
+    for(i=1; i<ajSeqGetLen(seq);i++)
     {
 	pairptr this;
 	pairptr next;
@@ -1548,8 +1549,8 @@ static ajint matcher_Calcons(const char *aa0,char *seqc0,ajint n0,
     i0 = min0;
     i1 = min1;
 
-    sq1 = ajStrStr(ajSeqStr(seq));
-    sq2 = ajStrStr(ajSeqStr(seq2));
+    sq1 = ajStrGetPtr(ajSeqGetSeqS(seq));
+    sq2 = ajStrGetPtr(ajSeqGetSeqS(seq2));
 
     while(i0 < max0 || i1 < max1)
     {

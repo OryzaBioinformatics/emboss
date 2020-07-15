@@ -2,7 +2,7 @@
 **
 ** Counts the composition of dimer/trimer/etc words in a sequence
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -58,7 +58,6 @@ int main(int argc, char **argv)
     AjPFile infile;
     AjBool reverse;
     AjBool calcfreq;
-    AjPStr ajb=NULL;
 
     ajint pos;
     const char *s;
@@ -70,6 +69,7 @@ int main(int argc, char **argv)
     AjBool first_time_round = ajTrue;
     ajulong count;
     AjPStr dispseq = NULL;
+    AjPStr tmpstr = NULL;		/* from table, no need to delete */
 
     ajulong total = 0;		/* no. of words counted */
     ajulong calcfreq_total = 0; /* no. of single bases/residues counted */
@@ -141,7 +141,9 @@ int main(int argc, char **argv)
 		    "from the file: %s\n",ajFileName(infile));
 	compseq_readexpfreq(&exptable, infile, word);
 	have_exp_freq = ajTrue;
+	ajFileClose(&infile);
     }
+
     ajFmtPrintF(outfile, "#\n");
     ajFmtPrintF(outfile, "# The input sequences are:\n");
     
@@ -161,7 +163,7 @@ int main(int argc, char **argv)
 
 	/* note the name of the sequence */
 	if(count_of_sequence_names++ < 10)
-	    ajFmtPrintF(outfile, "#\t%s\n", ajSeqName(seq));
+	    ajFmtPrintF(outfile, "#\t%s\n", ajSeqGetNameC(seq));
 	else if(count_of_sequence_names++ == 11)
 	    ajFmtPrintF(outfile, "# ... et al.\n");
 
@@ -190,8 +192,8 @@ int main(int argc, char **argv)
           
 	}
 
-	ajSeqToUpper(seq);
-	s = ajSeqChar(seq);
+	ajSeqFmtUpper(seq);
+	s = ajSeqGetSeqC(seq);
 
 	/*
 	**  Start at the first position, or at the frame, if it has been
@@ -200,7 +202,7 @@ int main(int argc, char **argv)
 	**  if frame is specified. Stop when less than a word-length from
 	**  the end of the sequence.
 	*/
-	for(pos=frame; pos <= ajSeqLen(seq)-word; pos += increment)
+	for(pos=frame; pos <= ajSeqGetLen(seq)-word; pos += increment)
 	{
 	    if(seqisnuc)
 		result = embNmerNuc2int(s, word, pos, &otherflag);
@@ -220,7 +222,7 @@ int main(int argc, char **argv)
         if(calcfreq) 
         {
         /* Count the single bases or residues to get the observed frequences */
-            for(pos=0; pos < ajSeqLen(seq); pos++) 
+            for(pos=0; pos < ajSeqGetLen(seq); pos++) 
             {
                 if(seqisnuc)
                     result = embNmerNuc2int(s, 1, pos, &otherflag);
@@ -242,9 +244,9 @@ int main(int argc, char **argv)
 	{
 	    /* Do it again on the reverse strand */
 	    ajSeqReverseForce(seq);
-	    s = ajSeqChar(seq);
+	    s = ajSeqGetSeqC(seq);
 
-	    for(pos=frame; pos <= ajSeqLen(seq)-word; pos += increment)
+	    for(pos=frame; pos <= ajSeqGetLen(seq)-word; pos += increment)
 	    {
 		result = embNmerNuc2int(s, word, pos, &otherflag);
 
@@ -264,7 +266,7 @@ int main(int argc, char **argv)
                 ** observed frequences 
                 */
 
-                for(pos=0; pos < ajSeqLen(seq); pos++) 
+                for(pos=0; pos < ajSeqGetLen(seq); pos++) 
                 {
                     result = embNmerNuc2int(s, 1, pos, &otherflag);
                                     
@@ -303,7 +305,7 @@ int main(int argc, char **argv)
 	if(!zerocount && bigarray[count] == 0)
 	    continue;
 
-	ajStrClear(&dispseq);
+	ajStrSetClear(&dispseq);
 
 	if(seqisnuc)
 	    embNmerInt2nuc(&dispseq, word, count);
@@ -315,8 +317,11 @@ int main(int argc, char **argv)
 
 	if(have_exp_freq)
 	{
-	    if((ajb=ajTableGet(exptable,dispseq)))
-		ajStrToDouble(ajb, &exp_freq);
+	    if((tmpstr=ajTableGet(exptable,dispseq)))
+	    {
+		ajStrToDouble(tmpstr, &exp_freq);
+		tmpstr = NULL;
+	    }
 	}
 	else
 	{
@@ -363,7 +368,7 @@ int main(int argc, char **argv)
     /* get the expected Other frequency */
     if(have_exp_freq)
     {
-	ajStrAssC(&strother, "Other");
+	ajStrAssignC(&strother, "Other");
 	ajStrToDouble(ajTableGet(exptable, strother), &exp_freq);
     }
     else 
@@ -396,13 +401,16 @@ int main(int argc, char **argv)
 		obs_freq, exp_freq, obs_exp);
     
     ajFileClose(&outfile);
-    
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
 
     AJFREE(bigarray);
-    
+    ajStrDel(&dispseq);
+
     if(have_exp_freq)
 	ajTableFree(&exptable);
-    
+ 
+
     ajExit();
 
     return 0;
@@ -470,14 +478,14 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 	if(!ajStrFindC(line, "#"))
 	    continue;
 
-	if(!ajStrLen(line))
+	if(!ajStrGetLen(line))
 	    continue;
 
 	/* look for the word size */
 	if(!ajStrFindC(line, "Word size"))
 	{
-	    ajStrAssSub(&sizestr, line, 10, ajStrLen(line)-1);
-	    ajStrChomp(&sizestr);
+	    ajStrAssignSubS(&sizestr, line, 10, ajStrGetLen(line)-1);
+	    ajStrTrimWhite(&sizestr);
 	    ajStrToInt(sizestr, &thissize);
 
 	    if(size == thissize)
@@ -500,7 +508,7 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 	if(!ajStrFindC(line, "#"))
 	    continue;
 
-	if(!ajStrLen(line))
+	if(!ajStrGetLen(line))
 	    continue;
 
 	/*
@@ -518,14 +526,14 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 	if(!ajStrFindC(line, "#"))
 	    continue;
 
-	if(!ajStrLen(line))
+	if(!ajStrGetLen(line))
 	    continue;
 
-	tokens = ajStrTokenInit(line, whiteSpace);
+	tokens = ajStrTokenNewC(line, whiteSpace);
 
 	/* get the word as the key */
 	key = ajStrNew();
-	ajStrToken( &key, &tokens, NULL);
+	ajStrTokenNextParse( &tokens, &key);
 
 	/*
 	**  get the observed frequency as the value - we'll use this as
@@ -534,8 +542,8 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 	value = ajStrNew();
 
 	/* skip the observed count column */
-	ajStrToken(&value, &tokens, NULL);
-	ajStrToken(&value, &tokens, NULL);
+	ajStrTokenNextParse(&tokens, &value);
+	ajStrTokenNextParse(&tokens, &value);
 
 	ajTablePut(*exptable, key, value);
 
@@ -543,7 +551,7 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 
 
     ajStrDel(&line);
-    ajStrTokenClear(&tokens);
+    ajStrTokenDel(&tokens);
 
     return;
 }
@@ -575,7 +583,7 @@ static double compseq_getexpfreqnuc(const AjPStr dispseq, ajint word,
 
     for(i=0; i<word; i++)
     {
-        c = ajStrStr(dispseq)[i];
+        c = ajStrGetPtr(dispseq)[i];
 
         if(c == 'A')
             offset = 0;
@@ -625,7 +633,7 @@ static double compseq_getexpfreqprot(const AjPStr dispseq, ajint word,
     
     result = 1.0;
 
-    s = ajStrStr(dispseq);
+    s = ajStrGetPtr(dispseq);
 
     for(i=0; i<word; i++)
     {

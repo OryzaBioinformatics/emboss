@@ -1,7 +1,7 @@
 /* @source primers application
 ** Simple version of primer3 to pick PCR primers
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** 5 Nov 2001 - GWW - written
 ** @@
 **
@@ -357,7 +357,7 @@ int main(int argc, char **argv, char **env)
         close( pipefrom[1] );
 
 	program = ajStrNew();
-	ajStrAssC(&program, "primer3_core");
+	ajStrAssignC(&program, "primer3_core");
 	if (ajSysWhich(&program)) {
 	    execlp( "primer3_core", "primer3_core", NULL );
 	    ajFatal("There was a problem while executing primer3");
@@ -388,16 +388,16 @@ int main(int argc, char **argv, char **env)
 /*
  * 	if (!ajStrCmpC(task[0], "0")) {
  */
-	    ajStrAssC(&taskstr, "pick_pcr_primers");
+	    ajStrAssignC(&taskstr, "pick_pcr_primers");
 /*
  * 	} else if (!ajStrCmpC(task[0], "1")) {
- * 	    ajStrAssC(&taskstr, "pick_pcr_primers_and_hyb_probe");
+ * 	    ajStrAssignC(&taskstr, "pick_pcr_primers_and_hyb_probe");
  * 	} else if (!ajStrCmpC(task[0], "2")) {
- * 	    ajStrAssC(&taskstr, "pick_left_only");
+ * 	    ajStrAssignC(&taskstr, "pick_left_only");
  * 	} else if (!ajStrCmpC(task[0], "3")) {
- * 	    ajStrAssC(&taskstr, "pick_right_only");
+ * 	    ajStrAssignC(&taskstr, "pick_right_only");
  * 	} else if (!ajStrCmpC(task[0], "4")) {
- * 	    ajStrAssC(&taskstr, "pick_hyb_probe_only");
+ * 	    ajStrAssignC(&taskstr, "pick_hyb_probe_only");
  * 	} else {
  * 	    ajFatal("Unknown value for TASK");
  * 	}
@@ -491,8 +491,8 @@ int main(int argc, char **argv, char **env)
 
             strand = ajSeqStrCopy(seq);
 
-            ajStrToUpper(&strand);
-            ajStrAssSubC(&substr,ajStrStr(strand), begin-1, end-1);
+            ajStrFmtUpper(&strand);
+            ajStrAssignSubC(&substr,ajStrGetPtr(strand), begin-1, end-1);
 
 /* send primer3 Primer "Sequence" parameters */
             primers_send_string(stream, "SEQUENCE", substr);
@@ -566,7 +566,7 @@ static AjPStr primers_read(int fd)
         ajFatal( "fdopen() read error" );
 
     while ( (ch = getc( stream )) != EOF )
-        ajStrAppK(&ret, ch);
+        ajStrAppendK(&ret, ch);
 
     fclose( stream );
     ajDebug( "reading done\n" );
@@ -612,12 +612,12 @@ static void primers_send_range(FILE * stream,
   if (ajRangeNumber(value)) {
       (void) ajFmtPrintS(&str, "%s=", tag);
       primers_write(str, stream);
-      ajStrClear(&str);
+      ajStrSetClear(&str);
       for (n=0; n < ajRangeNumber(value); n++) {
           ajRangeValues(value, n, &start, &end);
           (void) ajFmtPrintS(&str, "%d,%d ", start, end-start+1);
           primers_write(str, stream);
-	  ajStrClear(&str);
+	  ajStrSetClear(&str);
       }
       (void) ajFmtPrintS(&str, "\n");
       primers_write(str, stream);
@@ -649,12 +649,12 @@ static void primers_send_range(FILE * stream,
 //  if (ajRangeNumber(value)) {
 //      (void) ajFmtPrintS(&str, "%s=", tag);
 //      primers_write(str, stream);
-//      ajStrClear(&str);
+//      ajStrSetClear(&str);
 //      for (n=0; n < ajRangeNumber(value); n++) {
 //          ajRangeValues(value, n, &start, &end);
 //          (void) ajFmtPrintS(&str, "%d-%d ", start, end);
 //          primers_write(str, stream);
-//	  ajStrClear(&str);
+//	  ajStrSetClear(&str);
 //      }
 //      (void) ajFmtPrintS(&str, "\n");
 //      primers_write(str, stream);
@@ -744,7 +744,7 @@ static void primers_send_string(FILE * stream,
 
   AjPStr str=ajStrNew();
 
-  if (ajStrLen(value)) {
+  if (ajStrGetLen(value)) {
       (void) ajFmtPrintS(&str, "%s=%S\n", tag, value);
       primers_write(str, stream);
   }
@@ -808,7 +808,7 @@ static FILE* primers_start_write(int fd)
 static void primers_write(const AjPStr str, FILE *stream)
 {
 
-  fputs( ajStrStr(str), stream );
+  fputs( ajStrGetPtr(str), stream );
 
 }
 /* @funcstatic primers_end_write **********************************************
@@ -851,10 +851,10 @@ static void primers_report (AjPFile outfile,
   AjPTable table;
 
 /* set up tokeniser for lines */
-  linetokenhandle = ajStrTokenInit (output, eol);
+  linetokenhandle = ajStrTokenNewC(output, eol);
 
 /* get next line of relevant results */
-  while (ajStrToken (&line, &linetokenhandle, eol)) {
+  while (ajStrTokenNextParseC(&linetokenhandle, eol, &line)) {
     if (!gotsequenceid) {
 
 /*
@@ -862,7 +862,7 @@ static void primers_report (AjPFile outfile,
 ** Start storing the results in the table.
 */
 
-      if (ajStrNCmpC(line, "PRIMER_SEQUENCE_ID=", 19) == 0) {
+      if (ajStrCmpLenC(line, "PRIMER_SEQUENCE_ID=", 19) == 0) {
         gotsequenceid = AJTRUE;
         table = ajStrTableNew(TABLEGUESS);
 
@@ -889,25 +889,25 @@ static void primers_report (AjPFile outfile,
 results in the table because the LEFT, RIGHT and INTERNAL results for each
 resulting primer are interleaved */
 
-    keytokenhandle = ajStrTokenInit (line, equals);
+    keytokenhandle = ajStrTokenNewC(line, equals);
 
     key = ajStrNew();
-    ajStrToken(&key, &keytokenhandle,NULL);
+    ajStrTokenNextParse(&keytokenhandle, &key);
 
     value = ajStrNew();
-    ajStrToken(&value, &keytokenhandle,NULL);
+    ajStrTokenNextParse(&keytokenhandle, &value);
 
 /* debug */
     (void) ajDebug("key=%S\tvalue=%S\n", key, value);
 
     ajTablePut(table, (const void *)key, (void *)value);
 
-    (void) ajStrTokenClear(&keytokenhandle);
+    (void) ajStrTokenDel(&keytokenhandle);
   }
 
 /* tidy up */
   ajStrDel(&line);
-  (void) ajStrTokenClear(&linetokenhandle);
+  (void) ajStrTokenDel(&linetokenhandle);
   ajStrTableFree(&table);
   ajStrDel(&key);
   ajStrDel(&value);
@@ -971,48 +971,48 @@ PRIMER_PRODUCT_SIZE=137
 */
 
 /* check for errors */
-  ajStrAssC(&key, "PRIMER_ERROR");
+  ajStrAssignC(&key, "PRIMER_ERROR");
   error = (AjPStr)ajTableGet(table, (const void*)key);
   if (error != NULL) {
     ajErr("%S", error);
   }
-  ajStrAssC(&key, "PRIMER_WARNING");
+  ajStrAssignC(&key, "PRIMER_WARNING");
   error = (AjPStr)ajTableGet(table, (const void*)key);
   if (error != NULL) {
     ajWarn("%S", error);
   }
 
 /* get the sequence id */
-  ajStrAssC(&key, "PRIMER_SEQUENCE_ID");
+  ajStrAssignC(&key, "PRIMER_SEQUENCE_ID");
   seqid = (AjPStr)ajTableGet(table, (const void*)key);
   (void) ajFmtPrintF(outfile, "\n# PRIMER3 RESULTS FOR %S\n\n", seqid);
 
 /* get information on the analysis */
-  ajStrAssC(&key, "PRIMER_LEFT_EXPLAIN");
+  ajStrAssignC(&key, "PRIMER_LEFT_EXPLAIN");
   explain = (AjPStr)ajTableGet(table, (const void*)key);
   if (explain != NULL) {
-    ajStrSubstituteCC(&explain, ",", "\n#");
+    ajStrExchangeCC(&explain, ",", "\n#");
     (void) ajFmtPrintF(outfile, "# FORWARD PRIMER STATISTICS:\n# %S\n\n",
 		       explain);
   }
-  ajStrAssC(&key, "PRIMER_RIGHT_EXPLAIN");
+  ajStrAssignC(&key, "PRIMER_RIGHT_EXPLAIN");
   explain = (AjPStr)ajTableGet(table, (const void*)key);
   if (explain != NULL) {
-    ajStrSubstituteCC(&explain, ",", "\n#");
+    ajStrExchangeCC(&explain, ",", "\n#");
     (void) ajFmtPrintF(outfile, "# REVERSE PRIMER STATISTICS:\n# %S\n\n",
 		       explain);
   }
-  ajStrAssC(&key, "PRIMER_PAIR_EXPLAIN");
+  ajStrAssignC(&key, "PRIMER_PAIR_EXPLAIN");
   explain = (AjPStr)ajTableGet(table, (const void*)key);
   if (explain != NULL) {
-    ajStrSubstituteCC(&explain, ",", "\n#");
+    ajStrExchangeCC(&explain, ",", "\n#");
     (void) ajFmtPrintF(outfile, "# PRIMER PAIR STATISTICS:\n# %S\n\n",
 		       explain);
   }
-  ajStrAssC(&key, "PRIMER_INTERNAL_OLIGO_EXPLAIN");
+  ajStrAssignC(&key, "PRIMER_INTERNAL_OLIGO_EXPLAIN");
   explain = (AjPStr)ajTableGet(table, (const void*)key);
   if (explain != NULL) {
-    ajStrSubstituteCC(&explain, ",", "\n#");
+    ajStrExchangeCC(&explain, ",", "\n#");
    (void) ajFmtPrintF(outfile, "# INTERNAL OLIGO STATISTICS:\n# %S\n\n",
 		      explain);
   }
@@ -1085,16 +1085,16 @@ static AjPStr primers_tableget(const char *key1, ajint number,
   AjPStr keynum = NULL;
   AjPStr value = NULL;
 
-  ajStrAssC(&fullkey, key1);
+  ajStrAssignC(&fullkey, key1);
   if (number > 0) {
-    ajStrAppC(&fullkey, "_");
+    ajStrAppendC(&fullkey, "_");
     ajStrFromInt(&keynum, number);
-    ajStrApp(&fullkey, keynum);
+    ajStrAppendS(&fullkey, keynum);
   }
   if (strcmp(key2, "")) {
-    ajStrAppC(&fullkey, "_");
+    ajStrAppendC(&fullkey, "_");
   }
-  ajStrAppC(&fullkey, key2);
+  ajStrAppendC(&fullkey, key2);
   ajDebug("Constructed key=%S\n", fullkey);
   value = (AjPStr)ajTableGet(table, (const void*)fullkey);
 
@@ -1137,10 +1137,10 @@ static void primers_write_primer(AjPFile outfile,
     ajStrToFloat(tm, &tmfloat);
     ajStrToFloat(gc, &gcfloat);
     comma = ajStrFindC(posstr, ",");
-    ajStrAssS(&start, posstr);
-    ajStrCut(&start, comma, ajStrLen(start)-1);
+    ajStrAssignS(&start, posstr);
+    ajStrCutRange(&start, comma, ajStrGetLen(start)-1);
     ajStrToInt(start, &startint);
-    ajStrCut(&posstr, 0, comma);
+    ajStrCutRange(&posstr, 0, comma);
     ajStrToInt(posstr, &lenint);
     (void) ajFmtPrintF(outfile, "     %s  %6d %4d  %2.2f  %2.2f  %S\n\n",
     	tag, startint, lenint, tmfloat, gcfloat, seq);

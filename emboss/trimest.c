@@ -2,7 +2,7 @@
 **
 ** Trim poly-A tails off EST sequences
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
     {
         /* get sequence description */
-        ajStrAssS(&desc, ajSeqGetDesc(seq));
+        ajStrAssignS(&desc, ajSeqGetDescS(seq));
 
         /* get positions to cut in 5' poly-T and 3' poly-A tails */
 	if(fiveprime)
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 	tail3 = trimest_get_tail(seq, 3, minlength, mismatches);
 
 	/* get a COPY of the sequence string */
-	ajStrAssS(&str, ajSeqStr(seq));
+	ajStrAssignS(&str, ajSeqGetSeqS(seq));
 
         /* cut off longest of 3' or 5' tail */
 	if(tail5 > tail3)
@@ -88,8 +88,8 @@ int main(int argc, char **argv)
             if(tolower)
                 trimest_tolower(&str, 0, tail5-1);
             else
-	        ajStrSub(&str, tail5, ajSeqLen(seq)-1);
-	    ajStrAppC(&desc, " [poly-T tail removed]");
+	        ajStrKeepRange(&str, tail5, ajSeqGetLen(seq)-1);
+	    ajStrAppendC(&desc, " [poly-T tail removed]");
 
 	}
 	else if(tail3 > tail5)
@@ -97,25 +97,25 @@ int main(int argc, char **argv)
 	    /* remove 3' poly-A tail */
 	    ajDebug("Tail=%d\n", tail3);
             if(tolower)
-                trimest_tolower(&str, ajSeqLen(seq)-tail3, ajSeqLen(seq));
+                trimest_tolower(&str, ajSeqGetLen(seq)-tail3, ajSeqGetLen(seq));
             else
-	        ajStrSub(&str, 0, ajSeqLen(seq)-tail3-1);
-            ajStrAppC(&desc, " [poly-A tail removed]");
+	        ajStrKeepRange(&str, 0, ajSeqGetLen(seq)-tail3-1);
+            ajStrAppendC(&desc, " [poly-A tail removed]");
 
 	}
 
         /* write sequence out */
-	ajSeqReplace(seq, str);
+	ajSeqAssignSeqS(seq, str);
 
 	/* reverse complement if poly-T found */
 	if(tail5 > tail3 && reverse)
 	{
 	    ajSeqReverseForce(seq);
-	    ajStrAppC(&desc, " [reverse complement]");
+	    ajStrAppendC(&desc, " [reverse complement]");
 	}
 
         /* set description */
-        ajSeqAssDesc(seq, desc);
+        ajSeqAssignDescS(seq, desc);
 
 	ajSeqAllWrite(seqout, seq);
     }
@@ -164,18 +164,18 @@ static ajint trimest_get_tail(const AjPSeq seq, ajint direction,
 	t = 'T';
     	inc = 1;
     	start = 0;
-	end = ajSeqLen(seq);
+	end = ajSeqGetLen(seq);
 
     }
     else
     {
 	t = 'A';
     	inc = -1;
-    	start = ajSeqLen(seq)-1;
+    	start = ajSeqGetLen(seq)-1;
     	end = -1;
     }
 
-    s = ajSeqChar(seq);
+    s = ajSeqGetSeqC(seq);
 
     mismatchcount = 0;
     polycount = 0;
@@ -231,12 +231,12 @@ static void trimest_tolower(AjPStr *strng, ajint start, ajint end)
     substr = ajStrNew();
     
     /* extract the region and lowercase */
-    ajStrAppSub(&substr, *strng, start, end);
-    ajStrToLower(&substr);
+    ajStrAppendSubS(&substr, *strng, start, end);
+    ajStrFmtLower(&substr);
     
     /* remove and replace the lowercased region */
-    ajStrCut(strng, start, end);
-    ajStrInsert(strng, start, substr);
+    ajStrCutRange(strng, start, end);
+    ajStrInsertS(strng, start, substr);
     ajStrDel(&substr);
 
 }

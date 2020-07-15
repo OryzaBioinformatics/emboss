@@ -2,7 +2,7 @@
 **
 ** Pretty translation of DNA sequences for publication
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
     embInit("prettyseq", argc, argv);
 
     a      = ajAcdGetSeq("sequence");
-    codestr = ajAcdGetListI("table",1);
+    codestr = ajAcdGetListSingle("table");
     width  = ajAcdGetInt("width");
     range  = ajAcdGetRange("range");
     outf   = ajAcdGetOutfile("outfile");
@@ -98,15 +98,15 @@ int main(int argc, char **argv)
     isn    = ajAcdGetBool("nlabel");
 
     ajStrToInt(codestr, &gcode);
-    codon  = ajCodNewCode(gcode);;
-    beg = ajSeqBegin(a);
-    end = ajSeqEnd(a);
+    codon  = ajCodNewCode(gcode);
+    beg = ajSeqGetBegin(a);
+    end = ajSeqGetEnd(a);
 
     substr = ajStrNew();
-    ajStrAssSubC(&substr,ajSeqChar(a),beg-1,end-1);
-    ajStrToUpper(&substr);
+    ajStrAssignSubC(&substr,ajSeqGetSeqC(a),beg-1,end-1);
+    ajStrFmtUpper(&substr);
     pro=ajStrNewS(substr);
-    len = ajStrLen(substr);
+    len = ajStrGetLen(substr);
 
     AJCNEW(ruler, len);
     AJCNEW(npos, len);
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
     prettyseq_makeRuler(len,beg,ruler,npos);
     prettyseq_calcProteinPos(ppos,pro,len);
     prettyseq_showTrans(ppos,npos,pro,substr,len,ruler,beg,
-			outf,isrule,isp,isn,width,ajSeqName(a));
+			outf,isrule,isp,isn,width,ajSeqGetNameC(a));
 
     AJFREE(npos);
     AJFREE(ppos);
@@ -126,7 +126,12 @@ int main(int argc, char **argv)
     ajCodDel(&codon);
     ajRangeDel(&range);
 
-    ajExit();
+    ajSeqDel(&a);
+    ajFileClose(&outf);
+    ajStrDel(&codestr);
+    ajStrDel(&pro);
+
+    embExit();
 
     return 0;
 }
@@ -172,7 +177,7 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end,
 
     tri[3]='\0';
 
-    ajStrToUpper(s);
+    ajStrFmtUpper(s);
 
     /* Convert ranges to subsequence values */
     nr = ajRangeNumber(range);
@@ -181,7 +186,7 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end,
 	range->start[i] -= beg;
 	range->end[i] -= beg;
     }
-    limit = ajStrLen(*s);
+    limit = ajStrGetLen(*s);
 
     /* Test ranges for validity */
     for(i=0;i<nr;++i)
@@ -194,7 +199,7 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end,
     }
 
     /* Set areas of sequence to translate to lower case */
-    p = ajStrStrMod(s);
+    p = ajStrGetuniquePtr(s);
     for(i=0;i<nr;++i)
     {
 	ajRangeValues(range,i,&st,&en);
@@ -204,7 +209,7 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end,
 
 
     /* Do the translation */
-    q=ajStrStrMod(pro);
+    q=ajStrGetuniquePtr(pro);
     for(i=0;i<limit;++i)
     {
 	if(isupper((ajint)p[i]))
@@ -304,7 +309,7 @@ static void prettyseq_calcProteinPos(ajint *ppos, const AjPStr pro, ajint len)
     pos = 0;
     v   = 1;
 
-    p = ajStrStr(pro);
+    p = ajStrGetPtr(pro);
     while(p[pos]==' ')
 	ppos[pos++]=0;
 
@@ -435,8 +440,8 @@ static void prettyseq_showTransb(const ajint *ppos, const ajint *npos,
 
     if(isrule)
     {
-	ajStrAssSubC(&s,ruler,start,end);
-	ajFmtPrintF(outf,"           %s\n",ajStrStr(s));
+	ajStrAssignSubC(&s,ruler,start,end);
+	ajFmtPrintF(outf,"           %s\n",ajStrGetPtr(s));
     }
 
     if(isn)
@@ -444,8 +449,8 @@ static void prettyseq_showTransb(const ajint *ppos, const ajint *npos,
     else
 	ajFmtPrintF(outf,"           ");
 
-    ajStrAssSub(&s,substr,start,end);
-    ajFmtPrintF(outf,"%s ",ajStrStr(s));
+    ajStrAssignSubS(&s,substr,start,end);
+    ajFmtPrintF(outf,"%s ",ajStrGetPtr(s));
 
     if(isn)
 	ajFmtPrintF(outf,"%d",npos[end]);
@@ -507,8 +512,8 @@ static void prettyseq_showTransb(const ajint *ppos, const ajint *npos,
     else
 	ajFmtPrintF(outf,"           ");
 
-    ajStrAssSub(&s,pro,start,end);
-    ajFmtPrintF(outf,"%s ",ajStrStr(s));
+    ajStrAssignSubS(&s,pro,start,end);
+    ajFmtPrintF(outf,"%s ",ajStrGetPtr(s));
     if(isp && e)
 	ajFmtPrintF(outf,"%d",e);
     ajFmtPrintF(outf,"\n");

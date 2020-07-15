@@ -1,7 +1,7 @@
 /* @source etandem application
 **
 ** Tandem searches for tandem repeats
-** @author: Copyright (C) Richard Durbin (rd@sanger.ac.uk)
+** @author Copyright (C) Richard Durbin (rd@sanger.ac.uk)
 ** and Jean Thierry-Mieg 1992
 ** @@
 ** The original application is part of the ACEDB genome database
@@ -184,7 +184,7 @@ static void etandem_basicReport(AjPFeattable tab, AjPFile outfile,
     n = a->repeat;
 
     if(!rpthit)
-      ajStrAssC(&rpthit, "repeat_region");
+      ajStrAssignC(&rpthit, "repeat_region");
 
     copies = (a->ibest - a->start + 1) / n;
     perc = 100.0 * (a->bestScore + n * (copies + 1)) / (2.0 * n * copies);
@@ -210,7 +210,7 @@ static void etandem_basicReport(AjPFeattable tab, AjPFile outfile,
     {
 	/*ajDebug("      bestMax[%d] letter[%d] '%c'\n",
 		j, a->bestMax[j], letter[a->bestMax[j]]);*/
-	ajStrAppK(&constr, letter[a->bestMax[j]]);
+	ajStrAppendK(&constr, letter[a->bestMax[j]]);
     }
 
     if((a->phase+1) % n)
@@ -218,7 +218,7 @@ static void etandem_basicReport(AjPFeattable tab, AjPFile outfile,
 	{
 	    /*ajDebug("more: bestMax[%d] letter[%d] '%c'\n",
 		    j, a->bestMax[j], letter[a->bestMax[j]]);*/
-	    ajStrAppK(&constr, letter[a->bestMax[j]]);
+	    ajStrAppendK(&constr, letter[a->bestMax[j]]);
 	}
 
     ajFmtPrintS(&s, "*consensus %S", constr);
@@ -359,7 +359,7 @@ int main(int argc, char **argv)
     report   = ajAcdGetReport("outfile");
     outfile  = ajAcdGetOutfile("origfile");
     sequence = ajAcdGetSeq("sequence");
-    nbase    = ajSeqLen(sequence);
+    nbase    = ajSeqGetLen(sequence);
 
     tab = ajFeattableNewSeq(sequence);
 
@@ -379,7 +379,7 @@ int main(int argc, char **argv)
 
     for(n = nmin; n <= nmax; ++n)
     {
-	cp = ajStrStr(nseq);
+	cp = ajStrGetPtr(nseq);
 	for(ibase = 0; ibase < nbase; ++ibase, ++cp)
 	{
 	    base = *cp - 1;
@@ -512,8 +512,15 @@ int main(int argc, char **argv)
 
     etandem_finalReport(tab, outfile);
     ajReportWrite(report, tab, sequence);
+    ajReportDel(&report);
+    ajFeattableDel(&tab);
+    ajSeqDel(&sequence);
+    ajFileClose(&outfile);
 
+    ajSeqCvtDel(&cvt);
     ajStrDel(&nseq);
+    ajStrDel(&tmpstr);
+    AJFREE(ring);
 
     ajExit();
 

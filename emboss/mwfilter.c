@@ -4,7 +4,7 @@
 ** a file of molecular weights from a mass spec
 ** Also remove oxidised methionines and threonines
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -180,9 +180,9 @@ static void mwfilter_readdata(AjPFile inf, AjPDouble *rmarray,
     /* Read in the top of the file (noisy molwts) */
     while(ajFileReadLine(inf,&line) && !ajStrPrefixC(line,"Displacements"))
     {
-	if(!ajStrLen(line))
+	if(!ajStrGetLen(line))
 	    continue;
-	c = *ajStrStr(line);
+	c = *ajStrGetPtr(line);
 	if(c=='#' || c=='\n')
 	    continue;
 	if(ajFmtScanS(line,"%*s%lf",&n) != 1)
@@ -204,9 +204,9 @@ static void mwfilter_readdata(AjPFile inf, AjPDouble *rmarray,
 
     while(ajFileReadLine(inf,&line))
     {
-	if(!ajStrLen(line))
+	if(!ajStrGetLen(line))
 	    continue;
-	c = *ajStrStr(line);
+	c = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
 	    continue;
@@ -246,9 +246,9 @@ static void mwfilter_readexp(AjPFile inf, AjPDouble *exparray)
 
     while(ajFileReadLine(inf,&line))
     {
-	if(!ajStrLen(line))
+	if(!ajStrGetLen(line))
 	    continue;
-	c = *ajStrStr(line);
+	c = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
 	    continue;

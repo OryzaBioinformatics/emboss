@@ -1,7 +1,7 @@
 /* @source octanol application
 **
 ** Displays protein hydropathy.
-** @author: Copyright (C) Ian Longden (il@sanger.ac.uk)
+** @author Copyright (C) Ian Longden (il@sanger.ac.uk)
 ** @@
 ** From White and Wimley Annu Rev. Biophys. Biomol. Struct. 1999. 28:319-65
 **
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 				    &err2[0]))
 	ajFatal("Could not read data file");
 
-    graphdata = ajGraphPlpDataNewI(ajSeqLen(seq)-llen);
+    graphdata = ajGraphPlpDataNewI(ajSeqGetLen(seq)-llen);
     ajGraphPlpDataSetColour(graphdata,GREEN);
 
     if(interface)
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
     }
 
 
-    graphdata3 = ajGraphPlpDataNewI(ajSeqLen(seq)-llen);
+    graphdata3 = ajGraphPlpDataNewI(ajSeqGetLen(seq)-llen);
     ajGraphPlpDataSetColour(graphdata3,BLACK);
 
     if(difference)
@@ -114,7 +114,7 @@ int main(int argc, char **argv)
 	ajGraphPlpDataSetTypeC(graphdata3,"2D Plot");
     }
 
-    graphdata2 = ajGraphPlpDataNewI(ajSeqLen(seq)-llen);
+    graphdata2 = ajGraphPlpDataNewI(ajSeqGetLen(seq)-llen);
     ajGraphPlpDataSetColour(graphdata2,RED);
 
     if(octanol)
@@ -127,13 +127,13 @@ int main(int argc, char **argv)
     }
 
 
-    ajGraphAddLine(mult,0.0,0.0,(float)ajSeqLen(seq),0.0,BLACK);
+    ajGraphAddLine(mult,0.0,0.0,(float)ajSeqGetLen(seq),0.0,BLACK);
 
     midpoint = ((float)llen+1.0)/2.0;
 
-    ajSeqToLower(seq);
+    ajSeqFmtLower(seq);
 
-    s1 = ajStrStr(ajSeqStr(seq));
+    s1 = ajStrGetPtr(ajSeqGetSeqS(seq));
 
     for(j=0;j<llen;j++)
     {
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
 	total2 += matrix2[ajAZToInt(s1[j])];
     }
 
-    for(i=0;i<ajSeqLen(seq)-llen;i++)
+    for(i=0;i<ajSeqGetLen(seq)-llen;i++)
     {
 	v = graphdata->x[i] = (float)i+midpoint;
 	xmin1 = (xmin1<v) ? xmin1 : v;
@@ -187,14 +187,27 @@ int main(int argc, char **argv)
     min = min*1.1;
     max = max*1.1;
 
-    ajGraphxySetMaxMin(mult,0.0,(float)ajSeqLen(seq),min,max);
+    ajGraphxySetMaxMin(mult,0.0,(float)ajSeqGetLen(seq),min,max);
     ajGraphPlpDataSetMaxima(graphdata,xmin1,xmax1,ymin1,ymax1);
     ajGraphPlpDataSetMaxima(graphdata2,xmin2,xmax2,ymin2,ymax2);
     ajGraphPlpDataSetMaxima(graphdata3,xmin3,xmax3,ymin3,ymax3);
 
     ajGraphxyDisplay(mult,AJTRUE);
 
-    ajExit();
+    ajFileClose(&datafile);
+    ajSeqDel(&seq);
+    ajGraphxyDel(&mult);
+
+    if(!interface)
+	ajGraphPlpDataDel(&graphdata);
+
+    if(!octanol)
+	ajGraphPlpDataDel(&graphdata2);
+
+    if(!difference)
+	ajGraphPlpDataDel(&graphdata3);
+
+    embExit();
 
     return 0;
 }
@@ -227,34 +240,34 @@ static ajint octanol_getwhitewimbleydata(AjPFile file, float matrix[],
 
     while(ajFileGets(file,&buffer))
     {
-	s1 = ajStrStr(buffer);
+	s1 = ajStrGetPtr(buffer);
 	if(*s1 == '#')			/* ignore lines */
 	    continue;
 
-	token = ajStrTokenInit(buffer,ajStrStr(delim));
-	cols = ajStrTokenCount(buffer,ajStrStr(delim));
+	token = ajStrTokenNewS(buffer,delim);
+	cols = ajStrParseCountS(buffer,delim);
 	ajDebug("number of cols = %d\n",cols);
 
-	ajStrToken(&buf2,&token,ajStrStr(delim)); /* get AA char code */
-	ajStrToLower(&buf2);
+	ajStrTokenNextParseS(&token,delim,&buf2); /* get AA char code */
+	ajStrFmtLower(&buf2);
 
-	s1 = ajStrStr(buf2);		/* convert code to integer */
+	s1 = ajStrGetPtr(buf2);		/* convert code to integer */
 	matpos = (ajint)s1[0];
 	matpos -= 97;
 
-	ajStrToken(&buf2,&token,ajStrStr(delim)); /* get interface value */
+	ajStrTokenNextParseS(&token,delim,&buf2); /* get interface value */
 	ajStrToFloat(buf2,&matrix[matpos]);
 
-	ajStrToken(&buf2,&token,ajStrStr(delim)); /* get +/- error value */
+	ajStrTokenNextParseS(&token,delim,&buf2); /* get +/- error value */
 	ajStrToFloat(buf2,&err[matpos]);
 
-	ajStrToken(&buf2,&token,ajStrStr(delim)); /* get octanol value value */
+	ajStrTokenNextParseS(&token,delim,&buf2); /* get octanol value value */
 	ajStrToFloat(buf2,&matrix2[matpos]);
 
-	ajStrToken(&buf2,&token,ajStrStr(delim)); /* get +/- error value */
+	ajStrTokenNextParseS(&token,delim,&buf2); /* get +/- error value */
 	ajStrToFloat(buf2,&err2[matpos]);
 
-	ajStrTokenClear(&token);
+	ajStrTokenDel(&token);
     }
 
     ajStrDel(&delim);

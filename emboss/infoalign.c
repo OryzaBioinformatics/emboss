@@ -2,7 +2,7 @@
 **
 ** Display information on a multiple sequence alignment with consensus
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** 23 May 2001 - GWW - written
 ** @@
 **
@@ -159,10 +159,10 @@ int main(int argc, char **argv)
 
     /* get the consensus sequence */
     embConsCalc(seqset, matrix, ajSeqsetSize(seqset), ajSeqsetLen(seqset),
-		 fplural, 0.0, ident, &cons);
-    ajSeqAssSeq(consensus, cons);
+		 fplural, 0.0, ident, ajFalse, &cons);
+    ajSeqAssignSeqS(consensus, cons);
 
-    ajSeqAssName(consensus,(xxx=ajStrNewC("Consensus")));
+    ajSeqAssignNameS(consensus,(xxx=ajStrNewC("Consensus")));
 
     /* get the reference sequence */
     if(nrefseq == -1)
@@ -295,13 +295,13 @@ int main(int argc, char **argv)
     	seq = ajSeqsetGetSeq(seqset, i);
 
 	/* get the usa ('-' if unknown) */
-	usa = ajSeqGetUsa(seq);
-	if(ajStrLen(usa) == 0)
+	usa = ajSeqGetUsaS(seq);
+	if(ajStrGetLen(usa) == 0)
 	    usa = altusa;
 
 	/* get the name ('-' if unknown) */
-	name = ajSeqGetName(seq);
-	if(ajStrLen(name) == 0)
+	name = ajSeqGetNameS(seq);
+	if(ajStrGetLen(name) == 0)
 	    name = altname;
 
 	/* get the stats from the comparison to the reference sequence */
@@ -374,7 +374,7 @@ int main(int argc, char **argv)
             	dodesc);
 
 	if(dodesc)
-	    infoalign_OutputStr(outfile, ajSeqGetDesc(seq), html, ajFalse, 
+	    infoalign_OutputStr(outfile, ajSeqGetDescS(seq), html, ajFalse, 
 	    	NOLIMIT);
 	
 	/* end table line */
@@ -396,8 +396,13 @@ int main(int argc, char **argv)
     ajStrDel(&altname);
     ajStrDel(&xxx);
     ajSeqDel(&consensus);
-    
-    ajExit();
+
+    ajSeqsetDel(&seqset);
+    ajStrDel(&refseq);
+    ajMatrixDel(&matrix);
+    ajStrDel(&cons);
+
+    embExit();
     return 0;
 }
 
@@ -501,7 +506,7 @@ static void infoalign_OutputStr(AjPFile outfile, const AjPStr str, AjBool html,
 {
     AjPStr marginfmt;
 
-    marginfmt = ajStrNewL(10);
+    marginfmt = ajStrNewRes(10);
 
     /* ajFmtPrintF doesn't seem to deal with formats like "%-*S" correctly */
     ajFmtPrintS(&marginfmt, "%%-%dS", minlength);
@@ -518,12 +523,12 @@ static void infoalign_OutputStr(AjPFile outfile, const AjPStr str, AjBool html,
 	**  Try to fit the name in 'minlength' spaces, else just add a
 	**  TAB after it
 	*/
-	ajFmtPrintF(outfile, ajStrStr(marginfmt), str);
+	ajFmtPrintF(outfile, ajStrGetPtr(marginfmt), str);
 
     if(html)
 	ajFmtPrintF(outfile, "</td>\n");
     else
-	if(after &&  ajStrLen(str) >= minlength)
+	if(after &&  ajStrGetLen(str) >= minlength)
 	    ajFmtPrintF(outfile, "\t");
 
     ajStrDel(&marginfmt);
@@ -554,7 +559,7 @@ static int infoalign_Getrefseq(const AjPStr refseq, const AjPSeqset seqset)
     for(i=0; i<ajSeqsetSize(seqset); i++)
     {
 	seq = ajSeqsetGetSeq(seqset, i);
-	if(!ajStrCmpO(ajSeqGetName(seq), refseq))
+	if(!ajStrCmpS(ajSeqGetNameS(seq), refseq))
 	    return i;
     }
 
@@ -612,10 +617,10 @@ static void infoalign_Compare(const AjPSeq ref, const AjPSeq seq,
     ajint begin;
     ajint end;
 
-    lenseq = ajSeqLen(seq);
-    lenref = ajSeqLen(ref);
-    s = ajSeqChar(seq);
-    r = ajSeqChar(ref);
+    lenseq = ajSeqGetLen(seq);
+    lenref = ajSeqGetLen(ref);
+    s = ajSeqGetSeqC(seq);
+    r = ajSeqGetSeqC(ref);
 
     /* initialise counts */
     *seqlength   = 0;

@@ -2,7 +2,7 @@
 **
 ** Banana displays Bending and Curvature Calculations.
 **
-** @author: Copyright (C) Ian Longden (il@sanger.ac.uk)
+** @author Copyright (C) Ian Longden (il@sanger.ac.uk)
 ** @@
 ** please reference the following report in any publication resulting from
 ** use of this program.
@@ -110,11 +110,11 @@ int main(int argc, char **argv)
     graph  = ajAcdGetGraph("graph");
     numres = ajAcdGetInt("residuesperline");
 
-    ibeg = ajSeqBegin(seq);
-    iend = ajSeqEnd(seq);
+    ibeg = ajSeqGetBegin(seq);
+    iend = ajSeqGetEnd(seq);
 
-    ajStrAssSub(&sstr, ajSeqStr(seq), ibeg-1, iend-1);
-    ilen = ajStrLen(sstr);
+    ajStrAssignSubS(&sstr, ajSeqStr(seq), ibeg-1, iend-1);
+    ilen = ajStrGetLen(sstr);
 
     AJCNEW0(iseq,ilen+1);
     AJCNEW0(x,ilen+1);
@@ -124,9 +124,9 @@ int main(int argc, char **argv)
     AJCNEW0(curve,ilen+1);
     AJCNEW0(bend,ilen+1);
 
-    ptr= ajStrStr(sstr);
+    ptr= ajStrGetPtr(sstr);
 
-    for(i=0;i<ajStrLen(sstr);i++)
+    for(i=0;i<ajStrGetLen(sstr);i++)
     {
 	if(*ptr=='A' || *ptr=='a')
 	    iseq[i+1] = 0;
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 	{
 	    if(ajFileGets(file,&buffer))
 	    {
-		sscanf(ajStrStr(buffer),"%f,%f,%f,%f",
+		sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",
 		       &twist[i][0][k],&twist[i][1][k],&twist[i][2][k],
 		       &twist[i][3][k]);
 	    }
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	for(i=0;i<4;i++)
 	    if(ajFileGets(file,&buffer))
 	    {
-		sscanf(ajStrStr(buffer),"%f,%f,%f,%f",&roll[i][0][k],
+		sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",&roll[i][0][k],
 		       &roll[i][1][k],&roll[i][2][k],&roll[i][3][k]);
 	    }
 	    else
@@ -181,22 +181,23 @@ int main(int argc, char **argv)
     for(k=0;k<4;k++)
 	for(i=0;i<4;i++)
 	    if(ajFileGets(file,&buffer))
-		sscanf(ajStrStr(buffer),"%f,%f,%f,%f",&tilt[i][0][k],
+		sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",&tilt[i][0][k],
 		       &tilt[i][1][k],&tilt[i][2][k],&tilt[i][3][k]);
 	    else
 		ajErr("Error reading angle file");
 
 
     if(ajFileGets(file,&buffer))
-	sscanf(ajStrStr(buffer),"%f,%f,%f,%f",&rbend,&rcurve,
+	sscanf(ajStrGetPtr(buffer),"%f,%f,%f,%f",&rbend,&rcurve,
 	       &bendscale,&curvescale);
     else
 	ajErr("Error reading angle file");
 
     ajFileClose(&file);
+    ajStrDel(&buffer);
 
 
-    for(i=1;i<ajStrLen(sstr)-1;i++)
+    for(i=1;i<ajStrGetLen(sstr)-1;i++)
     {
 	twistsum += twist[iseq[i]][iseq[i+1]][iseq[i+2]];
 	dx = (roll[iseq[i]][iseq[i+1]][iseq[i+2]]*sinf(twistsum)) +
@@ -209,7 +210,7 @@ int main(int argc, char **argv)
 
     }
 
-    for(i=6;i<ajStrLen(sstr)-6;i++)
+    for(i=6;i<ajStrGetLen(sstr)-6;i++)
     {
 	rxsum = 0.0;
 	rysum = 0.0;
@@ -227,7 +228,7 @@ int main(int argc, char **argv)
 	yave[i] = rysum*0.1;
     }
 
-    for(i=(ajint)rbend+1;i<=ajStrLen(sstr)-(ajint)rbend-1;i++)
+    for(i=(ajint)rbend+1;i<=ajStrGetLen(sstr)-(ajint)rbend-1;i++)
     {
 	bend[i] = sqrt(((x[i+(ajint)rbend]-x[i-(ajint)rbend])*
 			(x[i+(ajint)rbend]-x[i-(ajint)rbend])) +
@@ -236,7 +237,7 @@ int main(int argc, char **argv)
 	bend[i]*=bendscale;
     }
 
-    for(i=(ajint)rcurve+6;i<=ajStrLen(sstr)-(ajint)rcurve-6;i++)
+    for(i=(ajint)rcurve+6;i<=ajStrGetLen(sstr)-(ajint)rcurve-6;i++)
 	curve[i] = sqrt(((xave[i+(ajint)rcurve]-
 			  xave[i-(ajint)rcurve])*(xave[i+(ajint)rcurve]-
 						xave[i-(ajint)rcurve]))+
@@ -247,8 +248,8 @@ int main(int argc, char **argv)
     if(outf)
     {
 	ajFmtPrintF(outf,"Base   Bend      Curve\n");
-	ptr = ajStrStr(sstr);
-	for(i=1;i<=ajStrLen(sstr);i++)
+	ptr = ajStrGetPtr(sstr);
+	for(i=1;i<=ajStrGetLen(sstr);i++)
 	{
 	    ajFmtPrintF(outf,"%c    %6.1f   %6.1f\n",*ptr, bend[i], curve[i]);
 	    ptr++;
@@ -260,7 +261,7 @@ int main(int argc, char **argv)
     {
 	maxbend  = minbend  = 0.0;
 	maxcurve = mincurve = 0.0;
-	for(i=1;i<=ajStrLen(sstr);i++)
+	for(i=1;i<=ajStrGetLen(sstr);i++)
 	{
 	    if(bend[i] > maxbend)
 		maxbend = bend[i];
@@ -322,10 +323,10 @@ int main(int argc, char **argv)
 	bendfactor = (3*yincr)/maxbend;
 	curvefactor = (3*yincr)/maxcurve;
 
-	ptr = ajStrStr(sstr);
+	ptr = ajStrGetPtr(sstr);
 
 	y1 = y1-(yincr*(5.0));
-	for(i=1;i<=ajStrLen(sstr);i++)
+	for(i=1;i<=ajStrGetLen(sstr);i++)
 	{
 	    if(count > numres)
 	    {
@@ -346,14 +347,14 @@ int main(int argc, char **argv)
 
 	    ajGraphTextEnd((float)(count)+2.0,y1,residue);
 
-	    if(i>1 && i < ajStrLen(sstr))
+	    if(i>1 && i < ajStrGetLen(sstr))
 	    {
 		yp1 = y1+yincr + (bend[i]*bendfactor);
 		yp2 = y1+yincr + (bend[i+1]*bendfactor);
 		ajGraphLine((float)count+1.5,yp1,(float)(count)+2.5,yp2);
 	    }
 
-	    if(i>(ajint)rcurve+5 && i< ajStrLen(sstr)-(ajint)rcurve-7)
+	    if(i>(ajint)rcurve+5 && i< ajStrGetLen(sstr)-(ajint)rcurve-7)
 	    {
 		yp1 = y1+yincr + (curve[i]*curvefactor);
 		yp2 = y1+yincr + (curve[i+1]*curvefactor);
@@ -376,6 +377,13 @@ int main(int argc, char **argv)
     AJFREE(yave);
     AJFREE(curve);
     AJFREE(bend);
+
+    ajStrDel(&sstr);
+
+    ajSeqDel(&seq);
+    ajFileClose(&file);
+    ajFileClose(&outf);
+    ajGraphxyDel(&graph);
 
     ajExit();
 

@@ -2,7 +2,7 @@
 **
 ** Trace of values during ACD processing
 **
-** @author: Peter Rice
+** @author Peter Rice
 ** @@
 **
 ** This program is free software; you can redistribute it and/or

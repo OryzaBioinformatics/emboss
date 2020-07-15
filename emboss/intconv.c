@@ -2,7 +2,7 @@
 **
 ** Convert ints to ajints and longs to ajlongs
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 	}
 
 	pos = 0;
-	p   = ajStrStr(line);
+	p   = ajStrGetPtr(line);
 
 	while(strstr(p+pos,"int"))
 	{
@@ -73,14 +73,14 @@ int main(int argc, char **argv)
 	    {
 		pos = q-p;
 		intconv_modLineInt(&line,pos+1);
-		p = ajStrStr(line);
+		p = ajStrGetPtr(line);
 		pos += 5;
 	    }
 	    else if((q=strstr(p+pos,"(int)")))
 	    {
 		pos = q-p;
 		intconv_modLineInt(&line,pos+1);
-		p = ajStrStr(line);
+		p = ajStrGetPtr(line);
 		pos += 5;
 	    }
 	    else if((q=strstr(p+pos,"int")))
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 		if(!pos && (c==' ' || c=='\t' || c=='\n' || c=='\r' || c=='*'))
 		{
 		    intconv_modLineInt(&line,pos);
-		    p = ajStrStr(line);
+		    p = ajStrGetPtr(line);
 		}
 
 		if(pos)
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 		   (c==' ' || c=='\t' || c=='\n' || c=='\r' || c=='*'))
 		{
 		    intconv_modLineInt(&line,pos);
-		    p = ajStrStr(line);
+		    p = ajStrGetPtr(line);
 		}
 
 		pos += 3;
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 
 
 	pos = 0;
-	p   = ajStrStr(line);
+	p   = ajStrGetPtr(line);
 
 	while(strstr(p+pos,"long"))
 	{
@@ -118,14 +118,14 @@ int main(int argc, char **argv)
 	    {
 		pos = q-p;
 		intconv_modLineLong(&line,pos+1);
-		p = ajStrStr(line);
+		p = ajStrGetPtr(line);
 		pos += 6;
 	    }
 	    else if((q=strstr(p+pos,"(long)")))
 	    {
 		pos = q-p;
 		intconv_modLineLong(&line,pos+1);
-		p = ajStrStr(line);
+		p = ajStrGetPtr(line);
 		pos += 6;
 	    }
 	    else if((q=strstr(p+pos,"long")))
@@ -135,7 +135,7 @@ int main(int argc, char **argv)
 		if(!pos && (c==' ' || c=='\t' || c=='\n' || c=='\r' || c=='*'))
 		{
 		    intconv_modLineLong(&line,pos);
-		    p = ajStrStr(line);
+		    p = ajStrGetPtr(line);
 		}
 
 		if(pos)
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 		   (c==' ' || c=='\t' || c=='\n' || c=='\r' || c=='*'))
 		{
 		    intconv_modLineLong(&line,pos);
-		    p = ajStrStr(line);
+		    p = ajStrGetPtr(line);
 		}
 
 		pos += 4;
@@ -156,8 +156,10 @@ int main(int argc, char **argv)
     }
 
     ajStrDel(&line);
+    ajFileClose(&inf);
+    ajFileClose(&outf);
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -180,18 +182,18 @@ static void intconv_modLineInt(AjPStr *line, ajint pos)
     const char *p;
 
     t = ajStrNew();
-    p = ajStrStr(*line);
+    p = ajStrGetPtr(*line);
 
     if(pos)
-	ajStrAssSubC(&t,p,0,pos-1);
+	ajStrAssignSubC(&t,p,0,pos-1);
     else
-	ajStrAssC(&t,"");
+	ajStrAssignC(&t,"");
 
-    ajStrAppC(&t,"ajint");
+    ajStrAppendC(&t,"ajint");
     p += (pos+3);
-    ajStrAppC(&t,p);
+    ajStrAppendC(&t,p);
 
-    ajStrAssC(line,ajStrStr(t));
+    ajStrAssignC(line,ajStrGetPtr(t));
 
     ajStrDel(&t);
 
@@ -216,19 +218,19 @@ static void intconv_modLineLong(AjPStr *line, ajint pos)
     const char   *p;
 
     t = ajStrNew();
-    p = ajStrStr(*line);
+    p = ajStrGetPtr(*line);
 
 
     if(pos)
-	ajStrAssSubC(&t,p,0,pos-1);
+	ajStrAssignSubC(&t,p,0,pos-1);
     else
-	ajStrAssC(&t,"");
+	ajStrAssignC(&t,"");
 
-    ajStrAppC(&t,"ajlong");
+    ajStrAppendC(&t,"ajlong");
     p += (pos+4);
-    ajStrAppC(&t,p);
+    ajStrAppendC(&t,p);
 
-    ajStrAssC(line,ajStrStr(t));
+    ajStrAssignC(line,ajStrGetPtr(t));
 
     ajStrDel(&t);
 

@@ -2,7 +2,7 @@
 **
 ** Index flatfile databases
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -106,11 +106,12 @@ int main(int argc, char **argv)
     
     AjPBtId  idobj  = NULL;
     AjPBtPri priobj = NULL;
+    AjPBtHybrid hyb = NULL;
     
 
     embInit("dbxflat", argc, argv);
 
-    dbtype     = ajAcdGetListI("idformat",1);
+    dbtype     = ajAcdGetListSingle("idformat");
     fieldarray = ajAcdGetList("fields");
     directory  = ajAcdGetDirectoryName("directory");
     indexdir   = ajAcdGetOutdirName("indexoutdir");
@@ -126,7 +127,8 @@ int main(int argc, char **argv)
     
     idobj   = ajBtreeIdNew();
     priobj  = ajBtreePriNew();
-
+    hyb     = ajBtreeHybNew();
+    
 
     nfields = embBtreeSetFields(entry,fieldarray);
     embBtreeSetDbInfo(entry,dbname,dbrs,datestr,release,dbtype,directory,
@@ -146,7 +148,7 @@ int main(int argc, char **argv)
 	ajListPop(entry->files,(void **)&thysfile);
 	ajListPushApp(entry->files,(void *)thysfile);
 	ajFmtPrintS(&tmpstr,"%S%S",entry->directory,thysfile);
-	printf("Processing file %s\n",MAJSTRSTR(tmpstr));
+	printf("Processing file %s\n",MAJSTRGETPTR(tmpstr));
 	if(!(inf=ajFileNewIn(tmpstr)))
 	    ajFatal("Cannot open input file %S\n",tmpstr);
 	
@@ -155,24 +157,24 @@ int main(int argc, char **argv)
 	{
 	    if(entry->do_id)
 	    {
-		ajStrToLower(&entry->id);
-		ajStrAssS(&idobj->id,entry->id);
-		idobj->dbno = i;
-		idobj->offset = entry->fpos;
-		idobj->dups = 0;
-		ajBtreeInsertId(entry->idcache,idobj);
+		ajStrFmtLower(&entry->id);
+		ajStrAssignS(&hyb->key1,entry->id);
+		hyb->dbno = i;
+		hyb->offset = entry->fpos;
+		hyb->dups = 0;
+		ajBtreeHybInsertId(entry->idcache,hyb);
 	    }
 
 	    if(entry->do_accession)
 	    {
                 while(ajListPop(entry->ac,(void **)&word))
                 {
-		    ajStrToLower(&word);
-                    ajStrAssS(&idobj->id,word);
-                    idobj->dbno = i;
-		    idobj->offset = entry->fpos;
-		    idobj->dups = 0;
-		    ajBtreeInsertId(entry->accache,idobj);
+		    ajStrFmtLower(&word);
+                    ajStrAssignS(&hyb->key1,word);
+                    hyb->dbno = i;
+		    hyb->offset = entry->fpos;
+		    hyb->dups = 0;
+		    ajBtreeHybInsertId(entry->accache,hyb);
 		    ajStrDel(&word);
                 }
 	    }
@@ -181,12 +183,12 @@ int main(int argc, char **argv)
 	    {
                 while(ajListPop(entry->sv,(void **)&word))
                 {
-		    ajStrToLower(&word);
-                    ajStrAssS(&idobj->id,word);
-                    idobj->dbno = i;
-		    idobj->offset = entry->fpos;
-		    idobj->dups = 0;
-		    ajBtreeInsertId(entry->svcache,idobj);
+		    ajStrFmtLower(&word);
+                    ajStrAssignS(&hyb->key1,word);
+                    hyb->dbno = i;
+		    hyb->offset = entry->fpos;
+		    hyb->dups = 0;
+		    ajBtreeHybInsertId(entry->svcache,hyb);
 		    ajStrDel(&word);
                 }
 	    }
@@ -195,9 +197,9 @@ int main(int argc, char **argv)
 	    {
                 while(ajListPop(entry->kw,(void **)&word))
                 {
-		    ajStrToLower(&word);
-		    ajStrAssS(&priobj->id,entry->id);
-                    ajStrAssS(&priobj->keyword,word);
+		    ajStrFmtLower(&word);
+		    ajStrAssignS(&priobj->id,entry->id);
+                    ajStrAssignS(&priobj->keyword,word);
                     priobj->treeblock = 0;
                     ajBtreeInsertKeyword(entry->kwcache, priobj);
 		    ajStrDel(&word);
@@ -208,9 +210,9 @@ int main(int argc, char **argv)
 	    {
                 while(ajListPop(entry->de,(void **)&word))
                 {
-		    ajStrToLower(&word);
-		    ajStrAssS(&priobj->id,entry->id);
-                    ajStrAssS(&priobj->keyword,word);
+		    ajStrFmtLower(&word);
+		    ajStrAssignS(&priobj->id,entry->id);
+                    ajStrAssignS(&priobj->keyword,word);
                     priobj->treeblock = 0;
                     ajBtreeInsertKeyword(entry->decache, priobj);
 		    ajStrDel(&word);
@@ -221,9 +223,9 @@ int main(int argc, char **argv)
 	    {
                 while(ajListPop(entry->tx,(void **)&word))
                 {
-		    ajStrToLower(&word);
-		    ajStrAssS(&priobj->id,entry->id);
-                    ajStrAssS(&priobj->keyword,word);
+		    ajStrFmtLower(&word);
+		    ajStrAssignS(&priobj->id,entry->id);
+                    ajStrAssignS(&priobj->keyword,word);
                     priobj->treeblock = 0;
                     ajBtreeInsertKeyword(entry->txcache, priobj);
 		    ajStrDel(&word);
@@ -231,14 +233,10 @@ int main(int argc, char **argv)
 	    }
 	}
 	
-
-
-
-
-
 	ajFileClose(&inf);
     }
     
+
 
     embBtreeDumpParameters(entry);
     embBtreeCloseCaches(entry);
@@ -256,7 +254,8 @@ int main(int argc, char **argv)
 
     ajBtreeIdDel(&idobj);
     ajBtreePriDel(&priobj);
-
+    ajBtreeHybDel(&hyb);
+    
     ajExit();
 
     return 0;
@@ -299,21 +298,24 @@ static AjBool dbxflat_ParseEmbl(EmbPBtreeEntry entry, AjPFile inf)
 	{
 	    entry->fpos = pos;
 	    ajFmtScanS(line,"%*S%S",&entry->id);
-	    ajStrTrimEndC(&entry->id, 1);
-	    if(entry->do_sv)
-		embBtreeEmblSV(line,entry->sv);
+	    ajStrTrimEndC(&entry->id, ";");
 /*
 	    ++global;
-	    printf("%d. %s\n",global,ajStrStr(entry->id));
+	    printf("%d. %s\n",global,ajStrGetPtr(entry->id));
 */
+	    if(entry->do_sv)
+		embBtreeEmblSV(line,entry->sv);
 	}
 
+
 	if(entry->do_sv)
-	    if(ajStrPrefixC(line,"SV"))
+	    if(ajStrPrefixC(line,"SV") ||
+	       ajStrPrefixC(line,"IV"))	/* emblcds database format */
 		embBtreeEmblAC(line,entry->sv);
 
 	if(entry->do_accession)
-	    if(ajStrPrefixC(line,"AC"))
+	    if(ajStrPrefixC(line,"AC") ||
+	       ajStrPrefixC(line,"PA"))	/* emblcds database format */
 		embBtreeEmblAC(line,entry->ac);
 	
 	if(entry->do_keyword)
@@ -359,12 +361,10 @@ static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf)
     
     line = ajStrNewC("");
     sumline = ajStrNew();
+
     
     while(!ajStrPrefixC(line,"//") && ret)
     {
-	pos = ajFileTell(inf);
-	
-	
 	if(ajStrPrefixC(line,"LOCUS"))
 	{
 	    entry->fpos = pos;
@@ -382,14 +382,14 @@ static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf)
 	if(entry->do_keyword)
 	    if(ajStrPrefixC(line,"KEYWORDS"))
 	    {
-		ajStrAssS(&sumline,line);
+		ajStrAssignS(&sumline,line);
 		ret = ajFileReadLine(inf,&line);
-		while(ret && *MAJSTRSTR(line)==' ')
+		while(ret && *MAJSTRGETPTR(line)==' ')
 		{
-		    ajStrApp(&sumline,line);
+		    ajStrAppendS(&sumline,line);
 		    ret = ajFileReadLine(inf,&line);
 		}
-		ajStrClean(&sumline);
+		ajStrRemoveWhite(&sumline);
 		embBtreeGenBankKW(sumline,entry->kw,entry->kwlen);
 		continue;
 	    }
@@ -397,14 +397,14 @@ static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf)
 	if(entry->do_description)
 	    if(ajStrPrefixC(line,"DEFINITION"))
 	    {
-		ajStrAssS(&sumline,line);
+		ajStrAssignS(&sumline,line);
 		ret = ajFileReadLine(inf,&line);
-		while(ret && *MAJSTRSTR(line)==' ')
+		while(ret && *MAJSTRGETPTR(line)==' ')
 		{
-		    ajStrApp(&sumline,line);
+		    ajStrAppendS(&sumline,line);
 		    ret = ajFileReadLine(inf,&line);
 		}
-		ajStrClean(&sumline);
+		ajStrRemoveWhite(&sumline);
 		embBtreeGenBankDE(sumline,entry->de,entry->delen);
 		continue;
 	    }
@@ -414,19 +414,19 @@ static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf)
 	    if(ajStrPrefixC(line,"SOURCE"))
 	    {
 		ret = ajFileReadLine(inf,&line);
-		ajStrAppC(&line,";");
-		while(ret && *MAJSTRSTR(line)==' ')
+		ajStrAppendC(&line,";");
+		while(ret && *MAJSTRGETPTR(line)==' ')
 		{
-		    ajStrApp(&sumline,line);
+		    ajStrAppendS(&sumline,line);
 		    ret = ajFileReadLine(inf,&line);
 		}
-		ajStrClean(&sumline);
+		ajStrRemoveWhite(&sumline);
 		embBtreeGenBankTX(sumline,entry->tx,entry->txlen);
 		continue;
 	    }
 	
 
-
+	pos = ajFileTell(inf);
 
 	if(!ajFileReadLine(inf,&line))
 	    ret = ajFalse;

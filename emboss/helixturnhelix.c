@@ -1,7 +1,7 @@
 /* @source helixturnhelix application
 **
 ** Reports nucleic acid binding domains
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** Original program "HELIXTURNHELIX" by Peter Rice (EGCG 1990)
@@ -51,11 +51,12 @@ struct DNAB
 
 
 
-static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven);
-static void hth_print_hits(AjPList ajb, ajint n, float minsd, ajint lastcol,
-			   AjBool eightyseven, AjPFile outf);
-static void hth_report_hits(AjPList ajb, ajint lastcol,
-			    AjPFeattable TabRpt);
+static ajint helixturnhelix_readNab(AjPInt2d *matrix,AjBool eightyseven);
+static void helixturnhelix_print_hits(AjPList ajb,
+				      ajint n, float minsd, ajint lastcol,
+				      AjBool eightyseven, AjPFile outf);
+static void helixturnhelix_report_hits(AjPList ajb, ajint lastcol,
+				       AjPFeattable TabRpt);
 
 
 
@@ -123,7 +124,7 @@ int main(int argc, char **argv)
 
     eightyseven = ajAcdGetBool("eightyseven");
 
-    cols = hth_readNab(&matrix,eightyseven);
+    cols = helixturnhelix_readNab(&matrix,eightyseven);
     ajDebug("cols = %d\n",cols);
 
     lastcol = cols-3;
@@ -143,18 +144,18 @@ int main(int argc, char **argv)
 
 
 	strand = ajSeqStrCopy(seq);
-	ajStrToUpper(&strand);
+	ajStrFmtUpper(&strand);
 
-	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
-	len = ajStrLen(substr);
+	ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
+	len = ajStrGetLen(substr);
 
 	TabRpt = ajFeattableNewSeq(seq);
 
-	q = ajStrStrMod(&substr);
+	q = ajStrGetuniquePtr(&substr);
 	for(i=0;i<len;++i,++q)
 	    *q = (char) ajAZToInt(*q);
 
-	p = ajStrStr(substr);
+	p = ajStrGetPtr(substr);
 
 	se = (len-lastcol)+1;
 	for(i=0;i<se;++i)
@@ -170,14 +171,14 @@ int main(int argc, char **argv)
 		lp->seq  = ajStrNew();
 		sp = begin - 1 + i;
 		lp->pos = sp+1;
-		ajStrAssSubC(&lp->seq,ajStrStr(strand),sp,sp+lastcol-1);
+		ajStrAssignSubC(&lp->seq,ajStrGetPtr(strand),sp,sp+lastcol-1);
 		lp->sd = thissd;
 		lp->wt = weight;
 		ajListPush(ajb,(void *)lp);
 		++n;
 	    }
 	}
-	hth_report_hits(ajb, lastcol, TabRpt);
+	helixturnhelix_report_hits(ajb, lastcol, TabRpt);
 
 	ajReportWrite(report, TabRpt, seq);
 	ajFeattableDel(&TabRpt);
@@ -197,7 +198,8 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(outf, "\nHELIXTURNHELIX: Nucleic Acid Binding "
 			"Domain search\n\n");
 	    ajFmtPrintF(outf,"\nHits above +%.2f SD (%.2f)\n",minsd,minscore);
-	    hth_print_hits(ajb, n, minsd, lastcol, eightyseven, outf);
+	    helixturnhelix_print_hits(ajb, n, minsd, lastcol,
+				      eightyseven, outf);
 	}
     
     ajInt2dDel(&matrix);
@@ -219,7 +221,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic hth_readNab ****************************************************
+/* @funcstatic helixturnhelix_readNab *****************************************
 **
 ** Undocumented.
 **
@@ -230,7 +232,7 @@ int main(int argc, char **argv)
 ******************************************************************************/
 
 
-static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
+static ajint helixturnhelix_readNab(AjPInt2d *matrix,AjBool eightyseven)
 {
     AjPFile mfptr = NULL;
     AjPStr  line  = NULL;
@@ -273,7 +275,7 @@ static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
 
     while(ajFileGets(mfptr, &line))
     {
-	p = ajStrStr(line);
+	p = ajStrGetPtr(line);
 
 	if(*p=='#' || *p=='!' || *p=='\n')
 	    continue;
@@ -288,7 +290,7 @@ static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
 	while((*p!='\n') && (*p<'A' || *p>'Z'))
 	    ++p;
 
-	cols = ajStrTokenCount(line,ajStrStr(delim));
+	cols = ajStrParseCountC(line,ajStrGetPtr(delim));
 
 	if(pass)
 	{
@@ -301,11 +303,11 @@ static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
 
 	d1 = ajAZToInt((char)toupper((ajint)*p));
 
-	q = ajStrStr(line);
+	q = ajStrGetPtr(line);
 	c = 0;
-	q = ajSysStrtok(q,ajStrStr(delim));
+	q = ajSysStrtok(q,ajStrGetPtr(delim));
 
-	while((q=ajSysStrtok(NULL,ajStrStr(delim))))
+	while((q=ajSysStrtok(NULL,ajStrGetPtr(delim))))
 	{
 	    sscanf(q,"%d",&v);
 	    ajInt2dPut(matrix,d1,c++,v);
@@ -379,7 +381,7 @@ static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
 
 
 
-/* @funcstatic hth_print_hits *************************************************
+/* @funcstatic helixturnhelix_print_hits **************************************
 **
 ** Undocumented.
 **
@@ -393,8 +395,9 @@ static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
 ******************************************************************************/
 
 
-static void hth_print_hits(AjPList ajb, ajint n, float minsd, ajint lastcol,
-			   AjBool eightyseven, AjPFile outf)
+static void helixturnhelix_print_hits(AjPList ajb, ajint n,
+				      float minsd, ajint lastcol,
+				      AjBool eightyseven, AjPFile outf)
 {
     DNAB     **lp;
 
@@ -422,10 +425,10 @@ static void hth_print_hits(AjPList ajb, ajint n, float minsd, ajint lastcol,
     {
 	ajFmtPrintF(outf,"\nScore %d (+%.2f SD) in %s at residue %d\n",
 		   lp[ajIntGet(hp,i)]->wt,lp[ajIntGet(hp,i)]->sd,
-		    ajStrStr(lp[ajIntGet(hp,i)]->name),
+		    ajStrGetPtr(lp[ajIntGet(hp,i)]->name),
 		   lp[ajIntGet(hp,i)]->pos);
 	ajFmtPrintF(outf,"\n Sequence:  %s\n",
-		    ajStrStr(lp[ajIntGet(hp,i)]->seq));
+		    ajStrGetPtr(lp[ajIntGet(hp,i)]->seq));
 
 	if(eightyseven)
 	{
@@ -458,7 +461,7 @@ static void hth_print_hits(AjPList ajb, ajint n, float minsd, ajint lastcol,
 
 
 
-/* @funcstatic hth_report_hits ************************************************
+/* @funcstatic helixturnhelix_report_hits *************************************
 **
 ** Undocumented.
 **
@@ -469,7 +472,8 @@ static void hth_print_hits(AjPList ajb, ajint n, float minsd, ajint lastcol,
 ** @@
 ******************************************************************************/
 
-static void hth_report_hits(AjPList ajb, ajint lastcol, AjPFeattable TabRpt)
+static void helixturnhelix_report_hits(AjPList ajb,
+				       ajint lastcol, AjPFeattable TabRpt)
 {
     DNAB     **lp = NULL;
 
@@ -485,7 +489,7 @@ static void hth_report_hits(AjPList ajb, ajint lastcol, AjPFeattable TabRpt)
     struct DNAB *dnab;
 
     if(!fthit)
-	ajStrAssC(&fthit, "hit");
+	ajStrAssignC(&fthit, "hit");
 
     hp  = ajIntNew();
     hsd = ajFloatNew();

@@ -1,7 +1,7 @@
 /* @source prophecy application
 **
 ** Creates profiles and simple freuency matrices
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -35,14 +35,12 @@ static void prophecy_simple_matrix(const AjPSeqset seqset, AjPFile outf,
 				   const AjPStr name,
 				   ajint thresh);
 static void prophecy_gribskov_profile(const AjPSeqset seqset,
-				      float **sub,
 				      AjPFile outf, const AjPStr name,
 				      ajint thresh,
 				      float gapopen, float gapextend,
 				      AjPStr *cons);
 static void prophecy_henikoff_profile(const AjPSeqset seqset,
 				      const AjPMatrixf imtx,
-				      float **sub,
 				      ajint thresh, const AjPSeqCvt cvt,
 				      AjPFile outf, const AjPStr name,
 				      float gapopen, float gapextend,
@@ -66,10 +64,8 @@ int main(int argc, char **argv)
     AjPStr cons  = NULL;
 
     ajint thresh;
-    const char *p;
-    AjPStr *type;
+    AjPStr type;
 
-    float **sub = NULL;
     AjPMatrixf imtx = NULL;
     AjPSeqCvt cvt = NULL;
     float gapopen;
@@ -82,7 +78,7 @@ int main(int argc, char **argv)
     name   = ajAcdGetString("name");
     thresh = ajAcdGetInt("threshold");
     imtx   = ajAcdGetMatrixf("datafile");
-    type   = ajAcdGetList("type");
+    type   = ajAcdGetListSingle("type");
     outf   = ajAcdGetOutfile("outfile");
 
     gapopen   = ajAcdGetFloat("open");
@@ -91,25 +87,29 @@ int main(int argc, char **argv)
     gapopen   = ajRoundF(gapopen, 8);
     gapextend = ajRoundF(gapextend, 8);
 
-    p = ajStrStr(*type);
     cons = ajStrNewC("");
 
 
-    if(*p=='F')
+    if(ajStrGetCharFirst(type) == 'F')
 	prophecy_simple_matrix(seqset,outf,name,thresh);
 
-    if(*p=='G')
-	prophecy_gribskov_profile(seqset,sub,outf,name,thresh,
+    if(ajStrGetCharFirst(type) == 'G')
+	prophecy_gribskov_profile(seqset,outf,name,thresh,
 				 gapopen,gapextend,&cons);
 
-    if(*p=='H')
-	prophecy_henikoff_profile(seqset,imtx,sub,thresh,cvt,outf,name,
+    if(ajStrGetCharFirst(type) == 'H')
+	prophecy_henikoff_profile(seqset,imtx,thresh,cvt,outf,name,
 				 gapopen,gapextend,&cons);
-
-
 
     ajFileClose(&outf);
-    ajExit();
+
+    ajSeqsetDel(&seqset);
+    ajStrDel(&name);
+    ajStrDel(&cons);
+    ajMatrixfDel(&imtx);
+    ajStrDel(&type);
+
+    embExit();
 
     return 0;
 }
@@ -189,7 +189,7 @@ static void prophecy_simple_matrix(const AjPSeqset seqset, AjPFile outf,
 		x=matrix[j][i];
 		px=j;
 	    }
-	ajStrAppK(&cons,(char)(px+'A'));
+	ajStrAppendK(&cons,(char)(px+'A'));
     }
 
     /* Find maximum score for matrix */
@@ -205,11 +205,11 @@ static void prophecy_simple_matrix(const AjPSeqset seqset, AjPFile outf,
     ajFmtPrintF(outf,"# Columns are amino acid counts A->Z\n");
     ajFmtPrintF(outf,"# Rows are alignment positions 1->n\n");
     ajFmtPrintF(outf,"Simple\n");
-    ajFmtPrintF(outf,"Name\t\t%s\n",ajStrStr(name));
+    ajFmtPrintF(outf,"Name\t\t%s\n",ajStrGetPtr(name));
     ajFmtPrintF(outf,"Length\t\t%d\n",mlen);
     ajFmtPrintF(outf,"Maximum score\t%d\n",maxscore);
     ajFmtPrintF(outf,"Thresh\t\t%d\n",thresh);
-    ajFmtPrintF(outf,"Consensus\t%s\n",ajStrStr(cons));
+    ajFmtPrintF(outf,"Consensus\t%s\n",ajStrGetPtr(cons));
 
 
     for(i=0;i<mlen;++i)
@@ -235,7 +235,6 @@ static void prophecy_simple_matrix(const AjPSeqset seqset, AjPFile outf,
 ** Undocumented.
 **
 ** @param [r] seqset [const AjPSeqset] Undocumented
-** @param [w] sub [float**] Undocumented
 ** @param [u] outf [AjPFile] Undocumented
 ** @param [r] name [const AjPStr] Undocumented
 ** @param [r] thresh [ajint] Undocumented
@@ -245,7 +244,7 @@ static void prophecy_simple_matrix(const AjPSeqset seqset, AjPFile outf,
 ** @@
 ******************************************************************************/
 
-static void prophecy_gribskov_profile(const AjPSeqset seqset, float **sub,
+static void prophecy_gribskov_profile(const AjPSeqset seqset,
 				      AjPFile outf, const AjPStr name,
 				      ajint thresh,
 				      float gapopen, float gapextend,
@@ -254,6 +253,7 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset, float **sub,
     AjPMatrixf imtx = 0;
     AjPSeqCvt cvt = 0;
     AjPStr mname = NULL;
+    float **sub = NULL;
 
     float **mat;
     ajint nseqs;
@@ -369,7 +369,7 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset, float **sub,
 		x=weights[i][j];
 		px=j;
 	    }
-	ajStrAppK(cons,(char)(px+'A'));
+	ajStrAppendK(cons,(char)(px+'A'));
     }
 
 
@@ -422,14 +422,14 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset, float **sub,
     ajFmtPrintF(outf,"# Last column is indel penalty\n");
     ajFmtPrintF(outf,"# Rows are alignment positions 1->n\n");
     ajFmtPrintF(outf,"Gribskov\n");
-    ajFmtPrintF(outf,"Name\t\t%s\n",ajStrStr(name));
+    ajFmtPrintF(outf,"Name\t\t%s\n",ajStrGetPtr(name));
     ajFmtPrintF(outf,"Matrix\t\tpprofile\n");
     ajFmtPrintF(outf,"Length\t\t%d\n",mlen);
     ajFmtPrintF(outf,"Max_score\t%.2f\n",psum);
     ajFmtPrintF(outf,"Threshold\t%d\n",thresh);
     ajFmtPrintF(outf,"Gap_open\t%.2f\n",gapopen);
     ajFmtPrintF(outf,"Gap_extend\t%.2f\n",gapextend);
-    ajFmtPrintF(outf,"Consensus\t%s\n",ajStrStr(*cons));
+    ajFmtPrintF(outf,"Consensus\t%s\n",ajStrGetPtr(*cons));
 
     for(i=0;i<mlen;++i)
     {
@@ -463,7 +463,6 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset, float **sub,
 **
 ** @param [r] seqset [const AjPSeqset] Undocumented
 ** @param [r] imtx [const AjPMatrixf] Undocumented
-** @param [w] sub [float**] Undocumented
 ** @param [r] thresh [ajint] Undocumented
 ** @param [r] cvt [const AjPSeqCvt] Undocumented
 ** @param [u] outf [AjPFile] Undocumented
@@ -477,12 +476,12 @@ static void prophecy_gribskov_profile(const AjPSeqset seqset, float **sub,
 
 static void prophecy_henikoff_profile(const AjPSeqset seqset,
 				      const AjPMatrixf imtx,
-				      float **sub,
 				      ajint thresh, const AjPSeqCvt cvt,
 				      AjPFile outf, const AjPStr name,
 				      float gapopen, float gapextend,
 				      AjPStr *cons)
 {
+    float **sub = NULL;
     float **mat;
     ajint nseqs;
     ajint mlen;
@@ -591,7 +590,7 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
 		x = weights[i][j];
 		px=j;
 	    }
-	ajStrAppK(cons,(char)(px+'A'));
+	ajStrAppendK(cons,(char)(px+'A'));
     }
 
 
@@ -656,14 +655,14 @@ static void prophecy_henikoff_profile(const AjPSeqset seqset,
     ajFmtPrintF(outf,"# Last column is indel penalty\n");
     ajFmtPrintF(outf,"# Rows are alignment positions 1->n\n");
     ajFmtPrintF(outf,"Henikoff\n");
-    ajFmtPrintF(outf,"Name\t\t%s\n",ajStrStr(name));
-    ajFmtPrintF(outf,"Matrix\t\t%s\n",ajStrStr(ajMatrixfName(imtx)));
+    ajFmtPrintF(outf,"Name\t\t%s\n",ajStrGetPtr(name));
+    ajFmtPrintF(outf,"Matrix\t\t%s\n",ajStrGetPtr(ajMatrixfName(imtx)));
     ajFmtPrintF(outf,"Length\t\t%d\n",mlen);
     ajFmtPrintF(outf,"Max_score\t%.2f\n",psum);
     ajFmtPrintF(outf,"Threshold\t%d\n",thresh);
     ajFmtPrintF(outf,"Gap_open\t%.2f\n",gapopen);
     ajFmtPrintF(outf,"Gap_extend\t%.2f\n",gapextend);
-    ajFmtPrintF(outf,"Consensus\t%s\n",ajStrStr(*cons));
+    ajFmtPrintF(outf,"Consensus\t%s\n",ajStrGetPtr(*cons));
 
     for(i=0;i<mlen;++i)
     {

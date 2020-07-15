@@ -1,7 +1,7 @@
 /* @source emma application
 **
 ** EMBOSS interface to clustal
-** @author: Copyright (C) Mark Faller (mfaller@hgmp.mrc.ac.uk)
+** @author Copyright (C) Mark Faller (mfaller@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -21,10 +21,7 @@
 
 #include "emboss.h"
 
-
-
-
-static AjPStr emma_getUniqueFileName();
+static AjPStr emma_getUniqueFileName(void);
 
 
 
@@ -122,7 +119,7 @@ int main(int argc, char **argv, char **env)
     use_dend  = ajAcdGetToggle("dend");
     dend_file = ajAcdGetInfile("dendfile");
     if (dend_file)
-	ajStrAssS(&dend_filename, ajFileGetName(dend_file));
+	ajStrAssignS(&dend_filename, ajFileGetName(dend_file));
     ajFileClose(&dend_file);
 
     do_slow = ajAcdGetToggle("slow");
@@ -134,62 +131,62 @@ int main(int argc, char **argv, char **env)
     nopercent = ajAcdGetBool("nopercent");
 
     pw_matrix = ajAcdGetList("pwmatrix");
-    pwmc = *ajStrStr(*pw_matrix);
+    pwmc = *ajStrGetPtr(*pw_matrix);
 
     if(pwmc=='b')
-	ajStrAssC(&pwmstr,"blosum");
+	ajStrAssignC(&pwmstr,"blosum");
     else if(pwmc=='p')
-	ajStrAssC(&pwmstr,"pam");
+	ajStrAssignC(&pwmstr,"pam");
     else if(pwmc=='g')
-	ajStrAssC(&pwmstr,"gonnet");
+	ajStrAssignC(&pwmstr,"gonnet");
     else if(pwmc=='i')
-	ajStrAssC(&pwmstr,"id");
+	ajStrAssignC(&pwmstr,"id");
     else if(pwmc=='o')
-	ajStrAssC(&pwmstr,"own");
+	ajStrAssignC(&pwmstr,"own");
 
 
     pw_dna_matrix = ajAcdGetList("pwdnamatrix");
-    pwdc = *ajStrStr(*pw_dna_matrix);
+    pwdc = *ajStrGetPtr(*pw_dna_matrix);
 
     if(pwdc=='i')
-	ajStrAssC(&pwdstr,"iub");
+	ajStrAssignC(&pwdstr,"iub");
     else if(pwdc=='c')
-	ajStrAssC(&pwdstr,"clustalw");
+	ajStrAssignC(&pwdstr,"clustalw");
     else if(pwdc=='o')
-	ajStrAssC(&pwdstr,"own");
+	ajStrAssignC(&pwdstr,"own");
 
-    pairwise_matrix = ajAcdGetInfile("pairwisedata");
+    pairwise_matrix = ajAcdGetInfile("pairwisedatafile");
 
     pw_gapc = ajAcdGetFloat( "pwgapopen");
     pw_gapv = ajAcdGetFloat( "pwgapextend");
 
     matrix = ajAcdGetList( "matrix");
-    m1c = *ajStrStr(*matrix);
+    m1c = *ajStrGetPtr(*matrix);
 
     if(m1c=='b')
-	ajStrAssC(&m1str,"blosum");
+	ajStrAssignC(&m1str,"blosum");
     else if(m1c=='p')
-	ajStrAssC(&m1str,"pam");
+	ajStrAssignC(&m1str,"pam");
     else if(m1c=='g')
-	ajStrAssC(&m1str,"gonnet");
+	ajStrAssignC(&m1str,"gonnet");
     else if(m1c=='i')
-	ajStrAssC(&m1str,"id");
+	ajStrAssignC(&m1str,"id");
     else if(m1c=='o')
-	ajStrAssC(&m1str,"own");
+	ajStrAssignC(&m1str,"own");
 
 
     dna_matrix = ajAcdGetList( "dnamatrix");
-    m2c = *ajStrStr(*dna_matrix);
+    m2c = *ajStrGetPtr(*dna_matrix);
 
     if(m2c=='b')
-	ajStrAssC(&m2str,"iub");
+	ajStrAssignC(&m2str,"iub");
     else if(m2c=='p')
-	ajStrAssC(&m2str,"clustalw");
+	ajStrAssignC(&m2str,"clustalw");
     else if(m2c=='g')
-	ajStrAssC(&m2str,"own");
+	ajStrAssignC(&m2str,"own");
 
 
-    ma_matrix = ajAcdGetInfile("mamatrix");
+    ma_matrix = ajAcdGetInfile("mamatrixfile");
     gapc      = ajAcdGetFloat("gapopen");
     gapv      = ajAcdGetFloat("gapextend");
     endgaps   = ajAcdGetBool("endgaps");
@@ -208,7 +205,7 @@ int main(int argc, char **argv, char **env)
 
 
     fil_file = ajSeqoutNew();
-    tmpFilename = ajStrDup( emma_getUniqueFileName());
+    tmpFilename = ajStrNewRef( emma_getUniqueFileName());
     if(!ajSeqFileNewOut( fil_file, tmpFilename))
 	ajExit();
 
@@ -237,35 +234,35 @@ int main(int argc, char **argv, char **env)
       cmd = ajStrNewC(prog_default);
 
     /* add tmp file containing sequences */
-    ajStrAppC(&cmd, " -infile=");
-    ajStrAppC(&cmd, ajStrStr( tmpFilename));
+    ajStrAppendC(&cmd, " -infile=");
+    ajStrAppendC(&cmd, ajStrGetPtr( tmpFilename));
 
     /* add out file name */
-    tmp_aln_outfile = ajStrDup(emma_getUniqueFileName());
-    ajStrAppC(&cmd, " -outfile=");
-    ajStrApp( &cmd, tmp_aln_outfile);
+    tmp_aln_outfile = ajStrNewRef(emma_getUniqueFileName());
+    ajStrAppendC(&cmd, " -outfile=");
+    ajStrAppendS( &cmd, tmp_aln_outfile);
 
 
     /* calculating just the nj tree or doing full alignment */
     if(only_dend)
-        ajStrAppC(&cmd, " -tree");
+        ajStrAppendC(&cmd, " -tree");
     else
         if(!use_dend)
-	    ajStrAppC(&cmd, " -align");
+	    ajStrAppendC(&cmd, " -align");
 
     /* Set sequence type from information from acd file */
     if(are_prot)
-        ajStrAppC(&cmd, " -type=protein");
+        ajStrAppendC(&cmd, " -type=protein");
     else
-        ajStrAppC(&cmd, " -type=dna");
+        ajStrAppendC(&cmd, " -type=dna");
 
 
     /*
     **  set output to MSF format - will read in this file later and output
     **  user requested format
     */
-    ajStrAppC(&cmd, " -output=");
-    ajStrAppC(&cmd, "gcg");
+    ajStrAppendC(&cmd, " -output=");
+    ajStrAppendC(&cmd, "gcg");
 
     /* If going to do pairwise alignment */
     if(!use_dend)
@@ -273,23 +270,23 @@ int main(int argc, char **argv, char **env)
         /* add fast pairwise alignments*/
         if(!do_slow)
         {
-            ajStrAppC(&cmd, " -quicktree");
-            ajStrAppC(&cmd, " -ktuple=");
+            ajStrAppendC(&cmd, " -quicktree");
+            ajStrAppendC(&cmd, " -ktuple=");
             ajStrFromInt(&tmp, ktup);
-            ajStrApp(&cmd, tmp);
-            ajStrAppC(&cmd, " -window=");
+            ajStrAppendS(&cmd, tmp);
+            ajStrAppendC(&cmd, " -window=");
             ajStrFromInt(&tmp, window);
-            ajStrApp(&cmd, tmp);
+            ajStrAppendS(&cmd, tmp);
             if(nopercent)
-                ajStrAppC(&cmd, " -score=percent");
+                ajStrAppendC(&cmd, " -score=percent");
             else
-                ajStrAppC(&cmd, " -score=absolute");
-            ajStrAppC(&cmd, " -topdiags=");
+                ajStrAppendC(&cmd, " -score=absolute");
+            ajStrAppendC(&cmd, " -topdiags=");
             ajStrFromInt(&tmp, topdiags);
-            ajStrApp(&cmd, tmp);
-            ajStrAppC(&cmd, " -pairgap=");
+            ajStrAppendS(&cmd, tmp);
+            ajStrAppendC(&cmd, " -pairgap=");
             ajStrFromInt(&tmp, gapw);
-            ajStrApp(&cmd, tmp);
+            ajStrAppendS(&cmd, tmp);
         }
         else
         {
@@ -297,29 +294,29 @@ int main(int argc, char **argv, char **env)
             {
 		if(are_prot)
 		{
-		    ajStrAppC(&cmd, " -pwmatrix=");
-		    ajStrApp(&cmd, pwmstr);
+		    ajStrAppendC(&cmd, " -pwmatrix=");
+		    ajStrAppendS(&cmd, pwmstr);
 		}
 		else
 		{
-		    ajStrAppC(&cmd, " -pwdnamatrix=");
-		    ajStrApp(&cmd, pwdstr);
+		    ajStrAppendC(&cmd, " -pwdnamatrix=");
+		    ajStrAppendS(&cmd, pwdstr);
 		}
             }
             else
             {
 		if(are_prot)
-		    ajStrAppC(&cmd, " -pwmatrix=");
+		    ajStrAppendC(&cmd, " -pwmatrix=");
 		else
-		    ajStrAppC(&cmd, " -pwdnamatrix=");
-		ajStrApp(&cmd, ajFileGetName(pairwise_matrix));
+		    ajStrAppendC(&cmd, " -pwdnamatrix=");
+		ajStrAppendS(&cmd, ajFileGetName(pairwise_matrix));
             }
-            ajStrAppC(&cmd, " -pwgapopen=");
+            ajStrAppendC(&cmd, " -pwgapopen=");
             ajStrFromFloat(&tmp, pw_gapc, 3);
-            ajStrApp(&cmd, tmp);
-            ajStrAppC(&cmd, " -pwgapext=");
+            ajStrAppendS(&cmd, tmp);
+            ajStrAppendC(&cmd, " -pwgapext=");
             ajStrFromFloat(&tmp, pw_gapv, 3);
-            ajStrApp(&cmd, tmp);
+            ajStrAppendS(&cmd, tmp);
         }
     }
 
@@ -328,71 +325,75 @@ int main(int argc, char **argv, char **env)
     /* using existing tree or generating new tree? */
     if(use_dend)
     {
-        ajStrAppC(&cmd, " -usetree=");
-        ajStrApp(&cmd, dend_filename);
+        ajStrAppendC(&cmd, " -usetree=");
+        ajStrAppendS(&cmd, dend_filename);
     }
     else
     {
 	/* use tmp file to hold dend file, will read back in later */
-	tmp_dendfilename = ajStrDup(emma_getUniqueFileName());
-        ajStrAppC(&cmd, " -newtree=");
-        ajStrApp(&cmd, tmp_dendfilename);
+	tmp_dendfilename = ajStrNewRef(emma_getUniqueFileName());
+        ajStrAppendC(&cmd, " -newtree=");
+        ajStrAppendS(&cmd, tmp_dendfilename);
     }
 
     if(!ma_matrix)
     {
 	if(are_prot)
 	{
-	    ajStrAppC(&cmd, " -matrix=");
-	    ajStrApp(&cmd, m1str);
+	    ajStrAppendC(&cmd, " -matrix=");
+	    ajStrAppendS(&cmd, m1str);
 	}
 	else
 	{
-	    ajStrAppC(&cmd, " -dnamatrix=");
-	    ajStrApp(&cmd, m2str);
+	    ajStrAppendC(&cmd, " -dnamatrix=");
+	    ajStrAppendS(&cmd, m2str);
 	}
     }
     else
     {
 	if(are_prot)
-	    ajStrAppC(&cmd, " -matrix=");
+	    ajStrAppendC(&cmd, " -matrix=");
 	else
-	    ajStrAppC(&cmd, " -pwmatrix=");
-	ajStrApp(&cmd, ajFileGetName(ma_matrix));
+	    ajStrAppendC(&cmd, " -pwmatrix=");
+	ajStrAppendS(&cmd, ajFileGetName(ma_matrix));
     }
 
-    ajStrAppC(&cmd, " -gapopen=");
+    ajStrAppendC(&cmd, " -gapopen=");
     ajStrFromFloat(&tmp, gapc, 3);
-    ajStrApp(&cmd, tmp);
-    ajStrAppC(&cmd, " -gapext=");
+    ajStrAppendS(&cmd, tmp);
+    ajStrAppendC(&cmd, " -gapext=");
     ajStrFromFloat(&tmp, gapv, 3);
-    ajStrApp(&cmd, tmp);
-    ajStrAppC(&cmd, " -gapdist=");
+    ajStrAppendS(&cmd, tmp);
+    ajStrAppendC(&cmd, " -gapdist=");
     ajStrFromInt(&tmp, gap_dist);
-    ajStrApp(&cmd, tmp);
-    ajStrAppC(&cmd, " -hgapresidues=");
-    ajStrApp(&cmd, hgapres);
+    ajStrAppendS(&cmd, tmp);
+    ajStrAppendC(&cmd, " -hgapresidues=");
+    ajStrAppendS(&cmd, hgapres);
 
     if(!endgaps)
-	ajStrAppC(&cmd, " -endgaps");
+	ajStrAppendC(&cmd, " -endgaps");
 
     if(norgap)
-	ajStrAppC(&cmd, " -nopgap");
+	ajStrAppendC(&cmd, " -nopgap");
 
     if(nohgap)
-	ajStrAppC(&cmd, " -nohgap");
+	ajStrAppendC(&cmd, " -nohgap");
 
-    ajStrAppC(&cmd, " -maxdiv=");
+    ajStrAppendC(&cmd, " -maxdiv=");
     ajStrFromInt(&tmp, maxdiv);
-    ajStrApp(&cmd, tmp);
+    ajStrAppendS(&cmd, tmp);
 
 
     /*  run clustalw */
 
-/*    ajFmtError("..%s..\n\n", ajStrStr( cmd)); */
+/*    ajFmtError("..%s..\n\n", ajStrGetPtr( cmd)); */
     ajDebug("Executing '%S'\n", cmd);
+#ifndef WIN32
     ajSystemEnv(cmd, env);
-
+#else
+    if(system(ajStrGetPtr(cmd)) == -1)
+	ajFatal("clustalw execution failure");
+#endif
 
     /* produce alignment file only if one was produced */
     if(!only_dend)
@@ -416,7 +417,7 @@ int main(int argc, char **argv, char **env)
 	    ajSeqinDel(&seqin);
 
 	    /* remove the Usa from the start of the string */
-	    ajStrTrim(&tmp_aln_outfile, 5);
+	    ajStrCutStart(&tmp_aln_outfile, 5);
 	}
 	else
 	    ajFmtError("Problem writing out EMBOSS alignment file");
@@ -429,7 +430,7 @@ int main(int argc, char **argv, char **env)
 	tmp_dendfile = ajFileNewIn( tmp_dendfilename);
 
 	while(ajFileReadLine(tmp_dendfile, &line))
-	    ajFmtPrintF(dend_outfile, "%s\n", ajStrStr( line));
+	    ajFmtPrintF(dend_outfile, "%s\n", ajStrGetPtr( line));
 
 	ajFileClose(&tmp_dendfile);
 	ajSysUnlink(tmp_dendfilename);

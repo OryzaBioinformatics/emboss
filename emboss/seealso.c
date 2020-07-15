@@ -2,7 +2,7 @@
 **
 ** Finds programs sharing group names
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -43,8 +43,6 @@ int main(int argc, char **argv, char **env)
 
     AjPFile outfile = NULL;
     AjPStr search   = NULL;
-    AjPStr link1    = NULL;
-    AjPStr link2    = NULL;
     AjBool html;
     AjBool groups;
     AjBool emboss;
@@ -52,14 +50,13 @@ int main(int argc, char **argv, char **env)
     AjBool explode;
     AjBool colon;
     AjPStr showembassy = NULL;
+    AjPStr package = NULL;
 
     embInit("seealso", argc, argv);
     
     search  = ajAcdGetString("search");
     outfile = ajAcdGetOutfile("outfile");
     html    = ajAcdGetToggle("html");
-    link1   = ajAcdGetString("prelink");
-    link2   = ajAcdGetString("postlink");
     groups  = ajAcdGetBool("groups");
     emboss  = ajAcdGetBool("emboss");
     embassy = ajAcdGetBool("embassy");
@@ -77,7 +74,7 @@ int main(int argc, char **argv, char **env)
     
     /* is a search string specified  - should be tested in seealso.acd */
     
-    if(!ajStrLen(search))
+    if(!ajStrGetLen(search))
 	ajFatal("No application specified.");
     
     
@@ -85,14 +82,18 @@ int main(int argc, char **argv, char **env)
     ** get the groups and program information - don't want to ignore
     ** applications that don't work well under GUIs
     */
+
+    /* everything */
     embGrpGetProgGroups(appglist, applist, env, ajTrue, ajTrue, NULL,
 			explode, colon, ajFalse);
-    
+
+    /* what the user asked for */
     embGrpGetProgGroups(glist, alpha, env, emboss, embassy, showembassy,
 			explode, colon, ajFalse);
-    
+
     newlist = ajListNew();
-    embGrpKeySearchSeeAlso(newlist, &appgroups, applist, glist, search);
+    embGrpKeySearchSeeAlso(newlist, &appgroups, &package,
+			   applist, glist, search);
     if(appgroups == NULL)
     {
 	ajErr("No applications match.");
@@ -100,24 +101,27 @@ int main(int argc, char **argv, char **env)
     }
     
     if(groups)
-	embGrpOutputGroupsList(outfile, appgroups, ajFalse, html,
-			       link1, link2);
+	embGrpOutputGroupsList(outfile, appgroups, ajFalse,
+			       html, ajFalse, package);
     else
-	embGrpOutputGroupsList(outfile, newlist, ajTrue, html, link1,
-			       link2);
+	embGrpOutputGroupsList(outfile, newlist, ajTrue,
+			       html, ajFalse, package);
     
     embGrpGroupsListDel(&newlist);
-    ajFileClose(&outfile);
     
     embGrpGroupsListDel(&glist);
     embGrpGroupsListDel(&alpha);
     embGrpGroupsListDel(&appglist);
     embGrpGroupsListDel(&applist);
-    
-    ajStrDel(&link1);
-    ajStrDel(&link2);
-    
-    ajExit();
+
+   /*  embGrpGroupsListDel(&appgroups); */ /* appgroup points to another list*/
+
+    ajFileClose(&outfile);
+    ajStrDel(&search);
+    ajStrDel(&showembassy);
+    ajStrDel(&package);
+
+    embExit();
     
     return 0;
 }

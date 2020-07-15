@@ -2,7 +2,7 @@
 **
 ** Finds proteins matching mass spectrometry data
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -126,23 +126,24 @@ static void emowse_print_hits(AjPFile outf, AjPList hlist, ajint dno,
 
 int main(int argc, char **argv)
 {
-    AjPSeq seq;
-    AjPSeqall seqall;
-    AjPFile outf;
-    AjPFile mwinf;
-    AjPFile ffile;
-    AjPStr *enzyme;
+    AjPSeq seq = NULL;
+    AjPSeqall seqall = NULL;
+    AjPFile outf = NULL;
+    AjPFile mwinf = NULL;
+    AjPFile ffile = NULL;
+    AjPStr enzyme = NULL;
     ajint smolwt;
     ajint range;
     float tol;
     float partials;
-    AjPDouble freqs;
+    AjPDouble freqs = NULL;
     ajint begin;
     ajint end;
     double smw;
     ajint rno;
+    ajint i;
 
-    AjPList flist;
+    AjPList flist = NULL;
     EmbPMdata *data = NULL;
     ajint dno;
     ajint nfrags;
@@ -153,7 +154,7 @@ int main(int argc, char **argv)
 
     seqall   = ajAcdGetSeqall("sequence");
     mwinf    = ajAcdGetInfile("infile");
-    enzyme   = ajAcdGetList("enzyme");
+    enzyme   = ajAcdGetListSingle("enzyme");
     smolwt   = ajAcdGetInt("weight");
     range    = ajAcdGetInt("pcrange");
     ffile    = ajAcdGetDatafile("frequencies");
@@ -166,8 +167,10 @@ int main(int argc, char **argv)
 
     freqs = ajDoubleNewL(FGUESS);
     emowse_read_freqs(ffile, &freqs);
-    if(sscanf(ajStrStr(*enzyme),"%d",&rno)!=1)
-	ajFatal("Illegal enzyme entry [%S]",*enzyme);
+    ajFileClose(&ffile);
+
+    if(ajFmtScanS(enzyme,"%d",&rno)!=1)
+	ajFatal("Illegal enzyme entry [%S]",enzyme);
 
 
     if(!(dno = emowse_read_data(mwinf,&data)))
@@ -194,19 +197,33 @@ int main(int argc, char **argv)
 
 	emowse_match(data,dno,flist,nfrags,(double)tol,seq,hlist,
 		     (double)partials,
-	      smw,rno,freqs);
+		     smw,rno,freqs);
 
 	ajListDel(&flist);
     }
 
 
     emowse_print_hits(outf,hlist,dno,data);
+    for(i=0;i<dno;i++)
+    {
+	ajStrDel(&data[i]->sdata);
+	AJFREE(data[i]);
+    }
+    AJFREE(data);
 
     ajListDel(&hlist);
 
     ajFileClose(&mfptr);
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajFileClose(&outf);
+    ajStrDel(&enzyme);
+
+    ajDoubleDel(&freqs);
+    ajListDel(&flist);
+
+    embExit();
 
     return 0;
 }
@@ -235,7 +252,7 @@ static void emowse_read_freqs(AjPFile finf, AjPDouble *freqs)
 
     while(ajFileReadLine(finf,&str))
     {
-       	if(sscanf(ajStrStr(str),"%lf",&f)==1)
+       	if(sscanf(ajStrGetPtr(str),"%lf",&f)==1)
 	    ajDoublePut(freqs,c,f);
 	else
 	    ajDoublePut(freqs,c,0.);
@@ -244,7 +261,6 @@ static void emowse_read_freqs(AjPFile finf, AjPDouble *freqs)
     }
 
     ajStrDel(&str);
-    ajFileClose(&finf);
 
     return;
 }
@@ -303,16 +319,16 @@ static ajint emowse_read_data(AjPFile inf, EmbPMdata** data)
     l   = ajListNew();
 
     while(ajFileReadLine(inf,&str))
-	if(sscanf(ajStrStr(str),"%lf",&v)==1)
+	if(sscanf(ajStrGetPtr(str),"%lf",&v)==1)
 	{
 	    AJNEW0(ptr);
 	    ptr->mwt = v;
 	    ptr->sdata=ajStrNew();
-	    ajStrClean(&str);
-	    token = ajStrTokenInit(str," \t\r\n");
-	    ajStrToken(&ptr->sdata,&token," \t\r\n");
-	    ajStrToken(&ptr->sdata,&token," \t\r\n");
-	    ajStrTokenClear(&token);
+	    ajStrRemoveWhite(&str);
+	    token = ajStrTokenNewC(str," \t\r\n");
+	    ajStrTokenNextParseC(&token," \t\r\n",&ptr->sdata);
+	    ajStrTokenNextParseC(&token," \t\r\n",&ptr->sdata);
+	    ajStrTokenDel(&token);
 	    ajListPush(l,(void *)ptr);
 	}
 
@@ -320,6 +336,7 @@ static ajint emowse_read_data(AjPFile inf, EmbPMdata** data)
     n = ajListToArray(l,(void ***)data);
     ajListDel(&l);
     ajStrDel(&str);
+    ajStrTokenDel(&token);
 
     return n;
 }
@@ -508,7 +525,7 @@ static void emowse_match(EmbPMdata const * data, ajint dno, AjPList flist,
     {
 	AJNEW0(hits);
 	hits->seq   = ajSeqStrCopy(seq);
-	hits->desc  = ajStrNewC(ajStrStr(ajSeqGetDesc(seq)));
+	hits->desc  = ajStrNewC(ajStrGetPtr(ajSeqGetDesc(seq)));
 	hits->found = found;
 	hits->score = sumf;
 	hits->mwt   = smw;
@@ -539,7 +556,7 @@ static void emowse_match(EmbPMdata const * data, ajint dno, AjPList flist,
 
 	AJNEW0(hits);
 	hits->seq   = ajSeqStrCopy(seq);
-	hits->desc  = ajStrNewC(ajStrStr(ajSeqGetDesc(seq)));
+	hits->desc  = ajStrNewC(ajStrGetPtr(ajSeqGetDesc(seq)));
 	hits->found = found;
 	hits->name  = ajStrNewC(ajSeqName(seq));
 	hits->score = sumf;
@@ -749,7 +766,7 @@ static ajint emowse_seq_comp(ajint bidx, ajint thys, const AjPSeq seq,
     const char *p;
 
 
-    if(!ajStrLen(data[thys]->sdata))
+    if(!ajStrGetLen(data[thys]->sdata))
 	return 1;
 
     beg = frags[bidx]->begin - 1;
@@ -759,39 +776,39 @@ static ajint emowse_seq_comp(ajint bidx, ajint thys, const AjPSeq seq,
 
     result = ajStrNew();
     substr = ajStrNew();
-    ajStrAssSub(&substr,str,beg,end);
-    ajStrToUpper(&substr);
+    ajStrAssignSubS(&substr,str,beg,end);
+    ajStrFmtUpper(&substr);
 
-    token = ajStrTokenInit(data[thys]->sdata," \r\t\n");
+    token = ajStrTokenNewC(data[thys]->sdata," \r\t\n");
     
-    while(ajStrToken(&result,&token," \r\t\n"))
+    while(ajStrTokenNextParseC(&token," \r\t\n",&result))
     {
-	len = ajStrLen(result);
-	ajStrToUpper(&result);
-	p = ajStrStr(result);
+	len = ajStrGetLen(result);
+	ajStrFmtUpper(&result);
+	p = ajStrGetPtr(result);
 
 	if(p[len-1]!=')')
 	    ajFatal("Missing ')' in subline %S",substr);
 
 	if(ajStrPrefixC(result,"SEQ("))
 	{
-	    ajStrAssC(&result,p+4);
-	    ajStrReplaceK(&result,5,'\0',1);
+	    ajStrAssignC(&result,p+4);
+	    ajStrPasteCountK(&result,5,'\0',1);
 	    if(!emowse_seq_search(substr,&result))
 		return 0;
 	}
 	else if(ajStrPrefixC(result,"COMP("))
 	{
-	    ajStrAssC(&result,p+5);
-	    ajStrReplaceK(&result, 5, '\0', 1);
-	    if(!emowse_comp_search(substr,ajStrStr(result)))
+	    ajStrAssignC(&result,p+5);
+	    ajStrPasteCountK(&result, 5, '\0', 1);
+	    if(!emowse_comp_search(substr,ajStrGetPtr(result)))
 		return 0;
 	}
 	else
 	    ajFatal("Unknown Query type [%S]",result);
 
     }
-    ajStrTokenClear(&token);
+    ajStrTokenDel(&token);
 
 
     ajStrDel(&substr);
@@ -819,8 +836,8 @@ static void emowse_mreverse(char *s)
     AjPStr rev;
 
     rev = ajStrNewC(s);
-    ajStrRev(&rev);
-    p = ajStrStrMod(&rev);
+    ajStrReverse(&rev);
+    p = ajStrGetuniquePtr(&rev);
 
     len = strlen(s);
     for(i=0;i<len;++i)
@@ -835,7 +852,7 @@ static void emowse_mreverse(char *s)
 	    p[i]=']';
     }
 
-    strcpy(s,ajStrStr(rev));
+    strcpy(s,ajStrGetPtr(rev));
 
     ajStrDel(&rev);
 
@@ -865,10 +882,10 @@ static AjBool emowse_seq_search(const AjPStr substr, AjPStr *str)
     if(!t)
 	t = ajStrNew();
 
-    p = ajStrStr(substr);
-    ajStrAssC(&t,p);
-    q = ajStrStrMod(&t);
-    s = ajStrStrMod(str);
+    p = ajStrGetPtr(substr);
+    ajStrAssignC(&t,p);
+    q = ajStrGetuniquePtr(&t);
+    s = ajStrGetuniquePtr(str);
 
     if(!strncmp(s,"B-",2))
     {
@@ -958,11 +975,11 @@ static AjBool emowse_msearch(const char *seq, const char *pat, AjBool term)
 		if(!pat[qpos])
 		    ajFatal("Missing ']' in term %s",pat);
 
-		ajStrAppK(&orc,pat[qpos++]);
+		ajStrAppendK(&orc,pat[qpos++]);
 	    }
 
-	    t = ajStrLen(orc);
-	    p = ajStrStr(orc);
+	    t = ajStrGetLen(orc);
+	    p = ajStrGetPtr(orc);
 	    for(i=0;i<t;++i)
 		if(p[i]==seq[fpos])
 		    break;
@@ -1033,8 +1050,8 @@ static AjBool emowse_comp_search(const AjPStr substr, const char *s)
     const char *p;
     AjPStr t;
 
-    p   = ajStrStr(substr);
-    len = ajStrLen(substr);
+    p   = ajStrGetPtr(substr);
+    len = ajStrGetLen(substr);
 
     arr = ajIntNewL(256);
 
@@ -1049,9 +1066,9 @@ static AjBool emowse_comp_search(const AjPStr substr, const char *s)
 
 
     t = ajStrNewC(s);
-    ajStrCleanWhite(&t);
+    ajStrRemoveWhiteExcess(&t);
 
-    p    = ajStrStr(t);
+    p    = ajStrGetPtr(t);
     qpos = 0;
     orc  = ajStrNew();
 
@@ -1060,7 +1077,7 @@ static AjBool emowse_comp_search(const AjPStr substr, const char *s)
 	if(c=='*')
 	{
 	    n = emowse_get_orc(&orc,p,qpos);
-	    r = ajStrStr(orc);
+	    r = ajStrGetPtr(orc);
 	    qpos += (n+3);
 	    for(i=0;i<n;++i)
 		if(ajIntGet(arr,r[i]))
@@ -1088,9 +1105,9 @@ static AjBool emowse_comp_search(const AjPStr substr, const char *s)
 	    ajFatal("Bad integer [%s]",p);
 
 	qpos = --i;
-	ajStrClear(&orc);
+	ajStrSetClear(&orc);
 	n = emowse_get_orc(&orc,p,qpos);
-	r = ajStrStr(orc);
+	r = ajStrGetPtr(orc);
 	qpos += (n+3);
 	w = 0;
 
@@ -1141,7 +1158,7 @@ static ajint emowse_get_orc(AjPStr *orc, const char *s, ajint pos)
     {
 	if(!s[pos])
 	    ajFatal("Unterminated square brackets [%s]",s);
-	ajStrAppK(orc,s[pos++]);
+	ajStrAppendK(orc,s[pos++]);
 	++i;
     }
 
@@ -1231,11 +1248,11 @@ static void emowse_print_hits(AjPFile outf, AjPList hlist, ajint dno,
 		if(v>=(ajint)MILLION)
 		    v -= (ajint)MILLION;
 
-		ajStrAssSubC(&substr,ajStrStr(hits->seq),
+		ajStrAssignSubC(&substr,ajStrGetPtr(hits->seq),
 			     hits->frags[v]->begin-1,
 			     hits->frags[v]->end-1);
 
-		len = ajStrLen(substr);
+		len = ajStrGetLen(substr);
 		ajFmtPrintF(outf,"        ");
 
 		if(partial)

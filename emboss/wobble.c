@@ -2,7 +2,7 @@
 **
 ** Plot wobble base percentage
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -65,8 +65,8 @@ int main(int argc, char **argv)
     AjPGraph   graph;
     AjPGraphPlpData data;
 
-    float *x[6];
-    float *y[6];
+    float *x[6] = {NULL, NULL, NULL, NULL, NULL, NULL};
+    float *y[6] = {NULL, NULL, NULL, NULL, NULL, NULL};
     float xt;
     float mean;
     float ymin;
@@ -109,28 +109,29 @@ int main(int argc, char **argv)
     window = ajAcdGetInt("window");
     outf   = ajAcdGetOutfile("outfile");
     
-    ajSeqToUpper(seq);
-    ajStrToUpper(&gc);
+    ajSeqFmtUpper(seq);
+    ajStrFmtUpper(&gc);
     
-    beg = ajSeqBegin(seq);
-    end = ajSeqEnd(seq);
+    beg = ajSeqGetBegin(seq);
+    end = ajSeqGetEnd(seq);
     
     fwd = ajStrNew();
     rev = ajStrNew();
     
-    ajStrAssSubC(&fwd,ajSeqChar(seq),beg-1,end-1);
-    rev = ajStrNewC(ajStrStr(fwd));
-    ajSeqReverseStr(&rev);
+    ajStrAssignSubC(&fwd,ajSeqGetSeqC(seq),beg-1,end-1);
+    rev = ajStrNewC(ajStrGetPtr(fwd));
+    ajSeqstrReverse(&rev);
     
     
     wobble_checkstring(&gc);
-    mean = wobble_get_mean(ajStrStr(gc),ajStrStr(fwd));
+    mean = wobble_get_mean(ajStrGetPtr(gc),ajStrGetPtr(fwd));
     ajFmtPrintF(outf,"Expected %s content in third position = %.2f\n",
-		ajStrStr(gc),mean);
+		ajStrGetPtr(gc),mean);
     
     for(i=0;i<6;++i)
     {
-	wobble_calcpc(ajStrStr(fwd),ajStrStr(rev),i,x,y,count,beg,ajStrStr(gc),
+	wobble_calcpc(ajStrGetPtr(fwd),ajStrGetPtr(rev),i,x,y,
+		      count,beg,ajStrGetPtr(gc),
 		      window);
 
 	data = ajGraphPlpDataNewI(count[i]);
@@ -157,7 +158,7 @@ int main(int argc, char **argv)
 
 	ajGraphxySetYTick(graph, ajTrue);
 
-	ajGraphPlpDataSetYTitleC(data,ajStrStr(gc));
+	ajGraphPlpDataSetYTitleC(data,ajStrGetPtr(gc));
 	ajGraphPlpDataSetXTitleC(data,"Sequence");
 	ajGraphPlpDataSetTitleC(data,ftit[i]);
 	ajGraphPlpDataAddLine(data,(float)beg,mean,(float)end,mean,4);
@@ -179,8 +180,16 @@ int main(int argc, char **argv)
     ajStrDel(&gc);
     ajStrDel(&fwd);
     ajStrDel(&rev);
+    ajSeqDel(&seq);
+    ajFileClose(&outf);
+    ajGraphxyDel(&graph);
+    for(i=0;i<6;i++)
+    {
+	AJFREE(x[i]);
+	AJFREE(y[i]);
+    }
 
-    ajExit();
+    embExit();
 
     return 0;
 }
@@ -292,14 +301,14 @@ static void wobble_checkstring(AjPStr *str)
     tmp = ajStrNewC("");
 
     for(i=0;i<4;++i)
-	if(strchr(ajStrStr(*str),(ajint)bases[i]))
-	    ajStrAppK(&tmp,bases[i]);
-    ajStrAssC(str,ajStrStr(tmp));
+	if(strchr(ajStrGetPtr(*str),(ajint)bases[i]))
+	    ajStrAppendK(&tmp,bases[i]);
+    ajStrAssignC(str,ajStrGetPtr(tmp));
 
-    if(ajStrLen(tmp) >3)
+    if(ajStrGetLen(tmp) >3)
 	ajFatal("Specifying ACG&T is meaningless");
 
-    if(ajStrLen(tmp)<1)
+    if(ajStrGetLen(tmp)<1)
 	ajFatal("No bases specified");
 
     ajStrDel(&tmp);

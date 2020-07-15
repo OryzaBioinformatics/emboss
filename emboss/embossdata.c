@@ -2,7 +2,7 @@
 **
 ** Finds or fetches the data files read in by the EMBOSS programs
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @modified Alan Bleasby (ableasby@hgmp.mrc.ac.uk) for recursion
 ** @modified Alan Bleasby (ableasby@hgmp.mrc.ac.uk) to remove HOME dependency
 ** @@
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     AjPStr ddir = NULL;
     AjPStr path = NULL;
     AjPStr cmd  = NULL;
-    AjPStr *rstrs = NULL;
+    AjPStr* rstrs = NULL;
 
     ajint result;
     char *p = NULL;
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     outf     = ajAcdGetOutfile("outfile");
 
 
-    if(ajStrLen(filename))
+    if(ajStrGetLen(filename))
 	isname = ajTrue;
     else
 	isname = ajFalse;
@@ -108,17 +108,17 @@ int main(int argc, char **argv)
     */
     if(fetch)
     {
-	ajStrAssS(&path,ddir);
+	ajStrAssignS(&path,ddir);
 	ajFileScan(path,filename,&flocs,ajFalse,ajFalse,NULL,rlist,
 		   recurs, outf);
 	if(!ajListPop(flocs,(void **)&t))
 	    ajFatal("The file '%S' does not exist.", filename);
 	/* fetch it */
-	ajStrAppC(&cmd, "cp ");
-	ajStrApp(&cmd, t);
-	ajStrAppC(&cmd, " ");
-	ajStrApp(&cmd, filename);
-	result = system(ajStrStr(cmd));
+	ajStrAppendC(&cmd, "cp ");
+	ajStrAppendS(&cmd, t);
+	ajStrAppendC(&cmd, " ");
+	ajStrAppendS(&cmd, filename);
+	result = system(ajStrGetPtr(cmd));
 	if(result)
 	    ajFatal("File not copied.");
 	ajFmtPrintF(outf, "File '%S' has been copied successfully.\n", t);
@@ -143,14 +143,14 @@ int main(int argc, char **argv)
 		    "working directory.\n");
 	ajFmtPrintF(outf,"\n");
 	
-	ajStrAssC(&directory, ".");
+	ajStrAssignC(&directory, ".");
 	if(isname)
 	    embossdata_check_file(directory,filename,outf);
 	else
 	    embossdata_check_dir(directory,outf);
 	
 	/* .embossdata */
-	ajStrAssC(&directory, ".embossdata");
+	ajStrAssignC(&directory, ".embossdata");
 	if(isname)
 	    embossdata_check_file(directory,filename,outf);
 	else
@@ -159,16 +159,16 @@ int main(int argc, char **argv)
 	/* HOME */
 	if((p = getenv("HOME")))
 	{
-	    ajStrAssC(&hdir, p);
-	    ajStrAssS(&directory, hdir);
+	    ajStrAssignC(&hdir, p);
+	    ajStrAssignS(&directory, hdir);
 	    if(isname)
 		embossdata_check_file(directory,filename,outf);
 	    else
 		embossdata_check_dir(directory,outf);
 
 	    /* ~/.embossdata */
-	    ajStrAssS(&directory, hdir);
-	    ajStrAppC(&directory, "/.embossdata");
+	    ajStrAssignS(&directory, hdir);
+	    ajStrAppendC(&directory, "/.embossdata");
 	    if(isname)
 		embossdata_check_file(directory,filename,outf);
 	    else
@@ -179,7 +179,7 @@ int main(int argc, char **argv)
 	/* DATA */
 	if(isname)
 	{
-	    ajStrAssS(&path,ddir);
+	    ajStrAssignS(&path,ddir);
 	    ajFileScan(path,filename,&flocs,ajFalse,ajFalse,NULL,rlist,
 		       recurs,outf);
 
@@ -199,7 +199,7 @@ int main(int argc, char **argv)
     /* Just show all the files in the EMBOSS Installation data directory */
     if(showall)
     {
-	ajStrAssS(&path,ddir);
+	ajStrAssignS(&path,ddir);
 	ajFileScan(path,NULL,NULL,ajTrue,ajFalse,NULL,rlist,recurs,outf);
     }
 
@@ -211,6 +211,8 @@ int main(int argc, char **argv)
     ajStrDel(&ddir);
     ajStrDel(&filename);
     ajFileClose(&outf);
+
+    AJFREE(rstrs);			/* individual strings freed on list */
 
     ajExit();
 
@@ -233,7 +235,7 @@ int main(int argc, char **argv)
 
 static void embossdata_check_dir(const AjPStr d, AjPFile outf)
 {
-    if(ajSysIsDirectory(ajStrStr(d)))
+    if(ajSysIsDirectory(ajStrGetPtr(d)))
 	ajFmtPrintF(outf,"%-60.60S Exists\n",d);
     else
 	ajFmtPrintF(outf,"%-60.60S Does not exist\n",d);
@@ -261,10 +263,10 @@ static void embossdata_check_file(const AjPStr d, const AjPStr file,
 
     s = ajStrNew();
 
-    ajStrAssS(&s,d);
-    ajStrAppC(&s,"/");
-    ajStrApp(&s,file);
-    if(ajSysIsRegular(ajStrStr(s)))
+    ajStrAssignS(&s,d);
+    ajStrAppendC(&s,"/");
+    ajStrAppendS(&s,file);
+    if(ajSysIsRegular(ajStrGetPtr(s)))
 	ajFmtPrintF(outf,"File %-60.60S Exists\n",s);
     else
 	ajFmtPrintF(outf,"File %-60.60S Does not exist\n",s);
@@ -303,13 +305,13 @@ static AjPStr embossdata_data_dir(void)
 	if(!ajFileDir(&tmp))
 	{
 	    if(ajNamRoot(&tmp))
-		ajStrAppC(&tmp,"/data");
+		ajStrAppendC(&tmp,"/data");
 	    else
 		ajFatal("The EMBOSS 'DATA' directory isn't defined.");
 	}
     }
 
-    ajStrAssC(&where,ajStrStr(tmp));
+    ajStrAssignC(&where,ajStrGetPtr(tmp));
 
     ajStrDel(&tmp);
 

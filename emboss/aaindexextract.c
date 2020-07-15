@@ -1,7 +1,7 @@
 /* @source aaindexextract application
 **
 ** Extracts amino acid indices from AAINDEX
-** @author: Copyright (C) Peter Rice (peter.rice@uk.lionbioscience.com)
+** @author Copyright (C) Peter Rice (peter.rice@uk.lionbioscience.com)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 
     idexp = ajRegCompC("^H ([^ \n\r\t]+)$");
     endexp = ajRegCompC("^//$");
-    ajStrAssC(&outdir, "AAINDEX");
+    ajStrAssignC(&outdir, "AAINDEX");
 
     embInit("aaindexextract",argc,argv);
 
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 	    if(!done)
 		ajFatal("bad aaindex1 format new ID at: %S", line);
 	    ajRegSubI(idexp, 1, &id);
-	    ajStrToLower(&id);
+	    ajStrFmtLower(&id);
 	    ajFmtPrintS(&outfname, "%S/%S", outdir, id);
 	    ajFileDataNewWrite(outfname,&outf);
 	    done = ajFalse;

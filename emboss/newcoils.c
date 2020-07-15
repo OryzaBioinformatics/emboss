@@ -47,131 +47,24 @@ struct fit_dat
 };
 
 
-static struct hept_pref *read_matrix(AjPFile inf);
+static struct hept_pref *newcoils_read_matrix(AjPFile inf);
 
 
 
-static void pred_coils(AjPFile outf, char *seq, char *ident, AjPStr str,
-		       struct hept_pref *h, ajint win, ajint which,
+static void newcoils_pred_coils(AjPFile outf, const char *seq,
+		       const char *ident, const AjPStr str,
+		       const struct hept_pref *h, ajint win, ajint which,
 		       ajint weighted, ajint fasta, float min_P, ajint *t,
 		       ajint *tc, ajint min_segs);
 
 
 
 
-static struct hept_pref *read_matrix(AjPFile inf)
-{
-    ajint i;
-    ajint j;
-    ajint pt;
-    ajint aa_len;
-    ajint win;
-
-    float m_g;
-    float sd_g;
-    float m_cc;
-    float sd_cc;
-    float sc;
-    float hept[NCHEPTAD];
-
-    AjPStr buff;
-    char   *pbuff;
-    
-    struct hept_pref *h;
-
-
-    buff = ajStrNew();
-
-    aa_len = strlen(NCAAs);
-
-    AJNEW(h);
-    AJCNEW(h->m,aa_len);
-
-    for(i=0; i<aa_len; ++i)
-    {
-	AJCNEW(h->m[i],NCHEPTAD);
-	for(j=0; j<NCHEPTAD; ++j)
-	    h->m[i][j] = -1;
-    }
-
-    AJNEW(h->f);
-
-    h->n = 0;
-    h->smallest = 1.0;
-
-    while(ajFileReadLine(inf,&buff))
-    {
-	pbuff = ajStrStr(buff);
-	if(*pbuff != '%')
-	{
-	    if((strncmp(pbuff,"uw ",3)==0) || (strncmp(pbuff,"w ",2)==0))
-	    {
-		i = h->n;
-		if(strncmp(pbuff,"uw ",3)==0)
-		    h->f[i].w = 0;
-		else
-		    h->f[i].w = 1;
-
-		ajFmtScanS(buff,"%*s %d %f %f %f %f %f",&win,&m_cc,
-			   &sd_cc,&m_g,&sd_g,&sc);
-
-		h->f[i].win   = win;
-		h->f[i].m_cc  = (float)m_cc; 
-		h->f[i].sd_cc = (float)sd_cc;
-		h->f[i].m_g   = (float)m_g;
-		h->f[i].sd_g  = (float)sd_g;
-		h->f[i].sc    = (float)sc;
-		h->n++;
-
-		AJCRESIZE(h->f,(h->n)+1);
-		
-		if((h->n)>=9)
-		    ajFatal("Too many window parms in matrix file\n");
-
-	    }
-	    else if(*pbuff>='A' && *pbuff<='Z')
-	    {
-		/* AA data */
-		pt = (int)(pbuff[0]-'A');
-		if(h->m[pt][0]==-1)
-		{
-		    ajFmtScanS(buff,"%*s%f%f%f%f%f%f%f",&hept[0],
-			       &hept[1],&hept[2],&hept[3],&hept[4],
-			       &hept[5],&hept[6]);
-
-		    for(i=0; i<NCHEPTAD; ++i)
-		    {
-			h->m[pt][i] = (float)hept[i];
-			if(h->m[pt][i]>0)
-			{
-			    if(h->m[pt][i]<h->smallest)
-				h->smallest = h->m[pt][i];
-			}
-			else
-			    h->m[pt][i]=-1; /* Don't permit zero values */
-		    }
-
-		}
-		else
-		    ajWarn("multiple entries for AA %c in matrix file\n",
-			   *pbuff);
-	    }
-	    else
-	    {
-		ajWarn("strange characters in matrix file\n");
-		ajWarn("Ignoring line: %S\n",buff);
-	    }
-	}
-    }
-
-
-    ajStrDel(&buff);
-
-    return h;
-}
-
-
-
+/* @prog newcoils *************************************************************
+**
+** Predicts coils protein secondary structure
+**
+******************************************************************************/
 
 int main(ajint argc, char **argv)
 {
@@ -190,7 +83,7 @@ int main(ajint argc, char **argv)
     ajint tc = 0;
     ajint mode;
     ajint min_seg;
-    AjPStr seqdes;
+    const AjPStr seqdes;
 
     float min_P;
 
@@ -211,7 +104,7 @@ int main(ajint argc, char **argv)
 
     ajseq = ajSeqNew();
 
-    h = read_matrix(datafile);
+    h = newcoils_read_matrix(datafile);
 
     if(verb)
     {
@@ -248,8 +141,9 @@ int main(ajint argc, char **argv)
     {
 
 	seqdes = ajSeqGetDesc(ajseq);
-	pred_coils(outf,ajSeqChar(ajseq),ajSeqName(ajseq),seqdes,h,window,
-		   which,weighted,mode,min_P,&t,&tc,min_seg); 
+	newcoils_pred_coils(outf,ajSeqChar(ajseq),ajSeqName(ajseq),
+			    seqdes,h,window,
+			    which,weighted,mode,min_P,&t,&tc,min_seg); 
 
     }
 
@@ -265,10 +159,32 @@ int main(ajint argc, char **argv)
 
 
 
-static void pred_coils(AjPFile outf, char *seq, char *ident, AjPStr str,
-		       struct hept_pref *h,ajint win, ajint which,
-		       ajint weighted,ajint mode, float min_P, ajint *t,
-		       ajint *tc, ajint min_seg)
+/* @funcstatic newcoils_pred_coils ********************************************
+**
+** Undocumented
+**
+** @param [u] outf [AjPFile] Undocumented
+** @param [r] seq [const char*] Undocumented
+** @param [r] ident [const char*] Undocumented
+** @param [r] str [const AjPStr] Undocumented
+** @param [r] h [const struct hept_pref *] Undocumented
+** @param [r] win [ajint] Undocumented
+** @param [r] which [ajint] Undocumented
+** @param [r] weighted [ajint] Undocumented
+** @param [r] mode [ajint] Undocumented
+** @param [r] min_P [float] Undocumented
+** @param [w] t [ajint*] Undocumented
+** @param [w] tc [ajint*] Undocumented
+** @param [r] min_seg [ajint] Undocumented
+** @return [void]
+******************************************************************************/
+static void newcoils_pred_coils(AjPFile outf, const char *seq,
+				const char *ident, const AjPStr str,
+				const struct hept_pref *h,
+				ajint win, ajint which,
+				ajint weighted,ajint mode,
+				float min_P, ajint *t,
+				ajint *tc, ajint min_seg)
 {
     ajint i;
     ajint j;
@@ -420,4 +336,125 @@ static void pred_coils(AjPFile outf, char *seq, char *ident, AjPStr str,
     AJFREE(hept_seq);
 
     return;
+}
+
+
+
+
+/* @funcstatic newcoils_read_matrix *******************************************
+**
+** Reads the matrix and stores in a hept_pref structure
+**
+** @param [u] inf [AjPFile] matrix input file
+** @return [struct hept_pref*] Matrix data for heptad preference
+******************************************************************************/
+static struct hept_pref* newcoils_read_matrix(AjPFile inf)
+{
+    ajint i;
+    ajint j;
+    ajint pt;
+    ajint aa_len;
+    ajint win;
+
+    float m_g;
+    float sd_g;
+    float m_cc;
+    float sd_cc;
+    float sc;
+    float hept[NCHEPTAD];
+
+    AjPStr buff;
+    const char   *pbuff;
+    
+    struct hept_pref *h;
+
+
+    buff = ajStrNew();
+
+    aa_len = strlen(NCAAs);
+
+    AJNEW(h);
+    AJCNEW(h->m,aa_len);
+
+    for(i=0; i<aa_len; ++i)
+    {
+	AJCNEW(h->m[i],NCHEPTAD);
+	for(j=0; j<NCHEPTAD; ++j)
+	    h->m[i][j] = -1;
+    }
+
+    AJNEW(h->f);
+
+    h->n = 0;
+    h->smallest = 1.0;
+
+    while(ajFileReadLine(inf,&buff))
+    {
+	pbuff = ajStrGetPtr(buff);
+	if(*pbuff != '%')
+	{
+	    if((strncmp(pbuff,"uw ",3)==0) || (strncmp(pbuff,"w ",2)==0))
+	    {
+		i = h->n;
+		if(strncmp(pbuff,"uw ",3)==0)
+		    h->f[i].w = 0;
+		else
+		    h->f[i].w = 1;
+
+		ajFmtScanS(buff,"%*s %d %f %f %f %f %f",&win,&m_cc,
+			   &sd_cc,&m_g,&sd_g,&sc);
+
+		h->f[i].win   = win;
+		h->f[i].m_cc  = (float)m_cc; 
+		h->f[i].sd_cc = (float)sd_cc;
+		h->f[i].m_g   = (float)m_g;
+		h->f[i].sd_g  = (float)sd_g;
+		h->f[i].sc    = (float)sc;
+		h->n++;
+
+		AJCRESIZE(h->f,(h->n)+1);
+		
+		if((h->n)>=9)
+		    ajFatal("Too many window parms in matrix file\n");
+
+	    }
+	    else if(*pbuff>='A' && *pbuff<='Z')
+	    {
+		/* AA data */
+		pt = (int)(pbuff[0]-'A');
+		if(h->m[pt][0]==-1)
+		{
+		    ajFmtScanS(buff,"%*s%f%f%f%f%f%f%f",&hept[0],
+			       &hept[1],&hept[2],&hept[3],&hept[4],
+			       &hept[5],&hept[6]);
+
+		    for(i=0; i<NCHEPTAD; ++i)
+		    {
+			h->m[pt][i] = (float)hept[i];
+			if(h->m[pt][i]>0)
+			{
+			    if(h->m[pt][i]<h->smallest)
+				h->smallest = h->m[pt][i];
+			}
+			else
+			    h->m[pt][i]=-1; /* Don't permit zero values */
+		    }
+
+		}
+		else
+		    ajWarn("multiple entries for AA %c in matrix file\n",
+			   *pbuff);
+	    }
+	    else
+	    {
+		ajWarn("strange characters in matrix file\n");
+		ajWarn("Ignoring line: %S\n",buff);
+	    }
+	}
+    }
+
+
+    ajStrDel(&buff);
+
+    return h;
 }

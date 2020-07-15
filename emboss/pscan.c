@@ -1,7 +1,7 @@
 /* @source pscan application
 **
 ** Reports fingerprints in a protein sequence
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -78,10 +78,10 @@ int main(int argc, char **argv)
 	begin = ajSeqallBegin(seqall);
 	end   = ajSeqallEnd(seqall);
 
-	ajStrAssC(&name,ajSeqName(seq));
+	ajStrAssignC(&name,ajSeqName(seq));
 	strand = ajSeqStrCopy(seq);
 
-	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
+	ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
 
 	nmotifs = 0;
 	ajDebug("pscan sequence '%S'\n", ajSeqGetName(seq));
@@ -199,10 +199,10 @@ static void pscan_print_hits(AjPFile outf, AjPList l, ajint nmotifs,
 	    if(mm->all && mm->ordered && maxelem==mm->n)
 	    {
 		ajFmtPrintF(outf,"Fingerprint %s Elements %d\n",
-			    ajStrStr(mm->cod),mm->n);
+			    ajStrGetPtr(mm->cod),mm->n);
 		ajFmtPrintF(outf,"    Accession number %s\n",
-			    ajStrStr(mm->acc));
-		ajFmtPrintF(outf,"    %s\n",ajStrStr(mm->tit));
+			    ajStrGetPtr(mm->acc));
+		ajFmtPrintF(outf,"    %s\n",ajStrGetPtr(mm->tit));
 		ajFmtPrintF(outf,"  Element %d Threshold %d%% Score %d%%\n",
 			    mm->element+1, mm->thresh, mm->score);
 		ajFmtPrintF(outf,"             Start position %d Length %d\n",
@@ -278,10 +278,10 @@ static void pscan_print_hits(AjPFile outf, AjPList l, ajint nmotifs,
 	    if(mm->all && maxelem==mm->n)
 	    {
 		ajFmtPrintF(outf,"Fingerprint %s Elements %d\n",
-			    ajStrStr(mm->cod),mm->n);
+			    ajStrGetPtr(mm->cod),mm->n);
 		ajFmtPrintF(outf,"    Accession number %s\n",
-			    ajStrStr(mm->acc));
-		ajFmtPrintF(outf,"    %s\n",ajStrStr(mm->tit));
+			    ajStrGetPtr(mm->acc));
+		ajFmtPrintF(outf,"    %s\n",ajStrGetPtr(mm->tit));
 		ajFmtPrintF(outf,"  Element %d Threshold %d%% Score %d%%\n",
 			    mm->element+1, mm->thresh, mm->score);
 		ajFmtPrintF(outf,"             Start position %d Length %d\n",
@@ -360,10 +360,10 @@ static void pscan_print_hits(AjPFile outf, AjPList l, ajint nmotifs,
 	    if(mm->ordered && maxhpm==mm->hpm)
 	    {
 		ajFmtPrintF(outf,"Fingerprint %s Elements %d\n",
-			    ajStrStr(mm->cod),mm->n);
+			    ajStrGetPtr(mm->cod),mm->n);
 		ajFmtPrintF(outf,"    Accession number %s\n",
-			    ajStrStr(mm->acc));
-		ajFmtPrintF(outf,"    %s\n",ajStrStr(mm->tit));
+			    ajStrGetPtr(mm->acc));
+		ajFmtPrintF(outf,"    %s\n",ajStrGetPtr(mm->tit));
 		ajFmtPrintF(outf,"  Element %d Threshold %d%% Score %d%%\n",
 			    mm->element+1, mm->thresh, mm->score);
 		ajFmtPrintF(outf,"             Start position %d Length %d\n",
@@ -441,10 +441,10 @@ static void pscan_print_hits(AjPFile outf, AjPList l, ajint nmotifs,
 	    if(maxhpm==mm->hpm)
 	    {
 		ajFmtPrintF(outf,"Fingerprint %s Elements %d\n",
-			    ajStrStr(mm->cod),mm->n);
+			    ajStrGetPtr(mm->cod),mm->n);
 		ajFmtPrintF(outf,"    Accession number %s\n",
-			    ajStrStr(mm->acc));
-		ajFmtPrintF(outf,"    %s\n",ajStrStr(mm->tit));
+			    ajStrGetPtr(mm->acc));
+		ajFmtPrintF(outf,"    %s\n",ajStrGetPtr(mm->tit));
 		ajFmtPrintF(outf,"  Element %d Threshold %d%% Score %d%%\n",
 			    mm->element+1, mm->thresh, mm->score);
 		ajFmtPrintF(outf,"             Start position %d Length %d\n",

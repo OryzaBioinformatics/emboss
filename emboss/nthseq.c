@@ -2,7 +2,7 @@
 **
 ** Get nth sequence in a file of sequences
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** 14 Sept 1999 - GWW - written
 ** @@
 **
@@ -50,15 +50,22 @@ int main(int argc, char **argv)
     count = 0;
     while(ajSeqallNext(seqall, &seq))
 	if(++count == n)
-	{
-	    ajSeqWrite(seqout, seq);
-	    ajSeqWriteClose(seqout);
-	    ajExit();
-	    return 0;
-	}
+	    break;
 
+    if(count != n)
+    {
+	ajSeqWriteClose(seqout);
+	ajFatal("No such sequence - only %d sequences were input.", count);
+	return 1;
+    }
+
+    ajSeqWrite(seqout, seq);
     ajSeqWriteClose(seqout);
-    ajFatal("No such sequence - only %d sequences were input.", count);
 
-    return 1;
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
+
+    embExit();
+    return 0;
 }

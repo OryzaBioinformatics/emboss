@@ -1,7 +1,7 @@
 /* @source rebaseextract application
 **
 ** Extracts restriction enzyme information from REBASE
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -36,11 +36,12 @@
 
 
 
-static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
-				  AjPFile outf, AjBool hassup);
-static void rebex_printEnzHeader(AjPFile outf);
-static void rebex_printRefHeader(AjPFile outf);
-static void rebex_printSuppHeader(AjPFile outf);
+static void rebaseextract_process_pattern(const AjPStr pattern,
+					  const AjPStr code,
+					  AjPFile outf, AjBool hassup);
+static void rebaseextract_printEnzHeader(AjPFile outf);
+static void rebaseextract_printRefHeader(AjPFile outf);
+static void rebaseextract_printSuppHeader(AjPFile outf);
 
 
 
@@ -99,19 +100,19 @@ int main(int argc, char **argv)
 
     pfname = ajStrNewC(DATANAME);
     ajFileDataNewWrite(pfname,&outf);
-    rebex_printEnzHeader(outf);
+    rebaseextract_printEnzHeader(outf);
 
-    ajStrAssC(&pfname,DATANAME2);
+    ajStrAssignC(&pfname,DATANAME2);
     ajFileDataNewWrite(pfname,&outf2);
-    rebex_printRefHeader(outf2);
+    rebaseextract_printRefHeader(outf2);
 
-    ajStrAssC(&pfname,DATANAME3);
+    ajStrAssignC(&pfname,DATANAME3);
     ajFileDataNewWrite(pfname,&outf3);
-    rebex_printSuppHeader(outf3);
+    rebaseextract_printSuppHeader(outf3);
 
     if(doequ)
     {
-	ajStrAssC(&pfname,DATANAME4);
+	ajStrAssignC(&pfname,DATANAME4);
 	ajFileDataNewWrite(pfname,&oute);
 	ptable = ajStrTableNew(EQUGUESS);
 	isostr = ajStrNew();
@@ -140,7 +141,7 @@ int main(int argc, char **argv)
 	if(ajStrFindC(line,"withref.")>=0)
 	    isref = ajTrue;
 
-	if(strstr(ajStrStr(line),"REBASE codes"))
+	if(strstr(ajStrGetPtr(line),"REBASE codes"))
 	    break;
     }
 
@@ -151,7 +152,7 @@ int main(int argc, char **argv)
 	    isproto = ajTrue;
 
 	
-	if(strstr(ajStrStr(line),"Rich Roberts"))
+	if(strstr(ajStrGetPtr(line),"Rich Roberts"))
 	    break;
     }
 
@@ -171,9 +172,9 @@ int main(int argc, char **argv)
 
     while(doequ && ajFileReadLine(infp,&line))
     {
-	if(!ajStrLen(line))
+	if(!ajStrGetLen(line))
 	    continue;
-	sptr = ajStrStr(line);
+	sptr = ajStrGetPtr(line);
 	c = *sptr;
 	if(c>='A' && c<='Z')
 	{
@@ -184,7 +185,7 @@ int main(int argc, char **argv)
 	    
 	    key   = ajStrNew();
 	    value = ajStrNewC(sptr);
-	    ajStrCleanWhite(&value);
+	    ajStrRemoveWhiteExcess(&value);
 	    ajFmtScanS(line,"%S",&key);
 	    ajTablePut(ptable,(const void *)key, (void *)value);
 	}
@@ -196,10 +197,10 @@ int main(int argc, char **argv)
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Unexpected EOF");
 
-    while(ajStrLen(line))
+    while(ajStrGetLen(line))
     {
-	ajStrClean(&line);
-	ajFmtPrintF(outf3,"%s\n",ajStrStr(line));
+	ajStrRemoveWhite(&line);
+	ajFmtPrintF(outf3,"%s\n",ajStrGetPtr(line));
 	if(!ajFileReadLine(inf,&line))
 	    ajFatal("Unexpected EOF");
     }
@@ -213,92 +214,92 @@ int main(int argc, char **argv)
 	if(!ajStrPrefixC(line,"<1>"))
 	    continue;
 
-	ajStrAssC(&code,ajStrStr(line)+3);
+	ajStrAssignC(&code,ajStrGetPtr(line)+3);
 
 	/* Get isoschizomers */
 	if(!ajFileReadLine(inf,&line2))
 	    ajFatal("Unexpected EOF");
 
-	if(ajStrLen(line2)>3)
-	    ajStrAssC(&isoschiz,ajStrStr(line2)+3);
+	if(ajStrGetLen(line2)>3)
+	    ajStrAssignC(&isoschiz,ajStrGetPtr(line2)+3);
 	else
-	    ajStrAssC(&isoschiz,"");
+	    ajStrAssignC(&isoschiz,"");
 
 
 	/* Get recognition sequence */
 	if(!ajFileReadLine(inf,&line))
 	    ajFatal("Unexpected EOF");
 
-	if(ajStrLen(line)>3)
+	if(ajStrGetLen(line)>3)
 	{
-	    ajStrAssC(&pattern,ajStrStr(line)+3);
+	    ajStrAssignC(&pattern,ajStrGetPtr(line)+3);
 
-	    if(doequ && ajStrLen(line2)>3)
+	    if(doequ && ajStrGetLen(line2)>3)
 	    {
-		ajStrAssS(&isostr,isoschiz);
-		handle = ajStrTokenInit(isostr,"\t\n>,");
-	        ajStrToken (&token, &handle, NULL);
+		ajStrAssignS(&isostr,isoschiz);
+		handle = ajStrTokenNewC(isostr,"\t\n>,");
+	        ajStrTokenNextParse(&handle, &token);
 
 		if((value=ajTableGet(ptable,(const void *)token)))
-		    if(ajStrMatch(value,pattern))
+		    if(ajStrMatchS(value,pattern))
 			ajFmtPrintF(oute,"%S %S\n",code,token);
-		ajStrTokenClear(&handle);
+		ajStrTokenDel(&handle);
 	    }
 	}
 	else
-	    ajStrAssC(&pattern,"");
+	    ajStrAssignC(&pattern,"");
 
 	/* Get methylation */
 	if(!ajFileReadLine(inf,&line))
 	    ajFatal("Unexpected EOF");
 
-	if(ajStrLen(line)>3)
-	    ajStrAssC(&meth,ajStrStr(line)+3);
+	if(ajStrGetLen(line)>3)
+	    ajStrAssignC(&meth,ajStrGetPtr(line)+3);
 	else
-	    ajStrAssC(&meth,"");
+	    ajStrAssignC(&meth,"");
 
 	/* Get title */
 	if(!ajFileReadLine(inf,&line))
 	    ajFatal("Unexpected EOF");
 
-	if(ajStrLen(line)>3)
-	    ajStrAssC(&tit,ajStrStr(line)+3);
+	if(ajStrGetLen(line)>3)
+	    ajStrAssignC(&tit,ajStrGetPtr(line)+3);
 	else
-	    ajStrAssC(&tit,"");
+	    ajStrAssignC(&tit,"");
 
 	/* Get source */
 	if(!ajFileReadLine(inf,&line))
 	    ajFatal("Unexpected EOF");
 
-	if(ajStrLen(line)>3)
-	    ajStrAssC(&sou,ajStrStr(line)+3);
+	if(ajStrGetLen(line)>3)
+	    ajStrAssignC(&sou,ajStrGetPtr(line)+3);
 	else
-	    ajStrAssC(&sou,"");
+	    ajStrAssignC(&sou,"");
 
 	/* Get commercial supplier */
 	if(!ajFileReadLine(inf,&line))
 	    ajFatal("Unexpected EOF");
 
 	hassup=ajFalse;
-	if(ajStrLen(line)>3)
+	if(ajStrGetLen(line)>3)
 	{
 	    hassup = ajTrue;
-	    ajStrAssC(&comm,ajStrStr(line)+3);
+	    ajStrAssignC(&comm,ajStrGetPtr(line)+3);
 	}
 	else
-	    ajStrAssC(&comm,"");
+	    ajStrAssignC(&comm,"");
 
-	ajFmtPrintF(outf2,"%s\n",ajStrStr(code));
-	ajFmtPrintF(outf2,"%s\n",ajStrStr(tit));
-	ajFmtPrintF(outf2,"%s\n",ajStrStr(isoschiz));
-	ajFmtPrintF(outf2,"%s\n",ajStrStr(meth));
-	ajFmtPrintF(outf2,"%s\n",ajStrStr(sou));
-	ajFmtPrintF(outf2,"%s\n",ajStrStr(comm));
+	ajFmtPrintF(outf2,"%s\n",ajStrGetPtr(code));
+	ajFmtPrintF(outf2,"%s\n",ajStrGetPtr(tit));
+	ajFmtPrintF(outf2,"%s\n",ajStrGetPtr(isoschiz));
+	ajFmtPrintF(outf2,"%s\n",ajStrGetPtr(meth));
+	ajFmtPrintF(outf2,"%s\n",ajStrGetPtr(sou));
+	ajFmtPrintF(outf2,"%s\n",ajStrGetPtr(comm));
 
 	/* Get references */
 	count = -1;
 	pos = ajFileTell(inf);
-	while(ajStrLen(line))
+	while(ajStrGetLen(line))
 	{
 	    if(!ajFileReadLine(inf,&line))
 		break;
@@ -310,22 +311,22 @@ int main(int argc, char **argv)
 	if(!ajFileReadLine(inf,&line))
 	    ajFatal("Unexpected EOF");
 
-	if(ajStrLen(line)==3)
+	if(ajStrGetLen(line)==3)
 	    ajFmtPrintF(outf2,"0\n");
 	else
 	{
-	    ajFmtPrintF(outf2,"%d\n%s\n",count,ajStrStr(line)+3);
+	    ajFmtPrintF(outf2,"%d\n%s\n",count,ajStrGetPtr(line)+3);
 	    for(i=1;i<count;++i)
 	    {
 		if(!ajFileReadLine(inf,&line))
 		    ajFatal("Unexpected EOF");
-		ajFmtPrintF(outf2,"%s\n",ajStrStr(line));
+		ajFmtPrintF(outf2,"%s\n",ajStrGetPtr(line));
 	    }
 	}
 	ajFmtPrintF(outf2,"//\n");
 
 
-	rebex_process_pattern(pattern,code,outf,hassup);
+	rebaseextract_process_pattern(pattern,code,outf,hassup);
 
     }
 
@@ -362,7 +363,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic rebex_process_pattern ******************************************
+/* @funcstatic rebaseextract_process_pattern **********************************
 **
 ** Convert rebase pattern into emboss pattern
 **
@@ -373,9 +374,10 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
-				  AjPFile outf,
-				  AjBool hassup)
+static void rebaseextract_process_pattern(const AjPStr pattern,
+					  const AjPStr code,
+					  AjPFile outf,
+					  AjBool hassup)
 {
     AjPStr temp = NULL;
     AjPStr ppat = NULL;
@@ -400,20 +402,20 @@ static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
     AjBool blunt = ajFalse;
 
     tmppattern = ajStrNewS(pattern);
-    ajStrToUpper(&tmppattern);
+    ajStrFmtUpper(&tmppattern);
     temp = ajStrNew();
     ppat = ajStrNew();
 
-    tokens=ajStrTokenInit(tmppattern,",");
+    tokens=ajStrTokenNewC(tmppattern,",");
 
-    while(ajStrToken(&ppat,&tokens,","))
+    while(ajStrTokenNextParseC(&tokens,",",&ppat))
     {
 	ajFmtPrintF(outf,"%S\t",code);
 
-	ajStrAssS(&temp,ppat);
+	ajStrAssignS(&temp,ppat);
 
 	hascarat = ajFalse;
-	p = ajStrStr(ppat);
+	p = ajStrGetPtr(ppat);
 
 	if(*p=='?')
 	{
@@ -438,8 +440,8 @@ static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
 	    if(!(p=strchr(p,(ajint)')')))
 		ajFatal("%S mismatched parentheses",code);
 
-	    p = ajStrStr(ppat);
-	    r = ajStrStrMod(&temp);
+	    p = ajStrGetPtr(ppat);
+	    r = ajStrGetuniquePtr(&temp);
 	    while(*p)
 	    {
 		if(*p>='A' && *p<='Z')
@@ -447,8 +449,8 @@ static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
 		++p;
 	    }
 	    *r = '\0';
-	    ajStrAssC(&ppat,ajStrStr(temp));
-	    len=ajStrLen(ppat);
+	    ajStrAssignC(&ppat,ajStrGetPtr(temp));
+	    len=ajStrGetLen(ppat);
 	    cut3 += len;
 	    cut4 += len;
 	    ncuts = 4;
@@ -472,8 +474,8 @@ static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
 		else
 		    blunt = ajFalse;
 
-		p = ajStrStr(ppat);
-		r = ajStrStrMod(&temp);
+		p = ajStrGetPtr(ppat);
+		r = ajStrGetuniquePtr(&temp);
 		while(*p)
 		{
 		    if(*p>='A' && *p<='Z')
@@ -481,8 +483,8 @@ static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
 		    ++p;
 		}
 		*r = '\0';
-		ajStrAssC(&ppat,ajStrStr(temp));
-		len=ajStrLen(ppat);
+		ajStrAssignC(&ppat,ajStrGetPtr(temp));
+		len=ajStrGetLen(ppat);
 		cut1 += len;
 		cut2 += len;
 		if(cut1<=0)
@@ -493,8 +495,8 @@ static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
 	    }
 	    else			/* probably a carat */
 	    {
-		p = ajStrStr(ppat);
-		r = ajStrStrMod(&temp);
+		p = ajStrGetPtr(ppat);
+		r = ajStrGetuniquePtr(&temp);
 		cut1 = 0;
 		hascarat = ajFalse;
 
@@ -512,8 +514,8 @@ static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
 		    ++p;
 		}
 		*r = '\0';
-		ajStrAssC(&ppat,ajStrStr(temp));
-		len = ajStrLen(ppat);
+		ajStrAssignC(&ppat,ajStrGetPtr(temp));
+		len = ajStrGetLen(ppat);
 		if(!hascarat)
 		{
 		    ncuts = 0;
@@ -535,7 +537,7 @@ static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
 		    }
 		    else
 		    {
-			p = ajStrStr(ppat);
+			p = ajStrGetPtr(ppat);
 			if(p[cut1-1]=='N' && cut1==len)
 			{
 			    for(i=cut1-1,nc=0;i>-1;--i)
@@ -555,21 +557,22 @@ static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
 
 	/* Mark RE's with no suppliers with lc sequence */
 	if(!hassup)
-	    ajStrToLower(&ppat);
+	    ajStrFmtLower(&ppat);
 
 
 	if(ncuts==4)
 	    ajFmtPrintF(outf,"%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n",
-			ajStrStr(ppat),len,ncuts,blunt,cut1,cut2,cut3,cut4);
+			ajStrGetPtr(ppat),len,ncuts,blunt,cut1,cut2,cut3,cut4);
 	else
-	    ajFmtPrintF(outf,"%s\t%d\t%d\t%d\t%d\t%d\t0\t0\n",ajStrStr(ppat),
+	    ajFmtPrintF(outf,"%s\t%d\t%d\t%d\t%d\t%d\t0\t0\n",
+			ajStrGetPtr(ppat),
 			len,ncuts,blunt,cut1,cut2);
     }
 
     ajStrDel(&tmppattern);
     ajStrDel(&temp);
     ajStrDel(&ppat);
-    ajStrTokenClear(&tokens);
+    ajStrTokenDel(&tokens);
 
     return;
 }
@@ -577,7 +580,7 @@ static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
 
 
 
-/* @funcstatic rebex_printEnzHeader *******************************************
+/* @funcstatic rebaseextract_printEnzHeader ***********************************
 **
 ** print comments at start of embossre.enz
 **
@@ -585,7 +588,7 @@ static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
 ** @@
 ******************************************************************************/
 
-static void rebex_printEnzHeader(AjPFile outf)
+static void rebaseextract_printEnzHeader(AjPFile outf)
 {
     ajFmtPrintF(outf,"# REBASE enzyme patterns for EMBOSS\n#\n");
     ajFmtPrintF(outf,"# Format:\n");
@@ -622,7 +625,7 @@ static void rebex_printEnzHeader(AjPFile outf)
 
 
 
-/* @funcstatic rebex_printRefHeader *******************************************
+/* @funcstatic rebaseextract_printRefHeader ***********************************
 **
 ** Print header to embossre.ref
 **
@@ -630,7 +633,7 @@ static void rebex_printEnzHeader(AjPFile outf)
 ** @@
 ******************************************************************************/
 
-static void rebex_printRefHeader(AjPFile outf)
+static void rebaseextract_printRefHeader(AjPFile outf)
 {
     ajFmtPrintF(outf,"# REBASE enzyme information for EMBOSS\n#\n");
     ajFmtPrintF(outf,"# Format:\n");
@@ -651,7 +654,7 @@ static void rebex_printRefHeader(AjPFile outf)
 
 
 
-/* @funcstatic rebex_printSuppHeader ******************************************
+/* @funcstatic rebaseextract_printSuppHeader **********************************
 **
 ** Print header to embossre.sup
 **
@@ -659,7 +662,7 @@ static void rebex_printRefHeader(AjPFile outf)
 ** @@
 ******************************************************************************/
 
-static void rebex_printSuppHeader(AjPFile outf)
+static void rebaseextract_printSuppHeader(AjPFile outf)
 {
     ajFmtPrintF(outf,"# REBASE Supplier information for EMBOSS\n#\n");
     ajFmtPrintF(outf,"# Format:\n");

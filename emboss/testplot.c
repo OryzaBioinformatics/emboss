@@ -152,6 +152,9 @@ int main(int argc, char **argv)
     return 0;
 }
 #else
+/* @header ********************************************************************
+**
+******************************************************************************/
 int main(int argc, char **argv)
 {
     ajFatal("Sorry no PLplot was found on compilation hence NO graph\n");

@@ -2,7 +2,7 @@
 **
 ** Display a DNA sequence in both direction with its translation
 **
-** @author: Copyright (C) Thomas Laurent (thomas.laurent@uk.lionbioscience.com)
+** @author Copyright (C) Thomas Laurent (thomas.laurent@uk.lionbioscience.com)
 ** 30 Sept 2002
 ** @@
 **
@@ -26,17 +26,17 @@
 
 
 
-static int sixpack_findorfs(AjPSeqout outseq, AjPFile outf, ajint s,
-			    ajint len, const char *seq,
-			    const char *name, ajint orfml, 
-			    AjBool addedasterisk, AjBool firstorf,
-			    ajint frame, 
-			    const char *origname, AjBool mstart);
+static int sixpackFindorfs(AjPSeqout outseq, AjPFile outf, ajint s,
+			   ajint len, const char *seq,
+			   const char *name, ajint orfml, 
+			   AjBool addedasterisk, AjBool firstorf,
+			   ajint frame, 
+			   const char *origname, AjBool mstart);
 
-static void sixpack_ajprintseq(AjPSeqout outseq, const char *seq, ajint begin,
-			       int end, ajint orflength, const char *name,
-			       ajint count, ajint frame, const char *origname,
-			       ajint min_orflength);
+static void sixpackPrintseq(AjPSeqout outseq, const char *seq, ajint begin,
+			    int end, ajint orflength, const char *name,
+			    ajint count, ajint frame, const char *origname,
+			    ajint min_orflength);
 
 
 
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     EmbPShow ss;
     AjPFile outfile;
     AjPSeqout outseq=NULL;
-    AjPStr *tablelist;
+    AjPStr tablename;
     ajint table;
     AjPRange uppercase;
     AjPRange highlight;
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
     seq         = ajAcdGetSeq("sequence");
     outfile     = ajAcdGetOutfile("outfile");
     outseq      = ajAcdGetSeqoutall("outseq");
-    tablelist   = ajAcdGetList("table");
+    tablename   = ajAcdGetListSingle("table");
     uppercase   = ajAcdGetRange("uppercase");
     highlight   = ajAcdGetRange("highlight");
     numberseq   = ajAcdGetBool("number");
@@ -110,21 +110,21 @@ int main(int argc, char **argv)
     
     
     /* get the number of the genetic code used */
-    ajStrToInt(tablelist[0], &table);
+    ajStrToInt(tablename, &table);
     trnTable = ajTrnNewI(table);
     
     /* get begin and end positions */
-    begin = ajSeqBegin(seq)-1;
-    end = ajSeqEnd(seq)-1;
+    begin = ajSeqGetBegin(seq)-1;
+    end = ajSeqGetEnd(seq)-1;
     
     /* do the name and description */
     if(nameseq)
     {
 	if(html)
 	    ajFmtPrintF(outfile, "<H2>%S</H2>\n",
-			ajSeqGetName(seq));
+			ajSeqGetNameS(seq));
 	else
-	    ajFmtPrintF(outfile, "%S\n", ajSeqGetName(seq)); 
+	    ajFmtPrintF(outfile, "%S\n", ajSeqGetNameS(seq)); 
     }
     
     if(description)
@@ -135,12 +135,12 @@ int main(int argc, char **argv)
 	 */
 	if(html)
 	    ajFmtPrintF(outfile, "<H3>%S</H3>\n",
-			ajSeqGetDesc(seq));
+			ajSeqGetDescS(seq));
 	else
 	{
 	    descriptionline = ajStrNew();
-	    ajStrAssS(&descriptionline, ajSeqGetDesc(seq));
-	    ajStrWrap(&descriptionline, width+margin);
+	    ajStrAssignS(&descriptionline, ajSeqGetDescS(seq));
+	    ajStrFmtWrap(&descriptionline, width+margin);
 	    ajFmtPrintF(outfile, "%S\n", descriptionline);
 	    ajStrDel(&descriptionline);
 	}
@@ -216,31 +216,31 @@ int main(int argc, char **argv)
 	    /* frame -1 uses frame 1 codons */
 	    pep = ajTrnSeqOrig(trnTable, seq, 2-i);
 	  
-	pepbegin = ajSeqBegin(pep)-1;
-	pepend = ajSeqEnd(pep)-1;
-	pepseq = ajSeqStr(pep);
+	pepbegin = ajSeqGetBegin(pep)-1;
+	pepend = ajSeqGetEnd(pep)-1;
+	pepseq = ajSeqGetSeqS(pep);
 
-	ajStrAssSub(&substr,pepseq,pepbegin,pepend);
+	ajStrAssignSubS(&substr,pepseq,pepbegin,pepend);
 
 	/* end with a '*' if we want to and there is not one there already */
-	ajDebug("last residue =%c\n", ajSeqChar(pep)[pepend]);
+	ajDebug("last residue =%c\n", ajSeqGetSeqC(pep)[pepend]);
 
-	if(addlast && ajSeqChar(pep)[pepend] != '*')
+	if(addlast && ajSeqGetSeqC(pep)[pepend] != '*')
 	{
-	    ajStrAppK(&substr,'*');
+	    ajStrAppendK(&substr,'*');
 	    addedasterisk = ajTrue;
 	}
 
 	ajDebug("After appending, sequence=%S\n", substr);
-	ajStrToUpper(&substr);
+	ajStrFmtUpper(&substr);
 	  
-	peplen = ajStrLen(substr);
+	peplen = ajStrGetLen(substr);
 
-	totalorf += sixpack_findorfs(outseq, outfile, 0, peplen,
-				     ajStrStr(substr),
-				     ajSeqName(pep), orfminsize,
-				     addedasterisk, firstorf,
-				     i+1, ajSeqName(seq), mstart);
+	totalorf += sixpackFindorfs(outseq, outfile, 0, peplen,
+				    ajStrGetPtr(substr),
+				    ajSeqGetNameC(pep), orfminsize,
+				    addedasterisk, firstorf,
+				    i+1, ajSeqGetNameC(seq), mstart);
 
 	ajSeqDel(&pep);
     }
@@ -249,21 +249,31 @@ int main(int argc, char **argv)
     ajFmtPrintF(outfile, "##############################\n\n");
     
     ajTrnDel(&trnTable);
-    
-    ajExit();
+    ajSeqWriteClose(outseq);
+    ajSeqoutDel(&outseq);
+    ajSeqDel(&seq);
+    ajSeqDel(&pep);
+    ajStrDel(&substr);
+    ajStrDel(&tablename);
+    ajFileClose(&outfile);
+    ajRangeDel(&uppercase);
+    ajRangeDel(&highlight);
+
+
+    embExit();
     return 0;
 }
 
 
 
 
-/* @funcstatic sixpack_findorfs **********************************************
+/* @funcstatic sixpackFindorfs ************************************************
 **
 ** Finds ORFs and prints report
 **
 ** @param [u] outseq [AjPSeqout] File where to write fasta sequences
 ** @param [u] outf [AjPFile] File where to write the report on ORFs 
-** @param [r] from [ajint] 0
+** @param [r] from [ajint] Zero
 ** @param [r] to [ajint] Length of the sequence
 ** @param [r] p [const char*] Sequence
 ** @param [r] name [const char*] Name of the translated sequence
@@ -278,12 +288,12 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-static int sixpack_findorfs(AjPSeqout outseq, AjPFile outf, ajint from,
-			    ajint to, const char *p, const char *name,
-			    ajint min_orflength,
-			    AjBool addedasterisk, AjBool firstorf,
-			    ajint frame, 
-			    const char *origname, AjBool mstart)
+static int sixpackFindorfs(AjPSeqout outseq, AjPFile outf, ajint from,
+			   ajint to, const char *p, const char *name,
+			   ajint min_orflength,
+			   AjBool addedasterisk, AjBool firstorf,
+			   ajint frame, 
+			   const char *origname, AjBool mstart)
 
 {
     ajint i;
@@ -313,9 +323,9 @@ static int sixpack_findorfs(AjPSeqout outseq, AjPFile outf, ajint from,
 
 	    if(orflength >= min_orflength)
 	    {
-		sixpack_ajprintseq(outseq, p,i-orflength,i-1,orflength,
-				   name,orfnb+1,frame,origname,
-				   min_orflength);
+		sixpackPrintseq(outseq, p,i-orflength,i-1,orflength,
+				name,orfnb+1,frame,origname,
+				min_orflength);
 		orfnb++;
 	    }
 	    else if((last_stop == 0) && firstorf && p[0] != '*')
@@ -325,9 +335,9 @@ static int sixpack_findorfs(AjPSeqout outseq, AjPFile outf, ajint from,
 
 		if(orflength > 0)
 		{
-		    sixpack_ajprintseq(outseq, p,i-orflength,i-1,orflength,
-				       name,orfnb+1,frame,origname,
-				       min_orflength);
+		    sixpackPrintseq(outseq, p,i-orflength,i-1,orflength,
+				    name,orfnb+1,frame,origname,
+				    min_orflength);
 		    orfnb++;
 		}
 	    }
@@ -335,9 +345,9 @@ static int sixpack_findorfs(AjPSeqout outseq, AjPFile outf, ajint from,
 	    {
 		if(orflength > 0)
 		{
-		    sixpack_ajprintseq(outseq, p,i-orflength,i-1,orflength,
-				       name,orfnb+1,frame,origname,
-				       min_orflength);
+		    sixpackPrintseq(outseq, p,i-orflength,i-1,orflength,
+				    name,orfnb+1,frame,origname,
+				    min_orflength);
 		    orfnb++;
 		}
 	    }
@@ -359,7 +369,7 @@ static int sixpack_findorfs(AjPSeqout outseq, AjPFile outf, ajint from,
 
 
 
-/* @funcstatic sixpack_ajprintseq *********************************************
+/* @funcstatic sixpackPrintseq ************************************************
 **
 ** Prints ORFs in the sequence file
 **
@@ -378,11 +388,11 @@ static int sixpack_findorfs(AjPSeqout outseq, AjPFile outf, ajint from,
 ** @@
 ******************************************************************************/
 
-static void sixpack_ajprintseq(AjPSeqout outseq,
-			       const char *seq, ajint begin, int
-			       end, ajint orflength, const char *name,
-			       ajint count, ajint frame, 
-			       const char *origname, ajint min_orflength)
+static void sixpackPrintseq(AjPSeqout outseq,
+			    const char *seq, ajint begin, int
+			    end, ajint orflength, const char *name,
+			    ajint count, ajint frame, 
+			    const char *origname, ajint min_orflength)
 {
     AjPSeq sq;
     AjPStr str;
@@ -394,13 +404,13 @@ static void sixpack_ajprintseq(AjPSeqout outseq,
     sq   = ajSeqNew();
     ajSeqSetProt(sq);
 
-    ajStrAssSubC(&str,seq,begin,end);
-    ajSeqReplace(sq,str);
+    ajStrAssignSubC(&str,seq,begin,end);
+    ajSeqAssignSeqS(sq,str);
 
     ajFmtPrintS(&nm, "%s_ORF%d  Translation of %s in frame %d, ORF %d, "
 		"threshold %d, %daa",
 		name,count,origname,frame,count,min_orflength,orflength);
-    ajSeqAssName(sq,nm);
+    ajSeqAssignNameS(sq,nm);
 
     ajSeqWrite(outseq, sq);
 

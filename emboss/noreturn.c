@@ -2,7 +2,7 @@
 **
 ** Remove trailing carriage returns from otherwise ASCII files
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 
     inf  = ajAcdGetInfile("infile");
     outf = ajAcdGetOutfile("outfile");
-    system = ajAcdGetListI("system",1);
+    system = ajAcdGetListSingle("system");
     if(ajStrMatchC(system, "pc"))
 	pcoutput = ajTrue;
     if(ajStrMatchC(system, "mac"))
@@ -61,8 +61,8 @@ int main(int argc, char **argv)
     while(ajFileReadLine(inf,&line))
     {
 	iline++;
-	p   = MAJSTRSTR(line);
-	len = ajStrLen(line);
+	p   = MAJSTRGETPTR(line);
+	len = ajStrGetLen(line);
 	if(len)
 	{
 	    ajDebug("line %d: Length %d\n", iline, len);
@@ -106,6 +106,7 @@ int main(int argc, char **argv)
     }
     
     ajStrDel(&line);
+    ajStrDel(&system);
     ajFileClose(&inf);
     ajFileClose(&outf);
 

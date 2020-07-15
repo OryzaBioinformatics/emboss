@@ -2,7 +2,7 @@
 **
 ** Retrieves original flatfile entries
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -52,6 +52,8 @@ int main(int argc, char **argv)
     }
 
     ajFileClose(&outf);
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
 
     ajExit();
     return 0;

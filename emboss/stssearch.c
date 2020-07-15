@@ -2,7 +2,7 @@
 **
 ** Gribskov statistical plot of synonymous codon usage
 **
-** @author: Unknown
+** @author Unknown
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 
     while(ajFileReadLine(primfile, &rdline))
     {
-	if(ajStrChar(rdline, 0) == '#')
+	if(ajStrGetCharFirst(rdline) == '#')
 	    continue;
 	if(ajStrSuffixC(rdline, ".."))
 	    continue;
@@ -101,20 +101,20 @@ int main(int argc, char **argv)
 	primdata->Oligoa = NULL;
 	primdata->Oligob = NULL;
 
-	handle = ajStrTokenInit(rdline, " \t");
-	ajStrToken(&primdata->Name, &handle, NULL);
+	handle = ajStrTokenNewC(rdline, " \t");
+	ajStrTokenNextParse(&handle, &primdata->Name);
 
 	if(!(nprimers % 1000))
 	    ajDebug("Name [%d]: '%S'\n", nprimers, primdata->Name);
 
-	ajStrToken(&primdata->Oligoa, &handle, NULL);
-	ajStrToUpper(&primdata->Oligoa);
+	ajStrTokenNextParse(&handle, &primdata->Oligoa);
+	ajStrFmtUpper(&primdata->Oligoa);
 	primdata->Prima = ajRegComp(primdata->Oligoa);
 
-	ajStrToken(&primdata->Oligob, &handle, NULL);
-	ajStrToUpper(&primdata->Oligob);
+	ajStrTokenNextParse(&handle, &primdata->Oligob);
+	ajStrFmtUpper(&primdata->Oligob);
 	primdata->Primb = ajRegComp(primdata->Oligob);
-	ajStrTokenClear(&handle);
+	ajStrTokenDel(&handle);
 
 	if(!nprimers)
 	    primList = ajListNew();
@@ -130,11 +130,11 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	ajSeqToUpper(seq);
-	ajStrAssS(&seqstr, ajSeqStr(seq));
-	ajStrAssS(&revstr, ajSeqStr(seq));
-	ajSeqReverseStr(&revstr);
-	ajDebug("Testing: %s\n", ajSeqName(seq));
+	ajSeqFmtUpper(seq);
+	ajStrAssignS(&seqstr, ajSeqGetSeqS(seq));
+	ajStrAssignS(&revstr, ajSeqGetSeqS(seq));
+	ajSeqstrReverse(&revstr);
+	ajDebug("Testing: %s\n", ajSeqGetNameC(seq));
 	ntests = 0;
 	ajListMap(primList, stssearch_primTest, NULL);
     }
@@ -189,9 +189,9 @@ static void stssearch_primTest(void **x,void *cl)
     {
 	ioff = ajRegOffset(primdata->Prima);
 	ajDebug("%s: %S PrimerA matched at %d\n",
-		ajSeqName(seq), primdata->Name, ioff);
+		ajSeqGetNameC(seq), primdata->Name, ioff);
 	ajFmtPrintF(out, "%s: %S PrimerA matched at %d\n",
-		    ajSeqName(seq), primdata->Name, ioff);
+		    ajSeqGetNameC(seq), primdata->Name, ioff);
 	ajRegTrace(primdata->Prima);
     }
 
@@ -200,31 +200,31 @@ static void stssearch_primTest(void **x,void *cl)
     {
 	ioff = ajRegOffset(primdata->Primb);
 	ajDebug("%s: %S PrimerB matched at %d\n",
-		ajSeqName(seq), primdata->Name, ioff);
+		ajSeqGetNameC(seq), primdata->Name, ioff);
 	ajFmtPrintF(out, "%s: %S PrimerB matched at %d\n",
-		    ajSeqName(seq), primdata->Name, ioff);
+		    ajSeqGetNameC(seq), primdata->Name, ioff);
 	ajRegTrace(primdata->Primb);
     }
 
     testc = ajRegExec(primdata->Prima, revstr);
     if(testc)
     {
-	ioff = ajStrLen(seqstr) - ajRegOffset(primdata->Prima);
+	ioff = ajStrGetLen(seqstr) - ajRegOffset(primdata->Prima);
 	ajDebug("%s: (rev) %S PrimerA matched at %d\n",
-		ajSeqName(seq), primdata->Name, ioff);
+		ajSeqGetNameC(seq), primdata->Name, ioff);
 	ajFmtPrintF(out, "%s: (rev) %S PrimerA matched at %d\n",
-		    ajSeqName(seq), primdata->Name, ioff);
+		    ajSeqGetNameC(seq), primdata->Name, ioff);
 	ajRegTrace(primdata->Prima);
     }
 
     testd = ajRegExec(primdata->Primb, revstr);
     if(testd)
     {
-	ioff = ajStrLen(seqstr) - ajRegOffset(primdata->Primb);
+	ioff = ajStrGetLen(seqstr) - ajRegOffset(primdata->Primb);
 	ajDebug("%s: (rev) %S PrimerB matched at %d\n",
-		ajSeqName(seq), primdata->Name, ioff);
+		ajSeqGetNameC(seq), primdata->Name, ioff);
 	ajFmtPrintF(out, "%s: (rev) %S PrimerB matched at %d\n",
-		    ajSeqName(seq), primdata->Name, ioff);
+		    ajSeqGetNameC(seq), primdata->Name, ioff);
 	ajRegTrace(primdata->Primb);
     }
 

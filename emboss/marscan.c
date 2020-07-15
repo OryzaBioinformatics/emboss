@@ -170,10 +170,10 @@ int main(int argc, char **argv)
 
 
     /* Copy original patterns for regexps */
-    ajStrAssC(&opattern16, ajStrStr(pattern16));
-    ajStrAssC(&opattern16rev, ajStrStr(pattern16rev));
-    ajStrAssC(&opattern8, ajStrStr(pattern8));
-    ajStrAssC(&opattern8rev, ajStrStr(pattern8rev));
+    ajStrAssignS(&opattern16, pattern16);
+    ajStrAssignS(&opattern16rev, pattern16rev);
+    ajStrAssignS(&opattern8, pattern8);
+    ajStrAssignS(&opattern8rev, pattern8rev);
 
     if(!(type16=embPatGetType(opattern16,&pattern16,
 			      mismatch16, 0, &m16, &amino16,
@@ -221,11 +221,11 @@ int main(int argc, char **argv)
 	l8     = ajListNew();
 	l8rev  = ajListNew();
 
-	ajStrAssC(&seqname, ajSeqName(seq));
+	ajStrAssignC(&seqname, ajSeqName(seq));
 	begin = ajSeqallBegin(seqall);
 	end   = ajSeqallEnd(seqall);
-	ajStrAssSubC(&text, ajSeqCharCopy(seq), begin-1, end-1);
-	ajStrToUpper(&text);
+	ajStrAssignSubC(&text, ajSeqChar(seq), begin-1, end-1);
+	ajStrFmtUpper(&text);
 	adj = begin+end+1;
 
 	embPatFuzzSearch(type16, begin, pattern16, seqname,
@@ -270,7 +270,6 @@ int main(int argc, char **argv)
 	{
 	    ajListPushList(l16, &l16rev);
 	    ajListSort(l16, embPatRestrictStartCompare);
-
 	}
 
 
@@ -298,6 +297,9 @@ int main(int argc, char **argv)
 	*/
 	ajListDel(&l16);
 	ajListDel(&l8);
+
+	ajListDel(&l16rev);
+	ajListDel(&l8rev);
 
     }
 
@@ -333,13 +335,23 @@ int main(int argc, char **argv)
     ajStrDel(&pattern8);
     ajStrDel(&pattern8rev);
 
+    ajStrDel(&opattern16);
+    ajStrDel(&opattern16rev);
+    ajStrDel(&opattern8);
+    ajStrDel(&opattern8rev);
+
     ajStrDel(&seqname);
     ajSeqDel(&seq);
+    ajSeqallDel(&seqall);
 
     ajReportClose(report);
     ajReportDel(&report);
 
-    ajExit();
+    ajStrDel(&text);
+
+    ajStrDel(&seqname);
+
+    embExit();
 
     return 0;
 }
@@ -369,16 +381,16 @@ static void marscan_stepdown(AjPList l16, AjPList l8, AjPFeattable *tab)
     AjBool stored_match = ajFalse;
 
     /* distance between the patterns in the stored match */
-    ajint stored_dist;
+    ajint stored_dist = 0;
 
     /* position of 16 pattern match in stored match */
-    ajint stored_16_pos;
+    ajint stored_16_pos = 0;
 
     /* position of 8 pattern match in stored match */
-    ajint stored_8_pos;
+    ajint stored_8_pos = 0;
 
     /* position of end of second pattern in stored match */
-    ajint stored_lastpos;
+    ajint stored_lastpos = 0;
 
     /* flag for empty list of length 16 pattern matches*/
     AjBool notend16 = ajTrue;
@@ -653,8 +665,8 @@ static void marscan_output_stored_match(AjBool stored_match, ajint stored_dist,
 
     if(!type)
     {
-      ajStrAssC(&source,"marscan");
-      ajStrAssC(&type,"misc_signal");
+      ajStrAssignC(&source,"marscan");
+      ajStrAssignC(&type,"misc_signal");
     }
 
     /*

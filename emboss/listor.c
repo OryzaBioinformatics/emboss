@@ -2,7 +2,7 @@
 **
 ** Writes a list file of the logical OR of two sets of sequences
 **
-** @author: Copyright (C) Gary Williams
+** @author Copyright (C) Gary Williams
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     operator = ajAcdGetList("operator");
 
     /* get the operator value */
-    switch(ajStrStr(operator[0])[0])
+    switch(ajStrGetPtr(operator[0])[0])
     {
     case 'O':
 	Operator = L_OR;
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
     order1   = AJCALLOC0(n1, sizeof(ajint));
     for(i=0; i<n1; i++)
     {
-	lengths1[i] = ajSeqLen(ajSeqsetGetSeq(seq1, i));
+	lengths1[i] = ajSeqGetLen(ajSeqsetGetSeq(seq1, i));
 	order1[i]   = i;
 	hits1[i]    = -1;
     }
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 
     for(i=0; i<n2; i++)
     {
-	lengths2[i] = ajSeqLen(ajSeqsetGetSeq(seq2, i));
+	lengths2[i] = ajSeqGetLen(ajSeqsetGetSeq(seq2, i));
 	order2[i]   = i;
 	hits2[i]    = -1;
     }
@@ -150,9 +150,9 @@ int main(int argc, char **argv)
 		for(tmp2=curr2; tmp2<n2 && lengths2[order2[tmp2]] ==
 		    lengths2[order2[curr2]]; tmp2++)
 		    /* check to see if the sequences are identical */
-		    if(!ajStrCmpCase(ajSeqStr(ajSeqsetGetSeq(seq1,
+		    if(!ajStrCmpCaseS(ajSeqGetSeqS(ajSeqsetGetSeq(seq1,
 							     order1[tmp1])),
-				      ajSeqStr(ajSeqsetGetSeq(seq2,
+				      ajSeqGetSeqS(ajSeqsetGetSeq(seq2,
 				      order2[tmp2]))))
 		    {
 			hits1[order1[tmp1]] = order2[tmp2];
@@ -260,7 +260,7 @@ static void listor_Output(AjPFile list, ajint Operator,
 
 static void listor_Write(AjPFile list, const AjPSeqset seqset, ajint i)
 {
-    ajFmtPrintF(list, "%S\n", ajSeqGetUsa(ajSeqsetGetSeq(seqset, i)));
+    ajFmtPrintF(list, "%S\n", ajSeqGetUsaS(ajSeqsetGetSeq(seqset, i)));
 
     return;
 }

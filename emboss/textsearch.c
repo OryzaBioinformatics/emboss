@@ -2,7 +2,7 @@
 **
 ** Search sequence documentation text. SRS or Entrez is faster.
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -106,21 +106,21 @@ int main(int argc, char **argv)
 	name = ajSeqGetName(seq);
 	desc = ajSeqGetDesc(seq);
 
-	if(ajStrLen(desc) && ajRegExec(exp, desc))
+	if(ajStrGetLen(desc) && ajRegExec(exp, desc))
 	{
 	    /* get the usa ('-' if unknown) */
 	    usa = ajSeqGetUsa(seq);
-	    if(ajStrLen(usa) == 0)
+	    if(ajStrGetLen(usa) == 0)
 		usa = altusa;
 
 	    /* get the name ('-' if unknown) */
 	    name = ajSeqGetName(seq);
-	    if(ajStrLen(name) == 0)
+	    if(ajStrGetLen(name) == 0)
 		name = altname;
 
 	    /* get the accession number ('-' if unknown) */
 	    acc = ajSeqGetAcc(seq);
-	    if(ajStrLen(acc) == 0)
+	    if(ajStrGetLen(acc) == 0)
 		acc = altacc;
 
 	    /* start table line */
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
 		    **  after it. Try to fit the name in 18 spaces,
 		    **  else just add a TAB after it
 		    */
-		    if(ajStrLen(usa) < 18)
+		    if(ajStrGetLen(usa) < 18)
 		    {
 			if(doname || doacc || dodesc)
 			    ajFmtPrintF(outfile, "%-18.17S", usa);
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 		    **  after it. Try to fit the name in 14 space, else
 		    **  just add a TAB after it
 		    */
-		    if(ajStrLen(name) < 14)
+		    if(ajStrGetLen(name) < 14)
 		    {
 			if(doacc || dodesc)
 			    ajFmtPrintF(outfile, "%-14.13S", name);
@@ -226,8 +226,11 @@ int main(int argc, char **argv)
     ajStrDel(&altname);
     ajStrDel(&altacc);
     ajRegFree(&exp);
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajStrDel(&pattern);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

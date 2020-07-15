@@ -2,7 +2,7 @@
 **
 ** Type in a short new sequence
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     AjPStr name = NULL;
     AjPStr desc = NULL;
     AjPStr sequence = NULL;
-    AjPStr *type;
+    AjPStr type;
 
     embInit("newseq", argc, argv);
 
@@ -47,24 +47,31 @@ int main(int argc, char **argv)
     name     = ajAcdGetString("name");
     desc     = ajAcdGetString("description");
     sequence = ajAcdGetString("sequence");
-    type     = ajAcdGetList("type");
+    type     = ajAcdGetListSingle("type");
 
     /* initialise the sequence */
-    seq = ajSeqNewL(ajStrLen(sequence));
+    seq = ajSeqNewRes(ajStrGetLen(sequence));
 
     /* assign some things to the sequence */
-    ajSeqAssName(seq, name);
-    ajSeqAssDesc(seq, desc);
+    ajSeqAssignNameS(seq, name);
+    ajSeqAssignDescS(seq, desc);
 
-    if(!ajStrCmpC(type[0], "N"))
+    if(!ajStrCmpC(type, "N"))
 	ajSeqSetNuc(seq);
     else
 	ajSeqSetProt(seq);
 
-    ajSeqReplace(seq, sequence);
+    ajSeqAssignSeqS(seq, sequence);
 
     ajSeqWrite(seqout, seq);
     ajSeqWriteClose(seqout);
+
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
+    ajStrDel(&name);
+    ajStrDel(&desc);
+    ajStrDel(&type);
+    ajStrDel(&sequence);
 
     ajExit();
 

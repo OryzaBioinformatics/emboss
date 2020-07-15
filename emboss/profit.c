@@ -1,7 +1,7 @@
 /* @source profit application
 **
 ** Scan a protein database or sequence with a profile or matrix
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 	    AJCNEW(matrix[i], AZ);
 	    if(!ajFileReadLine(inf,&line))
 		ajFatal("Missing matrix line");
-	    p = ajStrStr(line);
+	    p = ajStrGetPtr(line);
 	    p = ajSysStrtok(p," \t");
 	    for(j=0;j<AZ;++j)
 	    {
@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 	    }
 	}
 	ajFmtPrintF(outf,"# PROF scan using simple frequency matrix %s\n",
-		    ajStrStr(name));
+		    ajStrGetPtr(name));
 	ajFmtPrintF(outf,"# Scores >= threshold %d (max score %d)\n#\n",thresh,
 		    maxs);
 	break;
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 	    AJCNEW(fmatrix[i],(AZ+1));
 	    if(!ajFileReadLine(inf,&line))
 		ajFatal("Missing matrix line");
-	    p = ajStrStr(line);
+	    p = ajStrGetPtr(line);
 	    p = ajSysStrtok(p," \t");
 	    for(j=0;j<AZ;++j)
 	    {
@@ -154,7 +154,7 @@ int main(int argc, char **argv)
 	    }
 	}
 	ajFmtPrintF(outf,"# PROF scan using Gribskov profile %s\n",
-		    ajStrStr(name));
+		    ajStrGetPtr(name));
 	ajFmtPrintF(outf,"# Scores >= threshold %d (max score %.2f)\n#\n",
 		    thresh,maxfs);
 	break;
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
 	    AJCNEW(fmatrix[i], (AZ+1));
 	    if(!ajFileReadLine(inf,&line))
 		ajFatal("Missing matrix line");
-	    p = ajStrStr(line);
+	    p = ajStrGetPtr(line);
 	    p = ajSysStrtok(p," \t");
 	    for(j=0;j<AZ;++j)
 	    {
@@ -177,7 +177,7 @@ int main(int argc, char **argv)
 	    }
 	}
 	ajFmtPrintF(outf,"# PROF scan using Henikoff profile %s\n",
-		    ajStrStr(name));
+		    ajStrGetPtr(name));
 	ajFmtPrintF(outf,"# Scores >= threshold %d (max score %.2f)\n#\n",
 		    thresh,maxfs);
 	break;
@@ -192,10 +192,10 @@ int main(int argc, char **argv)
 	begin = ajSeqallBegin(seqall);
 	end   = ajSeqallEnd(seqall);
 
-	ajStrAssC(&pname,ajSeqName(seq));
+	ajStrAssignC(&pname,ajSeqName(seq));
 	strand = ajSeqStrCopy(seq);
 
-	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
+	ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
 
 	switch(type)
 	{
@@ -224,13 +224,18 @@ int main(int argc, char **argv)
 
     ajStrDel(&line);
     ajStrDel(&name);
-    ajStrDel(&mname);
     ajStrDel(&substr);
+    ajStrDel(&mname);
+    ajStrDel(&pname);
+    ajStrDel(&cons);
+
     ajSeqDel(&seq);
     ajFileClose(&inf);
     ajFileClose(&outf);
 
-    ajExit();
+    ajSeqallDel(&seqall);
+
+    embExit();
 
     return 0;
 }
@@ -257,7 +262,7 @@ static ajint profit_getType(AjPFile inf)
 
     while(ajFileReadLine(inf,&line))
     {
-	p=ajStrStr(line);
+	p=ajStrGetPtr(line);
 	if(!*p || *p=='#' || *p=='!' || *p=='\n') continue;
 	break;
     }
@@ -304,17 +309,17 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Name",4))
 	ajFatal("Incorrect profile/matrix file format");
     p = ajSysStrtok(p," \t");
     p = ajSysStrtok(NULL," \t");
-    ajStrAssC(name,p);
+    ajStrAssignC(name,p);
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Length",6))
 	ajFatal("Incorrect profile/matrix file format");
@@ -322,7 +327,7 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Maximum",7))
 	ajFatal("Incorrect profile/matrix file format");
@@ -330,7 +335,7 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Thresh",6))
 	ajFatal("Incorrect profile/matrix file format");
@@ -338,13 +343,13 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Consensus",9))
 	ajFatal("Incorrect profile/matrix file format");
     p = ajSysStrtok(p," \t\n");
     p = ajSysStrtok(NULL," \t\n");
-    ajStrAssC(cons,p);
+    ajStrAssignC(cons,p);
 
     ajStrDel(&line);
 
@@ -381,28 +386,28 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Name",4))
 	ajFatal("Incorrect profile/matrix file format");
     p = ajSysStrtok(p," \t");
     p = ajSysStrtok(NULL," \t");
-    ajStrAssC(name,p);
+    ajStrAssignC(name,p);
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Matrix",6))
 	ajFatal("Incorrect profile/matrix file format");
     p = ajSysStrtok(p," \t");
     p = ajSysStrtok(NULL," \t");
-    ajStrAssC(mname,p);
+    ajStrAssignC(mname,p);
 
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Length",6))
 	ajFatal("Incorrect profile/matrix file format");
@@ -410,7 +415,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Max_score",9))
 	ajFatal("Incorrect profile/matrix file format");
@@ -418,7 +423,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Threshold",9))
 	ajFatal("Incorrect profile/matrix file format");
@@ -427,7 +432,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Gap_open",8))
 	ajFatal("Incorrect profile/matrix file format");
@@ -435,7 +440,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Gap_extend",10))
 	ajFatal("Incorrect profile/matrix file format");
@@ -443,13 +448,13 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
-    p = ajStrStr(line);
+    p = ajStrGetPtr(line);
 
     if(strncmp(p,"Consensus",9))
 	ajFatal("Incorrect profile/matrix file format");
     p = ajSysStrtok(p," \t\n");
     p = ajSysStrtok(NULL," \t\n");
-    ajStrAssC(cons,p);
+    ajStrAssignC(cons,p);
 
     ajStrDel(&line);
 
@@ -489,9 +494,9 @@ static void profit_scan_simple(const AjPStr substr,
     ajint sum;
 
 
-    len = ajStrLen(substr);
+    len = ajStrGetLen(substr);
     lim = len-mlen+1;
-    p = ajStrStr(substr);
+    p = ajStrGetPtr(substr);
 
     for(i=0;i<lim;++i)
     {
@@ -524,7 +529,7 @@ static void profit_scan_simple(const AjPStr substr,
 static void profit_printHits(const AjPStr pname, ajint pos,
 			     ajint score, AjPFile outf)
 {
-    ajFmtPrintF(outf,"%s %d Percentage: %d\n",ajStrStr(pname),pos+1,score);
+    ajFmtPrintF(outf,"%s %d Percentage: %d\n",ajStrGetPtr(pname),pos+1,score);
 
     return;
 }
@@ -563,9 +568,9 @@ static void profit_scan_profile (const AjPStr substr,
     float sum;
 
 
-    len = ajStrLen(substr);
+    len = ajStrGetLen(substr);
     lim = len-mlen+1;
-    p = ajStrStr(substr);
+    p = ajStrGetPtr(substr);
 
     for(i=0;i<lim;++i)
     {

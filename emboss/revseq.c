@@ -2,7 +2,7 @@
 **
 ** Reverse and complement a sequence
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -58,9 +58,9 @@ int main(int argc, char **argv)
 	if(reverse && complement)
 	    ajSeqReverseForce(seq);	/* reverses and complements */
 	else if(reverse)
-	    ajSeqRevOnly(seq);
+	    ajSeqReverseOnly(seq);
 	else if(complement)
-	    ajSeqCompOnly(seq);
+	    ajSeqComplementOnly(seq);
 	else
 	  ajDebug("No action was specified\n");
 
@@ -70,7 +70,11 @@ int main(int argc, char **argv)
 
     ajSeqWriteClose(seqout);
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    ajSeqoutDel(&seqout);
+
+    embExit();
 
     return 0;
 }

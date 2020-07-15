@@ -6,7 +6,7 @@
 **
 ** Outputs 360 degrees if an angle cannot be calculated
 **
-** @author: Copyright (C) Damian Counsell
+** @author Copyright (C) Damian Counsell
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -29,61 +29,61 @@
 
 
 
-static ajint chain_index(ajint ajIntSelectedChainNumber,
-			 ajint ajIntHighestChainNumber,
-			 ajint ajIntLowestChainNumber);
+static ajint psiphi_chain_index(ajint selected,
+			 ajint highest,
+			 ajint lowest);
 
-static ajint first_residue_number(const AjPPdb ajpPdbCleanStructure,
-				  ajint ajIntChainIndex,
-				  ajint ajIntStartResidueNumber);
+static ajint psiphi_first_residue_number(const AjPPdb pdb,
+				  ajint index,
+				  ajint startres);
 
-static ajint last_residue_number(const AjPPdb PdbCleanStructure,
-				 ajint ajIntChainIndex,
-				 ajint ajIntStartResidueNumber,
-				 ajint ajIntFinishResidueNumber);
+static ajint psiphi_last_residue_number(const AjPPdb pdb,
+				 ajint index,
+				 ajint startres,
+				 ajint finishres);
 
-static AjBool phi_calculable(const AjBool* arrayOfAjboolsResidue);
+static AjBool psiphi_phi_calculable(const AjBool* known);
 
-static AjBool psi_calculable(const AjBool* arrayOfAjboolsResidue);
+static AjBool psiphi_psi_calculable(const AjBool* known);
 
-static float phi(AjPAtom const *arrayOfAjpatomsWindow);
+static float psiphi_phival(AjPAtom const *atoms);
 
-static float psi(AjPAtom const *arrayOfAjpatomsWindow);
+static float psiphi_psival(AjPAtom const *atoms);
 
-static AjBool load_previous_residue(AjPAtom ajpAtomCurrent,
-				    AjPAtom* arrayOfAjpatomsResidue,
-				    AjBool* arrayOfAjboolsResidue);
+static AjBool psiphi_load_previous_residue(AjPAtom current,
+				    AjPAtom* atoms,
+				    AjBool* known);
 
-static AjBool load_next_residue(AjPAtom ajpAtomCurrent,
-				AjPAtom* arrayOfAjpatomsResidue,
-				AjBool* arrayOfAjboolsResidue);
+static AjBool psiphi_load_next_residue(AjPAtom current,
+				AjPAtom* atoms,
+				AjBool* known);
 
-static AjBool load_current_residue(AjPAtom ajpAtomCurrent,
-				   AjPAtom* arrayOfAjpatomsResidue,
-				   AjBool* arrayOfAjboolsResidue);
+static AjBool psiphi_load_current_residue(AjPAtom current,
+				   AjPAtom* atoms,
+				   AjBool* known);
 
-static AjPFeature write_psi_phi(AjPFeattable ajpFeattableTorsionAngles,
-				ajint ajIntFeatureResidueNumber,
-				float fPhiTorsionAngle,
-				float fPsiTorsionAngle);
+static AjPFeature psiphi_write_psi_phi(AjPFeattable angletab,
+				ajint resnum,
+				float phi,
+				float psi);
 
-static void shift_residues(AjPAtom* arrayOfAjpatomsResidue,
-			   AjBool* arrayOfAjboolsResidue);
+static void psiphi_shift_residues(AjPAtom* atoms,
+			   AjBool* known);
 
 
 /* constant window size and enumerated indexes to atoms in window */
-const ajint ajIntWindowSize = 9;
+const ajint windowsize = 9;
 enum enumAtomWindowPoint
 {
-    ENitrogenPrevious,
-    EAlphaCarbonPrevious,
-    EPrimeCarbonPrevious,
-    ENitrogenCurrent,
-    EAlphaCarbonCurrent,
-    EPrimeCarbonCurrent,
-    ENitrogenNext,
-    EAlphaCarbonNext,
-    EPrimeCarbonNext
+    ENPrev,
+    ECAlphaPrev,
+    ECPrimePrev,
+    ENCurr,
+    ECAlphaCurr,
+    ECPrimeCurr,
+    ENNext,
+    ECAlphaNext,
+    ECPrimeNext
 };
 
 /* for unavailable angles (360 deg is an impossible torsion angle) */
@@ -97,305 +97,302 @@ const float FUnavailableAngle = 360.0;
 
 int main( int argc , char **argv )
 {
-    float fPhiTorsionAngle = 0.0;
-    float fPsiTorsionAngle = 0.0;
+    float phi = 0.0;
+    float psi = 0.0;
 
     /*
      * coordinates from atoms in at least
      * THREE residues are required
      * to calculate psi and phi angles
      */
-    ajint ajIntFirstResidueInWindow;
-    ajint ajIntSecondResidueInWindow;
-    ajint ajIntThirdResidueInWindow;
+    ajint firstres;
+    ajint secondres;
+    ajint thirdres;
 
     /* declare position counters and limits */
     /* ...for residues */
-    ajint ajIntCarbonCurrent          = 0;
-    ajint ajIntResidueNumber          = 0;
-    ajint ajIntPreviousResidueNumber  = 0;
-    ajint ajIntFinalResidueNumber     = 0;
+    ajint cpos          = 0;
+    ajint resnum          = 0;
+    ajint prevres  = 0;
+    ajint lastres     = 0;
 
     /* ...for chains */
-    ajint ajIntChainIndex             = 0; /* ...into structure object */
-    ajint ajIntLowestChainNumber      = 0; /* ...in structure file     */
-    ajint ajIntHighestChainNumber     = 0; /* ...in structure file     */
+    ajint index             = 0; /* ...into structure object */
+    ajint lowest      = 0; /* ...in structure file     */
+    ajint highest     = 0; /* ...in structure file     */
 
     /* variables for (user-specified) chain and residue numbers */
-    ajint ajIntSelectedChainNumber;
-    ajint ajIntStartResidueNumber;
-    ajint ajIntFinishResidueNumber;
+    ajint selected;
+    ajint startres;
+    ajint finishres;
     
     /* window of AjPAtoms for co-ords */
-    AjPAtom* arrayOfAjpatomsWindow = NULL;
+    AjPAtom* atoms = NULL;
     /* window of AjBools for presence or absence  */
-    AjBool* arrayOfAjboolsWindow   = NULL;
-    AjBool ajBoolWindowFull;
+    AjBool* known   = NULL;
 
-    AjPStr ajpStrReportHeader = NULL;
+    AjPStr header = NULL;
     /* DDDDEBUG: string for report footer */
     /*     AjPStr ajpStrReportTail      = NULL; */
 
     /* cleaned-up structure */
-    AjPFile ajpFileCleanProteinStructure = NULL; /* file           */
-    AjPPdb  ajpPdbCleanStructure         = NULL; /* object         */
-    AjPSeq  ajpSeqCleanChain             = NULL; /* current chain  */
-    AjIList ajIteratorAtomList           = NULL; /* list of atoms  */
-    AjPAtom ajpAtomCurrentInList         = NULL; /* current atom   */
+    AjPFile pdbfile     = NULL; /* file           */
+    AjPPdb  pdb         = NULL; /* object         */
+    AjPSeq  seq         = NULL; /* current chain  */
+    AjIList atomlist    = NULL; /* list of atoms  */
+    AjPAtom inlist      = NULL; /* current atom   */
 
     /* output report file for torsion angles */
-    AjPReport ajpReportTorsionAngles       = NULL;
-    AjPFeattable ajpFeattableTorsionAngles = NULL;
-    AjPFeature ajpFeatCurrent              = NULL;
+    AjPReport report    = NULL;
+    AjPFeattable angles = NULL;
+    AjPFeature curft    = NULL;
 
     embInit( "psiphi", argc ,argv );
 
     /* get protein structure from ACD */
-    ajpFileCleanProteinStructure = ajAcdGetInfile("infile" );
+    pdbfile = ajAcdGetInfile("infile" );
     /* get angle output file from ACD */
-    ajpReportTorsionAngles = ajAcdGetReport("outfile");
+    report = ajAcdGetReport("outfile");
     /* get chain to be scanned from ACD */
-    ajIntSelectedChainNumber = ajAcdGetInt("chainnumber");
+    selected = ajAcdGetInt("chainnumber");
     /* get first residue to be scanned from ACD */
-    ajIntStartResidueNumber = ajAcdGetInt("startresiduenumber");
+    startres = ajAcdGetInt("startresiduenumber");
     /* get last residue to be scanned from ACD */
-    ajIntFinishResidueNumber = ajAcdGetInt("finishresiduenumber");
+    finishres = ajAcdGetInt("finishresiduenumber");
 
     /* reserve memory for and read in structure */
-    /* JISON */    ajpPdbCleanStructure = ajPdbReadoldNew(ajpFileCleanProteinStructure);
+    /* JISON */    pdb = ajPdbReadoldNew(pdbfile);
     
     /* check and set number of chain to be analysed */
-    ajIntHighestChainNumber = ajpPdbCleanStructure->Nchn;
-    ajIntChainIndex = chain_index(ajIntSelectedChainNumber,
-				  ajIntHighestChainNumber,
-				  ajIntLowestChainNumber);
+    highest = pdb->Nchn;
+    index = psiphi_chain_index(selected,
+			       highest,
+			       lowest);
 
     /* check and set range of residues to be analysed */
-    ajIntFirstResidueInWindow = 
-	first_residue_number(ajpPdbCleanStructure,
-				    ajIntChainIndex,
-				    ajIntStartResidueNumber);    
-    ajIntFinalResidueNumber = last_residue_number(ajpPdbCleanStructure,
-						  ajIntChainIndex,
-						  ajIntStartResidueNumber,
-						  ajIntFinishResidueNumber);
-    ajIntSecondResidueInWindow = ajIntFirstResidueInWindow+1;
-    ajIntThirdResidueInWindow = ajIntFirstResidueInWindow+2;
+    firstres = 
+	psiphi_first_residue_number(pdb,
+				    index,
+				    startres);    
+    lastres = psiphi_last_residue_number(pdb,
+					 index,
+					 startres,
+					 finishres);
+    secondres = firstres+1;
+    thirdres = firstres+2;
 
     /*
      * start loop over atoms in chain at
-     * ajIntFirstResidueInWindow and
-     * finish at ajIntFinalResidueNumber
+     * firstres and
+     * finish at lastres
      */
 
     /* obtain iterator for list of atoms in chain */
-    ajIteratorAtomList = 
-	ajListIterRead(ajpPdbCleanStructure->Chains[ajIntChainIndex]->Atoms);
+    atomlist = 
+	ajListIterRead(pdb->Chains[index]->Atoms);
 
     /* obtain sequence from residues in chain */
-    ajpSeqCleanChain =
-	ajSeqNewStr(ajpPdbCleanStructure->Chains[ajIntChainIndex]->Seq);
+    seq =
+	ajSeqNewStr(pdb->Chains[index]->Seq);
 
-    ajIntResidueNumber = 0;
+    resnum = 0;
 
     /* create feature table for torsion angle output */
-    ajpFeattableTorsionAngles = ajFeattableNewSeq(ajpSeqCleanChain);    
+    angles = ajFeattableNewSeq(seq);    
 
     /* chain info for head of report */
-    ajFmtPrintS(&ajpStrReportHeader, "Chain: %d", (ajIntChainIndex+1));
-    ajReportSetHeader(ajpReportTorsionAngles, ajpStrReportHeader);
+    ajFmtPrintS(&header, "Chain: %d", (index+1));
+    ajReportSetHeader(report, header);
 
     /* BEGIN ANALYSIS OF CHAIN HERE */
     /* loop through list until first residue in window reached */
     do
     {
 	/* do nothing until you reach the start residue */
-	ajpAtomCurrentInList = ajListIterNext(ajIteratorAtomList);
-	ajIntResidueNumber = ajpAtomCurrentInList->Idx;
+	inlist = ajListIterNext(atomlist);
+	resnum = inlist->Idx;
     }
-    while(ajIntResidueNumber < ajIntFirstResidueInWindow);
+    while(resnum < firstres);
 
-    ajIntPreviousResidueNumber = ajIntResidueNumber;
+    prevres = resnum;
 
     /* create and initialize AjPAtom window array */
-    arrayOfAjpatomsWindow =
-	(AjPAtom *) AJALLOC(ajIntWindowSize*sizeof(AjPAtom));
-    arrayOfAjpatomsWindow[ENitrogenPrevious]    = NULL;
-    arrayOfAjpatomsWindow[EAlphaCarbonPrevious] = NULL;
-    arrayOfAjpatomsWindow[EPrimeCarbonPrevious] = NULL;
-    arrayOfAjpatomsWindow[ENitrogenCurrent]     = NULL;
-    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]  = NULL;
-    arrayOfAjpatomsWindow[EPrimeCarbonCurrent]  = NULL;
-    arrayOfAjpatomsWindow[ENitrogenNext]        = NULL;
-    arrayOfAjpatomsWindow[EAlphaCarbonNext]     = NULL;
-    arrayOfAjpatomsWindow[EPrimeCarbonNext]     = NULL;
+    atoms =
+	(AjPAtom *) AJALLOC(windowsize*sizeof(AjPAtom));
+    atoms[ENPrev]    = NULL;
+    atoms[ECAlphaPrev] = NULL;
+    atoms[ECPrimePrev] = NULL;
+    atoms[ENCurr]     = NULL;
+    atoms[ECAlphaCurr]  = NULL;
+    atoms[ECPrimeCurr]  = NULL;
+    atoms[ENNext]        = NULL;
+    atoms[ECAlphaNext]     = NULL;
+    atoms[ECPrimeNext]     = NULL;
     /* create and initialize AjBool window array */
-    arrayOfAjboolsWindow =
-	(AjBool *) AJALLOC(ajIntWindowSize*sizeof(AjBool));
-    arrayOfAjboolsWindow[ENitrogenPrevious]    = AJFALSE;
-    arrayOfAjboolsWindow[EAlphaCarbonPrevious] = AJFALSE;
-    arrayOfAjboolsWindow[EPrimeCarbonPrevious] = AJFALSE;
-    arrayOfAjboolsWindow[ENitrogenCurrent]     = AJFALSE;
-    arrayOfAjboolsWindow[EAlphaCarbonCurrent]  = AJFALSE;
-    arrayOfAjboolsWindow[EPrimeCarbonCurrent]  = AJFALSE;
-    arrayOfAjboolsWindow[ENitrogenNext]        = AJFALSE;
-    arrayOfAjboolsWindow[EAlphaCarbonNext]     = AJFALSE;
-    arrayOfAjboolsWindow[EPrimeCarbonNext]     = AJFALSE;
-    ajBoolWindowFull = AJFALSE;
+    known =
+	(AjBool *) AJALLOC(windowsize*sizeof(AjBool));
+    known[ENPrev]    = AJFALSE;
+    known[ECAlphaPrev] = AJFALSE;
+    known[ECPrimePrev] = AJFALSE;
+    known[ENCurr]     = AJFALSE;
+    known[ECAlphaCurr]  = AJFALSE;
+    known[ECPrimeCurr]  = AJFALSE;
+    known[ENNext]        = AJFALSE;
+    known[ECAlphaNext]     = AJFALSE;
+    known[ECPrimeNext]     = AJFALSE;
     
     /* loop through list until window is full */
     do
     {
-	ajIntResidueNumber = ajpAtomCurrentInList->Idx;
+	resnum = inlist->Idx;
 
 	/* load window with atom co-ordinates */
 	/* get previous N, CA and C' */
-	if(ajIntResidueNumber == ajIntFirstResidueInWindow)
-	    load_previous_residue(ajpAtomCurrentInList,
-				  arrayOfAjpatomsWindow,
-				  arrayOfAjboolsWindow);
+	if(resnum == firstres)
+	    psiphi_load_previous_residue(inlist,
+					 atoms,
+					 known);
 	/* get current N, CA and C' */
-	else if(ajIntResidueNumber == ajIntSecondResidueInWindow)
-	    load_current_residue(ajpAtomCurrentInList,
-				 arrayOfAjpatomsWindow,
-				 arrayOfAjboolsWindow);
+	else if(resnum == secondres)
+	    psiphi_load_current_residue(inlist,
+					atoms,
+					known);
 	/* get new next N, CA and C'  */
-	else if(ajIntResidueNumber == ajIntThirdResidueInWindow)
+	else if(resnum == thirdres)
 	{
-	    /* ajIntCarbonCurrent residue no. for which angles calc'd */
-	    ajIntCarbonCurrent = ajIntResidueNumber-1;
-	    load_next_residue(ajpAtomCurrentInList,
-			      arrayOfAjpatomsWindow,
-			      arrayOfAjboolsWindow);
+	    /* cpos residue no. for which angles calc'd */
+	    cpos = resnum-1;
+	    psiphi_load_next_residue(inlist,
+				     atoms,
+				     known);
 	}
 	else
 	    break;
-    }while((ajpAtomCurrentInList = ajListIterNext(ajIteratorAtomList)));
+    }while((inlist = ajListIterNext(atomlist)));
 
     /* analyse first residue */
-    if(phi_calculable(arrayOfAjboolsWindow))
-	fPhiTorsionAngle = phi(arrayOfAjpatomsWindow);
+    if(psiphi_phi_calculable(known))
+	phi = psiphi_phival(atoms);
     else
-	fPhiTorsionAngle = FUnavailableAngle;
-    if(psi_calculable(arrayOfAjboolsWindow))
-	fPsiTorsionAngle = psi(arrayOfAjpatomsWindow);
+	phi = FUnavailableAngle;
+    if(psiphi_psi_calculable(known))
+	psi = psiphi_psival(atoms);
     else
-	fPsiTorsionAngle = FUnavailableAngle;
-    ajpFeatCurrent = write_psi_phi(ajpFeattableTorsionAngles,
-				   ajIntCarbonCurrent,
-				   fPhiTorsionAngle,
-				   fPsiTorsionAngle);
+	psi = FUnavailableAngle;
+    curft = psiphi_write_psi_phi(angles,
+				 cpos,
+				 phi,
+				 psi);
 
     /* loop through list until last residue to be analysed */
-    ajIntPreviousResidueNumber = ajIntResidueNumber;
-    shift_residues(arrayOfAjpatomsWindow,
-		   arrayOfAjboolsWindow);
+    prevres = resnum;
+    psiphi_shift_residues(atoms, known);
     do
     {
-	ajIntResidueNumber = ajpAtomCurrentInList->Idx;
-	/* ajIntCarbonCurrent residue no. for which angles calc'd */
+	resnum = inlist->Idx;
+	/* cpos residue no. for which angles calc'd */
 
 	/* new residue? */
-	if(ajIntResidueNumber > ajIntPreviousResidueNumber)
+	if(resnum > prevres)
 	{
 	    /* analyse previous previous residue */
-	    if(phi_calculable(arrayOfAjboolsWindow))
-		fPhiTorsionAngle = phi(arrayOfAjpatomsWindow);
+	    if(psiphi_phi_calculable(known))
+		phi = psiphi_phival(atoms);
 	    else
-		fPhiTorsionAngle = FUnavailableAngle;
-	    if(psi_calculable(arrayOfAjboolsWindow))
-		fPsiTorsionAngle = psi(arrayOfAjpatomsWindow);
+		phi = FUnavailableAngle;
+	    if(psiphi_psi_calculable(known))
+		psi = psiphi_psival(atoms);
 	    else
-		fPsiTorsionAngle = FUnavailableAngle;
-	    ajpFeatCurrent = write_psi_phi(ajpFeattableTorsionAngles,
-					   ajIntCarbonCurrent,
-					   fPhiTorsionAngle,
-					   fPsiTorsionAngle);
+		psi = FUnavailableAngle;
+	    curft = psiphi_write_psi_phi(angles,
+					 cpos,
+					 phi,
+					 psi);
 
-	    shift_residues(arrayOfAjpatomsWindow, arrayOfAjboolsWindow);
+	    psiphi_shift_residues(atoms, known);
 	}
 	/* not finished? get new next N, CA and C'  */
-	if(ajIntResidueNumber <= ajIntFinalResidueNumber)
+	if(resnum <= lastres)
 	{
-	    /* conditional is kludge for bad residue numbers at chain termini */
-	    if( ajIntResidueNumber > 1 )
-		ajIntCarbonCurrent = ajIntResidueNumber-1;
-	    load_next_residue(ajpAtomCurrentInList,
-			      arrayOfAjpatomsWindow,
-			      arrayOfAjboolsWindow);
+	    /* conditional is kludge for bad residue numbers at termini */
+	    if( resnum > 1 )
+		cpos = resnum-1;
+	    psiphi_load_next_residue(inlist,
+				     atoms,
+				     known);
 	}
 	else
 	    break;
-	ajIntPreviousResidueNumber = ajIntResidueNumber;
+	prevres = resnum;
     }
-    while((ajpAtomCurrentInList = ajListIterNext(ajIteratorAtomList)));
+    while((inlist = ajListIterNext(atomlist)));
 
     /* conditional is kludge for bad residue numbers at chain termini */
-    if( ajIntResidueNumber > 1 )
-	ajIntCarbonCurrent = ajIntResidueNumber-1;
+    if( resnum > 1 )
+	cpos = resnum-1;
 
     /* analyse penultimate residue */
-    if(ajIntCarbonCurrent < ajIntFinalResidueNumber)
+    if(cpos < lastres)
     {
 
-	if(phi_calculable(arrayOfAjboolsWindow))
-	    fPhiTorsionAngle = phi(arrayOfAjpatomsWindow);
+	if(psiphi_phi_calculable(known))
+	    phi = psiphi_phival(atoms);
 	else
-	    fPhiTorsionAngle = FUnavailableAngle;
-	if(psi_calculable(arrayOfAjboolsWindow))
-	    fPsiTorsionAngle = psi(arrayOfAjpatomsWindow);
+	    phi = FUnavailableAngle;
+	if(psiphi_psi_calculable(known))
+	    psi = psiphi_psival(atoms);
 	else
-	    fPsiTorsionAngle = FUnavailableAngle;
+	    psi = FUnavailableAngle;
 
-	ajpFeatCurrent = write_psi_phi(ajpFeattableTorsionAngles,
-				       ajIntCarbonCurrent,
-				       fPhiTorsionAngle,
-				       fPsiTorsionAngle);
-	ajIntCarbonCurrent++;
-	shift_residues(arrayOfAjpatomsWindow,
-		       arrayOfAjboolsWindow);
+	curft = psiphi_write_psi_phi(angles,
+				     cpos,
+				     phi,
+				     psi);
+	cpos++;
+	psiphi_shift_residues(atoms,
+			      known);
     }
     /* analyse last residue */
-    if((ajIntCarbonCurrent < ajIntFinalResidueNumber ) &&
-       (phi_calculable(arrayOfAjboolsWindow)))
+    if((cpos < lastres ) &&
+       (psiphi_phi_calculable(known)))
     {
-	fPhiTorsionAngle = phi(arrayOfAjpatomsWindow);
-	fPsiTorsionAngle = FUnavailableAngle;
-	ajpFeatCurrent   = write_psi_phi(ajpFeattableTorsionAngles,
-					 ajIntCarbonCurrent,
-					 fPhiTorsionAngle,
-					 fPsiTorsionAngle);
+	phi = psiphi_phival(atoms);
+	psi = FUnavailableAngle;
+	curft   = psiphi_write_psi_phi(angles,
+				       cpos,
+				       phi,
+				       psi);
     }
     /* END ANALYSIS OF CHAIN HERE */
 
     /* DDDDEBUG TEST INFO FOR TAIL OF REPORT */
     /*     ajFmtPrintS(&ajpStrReportTail, "This is some tail text"); */
-    /*     ajReportSetTail(ajpReportTorsionAngles, ajpStrReportTail); */
+    /*     ajReportSetTail(report, ajpStrReportTail); */
 
     /* write the report to the output file */
-    ajReportWrite(ajpReportTorsionAngles,
-		  ajpFeattableTorsionAngles,
-		  ajpSeqCleanChain);
+    ajReportWrite(report,
+		  angles,
+		  seq);
 
     /* clear up windows */
-    AJFREE(arrayOfAjpatomsWindow);
-    AJFREE(arrayOfAjboolsWindow);
+    AJFREE(atoms);
+    AJFREE(known);
 
     /* clear up report objects */
-    ajFeattableDel(&ajpFeattableTorsionAngles);
+    ajFeattableDel(&angles);
 
     /* delete the atom list */
-    ajListIterFree(&ajIteratorAtomList);
+    ajListIterFree(&atomlist);
 
     /* close the input file */
-    ajFileClose(&ajpFileCleanProteinStructure);
+    ajFileClose(&pdbfile);
 
     /* close the report file */
-    ajReportDel(&ajpReportTorsionAngles);
+    ajReportDel(&report);
 
     /* clear up the structure */
-    /* JISON */ ajPdbDel(&ajpPdbCleanStructure);
-    ajSeqDel(&ajpSeqCleanChain);
+    /* JISON */ ajPdbDel(&pdb);
+    ajSeqDel(&seq);
 
     /*  tidy up everything else... */
     ajExit();
@@ -406,425 +403,425 @@ int main( int argc , char **argv )
 
 
 
-/* @funcstatic chain_index ***************************************************
+/* @funcstatic psiphi_chain_index ********************************************
 **
 ** check selected protein chain number present in structure file; return index
 **
-** @param [r] ajIntSelectedChainNumber [ajint] number of chain selected by user
-** @param [r] ajIntHighestChainNumber [ajint] number of highest chain in
+** @param [r] selected [ajint] number of chain selected by user
+** @param [r] highest [ajint] number of highest chain in
 **                                            structure
-** @param [r] ajIntLowestChainNumber [ajint] number of lowest chain in
+** @param [r] lowest [ajint] number of lowest chain in
 **                                           structure
 ** @return [ajint] index
 ** @@
 ******************************************************************************/
-static ajint chain_index(ajint ajIntSelectedChainNumber,
-			 ajint ajIntHighestChainNumber,
-			 ajint ajIntLowestChainNumber)
+static ajint psiphi_chain_index(ajint selected,
+				ajint highest,
+				ajint lowest)
 {
     /* ERROR: chain number too high */ 
-    if(ajIntSelectedChainNumber > ajIntHighestChainNumber)
+    if(selected > highest)
 	ajDie("There is no chain %d---highest chain number: %d.",
-	       ajIntSelectedChainNumber, ajIntHighestChainNumber );
+	       selected, highest );
     /* ERROR: chain number too low */ 
-    if(ajIntSelectedChainNumber < ajIntLowestChainNumber )
+    if(selected < lowest )
 	ajWarn("There is no chain %d---lowest chain number %d.",
-	       ajIntSelectedChainNumber, ajIntLowestChainNumber );
-    return ajIntSelectedChainNumber-1;
+	       selected, lowest );
+    return selected-1;
 }
 
 
 
 
-/* @funcstatic first_residue_number ***********************************
+/* @funcstatic psiphi_first_residue_number ***********************************
 **
 ** check selected lower residue within chain's range and return 1st window res
 **
-** @param [r] ajpPdbCleanStructure [const AjPPdb] cleaned AjPPdb structure
-** @param [r] ajIntChainIndex [ajint] number of user-selected chain in
+** @param [r] pdb [const AjPPdb] cleaned AjPPdb structure
+** @param [r] index [ajint] number of user-selected chain in
 **                                    structure
-** @param [r] ajIntStartResidueNumber [ajint] user-selected lower residue
+** @param [r] startres [ajint] user-selected lower residue
 **                                            number
 ** @return [ajint] First window residue number
 ** @@
 ******************************************************************************/
-static ajint first_residue_number (const AjPPdb ajpPdbCleanStructure,
-				   ajint ajIntChainIndex,
-				   ajint ajIntStartResidueNumber)
+static ajint psiphi_first_residue_number (const AjPPdb pdb,
+				   ajint index,
+				   ajint startres)
 {
-    ajint ajIntFirstResidueNumber  = 0;
-    ajint ajIntLowestResidueNumber = 0;
+    ajint firstres  = 0;
+    ajint lowestres = 0;
 
-    AjPAtom ajpAtomCurrentInList   = NULL;
+    AjPAtom inlist   = NULL;
     
     /* read first atom in list into memory, but keep it on list */
-    ajListPeek(ajpPdbCleanStructure->Chains[ajIntChainIndex]->Atoms,
-	       (void**)&ajpAtomCurrentInList);
+    ajListPeek(pdb->Chains[index]->Atoms,
+	       (void**)&inlist);
 
     /* get number of lowest residue available in chain */
-    ajIntLowestResidueNumber = ajpAtomCurrentInList->Idx;
+    lowestres = inlist->Idx;
     
     /* ERROR: start residue too low */ 
-    if(ajIntStartResidueNumber < ajIntLowestResidueNumber)
+    if(startres < lowestres)
     {	
 	ajWarn("No residue %d---number of lowest residue in chain %d is %d.",
-	       ajIntStartResidueNumber, ajIntChainIndex,
-	       ajIntLowestResidueNumber );
+	       startres, index,
+	       lowestres );
     }
 
     /* use user-specified starting position... */
-    if(ajIntStartResidueNumber > ajIntLowestResidueNumber)
-	ajIntFirstResidueNumber = ajIntStartResidueNumber-1;
+    if(startres > lowestres)
+	firstres = startres-1;
     /* ...or use start of chain */
     else
     {
-	ajIntFirstResidueNumber = ajIntLowestResidueNumber-1;
+	firstres = lowestres-1;
 	
     }
 
-    return ajIntFirstResidueNumber;
+    return firstres;
 }
 
 
 
 
-/* @funcstatic last_residue_number ******************************************
+/* @funcstatic psiphi_last_residue_number *************************************
 **
 ** check selected upper protein residue within chain's range and return limit
 **
-** @param [r] ajpPdbCleanStructure [const AjPPdb] cleaned AjPPdb structure
-** @param [r] ajIntChainIndex [ajint] number of user-selected chain in
+** @param [r] pdb [const AjPPdb] cleaned AjPPdb structure
+** @param [r] index [ajint] number of user-selected chain in
 **                                    structure
-** @param [r] ajIntStartResidueNumber [ajint] user-selected lower residue
+** @param [r] startres [ajint] user-selected lower residue
 **                                             number
-** @param [r] ajIntFinishResidueNumber [ajint] user-selected upper residue
+** @param [r] finishres [ajint] user-selected upper residue
 **                                             number
 ** @return [ajint] Last residue number
 ** @@
 ******************************************************************************/
-static ajint last_residue_number(const AjPPdb ajpPdbCleanStructure,
-				 ajint ajIntChainIndex,
-				 ajint ajIntStartResidueNumber,
-				 ajint ajIntFinishResidueNumber)
+static ajint psiphi_last_residue_number(const AjPPdb pdb,
+					ajint index,
+					ajint startres,
+					ajint finishres)
 {
-    ajint ajIntFinalResidueNumber   = 0;
-    ajint ajIntHighestResidueNumber = 0;
+    ajint lastres   = 0;
+    ajint highres = 0;
 
     /* get number of highest residue available in chain */
-    ajIntHighestResidueNumber = 
-	ajpPdbCleanStructure->Chains[ajIntChainIndex]->Nres;
+    highres = 
+	pdb->Chains[index]->Nres;
 
     /* last residue defaults to end of chain... */
-    if(ajIntFinishResidueNumber == 1)
-	ajIntFinalResidueNumber = ajIntHighestResidueNumber+1;
+    if(finishres == 1)
+	lastres = highres+1;
     /* ERROR: finish residue too low */ 
-    else if(ajIntFinishResidueNumber < ajIntStartResidueNumber)
+    else if(finishres < startres)
 	ajDie("Residue %d too low---number of lowest residue you chose is %d.",
-	      ajIntFinishResidueNumber, ajIntStartResidueNumber );
+	      finishres, startres );
     /* any other legitimate choice used as given */
-    else if(ajIntFinishResidueNumber < ajIntHighestResidueNumber)
-	    ajIntFinalResidueNumber = ajIntFinishResidueNumber+1;
+    else if(finishres < highres)
+	    lastres = finishres+1;
     else
 	/* ERROR: finish residue too high */ 
 	ajDie("No residue %d---number of highest residue in chain %d is %d.",
-	      ajIntFinishResidueNumber, ajIntChainIndex,
-	      ajIntHighestResidueNumber );
+	      finishres, index,
+	      highres );
     
-    return ajIntFinalResidueNumber;
+    return lastres;
 }
 
 
 
 
-/* @funcstatic phi_calculable ************************************************
+/* @funcstatic psiphi_phi_calculable ******************************************
 **
 ** are all necessary atoms present to calculate phi torsion angle?
 **
-** @param [r] arrayOfAjboolsWindow [const AjBool*] corresponding array of AjBools
+** @param [r] known [const AjBool*] corresponding array of AjBools
 ** @return [AjBool] ajTrue if calculable
 ** @@
 ******************************************************************************/
-static AjBool phi_calculable(const AjBool* arrayOfAjboolsWindow)
+static AjBool psiphi_phi_calculable(const AjBool* known)
 {
-    AjBool ajBoolPhiCalculable = AJFALSE;
+    AjBool phicalc = AJFALSE;
     /*
      * check for a complete set of atoms needed to calculate PHI
      */
-    if(arrayOfAjboolsWindow[EPrimeCarbonPrevious] &&
-       arrayOfAjboolsWindow[ENitrogenCurrent] &&
-       arrayOfAjboolsWindow[EAlphaCarbonCurrent] &&
-       arrayOfAjboolsWindow[EPrimeCarbonCurrent])
-	ajBoolPhiCalculable = AJTRUE;
+    if(known[ECPrimePrev] &&
+       known[ENCurr] &&
+       known[ECAlphaCurr] &&
+       known[ECPrimeCurr])
+	phicalc = AJTRUE;
 
-    return ajBoolPhiCalculable;
+    return phicalc;
 }
 
 
 
 
-/* @funcstatic psi_calculable ************************************************
+/* @funcstatic psiphi_psi_calculable ******************************************
 **
 ** are all necessary atoms present to calculate psi torsion angle?
 **
-** @param [r] arrayOfAjboolsWindow [const AjBool*] corresponding array of AjBools
+** @param [r] known [const AjBool*] corresponding array of AjBools
 ** @return [AjBool] ajTrue if calculable
 ** @@
 ******************************************************************************/
-static AjBool psi_calculable(const AjBool* arrayOfAjboolsWindow)
+static AjBool psiphi_psi_calculable(const AjBool* known)
 {
-    AjBool ajBoolPsiCalculable = AJFALSE;
+    AjBool psicalc = AJFALSE;
     /*
      * If you've got a complete set of the relevant
      * torsion atoms then calculate the PSI angle
      */
-    if(arrayOfAjboolsWindow[ENitrogenCurrent] &&
-       arrayOfAjboolsWindow[EAlphaCarbonCurrent] &&
-       arrayOfAjboolsWindow[EPrimeCarbonCurrent] &&
-       arrayOfAjboolsWindow[ENitrogenNext])
+    if(known[ENCurr] &&
+       known[ECAlphaCurr] &&
+       known[ECPrimeCurr] &&
+       known[ENNext])
     {
-	ajBoolPsiCalculable = AJTRUE;
+	psicalc = AJTRUE;
     }
-    return ajBoolPsiCalculable;
+    return psicalc;
 }
 
 
 
 
-/* @funcstatic phi ***********************************************************
+/* @funcstatic psiphi_phival **************************************************
 **
 ** returns the phi torsion angle between a specified set of AjPAtoms
 **
-** @param [r] arrayOfAjpatomsWindow [AjPAtom const *] window of nine mainchain atoms
+** @param [r] atoms [AjPAtom const *] window of nine mainchain atoms
 ** @return [float] phi torsion angle
 ** @@
 ******************************************************************************/
 
-static float phi (AjPAtom const * arrayOfAjpatomsWindow)
+static float psiphi_phival (AjPAtom const * atoms)
 {
-    float fPhiTorsionAngle;
+    float phi;
     
-    AjP3dVector ajp3dVector1To2 = NULL;
-    AjP3dVector ajp3dVector3To2 = NULL;
-    AjP3dVector ajp3dVector3To4 = NULL;
+    AjP3dVector vec1To2 = NULL;
+    AjP3dVector vec3To2 = NULL;
+    AjP3dVector vec3To4 = NULL;
 
     /* construct vectors between four atoms relevant to torsion angles */
-    ajp3dVector1To2 = aj3dVectorNew();
-    ajp3dVector3To2 = aj3dVectorNew();
-    ajp3dVector3To4 = aj3dVectorNew();
+    vec1To2 = aj3dVectorNew();
+    vec3To2 = aj3dVectorNew();
+    vec3To4 = aj3dVectorNew();
 
     /* calculate PHI angle for current window */
-    aj3dVectorBetweenPoints(ajp3dVector1To2,
-			    arrayOfAjpatomsWindow[EPrimeCarbonPrevious]->X,
-			    arrayOfAjpatomsWindow[EPrimeCarbonPrevious]->Y,
-			    arrayOfAjpatomsWindow[EPrimeCarbonPrevious]->Z,
-			    arrayOfAjpatomsWindow[ENitrogenCurrent]->X,
-			    arrayOfAjpatomsWindow[ENitrogenCurrent]->Y,
-			    arrayOfAjpatomsWindow[ENitrogenCurrent]->Z);
-    aj3dVectorBetweenPoints(ajp3dVector3To2,
-			    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]->X,
-			    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]->Y,
-			    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]->Z,
-			    arrayOfAjpatomsWindow[ENitrogenCurrent]->X,
-			    arrayOfAjpatomsWindow[ENitrogenCurrent]->Y,
-			    arrayOfAjpatomsWindow[ENitrogenCurrent]->Z);
-    aj3dVectorBetweenPoints(ajp3dVector3To4,
-			    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]->X,
-			    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]->Y,
-			    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]->Z,
-			    arrayOfAjpatomsWindow[EPrimeCarbonCurrent]->X,
-			    arrayOfAjpatomsWindow[EPrimeCarbonCurrent]->Y,
-			    arrayOfAjpatomsWindow[EPrimeCarbonCurrent]->Z);
+    aj3dVectorBetweenPoints(vec1To2,
+			    atoms[ECPrimePrev]->X,
+			    atoms[ECPrimePrev]->Y,
+			    atoms[ECPrimePrev]->Z,
+			    atoms[ENCurr]->X,
+			    atoms[ENCurr]->Y,
+			    atoms[ENCurr]->Z);
+    aj3dVectorBetweenPoints(vec3To2,
+			    atoms[ECAlphaCurr]->X,
+			    atoms[ECAlphaCurr]->Y,
+			    atoms[ECAlphaCurr]->Z,
+			    atoms[ENCurr]->X,
+			    atoms[ENCurr]->Y,
+			    atoms[ENCurr]->Z);
+    aj3dVectorBetweenPoints(vec3To4,
+			    atoms[ECAlphaCurr]->X,
+			    atoms[ECAlphaCurr]->Y,
+			    atoms[ECAlphaCurr]->Z,
+			    atoms[ECPrimeCurr]->X,
+			    atoms[ECPrimeCurr]->Y,
+			    atoms[ECPrimeCurr]->Z);
 		
-    fPhiTorsionAngle = -1.0 *
-	aj3dVectorDihedralAngle(ajp3dVector1To2,
-				ajp3dVector3To2,
-				ajp3dVector3To4);
+    phi = -1.0 *
+	aj3dVectorDihedralAngle(vec1To2,
+				vec3To2,
+				vec3To4);
     /* clean up vectors */
-    aj3dVectorDel(&ajp3dVector1To2);
-    aj3dVectorDel(&ajp3dVector3To2);
-    aj3dVectorDel(&ajp3dVector3To4);
+    aj3dVectorDel(&vec1To2);
+    aj3dVectorDel(&vec3To2);
+    aj3dVectorDel(&vec3To4);
     
-    return fPhiTorsionAngle;
+    return phi;
 }
 
 
 
 
-/* @funcstatic psi ***********************************************************
+/* @funcstatic psiphi_psival **************************************************
 **
 ** returns the psi torsion angle between a specified set of AjPAtoms
 **
-** @param [r] arrayOfAjpatomsWindow [AjPAtom const *] window of nine mainchain atoms
+** @param [r] atoms [AjPAtom const *] window of nine mainchain atoms
 ** @return [float]  psi torsion angle
 ** @@
 ******************************************************************************/
 
-static float psi (AjPAtom const * arrayOfAjpatomsWindow)
+static float psiphi_psival (AjPAtom const * atoms)
 {
-    float fPsiTorsionAngle;
+    float psi;
     
-    AjP3dVector ajp3dVector1To2 = NULL;
-    AjP3dVector ajp3dVector3To2 = NULL;
-    AjP3dVector ajp3dVector3To4 = NULL;
+    AjP3dVector vec1To2 = NULL;
+    AjP3dVector vec3To2 = NULL;
+    AjP3dVector vec3To4 = NULL;
 
     /* construct vectors between four atoms relevant to torsion angles */
-    ajp3dVector1To2 = aj3dVectorNew();
-    ajp3dVector3To2 = aj3dVectorNew();
-    ajp3dVector3To4 = aj3dVectorNew();
+    vec1To2 = aj3dVectorNew();
+    vec3To2 = aj3dVectorNew();
+    vec3To4 = aj3dVectorNew();
 
     /* calculate PSI angle for current window */
-    aj3dVectorBetweenPoints(ajp3dVector1To2,
-			    arrayOfAjpatomsWindow[ENitrogenCurrent]->X,
-			    arrayOfAjpatomsWindow[ENitrogenCurrent]->Y,
-			    arrayOfAjpatomsWindow[ENitrogenCurrent]->Z,
-			    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]->X,
-			    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]->Y,
-			    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]->Z);
+    aj3dVectorBetweenPoints(vec1To2,
+			    atoms[ENCurr]->X,
+			    atoms[ENCurr]->Y,
+			    atoms[ENCurr]->Z,
+			    atoms[ECAlphaCurr]->X,
+			    atoms[ECAlphaCurr]->Y,
+			    atoms[ECAlphaCurr]->Z);
 		
-    aj3dVectorBetweenPoints(ajp3dVector3To2,
-			    arrayOfAjpatomsWindow[EPrimeCarbonCurrent]->X,
-			    arrayOfAjpatomsWindow[EPrimeCarbonCurrent]->Y,
-			    arrayOfAjpatomsWindow[EPrimeCarbonCurrent]->Z,
-			    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]->X,
-			    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]->Y,
-			    arrayOfAjpatomsWindow[EAlphaCarbonCurrent]->Z);
+    aj3dVectorBetweenPoints(vec3To2,
+			    atoms[ECPrimeCurr]->X,
+			    atoms[ECPrimeCurr]->Y,
+			    atoms[ECPrimeCurr]->Z,
+			    atoms[ECAlphaCurr]->X,
+			    atoms[ECAlphaCurr]->Y,
+			    atoms[ECAlphaCurr]->Z);
 		
-    aj3dVectorBetweenPoints(ajp3dVector3To4,
-			    arrayOfAjpatomsWindow[EPrimeCarbonCurrent]->X,
-			    arrayOfAjpatomsWindow[EPrimeCarbonCurrent]->Y,
-			    arrayOfAjpatomsWindow[EPrimeCarbonCurrent]->Z,
-			    arrayOfAjpatomsWindow[ENitrogenNext]->X,
-			    arrayOfAjpatomsWindow[ENitrogenNext]->Y,
-			    arrayOfAjpatomsWindow[ENitrogenNext]->Z);
-    fPsiTorsionAngle = -1.0 *
-	aj3dVectorDihedralAngle(ajp3dVector1To2,
-				ajp3dVector3To2,
-				ajp3dVector3To4);
+    aj3dVectorBetweenPoints(vec3To4,
+			    atoms[ECPrimeCurr]->X,
+			    atoms[ECPrimeCurr]->Y,
+			    atoms[ECPrimeCurr]->Z,
+			    atoms[ENNext]->X,
+			    atoms[ENNext]->Y,
+			    atoms[ENNext]->Z);
+    psi = -1.0 *
+	aj3dVectorDihedralAngle(vec1To2,
+				vec3To2,
+				vec3To4);
     /* clean up vectors */
-    aj3dVectorDel(&ajp3dVector1To2);
-    aj3dVectorDel(&ajp3dVector3To2);
-    aj3dVectorDel(&ajp3dVector3To4);
+    aj3dVectorDel(&vec1To2);
+    aj3dVectorDel(&vec3To2);
+    aj3dVectorDel(&vec3To4);
 
-    return fPsiTorsionAngle;
+    return psi;
 }
 
 
 
 
-/* @funcstatic load_previous_residue *****************************************
+/* @funcstatic psiphi_load_previous_residue ***********************************
 **
 ** checks and/or loads one mainchain AjPAtom from into window of AjPAtoms
 ** returns AJFALSE if non-residue atom
 **
 ** @param [u] ajpAtom [AjPAtom] current AjPAtom from ajPPdb object
-** @param [u] arrayOfAjpatomsWindow [AjPAtom*] array of nine mainchain atoms
-** @param [u] arrayOfAjboolsWindow [AjBool*] corresponding array of AjBools
+** @param [u] atoms [AjPAtom*] array of nine mainchain atoms
+** @param [u] known [AjBool*] corresponding array of AjBools
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool load_previous_residue(AjPAtom ajpAtom,
-				    AjPAtom* arrayOfAjpatomsWindow,
-				    AjBool* arrayOfAjboolsWindow)
+static AjBool psiphi_load_previous_residue(AjPAtom ajpAtom,
+					   AjPAtom* atoms,
+					   AjBool* known)
 {
-    AjBool ajBoolIsResidueAtom = AJFALSE;
+    AjBool isres = AJFALSE;
 
     if(ajpAtom->Id1 == 'X')
     {
 	/* do nothing: this is not a residue */
-	ajBoolIsResidueAtom = AJFALSE;
+	isres = AJFALSE;
     }
     else if(ajStrMatchC(ajpAtom->Atm, "N"))
     {
-	arrayOfAjboolsWindow[ENitrogenPrevious] = AJTRUE;
-	arrayOfAjpatomsWindow[ENitrogenPrevious]  = ajpAtom;
-	ajBoolIsResidueAtom = AJTRUE;
+	known[ENPrev] = AJTRUE;
+	atoms[ENPrev]  = ajpAtom;
+	isres = AJTRUE;
     }
     else if(ajStrMatchC(ajpAtom->Atm, "CA"))
     {
-	arrayOfAjboolsWindow[EAlphaCarbonPrevious] = AJTRUE;
-	arrayOfAjpatomsWindow[EAlphaCarbonPrevious]  = ajpAtom;
-	ajBoolIsResidueAtom = AJTRUE;
+	known[ECAlphaPrev] = AJTRUE;
+	atoms[ECAlphaPrev]  = ajpAtom;
+	isres = AJTRUE;
     }
     else if(ajStrMatchC(ajpAtom->Atm, "C"))
     {
-	arrayOfAjboolsWindow[EPrimeCarbonPrevious] = AJTRUE;
-	arrayOfAjpatomsWindow[EPrimeCarbonPrevious]  = ajpAtom;
-	ajBoolIsResidueAtom = AJTRUE;
+	known[ECPrimePrev] = AJTRUE;
+	atoms[ECPrimePrev]  = ajpAtom;
+	isres = AJTRUE;
     }
     
-    return ajBoolIsResidueAtom;
+    return isres;
 }
 
 
 
 
-/* @funcstatic load_current_residue ******************************************
+/* @funcstatic psiphi_load_current_residue ************************************
 **
 ** check and/or loads one mainchain AjPAtom into window of AjPAtoms
 ** returns AJFALSE if non-residue atom
 **
 ** @param [u] ajpAtom [AjPAtom] current AjPAtom from ajPPdb object
-** @param [u] arrayOfAjpatomsWindow [AjPAtom*] array of nine mainchain atoms
-** @param [u] arrayOfAjboolsWindow [AjBool*] corresponding array of AjBools
+** @param [u] atoms [AjPAtom*] array of nine mainchain atoms
+** @param [u] known [AjBool*] corresponding array of AjBools
 ** @return [AjBool]  ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool load_current_residue(AjPAtom ajpAtom,
-				   AjPAtom* arrayOfAjpatomsWindow,
-				   AjBool* arrayOfAjboolsWindow)
+static AjBool psiphi_load_current_residue(AjPAtom ajpAtom,
+					  AjPAtom* atoms,
+					  AjBool* known)
 {
-    AjBool ajBoolIsResidueAtom = AJFALSE;
+    AjBool isres = AJFALSE;
     
     if(ajpAtom->Id1 == 'X')
     {
 	/* do nothing: this is not a residue */
-	ajBoolIsResidueAtom = AJFALSE;
+	isres = AJFALSE;
 	
     }
     else if(ajStrMatchC(ajpAtom->Atm, "N"))
     {
-	arrayOfAjboolsWindow[ENitrogenCurrent]  = AJTRUE;
-	arrayOfAjpatomsWindow[ENitrogenCurrent] = ajpAtom;
-	ajBoolIsResidueAtom = AJTRUE;
+	known[ENCurr]  = AJTRUE;
+	atoms[ENCurr] = ajpAtom;
+	isres = AJTRUE;
     }
     else if(ajStrMatchC(ajpAtom->Atm, "CA"))
     {
-	arrayOfAjboolsWindow[EAlphaCarbonCurrent]  = AJTRUE;
-	arrayOfAjpatomsWindow[EAlphaCarbonCurrent] = ajpAtom;
-	ajBoolIsResidueAtom = AJTRUE;
+	known[ECAlphaCurr]  = AJTRUE;
+	atoms[ECAlphaCurr] = ajpAtom;
+	isres = AJTRUE;
     }
     else if(ajStrMatchC(ajpAtom->Atm, "C"))
     {
-	arrayOfAjboolsWindow[EPrimeCarbonCurrent]  = AJTRUE;
-	arrayOfAjpatomsWindow[EPrimeCarbonCurrent] = ajpAtom;
-	ajBoolIsResidueAtom = AJTRUE;
+	known[ECPrimeCurr]  = AJTRUE;
+	atoms[ECPrimeCurr] = ajpAtom;
+	isres = AJTRUE;
     }
     
-    return ajBoolIsResidueAtom;
+    return isres;
 }
 
 
 
 
-/* @funcstatic load_next_residue *********************************************
+/* @funcstatic psiphi_load_next_residue ***************************************
 **
 ** loads AjPAtoms from next residue into window; returns AJTRUE if window full
 ** returns AJFALSE if non-residue atom
 **
 ** @param [u] ajpAtom [AjPAtom] current AjPAtom from ajPPdb object
-** @param [u] arrayOfAjpatomsWindow [AjPAtom*] array of nine mainchain atoms
-** @param [u] arrayOfAjboolsWindow [AjBool*] corresponding array of AjBools
+** @param [u] atoms [AjPAtom*] array of nine mainchain atoms
+** @param [u] known [AjBool*] corresponding array of AjBools
 ** @return [AjBool]  ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool load_next_residue(AjPAtom ajpAtom,
-				AjPAtom* arrayOfAjpatomsWindow,
-				AjBool* arrayOfAjboolsWindow)
+static AjBool psiphi_load_next_residue(AjPAtom ajpAtom,
+				       AjPAtom* atoms,
+				       AjBool* known)
 {
-    AjBool ajBoolIsResidueAtom = AJFALSE;
+    AjBool isres = AJFALSE;
 
     if(ajpAtom->Id1 == 'X')
     {
@@ -834,135 +831,135 @@ static AjBool load_next_residue(AjPAtom ajpAtom,
     }
     else if(ajStrMatchC(ajpAtom->Atm, "N"))
     {
-	arrayOfAjboolsWindow[ENitrogenNext]  = AJTRUE;
-	arrayOfAjpatomsWindow[ENitrogenNext] = ajpAtom;
-	ajBoolIsResidueAtom = AJTRUE;
+	known[ENNext]  = AJTRUE;
+	atoms[ENNext] = ajpAtom;
+	isres = AJTRUE;
     }
     else if(ajStrMatchC(ajpAtom->Atm, "CA"))
     {
-	arrayOfAjboolsWindow[EAlphaCarbonNext]  = AJTRUE;
-	arrayOfAjpatomsWindow[EAlphaCarbonNext] = ajpAtom;
-	ajBoolIsResidueAtom = AJTRUE;
+	known[ECAlphaNext]  = AJTRUE;
+	atoms[ECAlphaNext] = ajpAtom;
+	isres = AJTRUE;
     }
     else if(ajStrMatchC(ajpAtom->Atm, "C"))
     {
-	arrayOfAjboolsWindow[EPrimeCarbonNext]  = AJTRUE;
-	arrayOfAjpatomsWindow[EPrimeCarbonNext] = ajpAtom;
-	ajBoolIsResidueAtom = AJTRUE;
+	known[ECPrimeNext]  = AJTRUE;
+	atoms[ECPrimeNext] = ajpAtom;
+	isres = AJTRUE;
     }
 
-    return ajBoolIsResidueAtom;
+    return isres;
 }
 
 
 
 
-/* @funcstatic write_psi_phi *************************************************
+/* @funcstatic psiphi_write_psi_phi *******************************************
 **
 ** writes torsion angle features to a feature table and returns new feature  
 **
-** @param [u] ajpFeattableTorsionAngles [AjPFeattable] table to write torsion
+** @param [u] angletab [AjPFeattable] table to write torsion
 **                                                     angle to
-** @param [r] ajIntFeatureResidueNumber [ajint] residue that angle belongs to
-** @param [r] fPhiTorsionAngle [float] phi torsion angle for residue
-** @param [r] fPsiTorsionAngle [float] psi torsion angle for residue
+** @param [r] resnum [ajint] residue that angle belongs to
+** @param [r] phi [float] phi torsion angle for residue
+** @param [r] psi [float] psi torsion angle for residue
 ** @return [AjPFeature] New feature stored in feature table
 ** @@
 ******************************************************************************/
 
-static AjPFeature write_psi_phi (AjPFeattable ajpFeattableTorsionAngles,
-				 ajint ajIntFeatureResidueNumber,
-				 float fPhiTorsionAngle,
-				 float fPsiTorsionAngle)
+static AjPFeature psiphi_write_psi_phi (AjPFeattable angletab,
+					ajint resnum,
+					float phi,
+					float psi)
 {
-    AjPFeature ajpFeatTorsionAngles;
-    AjPStr ajpStrFeatTemp;
+    AjPFeature angleft;
+    AjPStr feattmp;
 
-    ajpStrFeatTemp = ajStrNew();
+    feattmp = ajStrNew();
 
     /* create feature for torsion angles and write psi/phi */
-    ajpFeatTorsionAngles = ajFeatNewII(ajpFeattableTorsionAngles,
-				       ajIntFeatureResidueNumber,
-				       ajIntFeatureResidueNumber);
-    ajFmtPrintS(&ajpStrFeatTemp, "*phi: %7.2f", fPhiTorsionAngle);
-    ajFeatTagAdd(ajpFeatTorsionAngles, NULL, ajpStrFeatTemp);
-    ajFmtPrintS(&ajpStrFeatTemp, "*psi: %7.2f", fPsiTorsionAngle);
-    ajFeatTagAdd(ajpFeatTorsionAngles, NULL, ajpStrFeatTemp);
+    angleft = ajFeatNewII(angletab,
+			  resnum,
+			  resnum);
+    ajFmtPrintS(&feattmp, "*phi: %7.2f", phi);
+    ajFeatTagAdd(angleft, NULL, feattmp);
+    ajFmtPrintS(&feattmp, "*psi: %7.2f", psi);
+    ajFeatTagAdd(angleft, NULL, feattmp);
 
-    ajStrDel(&ajpStrFeatTemp);
+    ajStrDel(&feattmp);
     
-    return ajpFeatTorsionAngles;
+    return angleft;
 }
 
 
 
 
-/* @funcstatic shift_residues ***************************************
+/* @funcstatic psiphi_shift_residues ***************************************
 **
 ** moves AjPAtoms one residue along an array of mainchain AjPAtoms
 **
-** @param [u] arrayOfAjpatomsWindow [AjPAtom*] array of nine mainchain atoms
-** @param [u] arrayOfAjboolsWindow [AjBool*] corresponding array of AjBools
-*8 @return [void]
+** @param [u] atoms [AjPAtom*] array of nine mainchain atoms
+** @param [u] known [AjBool*] corresponding array of AjBools
+** @return [void]
 ** @@
 ******************************************************************************/
 
-static void shift_residues(AjPAtom* arrayOfAjpatomsWindow,
-				     AjBool* arrayOfAjboolsWindow)
+static void psiphi_shift_residues(AjPAtom* atoms,
+				  AjBool* known)
 {
     /* move previous atoms */
-    if(arrayOfAjboolsWindow[ENitrogenCurrent])
+    if(known[ENCurr])
     {
 	/* use old current N as new previous N */
-	arrayOfAjboolsWindow[ENitrogenPrevious]=
-	    arrayOfAjboolsWindow[ENitrogenCurrent];
-	arrayOfAjpatomsWindow[ENitrogenPrevious] =
-	    arrayOfAjpatomsWindow[ENitrogenCurrent];
+	known[ENPrev]=
+	    known[ENCurr];
+	atoms[ENPrev] =
+	    atoms[ENCurr];
     }
-    if(arrayOfAjboolsWindow[EAlphaCarbonCurrent])
+    if(known[ECAlphaCurr])
     {
 	/* use old current CA as new previous CA */
-	arrayOfAjboolsWindow[EAlphaCarbonPrevious] =
-	    arrayOfAjboolsWindow[EAlphaCarbonCurrent];
-	arrayOfAjpatomsWindow[EAlphaCarbonPrevious] =
-	    arrayOfAjpatomsWindow[EAlphaCarbonCurrent];
+	known[ECAlphaPrev] =
+	    known[ECAlphaCurr];
+	atoms[ECAlphaPrev] =
+	    atoms[ECAlphaCurr];
     }
-    if(arrayOfAjboolsWindow[EPrimeCarbonCurrent])
+    if(known[ECPrimeCurr])
     {
 	/* use old current C' as new previous C' */
-	arrayOfAjboolsWindow[EPrimeCarbonPrevious] =
-	    arrayOfAjboolsWindow[EPrimeCarbonCurrent];
-	arrayOfAjpatomsWindow[EPrimeCarbonPrevious] =
-	    arrayOfAjpatomsWindow[EPrimeCarbonCurrent];
+	known[ECPrimePrev] =
+	    known[ECPrimeCurr];
+	atoms[ECPrimePrev] =
+	    atoms[ECPrimeCurr];
     }
-    if(arrayOfAjboolsWindow[ENitrogenNext])
+    if(known[ENNext])
     { 
 	/* use old next N as new current N */
-	arrayOfAjboolsWindow[ENitrogenCurrent] =
-	    arrayOfAjboolsWindow[ENitrogenNext];
-	arrayOfAjpatomsWindow[ENitrogenCurrent] =
-	    arrayOfAjpatomsWindow[ENitrogenNext];
+	known[ENCurr] =
+	    known[ENNext];
+	atoms[ENCurr] =
+	    atoms[ENNext];
     }
-    if(arrayOfAjboolsWindow[EAlphaCarbonNext])
+    if(known[ECAlphaNext])
     {    
 	/* use old next CA as new current CA */
-	arrayOfAjboolsWindow[EAlphaCarbonCurrent] =
-	    arrayOfAjboolsWindow[EAlphaCarbonNext];
-	arrayOfAjpatomsWindow[EAlphaCarbonCurrent] =
-	    arrayOfAjpatomsWindow[EAlphaCarbonNext];
+	known[ECAlphaCurr] =
+	    known[ECAlphaNext];
+	atoms[ECAlphaCurr] =
+	    atoms[ECAlphaNext];
     }
-    if(arrayOfAjboolsWindow[EPrimeCarbonNext])
+    if(known[ECPrimeNext])
     {	    
 	/* use old next C as new current C */
-	arrayOfAjboolsWindow[EPrimeCarbonCurrent] =
-	    arrayOfAjboolsWindow[EPrimeCarbonNext];
-	arrayOfAjpatomsWindow[EPrimeCarbonCurrent] =
-	    arrayOfAjpatomsWindow[EPrimeCarbonNext];
+	known[ECPrimeCurr] =
+	    known[ECPrimeNext];
+	atoms[ECPrimeCurr] =
+	    atoms[ECPrimeNext];
     }
     /* clear next atoms */
-    arrayOfAjboolsWindow[EPrimeCarbonNext] = AJFALSE;
-    arrayOfAjboolsWindow[ENitrogenNext]    = AJFALSE;
-    arrayOfAjboolsWindow[EAlphaCarbonNext] = AJFALSE;
+    known[ECPrimeNext] = AJFALSE;
+    known[ENNext]    = AJFALSE;
+    known[ECAlphaNext] = AJFALSE;
     
     return;
 }

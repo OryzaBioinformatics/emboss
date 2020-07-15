@@ -1,7 +1,7 @@
 /* @source needle application
 **
 ** True Needleman-Wunsch global alignment
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -99,13 +99,13 @@ int main(int argc, char **argv)
     sub = ajMatrixfArray(matrix);
     cvt = ajMatrixfCvt(matrix);
 
-    begina = ajSeqBegin(a)+ajSeqOffset(a);
-    lena = ajSeqLen(a);
+    begina = ajSeqGetBegin(a)+ajSeqGetOffset(a);
+    lena = ajSeqGetLen(a);
 
     while(ajSeqallNext(seqall,&b))
     {
 	ajSeqTrim(b);
-	lenb = ajSeqLen(b);
+	lenb = ajSeqGetLen(b);
 	len = lena*lenb;
 
 	if(len < 0)
@@ -122,13 +122,13 @@ int main(int argc, char **argv)
 	    maxarr=len;
 	}
 
-	beginb=ajSeqBegin(b)+ajSeqOffset(b);
+	beginb=ajSeqGetBegin(b)+ajSeqGetOffset(b);
 
-	p = ajSeqChar(a);
-	q = ajSeqChar(b);
+	p = ajSeqGetSeqC(a);
+	q = ajSeqGetSeqC(b);
 
-	ajStrAssC(&m,"");
-	ajStrAssC(&n,"");
+	ajStrAssignC(&m,"");
+	ajStrAssignC(&n,"");
 
 	embAlignPathCalc(p,q,lena,lenb,gapopen,gapextend,path,sub,cvt,
 			compass,ajFalse);
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 			     start1, start2,
 			     gapopen, gapextend,
 			     score, matrix,
-			     ajSeqOffset(a), ajSeqOffset(b));
+			     ajSeqGetOffset(a), ajSeqGetOffset(b));
 
 	if(!dobrief)
 	{
@@ -169,6 +169,10 @@ int main(int argc, char **argv)
     ajAlignClose(align);
     ajAlignDel(&align);
 
+    ajSeqallDel(&seqall);
+    ajSeqDel(&a);
+    ajSeqDel(&b);
+
     AJFREE(compass);
     AJFREE(path);
 
@@ -177,7 +181,7 @@ int main(int argc, char **argv)
     ajStrDel(&ss);
     ajStrDel(&tmpstr);
 
-    ajExit();
+    embExit();
 
     return 0;
 }

@@ -1,7 +1,7 @@
 /* @source tfextract application
 **
 ** Extracts pattern information from TRANSFAC site.dat file
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -60,16 +60,16 @@ int main(int argc, char **argv)
     pfname = ajStrNewC("tffungi");
     ajFileDataNewWrite(pfname,&fout);
 
-    ajStrAssC(&pfname,"tfinsect");
+    ajStrAssignC(&pfname,"tfinsect");
     ajFileDataNewWrite(pfname,&iout);
 
-    ajStrAssC(&pfname,"tfvertebrate");
+    ajStrAssignC(&pfname,"tfvertebrate");
     ajFileDataNewWrite(pfname,&vout);
 
-    ajStrAssC(&pfname,"tfplant");
+    ajStrAssignC(&pfname,"tfplant");
     ajFileDataNewWrite(pfname,&pout);
 
-    ajStrAssC(&pfname,"tfother");
+    ajStrAssignC(&pfname,"tfother");
     ajFileDataNewWrite(pfname,&oout);
 
     ajStrDel(&pfname);
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 
     while(ajFileReadLine(inf,&line))
     {
-	p = ajStrStr(line);
+	p = ajStrGetPtr(line);
 	
 	if(ajStrPrefixC(line,"ID"))
 	{
@@ -92,14 +92,14 @@ int main(int argc, char **argv)
 	    fp = oout;
 	    p = ajSysStrtok(p," \t\n");
 	    p = ajSysStrtok(NULL," \t\n");
-	    ajStrAssC(&id,p);
+	    ajStrAssignC(&id,p);
 	}
 
 	if(ajStrPrefixC(line,"AC"))
 	{
 	    p = ajSysStrtok(p," \t\n");
 	    p = ajSysStrtok(NULL," \t\n");
-	    ajStrAssC(&acc,p);
+	    ajStrAssignC(&acc,p);
 	}
 
 
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
 	    p = strpbrk(p," \t\n");
 	    while(*p && *p==' ')
 		++p;
-	    ajStrAssC(&bf,p);
+	    ajStrAssignC(&bf,p);
 	}
 
 	if(ajStrPrefixC(line,"SQ") || ajStrPrefixC(line,"SE"))
@@ -116,10 +116,10 @@ int main(int argc, char **argv)
 	    p = ajSysStrtok(p," .\t\n");
 	    p = ajSysStrtok(NULL," .\t\n");
 	    if(!p)
-		ajStrAssC(&pattern,"");
+		ajStrAssignC(&pattern,"");
 	    else
-		ajStrAssC(&pattern,p);
-	    q = ajStrStrMod(&pattern);
+		ajStrAssignC(&pattern,p);
+	    q = ajStrGetuniquePtr(&pattern);
 
 	    while(*q)
 	    {
@@ -161,14 +161,14 @@ int main(int argc, char **argv)
 		fp = pout;
 	}
 
-	if(ajStrPrefixC(line,"//") && ajStrLen(pattern) && gid)
+	if(ajStrPrefixC(line,"//") && ajStrGetLen(pattern) && gid)
 	{
-	    if(!ajStrLen(bf))
-		ajFmtPrintF(fp,"%-20s %S %S\n",ajStrStr(id),pattern,acc);
+	    if(!ajStrGetLen(bf))
+		ajFmtPrintF(fp,"%-20s %S %S\n",ajStrGetPtr(id),pattern,acc);
 	    else
 	    {
-		ajFmtPrintF(fp,"%-20s %S %S %S\n",ajStrStr(id),pattern,acc,bf);
-		ajStrAssC(&bf,"");
+		ajFmtPrintF(fp,"%-20s %S %S %S\n",ajStrGetPtr(id),pattern,acc,bf);
+		ajStrAssignC(&bf,"");
 	    }
 	}
     }

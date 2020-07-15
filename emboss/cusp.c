@@ -2,7 +2,7 @@
 **
 ** Calculate codon usage table from sequence(s)
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
     {
 	beg = ajSeqallBegin(seqall);
 	end  = ajSeqallEnd(seqall);
-	ajStrAssSub(&substr,ajSeqStr(seq),beg-1,end-1);
+	ajStrAssignSubS(&substr,ajSeqStr(seq),beg-1,end-1);
 	ajCodCountTriplets(codon,substr,&ccnt);
     }
 
@@ -69,6 +69,9 @@ int main(int argc, char **argv)
 
     ajStrDel(&substr);
     ajCodDel(&codon);
+
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
 
     ajExit();
 

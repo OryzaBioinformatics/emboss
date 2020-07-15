@@ -2,7 +2,7 @@
 **
 ** Fickett TESTCODE statistic
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@embnet.org)
+** @author Copyright (C) Alan Bleasby (ableasby@embnet.org)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -159,9 +159,9 @@ int main(int argc, char **argv)
 	    ftable = ajFeattableNewSeq(seq);
 	
 
-	ajSeqToUpper(seq);
-	seqstr = ajSeqStr(seq);
-	len    = ajStrLen(seqstr);
+	ajSeqFmtUpper(seq);
+	seqstr = ajSeqGetSeqS(seq);
+	len    = ajStrGetLen(seqstr);
 
 
 	ajFloatPut(&testcodes,len-window+1,0.);
@@ -176,8 +176,8 @@ int main(int argc, char **argv)
 	{
 	    testcode = tcode_slide(seqstr,window,table1,pos);
 
-	    ajIntPut(&from,npoints,pos+1+ajSeqOffset(seq));
-	    ajIntPut(&to,npoints,pos+window+ajSeqOffset(seq));
+	    ajIntPut(&from,npoints,pos+1+ajSeqGetOffset(seq));
+	    ajIntPut(&to,npoints,pos+window+ajSeqGetOffset(seq));
 	    ajFloatPut(&testcodes,npoints,testcode);
 	    
 	    pos += step;
@@ -271,7 +271,7 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     while(val && ok)
     {
 	ok = ajFileReadLine(datafile,&line);
-	c  = *ajStrStr(line);
+	c  = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
 	    continue;
@@ -286,7 +286,7 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     while(val && ok)
     {
 	ok = ajFileReadLine(datafile,&line);
-	c = *ajStrStr(line);
+	c = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
 	    continue;
@@ -300,7 +300,7 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     while(ok && i != table->npositions)
     {
 	ok = ajFileReadLine(datafile,&line);
-	c = *ajStrStr(line);
+	c = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
 	    continue;
@@ -320,7 +320,7 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     while(ok && i != table->ncontent)
     {
 	ok = ajFileReadLine(datafile,&line);
-	c = *ajStrStr(line);
+	c = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
 	    continue;
@@ -340,7 +340,7 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     while(ok && i != 4)
     {
 	ok = ajFileReadLine(datafile,&line);
-	c = *ajStrStr(line);
+	c = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
 	    continue;
@@ -356,7 +356,7 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     while(ok && i != 4)
     {
 	ok = ajFileReadLine(datafile,&line);
-	c = *ajStrStr(line);
+	c = *ajStrGetPtr(line);
 
 	if(c=='#' || c=='\n')
 	    continue;
@@ -521,7 +521,7 @@ static float tcode_slide(const AjPStr substr, ajint window,
 	for(j=0;j<4;++j)
 	    scores[i][j] = 0;
 
-    p = ajStrStr(substr);
+    p = ajStrGetPtr(substr);
 
     for(i=0;i<window;++i)
     {

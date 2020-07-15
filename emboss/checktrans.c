@@ -2,7 +2,7 @@
 **
 ** Check translations made with transeq (document these translations)
 **
-** @author: Copyright (C) Rodrigo Lopez & Alan Bleasby
+** @author Copyright (C) Rodrigo Lopez & Alan Bleasby
 ** @@
 ** Adapted from work done by Alan Bleasy
 ** Modified by Gary Williams 19 April 2000 to remove output to STDOUT and to
@@ -86,38 +86,42 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-        begin = ajSeqBegin(seq);
-        end   = ajSeqEnd(seq);
+        begin = ajSeqGetBegin(seq);
+        end   = ajSeqGetEnd(seq);
 
-        strand = ajSeqStr(seq);
+        strand = ajSeqGetSeqS(seq);
 
-	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
+	ajStrAssignSubS(&substr,strand,begin-1,end-1);
 
         /* end with a '*' if needed and there is not one there already */
-        if(addlast && ajSeqChar(seq)[end-1] != '*')
+        if(addlast && ajSeqGetSeqC(seq)[end-1] != '*')
 	{
-            ajStrAppK(&substr,'*');
+            ajStrAppendK(&substr,'*');
             addedasterisk = ajTrue;
         }
 	ajDebug("After appending, sequence=%S\n", substr);
-        ajStrToUpper(&substr);
+        ajStrFmtUpper(&substr);
 
-        len=ajStrLen(substr);
+        len=ajStrGetLen(substr);
 
 	ajFmtPrintF(outf,"\n\nCHECKTRANS of %s from %d to %d\n\n",
 		    ajSeqName(seq),begin,begin+len-1);
 
-        checktrans_findorfs(outseq, outf, 0, len, ajStrStr(substr),
+        checktrans_findorfs(outseq, outf, 0, len, ajStrGetPtr(substr),
 			    ajSeqName(seq), begin, orfml, addedasterisk);
 
-	checktrans_dumptofeat(featout,0,len,ajStrStr(substr),ajSeqName(seq),
+	checktrans_dumptofeat(featout,0,len,ajStrGetPtr(substr),ajSeqName(seq),
 			      begin,orfml);
     }
 
-    ajSeqDel(&seq);
-    ajStrDel(&substr);
+    ajSeqallDel(&seqall);
     ajFileClose(&outf);
     ajSeqWriteClose(outseq);
+    ajSeqoutDel(&outseq);
+    ajFeattabOutDel(&featout);
+
+    ajSeqDel(&seq);
+    ajStrDel(&substr);
 
     ajExit();
 
@@ -216,11 +220,11 @@ static void checktrans_ajbseq(AjPSeqout outseq, const char *seq,
     str = ajStrNew();
     nm  = ajStrNew();
 
-    ajStrAssSubC(&str,seq,begin,end);
-    ajSeqReplace(sq,str);
+    ajStrAssignSubC(&str,seq,begin,end);
+    ajSeqAssignSeqS(sq,str);
 
     ajFmtPrintS(&nm,"%s_%d",name,count);
-    ajSeqAssName(sq,nm);
+    ajSeqAssignNameS(sq,nm);
 
     ajSeqWrite(outseq, sq);
 
@@ -271,12 +275,12 @@ static void checktrans_dumptofeat(AjPFeattabOut featout, ajint from, ajint to,
     type   = ajStrNew();
 
 
-    ajStrAssC(&name,seqname);
+    ajStrAssignC(&name,seqname);
 
     feattable = ajFeattableNewProt(name);
 
-    ajStrAssC(&source,"checktrans");
-    ajStrAssC(&type,"misc_feature");
+    ajStrAssignC(&source,"checktrans");
+    ajStrAssignC(&type,"misc_feature");
 
 
     for(i=from;i<to;++i)

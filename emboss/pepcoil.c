@@ -1,7 +1,7 @@
 /* @source pepcoil application
 **
 ** Displays coiled coil sites in proteins
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 ** Original program "PEPCOIL" by Peter Rice (EGCG 1991)
 **
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     AjPFloat2d rdat = NULL;
 
 
-    ajGraphInit("pepcoil", argc, argv);
+    embInit("pepcoil", argc, argv);
 
 
     rdat = ajFloat2dNew();
@@ -133,18 +133,18 @@ int main(int argc, char **argv)
 	end   = ajSeqallEnd(seqall);
 
 	strand = ajSeqStrCopy(seq);
-	ajStrToUpper(&strand);
+	ajStrFmtUpper(&strand);
 
-	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
-	ajStrAssSubC(&sstr,ajStrStr(strand),begin-1,end-1);
+	ajStrAssignSubC(&substr,ajStrGetPtr(strand),begin-1,end-1);
+	ajStrAssignSubC(&sstr,ajStrGetPtr(strand),begin-1,end-1);
 
-	len = ajStrLen(substr);
+	len = ajStrGetLen(substr);
 
-	q = ajStrStrMod(&substr);
+	q = ajStrGetuniquePtr(&substr);
 	for(i=0;i<len;++i,++q)
 	    *q = (char) ajAZToInt(*q);
 
-	p = ajStrStr(substr);
+	p = ajStrGetPtr(substr);
 
 	maxmaxscore = -1.0;
 	isub = window -1;
@@ -315,10 +315,14 @@ int main(int argc, char **argv)
 
     ajStrDel(&stmp);
     ajStrDel(&sstr);
+    ajStrDel(&substr);
     ajSeqDel(&seq);
     ajFileClose(&outf);
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+
+    embExit();
 
     return 0;
 }
@@ -355,9 +359,9 @@ static void pepcoil_readcoildat(AjPFloat2d *rdat)
 
     while(ajFileGets(mfptr, &line))
     {
-	p=ajStrStrMod(&line);
+	p=ajStrGetuniquePtr(&line);
 	if(*p=='#' || *p=='!' || !*p) continue;
-	ajCharToUpper(p);
+	ajCharFmtUpper(p);
 	q=p;
 	q=ajSysStrtok(q," \t");
 	n=ajAZToInt(*q);

@@ -2,7 +2,7 @@
 **
 ** Calculate hydrophobic moment
 **
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -102,9 +102,9 @@ int main(int argc, char **argv)
 	limit = len-window+1;
 	sname = ajSeqName(seq);
 
-	ajStrAssSubC(&str,ajSeqChar(seq),--beg,--end);
-	ajStrToUpper(&str);
-	p = ajStrStr(str);
+	ajStrAssignSubC(&str,ajSeqChar(seq),--beg,--end);
+	ajStrFmtUpper(&str);
+	p = ajStrGetPtr(str);
 
 	if(limit>0)
 	{
@@ -178,14 +178,16 @@ int main(int argc, char **argv)
 	}
     }
 
-    if(plot)
-        ajGraphClose();
-    else
-	ajFileClose(&outf);
+    ajGraphClose();
+    ajGraphxyDel(&graph);
+    ajFileClose(&outf);
+
     ajStrDel(&str);
     ajStrDel(&st);
 
-    ajExit();
+    ajSeqallDel(&seqall);
+    ajSeqDel(&seq);
+    embExit();
 
     return 0;
 }
