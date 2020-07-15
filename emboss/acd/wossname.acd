@@ -9,14 +9,15 @@ section: input [
   type: "page"
 ]
 
-  string: search  [
+  string: search [
     parameter: "Y"
     default: ""
-    information: "Keyword to search for, or blank to list all programs"
+    information: "Text to search for, or blank to list all
+                  programs"
     help: "Enter a word or words here and a case-independent search
-           for it will be made in the one-line documentation of all of the
-           EMBOSS programs. If no keyword is specified, all programs will be
-           listed."
+           for it will be made in the one-line documentation, group names and
+           keywords of all of the EMBOSS programs. If no keyword is
+           specified, all programs will be listed."
     knowntype: "emboss keyword"
   ]
 
@@ -27,7 +28,7 @@ section: additional [
   type: "page"
 ]
 
-  boolean: explode  [
+  boolean: explode [
     additional: "Y"
     default: "N"
     information: "Use the expanded group names"
@@ -41,6 +42,21 @@ section: additional [
            'NAME1 NAME2'."
   ]
 
+  boolean: allmatch [
+    additional: "Y"
+    default: "Y"
+    information: "Match all words in the search string"
+    help: "By default, all words in the search string must match. This
+           option searches for a match to any word in a list of
+           possibilities"
+  ]
+
+  boolean: showkeywords [
+    additional: "Y"
+    default: "N"
+    information: "Show keywords with program documentation"
+  ]
+
 endsection: additional
 
 section: advanced [
@@ -48,7 +64,7 @@ section: advanced [
   type: "page"
 ]
 
-  boolean: emboss  [
+  boolean: emboss [
     default: "Y"
     information: "Search the EMBOSS programs"
     help: "If you use this option then EMBOSS program documentation
@@ -60,7 +76,7 @@ section: advanced [
            of the GNU Public Licence scheme"
   ]
 
-  boolean: embassy  [
+  boolean: embassy [
     default: "Y"
     information: "Search the EMBASSY programs"
     help: "If you use this option then EMBASSY program documentation
@@ -72,21 +88,21 @@ section: advanced [
            of the GNU Public Licence scheme"
   ]
 
-  string: showembassy  [
+  string: showembassy [
     default: ""
     information: "Show programs in one EMBASSY package"
-    help: "If you use this option then this EMBASSY package
-           program documentation will be searched.
-           EMBASSY programs are not strictly part of EMBOSS, but use the
-           same code libraries and share the same look and feel, but are
-           generally developed by people who wish the programs to be outside
-           of the GNU Public Licence scheme"
+    help: "If you use this option then this EMBASSY package program
+           documentation will be searched. EMBASSY programs are not strictly
+           part of EMBOSS, but use the same code libraries and share the same
+           look and feel, but are generally developed by people who wish the
+           programs to be outside of the GNU Public Licence scheme"
     knowntype: "embassy package"
   ]
 
-  boolean: colon  [
+  boolean: colon [
     default: "N"
-    information: "Put a colon in the group name between two levels"
+    information: "Put a colon in the group name between two
+                  levels"
     help: "The groups that EMBOSS applications belong to up to two
            levels, for example the primary group 'ALIGNMENT' has several
            sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES,
@@ -97,9 +113,10 @@ section: advanced [
            the group names have been exploded with the 'explode' option."
   ]
 
-  boolean: gui  [
+  boolean: gui [
     default: "N"
-    information: "Only report those applications that can run in a GUI"
+    information: "Only report those applications that can run
+                  in a GUI"
     help: "This option is intended to help those who are designing
            Graphical User Interfaces to the EMBOSS applications. Some EMBOSS
            programs are inappropriate for running in a GUI, these include
@@ -114,7 +131,7 @@ section: output [
   type: "page"
 ]
 
-  outfile: outfile  [
+  outfile: outfile [
     additional: "Y"
     default: "stdout"
     knowntype: "wossname output"
@@ -125,7 +142,7 @@ section: output [
     type: "frame"
   ]
 
-    toggle: html  [
+    toggle: html [
       additional: "Y"
       default: "N"
       information: "Format the output for HTML"
@@ -133,40 +150,9 @@ section: output [
              it for displaying as a table in a WWW document."
     ]
 
-    string: prelink  [
-      additional: "$(html)"
-      default: ""
-      information: "String to form the first half of an HTML link"
-      help: "If you are outputting to a file in HTML format, you can
-             make the program names into hyper-links by setting this to be
-             the first half of the URL. \
-             For example, if you wish the program name to be a hyperlink to
-             the URL: \
-             http://www.uk.embnet.org/Software/EMBOSS/Apps/programname.html \
-             then if you enter \
-             http://www.uk.embnet.org/Software/EMBOSS/Apps/ here, then the
-             first half of the URL before the programname will be set."
-      knowntype: "url prefix"
-    ]
-
-    string: postlink  [
-      additional: "$(html)"
-      default: ""
-      information: "String to form the second half of an HTML link"
-      help: "If you are outputting to a file in HTML format, you can
-             make the program names into hyper-links by setting this to be
-             the second half of the URL. \
-             For example, if you wish the program name to be a hyperlink to
-             the URL: \
-             http://www.uk.embnet.org/Software/EMBOSS/Apps/programname.html \
-             then if you enter '.html' here, the second half of the URL after
-             the programname will be set."
-      knowntype: "url suffix"
-    ]
-
   endsection: htmlsection
 
-  boolean: groups  [
+  boolean: groups [
     additional: "Y"
     default: "N"
     information: "Output only the group names"
@@ -174,7 +160,7 @@ section: output [
            output to the file"
   ]
 
-  boolean: alphabetic  [
+  boolean: alphabetic [
     additional: "Y"
     default: "N"
     information: "Output an alphabetic list of programs"

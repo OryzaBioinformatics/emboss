@@ -2,7 +2,7 @@
 **
 ** Finds programs by keywords in their one-line documentation
 **
-** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -39,8 +39,8 @@ int main(int argc, char **argv, char **env)
     AjPList alpha;    /* alphabetical list of all programs */
     AjPFile outfile = NULL;
     AjPStr search   = NULL;
-    AjPStr link1    = NULL;
-    AjPStr link2    = NULL;
+    AjBool matchall;
+    AjBool showkey;
     AjBool html;
     AjBool groups;
     AjBool alphabetic;
@@ -56,8 +56,8 @@ int main(int argc, char **argv, char **env)
     search     = ajAcdGetString("search");
     outfile    = ajAcdGetOutfile("outfile");
     html       = ajAcdGetToggle("html");
-    link1      = ajAcdGetString("prelink");
-    link2      = ajAcdGetString("postlink");
+    matchall   = ajAcdGetBool("allmatch");
+    showkey    = ajAcdGetBool("showkeywords");
     groups     = ajAcdGetBool("groups");
     alphabetic = ajAcdGetBool("alphabetic");
     emboss     = ajAcdGetBool("emboss");
@@ -77,31 +77,32 @@ int main(int argc, char **argv, char **env)
     
     
     /* is a search string specified */
-    if(ajStrLen(search))
+    if(ajStrGetLen(search))
     {
 	newlist = ajListNew();
-	embGrpKeySearchProgs(newlist, alpha, search);
-	embGrpOutputGroupsList(outfile, newlist, !groups, html, link1,
-			       link2);
+	embGrpKeySearchProgs(newlist, alpha, search, matchall);
+	embGrpOutputGroupsList(outfile, newlist, !groups, html,
+			       showkey, showembassy);
 	embGrpGroupsListDel(&newlist);
     }
     else if(alphabetic)
 	/* list all programs in alphabetic order */
-	embGrpOutputGroupsList(outfile, alpha, !groups, html, link1,
-			       link2);
+	embGrpOutputGroupsList(outfile, alpha, !groups, html,
+			       showkey, showembassy);
     else
 	/* just show the grouped sets of programs */
-	embGrpOutputGroupsList(outfile, glist, !groups, html, link1,
-			       link2);
+	embGrpOutputGroupsList(outfile, glist, !groups, html,
+			       showkey, showembassy);
     
     ajFileClose(&outfile);
     
     embGrpGroupsListDel(&glist);
     embGrpGroupsListDel(&alpha);
-    ajStrDel(&link1);
-    ajStrDel(&link2);
-    
-    ajExit();
+    ajFileClose(&outfile);
+    ajStrDel(&search);
+    ajStrDel(&showembassy);
+
+    embExit();
     
     return 0;
 }
