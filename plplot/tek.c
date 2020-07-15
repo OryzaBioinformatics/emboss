@@ -92,7 +92,7 @@ typedef struct {
  *		where colors are   1=red, 2=green, 4=blue 
  */
 #ifdef PLD_mskermit
-static char *kermit_color[15]= {
+static const char *kermit_color[15]= {
    "0;30","0;37",
    "0;32","0;36","0;31","0;35",
    "1;34","1;33","1;31","1;37",
@@ -155,6 +155,8 @@ pldebug( const char *fname, ... )
 	va_end(args);
 	c_plgra();
     }
+#else
+    (void) fname;
 #endif
 }
 
@@ -351,7 +353,7 @@ tek_init(PLStream *pls)
 \*--------------------------------------------------------------------------*/
 
 void
-plD_line_tek(PLStream *pls, short x1, short y1, short x2, short y2)
+plD_line_tek(PLStream *pls, short xx1, short yy1, short xx2, short yy2)
 {
     TekDev *dev = (TekDev *) pls->dev;
 
@@ -359,17 +361,17 @@ plD_line_tek(PLStream *pls, short x1, short y1, short x2, short y2)
 
 /* If not continuation of previous line, begin a new one */
 
-    if (x1 != dev->xold || y1 != dev->yold) {
+    if (xx1 != dev->xold || yy1 != dev->yold) {
 	pls->bytecnt += fprintf(pls->OutFile, VECTOR_MODE);
-	tek_vector(pls, x1, y1);
+	tek_vector(pls, xx1, yy1);
     }
 
 /* Now send following point to complete line draw */
 
-    tek_vector(pls, x2, y2);
+    tek_vector(pls, xx2, yy2);
 
-    dev->xold = x2;
-    dev->yold = y2;
+    dev->xold = xx2;
+    dev->yold = yy2;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -1148,6 +1150,6 @@ tty_atexit(void)			/* exit handler */
 #endif			/* POSIX_TTY */
 
 #else
-int pldummy_tek() {return 0;}
+int pldummy_tek(void) {return 0;}
 
 #endif	/*  defined(PLD_xterm) || ... */

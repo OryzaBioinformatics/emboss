@@ -283,6 +283,9 @@ pldrawcn(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
     PLFLT xlas = 0., ylas = 0., tpx, tpy, xt, yt;
     PLFLT f1, f2, f3, f4, fcheck;
 
+    (void) nx;
+    (void) ny;
+
 /* Check if a contour has been crossed */
 
     fxl = f2eval(kcol-1, krow, f2eval_data);
@@ -544,6 +547,8 @@ plr135 (PLINT *ix, PLINT *iy, PLINT isens)
 void
 pltr0(PLFLT x, PLFLT y, PLFLT *tx, PLFLT *ty, PLPointer pltr_data)
 {
+    (void) pltr_data;
+
     *tx = x;
     *ty = y;
 }

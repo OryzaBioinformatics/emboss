@@ -127,7 +127,7 @@ plstripc(PLINT *id, char *xspec, char *yspec,
 	plstrip_legend(stripc,1);
 }
 
-void plstrip_legend(PLStrip *stripc, int first)
+void plstrip_legend(PLStrip *mystripc, int first)
 {
 	int i;
 	PLFLT sc, dy;
@@ -138,14 +138,17 @@ void plstrip_legend(PLStrip *stripc, int first)
 	sc = dy = dy/100;
 	plwind(-0.01, 1.01, -0.01, 1.01);
 	for (i=0; i<PEN; i++) {
-		if (stripc->npts[i] || first) {
-			plcol(stripc->colline[i]); pllsty(stripc->styline[i]);
-			pljoin(stripc->xlpos, stripc->ylpos - sc, stripc->xlpos + 0.1, stripc->ylpos - sc);
-			plcol(stripc->collab);
-			plptex(stripc->xlpos + 0.11, stripc->ylpos - sc, 0., 0., 0, stripc->legline[i]);sc += dy;
+		if (mystripc->npts[i] || first) {
+			plcol(mystripc->colline[i]);
+			pllsty(mystripc->styline[i]);
+			pljoin(mystripc->xlpos, mystripc->ylpos - sc,
+			       mystripc->xlpos + 0.1, mystripc->ylpos - sc);
+			plcol(mystripc->collab);
+			plptex(mystripc->xlpos + 0.11, mystripc->ylpos - sc,
+			       0., 0., 0, mystripc->legline[i]);sc += dy;
 		}
 	}
-    plwind(stripc->xmin, stripc->xmax, stripc->ymin, stripc->ymax);
+    plwind(mystripc->xmin, mystripc->xmax, mystripc->ymin, mystripc->ymax);
     plflush();
 }
 
@@ -157,7 +160,7 @@ void plstrip_legend(PLStrip *stripc, int first)
 \*--------------------------------------------------------------------------*/
 PLFLT oxm,oxM, oym,oyM;
 void
-plstrip_gen(PLStrip *strip)
+plstrip_gen(PLStrip *mystrip)
 {
 	int i;
 	PLFLT x[]={0.,1.,1.,0.}, y[]={0.,0.,1.,1.};
@@ -180,26 +183,26 @@ plstrip_gen(PLStrip *strip)
 		plvsta();
 
 /* Draw box and same window dimensions */
-strip->wxmin=strip->xmin; strip->wxmax=strip->xmax;
- strip->wymin=strip->ymin; strip->wymax=strip->ymax; /* FIXME - can exist some redundancy here */
+ mystrip->wxmin=mystrip->xmin; mystrip->wxmax=mystrip->xmax;
+ mystrip->wymin=mystrip->ymin; mystrip->wymax=mystrip->ymax; /* FIXME - can exist some redundancy here */
 
-    plwind(strip->xmin, strip->xmax, strip->ymin, strip->ymax);
+    plwind(mystrip->xmin, mystrip->xmax, mystrip->ymin, mystrip->ymax);
     
 	pllsty(1);
-    plcol(strip->colbox);
-    plbox(strip->xspec, 0.0, 0, strip->yspec, 0.0, 0);
+    plcol(mystrip->colbox);
+    plbox(mystrip->xspec, 0.0, 0, mystrip->yspec, 0.0, 0);
 
-    plcol(strip->collab);
-    pllab(strip->labx, strip->laby, strip->labtop);
+    plcol(mystrip->collab);
+    pllab(mystrip->labx, mystrip->laby, mystrip->labtop);
 	 
     for (i=0; i<PEN; i++) {
-	    if (strip->npts[i] > 0) {
-			plcol(strip->colline[i]);pllsty(strip->styline[i]);
-			plline(strip->npts[i], strip->x[i], strip->y[i]);
+	    if (mystrip->npts[i] > 0) {
+			plcol(mystrip->colline[i]);pllsty(mystrip->styline[i]);
+			plline(mystrip->npts[i], mystrip->x[i], mystrip->y[i]);
 	    }
     }
 
-	plstrip_legend(strip,0);
+	plstrip_legend(mystrip,0);
 }
 
 /*--------------------------------------------------------------------------*\

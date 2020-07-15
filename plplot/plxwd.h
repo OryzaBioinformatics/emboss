@@ -33,6 +33,7 @@ typedef struct {
     int		ixwd;			/* Specifies xwDisplay number */
     char	*displayName;		/* Name of X display */
     int		screen;			/* X screen */
+    char pad1[4];
     Display	*display;		/* X display */
     Visual	*visual;		/* X Visual */
     GC		gcXor;			/* Graphics context for XOR draws */
@@ -46,6 +47,7 @@ typedef struct {
     XColor	fgcolor;		/* Foreground color (if grayscale) */
     Cursor	xhair_cursor;		/* Crosshair cursor */
     int		rw_cmap;		/* Can we allocate r/w color cells? */
+    char pad2[4];
 } XwDisplay;
 
 /* One of these holds the X driver state information */
@@ -54,6 +56,7 @@ typedef struct {
     XwDisplay	*xwd;			/* Pointer to display info */
 
     int		is_main;		/* Set if the toplevel X window */
+    char pad1[4];
     Window	window;			/* X window id */
     Pixmap	pixmap;			/* Off-screen pixmap */
     GC		gc;			/* Graphics context */
@@ -61,11 +64,13 @@ typedef struct {
 
     long	event_mask;		/* Event mask */
     int		exit_eventloop;		/* Breaks the event loop when set */
+    char pad2[4];
     long	init_width;		/* Initial window width */
     long	init_height;		/* Initial window height */
 
     unsigned	width, height, border;	/* Current window dimensions */
 
+    char pad3[4];
     double	xscale_init;		/* initial pixels/lx (virt. coords) */
     double	yscale_init;		/* initial pixels/ly (virt. coords) */
     double	xscale;			/* as above, but current value */
@@ -85,6 +90,7 @@ typedef struct {
     int		drawing_xhairs;		/* Set during xhair draws */
     XPoint	xhair_x[2], xhair_y[2];	/* Crosshair lines */
 
+    char pad4[4];
     void (*MasterEH) (PLStream *, XEvent *);	/* Master X event handler */
 } XwDev;
 

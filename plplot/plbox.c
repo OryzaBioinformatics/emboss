@@ -90,7 +90,7 @@ c_plbox(const char *xopt, PLFLT xtick, PLINT nxsub,
 \*--------------------------------------------------------------------------*/
 
 void
-c_plaxes(PLFLT x0, PLFLT y0,
+c_plaxes(PLFLT xx0, PLFLT yy0,
 	 const char *xopt, PLFLT xtick, PLINT nxsub,
 	 const char *yopt, PLFLT ytick, PLINT nysub)
 {
@@ -124,8 +124,8 @@ c_plaxes(PLFLT x0, PLFLT y0,
 
 /* Convert world coordinates to physical */
 
-    xp0 = plP_wcpcx(x0);
-    yp0 = plP_wcpcy(y0);
+    xp0 = plP_wcpcx(xx0);
+    yp0 = plP_wcpcy(yy0);
 
 /* Set plot options from input */
 
@@ -621,6 +621,8 @@ plxybx(const char *opt, const char *label, PLFLT wx1, PLFLT wy1,
  * of ticks) from the boundary that an X or Y numerical label can be drawn. */
     PLFLT dwx, dwy, lambda, tcrit, tspace = 0.1;
 
+    (void) nolast;
+
     vmin = (vmax_in > vmin_in) ? vmin_in : vmax_in;
     vmax = (vmax_in > vmin_in) ? vmax_in : vmin_in;
 
@@ -755,7 +757,7 @@ plxytx(PLFLT wx1, PLFLT wy1, PLFLT wx2, PLFLT wy2,
 {
     PLINT refx, refy;
     PLFLT shift, cc, ss, def, ht, wx, wy;
-    PLFLT xpmm, ypmm, xform[4], diag;
+    PLFLT xpmm, ypmm, xformarr[4], diag;
 
     plgchr(&def, &ht);
     cc = plsc->wmxscl * (wx2 - wx1);
@@ -772,12 +774,12 @@ plxytx(PLFLT wx1, PLFLT wy1, PLFLT wx2, PLFLT wy2,
     refx = plP_mmpcx(xpmm);
     refy = plP_mmpcy(ypmm);
 
-    xform[0] = cc;
-    xform[1] = 0.0;
-    xform[2] = ss;
-    xform[3] = 1.0;
+    xformarr[0] = cc;
+    xformarr[1] = 0.0;
+    xformarr[2] = ss;
+    xformarr[3] = 1.0;
 
-    plstr(0, xform, refx, refy, text);
+    plstr(0, xformarr, refx, refy, text);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -969,7 +971,7 @@ plztx(const char *opt, PLFLT dx, PLFLT dy, PLFLT wx, PLFLT wy1,
 {
     PLINT refx = 0, refy = 0, vert = 0;
     PLFLT shift, cc, ss, def, ht, wy;
-    PLFLT xmm, ymm, xform[4], diag;
+    PLFLT xmm, ymm, xformarr[4], diag;
 
     plgchr(&def, &ht);
     cc = plsc->wmxscl * dx;
@@ -994,18 +996,18 @@ plztx(const char *opt, PLFLT dx, PLFLT dy, PLFLT wx, PLFLT wy1,
 	refy = plP_wcpcy(wy) - plsc->ypmm * (disp * ht * ss + shift);
     }
     if (vert) {
-	xform[0] = 0.0;
-	xform[1] = -cc;
-	xform[2] = 1.0;
-	xform[3] = -ss;
+	xformarr[0] = 0.0;
+	xformarr[1] = -cc;
+	xformarr[2] = 1.0;
+	xformarr[3] = -ss;
     }
     else {
-	xform[0] = cc;
-	xform[1] = 0.0;
-	xform[2] = ss;
-	xform[3] = 1.0;
+	xformarr[0] = cc;
+	xformarr[1] = 0.0;
+	xformarr[2] = ss;
+	xformarr[3] = 1.0;
     }
-    plstr(0, xform, refx, refy, text);
+    plstr(0, xformarr, refx, refy, text);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -1221,7 +1223,7 @@ label_box(const char *xopt, PLFLT xtick1, const char *yopt, PLFLT ytick1)
 		    plmtex("r", height, pos, 0.5, string);
 		}
 	    }
-	    ydigits = MAX(ydigits, strlen(string));
+	    ydigits = MAX(ydigits, (int) strlen(string));
 	}
 	if (!lvy)
 	    ydigits = 2;

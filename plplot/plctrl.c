@@ -8,7 +8,7 @@
 #define DEBUG
 
 #define ifset(s) (s ? s : "<null>")
-#define ifsetu(s) (s ? s : (unsigned char*) "<null>")
+#define ifsetu(s) (s ? s : (unsigned const char*) "<null>")
 #include "plplotP.h"
 
 #ifdef __GO32__			/* dos386/djgpp */
@@ -36,7 +36,7 @@ static void
 strcat_delim(char *dirspec);
 
 static int
-(*exit_handler) (char *errormsg);
+(*exit_handler) (const char *errormsg);
 
 static void
 plcmap0_def(int imin, int imax);
@@ -107,6 +107,8 @@ pldebug( const char *fname, ... )
 	va_end(args);
 	c_plgra();
     }
+#else
+    (void) fname;
 #endif
 }
 
@@ -927,7 +929,7 @@ plRGB_HLS(PLFLT r, PLFLT g, PLFLT b, PLFLT *p_h, PLFLT *p_l, PLFLT *p_s)
 \*--------------------------------------------------------------------------*/
 
 void
-plwarn(char *errormsg)
+plwarn(const char *errormsg)
 {
     int was_gfx = 0;
 
@@ -953,7 +955,7 @@ plwarn(char *errormsg)
 \*--------------------------------------------------------------------------*/
 
 void
-plabort(char *errormsg)
+plabort(const char *errormsg)
 {
     if (plsc->errcode != NULL)
 	*(plsc->errcode) = 1;
@@ -992,8 +994,8 @@ plabort(char *errormsg)
  * should should either call plend() before exiting, or simply return.
 \*--------------------------------------------------------------------------*/
 
-void
-plexit(char *errormsg)
+__noreturn void
+plexit(const char *errormsg)
 {
     int status = 1;
 
@@ -1018,7 +1020,7 @@ plexit(char *errormsg)
 \*--------------------------------------------------------------------------*/
 
 void
-plsexit(int (*handler) (char *))
+plsexit(int (*handler) (const char *))
 {
     exit_handler = handler;
 }
@@ -1146,14 +1148,14 @@ plFindCommand(char *fn)
 \*--------------------------------------------------------------------------*/
 
 FILE *
-plLibOpen(char *fn)
+plLibOpen(const char *fn)
 {
     FILE *file;
     char *fs = NULL, *dn = NULL;
 
     /* EMBOSS additions to avoid need for PLPLOT_LIB */
-    static char *prefix = PREFIX;
-    static char *top    = EMBOSS_TOP;
+    static const char *prefix = PREFIX;
+    static const char *top    = EMBOSS_TOP;
     
     if(!strcmp(prefix,"/usr/local"))
     {
@@ -1268,7 +1270,14 @@ plFindName(char *p)
 {
     int n;
     char buf[1024], *cp;
+/* Declare the `errno' variable, unless it's defined as a macro by
+   bits/errno.h.  This is the case in GNU, where it is a per-thread
+   variable.  This redeclaration using the macro still works, but it
+   will be a function declaration without a prototype and may trigger
+   a -Wstrict-prototypes warning.  */
+#ifndef errno
     extern int errno;
+#endif
     struct stat sbuf;
 
     pldebug("plFindName", "Trying to find %s\n", p);
@@ -1329,7 +1338,8 @@ plFindName(char *p)
 \*--------------------------------------------------------------------------*/
 
 void
-plGetName(char *dir, char *subdir, char *filename, char **filespec)
+plGetName(const char *dir, const char *subdir, const char *filename,
+	  char **filespec)
 {
     int lfilespec;
 

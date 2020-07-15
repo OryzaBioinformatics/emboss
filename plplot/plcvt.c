@@ -174,6 +174,7 @@ plP_dcscy(PLFLT y)
 PLFLT
 plP_w3wcx(PLFLT x, PLFLT y, PLFLT z)
 {
+    (void) z;
     return ((PLFLT) ((x - plsc->basecx) * plsc->cxx +
 		     (y - plsc->basecy) * plsc->cxy));
 }

@@ -307,7 +307,10 @@ plD_esc_nx(PLStream *pls, PLINT op, void *ptr)
 
 #else
 int 
-pldummy_next()
+pldummy_next(void);
+
+int 
+pldummy_next(void)
 {
     return 0;
 }

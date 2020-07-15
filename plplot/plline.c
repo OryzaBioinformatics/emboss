@@ -47,10 +47,10 @@ grdashline(short *x, short *y);
 \*----------------------------------------------------------------------*/
 
 void
-c_pljoin(PLFLT x1, PLFLT y1, PLFLT x2, PLFLT y2)
+c_pljoin(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2)
 {
-    plP_movwor(x1, y1);
-    plP_drawor(x2, y2);
+    plP_movwor(xx1, yy1);
+    plP_drawor(xx2, yy2);
 }
 
 /*----------------------------------------------------------------------*\
@@ -349,40 +349,41 @@ plP_pllclp(PLINT *x, PLINT *y, PLINT npts,
 	   PLINT xmin, PLINT xmax, PLINT ymin, PLINT ymax, 
 	   void (*draw) (short *, short *, PLINT))
 {
-    PLINT x1, x2, y1, y2;
+    PLINT xx1, xx2, yy1, yy2;
     PLINT i, iclp = 0;
     short xclp[PL_MAXPOLY], yclp[PL_MAXPOLY];
     int drawable;
 
     for (i = 0; i < npts - 1; i++) {
-	x1 = x[i];
-	x2 = x[i + 1];
-	y1 = y[i];
-	y2 = y[i + 1];
+	xx1 = x[i];
+	xx2 = x[i + 1];
+	yy1 = y[i];
+	yy2 = y[i + 1];
 
-	drawable = (INSIDE(x1, y1) && INSIDE(x2, y2));
+	drawable = (INSIDE(xx1, yy1) && INSIDE(xx2, yy2));
 	if ( ! drawable)
-	    drawable = ! clipline(&x1, &y1, &x2, &y2, xmin, xmax, ymin, ymax);
+	    drawable = ! clipline(&xx1, &yy1, &xx2, &yy2,
+				  xmin, xmax, ymin, ymax);
 
 	if (drawable) {
 
 /* First point of polyline. */
 
 	    if (iclp == 0) {
-		xclp[iclp] = x1;
-		yclp[iclp] = y1;
+		xclp[iclp] = xx1;
+		yclp[iclp] = yy1;
 		iclp++;
-		xclp[iclp] = x2;
-		yclp[iclp] = y2;
+		xclp[iclp] = xx2;
+		yclp[iclp] = yy2;
 	    }
 
 /* Not first point.  Check if first point of this segment matches up to 
    previous point, and if so, add it to the current polyline buffer. */
 
-	    else if (x1 == xclp[iclp] && y1 == yclp[iclp]) {
+	    else if (xx1 == xclp[iclp] && yy1 == yclp[iclp]) {
 		iclp++;
-		xclp[iclp] = x2;
-		yclp[iclp] = y2;
+		xclp[iclp] = xx2;
+		yclp[iclp] = yy2;
 	    }
 
 /* Otherwise it's time to start a new polyline */
@@ -391,11 +392,11 @@ plP_pllclp(PLINT *x, PLINT *y, PLINT npts,
 		if (iclp + 1 >= 2)
 		    (*draw)(xclp, yclp, iclp + 1);
 		iclp = 0;
-		xclp[iclp] = x1;
-		yclp[iclp] = y1;
+		xclp[iclp] = xx1;
+		yclp[iclp] = yy1;
 		iclp++;
-		xclp[iclp] = x2;
-		yclp[iclp] = y2;
+		xclp[iclp] = xx2;
+		yclp[iclp] = yy2;
 	    }
 	}
     }
@@ -420,30 +421,31 @@ plP_plfclp(PLINT *x, PLINT *y, PLINT npts,
 	   PLINT xmin, PLINT xmax, PLINT ymin, PLINT ymax, 
 	   void (*draw) (short *, short *, PLINT))
 {
-    PLINT x1, x2, y1, y2;
+    PLINT xx1, xx2, yy1, yy2;
     PLINT i, iclp = -1;
     short xclp[PL_MAXPOLY], yclp[PL_MAXPOLY];
     int drawable;
 
     for (i = 0; i < npts - 1; i++) {
-	x1 = x[i];
-	x2 = x[i + 1];
-	y1 = y[i];
-	y2 = y[i + 1];
+	xx1 = x[i];
+	xx2 = x[i + 1];
+	yy1 = y[i];
+	yy2 = y[i + 1];
 
-	drawable = (INSIDE(x1, y1) && INSIDE(x2, y2));
+	drawable = (INSIDE(xx1, yy1) && INSIDE(xx2, yy2));
 	if ( ! drawable)
-	    drawable = ! clipline(&x1, &y1, &x2, &y2, xmin, xmax, ymin, ymax);
+	    drawable = ! clipline(&xx1, &yy1, &xx2, &yy2,
+				  xmin, xmax, ymin, ymax);
 
 	if (drawable) {
 
 /* Not first point.  If first point of this segment matches up to the
    previous point, just add it.  */
 
-	    if (iclp >= 0 && x1 == xclp[iclp] && y1 == yclp[iclp]) {
+	    if (iclp >= 0 && xx1 == xclp[iclp] && yy1 == yclp[iclp]) {
 		iclp++;
-		xclp[iclp] = x2;
-		yclp[iclp] = y2;
+		xclp[iclp] = xx2;
+		yclp[iclp] = yy2;
 	    }
 
 /* First point of polyline, OR . */
@@ -455,29 +457,29 @@ plP_plfclp(PLINT *x, PLINT *y, PLINT npts,
  */
 	    else {
 		iclp++;
-		xclp[iclp] = x1;
-		yclp[iclp] = y1;
+		xclp[iclp] = xx1;
+		yclp[iclp] = yy1;
 
-		if ((x1 == xmin && y2 == ymin) ||
-		    (x2 == xmin && y1 == ymin)) {
+		if ((xx1 == xmin && yy2 == ymin) ||
+		    (xx2 == xmin && yy1 == ymin)) {
 		    iclp++;
 		    xclp[iclp] = xmin;
 		    yclp[iclp] = ymin;
 		}
-		else if ((x1 == xmax && y2 == ymin) ||
-			 (x2 == xmax && y1 == ymin)) {
+		else if ((xx1 == xmax && yy2 == ymin) ||
+			 (xx2 == xmax && yy1 == ymin)) {
 		    iclp++;
 		    xclp[iclp] = xmax;
 		    yclp[iclp] = ymin;
 		}
-		else if ((x1 == xmax && y2 == ymax) ||
-			 (x2 == xmax && y1 == ymax)) {
+		else if ((xx1 == xmax && yy2 == ymax) ||
+			 (xx2 == xmax && yy1 == ymax)) {
 		    iclp++;
 		    xclp[iclp] = xmax;
 		    yclp[iclp] = ymax;
 		}
-		else if ((x1 == xmin && y2 == ymax) ||
-			 (x2 == xmin && y1 == ymax)) {
+		else if ((xx1 == xmin && yy2 == ymax) ||
+			 (xx2 == xmin && yy1 == ymax)) {
 		    iclp++;
 		    xclp[iclp] = xmin;
 		    yclp[iclp] = ymax;
@@ -508,8 +510,8 @@ plP_plfclp(PLINT *x, PLINT *y, PLINT npts,
 		}
 */
 		iclp++;
-		xclp[iclp] = x2;
-		yclp[iclp] = y2;
+		xclp[iclp] = xx2;
+		yclp[iclp] = yy2;
 	    }
 	}
     }

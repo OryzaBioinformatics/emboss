@@ -282,14 +282,14 @@ void
 plD_line_ps(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 {
     PSDev *dev = (PSDev *) pls->dev;
-    int x1 = x1a, y1 = y1a, x2 = x2a, y2 = y2a;
+    int xx1 = x1a, yy1 = y1a, xx2 = x2a, yy2 = y2a;
 
 /* Rotate by 90 degrees */
 
-    plRotPhy(1, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &x1, &y1);
-    plRotPhy(1, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &x2, &y2);
+    plRotPhy(1, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &xx1, &yy1);
+    plRotPhy(1, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &xx2, &yy2);
 
-    if (x1 == dev->xold && y1 == dev->yold && dev->ptcnt < 40) {
+    if (xx1 == dev->xold && yy1 == dev->yold && dev->ptcnt < 40) {
 	if (pls->linepos + 12 > LINELENGTH) {
 	    (void) putc('\n', OF);
 	    pls->linepos = 0;
@@ -297,7 +297,7 @@ plD_line_ps(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 	else
 	    (void) putc(' ', OF);
 
-	(void) sprintf(outbuf, "%d %d D", x2, y2);
+	(void) sprintf(outbuf, "%d %d D", xx2, yy2);
 	dev->ptcnt++;
 	pls->linepos += 12;
     }
@@ -305,23 +305,23 @@ plD_line_ps(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 	(void) fprintf(OF, " Z\n");
 	pls->linepos = 0;
 
-	(void) sprintf(outbuf, "%d %d M %d %d D", x1, y1, x2, y2);
-	dev->llx = MIN(dev->llx, x1);
-	dev->lly = MIN(dev->lly, y1);
-	dev->urx = MAX(dev->urx, x1);
-	dev->ury = MAX(dev->ury, y1);
+	(void) sprintf(outbuf, "%d %d M %d %d D", xx1, yy1, xx2, yy2);
+	dev->llx = MIN(dev->llx, xx1);
+	dev->lly = MIN(dev->lly, yy1);
+	dev->urx = MAX(dev->urx, xx1);
+	dev->ury = MAX(dev->ury, yy1);
 	dev->ptcnt = 1;
 	pls->linepos += 24;
     }
-    dev->llx = MIN(dev->llx, x2);
-    dev->lly = MIN(dev->lly, y2);
-    dev->urx = MAX(dev->urx, x2);
-    dev->ury = MAX(dev->ury, y2);
+    dev->llx = MIN(dev->llx, xx2);
+    dev->lly = MIN(dev->lly, yy2);
+    dev->urx = MAX(dev->urx, xx2);
+    dev->ury = MAX(dev->ury, yy2);
 
     (void) fprintf(OF, "%s", outbuf);
     pls->bytecnt += 1 + strlen(outbuf);
-    dev->xold = x2;
-    dev->yold = y2;
+    dev->xold = xx2;
+    dev->yold = yy2;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -490,6 +490,8 @@ plD_state_ps(PLStream *pls, PLINT op)
 void
 plD_esc_ps(PLStream *pls, PLINT op, void *ptr)
 {
+    (void) ptr;
+
     switch (op) {
       case PLESC_FILL:
 	fill_polygon(pls);
@@ -580,7 +582,7 @@ ps_getdate(void)
 
 #else
 int 
-pldummy_ps()
+pldummy_ps(void)
 {
     return 0;
 }

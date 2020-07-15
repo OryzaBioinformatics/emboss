@@ -80,7 +80,7 @@ void
 plD_line_xfig(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 {
     PLDev *dev = (PLDev *) pls->dev;
-    int x1 = x1a, y1 = y1a, x2 = x2a, y2 = y2a;
+    int xx1 = x1a, yy1 = y1a, xx2 = x2a, yy2 = y2a;
     short *tempptr;
 
 /* If starting point of this line is the same as the ending point of */
@@ -89,13 +89,13 @@ plD_line_xfig(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 
     if (firstline) {
 	count = 0;
-	*(buffptr + count++) = x1;
-	*(buffptr + count++) = y1;
-	*(buffptr + count++) = x2;
-	*(buffptr + count++) = y2;
+	*(buffptr + count++) = xx1;
+	*(buffptr + count++) = yy1;
+	*(buffptr + count++) = xx2;
+	*(buffptr + count++) = yy2;
 	firstline = 0;
     }
-    else if (x1 == dev->xold && y1 == dev->yold) {
+    else if (xx1 == dev->xold && yy1 == dev->yold) {
 	if (count + 2 >= bufflen) {
 	    bufflen += 2 * BSIZE;
 	    tempptr = (short *)
@@ -106,18 +106,18 @@ plD_line_xfig(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 	    }
 	    buffptr = tempptr;
 	}
-	*(buffptr + count++) = x2;
-	*(buffptr + count++) = y2;
+	*(buffptr + count++) = xx2;
+	*(buffptr + count++) = yy2;
     }
     else {
 	flushbuffer(pls);
-	*(buffptr + count++) = x1;
-	*(buffptr + count++) = y1;
-	*(buffptr + count++) = x2;
-	*(buffptr + count++) = y2;
+	*(buffptr + count++) = xx1;
+	*(buffptr + count++) = yy1;
+	*(buffptr + count++) = xx2;
+	*(buffptr + count++) = yy2;
     }
-    dev->xold = x2;
-    dev->yold = y2;
+    dev->xold = xx2;
+    dev->yold = yy2;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -225,6 +225,9 @@ plD_state_xfig(PLStream *pls, PLINT op)
 void
 plD_esc_xfig(PLStream *pls, PLINT op, void *ptr)
 {
+    (void) pls;
+    (void) op;
+    (void) ptr;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -251,7 +254,7 @@ flushbuffer(PLStream *pls)
 
 #else
 int 
-pldummy_xfig()
+pldummy_xfig(void)
 {
     return 0;
 }

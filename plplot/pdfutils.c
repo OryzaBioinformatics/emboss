@@ -61,6 +61,8 @@ pldebug( const char *fname, ... )
 	va_end(args);
 	c_plgra();
     }
+#else
+    (void) fname;
 #endif
 }
 
@@ -356,7 +358,7 @@ pdf_rdx(U_CHAR *x, long nitems, PDFstrm *pdfs)
 \*--------------------------------------------------------------------------*/
 
 int
-pdf_wr_header(PDFstrm *pdfs, char *header)
+pdf_wr_header(PDFstrm *pdfs, const char *header)
 {
     int i;
 
@@ -632,7 +634,7 @@ pdf_wr_ieeef(PDFstrm *pdfs, float f)
 {
     double fdbl, fmant, f_new;
     float fsgl, f_tmp;
-    int istat, exp, e_new, e_off, bias = 127;
+    int istat, iexp, e_new, e_off, bias = 127;
     U_LONG value, s_ieee, e_ieee, f_ieee;
 
     if (f == (float)0.0) {
@@ -640,7 +642,7 @@ pdf_wr_ieeef(PDFstrm *pdfs, float f)
 	return (pdf_wr_4bytes(pdfs, value));
     }
     fsgl = fdbl = f;
-    fmant = frexp(fdbl, &exp);
+    fmant = frexp(fdbl, &iexp);
 
     if (fmant < 0)
 	s_ieee = 1;
@@ -649,7 +651,7 @@ pdf_wr_ieeef(PDFstrm *pdfs, float f)
 
     fmant = fabs(fmant);
     f_new = 2 * fmant;
-    e_new = exp - 1;
+    e_new = iexp - 1;
 
     if (e_new < 1 - bias) {
 	e_off = e_new - (1 - bias);
@@ -695,7 +697,7 @@ pdf_rd_ieeef(PDFstrm *pdfs, float *pf)
 {
     double f_new, f_tmp;
     float fsgl;
-    int istat, exp, bias = 127;
+    int istat, iexp, bias = 127;
     U_LONG value, s_ieee, e_ieee, f_ieee;
 
     if ((istat = pdf_rd_4bytes(pdfs, &value)))
@@ -708,15 +710,15 @@ pdf_rd_ieeef(PDFstrm *pdfs, float *pf)
     f_tmp = (double) f_ieee / 8388608.0;	/* divide by 2^23 */
 
     if (e_ieee == 0) {
-	exp = 1 - bias;
+	iexp = 1 - bias;
 	f_new = f_tmp;
     }
     else {
-	exp = (int) e_ieee - bias;
+	iexp = (int) e_ieee - bias;
 	f_new = 1.0 + f_tmp;
     }
 
-    fsgl = f_new * pow(2.0, (double) exp);
+    fsgl = f_new * pow(2.0, (double) iexp);
     if (s_ieee == 1)
 	fsgl = -fsgl;
 
@@ -810,6 +812,7 @@ void
 plFree2dGrid(PLFLT **f, PLINT nx, PLINT ny)
 {
     PLINT i;
+    (void) ny;
 
     for (i = 0; i < nx; i++)
 	free((void *) f[i]);

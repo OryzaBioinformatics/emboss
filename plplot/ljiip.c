@@ -157,7 +157,7 @@ void
 plD_line_ljiip(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 {
     PLDev *dev = (PLDev *) pls->dev;
-    int x1 = x1a, y1 = y1a, x2 = x2a, y2 = y2a;
+    int xx1 = x1a, yy1 = y1a, xx2 = x2a, yy2 = y2a;
     int abs_dx, abs_dy, dx, dy, incx, incy;
     int i, j, width, residual;
     PLFLT tmp;
@@ -166,16 +166,16 @@ plD_line_ljiip(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
  
 /* Take mirror image, since PCL expects (0,0) to be at top left */
 
-    y1 = dev->ymax - (y1 - dev->ymin);
-    y2 = dev->ymax - (y2 - dev->ymin);
+    yy1 = dev->ymax - (yy1 - dev->ymin);
+    yy2 = dev->ymax - (yy2 - dev->ymin);
 
 /* Rotate by 90 degrees */
 
-    plRotPhy(1, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &x1, &y1);
-    plRotPhy(1, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &x2, &y2);
+    plRotPhy(1, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &xx1, &yy1);
+    plRotPhy(1, dev->xmin, dev->ymin, dev->xmax, dev->ymax, &xx2, &yy2);
 
-    dx = x2 - x1;
-    dy = y2 - y1;
+    dx = xx2 - xx1;
+    dy = yy2 - yy1;
 
     if (dx < 0) {
 	abs_dx = -dx;
@@ -212,31 +212,31 @@ plD_line_ljiip(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
     if (width > 1) {
 	for (i = 0; i < width; i++) {
 	    for (j = 0; j < width; j++) {
-	        setpoint((PLINT) (x1+i), (PLINT) (y1+j));
-	        setpoint((PLINT) (x2+i), (PLINT) (y2+j));
+	        setpoint((PLINT) (xx1+i), (PLINT) (yy1+j));
+	        setpoint((PLINT) (xx2+i), (PLINT) (yy2+j));
 	    }
 	}
     }
     if (abs_dx >= abs_dy) {
 	residual = -(abs_dx >> 1);
 	if (width == 1) {
-            for (i = 0; i <= abs_dx; i++, x1 += incx) {
-                setpoint((PLINT) (x1), (PLINT) (y1));
+            for (i = 0; i <= abs_dx; i++, xx1 += incx) {
+                setpoint((PLINT) (xx1), (PLINT) (yy1));
                 if ((residual += abs_dy) >= 0) {
                     residual -= abs_dx;
-                    y1 += incy;
+                    yy1 += incy;
                 }
             }
 	}
 	else {
-	    for (i = 0; i <= abs_dx; i++, x1 += incx) {
+	    for (i = 0; i <= abs_dx; i++, xx1 += incx) {
 	       for (j = 0; j < width; j++) {
-	           setpoint((PLINT) (x1), (PLINT) (y1+j));
-	           setpoint((PLINT) (x1+width-1), (PLINT) (y1+j));
+	           setpoint((PLINT) (xx1), (PLINT) (yy1+j));
+	           setpoint((PLINT) (xx1+width-1), (PLINT) (yy1+j));
 	       }
 	       if ((residual += abs_dy) >= 0) {
 		   residual -= abs_dx;
-		   y1 += incy;
+		   yy1 += incy;
 	       }
 	    }
 	}
@@ -244,23 +244,23 @@ plD_line_ljiip(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
     else {
 	residual = -(abs_dy >> 1);
         if (width == 1) {
-            for (i = 0; i <= abs_dy; i++, y1 += incy) {
-                setpoint((PLINT) (x1), (PLINT) (y1));
+            for (i = 0; i <= abs_dy; i++, yy1 += incy) {
+                setpoint((PLINT) (xx1), (PLINT) (yy1));
                 if ((residual += abs_dx) >= 0) {
                     residual -= abs_dy;
-                    x1 += incx;
+                    xx1 += incx;
                 }
             }
         }
         else {
-            for (i = 0; i <= abs_dy; i++, y1 += incy) {
+            for (i = 0; i <= abs_dy; i++, yy1 += incy) {
                for (j = 0; j < width; j++) {
-                   setpoint((PLINT) (x1+j), (PLINT) (y1));
-                   setpoint((PLINT) (x1+j), (PLINT) (y1+width-1));
+                   setpoint((PLINT) (xx1+j), (PLINT) (yy1));
+                   setpoint((PLINT) (xx1+j), (PLINT) (yy1+width-1));
                }
                if ((residual += abs_dx) >= 0) {
                    residual -= abs_dy;
-                   x1 += incx;
+                   xx1 += incx;
                }
             }
         }
@@ -415,6 +415,8 @@ plD_tidy_ljiip(PLStream *pls)
 void 
 plD_state_ljiip(PLStream *pls, PLINT op)
 {
+    (void) pls;
+    (void) op;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -426,6 +428,9 @@ plD_state_ljiip(PLStream *pls, PLINT op)
 void
 plD_esc_ljiip(PLStream *pls, PLINT op, void *ptr)
 {
+    (void) pls;
+    (void) op;
+    (void) ptr;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -437,14 +442,14 @@ plD_esc_ljiip(PLStream *pls, PLINT op, void *ptr)
 static void
 setpoint(PLINT x, PLINT y)
 {
-    PLINT index;
-    index = x / 8 + y * BPROW1;
-    *(bitmap + index) = *(bitmap + index) | mask[x % 8];
+    PLINT myindex;
+    myindex = x / 8 + y * BPROW1;
+    *(bitmap + myindex) = *(bitmap + myindex) | mask[x % 8];
 }
 
 #else
 int 
-pldummy_ljiip()
+pldummy_ljiip(void)
 {
     return 0;
 }

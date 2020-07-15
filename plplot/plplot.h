@@ -23,6 +23,23 @@
     affect any user programs in C as long as this file is included. 
 */
 
+#ifdef __GNUC__
+#ifndef __deprecated
+#define __deprecated __attribute__((deprecated))
+#endif
+#ifndef __noreturn
+#define __noreturn __attribute__((noreturn))
+#endif
+#else
+#ifndef __deprecated
+#define __deprecated
+#endif
+#ifndef __noreturn
+#define __noreturn
+#endif
+#endif
+
+
 #ifndef __PLPLOT_H__
 #define __PLPLOT_H__
 
@@ -205,13 +222,13 @@ typedef void* PLPointer;
 /* Option table definition */
 
 typedef struct {
-    char *opt;
-    int  (*handler)	(char *, char *, void *);
+    const char *opt;
+    int  (*handler)	(const char *, const char *, void *);
     void *client_data;
     void *var;
     long mode;
-    char *syntax;
-    char *desc;
+    const char *syntax;
+    const char *desc;
 } PLOptionTable;
 
 /* PLplot Graphics Input structure */
@@ -262,6 +279,7 @@ typedef struct {
 typedef struct {
     PLFLT *f;
     PLINT nx, ny, nz;
+    char Padding[4];
 } PLfGrid;
 
 /*
@@ -288,6 +306,7 @@ typedef struct {
 typedef struct {
     PLFLT *xg, *yg, *zg;
     PLINT nx, ny, nz;
+    char Padding[4];
 } PLcGrid;
 
 /*
@@ -1322,12 +1341,12 @@ c_plwind(PLFLT xmin, PLFLT xmax, PLFLT ymin, PLFLT ymax);
 /* Returns a list of file-oriented device names and their menu strings */
 
 void
-plgFileDevs(char ***p_menustr, char ***p_devname, int *p_ndev);
+plgFileDevs(const char ***p_menustr, const char ***p_devname, int *p_ndev);
 
 /* Returns a list of all device names and their menu strings */
 
 void
-plgDevs(char ***p_menustr, char ***p_devname, int *p_ndev);
+plgDevs(const char ***p_menustr, const char ***p_devname, int *p_ndev);
 
 /* Set the function pointer for the keyboard event handler */
 
@@ -1348,7 +1367,7 @@ plsError(PLINT *errcode, char *errmsg);
 /* Sets an optional user exit handler. */
 
 void
-plsexit(int (*handler) (char *));
+plsexit(int (*handler) (const char *));
 
 	/* Transformation routines */
 
@@ -1425,7 +1444,7 @@ plResetOpts(void);
 /* Merge user option table into internal info structure. */
 
 int
-plMergeOpts(PLOptionTable *options, char *name, char **notes);
+plMergeOpts(PLOptionTable *options, const char *name, const char **notes);
 
 /* Set the strings used in usage and syntax messages. */
 
@@ -1483,7 +1502,8 @@ plFindCommand(char *fn);
 /* name, allocating memory as needed.  */
 
 void
-plGetName(char *dir, char *subdir, char *filename, char **filespec);
+plGetName(const char *dir, const char *subdir, const char *filename,
+	  char **filespec);
 
 /* Prompts human to input an integer in response to given message. */
 

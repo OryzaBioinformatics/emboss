@@ -91,6 +91,8 @@ pldebug( const char *fname, ... )
 	va_end(args);
 	c_plgra();
     }
+#else
+    (void) fname;
 #endif
 }
 
@@ -167,7 +169,7 @@ plD_init_plm(PLStream *pls)
 \*--------------------------------------------------------------------------*/
 
 void
-plD_line_plm(PLStream *pls, short x1, short y1, short x2, short y2)
+plD_line_plm(PLStream *pls, short xx1, short yy1, short xx2, short yy2)
 {
     PLmDev *dev = (PLmDev *) pls->dev;
     U_CHAR c;
@@ -178,14 +180,15 @@ plD_line_plm(PLStream *pls, short x1, short y1, short x2, short y2)
 /* Failsafe check */
 
 #ifdef DEBUG
-    if (x1 < dev->xmin || x1 > dev->xmax ||
-	x2 < dev->xmin || x2 > dev->xmax ||
-	y1 < dev->ymin || y1 > dev->ymax ||
-	y2 < dev->ymin || y2 > dev->ymax) {
+    if (xx1 < dev->xmin || xx1 > dev->xmax ||
+	xx2 < dev->xmin || xx2 > dev->xmax ||
+	yy1 < dev->ymin || yy1 > dev->ymax ||
+	yy2 < dev->ymin || yy2 > dev->ymax) {
 
 	pldebug("plD_line_plm",
 		"coordinates out of bounds -- \nActual: (%i,%i), (%i,%i) Bounds: (%i,%i,%i,%i)\n", 
-		x1, y1, x2, y2, dev->xmin, dev->xmax, dev->ymin, dev->ymax);
+		xx1, yy1, xx2, yy2,
+		dev->xmin, dev->xmax, dev->ymin, dev->ymax);
     }
 #endif
 
@@ -199,27 +202,27 @@ plD_line_plm(PLStream *pls, short x1, short y1, short x2, short y2)
    command each time (so shortest command is 25% larger), but a lot easier
    to implement than the tek method.  
  */
-    if (x1 == dev->xold && y1 == dev->yold) {
+    if (xx1 == dev->xold && yy1 == dev->yold) {
 
 	c = (U_CHAR) LINETO;
 	plm_wr( pdf_wr_1byte(pls->pdfs, c) );
 
-	xy[0] = x2;
-	xy[1] = y2;
+	xy[0] = xx2;
+	xy[1] = yy2;
 	plm_wr( pdf_wr_2nbytes(pls->pdfs, xy, 2) );
     }
     else {
 	c = (U_CHAR) LINE;
 	plm_wr( pdf_wr_1byte(pls->pdfs, c) );
 
-	xy[0] = x1;
-	xy[1] = y1;
-	xy[2] = x2;
-	xy[3] = y2;
+	xy[0] = xx1;
+	xy[1] = yy1;
+	xy[2] = xx2;
+	xy[3] = yy2;
 	plm_wr( pdf_wr_2nbytes(pls->pdfs, xy, 4) );
     }
-    dev->xold = x2;
-    dev->yold = y2;
+    dev->xold = xx2;
+    dev->yold = yy2;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -463,6 +466,8 @@ plD_esc_plm(PLStream *pls, PLINT op, void *ptr)
 {
     U_CHAR c = (U_CHAR) ESCAPE;
 
+    (void) ptr;
+
     dbug_enter("plD_esc_plm");
 
     plm_wr( pdf_wr_1byte(pls->pdfs, c) );
@@ -512,6 +517,8 @@ plm_fill(PLStream *pls)
 static void
 plm_swin(PLStream *pls)
 {
+    (void) pls;
+
     dbug_enter("plm_swin");
 }
 
@@ -567,7 +574,7 @@ WriteHeader(PLStream *pls)
 
 #else
 int 
-pldummy_plmeta()
+pldummy_plmeta(void)
 {
     return 0;
 }

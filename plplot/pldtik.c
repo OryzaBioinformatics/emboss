@@ -189,7 +189,7 @@ pldprec(PLFLT vmin, PLFLT vmax, PLFLT tick, PLINT lf,
 /* Establish precision.  */
 /* It must be fine enough to resolve the tick spacing */
 
-    np = (PLINT) floor(log10(ABS(tick)));
+    np = floor(log10(ABS(tick)));
 
     if (*mode != 0)
 	*prec = msd - np;

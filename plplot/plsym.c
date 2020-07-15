@@ -35,7 +35,8 @@ static void
 pldeco(short int **sym, PLINT *length, const char *text);
 
 static void
-plchar(signed char *xygrid, PLFLT *xform, PLINT base, PLINT oline, PLINT uline,
+plchar(signed char *localxygrid, PLFLT *xform,
+       PLINT base, PLINT oline, PLINT uline,
        PLINT refx, PLINT refy, PLFLT scale, PLFLT xpmm, PLFLT ypmm,
        PLFLT *p_xorg, PLFLT *p_yorg, PLFLT *p_width);
 
@@ -79,6 +80,8 @@ pldebug( const char *fname, ... )
 	va_end(args);
 	c_plgra();
     }
+#else
+    (void) fname;
 #endif
 }
 
@@ -203,13 +206,13 @@ static void
 plhrsh(PLINT ch, PLINT x, PLINT y)
 {
     PLINT cx, cy, k, penup, style;
-    signed char *xygrid;
+    signed char *localxygrid;
     PLFLT scale, xscale, yscale;
 
     penup = 1;
     scale = 0.05 * plsc->symht;
 
-    if ( ! plcvec(ch, &xygrid)) {
+    if ( ! plcvec(ch, &localxygrid)) {
 	plP_movphy(x, y);
 	return;
     }
@@ -226,8 +229,8 @@ plhrsh(PLINT ch, PLINT x, PLINT y)
 
     k = 4;
     for (;;) {
-	cx = xygrid[k++];
-	cy = xygrid[k++];
+	cx = localxygrid[k++];
+	cy = localxygrid[k++];
 	if (cx == 64 && cy == 64) {
 	    plP_movphy(x, y);
 	    plsc->nms = style;
@@ -404,7 +407,7 @@ c_plmtex(const char *side, PLFLT disp, PLFLT pos, PLFLT just,
 {
     PLINT clpxmi, clpxma, clpymi, clpyma;
     PLINT vert, refx, refy;
-    PLFLT xdv, ydv, xmm, ymm, shift, xform[4];
+    PLFLT xdv, ydv, xmm, ymm, shift, xformarr[4];
     PLFLT chrdef, chrht;
 
     if (plsc->level < 2) {
@@ -468,18 +471,18 @@ c_plmtex(const char *side, PLFLT disp, PLFLT pos, PLFLT just,
     }
 
     if (vert != 0) {
-	xform[0] = 0.0;
-	xform[1] = -1.0;
-	xform[2] = 1.0;
-	xform[3] = 0.0;
+	xformarr[0] = 0.0;
+	xformarr[1] = -1.0;
+	xformarr[2] = 1.0;
+	xformarr[3] = 0.0;
     }
     else {
-	xform[0] = 1.0;
-	xform[1] = 0.0;
-	xform[2] = 0.0;
-	xform[3] = 1.0;
+	xformarr[0] = 1.0;
+	xformarr[1] = 0.0;
+	xformarr[2] = 0.0;
+	xformarr[3] = 1.0;
     }
-    plstr(0, xform, refx, refy, text);
+    plstr(0, xformarr, refx, refy, text);
     plP_sclp(clpxmi, clpxma, clpymi, clpyma);
 }
 
@@ -499,7 +502,7 @@ c_plptex(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy, PLFLT just, const char *text)
 {
     PLINT refx, refy;
     PLFLT shift, cc, ss;
-    PLFLT xform[4], diag;
+    PLFLT xformarr[4], diag;
 
     if (plsc->level < 3) {
 	plabort("plptex: Please set up window first");
@@ -517,15 +520,15 @@ c_plptex(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy, PLFLT just, const char *text)
     ss /= diag;
     shift = (just == 0.0) ? 0.0 : plstrl(text) * just;
 
-    xform[0] = cc;
-    xform[1] = -ss;
-    xform[2] = ss;
-    xform[3] = cc;
+    xformarr[0] = cc;
+    xformarr[1] = -ss;
+    xformarr[2] = ss;
+    xformarr[3] = cc;
 
     refx = plP_wcpcx(x) - shift * cc * plsc->xpmm;
     refy = plP_wcpcy(y) - shift * ss * plsc->ypmm;
 
-    plstr(0, xform, refx, refy, text);
+    plstr(0, xformarr, refx, refy, text);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -533,7 +536,7 @@ c_plptex(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy, PLFLT just, const char *text)
  *
  * Prints out a "string" at reference position with physical coordinates
  * (refx,refy). The coordinates of the vectors defining the string are
- * passed through the linear mapping defined by the 2 x 2 matrix xform()
+ * passed through the linear mapping defined by the 2 x 2 matrix xforarrm()
  * before being plotted.  The reference position is at the left-hand edge of
  * the string. If base = 1, it is aligned with the baseline of the string.
  * If base = 0, it is aligned with the center of the character box.
@@ -543,10 +546,10 @@ c_plptex(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy, PLFLT just, const char *text)
 \*--------------------------------------------------------------------------*/
 
 void
-plstr(PLINT base, PLFLT *xform, PLINT refx, PLINT refy, const char *strng)
+plstr(PLINT base, PLFLT *xformarr, PLINT refx, PLINT refy, const char *strng)
 {
     short int *symbol;
-    signed char *xygrid;
+    signed char *localxygrid;
     PLINT ch, i, length, level = 0, style, oline = 0, uline = 0;
     PLFLT width = 0., xorg = 0., yorg = 0., def, ht, dscale, scale;
 
@@ -580,8 +583,9 @@ plstr(PLINT base, PLFLT *xform, PLINT refx, PLINT refy, const char *strng)
 	else if (ch == -5)
 	    uline = !uline;
 	else {
-	    if (plcvec(ch, &xygrid))
-		plchar(xygrid, xform, base, oline, uline, refx, refy, scale,
+	    if (plcvec(ch, &localxygrid))
+		plchar(localxygrid, xformarr, base, oline, uline,
+		       refx, refy, scale,
 		       plsc->xpmm, plsc->ypmm, &xorg, &yorg, &width);
 	}
     }
@@ -595,7 +599,8 @@ plstr(PLINT base, PLFLT *xform, PLINT refx, PLINT refy, const char *strng)
 \*--------------------------------------------------------------------------*/
 
 static void
-plchar(signed char *xygrid, PLFLT *xform, PLINT base, PLINT oline, PLINT uline,
+plchar(signed char *localxygrid, PLFLT *xformarr,
+       PLINT base, PLINT oline, PLINT uline,
        PLINT refx, PLINT refy, PLFLT scale, PLFLT xpmm, PLFLT ypmm,
        PLFLT *p_xorg, PLFLT *p_yorg, PLFLT *p_width)
 {
@@ -603,21 +608,21 @@ plchar(signed char *xygrid, PLFLT *xform, PLINT base, PLINT oline, PLINT uline,
     PLINT k, penup;
     PLFLT x, y;
 
-    xbase = xygrid[2];
-    *p_width = xygrid[3] - xbase;
+    xbase = localxygrid[2];
+    *p_width = localxygrid[3] - xbase;
     if (base == 0) {
 	ybase = 0;
-	ydisp = xygrid[0];
+	ydisp = localxygrid[0];
     }
     else {
-	ybase = xygrid[0];
+	ybase = localxygrid[0];
 	ydisp = 0;
     }
     k = 4;
     penup = 1;
     for (;;) {
-	cx = xygrid[k++];
-	cy = xygrid[k++];
+	cx = localxygrid[k++];
+	cy = localxygrid[k++];
 	if (cx == 64 && cy == 64)
 	    break;
 	if (cx == 64 && cy == 0)
@@ -625,8 +630,8 @@ plchar(signed char *xygrid, PLFLT *xform, PLINT base, PLINT oline, PLINT uline,
 	else {
 	    x = *p_xorg + (cx - xbase) * scale;
 	    y = *p_yorg + (cy - ybase) * scale;
-	    lx = refx + ROUND(xpmm * (xform[0] * x + xform[1] * y));
-	    ly = refy + ROUND(ypmm * (xform[2] * x + xform[3] * y));
+	    lx = refx + ROUND(xpmm * (xformarr[0] * x + xformarr[1] * y));
+	    ly = refy + ROUND(ypmm * (xformarr[2] * x + xformarr[3] * y));
 	    if (penup != 0) {
 		plP_movphy(lx, ly);
 		penup = 0;
@@ -639,23 +644,23 @@ plchar(signed char *xygrid, PLFLT *xform, PLINT base, PLINT oline, PLINT uline,
     if (oline) {
 	x = *p_xorg;
 	y = *p_yorg + (30 + ydisp) * scale;
-	lx = refx + ROUND(xpmm * (xform[0] * x + xform[1] * y));
-	ly = refy + ROUND(ypmm * (xform[2] * x + xform[3] * y));
+	lx = refx + ROUND(xpmm * (xformarr[0] * x + xformarr[1] * y));
+	ly = refy + ROUND(ypmm * (xformarr[2] * x + xformarr[3] * y));
 	plP_movphy(lx, ly);
 	x = *p_xorg + *p_width * scale;
-	lx = refx + ROUND(xpmm * (xform[0] * x + xform[1] * y));
-	ly = refy + ROUND(ypmm * (xform[2] * x + xform[3] * y));
+	lx = refx + ROUND(xpmm * (xformarr[0] * x + xformarr[1] * y));
+	ly = refy + ROUND(ypmm * (xformarr[2] * x + xformarr[3] * y));
 	plP_draphy(lx, ly);
     }
     if (uline) {
 	x = *p_xorg;
 	y = *p_yorg + (-5 + ydisp) * scale;
-	lx = refx + ROUND(xpmm * (xform[0] * x + xform[1] * y));
-	ly = refy + ROUND(ypmm * (xform[2] * x + xform[3] * y));
+	lx = refx + ROUND(xpmm * (xformarr[0] * x + xformarr[1] * y));
+	ly = refy + ROUND(ypmm * (xformarr[2] * x + xformarr[3] * y));
 	plP_movphy(lx, ly);
 	x = *p_xorg + *p_width * scale;
-	lx = refx + ROUND(xpmm * (xform[0] * x + xform[1] * y));
-	ly = refy + ROUND(ypmm * (xform[2] * x + xform[3] * y));
+	lx = refx + ROUND(xpmm * (xformarr[0] * x + xformarr[1] * y));
+	ly = refy + ROUND(ypmm * (xformarr[2] * x + xformarr[3] * y));
 	plP_draphy(lx, ly);
     }
     *p_xorg = *p_xorg + *p_width * scale;
@@ -671,7 +676,7 @@ PLFLT
 plstrl(const char *strng)
 {
     short int *symbol;
-    signed char *xygrid;
+    signed char *localxygrid;
     PLINT ch, i, length, level = 0;
     PLFLT width = 0., xorg = 0., dscale, scale, def, ht;
 
@@ -694,7 +699,7 @@ plstrl(const char *strng)
 	    xorg -= width * scale;
 	else if (ch == -4 || ch == -5);
 	else {
-	    if (plcvec(ch, &xygrid)) {
+	    if (plcvec(ch, &localxygrid)) {
 		width = xygrid[3] - xygrid[2];
 		xorg += width * scale;
 	    }
@@ -1024,10 +1029,25 @@ c_plstrlW(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy, const char *text)
 {
     PLFLT diag;
 
+    (void) x;
+    (void) y;
+
+/* this has a bug: plP_wcmmx is the millimetre position and includes
+   the offset if the window origin is not (0,0). We need the true
+   scale */
+
+
+/*
     if (dx == 0.0 && dy !=0.0) diag = plstrl(text)/plP_wcmmy(1.0);
     else if (dy == 0.0 && dx !=0.0) diag = plstrl(text)/plP_wcmmx(1.0);
     else diag = sqrt( (plstrl(text)/plP_wcmmx(1.0)) * (plstrl(text)/plP_wcmmx(1.0)) + 
 		      (plstrl(text)/plP_wcmmy(1.0)) * (plstrl(text)/plP_wcmmy(1.0)) );
+*/
+
+    if (dx == 0.0 && dy !=0.0) diag = plstrl(text)/plsc->wmxscl;
+    else if (dy == 0.0 && dx !=0.0) diag = plstrl(text)/plsc->wmyscl;
+    else diag = sqrt( (plstrl(text)/plsc->wmxscl) * (plstrl(text)/plsc->wmxscl) + 
+		      (plstrl(text)/plsc->wmyscl) * (plstrl(text)/plsc->wmyscl) );
 
     return diag;
 }

@@ -191,6 +191,8 @@ buildlist(PLINT xp1, PLINT yp1, PLINT xp2, PLINT yp2, PLINT xp3, PLINT yp3,
     PLINT min_y, max_y;
     PLINT dx, dy, cstep, nstep, ploty, plotx;
 
+    (void) xp3;
+
     dx = xp2 - xp1;
     dy = yp2 - yp1;
 

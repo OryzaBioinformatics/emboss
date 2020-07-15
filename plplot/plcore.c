@@ -79,6 +79,8 @@ pldebug( const char *fname, ... )
 	va_end(args);
 	c_plgra();
     }
+#else
+    (void) fname;
 #endif
 }
 
@@ -322,6 +324,7 @@ plP_fill(short *x, short *y, PLINT npts)
 static void
 grline(short *x, short *y, PLINT npts)
 {
+    (void) npts;
     offset = plsc->device - 1;
     (*dispatch_table[offset].pl_line) (plsc, x[0], y[0], x[1], y[1]);
 }
@@ -391,7 +394,7 @@ grfill(short *x, short *y, PLINT npts)
 \*--------------------------------------------------------------------------*/
 
 static void
-difilt(PLINT *xscl, PLINT *yscl, PLINT npts,
+difilt(PLINT *xxscl, PLINT *yyscl, PLINT npts,
        PLINT *clpxmi, PLINT *clpxma, PLINT *clpymi, PLINT *clpyma)
 {
     PLINT i, x, y;
@@ -400,8 +403,8 @@ difilt(PLINT *xscl, PLINT *yscl, PLINT npts,
 
     if (plsc->difilt & PLDI_MAP) {
 	for (i = 0; i < npts; i++) {
-	    xscl[i] = plsc->dimxax * xscl[i] + plsc->dimxb;
-	    yscl[i] = plsc->dimyay * yscl[i] + plsc->dimyb;
+	    xxscl[i] = plsc->dimxax * xxscl[i] + plsc->dimxb;
+	    yyscl[i] = plsc->dimyay * yyscl[i] + plsc->dimyb;
 	}
     }
 
@@ -409,10 +412,12 @@ difilt(PLINT *xscl, PLINT *yscl, PLINT npts,
 
     if (plsc->difilt & PLDI_ORI) {
 	for (i = 0; i < npts; i++) {
-	    x = plsc->dioxax * xscl[i] + plsc->dioxay * yscl[i] + plsc->dioxb;
-	    y = plsc->dioyax * xscl[i] + plsc->dioyay * yscl[i] + plsc->dioyb;
-	    xscl[i] = x;
-	    yscl[i] = y;
+	    x = plsc->dioxax * xxscl[i] + plsc->dioxay * yyscl[i] +
+		plsc->dioxb;
+	    y = plsc->dioyax * xxscl[i] + plsc->dioyay * yyscl[i] +
+		plsc->dioyb;
+	    xxscl[i] = x;
+	    yyscl[i] = y;
 	}
     }
 
@@ -420,8 +425,8 @@ difilt(PLINT *xscl, PLINT *yscl, PLINT npts,
 
     if (plsc->difilt & PLDI_PLT) {
 	for (i = 0; i < npts; i++) {
-	    xscl[i] = plsc->dipxax * xscl[i] + plsc->dipxb;
-	    yscl[i] = plsc->dipyay * yscl[i] + plsc->dipyb;
+	    xxscl[i] = plsc->dipxax * xxscl[i] + plsc->dipxb;
+	    yyscl[i] = plsc->dipyay * yyscl[i] + plsc->dipyb;
 	}
     }
 
@@ -430,8 +435,8 @@ difilt(PLINT *xscl, PLINT *yscl, PLINT npts,
 
     if (plsc->difilt & PLDI_DEV) {
 	for (i = 0; i < npts; i++) {
-	    xscl[i] = plsc->didxax * xscl[i] + plsc->didxb;
-	    yscl[i] = plsc->didyay * yscl[i] + plsc->didyb;
+	    xxscl[i] = plsc->didxax * xxscl[i] + plsc->didxb;
+	    yyscl[i] = plsc->didyay * yyscl[i] + plsc->didyb;
 	}
 	*clpxmi = plsc->diclpxmi;
 	*clpxma = plsc->diclpxma;
@@ -454,7 +459,7 @@ difilt(PLINT *xscl, PLINT *yscl, PLINT npts,
 \*--------------------------------------------------------------------------*/
 
 static void
-setdef_diplt()
+setdef_diplt(void)
 {
     plsc->dipxmin = 0.0;
     plsc->dipxmax = 1.0;
@@ -463,7 +468,7 @@ setdef_diplt()
 }
 
 static void
-setdef_didev()
+setdef_didev(void)
 {
     plsc->mar = 0.0;
     plsc->aspect = 0.0;
@@ -472,7 +477,7 @@ setdef_didev()
 }
 
 static void
-setdef_diori()
+setdef_diori(void)
 {
     plsc->diorot = 0.;
 }
@@ -851,7 +856,7 @@ static void
 calc_diori(void)
 {
     PLFLT r11, r21, r12, r22, cost, sint;
-    PLFLT x0, y0, lx, ly, aspect;
+    PLFLT xx0, yy0, lx, ly, aspect;
 
     if (plsc->dev_di) {
 	offset = plsc->device - 1;
@@ -863,8 +868,8 @@ calc_diori(void)
 
 /* Center point of rotation */
 
-    x0 = (plsc->phyxma + plsc->phyxmi) / 2.;
-    y0 = (plsc->phyyma + plsc->phyymi) / 2.;
+    xx0 = (plsc->phyxma + plsc->phyxmi) / 2.;
+    yy0 = (plsc->phyyma + plsc->phyymi) / 2.;
 
 /* Rotation matrix */
 
@@ -902,11 +907,11 @@ calc_diori(void)
 
     plsc->dioxax = r11;
     plsc->dioxay = r21 * (lx / ly);
-    plsc->dioxb = (1. - r11) * x0 - r21 * y0 * (lx / ly);
+    plsc->dioxb = (1. - r11) * xx0 - r21 * yy0 * (lx / ly);
 
     plsc->dioyax = r12 * (ly / lx);
     plsc->dioyay = r22;
-    plsc->dioyb = (1. - r22) * y0 - r12 * x0 * (ly / lx);
+    plsc->dioyb = (1. - r22) * yy0 - r12 * xx0 * (ly / lx);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -955,7 +960,7 @@ c_plsdimap(PLINT dimxmin, PLINT dimxmax, PLINT dimymin, PLINT dimymax,
 \*--------------------------------------------------------------------------*/
 
 static void
-calc_dimap()
+calc_dimap(void)
 {
     PLFLT lx, ly;
     PLINT pxmin, pxmax, pymin, pymax;
@@ -1405,7 +1410,7 @@ c_plcpstrm(PLINT iplsr, PLINT flags)
 \*--------------------------------------------------------------------------*/
 
 static void
-plGetDev()
+plGetDev(void)
 {
     int dev, i, count, length;
     char response[80];
@@ -1529,7 +1534,7 @@ c_plreplot(void)
 \*--------------------------------------------------------------------------*/
 
 void
-plgFileDevs(char ***p_menustr, char ***p_devname, int *p_ndev)
+plgFileDevs(const char ***p_menustr, const char ***p_devname, int *p_ndev)
 {
   plgdevlst(*p_menustr, *p_devname, p_ndev, 0);
 }
@@ -1541,13 +1546,14 @@ plgFileDevs(char ***p_menustr, char ***p_devname, int *p_ndev)
 \*--------------------------------------------------------------------------*/
 
 void
-plgDevs(char ***p_menustr, char ***p_devname, int *p_ndev)
+plgDevs(const char ***p_menustr, const char ***p_devname, int *p_ndev)
 {
   plgdevlst(*p_menustr, *p_devname, p_ndev, -1);
 }
 
 static void
-plgdevlst(char **p_menustr, char **p_devname, int *p_ndev, int type)
+plgdevlst(const char **p_menustr, const char **p_devname,
+	  int *p_ndev, int type)
 {
     int i, j;
 
@@ -1966,11 +1972,25 @@ c_plgchrW(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy)
 {
     PLFLT diag;
 
+    (void) x;
+    (void) y;
+
+/* this has a bug: plP_wcmmx is the millimetre position and includes
+   the offset if the window origin is not (0,0). We need the true
+   scale */
+
+
+/*
     if (dx == 0.0 && dy !=0.0) diag = plsc->chrdef/plP_wcmmx(1.0);
     else if (dy == 0.0 && dx !=0.0) diag = plsc->chrdef/plP_wcmmy(1.0);
     else diag = sqrt( (plsc->chrdef/plP_wcmmx(1.0)) * (plsc->chrdef/plP_wcmmx(1.0)) 
 		      + (plsc->chrdef/plP_wcmmy(1.0)) * (plsc->chrdef/plP_wcmmy(1.0)) );
 
+*/
+    if (dx == 0.0 && dy !=0.0) diag = plsc->chrdef/plsc->wmxscl;
+    else if (dy == 0.0 && dx !=0.0) diag = plsc->chrdef/plsc->wmyscl;
+    else diag = sqrt( (plsc->chrdef/plsc->wmxscl) * (plsc->chrdef/plsc->wmxscl) 
+		      + (plsc->chrdef/plsc->wmyscl) * (plsc->chrdef/plsc->wmyscl) );
     return diag;
 }
 

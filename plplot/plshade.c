@@ -196,6 +196,8 @@ c_plshade(PLFLT **a, PLINT nx, PLINT ny, const char **defined,
 {
     PLfGrid2 grid;
 
+    (void) defined;
+
     grid.f = a;
     grid.nx = nx;
     grid.ny = ny;
@@ -337,6 +339,9 @@ plshade_int(PLFLT (*f2eval) (PLINT, PLINT, PLPointer),
     PLFLT x[8], y[8], xp[2], tx, ty;
     char *new_defined;
     int *c, *c0, *c1;
+
+    (void) c2eval;			/* not yet implemented */
+    (void) c2eval_data;			/* not yet implemented */
 
     if (plsc->level < 3) {
 	plabort("plfshade: window must be set up first");
@@ -944,6 +949,8 @@ plctest(PLFLT *x, PLFLT level)
 {
     int i, j;
     double t[4], sorted[4], temp;
+
+    (void) level;
 
     sorted[0] = t[0] = X(1,1);
     sorted[1] = t[1] = X(2,2);

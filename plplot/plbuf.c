@@ -62,6 +62,8 @@ pldebug( const char *fname, ... )
 	va_end(args);
 	c_plgra();
     }
+#else
+    (void) fname;
 #endif
 }
 
@@ -154,6 +156,8 @@ plbuf_polyline(PLStream *pls, short *xa, short *ya, PLINT npts)
 void
 plbuf_eop(PLStream *pls)
 {
+    (void) pls;
+
     dbug_enter("plbuf_eop");
 }
 
@@ -335,6 +339,8 @@ plbuf_swin(PLStream *pls, PLWindow *plwin)
 static void
 rdbuf_init(PLStream *pls)
 {
+    (void) pls;
+
     dbug_enter("rdbuf_init");
 }
 
@@ -388,6 +394,8 @@ rdbuf_polyline(PLStream *pls)
 static void
 rdbuf_eop(PLStream *pls)
 {
+    (void) pls;
+
     dbug_enter("rdbuf_eop");
 }
 

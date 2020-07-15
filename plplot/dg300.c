@@ -71,9 +71,12 @@ plD_init_dg(PLStream *pls)
 void
 plD_line_dg(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 {
-    int x1 = x1a, y1 = y1a, x2 = x2a, y2 = y2a;
+    int xx1 = x1a, yy1 = y1a, xx2 = x2a, yy2 = y2a;
 
-    (void) printf("LINE %d %d %d %d\n", x1 >> 4, y1 >> 3, x2 >> 4, y2 >> 3);
+    (void) pls;
+
+    (void) printf("LINE %d %d %d %d\n",
+		  xx1 >> 4, yy1 >> 3, xx2 >> 4, yy2 >> 3);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -100,6 +103,8 @@ plD_polyline_dg(PLStream *pls, short *xa, short *ya, PLINT npts)
 void
 plD_eop_dg(PLStream *pls)
 {
+    (void) pls;
+
     (void) putchar('\007');
     (void) fflush(stdout);
     while (getchar() != '\n');
@@ -127,6 +132,8 @@ plD_bop_dg(PLStream *pls)
 void
 plD_tidy_dg(PLStream *pls)
 {
+    (void) pls;
+
     (void) printf("\036\107\042\060\n");
     (void) fflush(stdout);
 }
@@ -140,6 +147,8 @@ plD_tidy_dg(PLStream *pls)
 void 
 plD_state_dg(PLStream *pls, PLINT op)
 {
+    (void) pls;
+    (void) op;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -151,11 +160,14 @@ plD_state_dg(PLStream *pls, PLINT op)
 void
 plD_esc_dg(PLStream *pls, PLINT op, void *ptr)
 {
+    (void) pls;
+    (void) op;
+    (void) ptr;
 }
 
 #else
 int 
-pldummy_dg300()
+pldummy_dg300(void)
 {
     return 0;
 }

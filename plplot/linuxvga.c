@@ -273,7 +273,10 @@ pause(PLStream *pls)
 
 #else
 int
-pldummy_vga()
+pldummy_vga(void);
+
+int
+pldummy_vga(void)
 {
     return 0;
 }

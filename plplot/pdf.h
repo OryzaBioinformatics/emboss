@@ -53,10 +53,10 @@ typedef struct {
 /* Info for the i/o device.  Only used by Tcl/TK/dp drivers for now */
 
 typedef struct {
-    int   fd;				/* I/O device file descriptor */
     FILE  *file;			/* File handle */
     char  *fileName;			/* Fifo or socket name (if needed) */
     char  *fileHandle;			/* Handle for use from interpreter */
+    int   fd;				/* I/O device file descriptor */
     int   type;				/* Communication channel type */
     char  *typeName;			/* As above, but in string form */
 } PLiodev;
@@ -75,6 +75,7 @@ typedef struct {
 /* Prototypes */
 /* Use a wrapper for the prototypes for use from K&R C */
 
+void pdf_set PLARGS((char *option, int value));
 PDFstrm *pdf_fopen	PLARGS((char *fileName, char *mode));
 PDFstrm *pdf_bopen	PLARGS((U_CHAR *buffer, long bufmax));
 PDFstrm *pdf_finit	PLARGS((FILE *file));
@@ -85,7 +86,7 @@ int  pdf_getc		PLARGS((PDFstrm *pdfs));
 int  pdf_ungetc		PLARGS((int c, PDFstrm *pdfs));
 
 int  pdf_rd_header	PLARGS((PDFstrm *pdfs, signed char *header));
-int  pdf_wr_header	PLARGS((PDFstrm *pdfs, char *header));
+int  pdf_wr_header	PLARGS((PDFstrm *pdfs, const char *header));
 int  pdf_wr_1byte	PLARGS((PDFstrm *pdfs, U_CHAR s));
 int  pdf_rd_1byte	PLARGS((PDFstrm *pdfs, U_CHAR *ps));
 int  pdf_wr_2bytes	PLARGS((PDFstrm *pdfs, U_SHORT s));

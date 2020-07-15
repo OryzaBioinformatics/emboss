@@ -1,4 +1,4 @@
-/*	xwin.c
+/*	Xwin.c
 
 	PLplot X-windows device driver.
 */
@@ -139,13 +139,17 @@ static void  FillPolygonCmd	(PLStream *pls);
 
 static void  StoreCmap0		(PLStream *pls);
 static void  StoreCmap1		(PLStream *pls);
+static int   XErrorProc(Display *dpy, XErrorEvent *errEventPtr);
 
 /* jc: X protocol error caused by trying to stop color on True Color*/
 #include <X11/Xproto.h>
 
-int XErrorProc(Display *dpy, XErrorEvent *errEventPtr)
+static int XErrorProc(Display *dpy, XErrorEvent *errEventPtr)
 {
-  if ( errEventPtr->error_code == BadAccess && errEventPtr->request_code == X_StoreColors) {
+    (void)dpy;
+
+    if ( errEventPtr->error_code == BadAccess &&
+	errEventPtr->request_code == X_StoreColors) {
     
 /*      (void) fprintf(stderr,"Can't change colormap on True Color Display. Plplot bug!\n");
     return 0;*/
@@ -191,6 +195,8 @@ pldebug( const char *fname, ... )
 	va_end(args);
 	c_plgra();
     }
+#else
+    (void) fname;
 #endif
 }
 
@@ -381,23 +387,23 @@ plD_line_xw(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
     XwDev *dev = (XwDev *) pls->dev;
     XwDisplay *xwd = (XwDisplay *) dev->xwd;
 
-    int x1 = x1a, y1 = y1a, x2 = x2a, y2 = y2a;
+    int xx1 = x1a, yy1 = y1a, xx2 = x2a, yy2 = y2a;
 
     CheckForEvents(pls);
 
-    y1 = dev->ylen - y1;
-    y2 = dev->ylen - y2;
+    yy1 = dev->ylen - yy1;
+    yy2 = dev->ylen - yy2;
 
-    x1 = x1 * dev->xscale;
-    x2 = x2 * dev->xscale;
-    y1 = y1 * dev->yscale;
-    y2 = y2 * dev->yscale;
+    xx1 = xx1 * dev->xscale;
+    xx2 = xx2 * dev->xscale;
+    yy1 = yy1 * dev->yscale;
+    yy2 = yy2 * dev->yscale;
 
     if (dev->write_to_window)
-	XDrawLine(xwd->display, dev->window, dev->gc, x1, y1, x2, y2);
+	XDrawLine(xwd->display, dev->window, dev->gc, xx1, yy1, xx2, yy2);
 
     if (dev->write_to_pixmap)
-	XDrawLine(xwd->display, dev->pixmap, dev->gc, x1, y1, x2, y2);
+	XDrawLine(xwd->display, dev->pixmap, dev->gc, xx1, yy1, xx2, yy2);
 }
 
 /*--------------------------------------------------------------------------*\
@@ -872,8 +878,8 @@ InitMain(PLStream *pls)
     if (pls->xlength == 0) pls->xlength = width  * 0.75;
     if (pls->ylength == 0) pls->ylength = height * 0.75;
 
-    if (pls->xlength > width)  pls->xlength = width  - dev->border * 2;
-    if (pls->ylength > height) pls->ylength = height - dev->border * 2;
+    if (pls->xlength > (int) width)  pls->xlength = width  - dev->border * 2;
+    if (pls->ylength > (int) height) pls->ylength = height - dev->border * 2;
 
     hint.width  = (int) pls->xlength;
     hint.height = (int) pls->ylength;
@@ -1322,7 +1328,7 @@ LocateKey(PLStream *pls)
 /* Now handle cursor keys */
 
     else if (IsCursorKey(gin->keysym)) {
-	int x1, y1, dx = 0, dy = 0;
+	int xx1, yy1, dx = 0, dy = 0;
 	int xmin = 0, xmax = dev->width - 1, ymin = 0, ymax = dev->height - 1;
 
 	switch (gin->keysym) {
@@ -1372,13 +1378,13 @@ LocateKey(PLStream *pls)
 
     /* Bounds checking so that we don't send cursor out of window */
 
-	x1 = gin->pX + dx;
-	y1 = gin->pY + dy;
+	xx1 = gin->pX + dx;
+	yy1 = gin->pY + dy;
 
-	if (x1 < xmin) dx = xmin - gin->pX;
-	if (y1 < ymin) dy = ymin - gin->pY;
-	if (x1 > xmax) dx = xmax - gin->pX;
-	if (y1 > ymax) dy = ymax - gin->pY;
+	if (xx1 < xmin) dx = xmin - gin->pX;
+	if (yy1 < ymin) dy = ymin - gin->pY;
+	if (xx1 > xmax) dx = xmax - gin->pX;
+	if (yy1 > ymax) dy = ymax - gin->pY;
 
     /* Engage... */
 
@@ -1534,6 +1540,8 @@ LeaveEH(PLStream *pls, XEvent *event)
 {
     XwDev *dev = (XwDev *) pls->dev;
 
+    (void) event;
+
     UpdateXhairs(pls);
     dev->drawing_xhairs = 0;
 }
@@ -1567,8 +1575,8 @@ CreateXhairs(PLStream *pls)
     if (XQueryPointer(xwd->display, dev->window, &root, &child,
 		      &root_x, &root_y, &win_x, &win_y, &mask)) {
 
-	if (win_x >= 0 && win_x < dev->width &&
-	    win_y >= 0 && win_y < dev->height) {
+	if (win_x >= 0 && win_x < (int) dev->width &&
+	    win_y >= 0 && win_y < (int) dev->height) {
 	    DrawXhairs(pls, win_x, win_y);
 	    dev->drawing_xhairs = 1;
 	}
@@ -1622,7 +1630,7 @@ DestroyXhairs(PLStream *pls)
 \*--------------------------------------------------------------------------*/
 
 static void
-DrawXhairs(PLStream *pls, int x0, int y0)
+DrawXhairs(PLStream *pls, int xx0, int yy0)
 {
     XwDev *dev = (XwDev *) pls->dev;
 
@@ -1632,11 +1640,11 @@ DrawXhairs(PLStream *pls, int x0, int y0)
     if (dev->drawing_xhairs) {
 	UpdateXhairs(pls);
     }
-    dev->xhair_x[0].x = xmin; dev->xhair_x[0].y = y0;
-    dev->xhair_x[1].x = xmax; dev->xhair_x[1].y = y0;
+    dev->xhair_x[0].x = xmin; dev->xhair_x[0].y = yy0;
+    dev->xhair_x[1].x = xmax; dev->xhair_x[1].y = yy0;
 
-    dev->xhair_y[0].x = x0; dev->xhair_y[0].y = ymin;
-    dev->xhair_y[1].x = x0; dev->xhair_y[1].y = ymax;
+    dev->xhair_y[0].x = xx0; dev->xhair_y[0].y = ymin;
+    dev->xhair_y[1].x = xx0; dev->xhair_y[1].y = ymax;
 
     UpdateXhairs(pls);
 }
@@ -2017,7 +2025,7 @@ CreatePixmap(PLStream *pls)
     XwDev *dev = (XwDev *) pls->dev;
     XwDisplay *xwd = (XwDisplay *) dev->xwd;
 
-    int (*oldErrorHandler)();
+    int (*oldErrorHandler)(Display*, XErrorEvent*);
 
     oldErrorHandler = XSetErrorHandler(CreatePixmapErrorHandler);
 
@@ -2575,7 +2583,7 @@ AllocCmap1(PLStream *pls)
 	StoreCmap1(pls);
     }
     else {
-	int i, r, ncolors;
+	int ii, r, ncolors;
 	PLColor cmap1color;
 	XColor xcol;
 
@@ -2590,20 +2598,20 @@ AllocCmap1(PLStream *pls)
 	    ncolors = 50;
 	}
 
-	for( i = 0; i < ncolors; i++ ) {
-	    plcol_interp( pls, &cmap1color, i, ncolors );
+	for( ii = 0; ii < ncolors; ii++ ) {
+	    plcol_interp( pls, &cmap1color, ii, ncolors );
 	    PLColor_to_XColor( &cmap1color, &xcol );
 	    
 	    r = XAllocColor( xwd->display, xwd->map, &xcol );
 	    if (pls->verbose)
-		(void) fprintf(stderr, "i=%d, r=%d, pixel=%ld\n", i, r, xcol.pixel );
+		(void) fprintf(stderr, "ii=%d, r=%d, pixel=%ld\n", ii, r, xcol.pixel );
 	    if ( r )
-		xwd->cmap1[i] = xcol;
+		xwd->cmap1[ii] = xcol;
 	    else
 		break;
 
 	}
-	if (i < ncolors) {
+	if (ii < ncolors) {
 	    xwd->ncol1 = -1;
 	    (void) fprintf(stderr,
 		    "Warning: unable to allocate sufficient colors in cmap1\n");
@@ -2773,7 +2781,10 @@ PLX_save_colormap(Display *display, Colormap colormap)
 #endif
 #else
 int
-pldummy_xwin()
+pldummy_xwin(void);
+
+int
+pldummy_xwin(void)
 {
     return 0;
 }

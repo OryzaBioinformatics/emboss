@@ -146,33 +146,33 @@ void
 plD_line_pbm(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 {
     int i;
-    int x1 = x1a, y1 = y1a, x2 = x2a, y2 = y2a;
+    int xx1 = x1a, yy1 = y1a, xx2 = x2a, yy2 = y2a;
     PLINT x1b, y1b, x2b, y2b;
     float length, fx, fy, dx, dy;
 
 /* Take mirror image, since PCL expects (0,0) to be at top left */
 
-    y1 = PIXELS_Y - (y1 - 0);
-    y2 = PIXELS_Y - (y2 - 0);
+    yy1 = PIXELS_Y - (yy1 - 0);
+    yy2 = PIXELS_Y - (yy2 - 0);
 
 /* Rotate by 90 degrees */
 /*
   plRotPhy(1, 0, 0, PIXELS_X, PIXELS_Y, &x1, &y1);
   plRotPhy(1, 0, 0, PIXELS_X, PIXELS_Y, &x2, &y2);
   */
-    x1b = x1, x2b = x2, y1b = y1, y2b = y2;
+    x1b = xx1, x2b = xx2, y1b = yy1, y2b = yy2;
     length = (float) sqrt((double)
 			  ((x2b - x1b) * (x2b - x1b) + (y2b - y1b) * (y2b - y1b)));
 
     if (length == 0.)
 	length = 1.;
-    dx = (x2 - x1) / length;
-    dy = (y2 - y1) / length;
+    dx = (xx2 - xx1) / length;
+    dy = (yy2 - yy1) / length;
 
-    fx = x1;
-    fy = y1;
-    plot((PLINT) x1, (PLINT) y1, pls);
-    plot((PLINT) x2, (PLINT) y2, pls);
+    fx = xx1;
+    fy = yy1;
+    plot((PLINT) xx1, (PLINT) yy1, pls);
+    plot((PLINT) xx2, (PLINT) yy2, pls);
 
     for (i = 1; i <= (int) length; i++) {
 	fx += dx; fy += dy;
@@ -213,30 +213,37 @@ plD_eop_pbm(PLStream *pls)
 void
 plD_bop_pbm(PLStream *pls)
 {
+    (void) pls;
 /* Nothing to do here */
 }
 
 void
 plD_tidy_pbm(PLStream *pls)
 {
+    (void) pls;
 /* Nothing to do here */
 }
 
 void 
 plD_state_pbm(PLStream *pls, PLINT op)
 {
+    (void) pls;
+    (void) op;
 /* Nothing to do here */
 }
 
 void
 plD_esc_pbm(PLStream *pls, PLINT op, void *ptr)
 {
+    (void) pls;
+    (void) op;
+    (void) ptr;
 /* Nothing to do here */
 }
 
 #else
 int 
-pldummy_pbm()
+pldummy_pbm(void)
 {
     return 0;
 }

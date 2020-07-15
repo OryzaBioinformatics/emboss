@@ -293,7 +293,7 @@ plfill_soft(short *x, short *y, PLINT npts);
 /* error message and tries to clean up as much as possible. */
 
 void
-plexit(char *errormsg);
+plexit(const char *errormsg);
 
 /* Just a front-end to exit().  */
 
@@ -303,12 +303,12 @@ pl_exit(void);
 /* A handy way to issue warnings, if need be. */
 
 void
-plwarn(char *errormsg);
+plwarn(const char *errormsg);
 
 /* Same as plwarn(), but appends ", aborting plot" to the error message */
 
 void
-plabort(char *errormsg);
+plabort(const char *errormsg);
 
 /* Loads either the standard or extended font. */
 
@@ -640,7 +640,7 @@ plP_swin(PLWindow *plwin);
 /* Return file pointer to lib file. */
 
 FILE *
-plLibOpen(char *fn);
+plLibOpen(const char *fn);
 
 /* Does required startup initialization of a stream.  */
 

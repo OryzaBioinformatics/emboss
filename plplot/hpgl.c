@@ -181,19 +181,19 @@ void
 plD_line_hpgl(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 {
     PLDev *dev = (PLDev *) pls->dev;
-    int x1 = x1a, y1 = y1a, x2 = x2a, y2 = y2a;
+    int xx1 = x1a, yy1 = y1a, xx2 = x2a, yy2 = y2a;
 
 /* Write out old path */
 
-    if (x1 != dev->xold || y1 != dev->yold)
-	pls->bytecnt += fprintf( OF, "PU%d %d;", x1, y1 );
+    if (xx1 != dev->xold || yy1 != dev->yold)
+	pls->bytecnt += fprintf( OF, "PU%d %d;", xx1, yy1 );
 
 /* Add new point to path */
 
-    pls->bytecnt += fprintf( OF, "PD%d %d\n", x2, y2);
+    pls->bytecnt += fprintf( OF, "PD%d %d\n", xx2, yy2);
 
-    dev->xold = x2;
-    dev->yold = y2;
+    dev->xold = xx2;
+    dev->yold = yy2;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -231,6 +231,7 @@ plD_polyline_hpgl(PLStream *pls, short *xa, short *ya, PLINT npts)
 void
 plD_eop_hpgl(PLStream *pls)
 {
+    (void) pls;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -264,6 +265,8 @@ plD_bop_hpgl(PLStream *pls)
 void
 plD_tidy_hpgl(PLStream *pls)
 {
+    (void) pls;
+
     (void) fputs( "SP0\n", OF );
     (void) fclose(OF);
 }
@@ -345,6 +348,9 @@ plD_state_hpgl(PLStream *pls, PLINT op)
 void
 plD_esc_hpgl(PLStream *pls, PLINT op, void *ptr)
 {
+    (void) pls;
+    (void) op;
+    (void) ptr;
 }
 
 #else

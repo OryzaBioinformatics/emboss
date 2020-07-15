@@ -115,9 +115,14 @@ plD_init_png(PLStream *pls)
 \*----------------------------------------------------------------------*/
 
 void
-plD_line_png(PLStream *pls, short x1, short y1, short x2, short y2)
+plD_line_png(PLStream *pls, short xx1, short yy1, short xx2, short yy2)
 {
-    gdImageLine(im_out, x1, PNGHeight-1 - y1, x2, PNGHeight-1 - y2, PNGColor);
+    (void) pls;
+
+    gdImageLine(im_out,
+		xx1, PNGHeight-1 - yy1,
+		xx2, PNGHeight-1 - yy2,
+		PNGColor);
 }
 
 /*----------------------------------------------------------------------*\
@@ -190,6 +195,8 @@ plD_bop_png(PLStream *pls)
 void
 plD_tidy_png(PLStream *pls)
 {
+    (void) pls;
+
     gdImageDestroy(im_out);
 }
 
@@ -210,6 +217,8 @@ void plD_state_png(PLStream *pls,PLINT op)
 void
 plD_esc_png(PLStream *pls, PLINT op, void *ptr)
 {
+    (void) ptr;
+
     switch (op) {
       case PLESC_FILL:
 			fill_polygon(pls);
@@ -243,13 +252,18 @@ fill_polygon(PLStream *pls)
 }
 
 int
-pldummy_PNG()
+pldummy_PNG(void);
+
+int
+pldummy_PNG(void)
 {
     return 0;
 }
 
 #else
-static int pngdummy()
+static int pngdummy(void);
+
+static int pngdummy(void)
 {
     return 0;
 }

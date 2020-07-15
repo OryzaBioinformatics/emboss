@@ -42,8 +42,8 @@ static void savehipoint	(PLINT, PLINT);
 static void savelopoint	(PLINT, PLINT);
 static void swaphiview	(void);
 static void swaploview	(void);
-static void myexit	(char *);
-static void myabort	(char *);
+static void myexit	(const char *);
+static void myabort	(const char *);
 static void freework	(void);
 static int  plabv	(PLINT, PLINT, PLINT, PLINT, PLINT, PLINT);
 static void pl3cut	(PLINT, PLINT, PLINT, PLINT, PLINT, 
@@ -234,40 +234,40 @@ plP_gzback(PLINT **zbf, PLINT **zbc, PLFLT **zbt)
 \*--------------------------------------------------------------------------*/
 
 static void
-plt3zz(PLINT x0, PLINT y0, PLINT dx, PLINT dy, PLINT flag, PLINT *init,
+plt3zz(PLINT xx0, PLINT yy0, PLINT dx, PLINT dy, PLINT flag, PLINT *init,
        PLFLT *x, PLFLT *y, PLFLT **z, PLINT nx, PLINT ny, PLINT *u, PLINT *v)
 {
     PLINT n = 0;
     PLFLT x2d, y2d;
 
-    while (1 <= x0 && x0 <= nx && 1 <= y0 && y0 <= ny) {
-	x2d = plP_w3wcx(x[x0 - 1], y[y0 - 1], z[x0 - 1][y0 - 1]);
-	y2d = plP_w3wcy(x[x0 - 1], y[y0 - 1], z[x0 - 1][y0 - 1]);
+    while (1 <= xx0 && xx0 <= nx && 1 <= yy0 && yy0 <= ny) {
+	x2d = plP_w3wcx(x[xx0 - 1], y[yy0 - 1], z[xx0 - 1][yy0 - 1]);
+	y2d = plP_w3wcy(x[xx0 - 1], y[yy0 - 1], z[xx0 - 1][yy0 - 1]);
 
 	u[n] = plP_wcpcx(x2d);
 	v[n] = plP_wcpcy(y2d);
 
 	switch (flag) {
 	case -3:
-	    y0 += dy;
+	    yy0 += dy;
 	    flag = -flag;
 	    break;
 	case -2:
-	    y0 += dy;
+	    yy0 += dy;
 	    break;
 	case -1:
-	    y0 += dy;
+	    yy0 += dy;
 	    flag = -flag;
 	    break;
 	case 1:
-	    x0 += dx;
+	    xx0 += dx;
 	    break;
 	case 2:
-	    x0 += dx;
+	    xx0 += dx;
 	    flag = -flag;
 	    break;
 	case 3:
-	    x0 += dx;
+	    xx0 += dx;
 	    flag = -flag;
 	    break;
 	}
@@ -276,16 +276,16 @@ plt3zz(PLINT x0, PLINT y0, PLINT dx, PLINT dy, PLINT flag, PLINT *init,
 
     if (flag == 1 || flag == -2) {
 	if (flag == 1) {
-	    x0 -= dx;
-	    y0 += dy;
+	    xx0 -= dx;
+	    yy0 += dy;
 	}
 	else if (flag == -2) {
-	    y0 -= dy;
-	    x0 += dx;
+	    yy0 -= dy;
+	    xx0 += dx;
 	}
-	if (1 <= x0 && x0 <= nx && 1 <= y0 && y0 <= ny) {
-	    x2d = plP_w3wcx( x[x0 - 1], y[y0 - 1], z[x0 - 1][y0 - 1]);
-	    y2d = plP_w3wcy( x[x0 - 1], y[y0 - 1], z[x0 - 1][y0 - 1]);
+	if (1 <= xx0 && xx0 <= nx && 1 <= yy0 && yy0 <= ny) {
+	    x2d = plP_w3wcx( x[xx0 - 1], y[yy0 - 1], z[xx0 - 1][yy0 - 1]);
+	    y2d = plP_w3wcy( x[xx0 - 1], y[yy0 - 1], z[xx0 - 1][yy0 - 1]);
 	    u[n] = plP_wcpcx(x2d);
 	    v[n] = plP_wcpcy(y2d);
 	    n++;
@@ -1130,7 +1130,7 @@ freework(void)
 \*--------------------------------------------------------------------------*/
 
 static void
-myexit(char *msg)
+myexit(const char *msg)
 {
     freework();
     plexit(msg);
@@ -1144,7 +1144,7 @@ myexit(char *msg)
 \*--------------------------------------------------------------------------*/
 
 static void
-myabort(char *msg)
+myabort(const char *msg)
 {
     freework();
     plabort(msg);

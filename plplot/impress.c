@@ -106,7 +106,7 @@ void
 plD_line_imp(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 {
     PLDev *dev = (PLDev *) pls->dev;
-    int x1 = x1a, y1 = y1a, x2 = x2a, y2 = y2a;
+    int xx1 = x1a, yy1 = y1a, xx2 = x2a, yy2 = y2a;
 
     if (FirstLine) {
 	if (penchange) {
@@ -118,17 +118,17 @@ plD_line_imp(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 
 	count = 0;
 	FirstLine = 0;
-	*(LineBuff + count++) = (short) x1;
-	*(LineBuff + count++) = (short) y1;
-	*(LineBuff + count++) = (short) x2;
-	*(LineBuff + count++) = (short) y2;
+	*(LineBuff + count++) = (short) xx1;
+	*(LineBuff + count++) = (short) yy1;
+	*(LineBuff + count++) = (short) xx2;
+	*(LineBuff + count++) = (short) yy2;
     }
-    else if ((count + 2) < BUFFLENG && x1 == dev->xold && y1 == dev->yold) {
+    else if ((count + 2) < BUFFLENG && xx1 == dev->xold && yy1 == dev->yold) {
 
     /* Add new point to path */
 
-	*(LineBuff + count++) = (short) x2;
-	*(LineBuff + count++) = (short) y2;
+	*(LineBuff + count++) = (short) xx2;
+	*(LineBuff + count++) = (short) yy2;
     }
     else {
 
@@ -148,13 +148,13 @@ plD_line_imp(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 	    penchange = 0;
 	}
 	count = 0;
-	*(LineBuff + count++) = (short) x1;
-	*(LineBuff + count++) = (short) y1;
-	*(LineBuff + count++) = (short) x2;
-	*(LineBuff + count++) = (short) y2;
+	*(LineBuff + count++) = (short) xx1;
+	*(LineBuff + count++) = (short) yy1;
+	*(LineBuff + count++) = (short) xx2;
+	*(LineBuff + count++) = (short) yy2;
     }
-    dev->xold = x2;
-    dev->yold = y2;
+    dev->xold = xx2;
+    dev->yold = yy2;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -254,6 +254,9 @@ plD_state_imp(PLStream *pls, PLINT op)
 void
 plD_esc_imp(PLStream *pls, PLINT op, void *ptr)
 {
+    (void) pls;
+    (void) op;
+    (void) ptr;
 }
 
 /*--------------------------------------------------------------------------*\
@@ -275,7 +278,7 @@ flushline(PLStream *pls)
 
 #else
 int 
-pldummy_impress()
+pldummy_impress(void)
 {
     return 0;
 }
