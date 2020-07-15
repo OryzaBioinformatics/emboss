@@ -1,230 +1,357 @@
-Fixes to Version 4.0.0 included
-
-The post-release fixed for 4.0.0 were already included in the distribution
-used to recreate this stage of the code history. The changes are included
-in earlier commits. The original README.fixes is added below for information.
-
-The files in this directory are bugfix replacements for files in
-the EMBOSS-4.0.0 distribution. Just drop the replacement files in
-the location shown and redo the 'make install.'
-
-Fix 1. EMBOSS-4.0.0/nucleus/embpatlist.c
-
-31 Jul 2006: Fixes a problem with searching for patterns and regular
-expression in the reverse strand of nucleotide sequences. The change
-is to use ajSeqReverseForce (always reverses the sequence provided)
-instead of ajSeqReverseDo (which only reverses if the reverse flag is
-set)
-
-9 Aug 2006: Revised to also fix a problem with reverse strand sequence
-positions.
-
-Fix 2. EMBOSS-4.0.0/ajax/ajfile.c
-
-31 Jul 2006: This fixes a bug where deleting the last line of buffered
-input fails to reset the pointer to the last buffered line. This only
-affected debug traces. Unfortunately, the ajFileBuffClear function
-does call the debug trace. In practice we have only seen this bug when
-processing sequence data in EMBL format from an MRS server.
-
-Fix 3. EMBOSS-4.0.0/ajax/ajnam.c
-
-31 Jul 3006: New database access methods MRS and DBFETCH need to be
-explicitly turned on so that showdb can report them.
-
-
-Fix 4. EMBOSS-4.0.0/ajax/ajseqdb.c
-
-31 Jul 2006: The new MRS access method used a general search. This
-gave strange results when the ID or accession appeared in any other
-entry. It appears that MRS can search for id or accession only. This
-worked on the main MRS server at least.
-
-MRS access will be further extended in the next release. Please
-contact the developers emboss-bug@emboss.open-bio.org if you would
-like to help test new features in MRS access.
-
-25 Aug 2006: Further change to allow multiple %s replacements in
-complex URLs for access method URL. Needed for complex SRS queries to
-resolve EMBL IDs so the following definition can be used for EMBL:
-
-DB embl [
-	method: "url" format: "embl" type: "N" url:
-	"http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-noSession+-ascii+-vn+2+-e+[embl-id:%s]|[embl-acc:%s]|([emblidacc-id:%s]>embl)"
-	comment: "EMBL from SRS including old IDs" ]
-
-Fix 5. EMBOSS-4.0.0/configure
-
-07 Aug 2006: Fix configuration problem on Intel Mac machines. Make sure
-this file is executable (chmod 755 configure) after downloading it.
-
-Fix 6. EMBOSS-4.0.0/ajax/ajseq.c
-
-09 Aug 2006: Return correct USA for "asis::" sequence input.
-
-Fix 7. EMBOSS-4.0.0/emboss/dreg.c
-
-09 Aug 2006: Correct sequence positions on the reverse strand.
-
-Fix 8. See Fix 13
-
-Fix 9. See Fix 13
-
-Fix10. EMBOSS-4.0.0/doc/programs/html/banana.1.banana.gif
-       EMBOSS-4.0.0/doc/programs/html/tcode.2.tcode.gif
-
-14 Aug 2006: These graphics example outputs were missing from the
-distribution.  When you run make install they will be copied to the
-installed documentation.
-
-Fix 11. EMBOSS-4.0.0/emboss/merger.c
-	EMBOSS-4.0.0/emboss/needle.c
-	EMBOSS-4.0.0/emboss/prophet.c
-	EMBOSS-4.0.0/emboss/water.c
-
-14 Aug 2006: These programs calculate an internal path size from the
-lengths of the input sequences. For sequences that are too long, a
-fatal error is produced. But if the sequences are extremely long, the
-test failed and the program gave a segmentation fault. This fix tests
-in a different way that will catch all cases.
-
-Fix 12. See Fix13
-
-Fix 13. EMBOSS-4.0.0/ajax/ajacd.c
-        EMBOSS-4.0.0/ajax/ajfeat.c
-        EMBOSS-4.0.0/ajax/ajfeat.h
-        EMBOSS-4.0.0/ajax/ajreport.c
-        EMBOSS-4.0.0/ajax/ajreport.h
-        EMBOSS-4.0.0/emboss/fuzznuc.c
-        EMBOSS-4.0.0/emboss/fuzzpro.c
-        EMBOSS-4.0.0/emboss/fuzztran.c
-
-21 Aug 2006: This provides new qualifiers to limit report output to a
-number of hits in total (-rmaxall) or for any one sequence
-(-rmaxseq). It also fixes reversed feature locations for reports in
-EMBL format. The files fixed overlap with earlier fixes which are
-included here.
-
-09 Aug 2006: Fix 8: In release 4.0.0 these 3 programs were changed to report
-even when no hits were found. The aim was to avoid empty output for a
-single sequence.
-
-Many users were running these programs over large input sets, and now
-get excessively large output files.
-
-The change has been reversed. Fix 9 makes sure a small output
-file is produced when no hits are found.
-
-09 Aug 2006: Fix 9: When closing a report (with ajReportClose) make sure a
-standard report header and footer are printed if nothing has been
-reported so far. The header reports the command line. The new footer
-reports the total number of sequences and features reported.
-
-Reversed sequence positions are corrected for listfile report format.
-
-No header can be reported for some formats (EMBL, Genbank, GFF, PIR,
-Swiss, Excel, Feattable).
-
-14 Aug 2006: Fix12: This fixes a bug where putting -ofopenfile on the command
-line for features output failed to set the feature output format.
-
-
-Fix 14. EMBOSS-4.0.0/ajax/ajseqread.c
-        EMBOSS-4.0.0/ajax/ajseqread.h
-        EMBOSS-4.0.0/ajax/ajseqwrite.c
-        EMBOSS-4.0.0/emboss/dbiblast.c
-        EMBOSS-4.0.0/emboss/dbifasta.c
-        EMBOSS-4.0.0/emboss/dbxfasta.c
-        EMBOSS-4.0.0/emboss/acd/dbifasta.acd
-        EMBOSS-4.0.0/emboss/acd/dbxfasta.acd
-
-24 Aug 2006: Pearson format preserves dbname:entryname style IDs
-NCBI format parsing (includes FASTA format parsing) extracts database
-name from NCBI piped ids and uses on output unless EMBOSS has defined
-some other database name.
-
-Three indexing programs call the NCBI parsing function which has an
-extra argument.
-
-Fasta parsing was also modified to allow UniProt style (yet another
-FASTA format) where the accession number is in brackets. The "idacc"
-default format now removes brackets before checking for an accession
-number or version next on the line.
-
-Fix 15. EMBOSS-4.0.0/emboss/restrict.c
-
-24 Aug 2006: If EMBL feature table output was selected then hits on
-the reverse strand were reported in a non-standard form.
-
-
-Fix 16. EMBOSS-4.0.0/emboss/dbigcg.c
-        EMBOSS-4.0.0/emboss/dbxgcg.c
-
-
-15 Sep 2006: dbigcg and dbxgcg needed a minor change to parse the new
-EMBL database ID line format.
-
-Fix 17. EMBOSS-4.0.0/emboss/einverted.c
-
-18 Sep 2006: einverted when run with a reversed input sequence
-numbered the results from the wrong end. It is rare to run an inverted
-repeat program in the reverse direction so nobody reported this bug
-which was in every release since 1.0.0, but we had a user with a
-genome-scale input and a lot of positions to recalculate who needs the
-fix.
-
-Fix 18. EMBOSS-4.0.0/emboss/tfm.c
-        EMBOSS-4.0.0/nucleus/embgroup.c
-        EMBOSS-4.0.0/nucleus/embgroup.h
-
-18 Sep 2006: tfm -html copies the installed HTML version of the
-documentation. The installed HTML documentation moved in release
-4.0.0. This fix finds the new documentation directory (embgroup.c has
-new functions to find the EMBASSY package so the correct install
-directory can be searched). Some EMBOSS interfaces need this fix to
-find the documentation.
-
-Fix 19. Various in the EMBOSS-4.0.0/jemboss/ directory
-
-8th November 2006: The file associated with this fix is jemboss-08112006.jar.
-To apply, change directory to the EMBOSS-4.0.0/jemboss directory and type:
-    jar xf jemboss-08112006.jar
-This fixes a problem with the specification of mismatches in "the fuzzies"
-(i.e. fuzznuc etc).
-
-Fix 20. EMBOSS-4.0.0/emboss/restrict.c
-
-30 Nov 2006: If no hits are found then fragment lengths from a previous
-sequence are no longer reported. This only happened when -fragments was
-selected with a set of sequences.
-
-Fix 21. EMBOSS-4.0.0/emboss/prettyplot.c
-        EMBOSS-4.0.0/emboss/acd/prettyplot.acd
-
-7 Dec 2006: Prettyplot has an incorrect definition for the
-"-alternative" command line option which selects how the consensus is
-calculated when there is a choice of consensus residues. This applies
-when the plurality score is less than half of the total sequence
-weights.
-
-When this option was used on the command line, strange error messages
-would be reported for ambiguous values (1, 2 or 3) or for unacceptable
-values (0). The default value gave no error. It appears this option is
-not widely used because this was reported only by wrappers such as
-SoapLab that pass the default value explicitly to the prgram.
-
-The ACD definition is for a "selection" menu, but the values are
-defined in "list" style which returns a value from 1 to 4. The fix is
-simply to redefine this option as a "list" with values from 0 to 3.
-
-Fix 22. EMBOSS-4.0.0/emboss/dbxflat.c
-
-3 Jan 2007: Fixes memory leaks in GenBank parsing
-
-Fix 23: EMBOSS-4.0.0/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java
-
-5 Jan 2007: Allow Jemboss compilation with Java version 6
-
+Version 4.1.0
+	A new ACD attribute outputmodifier: "Y" identifies qualifiers that
+	cause the kinds of output changes that can break parsers. An
+	obvious example is the -html qualifier on may of the utility
+	programs. This attribute is a warning to wrapper developers and
+	maintainers that they may want to fix the value of this qualifier
+	and not allow users to change it. In some cases (as with toggle
+	qualifiers) it may be useful to wrap each possible value
+	separately. For example, tfm can run as an HTML version (-html)
+	and a text version (-nohtml -nomore).
+
+	Backtranseq now keeps stop positions in the sequence and replaces
+	them with the most common stop codon. Previous releases converted
+	stops to 'X' and back translated them as 'NNN'.
+
+	Reading sequences in NBRF (or PIR) format now only removes one '*'
+	from the end, allowing protein sequences to end with a stop codon.
+
+	Reading NBRF format sequences in FASTA format was retaining a ';'
+	in front of the sequence ID. This is now fixed.
+
+	Pattern files and regular expression files now use the -pformat
+	and -pname associated qualifiers which weere ignored when they
+	first appeared in 4.0.0. Pattern file formats are "fasta" for the
+	original format in 4.0.0 with FASTA style identifiers, and
+	"simple" for files with a single pattern on each line. The format
+	defaults to testing the first character for a '>'. The pattern
+	name is used to set a name of "name1", "name2" and so on if no
+	name is in the FASTA file. By default patterns are called
+	pattern1, regular expressions are called "regex1".
+
+	Added a new function to read from a buffered file and trim
+	newlines. It was not needed before because input functions were
+	doing their own trimming.
+
+	Valgrind memory leak tests now cover all QA tests. The command
+	line is captured and used to generate test cases. Script
+	valgrind.pl knows about the few cases that need input files copied
+	and preprocesses them by name. A few tests can be flagged as
+	ignored. This is intended for tests known to run for a very long
+	time under valgrind. Memory leaks are fixed for all programs in
+	the main EMBOSS package and for the most used ones in the EMBRASSY
+	packages.
+
+	A new environment variable ACDCOMMANDLINELOG takes a filename as
+	its value. This saves the command line equivalent of a program
+	run, converting user responses to prompts into their command line
+	equivalents. A number of bugs in command line saving for report
+	headers were identifier and fixed.
+
+	Two string functions had their names reversed. ajStrRemoveWhite is
+	to remove all white space from a string, ajStrRemoveWhiteExcess is
+	to remove white space from the ends and replace internal
+	whitespace with single spaces. When function names were
+	standardized these names were reversed. As function calls were
+	converted automatically EMBOSS code worked as before, but
+	developers will notice the functions to not behave as
+	expected. This is now corrected, and all existing calls in the
+	EMBOSS code have been checked and converted.
+	
+	Showseq with a sequence end position now stops output at the end
+	of the user-specified range, Previous releases printed the whole
+	of the line with the last base/residue.
+	
+	SRS servers use "gid" as the field name for GI numbers. The field
+	name has been changed to allow GI searches with local SRS and
+	remote SRSWWW access to Genbank.
+
+	A new configure option for developers --enable-devwarnings
+	turns on many more warning messages from the gcc compiler. Not all
+	warnings are useful - the less useful gcc options are documented
+	(and commented out) in the configure.in file devwarnings section.
+	Warnings include missing function prototypes, signed/unsigned
+	comparisons, potential loss of precision in casts, use of global
+	names (index for example) as variables.
+
+	Function names in ajseqwrite.c have been standardised. Old names are
+	still accepted but are marked as "deprecated" and will generate
+	warnings with the gcc compiler (see ajstr below). Other compilers
+	will see no difference.
+
+	Edialign is a new application, a port of the DIALIGN2 program by
+	B. Morgenstern, using an ACD file written by Guy Bottu.  It takes
+	as input nucleic acid or protein sequences and produces as output
+	a multiple sequence alignment. The sequences need not be similar
+	over their complete length, since the program constructs
+	alignments from gapfree pairs of similar segments of the
+	sequences.
+	
+	Wordfinder is a new application to find word-based matches of
+	limited size. It is based on code from supermatcher. The inputs
+	are reversed so the query sequence set (unaligned) is compared to
+	a streamed database of sequences. (Supermatcher should perhaps
+	have its inputs in this order too). Limits are provided for the
+	length of the word match and the length of the alignment. The
+	default gap penalties are also increased to limit the gaps allowed
+	in alignment.
+
+	Word-based algorithms found too many matches where both sequences
+	contains runs of X (protein) or N (nucleotide). These are now
+	ignored when building the word table.
+
+	Word-based algorithms complained if a sequence was shorter than
+	the wordsize. This was a problem for database searches with some
+	short sequences present. They now run silently and simply return
+	no word matches.
+
+	The EMBL format sequence entry parser was able to read swissprot
+	sequence data, but not the feature table. Efficiency improvements
+	to set the sequence type to nucleotide for EMBL entries showed
+	that swissprot entries were being read by the EMBL parser. A test
+	for swissprot protein information on the ID line should redifrect
+	these entries to the swissprot parser. In previous release the
+	seuqnece type was not set, so there was no problem with the
+	sequence type - although feature lines may not have been readable
+	form swissprot format flat files. Database definitions specify the
+	swiss or embl format so they are not affected.
+
+	Large sequences were running very slowly. This was traced to the
+	way sequence types are tested using regular expressions processed
+	by calls to the PCRE library. These calls were replaced by simple
+	string functions as they are only testing that a sequence is
+	entirely composed of characteres from an allowed set. An
+	additional speedup was achieved by defining only upper case
+	characters as required (almost halving the number of tests) and
+	testing the upper case version of the sequence characters.
+
+	Sequence translation in the reverse direction adds extra amino
+	acids for partial codons. In the forward direction the overhang
+	was miscalculated so these codons were missed. No users have
+	complained, probably because in most cases they are translated as
+	'X' (it needs a 4-base wobble in the code to convert the first 2
+	bases of a codon into a single amino acid).
+
+	Sequence translation was relatively slow, at least on very large
+	sequences. Profiling with gprof indicated some changed to reduce
+	the number of string handling calls (each was very fast, but
+	there was a very large number of calls. The internal tables were
+	resized (from 15 elements to 16) for more efficient mapping.
+
+	Parsing NCBI format ID lines saves the database. This is available
+	for writing NCBI formatted output ID lines, but is not to be used
+	in reporting the USA.
+
+	Added "refseq" as a sequence and feature format. Initially a
+	simple alias of GenBank but we may let them diverge later.
+
+	REFSEQ entries have their own idea of what a ProteinID in the
+	feature table looks like, as they use REFSEQP protein IDs.
+	Validation now allows the third character to be an underscore.
+
+	Large numbers of database files could make the dbi indexing
+	programs (dbiflat, dbifasta, dbigcg, dbiblast) fail at the sort
+	merge stage when the index files are combined. The sort merge is
+	now in 2 steps to limit the number of open files required in the
+	system sort utility.
+
+	Added a script emblsplit.pl to split EMBL and UniProt database files
+	into 2Gbyte chunks.
+
+	The -sid qualifier now overwrites the sequence id if used. The
+	-sid value will be used for creating the output filename and for
+	reporting the sequence identifier in output files. For more than
+	one sequence as input currently the same ID is used. We may change
+	this in future to generate new IDs from this base name.
+
+	New sequence format gifasta is the same as "ncbi" but uses the GI
+	number as the identifier. Because the output is the same for both
+	formats we have to require -sformat gifasta to be on the
+	commandline. The default for such files will remain "ncbi" as the
+	automatically processed format. On output if there is no GI number
+	a dummy value of "000000" is currently used.
+
+	coderet now writes non-coding sequence to a new output file.
+
+	New feature function ajFeatLocMark marks selected features as
+	lower case. Used by coderet to report non-coding regions.
+
+	The help output now correctly reports output sequence default
+	filenames.
+
+	Phylip input distance matrices now allow integer values to be
+	treated as reals, although there is a possible confusion over
+	integer replicate values so the use of a trailing ".0" is strongly
+	recommended.
+	
+	Sequences with NCBI deflines and no ID after the final "|" were
+	using the version part of the seqversion ("1" from "AB123456.1")
+	instead of the "AB123456" part to set the ID.
+
+	Graph titles were not standard on the general "graph" type output,
+	but are consistent for xygraph outputs. A new attribute gdesc
+	defines a prefix for graph titles which can be appended to by the
+	calling program, usually with a description of the input (sequence
+	USA, input filename). A new call ajGraphSetTitlePlus defines the
+	text to add to the gdesc as "[gdesc] of [text]". All graphs were
+	standardized except pepinfo which has 10 subplot titles already in
+	the intended format. This will be corrected later to have standard
+	main titles and shorter subplot titles.
+
+	The version of plplot we use has a bug in calculating character
+	sizes where the origin in user units is not the default of
+	(0,0). This has been fixed in the plgchrW and plstrlW functions in
+	the copy that is included with EMBOSS.
+
+	Dreg and preg ignored sequence begin and end positions. Both
+	programs now use the embpatlist function calls to process sequence
+	ranges.
+
+	Fuzznuc, fuzzpro and fuzztran lost the ability to use the sequence
+	begin and end positions when we switched to pattern lists. This
+	has been restored in the pattern list processing code.
+	
+	The logfile caused a file close error if it was read only (because
+	it had not been successfully opened). Opening the logfile now
+	tests the file is writable and ignores logging for a read-only file.
+
+	More case-sensitive sequence comparison and matching functions
+	added to be consistent about providing both versions.
+
+	A few sequence databases have no accession number. For these a new
+	database attribute hasaccession: "N" in emboss.default prevents
+	EMBOSS trying to search the ACC field in addition to the ID field.
+
+	A few databases with duplicate IDs should be treated as
+	case-sensitive. The original example was a pdbprot database,
+	containing FASTA format sequences of individual chains from PDB
+	entries. In PDB, the entry itself is a 4-character string, and the
+	chain is a single character A through Z. When an entry has more
+	than 26 chains, the next 26 are labelled a through z. Pdbprot
+	appends these as _A, _B, etc. PDBPROT is available from some
+	public SRS servers - see the official list at
+	http://downloads.lionbio.co.uk/publicsrs.html.
+	This is resolved by adding a new database attribute caseidmatch in
+	emboss.default. A value of "Y" will force EMBOSS to exactly match
+	the case of the whole ID. This is done by post-processing and
+	rejecting entries with an ID that fails to match.
+	
+	The run date included in report output has changed format to have
+	the day first and to lose the leading zero when the day is 1st to
+	9th of the month.
+
+	Program cpgplot can run on more than one input sequence, but the
+	plot failed on the second sequence. Fixing this required adding a
+	new function ajGraphDataReplaceI to replace the 1st, 2nd 3rd,
+	etc. subgraph. Some memory cleanup was also added to remove
+	the replaced graph data objects.
+
+	Programs pepwindow and pepwindowall can now process any
+	protein sequence. In previous versions pepwindow was restricted to
+	pureprotein (no ambiguity codes) while pepwindowall accepted any
+	protein sequence (it has to handle gaps) but was using a score of
+	zero for unknown amino acid residues. Changed so that missing amino
+	acid values can be filled in using Dayhoff frequency weighted
+	averages for B, J and Z and an overall average for X, J and O.
+
+	Program octanol can accept any protein sequence. Interpolated
+	values are used for B, Z and J. An average over all values is used
+	for X and also for O and U where there is no data. Interpolations
+	and averages used the Dayhoff amino acid frequencies.
+
+	Program iep can accept any protein sequence. Ambiguity codes B and
+	Z are resolved by converting to the carboxylic acid (D or E) or
+	amide (N or Q) according to the Dayhoff amino acid frequencies,
+	giving a consistent value for any input protein.
+
+	Sequence set type testing was checking whether the seqset is
+	defined as protein but ignoring the type of the first
+	sequence. This is now fixed.
+
+	Program tfm looks in the obsolete install directory with the -html
+	option. Changed to find the embassy package name from the
+	installed ACD file and then to find the installed HTML file. If
+	EMBOSS has not been installed, will also search the original
+	source files.
+
+	Modified NCBI/FASTA format to preserve the database name from the
+	NCBI style ID. The database name is reported in one of the many
+	and varied NCBI syntax variants, depending on whether there is a
+	version or accession number, and whether there is an EMBOSS
+	database name also involved (for example, an entry in a file
+	indexed with dbxfasta or dbifasta)
+
+	Modified "pearson" sequence format to keep the FASTA file ID
+	complete. For historical reasons GCG-style dbname:id syntax was
+	still having the db part trimmed. This will still be trimmed from
+	fasta or ncbi format.
+
+	The report for digest has Cterm and Nterm columns capitalised to
+	match the rest of the report. Sequence ranges now give correct
+	cterm and nterm results.
+
+	The list file Cut.index for codon usage tables was changed to
+	remove old file names (commented out list at the end) and to
+	remove underscores from the species names.
+
+	Programs water, needle, merger and prophet calculate an internal
+	path size from the lengths of the input sequences. For sequences
+	that are too long, a fatal error is produced. But if the sequences
+	are extremely long, the test failed and the program gave a
+	segmentation fault. This fix tests in a different way that will
+	catch all cases. (added as a fix to 4.0.0)
+
+	The new MRS access method used a general search. This gave strange
+	results when the ID or accession appeared in any other entry. It
+	appears that MRS can search for id or accession only. This worked
+	on the main MRS server at least. (added as a fix to 4.0.0)
+
+	New database access methods MRS and DBFETCH need to be explicitly
+	turned on so that showdb can report them. (added as a fix to
+	4.0.0)
+
+	When deleting the last line of buffered input, failed to reset the
+	pointer to the last buffered line. This only affected debug
+	traces. Unfortunately, the ajFileBuffClear function does call the
+	debug trace. In practice we have only seen this bug when
+	processing sequence data in EMBL format from an MRS server. (added
+	as a fix to 4.0.0)
+
+	Pattern and regular expression searches failed to correctly
+	reverse a nucleotide sequence. The change is to use
+	ajSeqReverseForce (always reverses the sequence provided) instead
+	of ajSeqReverseDo (which only reverses if the reverse flag is
+	set). (added as a fix to 4.0.0)
+
+	Reports in list format failed to write a usable USA for "asis"
+	sequence input, and incorrectly reported reverse strand nucleotide
+	features. (added as a fix to 4.0.0)
+
+	The lists files Matrices.nucleotide, Matrices.protein and
+	Matrices.proteinstructure now have comment headers explaining
+	their format.  Fixed issues with nucleotide features in the
+	reverse direction in reports. The start/end positions were stored
+	the wrong way around and then reversed again when repiorted in one
+	of the report formats. However, reporting as EMBL features showed
+	the incorrect storage. ajFeatNewII now checks start/end and
+	reverses the feature if start is ggreater than end. ajFeatNewIIRev
+	sets the reverse strand and also checks that the start position is
+	greater than (or equal to) the end position (added as a fix to 4.0.0)
+
+	To reduce the size of very large reports, for example when fuzznuc
+	or fuzzpro run over very large databases, new qualifiers are added
+	to report output. -rmaxseq gived the maximum hits for any one
+	sequence, -maxall gives the total maximum number of hits. The
+	report tail contains a record of the number of hits reported and
+	found. The qualifiers are intended for web interfaces to control
+	the maximum output they need to report. When the maximum hits
+	figure is reached, ajReportWrite returns false so that programs
+	can terminate at that point. (added as a fix to 4.0.0)
+
+	Reports now write a header and tail when closed, to make sure that
+	all programs will wrirte something to the report file. The default
+	header contains the command line provenance, the tail contains the
+	number of sequences and hits. (added as a fix to 4.0.0)
 
 Version 4.0.0
 	The format of the knowntypes.standard file in the emboss/acd
@@ -822,7 +949,7 @@ Version 2.10.0
 	noreturn can write files for PC or Mac file systems using a new
 	-system qualifier.
 
-	FASTA format sequence files with a seqeunce ID starting P1; were
+	FASTA format sequence files with a sequence ID starting P1; were
 	assumed to be PIR format. These can now be read as FASTA, assuming
 	that PIR format has already beed tested for.
 

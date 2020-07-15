@@ -13,11 +13,14 @@ pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
 	demostring.acd demostringnew.acd \
 	demotable.acd descseq.acd diffseq.acd digest.acd \
 	distmat.acd dotmatcher.acd dotpath.acd dottup.acd dreg.acd \
+	edialign.acd \
 	einverted.acd embossdata.acd embossversion.acd emma.acd emowse.acd \
 	entrails.acd entret.acd epestfind.acd eprimer3.acd equicktandem.acd \
-	est2genome.acd etandem.acd extractfeat.acd extractseq.acd findkm.acd \
-	freak.acd fuzznuc.acd fuzzpro.acd fuzztran.acd garnier.acd \
-	geecee.acd getorf.acd giep.acd helixturnhelix.acd histogramtest.acd \
+	est2genome.acd etandem.acd \
+	extractalign.acd extractfeat.acd extractseq.acd \
+	findkm.acd freak.acd fuzznuc.acd fuzzpro.acd fuzztran.acd \
+	garnier.acd geecee.acd getorf.acd giep.acd \
+	helixturnhelix.acd histogramtest.acd \
 	hmoment.acd iep.acd infoalign.acd infoseq.acd intconv.acd \
 	isochore.acd lindna.acd listor.acd \
 	makenucseq.acd makeprotseq.acd marscan.acd maskfeat.acd maskseq.acd \
@@ -43,7 +46,8 @@ pkgdata2_DATA = needle.acd newcoils.acd newcpgreport.acd newcpgseek.acd \
 	tcode.acd testplot.acd textsearch.acd tfextract.acd tfm.acd \
 	tfscan.acd tmap.acd tranalign.acd transeq.acd treetypedisplay.acd \
 	trimest.acd trimseq.acd twofeat.acd union.acd vectorstrip.acd \
-	water.acd whichdb.acd wobble.acd wordcount.acd wordmatch.acd \
+	water.acd whichdb.acd wobble.acd \
+	wordcount.acd wordfinder.acd wordmatch.acd \
 	wossname.acd yank.acd
 
 pkgdata3_DATA =	codes.english  \

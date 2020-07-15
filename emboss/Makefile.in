@@ -62,46 +62,47 @@ bin_PROGRAMS = aaindexextract$(EXEEXT) abiview$(EXEEXT) acdc$(EXEEXT) \
 	degapseq$(EXEEXT) descseq$(EXEEXT) diffseq$(EXEEXT) \
 	digest$(EXEEXT) distmat$(EXEEXT) dotmatcher$(EXEEXT) \
 	dotpath$(EXEEXT) dottup$(EXEEXT) dreg$(EXEEXT) \
-	einverted$(EXEEXT) embossdata$(EXEEXT) embossversion$(EXEEXT) \
-	emma$(EXEEXT) emowse$(EXEEXT) entret$(EXEEXT) \
-	epestfind$(EXEEXT) eprimer3$(EXEEXT) equicktandem$(EXEEXT) \
-	est2genome$(EXEEXT) etandem$(EXEEXT) extractfeat$(EXEEXT) \
-	extractseq$(EXEEXT) findkm$(EXEEXT) freak$(EXEEXT) \
-	fuzznuc$(EXEEXT) fuzzpro$(EXEEXT) fuzztran$(EXEEXT) \
-	garnier$(EXEEXT) geecee$(EXEEXT) getorf$(EXEEXT) \
-	helixturnhelix$(EXEEXT) hmoment$(EXEEXT) iep$(EXEEXT) \
-	infoalign$(EXEEXT) infoseq$(EXEEXT) isochore$(EXEEXT) \
-	jembossctl$(EXEEXT) lindna$(EXEEXT) listor$(EXEEXT) \
-	makenucseq$(EXEEXT) makeprotseq$(EXEEXT) marscan$(EXEEXT) \
-	maskfeat$(EXEEXT) maskseq$(EXEEXT) matcher$(EXEEXT) \
-	megamerger$(EXEEXT) merger$(EXEEXT) msbar$(EXEEXT) \
-	mwcontam$(EXEEXT) mwfilter$(EXEEXT) needle$(EXEEXT) \
-	newcpgreport$(EXEEXT) newcpgseek$(EXEEXT) newseq$(EXEEXT) \
-	noreturn$(EXEEXT) notseq$(EXEEXT) nthseq$(EXEEXT) \
-	octanol$(EXEEXT) oddcomp$(EXEEXT) palindrome$(EXEEXT) \
-	pasteseq$(EXEEXT) patmatdb$(EXEEXT) patmatmotifs$(EXEEXT) \
-	pepcoil$(EXEEXT) pepinfo$(EXEEXT) pepnet$(EXEEXT) \
-	pepstats$(EXEEXT) pepwheel$(EXEEXT) pepwindow$(EXEEXT) \
-	pepwindowall$(EXEEXT) plotcon$(EXEEXT) plotorf$(EXEEXT) \
-	polydot$(EXEEXT) preg$(EXEEXT) prettyplot$(EXEEXT) \
-	prettyseq$(EXEEXT) primersearch$(EXEEXT) \
-	printsextract$(EXEEXT) profit$(EXEEXT) prophecy$(EXEEXT) \
-	prophet$(EXEEXT) prosextract$(EXEEXT) pscan$(EXEEXT) \
-	psiphi$(EXEEXT) rebaseextract$(EXEEXT) recoder$(EXEEXT) \
-	redata$(EXEEXT) remap$(EXEEXT) restover$(EXEEXT) \
-	restrict$(EXEEXT) revseq$(EXEEXT) seealso$(EXEEXT) \
-	seqmatchall$(EXEEXT) seqret$(EXEEXT) seqretsplit$(EXEEXT) \
-	showalign$(EXEEXT) showdb$(EXEEXT) showfeat$(EXEEXT) \
-	showorf$(EXEEXT) showseq$(EXEEXT) shuffleseq$(EXEEXT) \
-	sigcleave$(EXEEXT) silent$(EXEEXT) sirna$(EXEEXT) \
-	sixpack$(EXEEXT) skipseq$(EXEEXT) splitter$(EXEEXT) \
-	stretcher$(EXEEXT) stssearch$(EXEEXT) supermatcher$(EXEEXT) \
-	syco$(EXEEXT) tcode$(EXEEXT) textsearch$(EXEEXT) \
-	tfextract$(EXEEXT) tfm$(EXEEXT) tfscan$(EXEEXT) tmap$(EXEEXT) \
-	tranalign$(EXEEXT) transeq$(EXEEXT) trimest$(EXEEXT) \
-	trimseq$(EXEEXT) twofeat$(EXEEXT) union$(EXEEXT) \
-	vectorstrip$(EXEEXT) water$(EXEEXT) whichdb$(EXEEXT) \
-	wobble$(EXEEXT) wordcount$(EXEEXT) wordmatch$(EXEEXT) \
+	edialign$(EXEEXT) einverted$(EXEEXT) embossdata$(EXEEXT) \
+	embossversion$(EXEEXT) emma$(EXEEXT) emowse$(EXEEXT) \
+	entret$(EXEEXT) epestfind$(EXEEXT) eprimer3$(EXEEXT) \
+	equicktandem$(EXEEXT) est2genome$(EXEEXT) etandem$(EXEEXT) \
+	extractalign$(EXEEXT) extractfeat$(EXEEXT) extractseq$(EXEEXT) \
+	findkm$(EXEEXT) freak$(EXEEXT) fuzznuc$(EXEEXT) \
+	fuzzpro$(EXEEXT) fuzztran$(EXEEXT) garnier$(EXEEXT) \
+	geecee$(EXEEXT) getorf$(EXEEXT) helixturnhelix$(EXEEXT) \
+	hmoment$(EXEEXT) iep$(EXEEXT) infoalign$(EXEEXT) \
+	infoseq$(EXEEXT) isochore$(EXEEXT) jembossctl$(EXEEXT) \
+	lindna$(EXEEXT) listor$(EXEEXT) makenucseq$(EXEEXT) \
+	makeprotseq$(EXEEXT) marscan$(EXEEXT) maskfeat$(EXEEXT) \
+	maskseq$(EXEEXT) matcher$(EXEEXT) megamerger$(EXEEXT) \
+	merger$(EXEEXT) msbar$(EXEEXT) mwcontam$(EXEEXT) \
+	mwfilter$(EXEEXT) needle$(EXEEXT) newcpgreport$(EXEEXT) \
+	newcpgseek$(EXEEXT) newseq$(EXEEXT) noreturn$(EXEEXT) \
+	notseq$(EXEEXT) nthseq$(EXEEXT) octanol$(EXEEXT) \
+	oddcomp$(EXEEXT) palindrome$(EXEEXT) pasteseq$(EXEEXT) \
+	patmatdb$(EXEEXT) patmatmotifs$(EXEEXT) pepcoil$(EXEEXT) \
+	pepinfo$(EXEEXT) pepnet$(EXEEXT) pepstats$(EXEEXT) \
+	pepwheel$(EXEEXT) pepwindow$(EXEEXT) pepwindowall$(EXEEXT) \
+	plotcon$(EXEEXT) plotorf$(EXEEXT) polydot$(EXEEXT) \
+	preg$(EXEEXT) prettyplot$(EXEEXT) prettyseq$(EXEEXT) \
+	primersearch$(EXEEXT) printsextract$(EXEEXT) profit$(EXEEXT) \
+	prophecy$(EXEEXT) prophet$(EXEEXT) prosextract$(EXEEXT) \
+	pscan$(EXEEXT) psiphi$(EXEEXT) rebaseextract$(EXEEXT) \
+	recoder$(EXEEXT) redata$(EXEEXT) remap$(EXEEXT) \
+	restover$(EXEEXT) restrict$(EXEEXT) revseq$(EXEEXT) \
+	seealso$(EXEEXT) seqmatchall$(EXEEXT) seqret$(EXEEXT) \
+	seqretsplit$(EXEEXT) showalign$(EXEEXT) showdb$(EXEEXT) \
+	showfeat$(EXEEXT) showorf$(EXEEXT) showseq$(EXEEXT) \
+	shuffleseq$(EXEEXT) sigcleave$(EXEEXT) silent$(EXEEXT) \
+	sirna$(EXEEXT) sixpack$(EXEEXT) skipseq$(EXEEXT) \
+	splitter$(EXEEXT) stretcher$(EXEEXT) stssearch$(EXEEXT) \
+	supermatcher$(EXEEXT) syco$(EXEEXT) tcode$(EXEEXT) \
+	textsearch$(EXEEXT) tfextract$(EXEEXT) tfm$(EXEEXT) \
+	tfscan$(EXEEXT) tmap$(EXEEXT) tranalign$(EXEEXT) \
+	transeq$(EXEEXT) trimest$(EXEEXT) trimseq$(EXEEXT) \
+	twofeat$(EXEEXT) union$(EXEEXT) vectorstrip$(EXEEXT) \
+	water$(EXEEXT) whichdb$(EXEEXT) wobble$(EXEEXT) \
+	wordcount$(EXEEXT) wordfinder$(EXEEXT) wordmatch$(EXEEXT) \
 	wossname$(EXEEXT) yank$(EXEEXT)
 subdir = emboss
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in COPYING
@@ -642,6 +643,15 @@ dreg_LDADD = $(LDADD)
 @ISCYGWIN_TRUE@dreg_DEPENDENCIES = ../nucleus/libnucleus.la \
 @ISCYGWIN_TRUE@	../ajax/libajax.la ../plplot/libplplot.la \
 @ISCYGWIN_TRUE@	$(am__DEPENDENCIES_1)
+am_edialign_OBJECTS = edialign.$(OBJEXT)
+edialign_OBJECTS = $(am_edialign_OBJECTS)
+edialign_LDADD = $(LDADD)
+@ISCYGWIN_FALSE@edialign_DEPENDENCIES = ../nucleus/libnucleus.la \
+@ISCYGWIN_FALSE@	../ajax/libajaxg.la ../ajax/libajax.la \
+@ISCYGWIN_FALSE@	../plplot/libplplot.la $(am__DEPENDENCIES_1)
+@ISCYGWIN_TRUE@edialign_DEPENDENCIES = ../nucleus/libnucleus.la \
+@ISCYGWIN_TRUE@	../ajax/libajax.la ../plplot/libplplot.la \
+@ISCYGWIN_TRUE@	$(am__DEPENDENCIES_1)
 am_einverted_OBJECTS = einverted.$(OBJEXT)
 einverted_OBJECTS = $(am_einverted_OBJECTS)
 einverted_LDADD = $(LDADD)
@@ -748,6 +758,15 @@ etandem_LDADD = $(LDADD)
 @ISCYGWIN_FALSE@	../ajax/libajaxg.la ../ajax/libajax.la \
 @ISCYGWIN_FALSE@	../plplot/libplplot.la $(am__DEPENDENCIES_1)
 @ISCYGWIN_TRUE@etandem_DEPENDENCIES = ../nucleus/libnucleus.la \
+@ISCYGWIN_TRUE@	../ajax/libajax.la ../plplot/libplplot.la \
+@ISCYGWIN_TRUE@	$(am__DEPENDENCIES_1)
+am_extractalign_OBJECTS = extractalign.$(OBJEXT)
+extractalign_OBJECTS = $(am_extractalign_OBJECTS)
+extractalign_LDADD = $(LDADD)
+@ISCYGWIN_FALSE@extractalign_DEPENDENCIES = ../nucleus/libnucleus.la \
+@ISCYGWIN_FALSE@	../ajax/libajaxg.la ../ajax/libajax.la \
+@ISCYGWIN_FALSE@	../plplot/libplplot.la $(am__DEPENDENCIES_1)
+@ISCYGWIN_TRUE@extractalign_DEPENDENCIES = ../nucleus/libnucleus.la \
 @ISCYGWIN_TRUE@	../ajax/libajax.la ../plplot/libplplot.la \
 @ISCYGWIN_TRUE@	$(am__DEPENDENCIES_1)
 am_extractfeat_OBJECTS = extractfeat.$(OBJEXT)
@@ -1877,6 +1896,15 @@ wordcount_LDADD = $(LDADD)
 @ISCYGWIN_TRUE@wordcount_DEPENDENCIES = ../nucleus/libnucleus.la \
 @ISCYGWIN_TRUE@	../ajax/libajax.la ../plplot/libplplot.la \
 @ISCYGWIN_TRUE@	$(am__DEPENDENCIES_1)
+am_wordfinder_OBJECTS = wordfinder.$(OBJEXT)
+wordfinder_OBJECTS = $(am_wordfinder_OBJECTS)
+wordfinder_LDADD = $(LDADD)
+@ISCYGWIN_FALSE@wordfinder_DEPENDENCIES = ../nucleus/libnucleus.la \
+@ISCYGWIN_FALSE@	../ajax/libajaxg.la ../ajax/libajax.la \
+@ISCYGWIN_FALSE@	../plplot/libplplot.la $(am__DEPENDENCIES_1)
+@ISCYGWIN_TRUE@wordfinder_DEPENDENCIES = ../nucleus/libnucleus.la \
+@ISCYGWIN_TRUE@	../ajax/libajax.la ../plplot/libplplot.la \
+@ISCYGWIN_TRUE@	$(am__DEPENDENCIES_1)
 am_wordmatch_OBJECTS = wordmatch.$(OBJEXT)
 wordmatch_OBJECTS = $(am_wordmatch_OBJECTS)
 wordmatch_LDADD = $(LDADD)
@@ -1936,84 +1964,12 @@ SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) $(acdc_SOURCES) \
 	$(demotable_SOURCES) $(descseq_SOURCES) $(diffseq_SOURCES) \
 	$(digest_SOURCES) $(distmat_SOURCES) $(dotmatcher_SOURCES) \
 	$(dotpath_SOURCES) $(dottup_SOURCES) $(dreg_SOURCES) \
-	$(einverted_SOURCES) $(embossdata_SOURCES) \
+	$(edialign_SOURCES) $(einverted_SOURCES) $(embossdata_SOURCES) \
 	$(embossversion_SOURCES) $(emma_SOURCES) $(emowse_SOURCES) \
 	$(entrails_SOURCES) $(entret_SOURCES) $(epestfind_SOURCES) \
 	$(eprimer3_SOURCES) $(equicktandem_SOURCES) \
 	$(est2genome_SOURCES) $(etandem_SOURCES) \
-	$(extractfeat_SOURCES) $(extractseq_SOURCES) $(findkm_SOURCES) \
-	$(freak_SOURCES) $(fuzznuc_SOURCES) $(fuzzpro_SOURCES) \
-	$(fuzztran_SOURCES) $(garnier_SOURCES) $(geecee_SOURCES) \
-	$(getorf_SOURCES) giep.c $(helixturnhelix_SOURCES) \
-	$(histogramtest_SOURCES) $(hmoment_SOURCES) $(iep_SOURCES) \
-	$(infoalign_SOURCES) $(infoseq_SOURCES) $(intconv_SOURCES) \
-	$(isochore_SOURCES) $(jembossctl_SOURCES) $(lindna_SOURCES) \
-	$(listor_SOURCES) makenucseq.c makeprotseq.c \
-	$(marscan_SOURCES) $(maskfeat_SOURCES) $(maskseq_SOURCES) \
-	$(matcher_SOURCES) $(megamerger_SOURCES) $(merger_SOURCES) \
-	$(msbar_SOURCES) $(mwcontam_SOURCES) $(mwfilter_SOURCES) \
-	$(needle_SOURCES) $(newcoils_SOURCES) $(newcpgreport_SOURCES) \
-	$(newcpgseek_SOURCES) $(newseq_SOURCES) $(noreturn_SOURCES) \
-	$(notseq_SOURCES) $(nthseq_SOURCES) $(octanol_SOURCES) \
-	$(oddcomp_SOURCES) $(origsplitter_SOURCES) \
-	$(origunion_SOURCES) $(palindrome_SOURCES) $(pasteseq_SOURCES) \
-	$(patmatdb_SOURCES) $(patmatmotifs_SOURCES) \
-	$(patmattest_SOURCES) $(pepcoil_SOURCES) $(pepinfo_SOURCES) \
-	$(pepnet_SOURCES) $(pepstats_SOURCES) $(pepwheel_SOURCES) \
-	$(pepwindow_SOURCES) $(pepwindowall_SOURCES) \
-	$(plotcon_SOURCES) $(plotorf_SOURCES) $(polydot_SOURCES) \
-	$(preg_SOURCES) $(prettyplot_SOURCES) $(prettyseq_SOURCES) \
-	$(prima_SOURCES) $(primers_SOURCES) $(primersearch_SOURCES) \
-	$(printsextract_SOURCES) $(profit_SOURCES) $(prophecy_SOURCES) \
-	$(prophet_SOURCES) $(prosextract_SOURCES) $(pscan_SOURCES) \
-	$(psiphi_SOURCES) $(rebaseextract_SOURCES) $(recoder_SOURCES) \
-	$(redata_SOURCES) $(remap_SOURCES) $(restover_SOURCES) \
-	$(restrict_SOURCES) $(revseq_SOURCES) $(seealso_SOURCES) \
-	$(seqinfo_SOURCES) $(seqmatchall_SOURCES) $(seqret_SOURCES) \
-	$(seqretall_SOURCES) $(seqretallfeat_SOURCES) \
-	$(seqretset_SOURCES) $(seqretsingle_SOURCES) \
-	$(seqretsplit_SOURCES) $(seqrettype_SOURCES) \
-	$(showalign_SOURCES) $(showdb_SOURCES) $(showfeat_SOURCES) \
-	$(showorf_SOURCES) $(showseq_SOURCES) $(shuffleseq_SOURCES) \
-	$(sigcleave_SOURCES) $(silent_SOURCES) $(sirna_SOURCES) \
-	$(sixpack_SOURCES) skipseq.c $(splitter_SOURCES) \
-	$(stretcher_SOURCES) $(stssearch_SOURCES) \
-	$(supermatcher_SOURCES) $(syco_SOURCES) $(tcode_SOURCES) \
-	$(testplot_SOURCES) $(textsearch_SOURCES) $(tfextract_SOURCES) \
-	$(tfm_SOURCES) $(tfscan_SOURCES) $(tmap_SOURCES) \
-	$(tranalign_SOURCES) $(transeq_SOURCES) \
-	$(treetypedisplay_SOURCES) $(trimest_SOURCES) \
-	$(trimseq_SOURCES) $(twofeat_SOURCES) $(union_SOURCES) \
-	$(vectorstrip_SOURCES) $(water_SOURCES) $(whichdb_SOURCES) \
-	$(wobble_SOURCES) $(wordcount_SOURCES) $(wordmatch_SOURCES) \
-	$(wossname_SOURCES) $(yank_SOURCES)
-DIST_SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) \
-	$(acdc_SOURCES) $(acdlog_SOURCES) $(acdpretty_SOURCES) \
-	$(acdtable_SOURCES) $(acdtrace_SOURCES) $(acdvalid_SOURCES) \
-	$(ajtest_SOURCES) $(antigenic_SOURCES) \
-	$(backtranambig_SOURCES) $(backtranseq_SOURCES) \
-	$(banana_SOURCES) $(biosed_SOURCES) $(btwisted_SOURCES) \
-	$(cai_SOURCES) $(chaos_SOURCES) $(charge_SOURCES) \
-	$(checktrans_SOURCES) $(chips_SOURCES) $(cirdna_SOURCES) \
-	$(codcmp_SOURCES) codcopy.c $(coderet_SOURCES) \
-	$(complex_SOURCES) $(compseq_SOURCES) $(cons_SOURCES) \
-	$(corbatest_SOURCES) $(cpgplot_SOURCES) $(cpgreport_SOURCES) \
-	$(cusp_SOURCES) $(cutgextract_SOURCES) $(cutseq_SOURCES) \
-	$(dan_SOURCES) $(dbiblast_SOURCES) $(dbifasta_SOURCES) \
-	$(dbiflat_SOURCES) $(dbigcg_SOURCES) $(dbxfasta_SOURCES) \
-	$(dbxflat_SOURCES) $(dbxgcg_SOURCES) $(degapseq_SOURCES) \
-	$(demoalign_SOURCES) $(demofeatures_SOURCES) \
-	$(demolist_SOURCES) $(demoreport_SOURCES) \
-	$(demosequence_SOURCES) $(demostring_SOURCES) \
-	$(demostringnew_SOURCES) $(demotable_SOURCES) \
-	$(descseq_SOURCES) $(diffseq_SOURCES) $(digest_SOURCES) \
-	$(distmat_SOURCES) $(dotmatcher_SOURCES) $(dotpath_SOURCES) \
-	$(dottup_SOURCES) $(dreg_SOURCES) $(einverted_SOURCES) \
-	$(embossdata_SOURCES) $(embossversion_SOURCES) $(emma_SOURCES) \
-	$(emowse_SOURCES) $(entrails_SOURCES) $(entret_SOURCES) \
-	$(epestfind_SOURCES) $(eprimer3_SOURCES) \
-	$(equicktandem_SOURCES) $(est2genome_SOURCES) \
-	$(etandem_SOURCES) $(extractfeat_SOURCES) \
+	$(extractalign_SOURCES) $(extractfeat_SOURCES) \
 	$(extractseq_SOURCES) $(findkm_SOURCES) $(freak_SOURCES) \
 	$(fuzznuc_SOURCES) $(fuzzpro_SOURCES) $(fuzztran_SOURCES) \
 	$(garnier_SOURCES) $(geecee_SOURCES) $(getorf_SOURCES) giep.c \
@@ -2058,8 +2014,82 @@ DIST_SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) \
 	$(treetypedisplay_SOURCES) $(trimest_SOURCES) \
 	$(trimseq_SOURCES) $(twofeat_SOURCES) $(union_SOURCES) \
 	$(vectorstrip_SOURCES) $(water_SOURCES) $(whichdb_SOURCES) \
-	$(wobble_SOURCES) $(wordcount_SOURCES) $(wordmatch_SOURCES) \
-	$(wossname_SOURCES) $(yank_SOURCES)
+	$(wobble_SOURCES) $(wordcount_SOURCES) $(wordfinder_SOURCES) \
+	$(wordmatch_SOURCES) $(wossname_SOURCES) $(yank_SOURCES)
+DIST_SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) \
+	$(acdc_SOURCES) $(acdlog_SOURCES) $(acdpretty_SOURCES) \
+	$(acdtable_SOURCES) $(acdtrace_SOURCES) $(acdvalid_SOURCES) \
+	$(ajtest_SOURCES) $(antigenic_SOURCES) \
+	$(backtranambig_SOURCES) $(backtranseq_SOURCES) \
+	$(banana_SOURCES) $(biosed_SOURCES) $(btwisted_SOURCES) \
+	$(cai_SOURCES) $(chaos_SOURCES) $(charge_SOURCES) \
+	$(checktrans_SOURCES) $(chips_SOURCES) $(cirdna_SOURCES) \
+	$(codcmp_SOURCES) codcopy.c $(coderet_SOURCES) \
+	$(complex_SOURCES) $(compseq_SOURCES) $(cons_SOURCES) \
+	$(corbatest_SOURCES) $(cpgplot_SOURCES) $(cpgreport_SOURCES) \
+	$(cusp_SOURCES) $(cutgextract_SOURCES) $(cutseq_SOURCES) \
+	$(dan_SOURCES) $(dbiblast_SOURCES) $(dbifasta_SOURCES) \
+	$(dbiflat_SOURCES) $(dbigcg_SOURCES) $(dbxfasta_SOURCES) \
+	$(dbxflat_SOURCES) $(dbxgcg_SOURCES) $(degapseq_SOURCES) \
+	$(demoalign_SOURCES) $(demofeatures_SOURCES) \
+	$(demolist_SOURCES) $(demoreport_SOURCES) \
+	$(demosequence_SOURCES) $(demostring_SOURCES) \
+	$(demostringnew_SOURCES) $(demotable_SOURCES) \
+	$(descseq_SOURCES) $(diffseq_SOURCES) $(digest_SOURCES) \
+	$(distmat_SOURCES) $(dotmatcher_SOURCES) $(dotpath_SOURCES) \
+	$(dottup_SOURCES) $(dreg_SOURCES) $(edialign_SOURCES) \
+	$(einverted_SOURCES) $(embossdata_SOURCES) \
+	$(embossversion_SOURCES) $(emma_SOURCES) $(emowse_SOURCES) \
+	$(entrails_SOURCES) $(entret_SOURCES) $(epestfind_SOURCES) \
+	$(eprimer3_SOURCES) $(equicktandem_SOURCES) \
+	$(est2genome_SOURCES) $(etandem_SOURCES) \
+	$(extractalign_SOURCES) $(extractfeat_SOURCES) \
+	$(extractseq_SOURCES) $(findkm_SOURCES) $(freak_SOURCES) \
+	$(fuzznuc_SOURCES) $(fuzzpro_SOURCES) $(fuzztran_SOURCES) \
+	$(garnier_SOURCES) $(geecee_SOURCES) $(getorf_SOURCES) giep.c \
+	$(helixturnhelix_SOURCES) $(histogramtest_SOURCES) \
+	$(hmoment_SOURCES) $(iep_SOURCES) $(infoalign_SOURCES) \
+	$(infoseq_SOURCES) $(intconv_SOURCES) $(isochore_SOURCES) \
+	$(jembossctl_SOURCES) $(lindna_SOURCES) $(listor_SOURCES) \
+	makenucseq.c makeprotseq.c $(marscan_SOURCES) \
+	$(maskfeat_SOURCES) $(maskseq_SOURCES) $(matcher_SOURCES) \
+	$(megamerger_SOURCES) $(merger_SOURCES) $(msbar_SOURCES) \
+	$(mwcontam_SOURCES) $(mwfilter_SOURCES) $(needle_SOURCES) \
+	$(newcoils_SOURCES) $(newcpgreport_SOURCES) \
+	$(newcpgseek_SOURCES) $(newseq_SOURCES) $(noreturn_SOURCES) \
+	$(notseq_SOURCES) $(nthseq_SOURCES) $(octanol_SOURCES) \
+	$(oddcomp_SOURCES) $(origsplitter_SOURCES) \
+	$(origunion_SOURCES) $(palindrome_SOURCES) $(pasteseq_SOURCES) \
+	$(patmatdb_SOURCES) $(patmatmotifs_SOURCES) \
+	$(patmattest_SOURCES) $(pepcoil_SOURCES) $(pepinfo_SOURCES) \
+	$(pepnet_SOURCES) $(pepstats_SOURCES) $(pepwheel_SOURCES) \
+	$(pepwindow_SOURCES) $(pepwindowall_SOURCES) \
+	$(plotcon_SOURCES) $(plotorf_SOURCES) $(polydot_SOURCES) \
+	$(preg_SOURCES) $(prettyplot_SOURCES) $(prettyseq_SOURCES) \
+	$(prima_SOURCES) $(primers_SOURCES) $(primersearch_SOURCES) \
+	$(printsextract_SOURCES) $(profit_SOURCES) $(prophecy_SOURCES) \
+	$(prophet_SOURCES) $(prosextract_SOURCES) $(pscan_SOURCES) \
+	$(psiphi_SOURCES) $(rebaseextract_SOURCES) $(recoder_SOURCES) \
+	$(redata_SOURCES) $(remap_SOURCES) $(restover_SOURCES) \
+	$(restrict_SOURCES) $(revseq_SOURCES) $(seealso_SOURCES) \
+	$(seqinfo_SOURCES) $(seqmatchall_SOURCES) $(seqret_SOURCES) \
+	$(seqretall_SOURCES) $(seqretallfeat_SOURCES) \
+	$(seqretset_SOURCES) $(seqretsingle_SOURCES) \
+	$(seqretsplit_SOURCES) $(seqrettype_SOURCES) \
+	$(showalign_SOURCES) $(showdb_SOURCES) $(showfeat_SOURCES) \
+	$(showorf_SOURCES) $(showseq_SOURCES) $(shuffleseq_SOURCES) \
+	$(sigcleave_SOURCES) $(silent_SOURCES) $(sirna_SOURCES) \
+	$(sixpack_SOURCES) skipseq.c $(splitter_SOURCES) \
+	$(stretcher_SOURCES) $(stssearch_SOURCES) \
+	$(supermatcher_SOURCES) $(syco_SOURCES) $(tcode_SOURCES) \
+	$(testplot_SOURCES) $(textsearch_SOURCES) $(tfextract_SOURCES) \
+	$(tfm_SOURCES) $(tfscan_SOURCES) $(tmap_SOURCES) \
+	$(tranalign_SOURCES) $(transeq_SOURCES) \
+	$(treetypedisplay_SOURCES) $(trimest_SOURCES) \
+	$(trimseq_SOURCES) $(twofeat_SOURCES) $(union_SOURCES) \
+	$(vectorstrip_SOURCES) $(water_SOURCES) $(whichdb_SOURCES) \
+	$(wobble_SOURCES) $(wordcount_SOURCES) $(wordfinder_SOURCES) \
+	$(wordmatch_SOURCES) $(wossname_SOURCES) $(yank_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-exec-recursive install-info-recursive \
@@ -2155,6 +2185,7 @@ POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 PURIFY_FALSE = @PURIFY_FALSE@
 PURIFY_TRUE = @PURIFY_TRUE@
 RANLIB = @RANLIB@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -2258,6 +2289,7 @@ dotmatcher_SOURCES = dotmatcher.c
 dotpath_SOURCES = dotpath.c
 dottup_SOURCES = dottup.c
 dreg_SOURCES = dreg.c
+edialign_SOURCES = edialign.c
 einverted_SOURCES = einverted.c
 embossdata_SOURCES = embossdata.c
 emma_SOURCES = emma.c
@@ -2269,6 +2301,7 @@ equicktandem_SOURCES = equicktandem.c
 est2genome_SOURCES = est2genome.c
 etandem_SOURCES = etandem.c
 embossversion_SOURCES = embossversion.c
+extractalign_SOURCES = extractalign.c
 extractfeat_SOURCES = extractfeat.c
 extractseq_SOURCES = extractseq.c
 findkm_SOURCES = findkm.c
@@ -2374,6 +2407,7 @@ water_SOURCES = water.c
 whichdb_SOURCES = whichdb.c
 wobble_SOURCES = wobble.c
 wordcount_SOURCES = wordcount.c
+wordfinder_SOURCES = wordfinder.c
 wordmatch_SOURCES = wordmatch.c
 wossname_SOURCES = wossname.c
 yank_SOURCES = yank.c
@@ -2653,6 +2687,9 @@ dottup$(EXEEXT): $(dottup_OBJECTS) $(dottup_DEPENDENCIES)
 dreg$(EXEEXT): $(dreg_OBJECTS) $(dreg_DEPENDENCIES) 
 	@rm -f dreg$(EXEEXT)
 	$(LINK) $(dreg_LDFLAGS) $(dreg_OBJECTS) $(dreg_LDADD) $(LIBS)
+edialign$(EXEEXT): $(edialign_OBJECTS) $(edialign_DEPENDENCIES) 
+	@rm -f edialign$(EXEEXT)
+	$(LINK) $(edialign_LDFLAGS) $(edialign_OBJECTS) $(edialign_LDADD) $(LIBS)
 einverted$(EXEEXT): $(einverted_OBJECTS) $(einverted_DEPENDENCIES) 
 	@rm -f einverted$(EXEEXT)
 	$(LINK) $(einverted_LDFLAGS) $(einverted_OBJECTS) $(einverted_LDADD) $(LIBS)
@@ -2689,6 +2726,9 @@ est2genome$(EXEEXT): $(est2genome_OBJECTS) $(est2genome_DEPENDENCIES)
 etandem$(EXEEXT): $(etandem_OBJECTS) $(etandem_DEPENDENCIES) 
 	@rm -f etandem$(EXEEXT)
 	$(LINK) $(etandem_LDFLAGS) $(etandem_OBJECTS) $(etandem_LDADD) $(LIBS)
+extractalign$(EXEEXT): $(extractalign_OBJECTS) $(extractalign_DEPENDENCIES) 
+	@rm -f extractalign$(EXEEXT)
+	$(LINK) $(extractalign_LDFLAGS) $(extractalign_OBJECTS) $(extractalign_LDADD) $(LIBS)
 extractfeat$(EXEEXT): $(extractfeat_OBJECTS) $(extractfeat_DEPENDENCIES) 
 	@rm -f extractfeat$(EXEEXT)
 	$(LINK) $(extractfeat_LDFLAGS) $(extractfeat_OBJECTS) $(extractfeat_LDADD) $(LIBS)
@@ -3064,6 +3104,9 @@ wobble$(EXEEXT): $(wobble_OBJECTS) $(wobble_DEPENDENCIES)
 wordcount$(EXEEXT): $(wordcount_OBJECTS) $(wordcount_DEPENDENCIES) 
 	@rm -f wordcount$(EXEEXT)
 	$(LINK) $(wordcount_LDFLAGS) $(wordcount_OBJECTS) $(wordcount_LDADD) $(LIBS)
+wordfinder$(EXEEXT): $(wordfinder_OBJECTS) $(wordfinder_DEPENDENCIES) 
+	@rm -f wordfinder$(EXEEXT)
+	$(LINK) $(wordfinder_LDFLAGS) $(wordfinder_OBJECTS) $(wordfinder_LDADD) $(LIBS)
 wordmatch$(EXEEXT): $(wordmatch_OBJECTS) $(wordmatch_DEPENDENCIES) 
 	@rm -f wordmatch$(EXEEXT)
 	$(LINK) $(wordmatch_LDFLAGS) $(wordmatch_OBJECTS) $(wordmatch_LDADD) $(LIBS)
@@ -3138,6 +3181,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dotpath.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dottup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dreg.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edialign.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/einverted.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/embossdata.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/embossversion.Po@am__quote@
@@ -3150,6 +3194,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/equicktandem.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/est2genome.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/etandem.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/extractalign.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/extractfeat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/extractseq.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/findkm.Po@am__quote@
@@ -3275,6 +3320,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whichdb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wobble.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wordcount.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wordfinder.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wordmatch.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wossname.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/yank.Po@am__quote@

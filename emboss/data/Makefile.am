@@ -31,7 +31,8 @@ pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                Etags.pir Etags.protein Etags.swiss \
                Etcode.dat Evdw.dat Ewhite-wimley.dat \
                embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
-               Matrices.nucleotide Matrices.protein Matrices.proteinstructure
+               Matrices.nucleotide Matrices.protein Matrices.proteinstructure \
+	       edialignmat tp400_dna tp400_prot tp400_trans
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)/data
 
