@@ -37,6 +37,7 @@ extern "C"
 ** @attr Type [AjPStr] Type N or P
 ** @attr Handle [AjPFileBuff] Input buffered file
 ** @attr Seqname [AjPStr] name of AjPSeq assoc. with feature table
+** @attr Local [AjBool] Opened as a local file if ajTrue
 ** @@
 ******************************************************************************/
 
@@ -49,6 +50,7 @@ typedef struct AjSFeattabIn {
   AjPStr        Type;
   AjPFileBuff   Handle;
   AjPStr        Seqname;
+  AjBool        Local;
 }  AjOFeattabIn;
 
 #define AjPFeattabIn AjOFeattabIn*
