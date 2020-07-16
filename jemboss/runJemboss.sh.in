@@ -1,11 +1,11 @@
 #!/bin/sh
 #
-# jemboss/runJemboss.sh.  Generated from runJemboss.sh.in by configure.
-# EMBOSS
+# @configure_input@
+# @PACKAGE@
 # Version: $Revision: 1.1 $
 # Modified $Date: 2011/08/25 20:55:38 $ by $Author: mks $
 
-export JEMBOSS_HOME="/usr/local/share/EMBOSS/jemboss";
+export JEMBOSS_HOME="@prefix@/share/@PACKAGE@/jemboss";
 
 # Override an existing CLASSPATH environment variable
 
@@ -35,9 +35,9 @@ cd "${JEMBOSS_HOME}";
 
 case "${1}" in
   local)
-     org/emboss/jemboss/Jemboss local &
+    @JAVA@ org/emboss/jemboss/Jemboss local &
     ;;
   *)
-     org/emboss/jemboss/Jemboss &
+    @JAVA@ org/emboss/jemboss/Jemboss &
     ;;
 esac
