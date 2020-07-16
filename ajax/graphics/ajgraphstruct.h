@@ -3,51 +3,49 @@
 
 #define MAX_STRING 180
 
-#include "ajgraphxml.h"
-
-/* @data AjPGraphPlpObj *******************************************************
+/* @data AjPGraphobj *******************************************************
 **
 ** AJAX data structure for graph objects, contained as a substructure
-** in AjPGraphPlpData
+** in AjPGraphdata
 **
-** @attr type [ajint] Object type in AjEGraphObjectTypes
-** @attr colour [ajint] See AjEGraphColour for plplot colours
+** @attr type [ajuint] Object type in AjEGraphObjectTypes
+** @attr colour [ajuint] See AjEGraphColour for plplot colours
 ** @attr text [AjPStr] Text to plot
 ** @attr xx1 [float] x start
 ** @attr xx2 [float] x end
 ** @attr yy1 [float] y start
 ** @attr yy2 [float] y end
-** @attr next [struct AjSGraphPlpObj*] link to next object in the list
+** @attr next [struct AjSGraphobj*] link to next object in the list
 ** @attr scale [float] scale for text (0.0 to use the default)
 ** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
-typedef struct AjSGraphPlpObj {
-  ajint type;
-  ajint colour;
+typedef struct AjSGraphobj {
+  ajuint type;
+  ajuint colour;
   AjPStr text;
   float xx1;
   float xx2;
   float yy1;
   float yy2;
-  struct AjSGraphPlpObj *next;
+  struct AjSGraphobj *next;
   float scale;
   char Padding[4];
-} AjOGraphPlpObj;
-#define AjPGraphPlpObj AjOGraphPlpObj*
+} AjOGraphobj;
+#define AjPGraphobj AjOGraphobj*
 
-/* @data AjPGraphPlpData ******************************************************
+/* @data AjPGraphdata ******************************************************
 **
-** Graph data object. Substructure of AjPGraphPlp.
+** Graph data object. Substructure of AjPGraph.
 **
 ** @attr x [float*] x coordinates
 ** @attr y [float*] y coordinates
 ** @attr xcalc [AjBool] if x calculated then delete after
 ** @attr ycalc [AjBool] as with x. So we do not delete data if it was
 **                      passed as a ptr
-** @attr numofpoints [ajint] Number of points in x and y
-** @attr numofobjects [ajint] Number of graph objects starting at Obj
+** @attr numofpoints [ajuint] Number of points in x and y
+** @attr numofobjects [ajuint] Number of graph objects starting at Obj
 ** @attr minX [float] Lowest x value
 ** @attr maxX [float] Highest x value
 ** @attr minY [float] Lowest y value
@@ -63,17 +61,17 @@ typedef struct AjSGraphPlpObj {
 ** @attr gtype [AjPStr] Graph type: 2D, Tick etc
 ** @attr colour [ajint] See AjEGraphColour for plplot colours
 ** @attr lineType [ajint] Line type for plplot
-** @attr Obj [AjPGraphPlpObj] First graph object - links to rest
+** @attr Dataobj [AjPGraphobj] First graph object - links to rest
 ** @@
 ******************************************************************************/
 
-typedef struct AjSGraphPlpData {
+typedef struct AjSGraphdata {
   float *x;
   float *y;
   AjBool xcalc;
   AjBool ycalc;
-  ajint numofpoints;
-  ajint numofobjects;
+  ajuint numofpoints;
+  ajuint numofobjects;
   float minX;
   float maxX;
   float minY;
@@ -89,18 +87,20 @@ typedef struct AjSGraphPlpData {
   AjPStr gtype;
   ajint colour;
   ajint lineType;
-  AjPGraphPlpObj Obj;
-} AjOGraphPlpData;
-#define AjPGraphPlpData AjOGraphPlpData*
+  AjPGraphobj Dataobj;
+} AjOGraphdata;
+#define AjPGraphdata AjOGraphdata*
 
-/* @data AjPGraphPlp **********************************************************
+/* @data AjPGraph *************************************************************
 **
-** Graph plplot object.
+** Graph object.
 **
-** @attr numofgraphs [ajint] Number of graphs in graphs
-** @attr numofobjects [ajint] Number of objects in Obj
-** @attr numofgraphsmax [ajint] Maximum number of graphs expected
-** @attr flags [ajint] over rides the EmbGraphData flags
+** @attr displaytype [ajuint] Displaytype index to graphType
+** @attr numsets [ajuint] Number of sets in a multiple graph
+** @attr numofgraphs [ajuint] Number of graphs in graphs
+** @attr numofobjects [ajuint] Number of objects in Mainobj
+** @attr numofgraphsmax [ajuint] Maximum number of graphs expected
+** @attr flags [ajuint] over rides the EmbGraphData flags
 ** @attr minX [float] Lowest x value for all graphs
 ** @attr maxX [float] Highest x value for all graphs
 ** @attr minY [float] Lowest y value for all graphs
@@ -119,18 +119,19 @@ typedef struct AjSGraphPlpData {
 ** @attr xaxis [AjPStr] Plot x axis title
 ** @attr yaxis [AjPStr] Plot y axis title
 ** @attr outputfile [AjPStr] Output filename
-** @attr graphs [AjPGraphPlpData*] XY Data to plot for Graph(s)
-** @attr Obj [AjPGraphPlpObj] Objects to plot for single graph
-** @attr displaytype [ajint] Displaytype index to graphType
-** @attr Padding [char[4]] Padding to alignment boundary
+** @attr graphs [AjPGraphdata*] XY Data to plot for Graph(s)
+** @attr Mainobj [AjPGraphobj] Objects to plot for single graph
 ** @@
 ******************************************************************************/
 
-typedef struct AjSGraphPlp {
-  ajint numofgraphs;
-  ajint numofobjects;
-  ajint numofgraphsmax;
-  ajint flags;
+typedef struct AjSGraph {
+
+  ajuint displaytype;
+  ajuint numsets;
+  ajuint numofgraphs;
+  ajuint numofobjects;
+  ajuint numofgraphsmax;
+  ajuint flags;
   float minX;
   float maxX;
   float minY;
@@ -149,30 +150,8 @@ typedef struct AjSGraphPlp {
   AjPStr xaxis;
   AjPStr yaxis;
   AjPStr outputfile;
-  AjPGraphPlpData *graphs;
-  AjPGraphPlpObj Obj;
-  ajint displaytype;
-  char Padding[4];
-} AjOGraphPlp;
-#define AjPGraphPlp AjOGraphPlp*
-
-/* @data AjPGraph *************************************************************
-**
-** Graph object.
-**
-** @attr plplot [AjPGraphPlp] PlPlot graph object
-** @attr xml [AjPGraphXml] XML graph object
-** @attr numsets [ajint] Number of sets in a multiple graph
-** @attr Padding [char[4]] Padding to alignment boundary
-** @@
-******************************************************************************/
-
-typedef struct AjSGraph {
-
-    AjPGraphPlp plplot;
-    AjPGraphXml xml;
-    ajint numsets;
-    char Padding[4];
+  AjPGraphdata *graphs;
+  AjPGraphobj Mainobj;
 } AjOGraph;
 #define AjPGraph AjOGraph*
 
