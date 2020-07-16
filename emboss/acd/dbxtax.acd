@@ -1,11 +1,11 @@
-application: dbxgcg [
-  documentation: "Index a GCG formatted database using b+tree indices"
+application: dbxtax [
+  documentation: "Index NCBI taxonomy using b+tree indices"
   groups: "Utils:Database indexing"
   gui: "no"
   batch: "yes"
   cpu: "medium"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0000227 operation Data indexing"
+  relations: "EDAM:0000091 topic Data handling"
+  relations: "EDAM:0000227 operation Data indexing"
 ]
 
 section: input [
@@ -15,33 +15,24 @@ section: input [
 
   string: dbname [
     parameter: "Y"
+    default: "taxon"
     maxlength: "19"
     minlength: "2"
     information: "Basename for index files"
     knowntype: "emboss database name"
     pattern: "[A-z][A-z0-9_]+"
-    relations: "EDAM:0001056 identifier Database name"
+    relations:  "EDAM:0001056 identifier Database name"                          
   ]
 
   string: dbresource [
     parameter: "Y"
+    default: "taxresource"
     maxlength: "19"
     minlength: "2"
     information: "Resource name"
     knowntype: "emboss resource name"
     pattern: "[A-z][A-z0-9_]+"
-    relations: "EDAM:0002527 data Parameter or primitive"
-  ]
-
-  list: idformat [
-    standard: "y"
-    information: "Entry format"
-    values: "EMBL:EMBL; SWISS:Swiss-Prot, SpTrEMBL, TrEMBLnew;
-             GENBANK:Genbank, DDBJ; PIR:NBRF"
-    maximum: "1"
-    minimum: "1"
-    default: "SWISS"
-    relations: "EDAM:0002129 identifier File format name"
+    relations:  "EDAM:0002527 data Parameter or primitive"                          
   ]
 
   directory: directory [
@@ -49,15 +40,7 @@ section: input [
     default: "."
     information: "Database directory"
     knowntype: "emboss database directory"
-    relations: "EDAM:0001049 identifier Directory name"
-  ]
-
-  string: filenames [
-    standard: "Y"
-    default: "*.seq"
-    information: "Wildcard database filename"
-    knowntype: "emboss database wildcard filename"
-    relations: "EDAM:0001050 identifier File name"
+    relations:  "EDAM:0001049 identifier Directory name"
   ]
 
 endsection: input
@@ -70,11 +53,11 @@ section: required [
   list: fields [
     standard: "Y"
     information: "Index fields"
-    values: "id:ID;acc:Accession number;sv:Sequence Version and
-             GI;des:Description;key:Keywords;org:Taxonomy"
+    values: "id:ID;acc:Synonym;tax:Scientific name;rnk:Rank;up:Parent;
+             gc:Genetics code;mgc:Mitochondrial genetic code"
     minimum: "1"
-    maximum: "6"
-    default: "id,acc"
+    maximum: "7"
+    default: "*"
     relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
@@ -97,7 +80,7 @@ section: advanced [
     maxlength: "9"
     information: "Release number"
     knowntype: "emboss database release"
-    relations: "EDAM:0001670 data Database version information"
+    relations:  "EDAM:0001670 data Database version information"    
   ]
 
   string: date [
@@ -106,13 +89,7 @@ section: advanced [
     information: "Index date"
     pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
     knowntype: "date"
-    relations: "EDAM:0002156 data Date"
-  ]
-
-  string: exclude [
-    information: "Wildcard filename(s) to exclude"
-    knowntype: "filename wildcard"
-    relations: "EDAM:0001050 identifier File name"
+    relations:  "EDAM:0002156 data Date"   
   ]
 
 endsection: advanced
@@ -126,14 +103,14 @@ section: output [
     default: "."
     information: "Index file output directory"
     knowntype: "emboss database index"
-    relations: "EDAM:0001049 identifier Directory name"
+    relations:  "EDAM:0001049 identifier Directory name"
   ]
 
   outfile: outfile [
     standard: "Y"
     knowntype: "log"
     information: "General log output file"
-    relations: "EDAM:0001678 data Tool log"
+    relations:  "EDAM:0001678 data Tool log"
   ]
 
 endsection: output
