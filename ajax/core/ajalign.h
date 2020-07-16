@@ -12,6 +12,9 @@ extern "C"
 **
 ** Holds definition of feature align output.
 **
+** @alias AjSAlign
+** @alias AjOAlign
+**
 ** @new ajAlignNew Default constructor
 ** @delete ajAlignDel Default destructor
 ** @modify ajAlignReset Resets ready for reuse.
@@ -105,7 +108,7 @@ AjBool       ajAlignConsStats(const AjPSeqset thys, AjPMatrix mymatrix,
 			      ajint* retlen);
 AjBool       ajAlignDefine (AjPAlign pthys, AjPSeqset seqset);
 AjBool       ajAlignDefineSS (AjPAlign pthys,
-			      AjPSeq seqa, AjPSeq seqb);
+			      const AjPSeq seqa, const AjPSeq seqb);
 AjBool       ajAlignDefineCC (AjPAlign pthys,
 			      const char* seqa, const char* seqb,
 			      const char* namea,const  char* nameb);
@@ -113,12 +116,15 @@ void         ajAlignDel (AjPAlign* pthys);
 void         ajAlignExit(void);
 AjBool       ajAlignFindFormat (const AjPStr format, ajint* iformat);
 AjBool       ajAlignFormatDefault (AjPStr* pformat);
+AjBool       ajAlignFormatShowsSequences(const AjPAlign thys);
 ajint        ajAlignGetLen(const AjPAlign thys);
 const char*  ajAlignGetFilename(const AjPAlign thys);
 const AjPStr ajAlignGetFormat(const AjPAlign thys);
 AjPAlign     ajAlignNew (void);
 AjBool       ajAlignOpen (AjPAlign thys, const AjPStr name);
 void         ajAlignPrintFormat (AjPFile outf, AjBool full);
+void         ajAlignPrintbookFormat (AjPFile outf);
+void         ajAlignPrintwikiFormat (AjPFile outf);
 void         ajAlignReset (AjPAlign thys);
 void         ajAlignSetExternal (AjPAlign thys, AjBool external);
 void         ajAlignSetHeader (AjPAlign thys, const AjPStr header);
