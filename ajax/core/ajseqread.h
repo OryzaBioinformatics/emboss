@@ -7,7 +7,7 @@ extern "C"
 #define ajseqread_h
 
 
-
+extern AjPTable seqDbMethods;
 
 
 
@@ -15,6 +15,11 @@ extern "C"
 ** Prototype definitions
 */
 
+AjPTable     ajSeqtableGetDb(void);
+AjBool       ajSeqMethodTest (const AjPStr method);
+AjBool       ajSeqAccessAsis (AjPSeqin seqin);
+AjBool       ajSeqAccessFile (AjPSeqin seqin);
+AjBool       ajSeqAccessOffset (AjPSeqin seqin);
 AjPSeqall    ajSeqallFile (const AjPStr usa);
 AjBool       ajSeqAllRead (AjPSeq thys, AjPSeqin seqin);
 AjBool       ajSeqGetFromUsa (const AjPStr thys, AjBool protein, AjPSeq seq);
@@ -31,8 +36,7 @@ void         ajSeqinTrace (const AjPSeqin thys);
 
 AjBool       ajSeqParseFasta(const AjPStr str, AjPStr* id, AjPStr* acc,
 			     AjPStr* sv, AjPStr* desc);
-AjBool       ajSeqParseFastq(const AjPStr str, AjPStr* id, AjPStr* acc,
-			     AjPStr* sv, AjPStr* desc);
+AjBool       ajSeqParseFastq(const AjPStr str, AjPStr* id, AjPStr* desc);
 AjBool       ajSeqParseNcbi(const AjPStr str, AjPStr* id, AjPStr* acc,
 			    AjPStr* sv, AjPStr* gi, AjPStr* db, AjPStr* desc);
 void         ajSeqQueryClear (AjPSeqQuery thys);
@@ -43,6 +47,9 @@ void         ajSeqQueryStarclear (AjPSeqQuery qry);
 void         ajSeqQueryTrace (const AjPSeqQuery qry);
 AjBool       ajSeqQueryWild (AjPSeqQuery qry);
 void         ajSeqPrintInFormat (AjPFile outf, AjBool full);
+void         ajSeqPrintbookInFormat (AjPFile outf);
+void         ajSeqPrinthtmlInFormat (AjPFile outf);
+void         ajSeqPrintwikiInFormat (AjPFile outf);
 AjBool       ajSeqRead (AjPSeq thys, AjPSeqin seqin);
 void         ajSeqReadExit(void);
 ajint        ajSeqsetApp (AjPSeqset thys, const AjPSeq seq);

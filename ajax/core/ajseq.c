@@ -212,39 +212,41 @@ static SeqOMolecule seqMolecule[] =
 ** http://www.ncbi.nlm.nih.gov/Taxonomy/
 **
 ** @attr Taxid [ajuint] NCBI taxon id
+** @attr Standard [AjBool] Standard known taxon
 ** @attr Name [const char*] Common name
 ******************************************************************************/
 
 typedef struct SeqSTaxon {
   ajuint Taxid;
+  AjBool Standard;  
   const char* Name;
 } SeqOTaxon;
 
 static SeqOTaxon seqTaxon[] =
 {
-    { 3702, "Arabidopsis thaliana"},
-    { 1432, "Bacillus subtilis"},
-    { 9913, "Bos taurus"},
-    { 6239, "Caenorhabditis elegans"},
-    { 3055, "Chlamydomonas reinhardtii"},
-    { 7955, "Danio rario"},
-    {44689, "Dictyostelium discoideum"},
-    { 7227, "Drosophila melanogaster"},
-    {  562, "Escherichia coli"},
-    {11103, "Hepatitis C virus"},
-    { 9606, "Homo sapiens"},
-    { 2104, "Mycoplasma pneumoniae"},
-    {10090, "Mus musculus"},
-    { 4530, "Oryza sativa"},
-    { 5833, "Plasmodium falciparum"},
-    { 4754, "Pneumocystis carinii"},
-    {10116, "Rattus norvegicus"},
-    { 4932, "Saccharomyces cerevisiae"},
-    { 4896, "Schizosaccharomyces pombe"},
-    {31033, "Takifugu rubripes"},
-    { 8355, "Xenopus laevis"},
-    { 4577, "Zea mays"},
-    {    0, NULL}
+    { 3702, AJTRUE, "Arabidopsis thaliana"},
+    { 1432, AJTRUE, "Bacillus subtilis"},
+    { 9913, AJTRUE, "Bos taurus"},
+    { 6239, AJTRUE, "Caenorhabditis elegans"},
+    { 3055, AJTRUE, "Chlamydomonas reinhardtii"},
+    { 7955, AJTRUE, "Danio rario"},
+    {44689, AJTRUE, "Dictyostelium discoideum"},
+    { 7227, AJTRUE, "Drosophila melanogaster"},
+    {  562, AJTRUE, "Escherichia coli"},
+    {11103, AJTRUE, "Hepatitis C virus"},
+    { 9606, AJTRUE, "Homo sapiens"},
+    { 2104, AJTRUE, "Mycoplasma pneumoniae"},
+    {10090, AJTRUE, "Mus musculus"},
+    { 4530, AJTRUE, "Oryza sativa"},
+    { 5833, AJTRUE, "Plasmodium falciparum"},
+    { 4754, AJTRUE, "Pneumocystis carinii"},
+    {10116, AJTRUE, "Rattus norvegicus"},
+    { 4932, AJTRUE, "Saccharomyces cerevisiae"},
+    { 4896, AJTRUE, "Schizosaccharomyces pombe"},
+    {31033, AJTRUE, "Takifugu rubripes"},
+    { 8355, AJTRUE, "Xenopus laevis"},
+    { 4577, AJTRUE, "Zea mays"},
+    {    0, AJFALSE, NULL}
     
 };
 
@@ -333,51 +335,10 @@ AjPSeq ajSeqNewNameC(const char* txt, const char* name)
 {
     AjPSeq pthis;
 
-    AJNEW0(pthis);
+    pthis = ajSeqNew();
 
     ajStrAssignC(&pthis->Name, name);
-    pthis->Acc  = ajStrNew();
-    pthis->Sv   = ajStrNew();
-    pthis->Gi   = ajStrNew();
-    pthis->Tax  = ajStrNew();
-    pthis->Taxid = ajStrNew();
-    pthis->Organelle = ajStrNew();
-    pthis->Type = ajStrNew();
-    pthis->Db   = ajStrNew();
-    pthis->Full = ajStrNew();
-    pthis->Desc = ajStrNew();
-    pthis->Doc  = ajStrNew();
-    pthis->Usa  = ajStrNew();
-    pthis->Ufo  = ajStrNew();
-
-    pthis->Formatstr = ajStrNew();
-    pthis->Filename  = ajStrNew();
-    pthis->Entryname = ajStrNew();
-    pthis->TextPtr   = ajStrNew();
-
     ajStrAssignC(&pthis->Seq, txt);
-
-    pthis->Rev      = ajFalse;
-    pthis->Reversed = ajFalse;
-    pthis->Trimmed  = ajFalse;
-
-    pthis->EType  = 0;
-    pthis->Format = 0;
-    pthis->Begin  = 0;
-    pthis->End    = 0;
-    pthis->Offset = 0;
-    pthis->Offend = 0;
-    pthis->Weight = 1.0;
-
-    pthis->Acclist = ajListstrNew();
-    pthis->Keylist = ajListstrNew();
-    pthis->Taxlist = ajListstrNew();
-    pthis->Genelist = ajListstrNew();
-    pthis->Cmtlist = ajListstrNew();
-    pthis->Xreflist = ajListNew();
-    pthis->Reflist = ajListNew();
-
-    pthis->Fulldesc = ajSeqdescNew();
 
     return pthis;
 }
@@ -400,51 +361,10 @@ AjPSeq ajSeqNewNameS(const AjPStr str, const AjPStr name)
 {
     AjPSeq pthis;
 
-    AJNEW0(pthis);
+    pthis = ajSeqNew();
 
     pthis->Name = ajStrNewS(name);
-    pthis->Acc  = ajStrNew();
-    pthis->Sv   = ajStrNew();
-    pthis->Gi   = ajStrNew();
-    pthis->Tax  = ajStrNew();
-    pthis->Taxid = ajStrNew();
-    pthis->Organelle = ajStrNew();
-    pthis->Type = ajStrNew();
-    pthis->Db   = ajStrNew();
-    pthis->Full = ajStrNew();
-    pthis->Desc = ajStrNew();
-    pthis->Doc  = ajStrNew();
-    pthis->Usa  = ajStrNew();
-    pthis->Ufo  = ajStrNew();
-
-    pthis->Formatstr = ajStrNew();
-    pthis->Filename  = ajStrNew();
-    pthis->Entryname = ajStrNew();
-    pthis->TextPtr   = ajStrNew();
-
     ajStrAssignS(&pthis->Seq, str);
-
-    pthis->Rev      = ajFalse;
-    pthis->Reversed = ajFalse;
-    pthis->Trimmed  = ajFalse;
-
-    pthis->EType  = 0;
-    pthis->Format = 0;
-    pthis->Begin  = 0;
-    pthis->End    = 0;
-    pthis->Offset = 0;
-    pthis->Offend = 0;
-    pthis->Weight = 1.0;
-
-    pthis->Acclist = ajListstrNew();
-    pthis->Keylist = ajListstrNew();
-    pthis->Taxlist = ajListstrNew();
-    pthis->Genelist = ajListstrNew();
-    pthis->Cmtlist = ajListstrNew();
-    pthis->Xreflist = ajListNew();
-    pthis->Reflist = ajListNew();
-
-    pthis->Fulldesc = ajSeqdescNew();
 
     return pthis;
 }
@@ -501,29 +421,10 @@ AjPSeq ajSeqNewRangeC(const char* txt,
 {
     AjPSeq pthis;
 
-    AJNEW0(pthis);
+    pthis = ajSeqNew();
 
     ajDebug("ajSeqNewRangeC %d %d %B\n",
 	    offset, offend, rev);
-    pthis->Name = ajStrNew();
-    pthis->Acc  = ajStrNew();
-    pthis->Sv   = ajStrNew();
-    pthis->Gi   = ajStrNew();
-    pthis->Tax  = ajStrNew();
-    pthis->Taxid = ajStrNew();
-    pthis->Organelle = ajStrNew();
-    pthis->Type = ajStrNew();
-    pthis->Db   = ajStrNew();
-    pthis->Full = ajStrNew();
-    pthis->Desc = ajStrNew();
-    pthis->Doc  = ajStrNew();
-    pthis->Usa  = ajStrNew();
-    pthis->Ufo  = ajStrNew();
-
-    pthis->Formatstr = ajStrNew();
-    pthis->Filename  = ajStrNew();
-    pthis->Entryname = ajStrNew();
-    pthis->TextPtr   = ajStrNew();
 
     ajStrAssignC(&pthis->Seq, txt);
 
@@ -548,16 +449,6 @@ AjPSeq ajSeqNewRangeC(const char* txt,
     }
 
     pthis->Weight = 1.0;
-
-    pthis->Acclist = ajListstrNew();
-    pthis->Keylist = ajListstrNew();
-    pthis->Taxlist = ajListstrNew();
-    pthis->Genelist = ajListstrNew();
-    pthis->Cmtlist = ajListstrNew();
-    pthis->Xreflist = ajListNew();
-    pthis->Reflist = ajListNew();
-
-    pthis->Fulldesc = ajSeqdescNew();
 
     ajDebug("ajSeqNewRangeC rev:%B offset:%d/%d offend:%d/%d\n",
 	    rev, offset, pthis->Offset, offend, pthis->Offend);
@@ -641,24 +532,25 @@ AjPSeq ajSeqNewRes(size_t size)
 
     pthis->Name = ajStrNew();
     pthis->Acc  = ajStrNew();
-    pthis->Sv   = ajStrNew();
-    pthis->Gi   = ajStrNew();
-    pthis->Tax  = ajStrNew();
-    pthis->Taxid = ajStrNew();
-    pthis->Organelle = ajStrNew();
-    pthis->Type = ajStrNew();
-    pthis->Db   = ajStrNew();
-    pthis->Full = ajStrNew();
-    pthis->Desc = ajStrNew();
-    pthis->Doc  = ajStrNew();
-    pthis->Usa  = ajStrNew();
-    pthis->Ufo  = ajStrNew();
-
-    pthis->Formatstr = ajStrNew();
-    pthis->Filename  = ajStrNew();
-    pthis->Entryname = ajStrNew();
-    pthis->TextPtr   = ajStrNew();
-
+/*
+//    pthis->Sv   = ajStrNew();
+//    pthis->Gi   = ajStrNew();
+//    pthis->Tax  = ajStrNew();
+//    pthis->Taxid = ajStrNew();
+//    pthis->Organelle = ajStrNew();
+//    pthis->Type = ajStrNew();
+//    pthis->Db   = ajStrNew();
+//    pthis->Full = ajStrNew();
+//    pthis->Desc = ajStrNew();
+//    pthis->Doc  = ajStrNew();
+//    pthis->Usa  = ajStrNew();
+//    pthis->Ufo  = ajStrNew();
+//
+//    pthis->Formatstr = ajStrNew();
+//    pthis->Filename  = ajStrNew();
+//    pthis->Entryname = ajStrNew();
+//    pthis->TextPtr   = ajStrNew();
+*/
     if(size)
 	pthis->Seq = ajStrNewRes(size);
     else
@@ -675,17 +567,18 @@ AjPSeq ajSeqNewRes(size_t size)
     pthis->Offset  = 0;
     pthis->Offend  = 0;
     pthis->Weight  = 1.0;
-    pthis->Acclist = ajListstrNew();
-    pthis->Keylist = ajListstrNew();
-    pthis->Taxlist = ajListstrNew();
-    pthis->Genelist = ajListstrNew();
-    pthis->Cmtlist = ajListstrNew();
-    pthis->Xreflist = ajListNew();
-    pthis->Reflist = ajListNew();
-
-    pthis->Fulldesc = ajSeqdescNew();
-
-    return pthis;
+/*
+//    pthis->Acclist = ajListstrNew();
+//    pthis->Keylist = ajListstrNew();
+//    pthis->Taxlist = ajListstrNew();
+//    pthis->Genelist = ajListNew();
+//    pthis->Cmtlist = ajListstrNew();
+//    pthis->Xreflist = ajListNew();
+//    pthis->Reflist = ajListNew();
+//
+//    pthis->Fulldesc = ajSeqdescNew();
+*/
+     return pthis;
 }
 
 
@@ -718,22 +611,35 @@ AjPSeq ajSeqNewSeq(const AjPSeq seq)
 
     AJNEW0(pthis);
 
-    ajStrAssignS(&pthis->Name, seq->Name);
-    ajStrAssignS(&pthis->Acc, seq->Acc);
-    ajStrAssignS(&pthis->Sv, seq->Sv);
-    ajStrAssignS(&pthis->Gi, seq->Gi);
-    ajStrAssignS(&pthis->Tax, seq->Tax);
-    ajStrAssignS(&pthis->Taxid, seq->Taxid);
-    ajStrAssignS(&pthis->Organelle, seq->Organelle);
-    ajStrAssignS(&pthis->Type, seq->Type);
+    if(seq->Name)
+        ajStrAssignS(&pthis->Name, seq->Name);
+    if(seq->Acc)
+        ajStrAssignS(&pthis->Acc, seq->Acc);
+    if(seq->Sv)
+        ajStrAssignS(&pthis->Sv, seq->Sv);
+    if(seq->Gi)
+        ajStrAssignS(&pthis->Gi, seq->Gi);
+    if(seq->Tax)
+        ajStrAssignS(&pthis->Tax, seq->Tax);
+    if(seq->Taxid)
+        ajStrAssignS(&pthis->Taxid, seq->Taxid);
+    if(seq->Organelle)
+        ajStrAssignS(&pthis->Organelle, seq->Organelle);
+    if(seq->Type)
+        ajStrAssignS(&pthis->Type, seq->Type);
 
     pthis->EType  = seq->EType;
 
-    ajStrAssignS(&pthis->Db, seq->Db);
-    ajStrAssignS(&pthis->Setdb, seq->Setdb);
-    ajStrAssignS(&pthis->Full, seq->Full);
-    ajStrAssignS(&pthis->Desc, seq->Desc);
-    ajStrAssignS(&pthis->Doc, seq->Doc);
+    if(seq->Db)
+        ajStrAssignS(&pthis->Db, seq->Db);
+    if(seq->Setdb)
+        ajStrAssignS(&pthis->Setdb, seq->Setdb);
+    if(seq->Full)
+        ajStrAssignS(&pthis->Full, seq->Full);
+    if(seq->Desc)
+        ajStrAssignS(&pthis->Desc, seq->Desc);
+    if(seq->Doc)
+        ajStrAssignS(&pthis->Doc, seq->Doc);
 
     pthis->Rev      = seq->Rev;
     pthis->Reversed = seq->Reversed;
@@ -746,41 +652,63 @@ AjPSeq ajSeqNewSeq(const AjPSeq seq)
     pthis->Weight = seq->Weight;
     pthis->Fpos   = seq->Fpos;
 
-    ajStrAssignS(&pthis->Usa, seq->Usa);
-    ajStrAssignS(&pthis->Ufo, seq->Ufo);
-    ajStrAssignS(&pthis->Formatstr, seq->Formatstr);
+    if(seq->Usa)
+        ajStrAssignS(&pthis->Usa, seq->Usa);
+    if(seq->Ufo)
+        ajStrAssignS(&pthis->Ufo, seq->Ufo);
+    if(seq->Formatstr)
+        ajStrAssignS(&pthis->Formatstr, seq->Formatstr);
     pthis->Format = seq->Format;
 
-    ajStrAssignS(&pthis->Filename, seq->Filename);
-    ajStrAssignS(&pthis->Entryname, seq->Entryname);
+    if(seq->Filename)
+        ajStrAssignS(&pthis->Filename, seq->Filename);
+    if(seq->Entryname)
+        ajStrAssignS(&pthis->Entryname, seq->Entryname);
 
     if(seq->TextPtr)
 	ajStrAssignS(&pthis->TextPtr, seq->TextPtr);
 
+    if(seq->Acclist)
+        pthis->Acclist = ajListstrNewList(seq->Acclist);
+    if(seq->Keylist)
+        pthis->Keylist = ajListstrNewList(seq->Keylist);
+    if(seq->Taxlist)
+        pthis->Taxlist = ajListstrNewList(seq->Taxlist);
+    if(seq->Cmtlist)
+        pthis->Cmtlist = ajListstrNewList(seq->Cmtlist);
 
-    pthis->Acclist = ajListstrNewList(seq->Acclist);
+    if(seq->Xreflist)
+    {
+        pthis->Xreflist = ajListNew();
+        ajSeqxreflistClone(seq->Xreflist, pthis->Xreflist);
+    }
 
-    pthis->Keylist = ajListstrNewList(seq->Keylist);
+    if(seq->Genelist)
+    {
+        pthis->Genelist = ajListNew();
+        ajSeqgenelistClone(seq->Genelist, pthis->Genelist);
+    }
 
-    pthis->Taxlist = ajListstrNewList(seq->Taxlist);
+    if(seq->Reflist)
+    {
+        pthis->Reflist = ajListNew();
+        ajSeqreflistClone(seq->Reflist, pthis->Reflist);
+    }
 
-    pthis->Cmtlist = ajListstrNewList(seq->Cmtlist);
-
-    pthis->Xreflist = ajListNew();
-    ajSeqxreflistClone(seq->Xreflist, pthis->Xreflist);
-
-    pthis->Genelist = ajListstrNew();
-    ajSeqgenelistClone(seq->Genelist, pthis->Genelist);
-
-    pthis->Reflist = ajListNew();
-    ajSeqreflistClone(seq->Reflist, pthis->Reflist);
-
-    pthis->Fulldesc = ajSeqdescNewDesc(seq->Fulldesc);
+    if(seq->Fulldesc)
+        pthis->Fulldesc = ajSeqdescNewDesc(seq->Fulldesc);
 
     ajStrAssignS(&pthis->Seq, seq->Seq);
 
     if (seq->Fttable)
-	pthis->Fttable = ajFeattableCopy(seq->Fttable);
+	pthis->Fttable = ajFeattableNewFtable(seq->Fttable);
+
+    if (seq->Accuracy && seq->Qualsize)
+    {
+        pthis->Qualsize = seq->Qualsize;
+    	AJCNEW0(pthis->Accuracy,pthis->Qualsize);
+    	memmove(pthis->Accuracy,seq->Accuracy,pthis->Qualsize*sizeof(float));
+    }
 
     return pthis;
 }
@@ -962,6 +890,13 @@ void ajSeqDelarray(AjPSeq **PPseq)
 **
 ** @nam3rule Clear     Clear all contents
 **
+** @nam3rule Add     Add to a list of data
+** @nam4rule AddCmt Add to a gene list
+** @nam4rule AddGene Add to a gene list
+** @nam4rule AddKey Add to a gene list
+** @nam4rule AddRef  Add to a reference list
+** @nam4rule AddXref  Add to a reference list
+**
 ** @nam3rule Set Set sequence properties
 ** @nam4rule SetName Set sequence name
 ** @nam5rule SetNameMulti Set sequence name, adding a number for later calls
@@ -987,10 +922,130 @@ void ajSeqDelarray(AjPSeq **PPseq)
 ** @argrule Range pos1 [ajint] Start position
 ** @argrule Range pos2 [ajint] End  position
 ** @argrule SetName setname [const AjPStr] User-defined sequence name
+** @argrule Cmt str [AjPStr] Comment added to internal list
+** @argrule Gene gene [AjPSeqGene] Gene object added to internal list
+** @argrule Key str [AjPStr] Keyword added to internal list
+** @argrule Ref ref [AjPSeqRef] Citation object added to internal list
+** @argrule Xref xref [AjPSeqXref] Cross-reference object added to internal list
 **
 ** @valrule * [void]
 **
 ******************************************************************************/
+
+
+
+
+/* @func ajSeqAddCmt ***********************************************************
+**
+** Adds a comment to a sequence object
+**
+** @param [u] seq [AjPSeq] Sequence object.
+** @param [u] str [AjPStr] Comment.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqAddCmt(AjPSeq seq,  AjPStr str)
+{
+    if(!seq->Cmtlist)
+        seq->Cmtlist = ajListstrNew();
+
+    ajListstrPushAppend(seq->Cmtlist, str);
+
+    return;
+}
+
+
+
+
+/* @func ajSeqAddGene **********************************************************
+**
+** Adds a gene to a sequence object
+**
+** @param [u] seq [AjPSeq] Sequence object.
+** @param [u] gene [AjPSeqGene] Gene object
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqAddGene(AjPSeq seq, AjPSeqGene gene)
+{
+    if(!seq->Genelist)
+        seq->Genelist = ajListNew();
+
+    ajListPushAppend(seq->Genelist, gene);
+
+    return;
+}
+
+
+
+
+/* @func ajSeqAddKey ***********************************************************
+**
+** Adds a keyword to a sequence object
+**
+** @param [u] seq [AjPSeq] Sequence object.
+** @param [u] str [AjPStr] Comment.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqAddKey(AjPSeq seq, AjPStr str)
+{
+    if(!seq->Keylist)
+        seq->Keylist = ajListstrNew();
+
+    ajListstrPushAppend(seq->Keylist, str);
+
+    return;
+}
+
+
+
+
+/* @func ajSeqAddRef ***********************************************************
+**
+** Adds a literature reference to a sequence object
+**
+** @param [u] seq [AjPSeq] Sequence object.
+** @param [u] ref [AjPSeqRef] Literature reference.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqAddRef(AjPSeq seq, AjPSeqRef ref)
+{
+    if(!seq->Reflist)
+        seq->Reflist = ajListNew();
+
+    ajListPushAppend(seq->Reflist, ref);
+
+    return;
+}
+
+
+
+
+/* @func ajSeqAddXref **********************************************************
+**
+** Adds a cross-reference to a sequence object
+**
+** @param [u] seq [AjPSeq] Sequence object.
+** @param [u] xref [AjPSeqXref] Comment.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqAddXref(AjPSeq seq, AjPSeqXref xref)
+{
+    if(!seq->Xreflist)
+        seq->Xreflist = ajListNew();
+
+    ajListPushAppend(seq->Xreflist, xref);
+
+    return;
+}
 
 
 
@@ -1799,32 +1854,56 @@ void ajSeqClear(AjPSeq seq)
     AjPSeqXref tmpxref = NULL;
     AjPSeqGene tmpgene = NULL;
 
-    ajStrSetClear(&seq->Name);
-    ajStrSetClear(&seq->Acc);
-    ajStrSetClear(&seq->Sv);
-    ajStrSetClear(&seq->Gi);
-    ajStrSetClear(&seq->Tax);
-    ajStrSetClear(&seq->Taxid);
-    ajStrSetClear(&seq->Organelle);
-    ajStrSetClear(&seq->Type);
-    ajStrSetClear(&seq->Molecule);
-    ajStrSetClear(&seq->Class);
-    ajStrSetClear(&seq->Division);
-    ajStrSetClear(&seq->Evidence);
-    ajStrSetClear(&seq->Db);
-    ajStrSetClear(&seq->Full);
-    ajStrSetClear(&seq->Desc);
-    ajStrSetClear(&seq->Doc);
-    ajStrSetClear(&seq->Usa);
-    ajStrSetClear(&seq->Ufo);
+    if(MAJSTRGETLEN(seq->Name))
+       ajStrSetClear(&seq->Name);
+    if(MAJSTRGETLEN(seq->Acc))
+       ajStrSetClear(&seq->Acc);
+    if(MAJSTRGETLEN(seq->Sv))
+       ajStrSetClear(&seq->Sv);
+    if(MAJSTRGETLEN(seq->Gi))
+       ajStrSetClear(&seq->Gi);
+    if(MAJSTRGETLEN(seq->Tax))
+       ajStrSetClear(&seq->Tax);
+    if(MAJSTRGETLEN(seq->Taxid))
+       ajStrSetClear(&seq->Taxid);
+    if(MAJSTRGETLEN(seq->Organelle))
+       ajStrSetClear(&seq->Organelle);
+    if(MAJSTRGETLEN(seq->Type))
+       ajStrSetClear(&seq->Type);
+    if(MAJSTRGETLEN(seq->Molecule))
+       ajStrSetClear(&seq->Molecule);
+    if(MAJSTRGETLEN(seq->Class))
+       ajStrSetClear(&seq->Class);
+    if(MAJSTRGETLEN(seq->Division))
+       ajStrSetClear(&seq->Division);
+    if(MAJSTRGETLEN(seq->Evidence))
+       ajStrSetClear(&seq->Evidence);
+    if(MAJSTRGETLEN(seq->Db))
+       ajStrSetClear(&seq->Db);
+    if(MAJSTRGETLEN(seq->Full))
+       ajStrSetClear(&seq->Full);
+    if(MAJSTRGETLEN(seq->Desc))
+       ajStrSetClear(&seq->Desc);
+    if(MAJSTRGETLEN(seq->Doc))
+       ajStrSetClear(&seq->Doc);
+    if(MAJSTRGETLEN(seq->Usa))
+       ajStrSetClear(&seq->Usa);
+    if(MAJSTRGETLEN(seq->Ufo))
+       ajStrSetClear(&seq->Ufo);
 
-    ajStrSetClear(&seq->Formatstr);
-    ajStrSetClear(&seq->Filename);
-    ajStrSetClear(&seq->Entryname);
-    ajStrSetClear(&seq->TextPtr);
-    ajStrSetClear(&seq->Seq);
+    if(MAJSTRGETLEN(seq->Formatstr))
+       ajStrSetClear(&seq->Formatstr);
+    if(MAJSTRGETLEN(seq->Filename))
+       ajStrSetClear(&seq->Filename);
+    if(MAJSTRGETLEN(seq->Entryname))
+       ajStrSetClear(&seq->Entryname);
+    if(MAJSTRGETLEN(seq->TextPtr))
+       ajStrSetClear(&seq->TextPtr);
+    if(MAJSTRGETLEN(seq->Seq))
+       ajStrSetClear(&seq->Seq);
 
-    AJFREE(seq->Accuracy);
+    if(seq->Accuracy && seq->Qualsize)
+        AJCSET0(seq->Accuracy, seq->Qualsize);
 
     seq->Begin = 0;
     seq->End   = 0;
@@ -1832,31 +1911,41 @@ void ajSeqClear(AjPSeq seq)
     seq->Reversed = ajFalse;
     seq->Trimmed  = ajFalse;
 
-    while(ajListstrPop(seq->Acclist,&ptr))
-	ajStrDel(&ptr);
+    if(seq->Acclist)   
+        while(ajListstrPop(seq->Acclist,&ptr))
+            ajStrDel(&ptr);
 
-    while(ajListstrPop(seq->Keylist,&ptr))
-	ajStrDel(&ptr);
+    if(seq->Keylist)
+        while(ajListstrPop(seq->Keylist,&ptr))
+            ajStrDel(&ptr);
 
-    while(ajListstrPop(seq->Taxlist,&ptr))
-	ajStrDel(&ptr);
+    if(seq->Taxlist)
+        while(ajListstrPop(seq->Taxlist,&ptr))
+            ajStrDel(&ptr);
 
-    while(ajListPop(seq->Genelist,(void **)&tmpgene))
-	ajSeqgeneDel(&tmpgene);
+    if(seq->Genelist)
+        while(ajListPop(seq->Genelist,(void **)&tmpgene))
+            ajSeqgeneDel(&tmpgene);
 
-    while(ajListPop(seq->Reflist,(void **)&tmpref))
-	ajSeqrefDel(&tmpref);
+    if(seq->Reflist)
+        while(ajListPop(seq->Reflist,(void **)&tmpref))
+            ajSeqrefDel(&tmpref);
 
-    while(ajListPop(seq->Cmtlist,(void **)&ptr))
-	ajStrDel(&ptr);
+    if(seq->Cmtlist)
+        while(ajListPop(seq->Cmtlist,(void **)&ptr))
+            ajStrDel(&ptr);
 
-    while(ajListPop(seq->Xreflist,(void **)&tmpxref))
-	ajSeqxrefDel(&tmpxref);
+    if(seq->Xreflist)
+        while(ajListPop(seq->Xreflist,(void **)&tmpxref))
+            ajSeqxrefDel(&tmpxref);
 
-    ajSeqdateClear(seq->Date);
-    ajSeqdescClear(seq->Fulldesc);
+    if(seq->Date)
+        ajSeqdateClear(seq->Date);
+    if(seq->Fulldesc)
+        ajSeqdescClear(seq->Fulldesc);
 
-    ajFeattableDel(&seq->Fttable);
+    if(seq->Fttable)
+        ajFeattableDel(&seq->Fttable);
 
     return;
 }
@@ -2575,8 +2664,11 @@ void ajSeqReverseDo(AjPSeq seq)
     ajint ibegin;
     ajint iend;
     ajint itemp;
+    ajuint i;
+    ajuint j;
+    float atemp;
 
-    ajDebug("ajSeqReverse len: %d Begin: %d End: %d Rev: %B Reversed: %B\n",
+    ajDebug("ajSeqReverseDo len: %d Begin: %d End: %d Rev: %B Reversed: %B\n",
 	    ajSeqGetLen(seq), seq->Begin, seq->End,
 	    seq->Rev, seq->Reversed);
 
@@ -2608,6 +2700,18 @@ void ajSeqReverseDo(AjPSeq seq)
     if(seq->Fttable)
 	ajFeattableReverse(seq->Fttable);
 
+    if(seq->Accuracy)
+    {
+        j = seq->Qualsize;
+        for(i=0;i<seq->Qualsize;i++)
+        {
+            if(--j <= i) break;
+            atemp = seq->Accuracy[j];
+            seq->Accuracy[j] = seq->Accuracy[i];
+            seq->Accuracy[i] = atemp;
+        }
+    }
+    
     return;
 }
 
@@ -2767,8 +2871,8 @@ void ajSeqTrim(AjPSeq seq)
     if(jend > 0)
 	jend--;
 
-    begin = 1 + ajMathPosI(ajSeqGetLen(seq), 0, jbegin);
-    end   = 1 + ajMathPosI(ajSeqGetLen(seq), begin-1, jend);
+    begin = 1 + ajCvtSposToPosStart(ajSeqGetLen(seq), 0, jbegin);
+    end   = 1 + ajCvtSposToPosStart(ajSeqGetLen(seq), begin-1, jend);
 
     ajDebug("Trimming %d from %d (%d) to %d (%d) "
 	    "Rev: %B Reversed: %B Trimmed: %B\n",
@@ -2904,7 +3008,9 @@ const char* ajSeqGetAccC(const AjPSeq seq)
 
 const AjPStr ajSeqGetAccS(const AjPSeq seq)
 {
-    return seq->Acc;
+    if(seq->Acc)
+        return seq->Acc;
+    return ajStrConstEmpty();
 }
 
 
@@ -2947,7 +3053,7 @@ ajuint ajSeqGetBegin(const AjPSeq seq)
     if(seq->Begin > 0)
 	i = seq->Begin - 1;
 
-    j =  1 + ajMathPosI(ajSeqGetLen(seq), 0, i);
+    j =  1 + ajCvtSposToPosStart(ajSeqGetLen(seq), 0, i);
 
     return j;
 }
@@ -3038,7 +3144,9 @@ const char* ajSeqGetDbC(const AjPSeq seq)
 
 const AjPStr ajSeqGetDbS(const AjPSeq seq)
 {
-    return seq->Db;
+    if(seq->Db)
+        return seq->Db;
+    return ajStrConstEmpty();
 }
 
 
@@ -3080,7 +3188,9 @@ const char* ajSeqGetDescC(const AjPSeq seq)
 
 const AjPStr ajSeqGetDescS(const AjPSeq seq)
 {
-    return seq->Desc;
+    if(seq->Desc)
+        return seq->Desc;
+    return ajStrConstEmpty();
 }
 
 
@@ -3121,7 +3231,7 @@ ajuint ajSeqGetEnd(const AjPSeq seq)
     if(seq->End > 0)
 	i--;
 
-    i = 1 + ajMathPosI(ajSeqGetLen(seq), ajSeqGetBegin(seq)-1, i);
+    i = 1 +ajCvtSposToPosStart(ajSeqGetLen(seq), ajSeqGetBegin(seq)-1, i);
 
     return i;
 }
@@ -3213,7 +3323,9 @@ const char* ajSeqGetEntryC(const AjPSeq seq)
 
 const AjPStr ajSeqGetEntryS(const AjPSeq seq)
 {
-    return seq->TextPtr;
+    if(seq->TextPtr)
+        return seq->TextPtr;
+    return ajStrConstEmpty();
 }
 
 
@@ -3269,7 +3381,7 @@ const AjPFeattable ajSeqGetFeat(const AjPSeq seq)
 
 AjPFeattable ajSeqGetFeatCopy(const AjPSeq seq)
 {
-    return ajFeattableCopy(seq->Fttable);
+    return ajFeattableNewFtable(seq->Fttable);
 }
 
 
@@ -3280,7 +3392,7 @@ AjPFeattable ajSeqGetFeatCopy(const AjPSeq seq)
 */
 __deprecated AjPFeattable  ajSeqCopyFeat(const AjPSeq seq)
 {
-    return ajFeattableCopy(seq->Fttable);
+    return ajFeattableNewFtable(seq->Fttable);
 }
 
 
@@ -3322,7 +3434,9 @@ const char* ajSeqGetGiC(const AjPSeq seq)
 
 const AjPStr ajSeqGetGiS(const AjPSeq seq)
 {
-    return seq->Gi;
+    if(seq->Gi)
+        return seq->Gi;
+    return ajStrConstEmpty();
 }
 
 
@@ -3461,6 +3575,9 @@ ajuint ajSeqGetLenUngapped(const AjPSeq seq)
 
 const char* ajSeqGetNameC(const AjPSeq seq)
 {
+    if(!seq)
+        return "";
+
     return MAJSTRGETPTR(seq->Name);
 }
 
@@ -3482,7 +3599,13 @@ const char* ajSeqGetNameC(const AjPSeq seq)
 
 const AjPStr ajSeqGetNameS(const AjPSeq seq)
 {
-    return seq->Name;
+    if(!seq)
+        return ajStrConstEmpty();
+
+    if(seq->Name)
+        return seq->Name;
+
+    return ajStrConstEmpty();
 }
 
 
@@ -3594,12 +3717,13 @@ ajuint ajSeqGetRange(const AjPSeq seq, ajint* begin, ajint* end)
 	jend--;
 
     ajDebug("ajSeqGetRange '%S'\n", seq->Name);
-    *begin = ajMathPos(ajSeqGetLen(seq), jbegin); /* string position */
+    *begin = ajCvtSposToPos(ajSeqGetLen(seq), jbegin); /* string position */
 
     if(seq->End)
-	*end = 1 + ajMathPosI(ajSeqGetLen(seq), *begin, jend);
+	*end = 1 + ajCvtSposToPosStart(ajSeqGetLen(seq), *begin, jend);
     else
-	*end = 1 + ajMathPosI(ajSeqGetLen(seq), *begin, ajSeqGetLen(seq));
+	*end = 1 + ajCvtSposToPosStart(ajSeqGetLen(seq),
+                                       *begin, ajSeqGetLen(seq));
 
     (*begin)++;				/* sequence positions are 1..end */
 
@@ -3691,8 +3815,9 @@ const AjPStr ajSeqGetSeqS(const AjPSeq seq)
 {
     if(!seq)
 	return NULL;
-
-    return seq->Seq;
+    if(seq->Seq)
+        return seq->Seq;
+    return ajStrConstEmpty();
 }
 
 
@@ -3834,7 +3959,9 @@ const char* ajSeqGetSvC(const AjPSeq seq)
 
 const AjPStr ajSeqGetSvS(const AjPSeq seq)
 {
-    return seq->Sv;
+    if(seq->Sv)
+        return seq->Sv;
+    return ajStrConstEmpty();
 }
 
 
@@ -3887,7 +4014,9 @@ const char* ajSeqGetTaxC(const AjPSeq seq)
 
 const AjPStr ajSeqGetTaxS(const AjPSeq seq)
 {
-    return seq->Tax;
+    if(seq->Tax)
+        return seq->Tax;
+    return ajStrConstEmpty();
 }
 
 
@@ -4484,30 +4613,30 @@ float ajSeqCalcMolwt(const AjPSeq seq)
 
 
 /* @obsolete ajSeqPos
-** @replace ajMathPos (1,2/'ajSeqGetLen[1]',2)
+** @replace ajCvtSposToPos (1,2/'ajSeqGetLen[1]',2)
 */
 
 __deprecated ajint  ajSeqPos(const AjPSeq seq, ajint ipos)
 {
-    return 1+ajMathPosI(ajSeqGetLen(seq), 0, ipos);
+    return 1+ajCvtSposToPosStart(ajSeqGetLen(seq), 0, ipos);
 }
 
 
 
 
 /* @obsolete ajSeqPosI
-** @replace ajMathPosI (1,2,3/'ajSeqGetLen[1]',2,3)
+** @replace ajCvtSposToPosStart (1,2,3/'ajSeqGetLen[1]',2,3)
 */
 __deprecated ajint  ajSeqPosI(const AjPSeq seq, ajint imin, ajint ipos)
 {
-    return 1+ajMathPosI(ajSeqGetLen(seq), imin, ipos);
+    return 1+ajCvtSposToPosStart(ajSeqGetLen(seq), imin, ipos);
 }
 
 
 
 
 /* @obsolete ajSeqPosII
-** @rename ajMathPosI
+** @rename ajCvtSposToPosStart
 */
 
 __deprecated ajint  ajSeqPosII(ajint ilen, ajint imin, ajint ipos)
@@ -4571,10 +4700,10 @@ ajint ajSeqCalcTrueposMin(const AjPSeq seq, ajint imin, ajint ipos)
 	jpos--;
 
     if(ajSeqGetRev(seq))
-	return 1 + seq->Offend + ajMathPosI(ajSeqGetLen(seq),
+	return 1 + seq->Offend + ajCvtSposToPosStart(ajSeqGetLen(seq),
 			  jmin, jpos);
     else
-	return 1 + seq->Offset + ajMathPosI(ajSeqGetLen(seq),
+	return 1 + seq->Offset + ajCvtSposToPosStart(ajSeqGetLen(seq),
 			  jmin, jpos);
 }
 
@@ -4594,11 +4723,11 @@ __deprecated ajint  ajSeqTruePosI(const AjPSeq thys, ajint imin, ajint ipos)
 
 
 /* @obsolete ajSeqTruePosII
-** @rename ajMathPosI
+** @rename ajCvtSposToPosStart
 */
 __deprecated ajint  ajSeqTruePosII(ajint ilen, ajint imin, ajint ipos)
 {
-    return ajMathPosI(ilen, imin, ipos);
+    return ajCvtSposToPosStart(ilen, imin, ipos);
 }
 
 
@@ -4628,9 +4757,9 @@ ajint ajSeqCalcTruepos(const AjPSeq seq, ajint ipos)
 	jpos = ipos - 1;
 
     if(ajSeqGetRev(seq))
-	return 1 + seq->Offend + ajMathPosI(ajSeqGetLen(seq), 0, jpos);
+	return 1 + seq->Offend + ajCvtSposToPosStart(ajSeqGetLen(seq), 0, jpos);
 
-    return 1 + seq->Offset + ajMathPosI(ajSeqGetLen(seq), 0, jpos);
+    return 1 + seq->Offset + ajCvtSposToPosStart(ajSeqGetLen(seq), 0, jpos);
 }
 
 
@@ -4719,7 +4848,6 @@ void ajSeqExit(void)
 {
     ajSeqReadExit();
     ajSeqoutExit();
-    ajSeqDbExit();
     ajSeqTypeExit();
 
     ajStrDel(&seqVersionAccnum);
@@ -5431,7 +5559,7 @@ ajint ajSeqallGetseqBegin(const AjPSeqall seq)
 	if(jbegin > 0)
 	    jbegin--;
 
-	return 1 + ajMathPosI(ajSeqGetLen(seq->Seq), 0, jbegin);
+	return 1 + ajCvtSposToPosStart(ajSeqGetLen(seq->Seq), 0, jbegin);
     }
 
     if(seq->Seq->Begin)
@@ -5441,7 +5569,7 @@ ajint ajSeqallGetseqBegin(const AjPSeqall seq)
 	if(jbegin > 0)
 	    jbegin--;
 
-	return 1 + ajMathPosI(ajSeqGetLen(seq->Seq), 0, jbegin);
+	return 1 + ajCvtSposToPosStart(ajSeqGetLen(seq->Seq), 0, jbegin);
     }
 
     return 1;
@@ -5482,8 +5610,8 @@ ajint ajSeqallGetseqEnd(const AjPSeqall seq)
 	if(jend > 0)
 	    jend--;
 
-	return 1 + ajMathPosI(ajSeqGetLen(seq->Seq),
-			      ajSeqallGetseqBegin(seq)-1, jend);
+	return 1 + ajCvtSposToPosStart(ajSeqGetLen(seq->Seq),
+                                       ajSeqallGetseqBegin(seq)-1, jend);
     }
 
     if(seq->Seq->End)
@@ -5493,8 +5621,8 @@ ajint ajSeqallGetseqEnd(const AjPSeqall seq)
 	if(jend > 0)
 	    jend--;
 
-	return 1 + ajMathPosI(ajSeqGetLen(seq->Seq),
-			      ajSeqallGetseqBegin(seq)-1, jend);
+	return 1 + ajCvtSposToPosStart(ajSeqGetLen(seq->Seq),
+                                       ajSeqallGetseqBegin(seq)-1, jend);
     }
 
     return ajSeqGetLen(seq->Seq);
@@ -5558,6 +5686,9 @@ __deprecated ajint  ajSeqallLen(const AjPSeqall seqall)
 
 const AjPStr ajSeqallGetseqName(const AjPSeqall seq)
 {
+    if(!seq)
+        return ajStrConstEmpty();
+    
     ajDebug("ajSeqallGetseqName '%S'\n", seq->Seq->Name);
 
     return ajSeqGetNameS(seq->Seq);
@@ -5736,7 +5867,7 @@ void ajSeqsetDel(AjPSeqset *Pseq)
     AJFREE(seq->Seq);
     AJFREE(seq->Seqweight);
 
-    AJFREE(seq);
+    AJFREE(*Pseq);
 
     return;
 }
@@ -5923,12 +6054,12 @@ ajint ajSeqsetGetRange(const AjPSeqset seq, ajint* begin, ajint* end)
 
     ajDebug("ajSeqsetGetRange '%S' begin %d end %d len: %d\n",
 	    seq->Name, seq->Begin, seq->End, seq->Len);
-    *begin = ajMathPosI(seq->Len, 0, jbegin);
+    *begin = ajCvtSposToPosStart(seq->Len, 0, jbegin);
 
     if(seq->End)
-	*end = 1 + ajMathPosI(seq->Len, *begin, jend);
+	*end = 1 + ajCvtSposToPosStart(seq->Len, *begin, jend);
     else
-	*end = 1 + ajMathPosI(seq->Len, *begin, seq->Len);
+	*end = 1 + ajCvtSposToPosStart(seq->Len, *begin, seq->Len);
 
     (*begin)++;
 
@@ -6263,8 +6394,8 @@ void ajSeqsetTrim(AjPSeqset seq)
     if(jend > 0)
 	jend--;
 
-    begin = 1 + ajMathPosI(seq->Len, 0, jbegin);
-    end   = 1 + ajMathPosI(seq->Len, begin-1, jend);
+    begin = 1 + ajCvtSposToPosStart(seq->Len, 0, jbegin);
+    end   = 1 + ajCvtSposToPosStart(seq->Len, begin-1, jend);
 
     if(seq->End)
     {
@@ -6418,7 +6549,7 @@ ajuint ajSeqsetGetBegin(const AjPSeqset seq)
     if(jbegin > 0)
 	jbegin--;
 
-    return 1 + ajMathPosI(seq->Len, 0, jbegin);
+    return 1 + ajCvtSposToPosStart(seq->Len, 0, jbegin);
 }
 
 
@@ -6457,7 +6588,7 @@ ajuint ajSeqsetGetEnd(const AjPSeqset seq)
     if(jend > 0)
 	jend--;
 
-    return 1 + ajMathPosI(seq->Len, ajSeqsetGetBegin(seq)-1, jend);
+    return 1 + ajCvtSposToPosStart(seq->Len, ajSeqsetGetBegin(seq)-1, jend);
 }
 
 
@@ -6556,7 +6687,10 @@ __deprecated const AjPStr  ajSeqsetGetName(const AjPSeqset thys)
 
 const AjPStr ajSeqsetGetNameS(const AjPSeqset seq)
 {
-    ajDebug("ajSeqsetGetName '%S' usa: '%S'\n", seq->Name, seq->Usa);
+    if(!seq)
+        return ajStrConstEmpty();
+
+    ajDebug("ajSeqsetGetNameS '%S' usa: '%S'\n", seq->Name, seq->Usa);
 
     if(ajStrGetLen(seq->Name))
       return seq->Name;
@@ -6709,7 +6843,9 @@ const AjPStr ajSeqsetGetseqAccS(const AjPSeqset seq, ajuint i)
     if(i >= seq->Size)
 	return NULL;
 
-    return seq->Seq[i]->Acc;
+    if(seq->Seq[i]->Acc)
+        return seq->Seq[i]->Acc;
+    return ajStrConstEmpty();
 }
 
 
@@ -6738,10 +6874,16 @@ __deprecated const AjPStr  ajSeqsetAcc(const AjPSeqset seq, ajint i)
 
 const char* ajSeqsetGetseqNameC(const AjPSeqset seq, ajuint i)
 {
-    if(i >= seq->Size)
-	return NULL;
+    if(!seq)
+        return "";
 
-    return MAJSTRGETPTR(seq->Seq[i]->Name);
+    if(i >= seq->Size)
+	return "";
+
+    if(seq->Seq[i]->Name)
+        return MAJSTRGETPTR(seq->Seq[i]->Name);
+
+    return "";
 }
 
 
@@ -6759,10 +6901,16 @@ const char* ajSeqsetGetseqNameC(const AjPSeqset seq, ajuint i)
 
 const AjPStr ajSeqsetGetseqNameS(const AjPSeqset seq, ajuint i)
 {
-    if(i >= seq->Size)
-	return NULL;
+    if(!seq)
+        return ajStrConstEmpty();
 
-    return seq->Seq[i]->Name;
+    if(i >= seq->Size)
+	return ajStrConstEmpty();
+
+    if(seq->Seq[i]->Name)
+        return seq->Seq[i]->Name;
+
+    return ajStrConstEmpty();
 }
 
 
@@ -6850,7 +6998,9 @@ const AjPStr ajSeqsetGetseqSeqS(const AjPSeqset seq, ajuint i)
     if(i >= seq->Size)
 	return NULL;
 
-    return seq->Seq[i]->Seq;
+    if(seq->Seq[i]->Seq)
+        return seq->Seq[i]->Seq;
+    return ajStrConstEmpty();
 }
 
 
@@ -8354,6 +8504,8 @@ void ajSeqdescClear(AjPSeqDesc desc)
     AjPSeqDesc sdesc;
     AjPSeqSubdesc sub;
     AjPStr ptr;
+
+    if(!desc) return;
 
     ajStrSetClear(&desc->Name);
 
@@ -10187,14 +10339,24 @@ AjBool ajSeqreflistClone(const AjPList src, AjPList dest)
 ** @nam3rule Get return reference attributes
 ** @nam4rule GetXrefs Return cross-references
 **
-** @argrule Get  ref [AjPList] List of sequence citation object
-** @argrule Xrefs ref [AjPList] List of cross-reference objects
+** @argrule Get   src   [const AjPList] List of sequence citation object
+** @argrule Xrefs Plist [AjPList*]      List of cross-reference objects
 **
 ** @valrule GetXrefs [ajuint] Number of cross-references returned
 **
 ******************************************************************************/
 
-ajuint ajSeqreflistGetXrefs(const AjPList src, AjPList list)
+/* @func ajSeqreflistGetXrefs *************************************************
+**
+** Copy a cross-reference list
+**
+** @param [r] src [const AjPList] Source cross-reference list
+** @param [w] Plist [AjPList*] Target list,
+**                             created if it does not already exist
+** @return [ajuint] numbver of cross-references copied
+******************************************************************************/
+
+ajuint ajSeqreflistGetXrefs(const AjPList src, AjPList *Plist)
 {
     AjPStrTok handle = NULL;
     AjPStr token = NULL;
@@ -10203,6 +10365,12 @@ ajuint ajSeqreflistGetXrefs(const AjPList src, AjPList list)
     ajuint oldnum = 0;
     AjPSeqRef tmpref = NULL;
     AjPSeqXref xref = NULL;
+    AjPList list;
+
+    if(!*Plist)
+        *Plist = ajListNew();
+
+    list = *Plist;
 
     oldnum = ajListGetLength(list);
     iter = ajListIterNewread(src);

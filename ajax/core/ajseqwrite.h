@@ -15,6 +15,9 @@ extern "C"
 **
 ** Holds definition of sequence output.
 **
+** @alias AjSSeqout
+** @alias AjOSeqout
+**
 ** @attr Name [AjPStr] Name (ID)
 ** @attr Acc [AjPStr] Accession number (primary only)
 ** @attr Sv [AjPStr] SeqVersion number
@@ -36,8 +39,6 @@ extern "C"
 ** @attr Date [AjPSeqDate] Dates
 ** @attr Fulldesc [AjPSeqDesc] Dates
 ** @attr Doc [AjPStr] Obsolete - see TextPtr
-** @attr Rev [AjBool] true: to be reverse-complemented
-** @attr Circular [AjBool] true: circular nucleotide molecule
 ** @attr Usa [AjPStr] USA for re-reading
 ** @attr Ufo [AjPStr] UFO for re-reading
 ** @attr Fttable [AjPFeattable] Feature table
@@ -61,12 +62,16 @@ extern "C"
 ** @attr Seq [AjPStr] The sequence
 ** @attr File [AjPFile] Output file
 ** @attr Knownfile [AjPFile] Already open output file (we don't close this one)
-** @attr Single [AjBool] If true, single sequence in each file (-ossingle)
-** @attr Features [AjBool] If true, save features with sequence or in file
 ** @attr Extension [AjPStr] File extension
-** @attr Accuracy [float*] Accuracy values (one per base) from base calling
 ** @attr Savelist [AjPList] Previous sequences saved for later output
 **                          (e.g. MSF format)
+** @attr Accuracy [float*] Accuracy values (one per base) from base calling
+** @attr Cleanup [(void*)] Function to write remaining lines on closing
+** @attr Rev [AjBool] true: to be reverse-complemented
+** @attr Circular [AjBool] true: circular nucleotide molecule
+** @attr Single [AjBool] If true, single sequence in each file (-ossingle)
+** @attr Features [AjBool] If true, save features with sequence or in file
+** @attr Qualsize [ajuint] Size of Accuracy array
 ** @attr Count [ajint] Number of sequences
 ** @attr Offset [ajint] offset from start
 **
@@ -80,7 +85,7 @@ extern "C"
 ** @modify ajSeqsetWrite Master sequence set output routine
 ** @modify ajSeqFileNewOut Opens an output file for sequence writing.
 ** @other AjPSeq Sequences
-** @attr Cleanup [(void*)] Function to write remaining lines on closing
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -106,8 +111,6 @@ typedef struct AjSSeqout {
   AjPSeqDate Date;
   AjPSeqDesc Fulldesc;
   AjPStr Doc;
-  AjBool Rev;
-  AjBool Circular;
   AjPStr Usa;
   AjPStr Ufo;
   AjPFeattable Fttable;
@@ -131,14 +134,18 @@ typedef struct AjSSeqout {
   AjPStr Seq;
   AjPFile File;
   AjPFile Knownfile;
+  AjPStr Extension;
+  AjPList Savelist;
+  float* Accuracy;
+  void (*Cleanup) (AjPFile filethys);
+  AjBool Rev;
+  AjBool Circular;
   AjBool Single;
   AjBool Features;
-  AjPStr Extension;
-  float* Accuracy;
-  AjPList Savelist;
+  ajuint Qualsize;
   ajint Count;
   ajint Offset;
-  void (*Cleanup) (AjPFile filethys);
+  char Padding[4];
 } AjOSeqout;
 
 #define AjPSeqout AjOSeqout*
@@ -173,6 +180,9 @@ AjBool       ajSeqoutSetFormatC (AjPSeqout thys, const char* format);
 AjBool       ajSeqoutSetFormatS (AjPSeqout thys, const AjPStr format);
 void         ajSeqoutTrace (const AjPSeqout seq);
 void         ajSeqoutPrintFormat (AjPFile outf, AjBool full);
+void         ajSeqoutPrintbookFormat (AjPFile outf);
+void         ajSeqoutPrinthtmlFormat (AjPFile outf);
+void         ajSeqoutPrintwikiFormat (AjPFile outf);
 void         ajSeqoutClearUsa (AjPSeqout thys, const AjPStr Usa);
 AjBool       ajSeqoutWriteSet (AjPSeqout seqout, const AjPSeqset seq);
 void         ajSeqoutClose(AjPSeqout outseq);

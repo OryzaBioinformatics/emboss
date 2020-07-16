@@ -222,6 +222,7 @@ typedef struct AjSSeqRef {
 ** @attr Type [ajuint] Type of cross-reference
 ** @attr Start [ajuint] Start position
 ** @attr End [ajuint] End position
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -234,11 +235,11 @@ typedef struct AjSSeqXref {
     ajuint Type;
     ajuint Start;
     ajuint End;
+    char Padding[4];
 } AjOSeqXref;
 #define AjPSeqXref AjOSeqXref*
 
 
-    
 /* @data AjPSeqQuery **********************************************************
 **
 ** Ajax Sequence Query object.
@@ -283,7 +284,7 @@ typedef struct AjSSeqXref {
 ** @attr Fpos [ajlong] File position from fseek
 ** @attr Type [enum AjEQryType] Enumerated query type
 ** @attr QryDone [AjBool] Has the query been done yet
-** @attr Access [SeqSAccess*] Access function : see ajseqread.h
+** @attr Access [SeqSAccess*] Access function : see ajseqdb.h
 ** @attr QryData [void*] Private data for access function
 ** @attr Wild [AjBool] True if query contains '*' or '?'
 ** @attr Padding [char[4]] Padding to alignment boundary
@@ -348,6 +349,9 @@ typedef struct AjSSeqQuery {
 ** Also holds information on a selected sequence range and other
 ** options.
 **
+** @alias AjSSeqin
+** @alias AjOSeqin
+**
 ** @new ajSeqinNew Default constructor
 ** @delete ajSeqinDel Default destructor
 ** @modify ajSeqinUsa Resets using a new USA
@@ -400,7 +404,7 @@ typedef struct AjSSeqQuery {
 ** @attr Query [AjPSeqQuery] Query data - see AjPSeqQuery
 ** @attr Data [void*] Format data for reuse, e.g. multiple sequence input
 ** @attr Format [AjEnum] Sequence input format enum
-** @attr Padding [char[4]] Padding to alignment boundary
+** @attr Records [ajuint] Records processed
 ** @@
 ******************************************************************************/
 
@@ -446,13 +450,59 @@ typedef struct AjSSeqin {
   AjPSeqQuery Query;
   void *Data;
   AjEnum Format;
-  char Padding[4];
+  ajuint Records;
 } AjOSeqin;
 
 #define AjPSeqin AjOSeqin*
 
 
 
+
+/* @data SeqPAccess ***********************************************************
+**
+** Ajax Sequence Access database reading object.
+**
+** Holds information needed to read a sequence from a database.
+** Access methods are defined for each known database type.
+**
+** Sequences are read from the database using the defined
+** database access function, which is usually a static function
+** within ajseq.c
+**
+** This should be a static data object but is needed for the definition
+** of AjPSeqin.
+**
+** @alias SeqSAccess
+** @new ajSeqMethod returns a copy of a known access method definition.
+** @other AjPSeqin Sequence input
+**
+** @attr Name [const char*] Access method name used in emboss.default
+** @attr Alias [AjBool] Alias for another name
+** @attr Entry [AjBool] Supports retrieval of single entries
+** @attr Query [AjBool] Supports retrieval of selected entries
+** @attr All [AjBool] Supports retrieval of all entries
+** @attr Access [(AjBool*)] Access function
+** @attr AccessFree [(AjBool*)] Access cleanup function
+** @attr Desc [const char*] Description
+** @@
+******************************************************************************/
+
+typedef struct SeqSAccess {
+  const char *Name;
+  AjBool Alias;
+  AjBool Entry;
+  AjBool Query;
+  AjBool All;
+  AjBool (*Access) (AjPSeqin seqin);
+  AjBool (*AccessFree) (void* qry);
+  const char* Desc;
+} SeqOAccess;
+
+#define SeqPAccess SeqOAccess*
+
+
+
+    
 
 /* @data AjPSeq ***************************************************************
 **
@@ -466,6 +516,9 @@ typedef struct AjSSeqin {
 **
 ** Sequence features can also be stored, but for efficiency reasons
 ** features are turned off by default.
+**
+** @alias AjOSeq
+** @alias AjSSeq
 **
 ** @attr Name [AjPStr] Name (ID)
 ** @attr Acc [AjPStr] Accession number (primary only)
@@ -486,15 +539,6 @@ typedef struct AjSSeqin {
 ** @attr Desc [AjPStr] One-line description
 ** @attr Fulldesc [AjPSeqDesc] Detailed description
 ** @attr Doc [AjPStr] Obsolete - see TextPtr
-** @attr Rev [AjBool] true: to be reverse-complemented
-** @attr Reversed [AjBool] true: has been reverse-complemented
-** @attr Trimmed [AjBool] true: has been trimmed
-** @attr Circular [AjBool] true: circular nucleotide molecule
-** @attr Begin [ajint] start position (processed on reading)
-** @attr End [ajint] end position (processed on reading)
-** @attr Offset [ajuint] offset from start
-** @attr Offend [ajuint] offset from end 
-** @attr Fpos [ajlong] File position (fseek) for USA
 ** @attr Usa [AjPStr] USA for re-reading
 ** @attr Ufo [AjPStr] UFO for re-reading
 ** @attr Formatstr [AjPStr] Input format name
@@ -511,10 +555,19 @@ typedef struct AjSSeqin {
 ** @attr Seq [AjPStr] The sequence
 ** @attr Fttable [AjPFeattable] Feature table
 ** @attr Accuracy [float*] Accuracy values (one per base) from base calling
+** @attr Fpos [ajlong] File position (fseek) for USA
+** @attr Rev [AjBool] true: to be reverse-complemented
+** @attr Reversed [AjBool] true: has been reverse-complemented
+** @attr Trimmed [AjBool] true: has been trimmed
+** @attr Circular [AjBool] true: circular nucleotide molecule
+** @attr Begin [ajint] start position (processed on reading)
+** @attr End [ajint] end position (processed on reading)
+** @attr Offset [ajuint] offset from start
+** @attr Offend [ajuint] offset from end 
+** @attr Qualsize [ajuint] Size of Accuracy array
+** @attr Weight [float] Weight from multiple alignment
 ** @attr Format [AjEnum] Input format enum
 ** @attr EType [AjEnum] unused, obsolete
-** @attr Weight [float] Weight from multiple alignment
-** @attr Padding [char[4]] Padding to alignment boundary
 **
 ** @@
 ******************************************************************************/
@@ -539,15 +592,6 @@ typedef struct AjSSeq {
   AjPStr Desc;
   AjPSeqDesc Fulldesc;
   AjPStr Doc;
-  AjBool Rev;
-  AjBool Reversed;
-  AjBool Trimmed;
-  AjBool Circular;
-  ajint Begin;
-  ajint End;
-  ajuint Offset;
-  ajuint Offend;
-  ajlong Fpos;
   AjPStr Usa;
   AjPStr Ufo;
   AjPStr Formatstr;
@@ -564,10 +608,19 @@ typedef struct AjSSeq {
   AjPStr Seq;
   AjPFeattable Fttable;
   float* Accuracy;
+  ajlong Fpos;
+  AjBool Rev;
+  AjBool Reversed;
+  AjBool Trimmed;
+  AjBool Circular;
+  ajint Begin;
+  ajint End;
+  ajuint Offset;
+  ajuint Offend;
+  ajuint Qualsize;
+  float Weight;
   AjEnum Format;
   AjEnum EType;
-  float Weight;
-  char Padding[4];
 } AjOSeq;
 
 #define AjPSeq AjOSeq*
@@ -667,6 +720,9 @@ typedef struct AjSSeqset {
 **
 ** Inherits an AjPSeq but allows more sequences to be read from the
 ** same input by also inheriting the AjPSeqin input object.
+**
+** @alias AjSSeqall
+** @alias AjOSeqall
 **
 ** @new ajSeqallNew Default constructor
 ** @delete ajSeqallDel Default destructor
