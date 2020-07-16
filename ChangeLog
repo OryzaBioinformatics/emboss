@@ -1,179 +1,256 @@
-Fixed after release of version 6.2.0
+Version 6.3.0 15-Jul-2010
+	'ensembl' is a new access method for accessing Ensembl
+	from MySQL. Queries take the form:
+	   seqret ensembl:human:ENST00000262160
+	   seqret ensembl:human:ENST0000026216?
+	   seqret ensembl:human:ENSE00001533831
+	showing that transcripts, translations and exons are retrievable
+	and that partial queries are allowed. Example database
+	definitions are given in the emboss.default.template file. Please
+	read the note above those definitions regarding fair use of
+	the public Ensembl servers.
 
-The following fixes were already applied to the distribution used to
-reconstruct this stage of development.
+	'sql' is a new access method for networked SQL servers
+	(mysql or postgresql). The server and database is described
+	using the 'url' field. As for biomart (described below) the
+	database definition must include definitions of new attributes
+	'sequence' (the sequence column) and 'identifier' (the
+	column used in the squery). Additional columns may be
+	returned as description text if they are listed in the 'returns'
+	attribute of the DB definition. An example definition is
+	given in emboss.default.template.
 
-The files in this directory are bugfix replacements for files in
-the EMBOSS-6.2.0 distribution. Just drop the replacement files in
-the location shown and redo the 'make install.'
+	tfextract has been updated to deal with multiple pattern lines
+	and empty sequence lines.
 
-Fix 1. EMBOSS-6.2.0/emboss/jembossctl.c
-       EMBOSS-6.2.0/jemboss/lib/jemboss.jar
-       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/gui/filetree/DragTree.java
-       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/gui/filetree/RemoteDragTree.java
-       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java
-       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/gui/ShowResultSet.java
-       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/JembossParams.java
-       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/programs/RunEmbossApplication2.java
-       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/server/JembossAuthServer.java
-       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/server/JembossServer.java
-       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/server/JembossThread.java
-       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/soap/AuthPopup.java
-       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/soap/JembossRun.java
-       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/soap/PrivateRequest.java
-       EMBOSS-6.2.0/jemboss/utils/install-jemboss-server.sh
+	Three automatic EMBOSS environment variables are
+	added. EMBOSS_INSTALLDIRECTORY is the installation directory
+	reported by embossversion -full, EMBOSS_BASEDIRECTORY is the base
+	directory reported by embossversion -full, and
+	EMBOSS_ROOTDIRECTORY is the root directory reported by
+	embossversion-full. These are needed to allow the QA test
+	database definitions to point to the test data for the current
+	installation, and appear in the test/.embossrc file.
 
-26 Feb 2010: Various Jemboss fixes including allowing multiple
-             parameters to "wossname" and reporting of stderr
-             output
+	Validation of EMBL/GenBank feature tables has been updated by
+	reading EMBL release 104 (June 2010) and allowing many feature
+	qualifier non-standard values that appear in that release.
 
+	Biomart is a new access method for sequence databases, The
+	database definition must include definitions of new attributes
+	'sequence' (the biomart sequence attribute) and 'identifier' (the
+	Biomart identifier attribute). Additional attributes may be
+	returned as description text if they are listed in the returns'
+	attribute of the DB definition. An example definition is
+	given in emboss.default.template.
 
-Fix 2. EMBOSS-6.2.0/emboss/acd/jaspextract.acd
-       EMBOSS-6.2.0/emboss/acd/jaspscan.acd
-       EMBOSS-6.2.0/emboss/jaspextract.c
-       EMBOSS-6.2.0/emboss/jaspscan.c
+	Database definitions have a new attribute serverversion which is
+	used by SRSWWW access to choose the best way to retrieve data.
 
-26 Feb 2010: jaspextract and jaspscan can use the latest-format data at
-             http://jaspar.genereg.net/html/DOWNLOAD/Archive.zip
-             jaspextract uses the data in the "all_data/FlatFileDir"
-             directory. It is advisable to clear delete any old data files
-             from your EMBOSS data file area e.g. from the
-             /usr/local/emboss/share/EMBOSS/data/JASPAR_* directories
+	SRSWWW database access, for example from the EBI's srs.ebi.ac.uk
+	server, had a problem processing queries returning more than 30
+	entries. This is now corrected by first asking the server for the
+	number of entries and then accessing the data in chunks. This will
+	unfortunately slow down SRSWWW access for single entries but was
+	the only solution available after checking with EBI's SRS support
+	team.
 
+	Infoseq has a new column "organism" which shows the species line
+	from an EMBL or UniProt entry. In a future release this may be
+	changed to show the standard name for the NCBI taxon identifier
+	from an entry as the species definitions for these databases can
+	be long with alternative names and possibly additional species.
 
-Fix 3. EMBOSS-6.2.0/emboss/emma.c
+	Amino acid 280nm extinction coefficients in file Eamino.dat have
+	been adjusted to match those of the Expasy 'protparam' tool.
+	Pepstats now reports values with cysteine residues reduced and as
+	cysteine bridges.
 
-26 Feb 2010: Takes note once again of any EMBOSS_CLUSTALW environment variable
-             setting.
+	Database types, originally defined as simply "N" for nucleotide
+	and "P" for protein, should now be named in full. The names are
+	expanded automatically when reading the definitions in the
+	emboss.default and .embossrc files. Expanding the types allows for
+	new database types to be added in the near future.
 
+	EMBOSS can now read and write BAM (binary SAM) sequence files to
+	extract all sequences and quality scores, for example to write
+	them out in FASTQ format. Although BAM data can also be read
+	through a pipe as standard input, in this case the format must be
+	specified on the command line as it is not currently possible for
+	EMBOSS to read a buffered text file as binary data.
 
-Fix 4. EMBOSS-6.2.0/emboss/acd/trimseq.acd
+	Needle dynamic programming algorithm updated to allow adjacent
+	gaps in opposite strands.
 
-26 Feb 2010: Place limit on the maximum window size
+	Rabin-Karp multi pattern search algorithm moved into the nucleus
+	library. supermatcher application seed finding step updated to use
+	Rabin-Karp multi-pattern search.
 
+	Banded Smith-Waterman algorithm used by supermatcher and
+	wordfinder applications has been revised, fixing a problem with
+	occasional inconsistent alignments. Basic SAM format support for
+	these two applications as well as for the wordmatch
+	application. supermatcher assumes the second sequence as the
+	reference sequence while wordfinder and wordmatch considers the
+	first sequence as the reference sequence.
 
-Fix 5. EMBOSS-6.2.0/ajax/core/ajpat.c
-       EMBOSS-6.2.0/nucleus/embpat.c
+	The acdvalid application now reads the EDAM (EMBRACE Data and
+	Methods) ontology to validate EDAM references in relations
+	attributes. All applications are expected to have at least one
+	topic and at least one operation term. Other qualifiers can have
+	any number of data terms.
 
-26 Feb 2010: Fix crash when excessive mismatches requested in one of the
-             fuzzpro search algorithms.
+	New source file ajtax.c provides parsing and validation for the
+	NCBI taxonomy in its .dmp file form. The parser reads all taxonomy
+	data into memory. This takes up too much space for practical use,
+	so is only intended for subsets. The parser will be reused to
+	develop indexing applications to provide fast lookup of taxon
+	identifiers.
 
+	New source file ajobo.c provides parsing and validation for OBO
+	format ontology files. The parser includes strict warnings
+	according to the OBO format documentation, but these can be turned
+	off as in many cases the OBO foundry ontologies do not follow the
+	exact standard. Examples include terms not in sorted order, and
+	Typedef stanzzas following Term stanzas, and dbxrefs to
+	non-existent terms (e.g. GO:ma in the gene ontology to cite a
+	curator).
 
-Fix 6. EMBOSS-6.2.0/emboss/coderet.c
-       EMBOSS-6.2.0/emboss/splitter.c
+	Support for PDF and SVG graphic file output has been added. SVG
+	requires no additional libraries. PDF support requires the libhpdf
+	library (which, somewhat confusingly, is provided by the libharu
+	project). EMBOSS will attempt to find the library and development
+	files automatically and add PDF support (or not) appropriately.
+	However, if libhpdf is in a non-standard place, a --with-hpdf=DIR
+	configuration switch can be optionally used.
 
-26 Feb 2010: Fix crash if no features in the source sequence
+	The output of showalign has changed. The reference sequence now
+	appears at the top, of selected. The ticks and sequence position
+	numbering is relative to a selected reference sequence. Gaps
+	within the reference appear as '.' and are not counted in
+	numbering. End gaps appear as '.' with 'V' and 'v' as the major
+	and minor tick marks, and numbering from -1 before the start and
+	from +1 after the end of the reference. The additional copy of the
+	consensus is no longer reported.
 
+	When reading ABI trace files the quality scores can now be
+	read. They are undefined in ABI files, but assumed to be phred
+	scores. ABI files can have two sequences and sets of quality
+	scores. The first is from the instrument basecalling. The second
+	is from a second basecaller. Where two sets are found, EMBOSS now
+	reads the second set.
 
-Fix 7. EMBOSS-6.2.0/emboss/matcher.c
+	Application nospace has a new  -menu option to trim all, trailing, or
+	excess whitespace.
 
-26 Feb 2010: Fix memory allocation problem
+	Output type outfileall is obsolete (it is essentially an outfile)
+	and has been deleted. No application was using it.
 
+	Input type filelist (comma-delimited list of filenames) now trims
+	excess whitespace from the beginning and end of each filename.
 
-Fix 8. EMBOSS-6.2.0/ajax/core/ajseqread.c
-       EMBOSS-6.2.0/ajax/core/ajseqwrite.c
+	Command line qualifiers with an '=' but no value now have a
+	value of an empty string. Previous releases set the value to "="
 
-01-Mar-2010: Fix sequence format 'refseqp' to be a valid protein
-             output format and to preserve more fields from refseqp input.
+	The file extension for directory, dirlist and outdir ACD datatypes
+	is now a qualifier. This allows it to be defined as a default in
+	the ACD file but also substituted by the user. An empty string
+	means 'ignore the extension'. To specify 'no extension' a single
+	space can be used as the value.
 
+	On the command line, for a parameter (with no qualifier name
+	given) a single dot was used as a missing value in previous
+	versions. This causes problems when specifying the current
+	directory as a dot. On the command line an empty (missing) value
+	must now be an empty quoted string '' or "".
 
-Fix 9. EMBOSS-6.2.0/ajax/core/ajlist.c
-       EMBOSS-6.2.0/ajax/core/ajlist.h
-       EMBOSS-6.2.0/emboss/showfeat.c
+	Ampersands in application descriptions have been removed. They
+	confuse HTML versions of documentation.
 
-01-Mar-2010: Fix showfeat sorted feature output to correctly sort exons
-             for 'join' feature locations.
+	The QA test script qatest.pl has new options -simple to turn off
+	messages when running with a local test file, and -with to cancel
+	-without options
 
+	Output redirected to a file can now use ajSysExecOutname functions
+	to pass the filename to be used for standard output and possibly
+	standard error. The filename is most usefully picked up from a new
+	function ajAcdGetOutfileName which closes an ACD outfile and
+	returns the name of the file. Te file will be empty if simply
+	opened, or will have existing contents if the append attribute is
+	true in the ACD file.
 
-Fix 10.EMBOSS-6.2.0/ajax/graphics/ajgraph.c
-       EMBOSS-6.2.0/emboss/prettyplot.c
+	The output from tfscan is now in report format, replacing the
+	undefined text file produced in previous releases.
 
-01-Mar-2010: Fix PNG graphics output format to remove large blank
-             margins added by the plplot driver. Improve prettyplot
-             output to better centre sequence characters within boxes.
+	Where a new string is created by ajStrAssignS (the standard string
+	copy functions) the reserved space for the string is enough to
+	hold the current string value. In past releases the reserved
+	memory was the same size as the reserved memory of the string
+	being copied. This wasted memory where a large string had a short
+	value, especially when copying records read from a buffered input
+	file.
 
+	Sequence input formats now turn off buffering of input once they
+	can no longer fail (for example, FASTA format after the header
+	record will read everything until it finds another header).
 
-Fix 11.EMBOSS-6.2.0/emboss/recoder.c
-       EMBOSS-6.2.0/emboss/remap.c
-       EMBOSS-6.2.0/emboss/restrict.c
-       EMBOSS-6.2.0/emboss/showseq.c
-       EMBOSS-6.2.0/emboss/silent.c
+	Make ajaxdb code IPv6 compliant. Remove gethostbyname config
+	check.
 
-01-Mar-2010: Skip bad enzyme file records
+	pcre, expat & zlib include files now install to separate
+	subdirectories.
 
+	Showfeat failed to sort features with 'join' locations. The
+	sorting is corrected. A future internal change will improve
+	feature sorting in all cases.
 
-Fix 12.EMBOSS-6.2.0/emboss/showpep.c
-       EMBOSS-6.2.0/emboss/showseq.c
+	Restriction mapping applications now process bad enzyme input
+	files without crashing.
 
-01-Mar-2010: Correct HTML output closing tag.
+	PNG graphics output had an unwanted blank margin that did not
+	appear in other output formats. This is now turned off through
+	plplot.
 
+	Prettyplot formatting is corrected to improve the centring of
+	characters within boxes.
 
-Fix 13.EMBOSS-6.2.0/ajax/core/ajfeat.c       
+	Restriction mapping applications no longer have an upper limit on
+	the number of cuts.
 
-01-Mar-2010: Remove warnings for accessions and repeat features in
-             ensembl format EMBL files.
+	Warning messages for EMBL format sequences created vby ENSEMBL
+	have been turned off.
 
+	Corrected references to the EMBL/GenBank feature table
+	documentation in ACD files and web pages
 
-Fix 14.EMBOSS-6.2.0/emboss/acd/cirdna.acd
-       EMBOSS-6.2.0/emboss/acd/knowntypes.standard
+	embossversion now reports the setting of debug options, and
+	corrects variable name warnrange to acdwarnrange.
 
-01-Mar-2010: Fix description of cirdna input
+	Any numeric ACD type (integer, float, range or array) with
+	calculated values for the minimum or maximum attributes can
+	potentially have an impossible range (maximum less than minimum)
+	at run time. ACD processing now discovers these calculated values,
+	and requires a definition for a new attribute 'failrange' If this
+	is defined true, a 'failmessage' attribute must also be defined to
+	explain why the values are invalid (e.g. input sequence too short
+	for the algorithm). If 'failrange' is false, a value for another
+	new attribute 'trueminimum' must be set to define which of the
+	minimum or maximum values if to be used as the only accepted
+	value.
 
+	PNG graphics output had a plplot-defined margin limiting the
+	available plot space. This is now removed, allowing applications
+	such as prettyplot more space to display results.
 
-Fix 15.EMBOSS-6.2.0/emboss/acd/extractfeat.acd
-       EMBOSS-6.2.0/emboss/acd/maskfeat.acd
-       EMBOSS-6.2.0/emboss/acd/showfeat.acd
-       EMBOSS-6.2.0/emboss/acd/showpep.acd
-       EMBOSS-6.2.0/emboss/acd/showseq.acd
-       EMBOSS-6.2.0/emboss/acd/twofeat.acd
-       EMBOSS-6.2.0/doc/programs/html/extractfeat.html
-       EMBOSS-6.2.0/doc/programs/html/maskfeat.html
-       EMBOSS-6.2.0/doc/programs/html/showfeat.html
-       EMBOSS-6.2.0/doc/programs/html/showpep.html
-       EMBOSS-6.2.0/doc/programs/html/showseq.html
-       EMBOSS-6.2.0/doc/programs/html/twofeat.html
-       EMBOSS-6.2.0/doc/programs/text/extractfeat.txt
-       EMBOSS-6.2.0/doc/programs/text/maskfeat.txt
-       EMBOSS-6.2.0/doc/programs/text/showfeat.txt
-       EMBOSS-6.2.0/doc/programs/text/showpep.txt
-       EMBOSS-6.2.0/doc/programs/text/showseq.txt
-       EMBOSS-6.2.0/doc/programs/text/twofeat.txt
+	Resource attribute identifier: is obsoleted. No code used it. It
+	is no longer allowed in resource definitions.
 
-01-Mar-2010: Fix URLs for EMBL/GenBank and SwissProt feature table
-             descriptions in help and documentation.
-
-
-Fix 16.EMBOSS-6.2.0/emboss/acd/remap.acd
-       EMBOSS-6.2.0/emboss/acd/restover.acd
-       EMBOSS-6.2.0/emboss/acd/restrict.acd
-       EMBOSS-6.2.0/emboss/acd/showseq.acd
-
-01-Mar-2010: Remove artificial upper limit on number of restriction cuts
-
-
-Fix 17.EMBOSS-6.2.0/doc/programs/html/density.2.density.gif
-       EMBOSS-6.2.0/doc/programs/html/density.3.density.gif
-       EMBOSS-6.2.0/doc/programs/html/Makefile.am
-       EMBOSS-6.2.0/doc/programs/html/Makefile.in
-       EMBOSS-6.2.0/doc/programs/html/Makefile
-
-01-Mar-2010: Missing images for density usage examples
-
-
-Fix 18. EMBOSS-6.2.0/ajax/core/ajsys.c
-
-02-Mar-2010: Add .exe extension when searching for CYGWIN executables
-
-
-Fix 19.EMBOSS-6.2.0/nucleus/embaln.h
-       EMBOSS-6.2.0/nucleus/embaln.c
-       EMBOSS-6.2.0/emboss/needle.c
-       EMBOSS-6.2.0/emboss/needleall.c
-
-15-June-2010: Fix needle traceback problem
-
+	Database attributes identifier: description: and command: are
+	obsoleted. No code used them. They are no longer allowed in
+	database definitions.
 
 Version 6.2.0 15-Jan-2010
+
 	Fixed GFF2 and GFF3 feature formats to always have the start
 	position less than the end position for features on the '-'
 	strand.
@@ -369,6 +446,11 @@ Version 6.2.0 15-Jan-2010
 	by SoapLab.
 
 Version 6.1.0 15-Jul-2009
+
+	New application showpep displays protein sequences. Showseq is now
+	limited to nucleotide sequences. Many of the showseq options are
+	not appropriate for proteins. Showpep makes the remaining showseq
+	options available.
 
 	A new data structure AjPSeqXref holds details of cross-references
 	between a sequence object and any other data resource. The
@@ -651,6 +733,7 @@ Version 6.1.0 15-Jul-2009
 
 	Command line qualifiers are renamed where the first 5 characters
 	are the same. These were:
+	    eprimer3 major revision of all optoins
 	    est2genome -splice to -usesplace
 	    prettyplot -boxcolval to -boxuse
             octanol -*plot to -plot*
