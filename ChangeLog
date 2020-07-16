@@ -1,4 +1,214 @@
-	Version 6.4.0 15-Jul-2011
+Fixed to version 6.4.0 already included in the distribution used to rebuild
+this code repository
+
+The files in this directory are bugfix replacements for files in
+the EMBOSS-6.4.0 distribution. Just drop the replacement files in
+the location shown and redo the 'make install.'
+
+Fix 1. EMBOSS-6.4.0/emboss/dbiflat.c
+       EMBOSS-6.4.0/emboss/dbxflat.c
+
+10-Aug-2011: The SwissProt description line format includes additional
+             tags which interfere with the EMBL parser used in
+             previous releases. The fix replaces this with a SwissProt
+             parser that strips out the extra tags. After patching the
+             release, any existing SwissProt description index files
+             should be reindexed. Other indexes are unchanged.
+
+Fix 2. EMBOSS-6.4.0/ajax/core/ajquery.c
+
+10-Aug-2011: For databases with more than one valid format (examples
+                    include the EBI dbfetch server) this fix allows the
+                    format to be specified with a qualifier on the command
+                    line. In the original release only a format in the query
+                    string was used.
+
+
+Fix 3. EMBOSS-6.4.0/ajax/core/ajfeatread.c
+
+10-Aug-2011: When parsing GFF3 format input, long feature tags (for
+                    example extremely long translations) exceeded limits in
+                    regular expression parsing. Ths fix decouples testing for
+                    escaped quotes from the main task of finding quoted
+                    strings.
+
+
+Fix 4. EMBOSS-6.4.0/emboss/data/Etcode.dat
+
+10-Aug-2001: The local data file used by application tcode had a missing
+                    parameter line.
+
+
+Fix 5. EMBOSS-6.4.0/ajax/core/ajrange.c
+
+10-Aug-2011: When sequence ranges (and possible highlighting for
+                    showalign) were in a list file the parser overwrote
+                    string values.
+
+
+Fix 5. EMBOSS-6.4.0/ajax/core/ajseqabi.c
+
+10-Aug-2011: Sample names in ABI format files were stored in
+                    incompletely defined strings. This fix corrects the
+                    string object. The sample name is also used as the
+                    sequence name.
+
+
+Fix 6. EMBOSS-6.4.0/emboss/dbxresource.c
+
+10-Aug-2011: A future change to the format of Data Resource Catalogue
+                    entries in DRCAT.dat requires an update to the parsing of
+                    category lines. The current version is not affected.
+
+
+Fix 7. EMBOSS-6.4.0/emboss/server.ensemblgenomes
+       EMBOSS-6.4.0/emboss/cacheensembl.c
+       EMBOSS-6.4.0/ajax/ensembl/ensregistry.c
+       EMBOSS-6.4.0/ajax/ensembl/ensregistry.c
+       EMBOSS-6.4.0/ajax/ensembl/ensdatabaseadaptor.c
+       EMBOSS-6.4.0/ajax/ensembl/ensdatabaseadaptor.h
+
+10-Aug-2011: Microbial genomes use an enumerated species code which
+                    must be added to the query for data retrieval. This fix
+                    adds the species code to the comment field. In the next
+                    release a more complete solution will be implemented.
+
+
+Fix 8. EMBOSS-6.4.0/ajax/core/ajarch.h
+
+10-Aug-2011: Corrects the size of long integers on Windows systems only.
+
+
+Fix 9. EMBOSS-6.4.0/emboss/cirdna.c
+
+10-Aug-2011: Cirdna prints text inside solid blocks invisibly. When
+             printed outside the text scaling was too small. The text
+             scale is now adjusted for the radius and sequence length
+             so that labels should be readable outside the box.
+
+
+Fix 10. EMBOSS-6.4.0/ajax/core/ajpat.c
+
+10-Aug-2011: Fuzznuc, fuzzpro and fuzztran using a pattern file
+             ignored the command line -mismatch qualifier for the
+             first pattern. The default mismatch is now set to this
+             value at the start of the pattern matching loop in the
+             library.
+
+
+Fix 11. EMBOSS-6.4.0/ajax/core/ajfmt.c
+
+11-Aug-2011: ajFmtScanF handled va_list incorrectly. Only noticeable by code
+             developers.
+
+
+Fix 12. EMBOSS-6.4.0/nucleus/embgroup.c
+
+18-Aug-2011: An internal string variable should be initialised as NULL.
+
+
+Fix 13. EMBOSS-6.4.0/ajax/core/ajseqread.c
+
+18-Aug-2011: Reading protein GFF3 files ignored the EMBOSS type comment.
+	     This appears to be the only way to detect a protein GFF3 file.
+
+Fix 14. EMBOSS-6.4.0/emboss/data/Efeatures.gff3protein
+
+18-Aug-2011: In writing GFF3 protein file, uses the current term name
+	     from the Sequence Ontology to clear errors from the GFF3
+	     online validator.
+
+Fix 15. EMBOSS-6.4.0/ajax/core/ajfeatwrite.c
+
+18-Aug-2011: When writing GFF3 format, tags names are explicitly
+  	     converted to lower case as required by the GFF3
+  	     standard. This includes EC_number and /PCR_conditions in
+  	     EMBL/GenBank/DDBJ and several RefseqP tags. The score is
+  	     written using g format to represent very low values.
+
+Fix 16. EMBOSS-6.4.0/ajax/core/ajnexus.c
+        EMBOSS-6.4.0/ajax/core/ajseqread.c
+
+22-Aug-2011: When reading nexus data format with no taxlabels block
+	     the attempt to read the taxa (sequence names) from the
+	     matrix block failed.
+
+Fix 17. EMBOSS-6.4.0/ajax/ajaxdb/ajtextdb.c
+
+22-Aug-2011: The SRS access method added a stray '+' character to the
+	     getz command line.
+
+Fix 18. EMBOSS-6.4.0/ajax/core/ajquery.c
+
+25-Aug-2011: In some cases a query using a simple identifier
+	     could try to test an undefined "sv" field.
+
+Fix 19. EMBOSS-6.4.0/ajax/core/ajseqread.c
+
+02-Sep-2011: Reading "raw" sequence format failed when piped from
+	     standard input. In release 6.4.0 "raw" format was
+	     redefined as a binary format to catch binary files that
+	     start with one or more sequence characters followed by a
+	     NULL character. This fix continues to check binary files,
+	     but has to drop the check for data piped through standard
+	     input which is read as text and cannot be reread as
+	     binary.
+
+Fix 20. EMBOSS-6.4.0/ajax/core/ajnam.c
+
+02-Sep-2011: Complex database definitions with more than one type or
+	     format are allowed in 6.4.0 but caused an error message
+	     from showdb when the type and format were tested.
+
+Fix 21. EMBOSS-6.4.0/emboss/drfinddata.c
+    	EMBOSS-6.4.0/emboss/drfindformat.c
+    	EMBOSS-6.4.0/emboss/drfindid.c
+    	EMBOSS-6.4.0/emboss/drfindresource.c
+
+02-Sep-2011: Running with -debug fails. Debug calls used obsolete datatype
+	     for data resource internals. Without -debug there was no problem.
+
+Fix 22. EMBOSS-6.4.0/emboss/diffseq.c
+    	EMBOSS-6.4.0/ajax/core/ajreport.c
+
+14-Sep-2011: Diffseq reports insertions in the second sequence with a
+	     length 2 reversed region in the first sequence instead of
+	     a length 0 empty sequence. This bug was introduced in
+	     release 6.0.0 when reversed sequence features were updated.
+
+Fix 23. EMBOSS-6.4.0/ajax/core/ajindex.c
+
+04-Oct-2011: Dbx index files from earlier releases do not include a
+	     type parameter to indicate an Identifier or Secondary
+	     index. The code to test index field names failed to
+	     define id and acc fields as Identifiers. This fix allows
+	     old indexes to work with EMBOSS 6.4.0.
+
+Fix 24. EMBOSS-6.4.0/ajax/core/ajfileio.c
+
+05-Oct-2011: Trimming carriage control from the ends of lines in a
+	     buffer failed when MacOSX-style characters are used and
+	     the line buffer is a reference counted string. An example
+	     on non-MacOSX systems was processing the data returned by
+	     the NCBI Entrez server.
+
+Fix 25. EMBOSS-6.4.0/emboss/dbxflat.c
+
+21-Nov-2011: The ORG (taxonomy) field failed to parse correctly when
+	     another secondary field (keyword or description) was
+	     indexed. The input buffer was not correctly reset when
+	     skipping the SOURCE record to parse the ORGANISM record
+	     below.
+
+Fix 26. EMBOSS-6.4.0/ajax/core/ajfeatread.c
+
+21-Nov-2011: When reading EMBL format, an entry with a single feature
+	     returned a failure status which deleted the feature. A
+	     single feature now correctly sets the return code when
+	     the last feature in the input is processed.
+
+
+Version 6.4.0 15-Jul-2011
 
 	DBXFLAT can index FASTQ format short
 	read sequence files, allowing individual sequences to be rapidly
