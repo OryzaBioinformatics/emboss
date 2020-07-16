@@ -648,7 +648,9 @@ static void cvt_c(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 		  const ajuint* flags, ajint width, ajint precision)
 {
     ajuint minusflag = flags['-'];
-
+    ajuint upperflag = flags['U'];
+    ajuint lowerflag = flags['L'];
+  
     (void) code;
     (void) precision;
 
@@ -664,7 +666,12 @@ static void cvt_c(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
     if(!minusflag)
 	pad(width - 1, ' ');
 
-    put(ajSysCastItouc(va_arg(VA_V(ap), int)), cl);
+    if(upperflag)
+        put((unsigned char) toupper(va_arg(VA_V(ap), int)), cl);
+    else if(lowerflag)
+        put((unsigned char) tolower(va_arg(VA_V(ap), int)), cl);
+    else
+        put(ajSysCastItouc(va_arg(VA_V(ap), int)), cl);
 
     if(minusflag)
 	pad(width - 1, ' ');
@@ -1149,6 +1156,9 @@ void ajFmtPuts(const char* str, ajint len, int put(int c, void* cl), void* cl,
 		const ajuint* flags, ajint width, ajint precision)
 {
     ajuint minusflag = flags['-'];
+    ajuint upperflag = flags['U'];
+    ajuint lowerflag = flags['L'];
+    ajint i;
 
     assert(len >= 0);
     assert(flags);
@@ -1167,11 +1177,21 @@ void ajFmtPuts(const char* str, ajint len, int put(int c, void* cl), void* cl,
 
     if(!minusflag)
 	pad(width - len, ' ');
-    {
-	ajint i;
 
-	for(i = 0; i < len; i++)
-	    put((unsigned char)*str++, cl);
+    if(upperflag)
+    {
+        for(i = 0; i < len; i++)
+            put((unsigned char) toupper((int)*str++), cl);
+    }
+    else if(lowerflag)
+    {
+        for(i = 0; i < len; i++)
+            put((unsigned char) tolower((int)*str++), cl);
+    }
+    else
+    {
+        for(i = 0; i < len; i++)
+            put((unsigned char)*str++, cl);
     }
 
     if(minusflag)
@@ -1864,9 +1884,17 @@ void ajFmtVfmt(int put(int c, void* cl), void* cl, const char* fmt,
 
 	    if(*fmt == 'l' || *fmt == 'L'|| *fmt == 'h')
 	    {
-		/* size modifiers */
+		/* size modifiers, L is also lower case string */
 		assert(flags[(int)*fmt] < 255); /* store as flags - */
 		/* values do not clash */
+		flags[(int)*fmt]++;
+		fmt++;
+	    }
+
+	    if(*fmt == 'U')
+	    {
+		/* upper case */
+		assert(flags[(int)*fmt] < 255); /* store as flags - */
 		flags[(int)*fmt]++;
 		fmt++;
 	    }
