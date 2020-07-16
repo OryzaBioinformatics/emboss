@@ -1,8 +1,8 @@
-/* @source wossname application
+/* @source wossparam application
 **
-** Finds programs by keywords in their one-line documentation
+** Finds programs by EDAM parameter
 **
-** @author Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @author Copyright (C) Peter Rice (pmr@ebi.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -25,9 +25,9 @@
 
 
 
-/* @prog wossname *************************************************************
+/* @prog wossparam ************************************************************
 **
-** Finds programs by keywords in their one-line documentation
+** Finds programs by EDAM parameter
 **
 ******************************************************************************/
 
@@ -39,7 +39,6 @@ int main(int argc, char **argv, char **env)
     AjPList alpha;    /* alphabetical list of all programs */
     AjPFile outfile = NULL;
     AjPStr search   = NULL;
-    AjBool matchall;
     AjBool showkey;
     AjBool html;
     AjBool groups;
@@ -50,13 +49,15 @@ int main(int argc, char **argv, char **env)
     AjBool colon;
     AjBool gui;
     AjPStr showembassy;
+    AjBool sensitive = ajFalse;
+    AjBool subclasses = ajTrue;
+    AjBool obsolete = ajFalse;
 
-    embInit("wossname", argc, argv);
+    embInit("wossparam", argc, argv);
     
-    search     = ajAcdGetString("search");
+    search     = ajAcdGetString("identifier");
     outfile    = ajAcdGetOutfile("outfile");
     html       = ajAcdGetToggle("html");
-    matchall   = ajAcdGetBoolean("allmatch");
     showkey    = ajAcdGetBoolean("showkeywords");
     groups     = ajAcdGetBoolean("groups");
     alphabetic = ajAcdGetBoolean("alphabetic");
@@ -66,6 +67,9 @@ int main(int argc, char **argv, char **env)
     explode    = ajAcdGetBoolean("explode");
     colon      = ajAcdGetBoolean("colon");
     gui        = ajAcdGetBoolean("gui");
+    sensitive = ajAcdGetBoolean("sensitive");
+    subclasses = ajAcdGetBoolean("subclasses");
+    obsolete = ajAcdGetBoolean("obsolete");
     
     
     glist = ajListNew();
@@ -77,25 +81,21 @@ int main(int argc, char **argv, char **env)
     
     
     /* is a search string specified */
-    if(ajStrGetLen(search))
-    {
-	newlist = ajListNew();
-	embGrpKeySearchProgs(newlist, alpha, search, matchall);
-	embGrpOutputGroupsList(outfile, newlist, !groups, html,
-			       showkey, showembassy);
-	embGrpGroupsListDel(&newlist);
-    }
-    else if(alphabetic)
-	/* list all programs in alphabetic order */
-	embGrpOutputGroupsList(outfile, alpha, !groups, html,
-			       showkey, showembassy);
+    newlist = ajListNew();
+    if(alphabetic)
+        embGrpSearchProgsEdam(newlist, alpha, search, "param",
+                              sensitive, subclasses, obsolete);
     else
-	/* just show the grouped sets of programs */
-	embGrpOutputGroupsList(outfile, glist, !groups, html,
-			       showkey, showembassy);
+        embGrpSearchProgsEdam(newlist, glist, search, "param",
+                              sensitive, subclasses, obsolete);
+        
+
+    embGrpOutputGroupsList(outfile, newlist, !groups, html,
+                           showkey, showembassy);
     
     ajFileClose(&outfile);
     
+    embGrpGroupsListDel(&newlist);
     embGrpGroupsListDel(&glist);
     embGrpGroupsListDel(&alpha);
 

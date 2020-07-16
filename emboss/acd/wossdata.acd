@@ -1,6 +1,7 @@
-application: wossname [
-  documentation: "Finds programs by keywords in their short description"
-  groups: "Documentation"
+application: wossdata [
+  documentation: "Finds programs by EDAM data"
+  groups: "Ontology:EDAM, Documentation"
+    relations: "EDAM:0000219 topic Annotation"
     relations: "EDAM:0000088 topic Literature and documentation"
     relations: "EDAM:0000515 operation Data retrieval (tool annotation)"
 ]
@@ -10,20 +11,19 @@ section: input [
   type: "page"
 ]
 
-  string: search [
-    parameter: "Y"
-    default: ""
-    information: "Text to search for, or blank to list all
-                  programs"
-    help: "Enter a word or words here and a case-independent search
-           for it will be made in the one-line documentation, group names and
-           keywords of all of the EMBOSS programs. If no keyword is
-           specified, all programs will be listed."
-    knowntype: "emboss keyword"
+  string: identifier [
+      default: ""
+      parameter: "Y"
+      information: "Identifier(s) to search for in ontology"
+      knowntype: "keyword"
     relations: "EDAM:0000968 data Keyword"
   ]
 
 endsection: input
+
+
+
+
 
 section: additional [
   information: "Additional section"
@@ -45,16 +45,6 @@ section: additional [
     relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
-  boolean: allmatch [
-    additional: "Y"
-    default: "Y"
-    information: "Match all words in the search string"
-    help: "By default, all words in the search string must match. This
-           option searches for a match to any word in a list of
-           possibilities"
-    relations: "EDAM:0002527 data Parameter or primitive"
-  ]
-
   boolean: showkeywords [
     additional: "Y"
     default: "N"
@@ -65,10 +55,42 @@ section: additional [
 
 endsection: additional
 
+
+
+
+
 section: advanced [
   information: "Advanced section"
   type: "page"
 ]
+
+  boolean: sensitive [
+    default: "N"
+    information: "Increase sensitivity of search"
+    help: "By default, the query keywords are matched against the EDAM
+          term names (and synonyms) only. This option also matches the
+	  keywords against the EDAM term definitions and will therefore
+	  (typically) report more matches."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: subclasses [
+    default: "Y"
+    information: "Include subclasses of hits"
+    help: "Extend the query matches to include all terms which are
+           specialisations (EDAM sub-classes) of the matched type."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+
+  boolean: obsolete [
+    default: "N"
+    information: "Include obsolete terms"
+    help: "The default behaviour is to not use or return obsolete terms.
+           This option if set will include all terms."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
 
   boolean: emboss [
     default: "Y"
@@ -138,6 +160,9 @@ section: advanced [
 
 endsection: advanced
 
+
+
+
 section: output [
   information: "Output section"
   type: "page"
@@ -190,3 +215,5 @@ section: output [
   ]
 
 endsection: output
+
+
