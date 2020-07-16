@@ -1,10 +1,9 @@
-application: digest [
+application: pepdigest [
   documentation: "Reports on protein proteolytic enzyme or
                   reagent cleavage sites"
-  groups: "Protein:Motifs"
-    relations: "EDAM:0000767 topic Peptide identification and proteolysis"
+  groups: "Protein:Composition"
+    relations: "EDAM:0000157 topic Sequence composition"
     relations: "EDAM:0000422 operation Protein cleavage site prediction"
-    obsolete: "renamed to pepdigest"
 ]
 
 section: input [

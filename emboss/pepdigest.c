@@ -1,4 +1,4 @@
-/* @source digest application
+/* @source pepdigest application
 **
 ** Calculate protein proteolytic (and CNBr) digest fragments
 **
@@ -28,15 +28,15 @@
 
 
 
-static void digest_report_hits(AjPFeattable TabRpt,
-			       AjPList l, ajint be, const char *s);
-static void digest_print_hits(AjPList l, AjPFile outf, ajint be,
-			      const char *s);
+static void pepdigest_report_hits(AjPFeattable TabRpt,
+                                  AjPList l, ajint be, const char *s);
+static void pepdigest_print_hits(AjPList l, AjPFile outf, ajint be,
+                                 const char *s);
 
 
 
 
-/* @prog digest ***************************************************************
+/* @prog pepdigest *************************************************************
 **
 ** Protein proteolytic enzyme or reagent cleavage digest
 **
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     AjBool mono;
     
 
-    embInit("digest", argc, argv);
+    embInit("pepdigest", argc, argv);
 
     seqall      = ajAcdGetSeqall("seqall");
     menu        = ajAcdGetListSingle("menu");
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
 			     nterm, cterm, dorag, mwdata, mono);
 
 	if(outf)
-	    ajFmtPrintF(outf,"DIGEST of %s from %d to %d Molwt=%10.3f\n\n",
+	    ajFmtPrintF(outf,"PEPDIGEST of %s from %d to %d Molwt=%10.3f\n\n",
 			ajSeqGetNameC(a),be,en,
 			embPropCalcMolwt(ajSeqGetSeqC(a),0,len-1,mwdata,mono));
 	if(!ncomp)
@@ -149,13 +149,13 @@ int main(int argc, char **argv)
 		ajFmtPrintF(outf,"Complete digestion with %s "
 			    "yields %d fragments:\n",
 			    ajStrGetPtr(rname),ncomp);
-		digest_print_hits(l,outf,be,ajStrGetPtr(substr));
+		pepdigest_print_hits(l,outf,be,ajStrGetPtr(substr));
 	    }
 	    ajFmtPrintS(&tmpStr,
 			"Complete digestion with %S yields %d fragments",
 			rname,ncomp);
 	    ajReportSetHeaderS(report, tmpStr);
-	    digest_report_hits(TabRpt,l,be, ajStrGetPtr(substr));
+	    pepdigest_report_hits(TabRpt,l,be, ajStrGetPtr(substr));
 	    ajReportWrite(report, TabRpt, a);
 	    ajFeattableClear(TabRpt);
 	}
@@ -168,14 +168,14 @@ int main(int argc, char **argv)
 			    "\n\nPartial digest with %s yields %d extras.\n",
 			    ajStrGetPtr(rname),npart);
 		ajFmtPrintF(outf,"Only overlapping partials shown:\n");
-		digest_print_hits(pa,outf,be,ajStrGetPtr(substr));
+		pepdigest_print_hits(pa,outf,be,ajStrGetPtr(substr));
 	    }
 	    ajFmtPrintS(&tmpStr,
 			"\n\nPartial digest with %S yields %d extras.\n",
 			rname,npart);
 	    ajFmtPrintAppS(&tmpStr,"Only overlapping partials shown:\n");
 	    ajReportSetHeaderS(report, tmpStr);
-	    digest_report_hits(TabRpt, pa,be,ajStrGetPtr(substr));
+	    pepdigest_report_hits(TabRpt, pa,be,ajStrGetPtr(substr));
 	    ajReportWrite(report, TabRpt, a);
 	    ajFeattableClear(TabRpt);
 	}
@@ -188,14 +188,14 @@ int main(int argc, char **argv)
 			    "\n\nPartial digest with %s yields %d extras.\n",
 			    ajStrGetPtr(rname),npart);
 		ajFmtPrintF(outf,"All partials shown:\n");
-		digest_print_hits(pa,outf,be,ajStrGetPtr(substr));
+		pepdigest_print_hits(pa,outf,be,ajStrGetPtr(substr));
 	    }
 	    ajFmtPrintS(&tmpStr,
 			"\n\nPartial digest with %S yields %d extras.\n",
 			rname,npart);
 	    ajFmtPrintAppS(&tmpStr,"All partials shown:\n");
 	    ajReportSetHeaderS(report, tmpStr);
-	    digest_report_hits(TabRpt, pa,be, ajStrGetPtr(substr));
+	    pepdigest_report_hits(TabRpt, pa,be, ajStrGetPtr(substr));
 	    ajReportWrite(report, TabRpt, a);
 	    ajFeattableClear(TabRpt);
 	}
@@ -232,20 +232,21 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic digest_print_hits **********************************************
+/* @funcstatic pepdigest_print_hits *******************************************
 **
-** Undocumented.
+** Print the digest fragments
 **
-** @param [u] l [AjPList] Undocumented
-** @param [u] outf [AjPFile] Undocumented
-** @param [r] be [ajint] Undocumented
-** @param [r] s [const char*] Undocumented
+** @param [u] l [AjPList] List of hits
+** @param [u] outf [AjPFile] Output file
+** @param [r] be [ajint] Sequence start position
+** @param [r] s [const char*] Sequence
 ** @@
 ******************************************************************************/
 
 
 
-static void digest_print_hits(AjPList l, AjPFile outf, ajint be, const char *s)
+static void pepdigest_print_hits(AjPList l, AjPFile outf,
+                                 ajint be, const char *s)
 {
     EmbPPropFrag fr;
     AjPStr t;
@@ -288,19 +289,19 @@ static void digest_print_hits(AjPList l, AjPFile outf, ajint be, const char *s)
 
 
 
-/* @funcstatic digest_report_hits *********************************************
+/* @funcstatic pepdigest_report_hits ******************************************
 **
-** Undocumented.
+** Save hits to a report
 **
-** @param [u] TabRpt [AjPFeattable] feature table object to store results
-** @param [u] l [AjPList] Undocumented
-** @param [r] be [ajint] Undocumented
-** @param [r] s [const char*] Undocumented
+** @param [u] TabRpt [AjPFeattable] Feature table object to store results
+** @param [u] l [AjPList] Hit list
+** @param [r] be [ajint] Start position
+** @param [r] s [const char*] Sequence
 ** @@
 ******************************************************************************/
 
-static void digest_report_hits(AjPFeattable TabRpt, AjPList l, ajint be,
-			       const char* s)
+static void pepdigest_report_hits(AjPFeattable TabRpt, AjPList l, ajint be,
+                                  const char* s)
 {
     AjPFeature gf = NULL;
     EmbPPropFrag fr;
