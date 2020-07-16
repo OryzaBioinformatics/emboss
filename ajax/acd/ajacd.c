@@ -32,6 +32,10 @@
 ** Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
+#ifdef WIN32
+#include "win32.h"
+#endif
+
 #include <stddef.h>
 #include <stdarg.h>
 #include <float.h>
@@ -39,7 +43,9 @@
 #include <math.h>
 
 #include "ajax.h"
-
+#include "ajgraph.h"
+#include "ajacd.h"
+#include "ajseqdb.h"
 
 #define DEFDLIST  "."
 #define DEFBLOSUM "EBLOSUM62"
@@ -61,7 +67,6 @@
 
 /*static AjBool acdDebug = 0;*/
 /*static AjBool acdDebugSet = 0;*/
-/*static AjPStr acdProgram = NULL;*/
 static AjBool acdDoHelp = AJFALSE;
 static AjBool acdDoLog = AJFALSE;
 static AjBool acdDoWarnRange =AJTRUE;
@@ -70,6 +75,7 @@ static AjBool acdDoTable = AJFALSE;
 static AjBool acdDoTrace = AJFALSE;
 static AjBool acdDoValid = AJFALSE;
 static AjBool acdDoXsd = AJFALSE;
+static AjBool acdDoVersion = AJFALSE;
 static AjBool acdVerbose = AJFALSE;
 static AjBool acdCommandLine = AJTRUE;
 static AjBool acdAuto = AJFALSE;
@@ -95,8 +101,9 @@ static AjPStr acdTmpStr2 = NULL;
 static AjPStr acdPrefName = NULL;
 static AjPStr acdPrefToken = NULL;
 
-static AjPStr acdArgSave = NULL;
-static AjPStr acdInputSave = NULL;
+static AjPStr acdPackName = NULL;
+static AjPStr acdPackVersion = NULL;
+
 static AjPStr acdInputName = NULL;
 static ajint acdInputLen = 0;
 static AjPStr acdInFName = NULL;
@@ -115,6 +122,7 @@ static AjPStr acdLogFName = NULL;
 static AjPFile acdLogFile = NULL;
 static AjPList acdSecList = NULL;
 static AjPTable acdSecTable = NULL;
+static AjPTable acdExternalTable = NULL;
 
 static AjPStr acdOutFullFName = NULL;
 static AjPStr acdPrettyFName = NULL;
@@ -281,6 +289,7 @@ static const char* acdValNames[] =
 **
 ** @nam2rule Acd ACD processing
 ** @suffix    P  [char*]     Package name provided
+** @suffix    V  [char*]     Package version provided
 */
 
 /* @section data definitions **************************************************
@@ -333,7 +342,7 @@ static AcdOAttrAlias acdAttrAlias[] =
 **
 ** @attr Name [const char*] Attribute name
 ** @attr Type [enum AcdEValtype] Type code
-** @attr Padding [ajint] padding to alignment boundary
+** @attr Multiple [AjBool] True if multiple values are allowed
 ** @attr Default [const char*] Default value as a string for help
 **                             and documentation
 ** @attr Help [const char*] Descriptive short text for documentation
@@ -344,7 +353,7 @@ typedef struct AcdSAttr
 {
     const char* Name;
     enum AcdEValtype Type;
-    ajint Padding;
+    AjBool Multiple;
     const char* Default;
     const char* Help;
 } AcdOAttr;
@@ -388,18 +397,22 @@ typedef struct AcdSQual
 ** @alias AcdOTableItem
 **
 ** @attr Qual [AjPStr] Qualifier name
+** @attr Type [AjPStr] Qualifier type
 ** @attr Help [AjPStr] Help text
 ** @attr Valid [AjPStr] Valid input
 ** @attr Expect [AjPStr] Expected value(s)
+** @attr Title [AjPStr] Section title
 ** @@
 ******************************************************************************/
 
 typedef struct AcdSTableItem
 {
     AjPStr Qual;
+    AjPStr Type;
     AjPStr Help;
     AjPStr Valid;
     AjPStr Expect;
+    AjPStr Title;
 } AcdOTableItem;
 #define AcdPTableItem AcdOTableItem*
 
@@ -648,6 +661,7 @@ typedef struct AcdSType
 static AjBool* acdParamSet;
 
 static AcdPAcd acdNewCurr = NULL;
+static AcdPAcd acdApplAcd = NULL;
 static AcdPAcd acdMasterQual = NULL;
 
 /*
@@ -1239,54 +1253,54 @@ enum AcdEDef
 
 AcdOAttr acdAttrDef[] =
 {
-    {"default", VT_STR, 0, "",
+    {"default", VT_STR, AJFALSE, "",
 	 "Default value"},
-    {"information", VT_STR, 0, "",
+    {"information", VT_STR, AJFALSE, "",
 	 "Information for menus etc., and default prompt"},
-    {"prompt", VT_STR, 0, "",
+    {"prompt", VT_STR, AJFALSE, "",
 	 "Prompt (if information string is unclear)"},
-    {"code", VT_STR, 0, "",
+    {"code", VT_STR, AJFALSE, "",
 	 "Code name for information/prompt to be looked up in standard table"},
-    {"help", VT_STR, 0, "",
+    {"help", VT_STR, AJFALSE, "",
 	 "Text for help documentation"},
-    {"parameter", VT_BOOL, 0, "N",
+    {"parameter", VT_BOOL, AJFALSE, "N",
 	 "Command line parameter. "
 	     "Can be on the command line with no qualifier name. "
 		 "Implies 'standard' qualifier"},
-    {"standard", VT_BOOL, 0, "N",
+    {"standard", VT_BOOL, AJFALSE, "N",
 	 "Standard qualifier, value required. Interactive prompt if missing"},
-    {"additional", VT_BOOL, 0, "N",
+    {"additional", VT_BOOL, AJFALSE, "N",
 	 "Additional qualifier. "
 	     "Value required if -options is on the command line, "
 		 "or set by default"},
-    {"missing", VT_BOOL, 0, "N",
+    {"missing", VT_BOOL, AJFALSE, "N",
 	 "Allow with no value on the command line to set to ''"},
-    {"valid", VT_STR, 0, "",
+    {"valid", VT_STR, AJFALSE, "",
 	 "Help: String description of allowed values for -help output, "
 	     "used if the default help is nuclear"},
-    {"expected", VT_STR, 0, "",
+    {"expected", VT_STR, AJFALSE, "",
 	 "Help: String description of the expected value for -help output, "
 	     "used if the default help is nuclear"},
-    {"needed", VT_BOOL, 0, "y",
+    {"needed", VT_BOOL, AJFALSE, "y",
 	 "Include in GUI form, "
 	     "used to hide options if they are unclear in GUIs"},
-    {"knowntype", VT_STR, 0, "",
+    {"knowntype", VT_STR, AJFALSE, "",
 	 "Known standard type, "
 	     "used to define input and output types for workflows"},
-    {"relations", VT_STR, 0, "",
+    {"relations", VT_STR, AJTRUE, "",
 	 "Relationships between this ACD item and others, "
 	     "defined as specially formatted text"},
-    {"outputmodifier", VT_BOOL, 0, "N",
+    {"outputmodifier", VT_BOOL, AJFALSE, "N",
 	 "Modifies the output in ways that can break parsers"},
-    {"style", VT_STR, 0, "",
+    {"style", VT_STR, AJFALSE, "",
 	 "Style for SoapLab's ACD files"},
-    {"qualifier", VT_STR, 0, "",
+    {"qualifier", VT_STR, AJFALSE, "",
 	 "Qualifier name for SoapLab's ACD files"},
-    {"template", VT_STR, 0, "",
+    {"template", VT_STR, AJFALSE, "",
 	 "Commandline template for SoapLab's ACD files"},
-    {"comment", VT_STR, 0, "",
+    {"comment", VT_STR, AJTRUE, "",
 	 "Comment for SoapLab's ACD files"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
@@ -1297,907 +1311,910 @@ AcdOAttr acdAttrDef[] =
 
 AcdOAttr acdAttrXxxx[] =
 {
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrAppl[] =
 {
-    {"documentation", VT_STR, 0, "",
+    {"documentation", VT_STR, AJFALSE, "",
 	 "Short description of the application function"},
-    {"groups", VT_STR, 0, "",
+    {"groups", VT_STR, AJTRUE, "",
 	 "Standard application group(s) for wossname and GUIs"},
-    {"keywords", VT_STR, 0, "",
+    {"keywords", VT_STR, AJTRUE, "",
 	 "Standard application group(s) for wossname and GUIs"},
-    {"gui", VT_STR, 0, "",
+    {"gui", VT_STR, AJFALSE, "",
 	 "Suitability for launching in a GUI"},
-    {"batch", VT_STR, 0,"",
+    {"batch", VT_STR, AJFALSE,"",
 	 "Suitability for running in batch"},
-    {"obsolete", VT_STR, 0,"",
+    {"obsolete", VT_STR, AJFALSE,"",
 	 "Reason for obsolete status"},
-    {"embassy", VT_STR, 0,"",
+    {"embassy", VT_STR, AJFALSE,"",
 	 "EMBASSY package name"},
-    {"external", VT_STR, 0, "",
+    {"external", VT_STR, AJTRUE, "",
 	 "Third party tool(s) required by this program"},
-    {"cpu", VT_STR, 0, "",
+    {"cpu", VT_STR, AJFALSE, "",
 	 "Estimated maximum CPU usage"},
-    {"supplier", VT_STR, 0, "",
+    {"supplier", VT_STR, AJFALSE, "",
 	 "Supplier name"},
-    {"version", VT_STR, 0, "",
+    {"versionnumber", VT_STR, AJFALSE, "",
 	 "Version number"},
-    {"nonemboss", VT_STR, 0, "",
+    {"nonemboss", VT_STR, AJFALSE, "",
 	 "Non-emboss application name for SoapLab"},
-    {"executable", VT_STR, 0,"",
+    {"executable", VT_STR, AJFALSE,"",
 	 "Non-emboss executable for SoapLab"},
-    {"template", VT_STR, 0, "",
+    {"template", VT_STR, AJFALSE, "",
 	 "Commandline template for SoapLab's ACD files"},
-    {"comment", VT_STR, 0, "",
+    {"comment", VT_STR, AJFALSE, "",
 	 "Comment for SoapLab's ACD files"},
-    {NULL, VT_NULL, 0, NULL,
+    {"relations", VT_STR, AJTRUE, "",
+	 "Relationships between this ACD item and others, "
+	     "defined as specially formatted text"},
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrAlign[] =
 {
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "[P]rotein or [N]ucleotide"},
-    {"taglist", VT_STR, 0, "",
+    {"taglist", VT_STR, AJFALSE, "",
 	 "Extra tags to report"},
-    {"minseqs", VT_INT, 0, "1",
+    {"minseqs", VT_INT, AJFALSE, "1",
 	 "Minimum number of sequences"},
-    {"maxseqs", VT_INT, 0, "(INT_MAX)",
+    {"maxseqs", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum number of sequences"},
-    {"multiple", VT_BOOL, 0, "N",
+    {"multiple", VT_BOOL, AJFALSE, "N",
 	 "More than one alignment in one file"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrArray[] =
 {
-    {"minimum", VT_FLOAT, 0, "(-FLT_MAX)",
+    {"minimum", VT_FLOAT, AJFALSE, "(-FLT_MAX)",
 	 "Minimum value"},
-    {"maximum", VT_FLOAT, 0, "(FLT_MAX)",
+    {"maximum", VT_FLOAT, AJFALSE, "(FLT_MAX)",
 	 "Maximum value"},
-    {"increment", VT_FLOAT, 0, "0",
+    {"increment", VT_FLOAT, AJFALSE, "0",
 	 "(Not used by ACD) Increment for GUIs"},
-    {"precision", VT_INT, 0, "0",
+    {"precision", VT_INT, AJFALSE, "0",
 	 "(Not used by ACD) Floating precision for GUIs"},
-    {"warnrange", VT_BOOL, 0, "Y",
+    {"warnrange", VT_BOOL, AJFALSE, "Y",
 	 "Warning if values are out of range"},
-    {"size", VT_INT, 0, "1",
+    {"size", VT_INT, AJFALSE, "1",
 	 "Number of values required"},
-    {"sum", VT_FLOAT, 0, "1.0",
+    {"sum", VT_FLOAT, AJFALSE, "1.0",
 	 "Total for all values"},
-    {"sumtest", VT_BOOL, 0, "Y",
+    {"sumtest", VT_BOOL, AJFALSE, "Y",
 	 "Test sum of all values"},
-    {"tolerance", VT_FLOAT, 0, "0.01",
+    {"tolerance", VT_FLOAT, AJFALSE, "0.01",
 	 "Tolerance (sum +/- tolerance) of the total"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrBool[] =
 {
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrCodon[] =
 {
-    {"name", VT_STR, 0, "Ehum.cut",
+    {"name", VT_STR, AJFALSE, "Ehum.cut",
 	 "Codon table name"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrCpdb[] =
 {
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrDatafile[] =
 {
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "Default file base name"},
-    {"extension", VT_STR, 0, "",
+    {"extension", VT_STR, AJFALSE, "",
 	 "Default file extension"},
-    {"directory", VT_STR, 0, "",
+    {"directory", VT_STR, AJFALSE, "",
 	 "Default installed data directory"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrDirectory[] =
 {
-    {"fullpath", VT_BOOL, 0, "N",
+    {"fullpath", VT_BOOL, AJFALSE, "N",
 	 "Require full path in value"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {"extension", VT_STR, 0, "",
+    {"extension", VT_STR, AJFALSE, "",
 	 "Default file extension"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrDirlist[] =
 {
-    {"fullpath", VT_BOOL, 0, "N",
+    {"fullpath", VT_BOOL, AJFALSE, "N",
 	 "Require full path in value"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {"extension", VT_STR, 0, "",
+    {"extension", VT_STR, AJFALSE, "",
 	 "Default file extension"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrDiscretestates[] =
 {
-    {"length", VT_INT, 0, "0",
+    {"length", VT_INT, AJFALSE, "0",
 	 "Number of discrete state values per set"},
-    {"size", VT_INT, 0, "1",
+    {"size", VT_INT, AJFALSE, "1",
 	 "Number of discrete state set"},
-    {"characters", VT_STR, 0, "01",
+    {"characters", VT_STR, AJFALSE, "01",
 	 "Allowed discrete state characters (default is '' for all non-space characters"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrDistances[] =
 {
-    {"size", VT_INT, 0, "1",
+    {"size", VT_INT, AJFALSE, "1",
 	 "Number of rows"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {"missval", VT_BOOL, 0, "N",
+    {"missval", VT_BOOL, AJFALSE, "N",
 	 "Can have missing values (replicates zero)"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrEndsec[] =
 {
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrFeatures[] =
 {
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "Feature type (protein, nucleotide, etc.)"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrFeatout[] =
 {
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "Default base file name (use of -ofname preferred)"},
-    {"extension", VT_STR, 0, "",
+    {"extension", VT_STR, AJFALSE, "",
 	 "Default file extension (use of -offormat preferred)"},
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "Feature type (protein, nucleotide, etc.)"},
-    {"multiple", VT_BOOL, 0, "N",
+    {"multiple", VT_BOOL, AJFALSE, "N",
 	 "Features for multiple sequences"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null UFO as 'no output'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrFilelist[] =
 {
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {"binary", VT_BOOL, 0, "N",
+    {"binary", VT_BOOL, AJFALSE, "N",
 	 "File contains binary data"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrFloat[] =
 {
-    {"minimum", VT_FLOAT, 0, "(-FLT_MAX)",
+    {"minimum", VT_FLOAT, AJFALSE, "(-FLT_MAX)",
 	 "Minimum value"},
-    {"maximum", VT_FLOAT, 0, "(FLT_MAX)",
+    {"maximum", VT_FLOAT, AJFALSE, "(FLT_MAX)",
 	 "Maximum value"},
-    {"increment", VT_FLOAT, 0, "1.0",
+    {"increment", VT_FLOAT, AJFALSE, "1.0",
 	 "(Not used by ACD) Increment for GUIs"},
-    {"precision", VT_INT, 0, "3",
+    {"precision", VT_INT, AJFALSE, "3",
 	 "Precision for printing values"},
-    {"warnrange", VT_BOOL, 0, "Y",
+    {"warnrange", VT_BOOL, AJFALSE, "Y",
 	 "Warning if values are out of range"},
-    {"large", VT_BOOL, 0, "N",
+    {"large", VT_BOOL, AJFALSE, "N",
 	 "Large values returned as double"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrFrequencies[] =
 {
-    {"length", VT_INT, 0, "0",
+    {"length", VT_INT, AJFALSE, "0",
 	 "Number of frequency loci/values per set"},
-    {"size", VT_INT, 0, "1",
+    {"size", VT_INT, AJFALSE, "1",
 	 "Number of frequency sets"},
-    {"continuous", VT_BOOL, 0, "N",
+    {"continuous", VT_BOOL, AJFALSE, "N",
 	 "Continuous character data only"},
-    {"genedata", VT_BOOL, 0, "N",
+    {"genedata", VT_BOOL, AJFALSE, "N",
 	 "Gene frequency data only"},
-    {"within", VT_BOOL, 0, "N",
+    {"within", VT_BOOL, AJFALSE, "N",
 	 "Continuous data for multiple individuals"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrGraph[] =
 {
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null graph type as 'no graph'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrGraphxy[] =
 {
-    {"multiple", VT_INT, 0, "1",
+    {"multiple", VT_INT, AJFALSE, "1",
 	 "Number of graphs"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null graph type as 'no graph'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrInt[] =
 {
-    {"minimum", VT_INT, 0, "(INT_MIN)",
+    {"minimum", VT_INT, AJFALSE, "(INT_MIN)",
 	 "Minimum value"},
-    {"maximum", VT_INT, 0, "(INT_MAX)",
+    {"maximum", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum value"},
-    {"increment", VT_INT, 0, "0",
+    {"increment", VT_INT, AJFALSE, "0",
 	 "(Not used by ACD) Increment for GUIs"},
-    {"warnrange", VT_BOOL, 0, "Y",
+    {"warnrange", VT_BOOL, AJFALSE, "Y",
 	 "Warning if values are out of range"},
-    {"large", VT_BOOL, 0, "N",
+    {"large", VT_BOOL, AJFALSE, "N",
 	 "Large values returned as long"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrInfile[] =
 {
-    {"directory", VT_STR, 0, "",
+    {"directory", VT_STR, AJFALSE, "",
 	 "Default directory"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {"trydefault", VT_BOOL, 0, "N",
+    {"trydefault", VT_BOOL, AJFALSE, "N",
 	 "Default filename may not exist if nullok is true"},
-    {"binary", VT_BOOL, 0, "N",
+    {"binary", VT_BOOL, AJFALSE, "N",
 	 "File contains binary data"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrList[] =
 {
-    {"minimum", VT_INT, 0, "1",
+    {"minimum", VT_INT, AJFALSE, "1",
 	 "Minimum number of selections"},
-    {"maximum", VT_INT, 0, "1",
+    {"maximum", VT_INT, AJFALSE, "1",
 	 "Maximum number of selections"},
-    {"button", VT_BOOL, 0, "N",
+    {"button", VT_BOOL, AJFALSE, "N",
 	 "(Not used by ACD) Prefer checkboxes in GUI"},
-    {"casesensitive", VT_BOOL, 0, "N",
+    {"casesensitive", VT_BOOL, AJFALSE, "N",
 	 "Case sensitive"},
-    {"header", VT_STR, 0, "",
+    {"header", VT_STR, AJFALSE, "",
 	 "Header description for list"},
-    {"delimiter", VT_STR, 0, ";",
+    {"delimiter", VT_STR, AJFALSE, ";",
 	 "Delimiter for parsing values"},
-    {"codedelimiter", VT_STR, 0, ":",
+    {"codedelimiter", VT_STR, AJFALSE, ":",
 	 "Delimiter for parsing"},
-    {"values", VT_STR, 0, "",
+    {"values", VT_STR, AJFALSE, "",
 	 "Codes and values with delimiters"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrMatrix[] =
 {
-    {"pname", VT_STR, 0, "EBLOSUM62",
+    {"pname", VT_STR, AJFALSE, "EBLOSUM62",
 	 "Default name for protein matrix"},
-    {"nname", VT_STR, 0, "EDNAFULL",
+    {"nname", VT_STR, AJFALSE, "EDNAFULL",
 	 "Default name for nucleotide matrix"},
-    {"protein", VT_BOOL, 0, "Y",
+    {"protein", VT_BOOL, AJFALSE, "Y",
 	 "Protein matrix"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrMatrixf[] =
 {
-    {"pname", VT_STR, 0, "EBLOSUM62",
+    {"pname", VT_STR, AJFALSE, "EBLOSUM62",
 	 "Default name for protein matrix"},
-    {"nname", VT_STR, 0, "EDNAFULL",
+    {"nname", VT_STR, AJFALSE, "EDNAFULL",
 	 "Default name for nucleotide matrix"},
-    {"protein", VT_BOOL, 0, "Y",
+    {"protein", VT_BOOL, AJFALSE, "Y",
 	 "Protein matrix"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutcodon[] =
 {
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "Default file name"},
-    {"extension", VT_STR, 0, "",
+    {"extension", VT_STR, AJFALSE, "",
 	 "Default file extension"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutcpdb[] =
 {
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutdata[] =
 {
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "Data type"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {"binary", VT_BOOL, 0, "N",
+    {"binary", VT_BOOL, AJFALSE, "N",
 	 "File contains binary data"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutdir[] =
 {
-    {"fullpath", VT_BOOL, 0, "N",
+    {"fullpath", VT_BOOL, AJFALSE, "N",
 	 "Require full path in value"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {"extension", VT_STR, 0, "",
+    {"extension", VT_STR, AJFALSE, "",
 	 "Default file extension"},
-    {"binary", VT_BOOL, 0, "N",
+    {"binary", VT_BOOL, AJFALSE, "N",
 	 "Files contain binary data"},
-    {"create", VT_BOOL, 0, "N",
+    {"create", VT_BOOL, AJFALSE, "N",
 	 "Can create directory if not found"},
-    {"temporary", VT_BOOL, 0, "N",
+    {"temporary", VT_BOOL, AJFALSE, "N",
 	 "Scratch directory for temporary files deleted on completion"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutdiscrete[] =
 {
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutdistance[] =
 {
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutfile[] =
 {
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "Default file name"},
-    {"extension", VT_STR, 0, "",
+    {"extension", VT_STR, AJFALSE, "",
 	 "Default file extension"},
-    {"append", VT_BOOL, 0, "N",
+    {"append", VT_BOOL, AJFALSE, "N",
 	 "Append to an existing file"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {"binary", VT_BOOL, 0, "N",
+    {"binary", VT_BOOL, AJFALSE, "N",
 	 "File contains binary data"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutfileall[] =
 {
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "Default file name"},
-    {"extension", VT_STR, 0, "",
+    {"extension", VT_STR, AJFALSE, "",
 	 "Default file extension"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {"binary", VT_BOOL, 0, "N",
+    {"binary", VT_BOOL, AJFALSE, "N",
 	 "Files contains binary data"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutfreq[] =
 {
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutmatrix[] =
 {
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutmatrixf[] =
 {
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutproperties[] =
 {
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOutscop[] =
 {
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrOuttree[] =
 {
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "Default file name"},
-    {"extension", VT_STR, 0, "",
+    {"extension", VT_STR, AJFALSE, "",
 	 "Default file extension"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrPattern[] =
 {
-    {"minlength", VT_INT, 0, "1",
+    {"minlength", VT_INT, AJFALSE, "1",
 	 "Minimum pattern length"},
-    {"maxlength", VT_INT, 0, "(INT_MAX)",
+    {"maxlength", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum pattern length"},
-    {"maxsize", VT_INT, 0, "(INT_MAX)",
+    {"maxsize", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum number of patterns"},
-    {"upper", VT_BOOL, 0, "N",
+    {"upper", VT_BOOL, AJFALSE, "N",
 	 "Convert to upper case"},
-    {"lower", VT_BOOL, 0, "N",
+    {"lower", VT_BOOL, AJFALSE, "N",
 	 "Convert to lower case"},
-    {"type", VT_STR, 0, "string",
+    {"type", VT_STR, AJFALSE, "string",
 	 "Type (nucleotide, protein)"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrProperties[] =
 {
-    {"length", VT_INT, 0, "0",
+    {"length", VT_INT, AJFALSE, "0",
 	 "Number of property values per set"},
-    {"size", VT_INT, 0, "1",
+    {"size", VT_INT, AJFALSE, "1",
 	 "Number of property sets"},
-    {"characters", VT_STR, 0, "",
-	 "Allowed property characters (default is '' for all non-space characters)"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"characters", VT_STR, AJFALSE, "",
+	 "Allowed property characters (default is '' for all non-space)"},
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrRange[] =
 {
-    {"minimum", VT_INT, 0, "1",
+    {"minimum", VT_INT, AJFALSE, "1",
 	 "Minimum value"},
-    {"maximum", VT_INT, 0, "(INT_MAX)",
+    {"maximum", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum value"},
-    {"size", VT_INT, 0, "0",
+    {"size", VT_INT, AJFALSE, "0",
 	 "Exact number of values required"},
-    {"minsize", VT_INT, 0, "0",
+    {"minsize", VT_INT, AJFALSE, "0",
 	 "Minimum number of values required"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrRegexp[] =
 {
-    {"minlength", VT_INT, 0, "1",
+    {"minlength", VT_INT, AJFALSE, "1",
 	 "Minimum pattern length"},
-    {"maxlength", VT_INT, 0, "(INT_MAX)",
+    {"maxlength", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum pattern length"},
-    {"maxsize", VT_INT, 0, "(INT_MAX)",
+    {"maxsize", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum number of patterns"},
-    {"upper", VT_BOOL, 0, "N",
+    {"upper", VT_BOOL, AJFALSE, "N",
 	 "Convert to upper case"},
-    {"lower", VT_BOOL, 0, "N",
+    {"lower", VT_BOOL, AJFALSE, "N",
 	 "Convert to lower case"},
-    {"type", VT_STR, 0, "string",
+    {"type", VT_STR, AJFALSE, "string",
 	 "Type (string, nucleotide, protein)"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrRel[] =
 {
-    {"relations", VT_STR, 0, "",
+    {"relations", VT_STR, AJTRUE, "",
 	 "Relationships between this ACD item and others, "
 	     "defined as specially formatted text"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrReport[] =
 {
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "[P]rotein or [N]ucleotide"},
-    {"taglist", VT_STR, 0, "",
+    {"taglist", VT_STR, AJFALSE, "",
 	 "Extra tag names to report"},
-    {"multiple", VT_BOOL, 0, "N",
+    {"multiple", VT_BOOL, AJFALSE, "N",
 	 "Multiple sequences in one report"},
-    {"precision", VT_INT, 0, "3",
+    {"precision", VT_INT, AJFALSE, "3",
 	 "Score precision"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrScop[] =
 {
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrSec[] =
 {
-    {"information", VT_STR, 0, "",
+    {"information", VT_STR, AJFALSE, "",
 	 "(Not used by ACD) Section description"},
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "(Not used by ACD) Type (frame, page)"},
-    {"comment", VT_STR, 0, "",
+    {"comment", VT_STR, AJFALSE, "",
 	 "(Not used by ACD) Free text comment"},
-    {"border", VT_INT, 0, "1",
+    {"border", VT_INT, AJFALSE, "1",
 	 "(Not used by ACD) Border width"},
-    {"side", VT_STR, 0, "",
+    {"side", VT_STR, AJFALSE, "",
 	 "(Not used by ACD) Side (top, bottom, left, right) "
 	 "for type:frame"},
-    {"folder", VT_STR, 0, "",
+    {"folder", VT_STR, AJFALSE, "",
 	 "(Not used by ACD) Folder name for type:page"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrSelect[] =
 {
-    {"minimum", VT_INT, 0, "1",
+    {"minimum", VT_INT, AJFALSE, "1",
 	 "Minimum number of selections"},
-    {"maximum", VT_INT, 0, "1",
+    {"maximum", VT_INT, AJFALSE, "1",
 	 "Maximum number of selections"},
-    {"button", VT_BOOL, 0, "N",
+    {"button", VT_BOOL, AJFALSE, "N",
 	 "(Not used by ACD) Prefer radiobuttons in GUI"},
-    {"casesensitive", VT_BOOL, 0, "N",
+    {"casesensitive", VT_BOOL, AJFALSE, "N",
 	 "Case sensitive matching"},
-    {"header", VT_STR, 0, "",
+    {"header", VT_STR, AJFALSE, "",
 	 "Header description for selection list"},
-    {"delimiter", VT_STR, 0, ":",
+    {"delimiter", VT_STR, AJFALSE, ":",
 	 "Delimiter for parsing values"},
-    {"values", VT_STR, 0, "",
+    {"values", VT_STR, AJFALSE, "",
 	 "Values with delimiters"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrSeq[] =
 {
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "Input sequence type (protein, gapprotein, etc.)"},
-    {"features", VT_BOOL, 0, "N",
+    {"features", VT_BOOL, AJFALSE, "N",
 	 "Read features if any"},
-    {"entry", VT_BOOL, 0, "N",
+    {"entry", VT_BOOL, AJFALSE, "N",
 	 "Read whole entry text"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrSeqall[] =
 {
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "Input sequence type (protein, gapprotein, etc.)"},
-    {"features", VT_BOOL, 0, "N",
+    {"features", VT_BOOL, AJFALSE, "N",
 	 "Read features if any"},
-    {"entry", VT_BOOL, 0, "N",
+    {"entry", VT_BOOL, AJFALSE, "N",
 	 "Read whole entry text"},
-    {"minseqs", VT_INT, 0, "1",
+    {"minseqs", VT_INT, AJFALSE, "1",
 	 "Minimum number of sequences"},
-    {"maxseqs", VT_INT, 0, "(INT_MAX)",
+    {"maxseqs", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum number of sequences"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrSeqout[] =
 {
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "Output base name (use of -osname preferred)"},
-    {"extension", VT_STR, 0, "",
+    {"extension", VT_STR, AJFALSE, "",
 	 "Output extension (use of -osextension preferred)"},
-    {"features", VT_BOOL, 0, "N",
+    {"features", VT_BOOL, AJFALSE, "N",
 	 "Write features if any"},
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "Output sequence type (protein, gapprotein, etc.)"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null USA as 'no output'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrSeqoutall[] =
 {
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "Output base name (use of -osname preferred)"},
-    {"extension", VT_STR, 0, "",
+    {"extension", VT_STR, AJFALSE, "",
 	 "Output extension (use of -osextension preferred)"},
-    {"features", VT_BOOL, 0, "N",
+    {"features", VT_BOOL, AJFALSE, "N",
 	 "Write features if any"},
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "Output sequence type (protein, gapprotein, etc.)"},
-    {"minseqs", VT_INT, 0, "1",
+    {"minseqs", VT_INT, AJFALSE, "1",
 	 "Minimum number of sequences"},
-    {"maxseqs", VT_INT, 0, "(INT_MAX)",
+    {"maxseqs", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum number of sequences"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null USA as 'no output'"},
-    {"aligned", VT_BOOL, 0, "N",
+    {"aligned", VT_BOOL, AJFALSE, "N",
          "Sequences are aligned"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrSeqoutset[] =
 {
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "Output base name (use of -osname preferred)"},
-    {"extension", VT_STR, 0, "",
+    {"extension", VT_STR, AJFALSE, "",
 	 "Output extension (use of -osextension preferred)"},
-    {"features", VT_BOOL, 0, "N",
+    {"features", VT_BOOL, AJFALSE, "N",
 	 "Write features if any"},
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "Output sequence type (protein, gapprotein, etc.)"},
-    {"minseqs", VT_INT, 0, "1",
+    {"minseqs", VT_INT, AJFALSE, "1",
 	 "Minimum number of sequences"},
-    {"maxseqs", VT_INT, 0, "(INT_MAX)",
+    {"maxseqs", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum number of sequences"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null USA as 'no output'"},
-    {"aligned", VT_BOOL, 0, "N",
+    {"aligned", VT_BOOL, AJFALSE, "N",
 	 "Sequences are aligned"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrSeqset[] =
 {
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "Input sequence type (protein, gapprotein, etc.)"},
-    {"features", VT_BOOL, 0, "N",
+    {"features", VT_BOOL, AJFALSE, "N",
 	 "Read features if any"},
-    {"aligned", VT_BOOL, 0, "N",
+    {"aligned", VT_BOOL, AJFALSE, "N",
 	 "Sequences are aligned"},
-    {"minseqs", VT_INT, 0, "1",
+    {"minseqs", VT_INT, AJFALSE, "1",
 	 "Minimum number of sequences"},
-    {"maxseqs", VT_INT, 0, "(INT_MAX)",
+    {"maxseqs", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum number of sequences"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrSeqsetall[] =
 {
-    {"type", VT_STR, 0, "",
+    {"type", VT_STR, AJFALSE, "",
 	 "Input sequence type (protein, gapprotein, etc.)"},
-    {"features", VT_BOOL, 0, "N",
+    {"features", VT_BOOL, AJFALSE, "N",
 	 "Read features if any"},
-    {"aligned", VT_BOOL, 0, "N",
+    {"aligned", VT_BOOL, AJFALSE, "N",
 	 "Sequences are aligned"},
-    {"minseqs", VT_INT, 0, "1",
+    {"minseqs", VT_INT, AJFALSE, "1",
 	 "Minimum number of sequences"},
-    {"maxseqs", VT_INT, 0, "(INT_MAX)",
+    {"maxseqs", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum number of sequences"},
-    {"minsets", VT_INT, 0, "1",
+    {"minsets", VT_INT, AJFALSE, "1",
 	 "Minimum number of sequence sets"},
-    {"maxsets", VT_INT, 0, "(INT_MAX)",
+    {"maxsets", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum number of sequence sets"},
-    {"nulldefault", VT_BOOL, 0, "N",
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrString[] =
 {
-    {"minlength", VT_INT, 0, "0",
+    {"minlength", VT_INT, AJFALSE, "0",
 	 "Minimum length"},
-    {"maxlength", VT_INT, 0, "(INT_MAX)",
+    {"maxlength", VT_INT, AJFALSE, "(INT_MAX)",
 	 "Maximum length"},
-    {"pattern", VT_STR, 0, "",
+    {"pattern", VT_STR, AJFALSE, "",
 	 "Regular expression for validation"},
-    {"upper", VT_BOOL, 0, "N",
+    {"upper", VT_BOOL, AJFALSE, "N",
 	 "Convert to upper case"},
-    {"lower", VT_BOOL, 0, "N",
+    {"lower", VT_BOOL, AJFALSE, "N",
 	 "Convert to lower case"},
-    {"word", VT_BOOL, 0, "N",
+    {"word", VT_BOOL, AJFALSE, "N",
 	 "Disallow whitespace in strings"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrToggle[] =
 {
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrTree[] =
 {
-    {"size", VT_INT, 0, "0",
+    {"size", VT_INT, AJFALSE, "0",
 	 "Number of trees (0 means any number)"},
-    {"nullok", VT_BOOL, 0, "N",
+    {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 AcdOAttr acdAttrVar[] =
 {
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
@@ -2206,204 +2223,204 @@ AcdOAttr acdAttrVar[] =
 
 static AcdOAttr acdCalcDiscrete[] =
 {
-    {"discretelength", VT_INT, 0, "",
+    {"discretelength", VT_INT, AJFALSE, "",
 	 "Number of discrete state values per set"},
-    {"discretesize", VT_INT, 0, "",
+    {"discretesize", VT_INT, AJFALSE, "",
 	 "Number of discrete state sets"},
-    {"discretecount", VT_INT, 0, "",
+    {"discretecount", VT_INT, AJFALSE, "",
 	 "Number of sets of discrete states"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 static AcdOAttr acdCalcDistances[] =
 {
-    {"distancecount", VT_INT, 0, "",
+    {"distancecount", VT_INT, AJFALSE, "",
 	 "Number of distance matrices"},
-    {"distancesize", VT_INT, 0, "",
+    {"distancesize", VT_INT, AJFALSE, "",
 	 "Number of distance rows"},
-    {"replicates", VT_BOOL, 0, "",
+    {"replicates", VT_BOOL, AJFALSE, "",
 	 "Replicates data found in input"},
-    {"hasmissing", VT_BOOL, 0, "",
+    {"hasmissing", VT_BOOL, AJFALSE, "",
 	 "Missing values found(replicates=N)"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 static AcdOAttr acdCalcFeat[] =
 {
-    {"fbegin", VT_INT, 0, "(0 if unspecified)",
+    {"fbegin", VT_INT, AJFALSE, "(0 if unspecified)",
 	 "Start of the features to be used"},
-    {"fend", VT_INT, 0, "(0 if unspecified)",
+    {"fend", VT_INT, AJFALSE, "(0 if unspecified)",
 	 "End of the features to be used"},
-    {"flength", VT_INT, 0, "",
+    {"flength", VT_INT, AJFALSE, "",
 	 "Total length of sequence (fsize is feature count)"},
-    {"fprotein", VT_BOOL, 0, "",
+    {"fprotein", VT_BOOL, AJFALSE, "",
 	 "Feature table is protein"},
-    {"fnucleic", VT_BOOL, 0, "",
+    {"fnucleic", VT_BOOL, AJFALSE, "",
 	 "Feature table is nucleotide"},
-    {"fname", VT_STR, 0, "",
+    {"fname", VT_STR, AJFALSE, "",
 	 "The name of the feature table"},
-    {"fsize", VT_STR, 0, "",
+    {"fsize", VT_STR, AJFALSE, "",
 	 "Integer, number of features"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 static AcdOAttr acdCalcFrequencies[] =
 {
-    {"freqlength", VT_INT, 0, "",
+    {"freqlength", VT_INT, AJFALSE, "",
 	 "Number of frequency values per set"},
-    {"freqsize", VT_INT, 0, "",
+    {"freqsize", VT_INT, AJFALSE, "",
 	 "Number of frequency sets"},
-    {"freqloci", VT_INT, 0, "",
+    {"freqloci", VT_INT, AJFALSE, "",
 	 "Number of frequency loci"},
-    {"freqgenedata", VT_BOOL, 0, "",
+    {"freqgenedata", VT_BOOL, AJFALSE, "",
 	 "Gene frequency data"},
-    {"freqcontinuous", VT_BOOL, 0, "",
+    {"freqcontinuous", VT_BOOL, AJFALSE, "",
 	 "Continuous frequency data"},
-    {"freqwithin", VT_BOOL, 0, "",
+    {"freqwithin", VT_BOOL, AJFALSE, "",
 	 "Individual within species frequency data"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 static AcdOAttr acdCalcProperties[] =
 {
-    {"propertylength", VT_INT, 0, "",
+    {"propertylength", VT_INT, AJFALSE, "",
 	 "Number of property values per set"},
-    {"propertysize", VT_INT, 0, "",
+    {"propertysize", VT_INT, AJFALSE, "",
 	 "Number of property sets"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 static AcdOAttr acdCalcRegexp[] =
 {
-    {"length", VT_INT, 0, "",
+    {"length", VT_INT, AJFALSE, "",
 	 "The length of the regular expression"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 static AcdOAttr acdCalcSeq[] =
 {
-    {"begin", VT_INT, 0, "",
+    {"begin", VT_INT, AJFALSE, "",
 	 "Start of the sequence used"},
-    {"end", VT_INT, 0, "",
+    {"end", VT_INT, AJFALSE, "",
 	 "End of the sequence used"},
-    {"length", VT_INT, 0, "",
+    {"length", VT_INT, AJFALSE, "",
 	  "Total length of the sequence"},
-    {"protein", VT_BOOL, 0, "",
+    {"protein", VT_BOOL, AJFALSE, "",
 	 "Boolean, indicates if sequence is protein"},
-    {"nucleic", VT_BOOL, 0, "",
+    {"nucleic", VT_BOOL, AJFALSE, "",
 	 "Boolean, indicates if sequence is DNA"},
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "The name/ID/accession of the sequence"},
-    {"usa", VT_STR, 0, "",
+    {"usa", VT_STR, AJFALSE, "",
 	 "The USA of the sequence"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 static AcdOAttr acdCalcSeqall[] =
 {
-    {"begin", VT_INT, 0, "",
+    {"begin", VT_INT, AJFALSE, "",
 	 "Start of the first sequence used"},
-    {"end", VT_INT, 0, "",
+    {"end", VT_INT, AJFALSE, "",
 	 "End of the first sequence used"},
-    {"length", VT_INT, 0, "",
+    {"length", VT_INT, AJFALSE, "",
 	 "Total length of the first sequence"},
-    {"protein", VT_BOOL, 0, "",
+    {"protein", VT_BOOL, AJFALSE, "",
 	 "Boolean, indicates if sequence is protein"},
-    {"nucleic", VT_BOOL, 0, "",
+    {"nucleic", VT_BOOL, AJFALSE, "",
 	 "Boolean, indicates if sequence is DNA"},
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "The name/ID/accession of the sequence"},
-    {"usa", VT_STR, 0, "",
+    {"usa", VT_STR, AJFALSE, "",
 	 "The USA of the sequence"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 static AcdOAttr acdCalcSeqset[] =
 {
-    {"begin", VT_INT, 0, "",
+    {"begin", VT_INT, AJFALSE, "",
 	 "The beginning of the selection of the sequence"},
-    {"end", VT_INT, 0, "",
+    {"end", VT_INT, AJFALSE, "",
 	 "The end of the selection of the sequence"},
-    {"length", VT_INT, 0, "",
+    {"length", VT_INT, AJFALSE, "",
 	 "The maximum length of the sequence set"},
-    {"protein", VT_BOOL, 0, "",
+    {"protein", VT_BOOL, AJFALSE, "",
 	 "Boolean, indicates if sequence set is protein"},
-    {"nucleic", VT_BOOL, 0, "",
+    {"nucleic", VT_BOOL, AJFALSE, "",
 	 "Boolean, indicates if sequence set is DNA"},
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "The name of the sequence set"},
-    {"usa", VT_STR, 0, "",
+    {"usa", VT_STR, AJFALSE, "",
 	 "The USA of the sequence"},
-    {"totweight", VT_FLOAT, 0, "",
+    {"totweight", VT_FLOAT, AJFALSE, "",
 	 "Float, total sequence weight for a set"},
-    {"count", VT_INT, 0, "",
+    {"count", VT_INT, AJFALSE, "",
 	 "Integer, number of sequences in the set"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 static AcdOAttr acdCalcSeqsetall[] =
 {
-    {"begin", VT_INT, 0, "",
+    {"begin", VT_INT, AJFALSE, "",
 	 "The beginning of the selection of the sequence"},
-    {"end", VT_INT, 0, "",
+    {"end", VT_INT, AJFALSE, "",
 	 "The end of the selection of the sequence"},
-    {"length", VT_INT, 0, "",
+    {"length", VT_INT, AJFALSE, "",
 	 "The maximum length of the sequence set"},
-    {"protein", VT_BOOL, 0, "",
+    {"protein", VT_BOOL, AJFALSE, "",
 	 "Boolean, indicates if sequence set is protein"},
-    {"nucleic", VT_BOOL, 0, "",
+    {"nucleic", VT_BOOL, AJFALSE, "",
 	 "Boolean, indicates if sequence set is DNA"},
-    {"name", VT_STR, 0, "",
+    {"name", VT_STR, AJFALSE, "",
 	 "The name of the sequence set"},
-    {"usa", VT_STR, 0, "",
+    {"usa", VT_STR, AJFALSE, "",
 	 "The USA of the sequence"},
-    {"totweight", VT_FLOAT, 0, "",
+    {"totweight", VT_FLOAT, AJFALSE, "",
 	 "Float, total sequence weight for each set"},
-    {"count", VT_INT, 0, "",
+    {"count", VT_INT, AJFALSE, "",
 	 "Integer, number of sequences in each set"},
-    {"multicount", VT_INT, 0, "",
+    {"multicount", VT_INT, AJFALSE, "",
 	 "Integer, number of sets of sequences"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 static AcdOAttr acdCalcString[] =
 {
-    {"length", VT_INT, 0, "",
+    {"length", VT_INT, AJFALSE, "",
 	 "The length of the string"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
 
 static AcdOAttr acdCalcTree[] =
 {
-    {"treecount", VT_INT, 0, "",
+    {"treecount", VT_INT, AJFALSE, "",
 	 "Number of trees"},
-    {"speciescount", VT_INT, 0, "",
+    {"speciescount", VT_INT, AJFALSE, "",
 	 "Number of species"},
-    {"haslengths", VT_BOOL, 0, "",
+    {"haslengths", VT_BOOL, AJFALSE, "",
 	 "Branch lengths defined"},
-    {NULL, VT_NULL, 0, NULL,
+    {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
 
@@ -2545,7 +2562,7 @@ AcdOQual acdQualAppl[] =	  /* careful: index numbers used in */
 
     /* end of deprecated set */
     {"verbose",    "N", "boolean", "Report some/full command line options"},
-    {"help",       "N", "boolean", "Report command line options. "
+    {"help",       "N", "boolean", "Report command line options and exit. "
 	                           "More information on associated and "
 				   "general qualifiers "
 				   "can be found with -help -verbose"},
@@ -2553,6 +2570,7 @@ AcdOQual acdQualAppl[] =	  /* careful: index numbers used in */
     {"error",      "Y", "boolean", "Report errors"},
     {"fatal",      "Y", "boolean", "Report fatal errors"},
     {"die",        "Y", "boolean", "Report dying program messages"},
+    {"version",    "N", "boolean", "Report version number and exit"},
     {NULL, NULL, NULL, NULL}
 };
 
@@ -3296,6 +3314,7 @@ static const char* acdResource[] =
 ** @argrule   Init    argc [ajint] Number of command line arguments
 ** @argrule   Init    argv [char* const[]] Command line arguments
 ** @argrule   P    package [const char*] Package name (empty for default name)
+** @argrule   V    packversion [const char*] Package version (empty for default)
 **
 ** @valrule   *  [void]
 ** @fcategory misc
@@ -3325,14 +3344,15 @@ static const char* acdResource[] =
 
 void ajAcdInit(const char *pgm, ajint argc, char * const argv[])
 {
-    ajAcdInitP(pgm, argc, argv, "");
+    ajAcdInitPV(pgm, argc, argv, "", "");
+
     return;
 }
 
 
 
 
-/* @func ajAcdInitP ***********************************************************
+/* @func ajAcdInitPV ***********************************************************
 **
 ** Initialises everything. Reads an ACD (AJAX Command Definition) file
 ** prompts the user for any missing information, reads all sequences
@@ -3344,12 +3364,13 @@ void ajAcdInit(const char *pgm, ajint argc, char * const argv[])
 **        usually passsed as-is by the calling application.
 ** @param [r] argv [char* const[]] Actual arguments as an array of text.
 ** @param [r] package [const char*] Package name, used to find the ACD file
+** @param [r] packversion [const char*] Package version
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajAcdInitP(const char *pgm, ajint argc, char * const argv[],
-                const char *package)
+void ajAcdInitPV(const char *pgm, ajint argc, char * const argv[],
+                 const char *package, const char *packversion)
 {    
     static AjPFile acdFile = NULL;
     static AjPStr acdLine = NULL;
@@ -3359,6 +3380,8 @@ void ajAcdInitP(const char *pgm, ajint argc, char * const argv[],
     static AjPStr acdPackRoot = NULL;
     static AjPStr acdPackRootName = NULL;
     static AjPStr acdUtilRoot = NULL;
+    AjPStr applversion = NULL;
+    AjPStr versionstr = NULL;
     AjPStr comment = NULL;
     AjPStrTok tokenhandle = NULL;
     char white[] = " \t\n\r";
@@ -3372,6 +3395,7 @@ void ajAcdInitP(const char *pgm, ajint argc, char * const argv[],
     ajuint pos;
 
     acdProgram = ajStrNewC(pgm);
+
     acdSecList = ajListstrNew();
     acdSecTable = ajTablestrNewCaseLen(50);
 
@@ -3395,10 +3419,19 @@ void ajAcdInitP(const char *pgm, ajint argc, char * const argv[],
     
     acdArgsScan(argc, argv);
     
-    ajDebug("ajAcdInitP pgm '%s' package '%s'\n", pgm, package);
+    ajDebug("ajAcdInitPV pgm '%s' package '%s'\n", pgm, package);
+    ajDebug("  version '%S' system '%S\n",
+            ajNamValueVersion(),
+            ajNamValueSystem());
 
     /* open the command definition file */
     
+    if(*package)
+        ajStrAssignC(&acdPackName, package);
+
+    if(*packversion)
+        ajStrAssignC(&acdPackVersion, packversion);
+
     ajStrAssignS(&acdPack, ajNamValuePackage());
     ajStrAssignS(&acdRootInst, ajNamValueInstalldir());
     ajDirnameFix(&acdRootInst);
@@ -3422,7 +3455,7 @@ void ajAcdInitP(const char *pgm, ajint argc, char * const argv[],
 	if(!acdFile)
 	{
 	    acdLog("acdfile '%S' not opened\n", acdFName);
-	    ajStrAssignC(&acdPack, package); /* package name for acdInitP */
+	    ajStrAssignC(&acdPack, package); /* package name for acdInitPV */
 	    ajStrFmtLower(&acdPack);
 
 	    ajStrAssignS(&acdPackRootName, acdPack);
@@ -3455,8 +3488,7 @@ void ajAcdInitP(const char *pgm, ajint argc, char * const argv[],
 	if(!acdFile)
 	{
 	    acdLog("acdfile '%S' not opened\n", acdFName);
-	    ajStrAssignC(&acdPack, package); /* package name for acdInitP */
-	    ajStrFmtLower(&acdPack);
+	    ajStrAssignC(&acdPack, "emboss");
 
 	    if(ajNamGetValueC("acdutilroot", &acdUtilRoot))
 	    {
@@ -3550,6 +3582,26 @@ void ajAcdInitP(const char *pgm, ajint argc, char * const argv[],
     ajListstrFreeData(&acdListWords);
     ajListFreeData(&acdListCount);
     
+    if(acdDoVersion)
+    {
+        ajFmtPrintS(&versionstr, "EMBOSS:%s", VERSION);
+
+        if(ajStrGetLen(acdPackVersion))
+            ajFmtPrintAppS(&versionstr, " %S:%S", acdPackName, acdPackVersion);
+
+        acdAttrResolve(acdApplAcd, "versionnumber", &applversion);
+
+        if(ajStrGetLen(applversion))
+        {
+            ajFmtPrintAppS(&versionstr, " %s:%S", pgm, applversion);
+            ajStrDel(&applversion);
+        }
+
+        ajUserDumpS(versionstr);
+        ajStrDel(&versionstr);
+        ajExit();
+    }
+
     if(acdDoPretty || acdDoValid)
 	ajExit();
     
@@ -3776,6 +3828,7 @@ static void acdParse(AjPList listwords, AjPList listcount)
 			 acdStrName, acdProgram);
 	    
 	    acdNewCurr = acdNewAppl(acdStrName);
+            acdApplAcd = acdNewCurr;
 	    
 	    acdWordNum++;		/* add one for '[' */
 
@@ -4639,9 +4692,9 @@ static AcdPAcd acdNewQual(const AjPStr name, const AjPStr token,
     AcdPAcd vacd;
     AcdPAcd saveqacd = NULL;
     AcdPQual quals;
+    AjPStr protName = NULL;
     AjPStr qname = NULL;
     AjPStr qtype = NULL;
-    AjPStr protName = NULL;
     ajint itype;
     ajint i;
     
@@ -4683,8 +4736,8 @@ static AcdPAcd acdNewQual(const AjPStr name, const AjPStr token,
     ajStrDel(&qtype);
     
     /*
-     ** For the first sequence, set the sequence type variable
-     */
+    ** For the first sequence, set the sequence type variable
+    */
 
     if(!ajStrGetLen(acdVarAcdProtein))
 	if((acdType[itype].Attr == acdAttrSeq) ||
@@ -4700,6 +4753,7 @@ static AcdPAcd acdNewQual(const AjPStr name, const AjPStr token,
 	    ajStrDel(&protName);
 	}
 
+    ajStrDel(&protName);
     return acd;
 }
 
@@ -6115,14 +6169,18 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @nam5rule  GetValueDefault   ACD datatype default value
 ** @nam5rule  Name    Name of ACD datatype value
 ** @nam5rule  Single  First in array of ACD datatype values
+** @nam3rule  Getpath  Return path for a program definied as external
 ** @nam3rule  Is    Test value
 ** @nam4rule  IsUserdefined    Test value is defined by the user
+** @suffix C Character string data
+** @suffix S String object data
 **
 ** @suffix Double Return double precision
 ** @suffix Long   Return long integer
 **
 ** @argrule   Get    token [const char*] Token name
-** @argrule   Is    token [const char*] Token name
+** @argrule   C      token [const char*] Token name
+** @argrule   S   strtoken [const AjPStr] Token name
 ** @argrule   Num    token [const char*] Token name
 **
 ** @valrule   Align  [AjPAlign]
@@ -6189,6 +6247,7 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @valrule   *TreeSingle  [AjPPhyloTree]
 ** @valrule   Value  [const AjPStr]
 ** @valrule   *Name  [AjPStr]
+** @valrule   Getpath  [const AjPStr]
 ** @valrule   Is  [AjBool]
 ** @fcategory misc
 **
@@ -6279,9 +6338,19 @@ static void acdSetAppl(AcdPAcd thys)
 {
     AjPStr appldoc = NULL;
     AjPStr applobsolete = NULL;
+    AjPStr applexternal = NULL;
+    AjPStrTok handle = NULL;
+    AjPStr token = NULL;
+    AjPStr message = NULL;
+    AjPStr appname = NULL;      /* saved to table */
+    AjPStr appfullname = NULL;  /* saved to table */
 
     acdAttrResolve(thys, "documentation", &appldoc);
     acdAttrResolve(thys, "obsolete", &applobsolete);
+    acdAttrResolve(thys, "external", &applexternal);
+
+    if(!acdExternalTable)
+        acdExternalTable = ajTablestrNewCaseLen(50);
 
     if(!acdAuto && ajStrGetLen(appldoc))
     {
@@ -6295,9 +6364,39 @@ static void acdSetAppl(AcdPAcd thys)
     {
         acdWarnObsolete(applobsolete);
     }
-    
+
+    if(ajStrGetLen(applexternal))
+    {
+        ajStrTokenAssignC(&handle, applexternal, "|");
+
+        while(ajStrTokenNextParse(&handle, &token))
+        {
+            ajStrExtractFirst(token, &message, &appname);
+            ajStrAssignS(&appfullname, appname);
+
+            if(!ajSysFileWhich(&appfullname))
+            {
+                ajStrFmtWrapLeft(&message, 70, 5, 0);
+                ajDie("%S uses external program '%S' "
+                      "which is not in the PATH or defined as %S_%US\n%S",
+                      acdProgram, appname,
+                      ajNamValuePackage(), appname, message);
+            }
+
+            ajTablePut(acdExternalTable, appname, appfullname);
+            appname = NULL;
+            appfullname = NULL;
+        }
+        
+    }
+
     ajStrDel(&appldoc);
     ajStrDel(&applobsolete);
+    ajStrDel(&applexternal);
+    ajStrDel(&message);
+    ajStrDel(&token);
+
+    ajStrTokenDel(&handle);
 
     return;
 }
@@ -6703,7 +6802,7 @@ static void acdSetArray(AcdPAcd thys)
 	ajFmtPrintAppS(&deflist, "%.*f", precision, fdef);
     }
     
-    val = ajFloatNewL(size);	   /* create storage for the result */
+    val = ajFloatNewRes(size);	   /* create storage for the result */
     
     required = acdIsRequired(thys);
     acdReplyInitS(thys, deflist, &acdReplyDef);
@@ -7452,7 +7551,6 @@ static void acdSetDirlist(AcdPAcd thys)
     }    
 
     ajFilelistAddPathWild(val, acdReply, t);
-    /* ajFileScan(acdReply,t,&val,ajFalse,ajFalse,NULL,NULL,ajFalse,NULL); */
 
     /* Sort list so that list of files is system-independent */
     ajListSort(val, ajStrVcmp);
@@ -7469,7 +7567,7 @@ static void acdSetDirlist(AcdPAcd thys)
 	ajFmtPrintS(&t,"");
 	ajListPop(val,(void **)&v);
 	ajStrAppendS(&t,v);
-	ajStrAssignC(&v,ajStrGetPtr(t));
+	ajStrAssignS(&v,t);
 	ajListPushAppend(val,(void *)v);
     }
     
@@ -8136,7 +8234,7 @@ static void acdSetFeatures(AcdPAcd thys)
 	acdGetValueAssoc(thys, "fformat", &tabin->Formatstr);
 	acdGetValueAssoc(thys, "fopenfile", &tabin->Filename);
 
-	val = ajFeatUfoRead(tabin, acdReply);
+	val = ajFeattableNewReadUfo(tabin, acdReply);
 
 	if(!val)
         {
@@ -8172,7 +8270,8 @@ static void acdSetFeatures(AcdPAcd thys)
     if(!ok)
 	acdBadRetry(thys);
     
-    ok = acdQualToInt(thys, "fend", ajFeattableLen(val), &fend, &acdReplyDef);
+    ok = acdQualToInt(thys, "fend", ajFeattableGetLen(val), &fend,
+                      &acdReplyDef);
 
     for(itry=acdPromptTry; itry && !ok; itry--)
     {
@@ -8227,13 +8326,13 @@ static void acdSetFeatures(AcdPAcd thys)
     thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
     
     iattr = 0;
-    ajStrFromInt(&thys->SetStr[iattr++], ajFeattableBegin(val));
-    ajStrFromInt(&thys->SetStr[iattr++], ajFeattableEnd(val));
-    ajStrFromInt(&thys->SetStr[iattr++], ajFeattableLen(val));
+    ajStrFromInt(&thys->SetStr[iattr++], ajFeattableGetBegin(val));
+    ajStrFromInt(&thys->SetStr[iattr++], ajFeattableGetEnd(val));
+    ajStrFromInt(&thys->SetStr[iattr++], ajFeattableGetLen(val));
     ajStrFromBool(&thys->SetStr[iattr++], ajFeattableIsProt(val));
     ajStrFromBool(&thys->SetStr[iattr++], ajFeattableIsNuc(val));
     ajStrAssignS(&thys->SetStr[iattr++], ajFeattableGetName(val));
-    ajStrFromInt(&thys->SetStr[iattr++], ajFeattableSize(val));
+    ajStrFromInt(&thys->SetStr[iattr++], ajFeattableGetSize(val));
     
     thys->Value = val;
     ajStrAssignS(&thys->ValStr, acdReply);
@@ -8744,12 +8843,12 @@ static void acdSetGraph(AcdPAcd thys)
 	{
 
 	    if(!val)
-		val = ajCall("ajGraphNew");
-	    ajCall("ajGraphSet",val, acdReply, &ok);
+	      val = ajGraphNew();
+	    ok = ajGraphSetDevicetype(val, acdReply);
 
 	    if(!ok)
 	    {
-		ajCall("ajGraphDumpDevices");
+	        ajGraphicsDumpDevices();
 		acdBadVal(thys, required,
 			  "Invalid graph value '%S'", acdReply);
 	    }
@@ -8772,34 +8871,34 @@ static void acdSetGraph(AcdPAcd thys)
     if(val)
     {
 	if(acdGetValueAssoc(thys, "gdesc", &title))
-	    ajCall("ajGraphDesc",val,title);
+	    ajGraphSetDescS(val,title);
     
 	if(acdGetValueAssoc(thys, "gtitle", &title))
-	    ajCall("ajGraphTitle",val,title);
+	    ajGraphSetTitleS(val,title);
     
 	if(acdGetValueAssoc(thys, "gsubtitle", &title))
-	    ajCall("ajGraphSubTitle",val,title);
+	    ajGraphSetSubtitleS(val,title);
     
 	if(acdGetValueAssoc(thys, "gxtitle", &title))
-	    ajCall("ajGraphXTitle",val,title);
+	    ajGraphSetXlabelS(val,title);
     
 	if(acdGetValueAssoc(thys, "gytitle", &title))
-	    ajCall("ajGraphYTitle",val,title);
+	    ajGraphSetYlabelS(val,title);
     
 	if(acdGetValueAssoc(thys, "goutfile", &title))
-	    ajCall("ajGraphSetOutputFile",val,title);
+	    ajGraphSetOutfileS(val,title);
     
 	if(acdGetValueAssoc(thys, "gdirectory", &title))
-	    ajCall("ajGraphSetOutputDir",val,title);
+	    ajGraphSetOutdirS(val,title);
 	else
 	{
 	    ajStrAssignClear(&title);
 	    if(acdOutDirectory(&title))
-		ajCall("ajGraphSetOutputDir",val,title);
+	        ajGraphSetOutdirS(val,title);
 	}
 
 	ajStrDel(&title);
-	ajCall("ajGraphTrace",val);
+	ajGraphTrace(val);
     }
     
     return;
@@ -8921,13 +9020,13 @@ static void acdSetGraphxy(AcdPAcd thys)
 	if(ajStrGetLen(acdReply))	/* valid no graph type */
 	{
 	    if(!val)
-		val = ajCall("ajGraphxyNewI",multi);
+	        val = ajGraphxyNewI(multi);
     
-	    ajCall("ajGraphxySet",val, acdReply, &ok);
+	    ok = ajGraphxySetDevicetype(val, acdReply);
 
 	    if(!ok)
 	    {
-		ajCall("ajGraphDumpDevices");
+	        ajGraphicsDumpDevices();
 		acdBadVal(thys, required,
 			  "Invalid XY graph value '%S'", acdReply);
 	    }
@@ -8950,34 +9049,34 @@ static void acdSetGraphxy(AcdPAcd thys)
     if(val)
     {
 	if(acdGetValueAssoc(thys, "gdesc", &title))
-	    ajCall("ajGraphDesc",val,title);
+	    ajGraphSetDescS(val,title);
     
 	if(acdGetValueAssoc(thys, "gtitle", &title))
-	    ajCall("ajGraphTitle",val,title);
+	    ajGraphSetTitleS(val,title);
 
 	if(acdGetValueAssoc(thys, "gsubtitle", &title))
-	    ajCall("ajGraphSubTitle",val,title);
+	    ajGraphSetSubtitleS(val,title);
 
 	if(acdGetValueAssoc(thys, "gxtitle", &title))
-	    ajCall("ajGraphXTitle",val,title);
+	    ajGraphSetXlabelS(val,title);
 
 	if(acdGetValueAssoc(thys, "gytitle", &title))
-	    ajCall("ajGraphYTitle",val,title);
+	    ajGraphSetYlabelS(val,title);
 
 	if(acdGetValueAssoc(thys, "goutfile", &title))
-	    ajCall("ajGraphSetOutputFile",val,title);
+	    ajGraphSetOutfileS(val,title);
 
 	if(acdGetValueAssoc(thys, "gdirectory", &title))
-	    ajCall("ajGraphSetOutputDir",val,title);
+	    ajGraphSetOutdirS(val,title);
 	else
 	{
 	    ajStrAssignClear(&title);
 	    if(acdOutDirectory(&title))
-		ajCall("ajGraphSetOutputDir",val,title);
+                ajGraphSetOutdirS(val,title);
 	}
 
 	ajStrDel(&title);
-	ajCall("ajGraphTrace",val);
+	ajGraphTrace(val);
     }
 
     return;
@@ -9499,7 +9598,7 @@ AjPMatrixf ajAcdGetMatrixf(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
-** @see ajMatrixRead
+** @see ajMatrixNewFile
 ** @@
 ******************************************************************************/
 
@@ -9548,7 +9647,8 @@ static void acdSetMatrix(AcdPAcd thys)
 	
 	if(ajStrGetLen(acdReply))
 	{
-	    if(!ajMatrixRead(&val, acdReply))
+	    val = ajMatrixNewFile(acdReply);
+            if(!val)
 	    {
 		acdBadVal(thys, required,
 			  "Unable to read matrix '%S'", acdReply);
@@ -9585,7 +9685,7 @@ static void acdSetMatrix(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
-** @see ajMatrixfRead
+** @see ajMatrixfNewFile
 ** @@
 ******************************************************************************/
 
@@ -9636,8 +9736,9 @@ static void acdSetMatrixf(AcdPAcd thys)
 
 	if(ajStrGetLen(acdReply))
 	{
-	    if(!ajMatrixfRead(&val, acdReply))
-	    {
+	    val = ajMatrixfNewFile(acdReply);
+	    if(!val)
+            {
 		acdBadVal(thys, required,
 			  "Unable to read matrix '%S'", acdReply);
 		ok = ajFalse;
@@ -11161,7 +11262,7 @@ static void acdSetRange(AcdPAcd thys)
 	if(required)
 	    acdUserGet(thys, &acdReply);
 
-	val = ajRangeGetLimits(acdReply, imin, imax, iminsize, isize);
+	val = ajRangeNewStringLimits(acdReply, imin, imax, iminsize, isize);
 
 	if(!val)
 	{
@@ -11517,7 +11618,7 @@ static void acdSetReport(AcdPAcd thys)
 			  &val->MaxHitSeq, &acdReplyDef);
     
 	    /* test acdc-reportbadtaglist */
-	    if(!ajReportSetTags(val, taglist))
+	    if(!ajReportSetTagsS(val, taglist))
 		acdErrorAcd(thys, "Bad tag list for report");
 
 	    /* test acdc-reportbadtags */
@@ -11873,7 +11974,7 @@ AjPSeq ajAcdGetSeq(const char *token)
 
 static void acdSetSeq(AcdPAcd thys)
 {
-    AjPSeq val;
+    AjPSeq val = NULL;
     AjPSeqin seqin;
     
     AjBool required = ajFalse;
@@ -11924,15 +12025,18 @@ static void acdSetSeq(AcdPAcd thys)
 	    acdUserGet(thys, &acdReply);
 	
 	if(!ajStrGetLen(acdReply) && nullok)
+        {
+            ajSeqDel(&val);
 	    break;
-	
+	}
+
 	ajSeqinUsa(&seqin, acdReply);
 	
 	if(ajStrGetLen(typestr))
 	{
 	   ajStrAssignS(&seqin->Inputtype, typestr);
 	   acdInTypeSeqSave(seqin->Inputtype);
-       }
+        }
 	else
 	    acdInTypeSeqSave(NULL);
 	
@@ -11988,7 +12092,7 @@ static void acdSetSeq(AcdPAcd thys)
     
     if(!ok)
 	acdBadRetry(thys);
-    
+
     acdInFileSave(acdReply, ajSeqGetNameS(val),
                   ajTrue);	/* save sequence name */
     
@@ -11996,121 +12100,141 @@ static void acdSetSeq(AcdPAcd thys)
     
     acdQualToBool(thys, "sask", ajFalse, &sprompt, &acdReplyDef);
     
-    /* now process the begin, end and reverse options */
-    
-    if(seqin->Begin)
-	okbeg = ajTrue;
-    
-    for(itry=acdPromptTry; itry && !okbeg; itry--)
+    if(val) 
     {
-	ajStrAssignC(&acdReplyPrompt, "start");
 
-	if(sprompt)
-	    acdUserGetPrompt(thys, "sbegin",
-			     " Begin at position", &acdReplyPrompt);
-	if(ajStrMatchCaseC(acdReplyPrompt, "start"))
-	    ajStrAssignC(&acdReplyPrompt, "0");
-
-	okbeg = ajStrToInt(acdReplyPrompt, &sbegin);
-
-	if(!okbeg)
-	    acdBadVal(thys, sprompt,
-		      "Invalid sequence position '%S'", acdReplyPrompt);
-    }
-
-    if(!okbeg)
-	acdBadRetry(thys);
+        /* now process the begin, end and reverse options */
     
-    if(sbegin)
+        if(seqin->Begin)
+            okbeg = ajTrue;
+    
+        for(itry=acdPromptTry; itry && !okbeg; itry--)
+        {
+            ajStrAssignC(&acdReplyPrompt, "start");
+
+            if(sprompt)
+                acdUserGetPrompt(thys, "sbegin",
+                                 " Begin at position", &acdReplyPrompt);
+            if(ajStrMatchCaseC(acdReplyPrompt, "start"))
+                ajStrAssignC(&acdReplyPrompt, "0");
+
+            okbeg = ajStrToInt(acdReplyPrompt, &sbegin);
+
+            if(!okbeg)
+                acdBadVal(thys, sprompt,
+                          "Invalid sequence position '%S'", acdReplyPrompt);
+        }
+
+        if(!okbeg)
+            acdBadRetry(thys);
+    
+        if(sbegin)
+        {
+            seqin->Begin = sbegin;
+            val->Begin = sbegin;
+            acdSetQualDefInt(thys, "sbegin", sbegin);
+        }
+    
+        if(seqin->End)
+            okend = ajTrue;
+    
+        for(itry=acdPromptTry; itry && !okend; itry--)
+        {
+            ajStrAssignC(&acdReplyPrompt, "end");
+
+            if(sprompt)
+                acdUserGetPrompt(thys, "send",
+                                 "   End at position", &acdReplyPrompt);
+            if(ajStrMatchCaseC(acdReplyPrompt, "end"))
+                ajStrAssignC(&acdReplyPrompt, "0");
+
+            okend = ajStrToInt(acdReplyPrompt, &send);
+
+            if(!okend)
+                acdBadVal(thys, sprompt,
+                          "Invalid sequence position '%S'", acdReplyPrompt);
+        }
+
+        if(!okend)
+            acdBadRetry(thys);
+    
+        if(send)
+        {
+            seqin->End = send;
+            val->End = send;
+            acdSetQualDefInt(thys, "send", send);
+        }
+
+        if(ajSeqIsNuc(val))
+        {
+            for(itry=acdPromptTry; itry && !okrev; itry--)
+            {
+                ajStrAssignC(&acdReplyPrompt, "N");
+
+                if(sprompt)
+                    acdUserGetPrompt(thys, "sreverse",
+                                     "    Reverse strand", &acdReplyPrompt);
+
+                okrev = ajStrToBool(acdReplyPrompt, &sreverse);
+
+                if(!okrev)
+                    acdBadVal(thys, sprompt,
+                              "Invalid Y/N value '%S'", acdReplyPrompt);
+            }
+
+            if(!okrev)
+                acdBadRetry(thys);
+
+            if(sreverse)
+            {
+                seqin->Rev = sreverse;
+                val->Rev = sreverse;
+                acdSetQualDefBool(thys, "sreverse", sreverse);
+            }
+        }
+    
+        acdLog("sbegin: %d, send: %d, sreverse: %B\n",
+               sbegin, send, sreverse);
+    
+        if(val->Rev)
+            ajSeqReverseDo(val);
+    
+    
+        /* sequences have special set attributes */
+    
+        thys->SAttr = acdAttrListCount(acdCalcSeq);
+        thys->SetAttr = &acdCalcSeq[0];
+        thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
+    
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_BEGIN], ajSeqGetBegin(val));
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_END], ajSeqGetEnd(val));
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_LENGTH], ajSeqGetLen(val));
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_NUCLEIC], ajSeqIsNuc(val));
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_PROTEIN], ajSeqIsProt(val));
+        ajStrAssignS(&thys->SetStr[ACD_SEQ_NAME], val->Name);
+        ajStrAssignS(&thys->SetStr[ACD_SEQ_USA], ajSeqGetUsaS(val));
+    }
+    else 
     {
-	seqin->Begin = sbegin;
-	val->Begin = sbegin;
-	acdSetQualDefInt(thys, "sbegin", sbegin);
+       /* sequences have special set attributes */
+    
+        thys->SAttr = acdAttrListCount(acdCalcSeq);
+        thys->SetAttr = &acdCalcSeq[0];
+        thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
+    
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_BEGIN], 0);
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_END], 0);
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_LENGTH], 0);
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_NUCLEIC], ajFalse);
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_PROTEIN], ajFalse);
+        ajStrAssignC(&thys->SetStr[ACD_SEQ_NAME], "");
+        ajStrAssignC(&thys->SetStr[ACD_SEQ_USA], "");
     }
-    
-    if(seqin->End)
-	okend = ajTrue;
-    
-    for(itry=acdPromptTry; itry && !okend; itry--)
-    {
-	ajStrAssignC(&acdReplyPrompt, "end");
-
-	if(sprompt)
-	    acdUserGetPrompt(thys, "send",
-			     "   End at position", &acdReplyPrompt);
-	if(ajStrMatchCaseC(acdReplyPrompt, "end"))
-	    ajStrAssignC(&acdReplyPrompt, "0");
-
-	okend = ajStrToInt(acdReplyPrompt, &send);
-
-	if(!okend)
-	    acdBadVal(thys, sprompt,
-		      "Invalid sequence position '%S'", acdReplyPrompt);
-    }
-
-    if(!okend)
-	acdBadRetry(thys);
-    
-    if(send)
-    {
-	seqin->End = send;
-	val->End = send;
-	acdSetQualDefInt(thys, "send", send);
-    }
-
-    if(ajSeqIsNuc(val))
-    {
-	for(itry=acdPromptTry; itry && !okrev; itry--)
-	{
-	    ajStrAssignC(&acdReplyPrompt, "N");
-
-	    if(sprompt)
-		acdUserGetPrompt(thys, "sreverse",
-				 "    Reverse strand", &acdReplyPrompt);
-
-	    okrev = ajStrToBool(acdReplyPrompt, &sreverse);
-
-	    if(!okrev)
-		acdBadVal(thys, sprompt,
-			  "Invalid Y/N value '%S'", acdReplyPrompt);
-	}
-
-	if(!okrev)
-	    acdBadRetry(thys);
-
-	if(sreverse)
-	{
-	    seqin->Rev = sreverse;
-	    val->Rev = sreverse;
-	    acdSetQualDefBool(thys, "sreverse", sreverse);
-	}
-    }
-    
-    acdLog("sbegin: %d, send: %d, sreverse: %B\n",
-	   sbegin, send, sreverse);
-    
-    if(val->Rev)
-	ajSeqReverseDo(val);
-    
-    ajSeqinDel(&seqin);
-    
-    /* sequences have special set attributes */
-    
-    thys->SAttr = acdAttrListCount(acdCalcSeq);
-    thys->SetAttr = &acdCalcSeq[0];
-    thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
-    
-    ajStrFromInt(&thys->SetStr[ACD_SEQ_BEGIN], ajSeqGetBegin(val));
-    ajStrFromInt(&thys->SetStr[ACD_SEQ_END], ajSeqGetEnd(val));
-    ajStrFromInt(&thys->SetStr[ACD_SEQ_LENGTH], ajSeqGetLen(val));
-    ajStrFromBool(&thys->SetStr[ACD_SEQ_NUCLEIC], ajSeqIsNuc(val));
-    ajStrFromBool(&thys->SetStr[ACD_SEQ_PROTEIN], ajSeqIsProt(val));
-    ajStrAssignS(&thys->SetStr[ACD_SEQ_NAME], val->Name);
-    ajStrAssignS(&thys->SetStr[ACD_SEQ_USA], ajSeqGetUsaS(val));
     
     thys->Value = val;
     ajStrAssignS(&thys->ValStr, acdReply);
 
+    ajSeqinDel(&seqin);
     ajStrDel(&typestr);
 
     return;
@@ -12174,7 +12298,7 @@ AjPSeqall ajAcdGetSeqall(const char *token)
 
 static void acdSetSeqall(AcdPAcd thys)
 {
-    AjPSeqall val;
+    AjPSeqall val = NULL;
     AjPSeqin seqin;
     AjPSeq seq;
     
@@ -12223,8 +12347,11 @@ static void acdSetSeqall(AcdPAcd thys)
 	    acdUserGet(thys, &acdReply);
 	
 	if(!ajStrGetLen(acdReply) && nullok)
+        {
+            ajSeqallDel(&val);
 	    break;
-	
+	}
+
 	ajSeqinUsa(&seqin, acdReply);
 	
 	if(ajStrGetLen(typestr))
@@ -12277,127 +12404,147 @@ static void acdSetSeqall(AcdPAcd thys)
     if(!ok)
 	acdBadRetry(thys);
     
+    acdInFileSave(acdReply, ajSeqallGetseqName(val), ajTrue);
+
     /*  commentedout__ajSeqinDel(&seqin);*/
         
     acdQualToBool(thys, "sask", ajFalse, &sprompt, &acdReplyDef);
 
     /* now process the begin, end and reverse options */
-    
-    if(seqin->Begin)
+
+    if(val)
     {
-	okbeg = ajTrue;
-	val->Begin = seq->Begin = seqin->Begin;
-    }
+
+        if(seqin->Begin)
+        {
+            okbeg = ajTrue;
+            val->Begin = seq->Begin = seqin->Begin;
+        }
     
-    for(itry=acdPromptTry; itry && !okbeg; itry--)
+        for(itry=acdPromptTry; itry && !okbeg; itry--)
+        {
+            ajStrAssignC(&acdReplyPrompt, "start");
+
+            if(sprompt)
+                acdUserGetPrompt(thys, "sbegin",
+                                 " Begin at position", &acdReplyPrompt);
+            if(ajStrMatchCaseC(acdReplyPrompt, "start"))
+                ajStrAssignC(&acdReplyPrompt, "0");
+
+            okbeg = ajStrToInt(acdReplyPrompt, &sbegin);
+
+            if(!okbeg)
+                acdBadVal(thys, sprompt,
+                          "Invalid integer value '%S'", acdReplyPrompt);
+        }
+
+        if(!okbeg)
+            acdBadRetry(thys);
+    
+        if(sbegin)
+        {
+            seqin->Begin = sbegin;
+            seq->Begin = sbegin;
+            val->Begin = sbegin;
+            acdSetQualDefInt(thys, "sbegin", sbegin);
+        }
+    
+        if(seqin->End)
+        {
+            okend = ajTrue;
+            val->End = seq->End = seqin->End;
+        }
+    
+        for(itry=acdPromptTry; itry && !okend; itry--)
+        {
+            ajStrAssignC(&acdReplyPrompt, "end");
+
+            if(sprompt)
+                acdUserGetPrompt(thys, "send",
+                                 "   End at position", &acdReplyPrompt);
+            if(ajStrMatchCaseC(acdReplyPrompt, "end"))
+                ajStrAssignC(&acdReplyPrompt, "0");
+
+            okend = ajStrToInt(acdReplyPrompt, &send);
+
+            if(!okend)
+                acdBadVal(thys, sprompt,
+                          "Invalid integer value '%S'", acdReplyPrompt);
+        }
+
+        if(!okend)
+            acdBadRetry(thys);
+    
+        if(send)
+        {
+            seqin->End = send;
+            seq->End = send;
+            val->End = send;
+            acdSetQualDefInt(thys, "send", send);
+        }
+
+        if(ajSeqIsNuc(seq))
+        {
+            for(itry=acdPromptTry; itry && !okrev; itry--)
+            {
+                ajStrAssignC(&acdReplyPrompt, "N");
+
+                if(sprompt)
+                    acdUserGetPrompt(thys, "sreverse",
+                                     "    Reverse strand", &acdReplyPrompt);
+                okrev = ajStrToBool(acdReplyPrompt, &sreverse);
+
+                if(!okrev)
+                    acdBadVal(thys, sprompt,
+                              "Invalid Y/N value '%S'", acdReplyPrompt);
+            }
+
+            if(!okrev)
+                acdBadRetry(thys);
+
+            if(sreverse)
+            {
+                seqin->Rev = sreverse;
+                seq->Rev = sreverse;
+                val->Rev = sreverse;
+                acdSetQualDefBool(thys, "sreverse", sreverse);
+            }
+        }
+
+
+        acdLog("sbegin: %d, send: %d, sreverse: %B\n",
+               sbegin, send, sreverse);
+    
+        /* sequences have special set attributes */
+    
+        thys->SAttr = acdAttrListCount(acdCalcSeqall);
+        thys->SetAttr = &acdCalcSeqall[0];
+        thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
+
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_BEGIN], ajSeqallGetseqBegin(val));
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_END], ajSeqallGetseqEnd(val));
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_LENGTH], ajSeqGetLen(seq));
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_NUCLEIC], ajSeqIsNuc(seq));
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_PROTEIN], ajSeqIsProt(seq));
+        ajStrAssignS(&thys->SetStr[ACD_SEQ_NAME], seq->Name);
+        ajStrAssignS(&thys->SetStr[ACD_SEQ_USA], ajSeqallGetUsa(val));
+    }
+    else 
     {
-	ajStrAssignC(&acdReplyPrompt, "start");
-
-	if(sprompt)
-	    acdUserGetPrompt(thys, "sbegin",
-			     " Begin at position", &acdReplyPrompt);
-	if(ajStrMatchCaseC(acdReplyPrompt, "start"))
-	    ajStrAssignC(&acdReplyPrompt, "0");
-
-	okbeg = ajStrToInt(acdReplyPrompt, &sbegin);
-
-	if(!okbeg)
-	    acdBadVal(thys, sprompt,
-		      "Invalid integer value '%S'", acdReplyPrompt);
+       /* sequences have special set attributes */
+    
+        thys->SAttr = acdAttrListCount(acdCalcSeqall);
+        thys->SetAttr = &acdCalcSeq[0];
+        thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
+    
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_BEGIN], 0);
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_END], 0);
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_LENGTH], 0);
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_NUCLEIC], ajFalse);
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_PROTEIN], ajFalse);
+        ajStrAssignC(&thys->SetStr[ACD_SEQ_NAME], "");
+        ajStrAssignC(&thys->SetStr[ACD_SEQ_USA], "");
     }
-
-    if(!okbeg)
-	acdBadRetry(thys);
-    
-    if(sbegin)
-    {
-	seqin->Begin = sbegin;
-	seq->Begin = sbegin;
-	val->Begin = sbegin;
-	acdSetQualDefInt(thys, "sbegin", sbegin);
-    }
-    
-    if(seqin->End)
-    {
-	okend = ajTrue;
-	val->End = seq->End = seqin->End;
-    }
-    
-    for(itry=acdPromptTry; itry && !okend; itry--)
-    {
-	ajStrAssignC(&acdReplyPrompt, "end");
-
-	if(sprompt)
-	    acdUserGetPrompt(thys, "send",
-			     "   End at position", &acdReplyPrompt);
-	if(ajStrMatchCaseC(acdReplyPrompt, "end"))
-	    ajStrAssignC(&acdReplyPrompt, "0");
-
-	okend = ajStrToInt(acdReplyPrompt, &send);
-
-	if(!okend)
-	    acdBadVal(thys, sprompt,
-		      "Invalid integer value '%S'", acdReplyPrompt);
-    }
-
-    if(!okend)
-	acdBadRetry(thys);
-    
-    if(send)
-    {
-	seqin->End = send;
-	seq->End = send;
-	val->End = send;
-	acdSetQualDefInt(thys, "send", send);
-    }
-
-    if(ajSeqIsNuc(seq))
-    {
-	for(itry=acdPromptTry; itry && !okrev; itry--)
-	{
-	    ajStrAssignC(&acdReplyPrompt, "N");
-
-	    if(sprompt)
-		acdUserGetPrompt(thys, "sreverse",
-				 "    Reverse strand", &acdReplyPrompt);
-	    okrev = ajStrToBool(acdReplyPrompt, &sreverse);
-
-	    if(!okrev)
-		acdBadVal(thys, sprompt,
-			  "Invalid Y/N value '%S'", acdReplyPrompt);
-	}
-
-	if(!okrev)
-	    acdBadRetry(thys);
-
-	if(sreverse)
-	{
-	    seqin->Rev = sreverse;
-	    seq->Rev = sreverse;
-	    val->Rev = sreverse;
-	    acdSetQualDefBool(thys, "sreverse", sreverse);
-	}
-    }
-
-
-    acdLog("sbegin: %d, send: %d, sreverse: %B\n",
-	   sbegin, send, sreverse);
-    
-    /* sequences have special set attributes */
-    
-    thys->SAttr = acdAttrListCount(acdCalcSeqall);
-    thys->SetAttr = &acdCalcSeqall[0];
-    thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
-    
-    ajStrFromInt(&thys->SetStr[ACD_SEQ_BEGIN], ajSeqallGetseqBegin(val));
-    ajStrFromInt(&thys->SetStr[ACD_SEQ_END], ajSeqallGetseqEnd(val));
-    ajStrFromInt(&thys->SetStr[ACD_SEQ_LENGTH], ajSeqGetLen(seq));
-    ajStrFromBool(&thys->SetStr[ACD_SEQ_NUCLEIC], ajSeqIsNuc(seq));
-    ajStrFromBool(&thys->SetStr[ACD_SEQ_PROTEIN], ajSeqIsProt(seq));
-    ajStrAssignS(&thys->SetStr[ACD_SEQ_NAME], seq->Name);
-    ajStrAssignS(&thys->SetStr[ACD_SEQ_USA], ajSeqallGetUsa(val));
-    
-    acdInFileSave(acdReply, ajSeqallGetseqName(val), ajTrue);
 
     thys->Value = val;
     ajStrAssignS(&thys->ValStr, acdReply);
@@ -12442,7 +12589,7 @@ static void acdSetSeqall(AcdPAcd thys)
 
 static void acdSetSeqsetall(AcdPAcd thys)
 {
-    AjPSeqset *val;
+    AjPSeqset *val = NULL;
     AjPSeqin seqin;
     
     AjBool required = ajFalse;
@@ -12499,7 +12646,7 @@ static void acdSetSeqsetall(AcdPAcd thys)
 	    acdUserGet(thys, &acdReply);
 	
 	if(!ajStrGetLen(acdReply) && nullok)
-	    break;;
+	    break;
 
 	ajSeqinUsa(&seqin, acdReply);
 	
@@ -12553,165 +12700,191 @@ static void acdSetSeqsetall(AcdPAcd thys)
 	acdBadRetry(thys);
 
     nsets = ajListToarray(seqlist,(void***) &sets);
-    val   = (AjPSeqset*) sets;
-    ajListFree(&seqlist);
 
-    acdInFileSave(acdReply, ajSeqsetGetNameS(val[0]),
-                  ajTrue);      /* save sequence name */
-    
-    acdQualToBool(thys, "sask", ajFalse, &sprompt, &acdReplyDef);
-    
-    /* now process the begin, end and reverse options */
-    
-    if(seqin->Begin)
+    if(!nsets)
     {
-	okbeg = ajTrue;
-
-	for(iset=0;iset<nsets;iset++)
-	    val[iset]->Begin = seqin->Begin;
-    }
+        acdInFileSave(acdReply, ajStrConstEmpty(),
+                      ajTrue); 
+       /* sequences have special set attributes */
     
-    for(itry=acdPromptTry; itry && !okbeg; itry--)
+        thys->SAttr = acdAttrListCount(acdCalcSeqsetall);
+        thys->SetAttr = &acdCalcSeq[0];
+        thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
+    
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_BEGIN], 0);
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_END], 0);
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_LENGTH], 0);
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_NUCLEIC], ajFalse);
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_PROTEIN], ajFalse);
+        ajStrAssignC(&thys->SetStr[ACD_SEQ_NAME], "");
+        ajStrAssignC(&thys->SetStr[ACD_SEQ_USA], "");
+        ajStrFromFloat(&thys->SetStr[ACD_SEQ_WEIGHT],
+                       0.0, 3);
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_COUNT], 0);
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_MULTICOUNT], 0);
+    }
+    else
     {
-	ajStrAssignC(&acdReplyPrompt, "start");
+        val   = (AjPSeqset*) sets;
+        ajListFree(&seqlist);
 
-	if(sprompt)
-	    acdUserGetPrompt(thys, "sbegin",
-			     " Begin at position", &acdReplyPrompt);
-	if(ajStrMatchCaseC(acdReplyPrompt, "start"))
-	    ajStrAssignC(&acdReplyPrompt, "0");
+        acdInFileSave(acdReply, ajSeqsetGetNameS(val[0]),
+                      ajTrue);      /* save sequence name */
+    
+        acdQualToBool(thys, "sask", ajFalse, &sprompt, &acdReplyDef);
+    
+        /* now process the begin, end and reverse options */
+    
+        if(seqin->Begin)
+        {
+            okbeg = ajTrue;
 
-	okbeg = ajStrToInt(acdReplyPrompt, &sbegin);
+            for(iset=0;iset<nsets;iset++)
+                val[iset]->Begin = seqin->Begin;
+        }
+    
+        for(itry=acdPromptTry; itry && !okbeg; itry--)
+        {
+            ajStrAssignC(&acdReplyPrompt, "start");
 
-	if(!okbeg)
-	    acdBadVal(thys, sprompt,
-		      "Invalid integer value '%S'", acdReplyPrompt);
+            if(sprompt)
+                acdUserGetPrompt(thys, "sbegin",
+                                 " Begin at position", &acdReplyPrompt);
+            if(ajStrMatchCaseC(acdReplyPrompt, "start"))
+                ajStrAssignC(&acdReplyPrompt, "0");
+
+            okbeg = ajStrToInt(acdReplyPrompt, &sbegin);
+
+            if(!okbeg)
+                acdBadVal(thys, sprompt,
+                          "Invalid integer value '%S'", acdReplyPrompt);
+        }
+
+        if(!okbeg)
+            acdBadRetry(thys);
+    
+        if(sbegin)
+        {
+            seqin->Begin = sbegin;
+
+            for(iset=0;iset<nsets;iset++)
+                val[iset]->Begin = sbegin;
+
+            acdSetQualDefInt(thys, "sbegin", sbegin);
+        }
+    
+        if(seqin->End)
+        {
+            okend = ajTrue;
+
+            for(iset=0;iset<nsets;iset++)
+                val[iset]->End = seqin->End;
+        }
+    
+        for(itry=acdPromptTry; itry && !okend; itry--)
+        {
+            ajStrAssignC(&acdReplyPrompt, "end");
+
+            if(sprompt)
+                acdUserGetPrompt(thys, "send",
+                                 "   End at position", &acdReplyPrompt);
+            if(ajStrMatchCaseC(acdReplyPrompt, "end"))
+                ajStrAssignC(&acdReplyPrompt, "0");
+
+            okend = ajStrToInt(acdReplyPrompt, &send);
+
+            if(!okend)
+                acdBadVal(thys, sprompt,
+                          "Invalid integer value '%S'", acdReplyPrompt);
+        }
+
+        if(!okend)
+            acdBadRetry(thys);
+    
+        if(send)
+        {
+            seqin->End = send;
+
+            for(iset=0;iset<nsets;iset++)
+                val[iset]->End = send;
+
+            acdSetQualDefInt(thys, "send", send);
+        }
+
+        if(ajSeqsetIsNuc(val[0]))
+        {
+            for(itry=acdPromptTry; itry && !okrev; itry--)
+            {
+                ajStrAssignC(&acdReplyPrompt, "N");
+
+                if(sprompt)
+                    acdUserGetPrompt(thys, "sreverse",
+                                     "    Reverse strand", &acdReplyPrompt);
+
+                okrev = ajStrToBool(acdReplyPrompt, &sreverse);
+
+                if(!okrev)
+                    acdBadVal(thys, sprompt,
+                              "Invalid Y/N value '%S'", acdReplyPrompt);
+            }
+
+            if(!okrev)
+                acdBadRetry(thys);
+
+            if(sreverse)
+            {
+                seqin->Rev = sreverse;
+
+                for(iset=0;iset<nsets;iset++)
+                    val[iset]->Rev = sreverse;
+
+                acdSetQualDefBool(thys, "sreverse", sreverse);
+            }
+        }
+    
+        acdLog("sbegin: %d, send: %d, sreverse: Bs\n",
+               sbegin, send, sreverse);
+    
+        if(aligned)
+            for(iset=0;iset<nsets;iset++)
+                ajSeqsetFill(val[iset]);
+
+        for(iset=0;iset<nsets;iset++)
+            if(val[iset]->Rev)
+                ajSeqsetReverse(val[iset]);
+    
+    
+        /* sequences have special set attributes */
+
+        thys->SAttr = acdAttrListCount(acdCalcSeqsetall);
+        thys->SetAttr = &acdCalcSeqsetall[0];
+        thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
+    
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_BEGIN], ajSeqsetGetBegin(val[0]));
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_END], ajSeqsetGetEnd(val[0]));
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_LENGTH], ajSeqsetGetLen(val[0]));
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_PROTEIN],
+                      ajSeqsetIsProt(val[0]));
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_NUCLEIC],
+                      ajSeqsetIsNuc(val[0]));
+        ajStrAssignS(&thys->SetStr[ACD_SEQ_NAME], val[0]->Name);
+        ajStrAssignS(&thys->SetStr[ACD_SEQ_USA], ajSeqsetGetUsa(val[0]));
+        ajStrFromFloat(&thys->SetStr[ACD_SEQ_WEIGHT],
+                       ajSeqsetGetTotweight(val[0]), 3);
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_COUNT], ajSeqsetGetSize(val[0]));
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_MULTICOUNT], nsets);
+    
+        acdInFileSave(acdReply, ajSeqsetGetNameS(val[0]), ajTrue);
+
+        for(iattr=0; iattr < thys->SAttr; iattr++)
+            ajDebug("CalcAttr %s: '%S'\n",
+                    acdCalcSeqset[iattr].Name, thys->SetStr[iattr]);
     }
-
-    if(!okbeg)
-	acdBadRetry(thys);
-    
-    if(sbegin)
-    {
-	seqin->Begin = sbegin;
-
-	for(iset=0;iset<nsets;iset++)
-	    val[iset]->Begin = sbegin;
-
-	acdSetQualDefInt(thys, "sbegin", sbegin);
-    }
-    
-    if(seqin->End)
-    {
-	okend = ajTrue;
-
-	for(iset=0;iset<nsets;iset++)
-	    val[iset]->End = seqin->End;
-    }
-    
-    for(itry=acdPromptTry; itry && !okend; itry--)
-    {
-	ajStrAssignC(&acdReplyPrompt, "end");
-
-	if(sprompt)
-	    acdUserGetPrompt(thys, "send",
-			     "   End at position", &acdReplyPrompt);
-	if(ajStrMatchCaseC(acdReplyPrompt, "end"))
-	    ajStrAssignC(&acdReplyPrompt, "0");
-
-	okend = ajStrToInt(acdReplyPrompt, &send);
-
-	if(!okend)
-	    acdBadVal(thys, sprompt,
-		      "Invalid integer value '%S'", acdReplyPrompt);
-    }
-
-    if(!okend)
-	acdBadRetry(thys);
-    
-    if(send)
-    {
-	seqin->End = send;
-
-	for(iset=0;iset<nsets;iset++)
-	    val[iset]->End = send;
-
-	acdSetQualDefInt(thys, "send", send);
-    }
-
-    if(ajSeqsetIsNuc(val[0]))
-    {
-	for(itry=acdPromptTry; itry && !okrev; itry--)
-	{
-	    ajStrAssignC(&acdReplyPrompt, "N");
-
-	    if(sprompt)
-		acdUserGetPrompt(thys, "sreverse",
-				 "    Reverse strand", &acdReplyPrompt);
-
-	    okrev = ajStrToBool(acdReplyPrompt, &sreverse);
-
-	    if(!okrev)
-		acdBadVal(thys, sprompt,
-			  "Invalid Y/N value '%S'", acdReplyPrompt);
-	}
-
-	if(!okrev)
-	    acdBadRetry(thys);
-
-	if(sreverse)
-	{
-	    seqin->Rev = sreverse;
-
-	    for(iset=0;iset<nsets;iset++)
-		val[iset]->Rev = sreverse;
-
-	    acdSetQualDefBool(thys, "sreverse", sreverse);
-	}
-    }
-    
-    acdLog("sbegin: %d, send: %d, sreverse: Bs\n",
-	   sbegin, send, sreverse);
-    
-    if(aligned)
-	for(iset=0;iset<nsets;iset++)
-	    ajSeqsetFill(val[iset]);
-
-    for(iset=0;iset<nsets;iset++)
-	if(val[iset]->Rev)
-	    ajSeqsetReverse(val[iset]);
-    
-    ajSeqinDel(&seqin);
-    
-    /* sequences have special set attributes */
-    
-    thys->SAttr = acdAttrListCount(acdCalcSeqsetall);
-    thys->SetAttr = &acdCalcSeqsetall[0];
-    thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
-    
-    ajStrFromInt(&thys->SetStr[ACD_SEQ_BEGIN], ajSeqsetGetBegin(val[0]));
-    ajStrFromInt(&thys->SetStr[ACD_SEQ_END], ajSeqsetGetEnd(val[0]));
-    ajStrFromInt(&thys->SetStr[ACD_SEQ_LENGTH], ajSeqsetGetLen(val[0]));
-    ajStrFromBool(&thys->SetStr[ACD_SEQ_PROTEIN],
-		  ajSeqsetIsProt(val[0]));
-    ajStrFromBool(&thys->SetStr[ACD_SEQ_NUCLEIC],
-		  ajSeqsetIsNuc(val[0]));
-    ajStrAssignS(&thys->SetStr[ACD_SEQ_NAME], val[0]->Name);
-    ajStrAssignS(&thys->SetStr[ACD_SEQ_USA], ajSeqsetGetUsa(val[0]));
-    ajStrFromFloat(&thys->SetStr[ACD_SEQ_WEIGHT],
-		   ajSeqsetGetTotweight(val[0]), 3);
-    ajStrFromInt(&thys->SetStr[ACD_SEQ_COUNT], ajSeqsetGetSize(val[0]));
-    ajStrFromInt(&thys->SetStr[ACD_SEQ_MULTICOUNT], nsets);
-    
-    acdInFileSave(acdReply, ajSeqsetGetNameS(val[0]), ajTrue);
-
-    for(iattr=0; iattr < thys->SAttr; iattr++)
-	ajDebug("CalcAttr %s: '%S'\n",
-		acdCalcSeqset[iattr].Name, thys->SetStr[iattr]);
 
     thys->Value = val;
     ajStrAssignS(&thys->ValStr, acdReply);
 
+    ajSeqinDel(&seqin);
     ajStrDel(&typestr);
 
     return;
@@ -12765,7 +12938,7 @@ AjPSeqout ajAcdGetSeqout(const char *token)
 
 static void acdSetSeqout(AcdPAcd thys)
 {
-    AjPSeqout val;
+    AjPSeqout val = NULL;
     
     AjBool required = ajFalse;
     AjBool ok       = ajFalse;
@@ -12962,7 +13135,7 @@ AjPSeqout ajAcdGetSeqoutall(const char *token)
 
 static void acdSetSeqoutall(AcdPAcd thys)
 {
-    AjPSeqout val;
+    AjPSeqout val = NULL;
     
     AjBool required = ajFalse;
     AjBool ok       = ajFalse;
@@ -13156,7 +13329,7 @@ AjPSeqout ajAcdGetSeqoutset(const char *token)
 
 static void acdSetSeqoutset(AcdPAcd thys)
 {
-    AjPSeqout val;
+    AjPSeqout val = NULL;
     
     AjBool required = ajFalse;
     AjBool ok       = ajFalse;
@@ -13351,7 +13524,7 @@ AjPSeqset ajAcdGetSeqset(const char *token)
 
 static void acdSetSeqset(AcdPAcd thys)
 {
-    AjPSeqset val;
+    AjPSeqset val = NULL;
     AjPSeqin seqin;
     
     AjBool required = ajFalse;
@@ -13402,7 +13575,10 @@ static void acdSetSeqset(AcdPAcd thys)
 	
 	
 	if(!ajStrGetLen(acdReply) && nullok)
-	    break;;
+        {
+            ajSeqsetDel(&val);
+	    break;
+        }
 
 	ajSeqinUsa(&seqin, acdReply);
 	
@@ -13455,128 +13631,126 @@ static void acdSetSeqset(AcdPAcd thys)
     if(!ok)
 	acdBadRetry(thys);
     
-    if(val)
-        acdInFileSave(acdReply, ajSeqsetGetNameS(val),
-                      ajTrue);      /* save sequence name */
-    
+    acdInFileSave(acdReply, ajSeqsetGetNameS(val),
+                  ajTrue);      /* save sequence name */
+
     acdQualToBool(thys, "sask", ajFalse, &sprompt, &acdReplyDef);
-    
-    /* now process the begin, end and reverse options */
-    
-    if(seqin->Begin)
+
+    if(val) 
     {
-	okbeg = ajTrue;
-	val->Begin = seqin->Begin;
-    }
+
+        /* now process the begin, end and reverse options */
     
-    for(itry=acdPromptTry; itry && !okbeg; itry--)
-    {
-	ajStrAssignC(&acdReplyPrompt, "start");
-
-	if(sprompt)
-	    acdUserGetPrompt(thys, "sbegin",
-			     " Begin at position", &acdReplyPrompt);
-	if(ajStrMatchCaseC(acdReplyPrompt, "start"))
-	    ajStrAssignC(&acdReplyPrompt, "0");
-
-	okbeg = ajStrToInt(acdReplyPrompt, &sbegin);
-
-	if(!okbeg)
-	    acdBadVal(thys, sprompt,
-		      "Invalid integer value '%S'", acdReplyPrompt);
-    }
-
-    if(!okbeg)
-	acdBadRetry(thys);
+        if(seqin->Begin)
+        {
+            okbeg = ajTrue;
+            val->Begin = seqin->Begin;
+        }
     
-    if(sbegin)
-    {
-	seqin->Begin = sbegin;
-	val->Begin = sbegin;
-	acdSetQualDefInt(thys, "sbegin", sbegin);
-    }
+        for(itry=acdPromptTry; itry && !okbeg; itry--)
+        {
+            ajStrAssignC(&acdReplyPrompt, "start");
+
+            if(sprompt)
+                acdUserGetPrompt(thys, "sbegin",
+                                 " Begin at position", &acdReplyPrompt);
+            if(ajStrMatchCaseC(acdReplyPrompt, "start"))
+                ajStrAssignC(&acdReplyPrompt, "0");
+
+            okbeg = ajStrToInt(acdReplyPrompt, &sbegin);
+
+            if(!okbeg)
+                acdBadVal(thys, sprompt,
+                          "Invalid integer value '%S'", acdReplyPrompt);
+        }
+
+        if(!okbeg)
+            acdBadRetry(thys);
     
-    if(seqin->End)
-    {
-	okend = ajTrue;
-	val->End = seqin->End;
-    }
+        if(sbegin)
+        {
+            seqin->Begin = sbegin;
+            val->Begin = sbegin;
+            acdSetQualDefInt(thys, "sbegin", sbegin);
+        }
     
-    for(itry=acdPromptTry; itry && !okend; itry--)
-    {
-	ajStrAssignC(&acdReplyPrompt, "end");
-
-	if(sprompt)
-	    acdUserGetPrompt(thys, "send",
-			     "   End at position", &acdReplyPrompt);
-
-	if(ajStrMatchCaseC(acdReplyPrompt, "end"))
-	    ajStrAssignC(&acdReplyPrompt, "0");
-
-	okend = ajStrToInt(acdReplyPrompt, &send);
-
-	if(!okend)
-	    acdBadVal(thys, sprompt,
-		      "Invalid integer value '%S'", acdReplyPrompt);
-    }
-
-    if(!okend)
-	acdBadRetry(thys);
+        if(seqin->End)
+        {
+            okend = ajTrue;
+            val->End = seqin->End;
+        }
     
-    if(send)
-    {
-	seqin->End = send;
-	val->End = send;
-	acdSetQualDefInt(thys, "send", send);
-    }
+        for(itry=acdPromptTry; itry && !okend; itry--)
+        {
+            ajStrAssignC(&acdReplyPrompt, "end");
 
-    if(val && ajSeqsetGetSize(val) && ajSeqsetIsNuc(val))
-    {
-	for(itry=acdPromptTry; itry && !okrev; itry--)
-	{
-	    ajStrAssignC(&acdReplyPrompt, "N");
+            if(sprompt)
+                acdUserGetPrompt(thys, "send",
+                                 "   End at position", &acdReplyPrompt);
 
-	    if(sprompt)
-		acdUserGetPrompt(thys, "sreverse",
-				 "    Reverse strand", &acdReplyPrompt);
+            if(ajStrMatchCaseC(acdReplyPrompt, "end"))
+                ajStrAssignC(&acdReplyPrompt, "0");
 
-	    okrev = ajStrToBool(acdReplyPrompt, &sreverse);
+            okend = ajStrToInt(acdReplyPrompt, &send);
 
-	    if(!okrev)
-		acdBadVal(thys, sprompt,
-			  "Invalid Y/N value '%S'", acdReplyPrompt);
-	}
+            if(!okend)
+                acdBadVal(thys, sprompt,
+                          "Invalid integer value '%S'", acdReplyPrompt);
+        }
 
-	if(!okrev)
-	    acdBadRetry(thys);
-
-	if(sreverse)
-	{
-	    seqin->Rev = sreverse;
-	    val->Rev = sreverse;
-	    acdSetQualDefBool(thys, "sreverse", sreverse);
-	}
-    }
+        if(!okend)
+            acdBadRetry(thys);
     
-    acdLog("sbegin: %d, send: %d, sreverse: %B\n",
-	   sbegin, send, sreverse);
-    
-    if(val && aligned)
-	ajSeqsetFill(val);
+        if(send)
+        {
+            seqin->End = send;
+            val->End = send;
+            acdSetQualDefInt(thys, "send", send);
+        }
 
-    if(val && val->Rev)
-        ajSeqsetReverse(val);
+        if(ajSeqsetGetSize(val) && ajSeqsetIsNuc(val))
+        {
+            for(itry=acdPromptTry; itry && !okrev; itry--)
+            {
+                ajStrAssignC(&acdReplyPrompt, "N");
+
+                if(sprompt)
+                    acdUserGetPrompt(thys, "sreverse",
+                                     "    Reverse strand", &acdReplyPrompt);
+
+                okrev = ajStrToBool(acdReplyPrompt, &sreverse);
+
+                if(!okrev)
+                    acdBadVal(thys, sprompt,
+                              "Invalid Y/N value '%S'", acdReplyPrompt);
+            }
+
+            if(!okrev)
+                acdBadRetry(thys);
+
+            if(sreverse)
+            {
+                seqin->Rev = sreverse;
+                val->Rev = sreverse;
+                acdSetQualDefBool(thys, "sreverse", sreverse);
+            }
+        }
+
+        acdLog("sbegin: %d, send: %d, sreverse: %B\n",
+               sbegin, send, sreverse);
+
+        if(val && aligned)
+            ajSeqsetFill(val);
+
+        if(val && val->Rev)
+            ajSeqsetReverse(val);
+
+        /* sequences have special set attributes */
     
-    ajSeqinDel(&seqin);
+        thys->SAttr = acdAttrListCount(acdCalcSeqset);
+        thys->SetAttr = &acdCalcSeqset[0];
+        thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
     
-    /* sequences have special set attributes */
-    
-    thys->SAttr = acdAttrListCount(acdCalcSeqset);
-    thys->SetAttr = &acdCalcSeqset[0];
-    thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
-    
-    if(val)
-    {
         ajStrFromInt(&thys->SetStr[ACD_SEQ_BEGIN], ajSeqsetGetBegin(val));
         ajStrFromInt(&thys->SetStr[ACD_SEQ_END], ajSeqsetGetEnd(val));
         ajStrFromInt(&thys->SetStr[ACD_SEQ_LENGTH], ajSeqsetGetLen(val));
@@ -13590,10 +13764,30 @@ static void acdSetSeqset(AcdPAcd thys)
     
         acdInFileSave(acdReply, ajSeqsetGetNameS(val), ajTrue);
     }
+    else 
+    {
+       /* sequences have special set attributes */
+    
+        thys->SAttr = acdAttrListCount(acdCalcSeqset);
+        thys->SetAttr = &acdCalcSeq[0];
+        thys->SetStr = AJCALLOC0(thys->SAttr, sizeof(AjPStr));
+    
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_BEGIN], 0);
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_END], 0);
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_LENGTH], 0);
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_NUCLEIC], ajFalse);
+        ajStrFromBool(&thys->SetStr[ACD_SEQ_PROTEIN], ajFalse);
+        ajStrAssignC(&thys->SetStr[ACD_SEQ_NAME], "");
+        ajStrAssignC(&thys->SetStr[ACD_SEQ_USA], "");
+        ajStrFromFloat(&thys->SetStr[ACD_SEQ_WEIGHT],
+                       0.0, 3);
+        ajStrFromInt(&thys->SetStr[ACD_SEQ_COUNT], 0);
+    }
 
     thys->Value = val;
     ajStrAssignS(&thys->ValStr, acdReply);
     
+    ajSeqinDel(&seqin);
     ajStrDel(&typestr);
 
     return;
@@ -14167,7 +14361,63 @@ const AjPStr ajAcdGetValueDefault(const char *token)
 
 
 
-/* @func ajAcdIsUserdefined ***************************************************
+/* @func ajAcdGetpathC ********************************************************
+**
+** Returns the full path of an application defined in an external: attribute
+** within the application definition. If the application was defined by an
+** EMBOSS_appname environment variable this will use the substitution made
+** when the external attribute was validated.
+**
+** @param [r] token [const char*] External application name
+** @return [const AjPStr] Executable application name
+** @@
+******************************************************************************/
+
+const AjPStr ajAcdGetpathC(const char* token)
+{
+    const AjPStr value;	       /* not static - copy of a table text */
+    AjPStr tmpname = NULL;
+
+    ajStrAssignC(&tmpname, token);
+
+    value = ajAcdGetpathS(tmpname);
+
+    ajStrDel(&tmpname);
+
+    return value;
+}
+
+
+
+
+/* @func ajAcdGetpathS ********************************************************
+**
+** Returns the full path of an application defined in an external: attribute
+** within the application definition. If the application was defined by an
+** EMBOSS_appname environment variable this will use the substitution made
+** when the external attribute was validated.
+**
+** @param [r] strtoken [const AjPStr] External application name
+** @return [const AjPStr] Executable application name
+** @@
+******************************************************************************/
+
+const AjPStr ajAcdGetpathS(const AjPStr strtoken)
+{
+    const AjPStr value;
+
+    value = ajTableFetch(acdExternalTable, strtoken);
+
+    if(!value) 
+        ajWarn("Cannot find '%S', no ACD external definition found", strtoken);
+
+    return value;
+}
+
+
+
+
+/* @func ajAcdIsUserdefinedC **************************************************
 **
 ** Tests whether an ACD item has a value set by the user.
 **
@@ -14179,7 +14429,7 @@ const AjPStr ajAcdGetValueDefault(const char *token)
 ** @@
 ******************************************************************************/
 
-AjBool ajAcdIsUserdefined(const char *token)
+AjBool ajAcdIsUserdefinedC(const char *token)
 {
     AcdPAcd acd;
     ajint pnum = 0;		   /* need to get from end of token */
@@ -14194,6 +14444,50 @@ AjBool ajAcdIsUserdefined(const char *token)
     if(!acd)
     {
         ajErr("Qualifier '-%s' not found", token);
+        return ajFalse;
+    }
+
+    ajStrDel(&tmpstr);
+
+    return acd->UserDefined;
+}
+
+/* @obsolete ajAcdIsUserdefined
+** @rename ajAcdIsUserdefinedC
+*/
+__deprecated AjBool ajAcdIsUserdefined(const char *token)
+{
+    return ajAcdIsUserdefinedC(token);
+}
+
+
+/* @func ajAcdIsUserdefinedS **************************************************
+**
+** Tests whether an ACD item has a value set by the user.
+**
+** @param [r] strtoken [const AjPStr] Text token name
+** @return [AjBool] True if token is not found as an ACD object name
+**
+** @cre failure to find an item with the right name gives an error message
+** and continues
+** @@
+******************************************************************************/
+
+AjBool ajAcdIsUserdefinedS(const AjPStr strtoken)
+{
+    AcdPAcd acd;
+    ajint pnum = 0;		   /* need to get from end of token */
+    AjPStr tmpstr = NULL;
+
+    tmpstr = ajStrNewS(strtoken);
+
+    acdTokenToLowerS(&tmpstr, &pnum);
+
+    acd = acdFindAcd(tmpstr, tmpstr);
+
+    if(!acd)
+    {
+        ajErr("Qualifier '-%S' not found", strtoken);
         return ajFalse;
     }
 
@@ -14668,6 +14962,8 @@ static void acdHelp(void)
     ajint iattr = 0;
     ajint igrp = 0;
     AjPStr groupname = NULL;
+    AjPStr tmpstr = NULL;
+    AjPStr applversion = NULL;
 
     AjBool flagReq = ajFalse;
     AjBool flagOpt = ajFalse;
@@ -14772,7 +15068,7 @@ static void acdHelp(void)
             case HELP_APP:			/* application, do nothing */
                 iattr = acdFindAttrC(acdAttrAppl, "groups");
                 ajStrAssignS(&groupname, pa->AttrStr[iattr]);
-                igrp = ajStrFindAnyK(groupname, ',');
+                igrp = ajStrFindAnyC(groupname, ",|");
 
                 if(igrp != -1)
                     ajStrTruncateLen(&groupname, igrp);
@@ -14843,6 +15139,37 @@ static void acdHelp(void)
 
     if(!acdDoXsd)
     {
+        /*
+        ** report 1-line documentation
+        ** report version (s)
+         */
+
+        acdAttrResolve(acdApplAcd, "documentation", &tmpstr);
+
+        if(!acdAuto && !acdDoTable && ajStrGetLen(tmpstr))
+        {
+            ajStrFmtWrap(&tmpstr, 75);
+            ajUserDumpS(tmpstr);
+        }
+        
+        ajFmtPrintS(&tmpstr, "EMBOSS:%s", VERSION);
+
+        if(ajStrGetLen(acdPackVersion))
+            ajFmtPrintAppS(&tmpstr, " %S:%S", acdPackName, acdPackVersion);
+
+        acdAttrResolve(acdApplAcd, "versionnumber", &applversion);
+
+        if(ajStrGetLen(applversion))
+        {
+            ajFmtPrintAppS(&tmpstr, " %S:%S", acdApplAcd->Name, applversion);
+            ajStrDel(&applversion);
+        }
+
+        if(!acdDoTable)
+            ajUser("Version: %S\n", tmpstr);
+        ajStrDel(&tmpstr);
+        ajStrDel(&applversion);
+
         if(flagReq)
             acdHelpShow(helpReq,
                         "Standard (Mandatory) qualifiers "
@@ -14850,6 +15177,7 @@ static void acdHelp(void)
         else
             acdHelpShow(helpReq, "Standard (Mandatory) qualifiers");
 
+        acdHelpTableShow(NULL, "");
         acdHelpTableShow(reqlist, "Standard (Mandatory) qualifiers");
 
         if(flagOpt)
@@ -15503,7 +15831,7 @@ static void acdHelpValidGraph(const AcdPAcd thys, AjBool table, AjPStr* str)
 
     list = ajListstrNew();
 
-    ajCall("ajGraphListDevices", list);
+    ajGraphicsListDevices(list);
 
     if(table)
 	ajFmtPrintAppS(str, "EMBOSS has a list of known devices, including ");
@@ -15567,24 +15895,22 @@ static void acdHelpValidString(const AcdPAcd thys, AjBool table, AjPStr* str)
 	ajStrAppendC(str, " (");
 
     if(word)
-	ajFmtPrintAppS(str, "Any string without whitespace ");
+	ajFmtPrintAppS(str, "Any word");
     else
-    	ajFmtPrintAppS(str, "Any string ");
+    	ajFmtPrintAppS(str, "Any string");
 
     if(maxlen > 0)
     {
 	if(minlen > 0)
-	    ajFmtPrintAppS(str, "from %d to %d characters",
+	    ajFmtPrintAppS(str, " from %d to %d characters",
 			   minlen, maxlen);
 	else
-	    ajFmtPrintAppS(str, "up to %d characters", maxlen);
+	    ajFmtPrintAppS(str, " up to %d characters", maxlen);
     }
     else
     {
 	if(minlen > 0)
-	    ajFmtPrintAppS(str, "of at least %d characters", minlen);
-	else
-	    ajFmtPrintAppS(str, "is accepted");
+	    ajFmtPrintAppS(str, " of at least %d characters", minlen);
     }
     
 
@@ -15698,7 +16024,7 @@ static void acdHelpValidList(const AcdPAcd thys, AjBool table, AjPStr* str)
 	if(!acdKnownValueList(thys, &value))
 	    acdError("No value defined for list");
 
-    handle = ajStrTokenNewC(value, ajStrGetPtr(delim));
+    handle = ajStrTokenNewS(value, delim);
 
     if(table)
 	ajFmtPrintAppS(str, "<table>");
@@ -15709,9 +16035,9 @@ static void acdHelpValidList(const AcdPAcd thys, AjBool table, AjPStr* str)
 
     while(ajStrTokenNextFind(&handle, &line))
     {
-	codehandle = ajStrTokenNewC(line, ajStrGetPtr(codedelim));
+	codehandle = ajStrTokenNewS(line, codedelim);
 	ajStrTokenNextParse(&codehandle, &code);
-	ajStrTokenNextParseC(&codehandle, ajStrGetPtr(delim), &desc);
+	ajStrTokenNextParseS(&codehandle, delim, &desc);
 	acdTextTrim(&code);
 	acdTextTrim(&desc);
 	if(table)
@@ -15766,7 +16092,7 @@ static void acdHelpValidSelect(const AcdPAcd thys, AjBool table, AjPStr* str)
 	if(!acdKnownValueSelect(thys, &value))
 	    acdError("No value defined for selection");
 
-    handle = ajStrTokenNewC(value, ajStrGetPtr(delim));
+    handle = ajStrTokenNewS(value, delim);
 
     while(ajStrTokenNextFind(&handle, &desc))
     {
@@ -16352,7 +16678,7 @@ static void acdHelpExpectString(const AcdPAcd thys, AjBool table, AjPStr* str)
     else
     {
 	if(table)
-	    ajStrAppendC(str, "<i>An empty string is accepted</i>");
+	    ajStrAppendC(str, "&nbsp;");
     }
 
     return;
@@ -16522,35 +16848,57 @@ static void acdHelpTableShow(const AjPList tablist, const char* title)
 {
     AcdPTableItem item;
     AjIList iter = NULL;
+    ajuint nitem = 0;
 
     if(!acdDoTable)
 	return;
 
-    ajUserDumpC("<tr bgcolor=\"#FFFFCC\">"); /* was #FFFFD0 */
-    ajUser("<th align=\"left\" colspan=2>%s</th>", title);
-    ajUserDumpC("<th align=\"left\">Allowed values</th>");
-    ajUserDumpC("<th align=\"left\">Default</th>");
-    ajUserDumpC("</tr>\n");
-
-    if(!ajListGetLength(tablist))
+    if(!tablist)
     {
-	ajUserDumpC("<tr>");
-	ajUserDumpC("<td colspan=4>(none)</td>");
-	ajUserDumpC("</tr>\n");
+        ajUserDumpC("<tr bgcolor=\"#FFFFCC\">"); /* was #FFFFD0 */
+        ajUserDumpC("<th align=\"left\">Qualifier</th>");
+        ajUserDumpC("<th align=\"left\">Type</th>");
+        ajUserDumpC("<th align=\"left\">Description</th>");
+        ajUserDumpC("<th align=\"left\">Allowed values</th>");
+        ajUserDumpC("<th align=\"left\">Default</th>");
+        ajUserDumpC("</tr>\n");
+        return;
     }
-    else
+
+    /* new section */
+    
+    if(title){
+        ajUserDumpC("<tr bgcolor=\"#FFFFCC\">"); /* was #FFFFD0 */
+        ajUser("<th align=\"left\" colspan=5>%s</th>", title);
+        ajUserDumpC("</tr>\n");
+    }
+
+    iter = ajListIterNewread(tablist);
+    while((item = ajListIterGet(iter)))
     {
-	iter = ajListIterNewread(tablist);
-	while((item = ajListIterGet(iter)))
-	{
-	    acdTextTrim(&item->Help);
-	    ajUserDumpC("<tr>");
-	    ajUser("<td>%S</td>", item->Qual);
-	    ajUser("<td>%S</td>", item->Help);
-	    ajUser("<td>%S</td>", item->Valid);
-	    ajUser("<td>%S</td>", item->Expect);
-	    ajUserDumpC("</tr>\n");
-	}
+        ajUserDumpC("<tr bgcolor=\"#FFFFCC\">");
+        if(ajStrGetLen(item->Title))
+        {
+            ajUser("<th align=\"left\" colspan=5>%S</td>", item->Title);
+        }
+        else
+        {
+            nitem++;
+            acdTextTrim(&item->Help);
+            ajUser("<td>%S</td>", item->Qual);
+            ajUser("<td>%S</td>", item->Type);
+            ajUser("<td>%S</td>", item->Help);
+            ajUser("<td>%S</td>", item->Valid);
+            ajUser("<td>%S</td>", item->Expect);
+        }
+        ajUserDumpC("</tr>\n");
+    }
+
+    if(!nitem || !ajListGetLength(tablist))
+    {
+        ajUserDumpC("<tr>");
+        ajUserDumpC("<td colspan=5>(none)</td>");
+        ajUserDumpC("</tr>\n");
     }
 
     ajListIterDel(&iter);
@@ -16719,9 +17067,6 @@ static void acdHelpAssocTable(const AcdPAcd thys, AjPList tablist)
 {
     AcdPTableItem item;
 
-    static AjPStr line  = NULL;
-    static AjPStr qname = NULL;
-    static AjPStr qtype = NULL;
     AcdPQual quals;
     ajint i;
     AcdPAcd pa;
@@ -16729,37 +17074,45 @@ static void acdHelpAssocTable(const AcdPAcd thys, AjPList tablist)
    if(!acdDoTable)
 	return;
 
-    acdLog("++ acdHelpAssoc %S\n", thys->Name);
+    acdLog("++ acdHelpAssocTable %S\n", thys->Name);
 
     if(thys->Level == ACD_APPL)
-	quals = acdQualAppl;
+    {
+        quals = acdQualAppl;
+    }
     else
     {
-	ajFmtPrintS(&line, "  \"-%S\" related qualifiers\n",
-		    thys->Name);
+        AJNEW0(item);
+        ajFmtPrintS(&item->Title, "\"-%S\" associated %s qualifiers\n",
+		    thys->Name,acdType[thys->Type].Name);
+        ajListPushAppend(tablist, item);
 	quals = acdType[thys->Type].Quals;
     }
 
     acdLog("++ type %d quals %x\n", thys->Type, quals);
 
-    i=0;
-
-    for(pa=thys->AssocQuals; pa && pa->Assoc; pa=pa->Next)
+    if(quals)
     {
-	acdLog("++ assoc[%d].Name %S\n", i, pa->Name);
-	AJNEW0(item);
+        i=0;
+        for(pa=thys->AssocQuals; pa && pa->Assoc; pa=pa->Next)
+	{
+            acdLog("++ assoc[%d].Name %s\n", i, quals[i].Name);
+            AJNEW0(item);
 
-	if(thys->PNum)
-	    ajFmtPrintS(&item->Qual, " -%S%d", pa->Name, pa->PNum);
-	else
-	    ajFmtPrintS(&item->Qual, " -%S", pa->Name);
+            if(thys->PNum)
+                ajFmtPrintS(&item->Qual, " -%s%d<br>-%s_%S",
+                            quals[i].Name, pa->PNum,
+                            quals[i].Name, thys->Name);
+            else
+                ajFmtPrintS(&item->Qual, " -%s", quals[i].Name);
 
-	ajFmtPrintS(&line, "  %-20S %-10S ",
-		    qname,  qtype);
-	acdHelpText(pa, &item->Help);
-	acdHelpValid(pa, ajTrue, &item->Valid);
-	acdHelpExpect(pa, ajTrue, &item->Expect);
-	ajListPushAppend(tablist, item);
+            ajStrAssignC(&item->Type, quals[i].Type);
+            ajStrAssignC(&item->Help, quals[i].Help);
+            acdHelpValid(pa, ajTrue, &item->Valid);
+            acdHelpExpect(pa, ajTrue, &item->Expect);
+            ajListPushAppend(tablist, item);
+            i++;
+        }
     }
 
     return;
@@ -16836,6 +17189,7 @@ static void acdHelpTable(const AcdPAcd thys, AjPList tablist)
      **  read in the data and things like calculated attributes do not exist
      */
     
+    ajStrAssignC(&item->Type, acdType[thys->Type].Name);
     acdHelpValid(thys, ajTrue, &item->Valid);
     acdHelpText(thys, &item->Help);
     
@@ -17152,7 +17506,18 @@ static AjBool acdSet(const AcdPAcd thys, AjPStr* attrib, const AjPStr value)
     if(iattr >= 0)
     {
 	ajStrAssignC(attrib, attr[iattr].Name);
-	ajStrAssignS(&attrstr[iattr], value);
+        if(attr[iattr].Multiple)
+        {
+            if(ajStrGetLen(attrstr[iattr]))
+                ajStrAppendK(&attrstr[iattr], '|');
+            ajStrAppendS(&attrstr[iattr], value);
+        }
+        else 
+        {
+            if(acdDoValid && ajStrGetLen(attrstr[iattr]))
+                acdWarn("duplicate attribute '%S'", *attrib);
+            ajStrAssignS(&attrstr[iattr], value);
+        }
 
 	return ajTrue;
     }
@@ -17160,7 +17525,19 @@ static AjBool acdSet(const AcdPAcd thys, AjPStr* attrib, const AjPStr value)
     if(idef >= 0)
     {
 	ajStrAssignC(attrib, acdAttrDef[idef].Name);
-	ajStrAssignS(&thys->DefStr[idef], value);
+        if(acdAttrDef[idef].Multiple)
+        {
+            if(ajStrGetLen(thys->DefStr[idef]))
+                ajStrAppendK(&thys->DefStr[idef], '|');
+            ajStrAppendS(&thys->DefStr[idef], value);
+        }
+
+        else
+        {
+            if(acdDoValid && ajStrGetLen(thys->DefStr[idef]))
+                acdWarn("duplicate attribute '%S'", *attrib);
+            ajStrAssignS(&thys->DefStr[idef], value);
+        }
 
 	return ajTrue;
     }
@@ -17216,8 +17593,19 @@ static AjBool acdSetKey(const AcdPAcd thys, AjPStr* attrib, const AjPStr value)
     if(iattr >= 0)
     {
 	ajStrAssignC(attrib, attr[iattr].Name);
-	ajStrAssignS(&attrstr[iattr], value);
-
+        if(attr[iattr].Multiple)
+        {
+            if(ajStrGetLen(attrstr[iattr]))
+                ajStrAppendK(&attrstr[iattr], '|');
+            ajStrAppendS(&attrstr[iattr], value);
+        }
+        else
+        {
+            if(acdDoValid && ajStrGetLen(attrstr[iattr]))
+                acdWarn("duplicate attribute '%S'", *attrib);
+            ajStrAssignS(&attrstr[iattr], value);
+        }
+        
 	return ajTrue;
     }
   
@@ -17633,7 +18021,7 @@ static void acdSetAll(void)
     const char* stdstring = "std";
     const char* addstring = "opt";
     const char* advstring = "   ";
-    const char* nostring = "   ";
+    const char* nostring  = "   ";
     const char* level = NULL;
     ajint iendsec = 0;
 
@@ -17676,13 +18064,13 @@ static void acdSetAll(void)
 		if (pa->Assoc)
 		    continue;
 		else
-		    ajUser("Trace: %4d %s %15s: %S '%S'",
+		    ajUser("Trace: %4d %s %15s: %15S '%S'",
 			   pa->LineNum, level, acdType[pa->Type].Name,
 			   pa->Name, pa->ValStr);
 	    }
 	    else if(acdIsStype(pa))
 	    {
-		ajUser("Trace: %4d %s %15s: %S",
+		ajUser("Trace: %4d %s %15s: %15S",
 		       pa->LineNum, level, acdKeywords[pa->Type].Name,
 		       pa->Name);
 		if (pa->Type == iendsec)
@@ -17690,7 +18078,7 @@ static void acdSetAll(void)
 	    }
 	    else
 	    {
-		ajUser("Trace: %4d %s %15s: %S '%S'",
+		ajUser("Trace: %4d %s %15s: %15S '%S'",
 		       pa->LineNum, nostring, acdKeywords[pa->Type].Name,
 		       pa->Name, pa->ValStr);
 	    }
@@ -20374,6 +20762,9 @@ static void acdArgsScan(ajint argc, char * const argv[])
 	if(!strcmp(cp, "verbose"))
 	    acdVerbose = ajTrue;
 
+	if(!strcmp(cp, "version"))
+	    acdDoVersion = ajTrue;
+
 	if(!strcmp(cp, "help"))
 	    acdDoHelp = ajTrue;
 
@@ -20652,57 +21043,6 @@ static void acdArgsParse(ajint argc, char * const argv[])
     ajStrDel(&argvalstr);
     
     return;
-}
-
-
-
-
-/* @section provenance *******************************************************
-**
-** Functions providing information about the run-time environment
-**
-** @fdata [none]
-**
-** @nam3rule Get Return data as a string
-** @nam4rule GetCmdline Return the full commandline equivalent
-** @nam4rule GetInputs Return the full commandline equivalent
-** @nam4rule GetProgram Return the program name
-**
-** @valrule * [const AjPStr]
-** @fcategory misc
-**
-******************************************************************************/
-
-
-
-/* @func ajAcdGetCmdline ******************************************************
-**
-** Returns the original command line as qualifiers and values with newline
-** delimiters
-**
-** @return [const AjPStr] Commandline with newlines between qualifiers
-** and parameters
-******************************************************************************/
-
-const AjPStr ajAcdGetCmdline (void)
-{
-    return acdArgSave;
-}
-
-
-
-
-/* @func ajAcdGetInputs *******************************************************
-**
-** Returns the user non-default inputs in commandline form
-**
-** @return [const AjPStr] Commandline with newlines between qualifiers
-** and parameters
-******************************************************************************/
-
-const AjPStr ajAcdGetInputs (void)
-{
-    return acdInputSave;
 }
 
 
@@ -22206,47 +22546,6 @@ static AjBool acdTestStdout(void)
 __deprecated AjBool  ajAcdStdout(void)
 {
     return acdTestStdout();
-}
-
-
-
-
-/* @obsolete ajAcdProgramS
-** @remove Use ajAcdGetProgram
-*/
-
-__deprecated void  ajAcdProgramS(AjPStr* pgm)
-{
-    ajStrAssignS(pgm, acdProgram);
-    return;
-}
-
-
-
-
-/* @func ajAcdGetProgram ******************************************************
-**
-** Returns the application (program) name from the ACD definition.
-**
-** @return [const AjPStr] Program name
-** @@
-******************************************************************************/
-
-const AjPStr ajAcdGetProgram(void)
-{
-    return acdProgram;
-}
-
-
-
-
-/* @obsolete ajAcdProgram
-** @remove Use ajAcdGetProgram
-*/
-
-__deprecated const char*  ajAcdProgram(void)
-{
-    return ajStrGetPtr(acdProgram);
 }
 
 
@@ -24545,7 +24844,7 @@ static void acdSelectPrompt(const AcdPAcd thys)
 	if(!acdKnownValueSelect(thys, &value))
 	    acdError("No value defined for selection");
 
-    handle = ajStrTokenNewC(value, ajStrGetPtr(delim));
+    handle = ajStrTokenNewS(value, delim);
 
     while(ajStrTokenNextFind(&handle, &line))
     {
@@ -24962,13 +25261,13 @@ static AjPStr* acdSelectValue(const AcdPAcd thys, ajint min, ajint max,
     
     ajStrAssignClear(&ambigList);
     ajStrAssignClear(&validstr);
-    rephandle = ajStrTokenNewC(reply, ajStrGetPtr(repdelim));
+    rephandle = ajStrTokenNewS(reply, repdelim);
     while(ajStrTokenNextParse(&rephandle, &repstr))
     {
 	itoken++;
 	
 	acdLog("testing '%S'\n", repstr);
-	handle = ajStrTokenNewC(value, ajStrGetPtr(delim));
+	handle = ajStrTokenNewS(value, delim);
 	i = jfound = 0;
 
 	for(icnt = 1; ajStrTokenNextFind(&handle, &desc); icnt++)
@@ -26657,7 +26956,7 @@ static void acdWarnObsolete(const AjPStr str)
     
     ajFmtPrintS(&outstr, "Application %S is marked as obsolete.\n%S",
                 acdProgram, str);
-    ajStrFmtWrap(&outstr, 70);
+    ajStrFmtWrap(&outstr, 75);
     ajWarn("%S", outstr);
 
     ajStrDel(&outstr);
@@ -26902,6 +27201,9 @@ static void acdReset(void)
 	acdDel(&pa);
     }
 
+    ajStrDel(&acdPackName);
+    ajStrDel(&acdPackVersion);
+
     ajTablestrFree(&acdKnowntypeTypeTable);
     ajTablestrFree(&acdKnowntypeDescTable);
     ajTablestrFree(&acdCodeTable);
@@ -26928,6 +27230,7 @@ static void acdReset(void)
 
     ajListstrFreeData(&acdSecList);
     ajTablestrFree(&acdSecTable);
+    ajTablestrFree(&acdExternalTable);
 
     ajStrDel(&acdPrettyFName);
     ajFileClose(&acdPrettyFile);
@@ -27499,8 +27802,8 @@ static void acdValidQual(AcdPAcd thys)
 	    if(ajStrGetLen(tmpinfo))
 	    {
 		if(!ajStrMatchS(tmpinfo, tmpstandard))
-		    acdWarn("Information string for '%S' not standard '%S'",
-			    thys->Name, tmpstandard);
+		    acdWarn("Information string for '%S' '%S' not standard '%S'",
+			    thys->Name, tmpinfo, tmpstandard);
 	    }
 	    else
 	    {
@@ -28335,10 +28638,12 @@ static void acdReadKnowntype(AjPTable* desctable, AjPTable* typetable)
     AjPStr knownPack     = NULL;
     AjPStr knownLine     = NULL;
     AjBool ok            = ajFalse;
+    AjPStrTok handle     = NULL;
     AjPStr knownName     = NULL;
     AjPStr knownName2     = NULL;
     AjPStr knownType     = NULL;
     AjPStr knownDesc     = NULL;
+    AjPStr knownEdam     = NULL;
     AjPStr knownRest     = NULL;
     ajint iline = 0;
 
@@ -28384,16 +28689,24 @@ static void acdReadKnowntype(AjPTable* desctable, AjPTable* typetable)
 
 	if(ajStrCutComments(&knownLine))
 	{
-	    ajStrRemoveWhiteExcess(&knownLine);
+            handle = ajStrTokenNewC(knownLine, "|");
 
-	    ok = ajStrExtractWord(knownLine, &knownRest, &knownName);
+            ok = ajStrTokenNextParse(&handle, &knownName);
 
 	    if(ok)
-	      ok = ajStrExtractWord(knownRest, &knownDesc, &knownType);
+	      ok = ajStrTokenNextParse(&handle, &knownType);
+	    if(ok)
+	      ok = ajStrTokenNextParse(&handle, &knownEdam);
+	    if(ok)
+	      ajStrTokenRestParse(&handle, &knownDesc);
+
+            ajStrTokenDel(&handle);
 
 	    if(ok)
 	    {
+                ajStrRemoveWhiteExcess(&knownName);
 		ajStrExchangeKK(&knownName, '_', ' ');
+                ajStrRemoveWhiteExcess(&knownType);
 		if(ajStrMatchCaseC(knownType, "infile") ||
 		   ajStrMatchCaseC(knownType, "filelist") ||
 		   ajStrMatchCaseC(knownType, "datafile") ||
@@ -28406,8 +28719,18 @@ static void acdReadKnowntype(AjPTable* desctable, AjPTable* typetable)
 		    ajWarn("Duplicate knowntype name '%S' in file %S line %d",
 			   knownName, knownFName, iline);
 		ajStrAssignS(&knownName2, knownName);
+                ajStrRemoveWhiteExcess(&knownEdam);
+                ajStrQuoteStrip(&knownEdam);
+                if(ajStrPrefixC(knownEdam, "EDAM: "))
+                    ajStrCutStart(&knownEdam, 6);
+                else if(ajStrGetLen(knownEdam))
+		    ajWarn("Knowntype '%S' in file %S line %d - EDAM badly formatted",
+			   knownType, knownFName, iline);
+                ajStrRemoveWhiteExcess(&knownDesc);
 		ajTablePut(*desctable, knownName2, knownDesc);
 
+/*                ajUser("name '%S' type '%S' desc '%S' edam '%S'",
+                  knownName, knownType, knownDesc, knownEdam);*/
 	        knownName = NULL;
 	        knownName2 = NULL;
 		knownType = NULL;
@@ -28427,6 +28750,7 @@ static void acdReadKnowntype(AjPTable* desctable, AjPTable* typetable)
     ajStrDel(&knownLine);
     ajStrDel(&knownName);
     ajStrDel(&knownType);
+    ajStrDel(&knownEdam);
     ajStrDel(&knownDesc);
     ajStrDel(&knownRest);
 
@@ -28460,7 +28784,7 @@ static void acdValidApplGroup(const AjPStr groups)
     ajStrAssignS(&tmpGroups, groups);
 
     /* step through each group */
-    grpexp = ajRegCompC("([^,]+),?");
+    grpexp = ajRegCompC("([^,|]+),?");
 
     while(ajRegExec(grpexp, tmpGroups))
     {
@@ -28509,7 +28833,7 @@ static void acdValidApplKeywords(const AjPStr keys)
     ajStrAssignS(&tmpKeys, keys);
 
     /* step through each group */
-    keyexp = ajRegCompC("([^,]+),?");
+    keyexp = ajRegCompC("([^,|]+),?");
 
     while(ajRegExec(keyexp, tmpKeys))
     {
@@ -30016,3 +30340,130 @@ void ajAcdUnused(void)
 
     return;
 }
+
+
+
+
+
+
+/* @section deprecated ********************************************************
+**
+** @fdata [none]
+** @fcategory misc
+**
+** @nam3rule Graphics Graphics application
+** @nam4rule Init Initialise internals
+** @suffix P Package name given
+** @suffix V Package version given
+**
+** @argrule Graphics pgm [const char*] Program name
+** @argrule Graphics argc [ajint] Number of arguments
+** @argrule Graphics argv [char* const[]] Command line arguments
+** @argrule P package [const char*] Package name
+** @argrule V packversion [const char*] Package version
+**
+** @valrule * [void]
+******************************************************************************/
+
+/* @func ajAcdGraphicsInit ****************************************************
+**
+** Initialises the graphics then everything else. Reads an ACD
+** (AJAX Command Definition) file,
+** prompts the user for any missing information, reads all sequences
+** and other input into local structures which applications can request.
+** Must be called in each EMBOSS program first.
+**
+** @param [r] pgm [const char*] Application name, used as the name of the
+**                              ACD file
+** @param [r] argc [ajint] Number of arguments provided on the command line,
+**        usually passsed as-is by the calling application.
+** @param [r] argv [char* const[]] Actual arguments as an array of text.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajAcdGraphicsInit(const char *pgm, ajint argc, char * const argv[])
+{
+    ajSeqdbInit();
+    ajNamInit("emboss");
+    ajAcdInit(pgm, argc, argv);
+
+    return;
+}
+
+
+/* @obsolete ajGraphicsInit
+** @rename ajAcdGraphicsInit
+*/
+__deprecated void ajGraphicsInit(const char *pgm,
+				 ajint argc, char * const argv[])
+{
+    ajAcdGraphicsInit(pgm, argc, argv);
+    return;
+}
+
+/* @obsolete ajGraphInit
+** @rename ajAcdGraphicsInit
+*/
+
+__deprecated void ajGraphInit(const char *pgm, ajint argc, char * const argv[])
+{
+    ajAcdGraphicsInit(pgm, argc, argv);
+    return;
+}
+
+
+/* @func ajAcdGraphicsInitPV *************************************************
+**
+** Initialises the graphics then everything else. Reads an ACD
+** (AJAX Command Definition) file,
+** prompts the user for any missing information, reads all sequences
+** and other input into local structures which applications can request.
+** Must be called in each EMBOSS program first.
+**
+** @param [r] pgm [const char*] Application name, used as the name of
+**                              the ACD file
+** @param [r] argc [ajint] Number of arguments provided on the command line,
+**        usually passsed as-is by the calling application.
+** @param [r] argv [char* const[]] Actual arguments as an array of text.
+** @param [r] package [const char*] Package name, used to find the ACD file
+** @param [r] packversion [const char*] Package version
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajAcdGraphicsInitPV(const char *pgm, ajint argc, char *const argv[],
+			 const char *package,const char *packversion)
+{
+    ajSeqdbInit();
+    ajNamInit("emboss");
+    ajAcdInitPV(pgm, argc, argv,package, packversion);
+
+    return;
+}
+
+/* @obsolete ajGraphicsInitPV
+** @rename ajAcdGraphicsInitPV
+*/
+
+__deprecated void ajGraphicsInitPV(const char *pgm,
+				   ajint argc, char *const argv[],
+				   const char *package,
+				   const char *packversion)
+{
+    ajAcdGraphicsInitPV(pgm, argc, argv, package, packversion);
+    return;
+}
+
+/* @obsolete ajGraphInitPV
+** @rename ajAcdGraphicsInitPV
+*/
+
+__deprecated void ajGraphInitPV(const char *pgm, ajint argc, char *const argv[],
+                                const char *package,const char *packversion)
+{
+    ajAcdGraphicsInitPV(pgm, argc, argv, package, packversion);
+    return;
+}
+
+
