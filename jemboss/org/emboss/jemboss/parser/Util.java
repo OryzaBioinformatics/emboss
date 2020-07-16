@@ -33,7 +33,7 @@ import org.emboss.jemboss.programs.ListFile;
 * entry ready to use in Ajax
 *
 */
-public class AjaxUtil
+public class Util
 {
 
   /**
