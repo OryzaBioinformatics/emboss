@@ -62,36 +62,34 @@ typedef struct AjSCod
 ** Prototype definitions
 */
 
-void         ajCodAssCode(AjPCod thys, ajint geneticcode);
-void         ajCodAssDesc(AjPCod thys, const AjPStr desc);
-void         ajCodAssDescC(AjPCod thys, const char* desc);
-void         ajCodAssDivision(AjPCod thys, const AjPStr division);
-void         ajCodAssDivisionC(AjPCod thys, const char* division);
-void         ajCodAssNumcds(AjPCod thys, ajint numcds);
-void         ajCodAssNumcodon(AjPCod thys, ajint numcodon);
-void         ajCodAssRelease(AjPCod thys, const AjPStr release);
-void         ajCodAssReleaseC(AjPCod thys, const char* release);
-void         ajCodAssSpecies(AjPCod thys, const AjPStr species);
-void         ajCodAssSpeciesC(AjPCod thys, const char* species);
-void         ajCodAssName(AjPCod thys, const AjPStr name);
-void         ajCodAssNameC(AjPCod thys, const char* name);
+void         ajCodSetCodenum(AjPCod thys, ajint geneticcode);
+void         ajCodSetDescC(AjPCod thys, const char* desc);
+void         ajCodSetDescS(AjPCod thys, const AjPStr desc);
+void         ajCodSetDivisionC(AjPCod thys, const char* division);
+void         ajCodSetDivisionS(AjPCod thys, const AjPStr division);
+void         ajCodSetNameC(AjPCod thys, const char* name);
+void         ajCodSetNameS(AjPCod thys, const AjPStr name);
+void         ajCodSetNumcds(AjPCod thys, ajint numcds);
+void         ajCodSetNumcodons(AjPCod thys, ajint numcodon);
+void         ajCodSetReleaseC(AjPCod thys, const char* release);
+void         ajCodSetReleaseS(AjPCod thys, const AjPStr release);
+void         ajCodSetSpeciesC(AjPCod thys, const char* species);
+void         ajCodSetSpeciesS(AjPCod thys, const AjPStr species);
 void         ajCodBacktranslate(AjPStr *b, const AjPStr a, const AjPCod thys);
 void         ajCodBacktranslateAmbig(AjPStr *b, const AjPStr a,
 				     const AjPCod thys);
 ajint        ajCodBase(ajint c);
-double       ajCodCai(const AjPCod cod, const AjPStr str);
-double*      ajCodCaiW(const AjPCod cod);
+double       ajCodCalcCaiCod(const AjPCod thys);
+double       ajCodCalcCaiSeq(const AjPCod cod, const AjPStr str);
 void         ajCodCalcGribskov(AjPCod thys, const AjPStr s);
-double       ajCodCalcCai(const AjPCod thys);
 double       ajCodCalcNc(const AjPCod thys);
-void         ajCodCalculateUsage(AjPCod thys, ajint c);
+void         ajCodCalcUsage(AjPCod thys, ajint c);
 void         ajCodClear(AjPCod thys);
 void         ajCodClearData(AjPCod thys);
 void         ajCodComp(ajint *NA, ajint *NC, ajint *NG, ajint *NT,
 		       const char *str);
-void         ajCodCountTriplets(AjPCod thys, const AjPStr s, ajint *c);
+void         ajCodSetTripletsS(AjPCod thys, const AjPStr s, ajint *c);
 void         ajCodDel (AjPCod *thys);
-AjPCod       ajCodDup (const AjPCod thys);
 ajint        ajCodGetCode(const AjPCod thys);
 const AjPStr ajCodGetDesc(const AjPCod thys);
 const char*  ajCodGetDescC(const AjPCod thys);
@@ -110,9 +108,10 @@ const char*  ajCodGetSpeciesC(const AjPCod thys);
 ajint        ajCodIndex(const AjPStr s);
 ajint        ajCodIndexC(const char *codon);
 AjPCod	     ajCodNew(void);
-AjPCod	     ajCodNewCode(ajint code);
+AjPCod	     ajCodNewCodenum(ajint code);
+AjPCod       ajCodNewCod (const AjPCod thys);
 AjBool       ajCodRead(AjPCod thys, const AjPStr fn, const AjPStr format);
-void         ajCodSetBacktranslate(AjPCod *thys);
+void         ajCodSetBacktranslate(AjPCod thys);
 char*        ajCodTriplet(ajint idx);
 void 	     ajCodWrite(AjPCod thys, AjPFile outf);
 void 	     ajCodWriteOut( const AjPCod thys, AjPOutfile outf);
@@ -122,6 +121,26 @@ void         ajCodPrintFormat(AjPFile outf, AjBool full);
 /*
 ** End of prototype definitions
 */
+
+__deprecated AjPCod       ajCodDup (const AjPCod thys);
+__deprecated AjPCod	  ajCodNewCode(ajint code);
+__deprecated void         ajCodAssCode(AjPCod thys, ajint geneticcode);
+__deprecated void         ajCodAssDesc(AjPCod thys, const AjPStr desc);
+__deprecated void         ajCodAssDescC(AjPCod thys, const char* desc);
+__deprecated void         ajCodAssDivision(AjPCod thys, const AjPStr division);
+__deprecated void         ajCodAssDivisionC(AjPCod thys, const char* division);
+__deprecated void         ajCodAssNumcds(AjPCod thys, ajint numcds);
+__deprecated void         ajCodAssNumcodon(AjPCod thys, ajint numcodon);
+__deprecated void         ajCodAssRelease(AjPCod thys, const AjPStr release);
+__deprecated void         ajCodAssReleaseC(AjPCod thys, const char* release);
+__deprecated void         ajCodAssSpecies(AjPCod thys, const AjPStr species);
+__deprecated void         ajCodAssSpeciesC(AjPCod thys, const char* species);
+__deprecated void         ajCodAssName(AjPCod thys, const AjPStr name);
+__deprecated void         ajCodAssNameC(AjPCod thys, const char* name);
+__deprecated void         ajCodCountTriplets(AjPCod thys,
+                                             const AjPStr s, ajint *c);
+__deprecated double       ajCodCalcCai(const AjPCod cod, const AjPStr str);
+__deprecated void         ajCodCalculateUsage(AjPCod thys, ajint c);
 
 #endif
 

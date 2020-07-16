@@ -66,6 +66,7 @@ static void   codWriteGcg(const AjPCod thys, AjPFile outf);
 static void   codWriteStaden(const AjPCod thys, AjPFile outf);
 static void   codWriteSpsum(const AjPCod thys, AjPFile outf);
 static void   codWriteTransterm(const AjPCod thys, AjPFile outf);
+static double* codGetWstat(const AjPCod thys);
 
 #define AJCODSIZE 66
 #define AJCODSTART 64
@@ -244,7 +245,7 @@ AjPCod ajCodNew(void)
 
 
 
-/* @func ajCodNewCode *********************************************************
+/* @func ajCodNewCodenum *******************************************************
 **
 ** Default constructor for empty AJAX codon usage objects, with the
 ** amino acid assignments taken from a standard genetic code.
@@ -254,7 +255,7 @@ AjPCod ajCodNew(void)
 ** @@
 ******************************************************************************/
 
-AjPCod ajCodNewCode(ajint code)
+AjPCod ajCodNewCodenum(ajint code)
 {
     AjPCod thys;
     AjPTrn trn = NULL;
@@ -284,7 +285,7 @@ AjPCod ajCodNewCode(ajint code)
     for(i=0;i<64;i++)
     {
 	idx = ajCodIndexC(spsumcodons[i]);
-	ajStrAssignS(&aa, ajTrnCodonC(trn, spsumcodons[i]));
+	ajStrAssignK(&aa, ajTrnCodonC(trn, spsumcodons[i]));
 	c = ajBasecodeToInt((ajint)ajStrGetCharFirst(aa));
 
 	if(c>25)
@@ -302,7 +303,19 @@ AjPCod ajCodNewCode(ajint code)
 
 
 
-/* @func ajCodDup *************************************************************
+/* @obsolete ajCodNewCode
+** @rename ajCodNewCodenum
+*/
+
+__deprecated AjPCod ajCodNewCode(ajint code)
+{
+    return ajCodNewCodenum(code);
+}
+
+
+
+
+/* @func ajCodNewCod ***********************************************************
 **
 ** Duplicate a codon object
 **
@@ -312,7 +325,7 @@ AjPCod ajCodNewCode(ajint code)
 ** @@
 ******************************************************************************/
 
-AjPCod ajCodDup(const AjPCod thys)
+AjPCod ajCodNewCod(const AjPCod thys)
 {
     AjPCod dupcod;
     ajint  i;
@@ -341,6 +354,18 @@ AjPCod ajCodDup(const AjPCod thys)
 	dupcod->back[i] = thys->back[i];
 
     return dupcod;
+}
+
+
+
+
+/* @obsolete ajCodDup
+** @rename ajCodNewCod
+*/
+
+__deprecated AjPCod ajCodDup(const AjPCod thys)
+{
+    return ajCodNewCod(thys);
 }
 
 
@@ -636,273 +661,6 @@ ajint ajCodBase(ajint c)
 
 
 
-/* @func ajCodCalcGribskov ****************************************************
-**
-** Calculate Gribskov statistic (count per thousand) in AjPCod internals
-**
-** @param [u] thys [AjPCod] codon usage for sequence
-** @param [r] s [const AjPStr] sequence
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajCodCalcGribskov(AjPCod thys, const AjPStr s)
-{
-    ajint i;
-    ajint j;
-
-    ajint NA;
-    ajint NC;
-    ajint NG;
-    ajint NT;
-
-    const char *p;
-    ajint len;
-    ajint aa;
-    double fam[64];
-    double frct[64];
-
-    double x;
-    double z;
-
-    len = ajStrGetLen(s);
-
-    for(i=0;i<AJCODSTART;++i)
-	frct[i] = thys->fraction[i];
-
-    NA = NC = NG = NT = 0;
-    ajCodComp(&NA,&NC,&NG,&NT,ajStrGetPtr(s));
-
-    /* Get expected frequencies */
-    for(i=0;i<AJCODSTART;++i)
-    {
-	p = ajCodTriplet(i);
-	thys->tcount[i] = codRandom(NA,NC,NG,NT,len,p);
-    }
-
-
-    /* Calculate expected family */
-    for(i=0;i<AJCODSTART;++i)
-    {
-	x=0.0;
-	aa = thys->aa[i];
-
-	for(j=0;j<AJCODSTART;++j)
-	    if(thys->aa[j]==aa) x += thys->tcount[j];
-
-	fam[i] = x;
-    }
-
-
-    /* Calculate expected ratio etc */
-
-    for(i=0;i<AJCODSTART;++i)
-    {
-	z = thys->tcount[i] / fam[i];
-
-	/* Work out ln(real/expected) */
-	thys->tcount[i]= log(frct[i] / z);
-    }
-
-    return;
-}
-
-
-
-
-/* @func ajCodCalcNc **********************************************************
-**
-** Calculate effective number of codons
-** Wright, F. (1990) Gene 87:23-29
-**
-** @param [r] thys [const AjPCod] codon usage
-**
-** @return [double] Nc
-** @@
-******************************************************************************/
-
-double ajCodCalcNc(const AjPCod thys)
-{
-    ajint *df = NULL;
-    ajint *n  = NULL;
-    ajint i;
-    ajint j;
-    ajint v;
-
-    ajint max;
-    ajint ndx;
-
-    ajint    *nt = NULL;
-    double *Fbar = NULL;
-    double *F    = NULL;
-    double sum;
-    double num = 0.0;
-
-    AJCNEW0(df, AJCODAMINOS);
-    AJCNEW0(n, AJCODAMINOS);
-
-    for(i=0;i<AJCODSTART;++i)
-    {
-	v = thys->aa[i];
-
-	if(v==27)
-	    continue;
-
-	++df[v];
-	n[thys->aa[i]] += thys->num[i];
-    }
-
-
-    for(i=0,max=INT_MIN;i<AJCODAMINOS;++i)
-	max = (max > df[i]) ? max : df[i];
-
-    AJCNEW0(Fbar, max);
-    AJCNEW0(nt, max);
-    AJCNEW0(F, AJCODAMINOS);
-
-    for(i=0;i<AJCODAMINOS-2;++i)
-	if(df[i])
-	    ++nt[df[i]-1];
-
-    for(i=0;i<AJCODAMINOS-2;++i)
-      for(j=0;j<AJCODSTART;++j)
-	{
-	    if(thys->aa[j]==27)
-		continue;
-
-	    if(thys->aa[j]==i)
-		F[i] += pow(thys->fraction[j],2.0);
-	}
-
-
-    for(i=0;i<AJCODAMINOS-2;++i)
-    {
-	if(n[i]-1 <1  || (num=((double)n[i]*F[i]-1.0))<0.05)
-	{
-	    F[i] = 0.0;
-
-	    if(df[i])
-		--nt[df[i]-1];
-
-	    continue;
-	}
-
-	F[i]= num / ((double)n[i]-1.0);
-    }
-
-
-    for(i=0;i<AJCODAMINOS-2;++i)
-    {
-	ndx=df[i];
-
-	if(!ndx)
-	    continue;
-
-	--ndx;
-	Fbar[ndx] += F[i];
-    }
-
-    for(i=0;i<max;++i)
-	if(nt[i])
-	    Fbar[i] /= (double)nt[i];
-
-    if(!Fbar[2])				/* Ile fix */
-	Fbar[2] = (Fbar[1]+Fbar[3]) / 2.0;
-
-
-    for(i=1,sum=2.0;i<max;++i)
-    {
-	if(!Fbar[i])
-	    continue;
-
-	if(i==1)
-	    sum += 9.0/Fbar[i];
-	else if(i==2)
-	    sum += 1.0/Fbar[i];
-	else if(i==3)
-	    sum += 5.0/Fbar[i];
-	else if(i==5)
-	    sum += 3.0/Fbar[i];
-    }
-
-
-    AJFREE(F);
-    AJFREE(nt);
-    AJFREE(Fbar);
-    AJFREE(n);
-    AJFREE(df);
-
-    if(sum>61.0)
-	return 61.0;
-
-    return sum;
-}
-
-
-
-
-/* @func ajCodCalculateUsage **************************************************
-**
-** Calculate fractional and thousand elements of a codon object
-** Used for creating a codon usage table
-** Requires pre-running of ajCodCountTriplets
-**
-** @param [u] thys [AjPCod] Codon object
-** @param [r] c [ajint] triplet count
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajCodCalculateUsage(AjPCod thys, ajint c)
-{
-    ajint i;
-    ajint *aasum;
-
-    /* Calculate thousands */
-    for(i=0;i<AJCODSTART;++i)
-	if(!c)
-	    thys->tcount[i] = 0.0;
-	else
-	    thys->tcount[i] = ((double)thys->num[i] / (double)c) * 1000.0;
-
-    /* Get number of codons per amino acid */
-    AJCNEW0(aasum, AJCODAMINOS);
-    for(i=0;i<AJCODSTART;++i)
-	if(thys->aa[i]==27)
-	    aasum[27] += thys->num[i];
-	else
-	    aasum[thys->aa[i]] += thys->num[i];
-
-
-    /* Calculate fraction */
-    for(i=0;i<AJCODSTART;++i)
-	if(thys->aa[i]==27)
-	{
-	    if(!aasum[27])
-		thys->fraction[i] = 0.0;
-	    else
-		thys->fraction[i] = (double)thys->num[i] /
-		    (double)aasum[27];
-	}
-	else
-	{
-	    if(!aasum[thys->aa[i]])
-		thys->fraction[i] = 0.0;
-	    else
-		thys->fraction[i] = (double)thys->num[i] /
-		    (double)aasum[thys->aa[i]];
-	}
-
-    AJFREE(aasum);
-
-    return;
-}
-
-
-
-
 /* @func ajCodClear ***********************************************************
 **
 ** Zero all entries
@@ -985,9 +743,10 @@ void ajCodClearData(AjPCod thys)
 
 
 
-/* @func ajCodCountTriplets ***************************************************
+/* @func ajCodSetTripletsS *****************************************************
 **
 ** Load the num array of a codon structure
+**
 ** Used for creating a codon usage table
 **
 ** Skips triplets with ambiguity codes and any incomplete triplet at the end.
@@ -999,7 +758,7 @@ void ajCodClearData(AjPCod thys)
 ** @return [void]
 ** @@
 ******************************************************************************/
-void ajCodCountTriplets(AjPCod thys, const AjPStr s, ajint *c)
+void ajCodSetTripletsS(AjPCod thys, const AjPStr s, ajint *c)
 {
     const char *p;
     ajuint  last;
@@ -1009,14 +768,13 @@ void ajCodCountTriplets(AjPCod thys, const AjPStr s, ajint *c)
     p = ajStrGetPtr(s);
     last = ajStrGetLen(s)-2;
 
-
     for(i=0;i<last;i+=3,p+=3,++(*c))
     {
 	if((idx=ajCodIndexC(p))!=-1)
 	    ++thys->num[idx];
 	else
 	{
-	    ajDebug("ajCodCountTripletsSkipping triplet %3.3s\n", p);
+	    ajDebug("ajCodSetTripletsS skipping triplet %3.3s\n", p);
 	    --(*c);
 	}
     }
@@ -1026,6 +784,17 @@ void ajCodCountTriplets(AjPCod thys, const AjPStr s, ajint *c)
 
 
 
+
+
+/* @obsolete ajCodCountTriplets
+** @rename ajCodSetTripletsS
+*/
+
+__deprecated void ajCodCountTriplets(AjPCod thys, const AjPStr s, ajint *c)
+{
+    ajCodSetTripletsS(thys, s, c);
+    return;
+}
 
 /* @func ajCodIndex ***********************************************************
 **
@@ -1606,7 +1375,7 @@ static AjBool codReadCutg(AjPCod thys, AjPFilebuff inbuff)
 		    if(!trn)
 			trn = ajTrnNewI(0);
 
-		    ajStrAssignS(&tok, ajTrnCodon(trn, tok));
+		    ajStrAssignK(&tok, ajTrnCodonS(trn, tok));
 		    c = ajBasecodeToInt((ajint)ajStrGetCharFirst(tok));
 		}
 
@@ -1709,7 +1478,7 @@ static AjBool codReadCodehop(AjPCod thys, AjPFilebuff inbuff)
 	if(!trn)
 	    trn = ajTrnNewI(0);
 
-	ajStrAssignS(&tok2, ajTrnCodon(trn, tok4));
+	ajStrAssignK(&tok2, ajTrnCodonS(trn, tok4));
 	c = ajBasecodeToInt((ajint)ajStrGetCharFirst(tok2));
 
 	if(c>25)
@@ -2379,37 +2148,37 @@ static AjBool codIsFreq(const AjPStr token)
 ** Fill the codon usage object "back" element with the most commonly
 ** used triplet index for the amino acids
 **
-** @param [u] thys [AjPCod *] codon usage structure
+** @param [u] thys [AjPCod] codon usage structure
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajCodSetBacktranslate(AjPCod *thys)
+void ajCodSetBacktranslate(AjPCod thys)
 {
     ajint i;
     ajint aa;
     double f;
     double f2;
 
-    if(!*thys)
+    if(!thys)
 	ajFatal("Codon usage object uninitialised");
 
     for(i=0;i<AJCODAMINOS;++i)
-	(*thys)->back[i] = -1;
+	thys->back[i] = -1;
 
     for(i=0;i<AJCODSTART;++i)
     {
-	aa = (*thys)->aa[i];
+	aa = thys->aa[i];
 
-	if((*thys)->back[aa]<0)
-	    (*thys)->back[aa] = i;
+	if(thys->back[aa]<0)
+	    thys->back[aa] = i;
 
-	f = (*thys)->fraction[i];
-	f2 = (*thys)->fraction[(*thys)->back[aa]];
+	f = thys->fraction[i];
+	f2 = thys->fraction[thys->back[aa]];
 
 	if(f>f2)
-	    (*thys)->back[aa] = i;
+	    thys->back[aa] = i;
     }
 
     return;
@@ -3301,10 +3070,52 @@ static double codRandom(ajint NA, ajint NC, ajint NG, ajint NT,
 
 
 
-/* @func ajCodCalcCai *********************************************************
+
+/* @funcstatic codGetWstat *****************************************************
 **
-** Calculate codon adaptive index using equation 8
+** Calculate codon adaptive index W values
 ** NAR 15:1281-1295
+**
+** @param [r] thys [const AjPCod] codon usage
+**
+** @return [double*] w value array
+** @@
+******************************************************************************/
+
+static double* codGetWstat(const AjPCod thys)
+{
+    ajint i;
+    ajint j;
+    double *wk;
+    ajint thisaa;
+    double aamax;
+
+    AJCNEW0(wk,AJCODSTART);
+
+
+    for(i=0;i<AJCODSTART;++i)
+    {
+	thisaa = thys->aa[i];
+	aamax = (double)INT_MIN;
+
+	for(j=0;j<AJCODSTART;++j)
+	    if(thys->aa[j]==thisaa)
+		aamax = aamax > thys->tcount[j] ? aamax : thys->tcount[j];
+	if(aamax)
+	    wk[i] = thys->tcount[i] / aamax;
+    }
+
+    return wk;
+}
+
+
+
+
+/* @func ajCodCalcCaiCod *******************************************************
+**
+** Calculate codon adaptive index using overall codon usage data only.
+**
+** See equation 8 in NAR 15:1281-1295
 **
 ** @param [r] thys [const AjPCod] codon usage
 **
@@ -3312,7 +3123,7 @@ static double codRandom(ajint NA, ajint NC, ajint NG, ajint NT,
 ** @@
 ******************************************************************************/
 
-double ajCodCalcCai(const AjPCod thys)
+double ajCodCalcCaiCod(const AjPCod thys)
 {
     double cai;
     double max;
@@ -3367,51 +3178,11 @@ double ajCodCalcCai(const AjPCod thys)
 
 
 
-
-/* @func ajCodCaiW ************************************************************
+/* @func ajCodCalcCaiSeq *******************************************************
 **
-** Calculate codon adaptive index W values
-** NAR 15:1281-1295
+** Calculate codon adaptive index for a coding sequence
 **
-** @param [r] thys [const AjPCod] codon usage
-**
-** @return [double*] w value array
-** @@
-******************************************************************************/
-
-double* ajCodCaiW(const AjPCod thys)
-{
-    ajint i;
-    ajint j;
-    double *wk;
-    ajint thisaa;
-    double aamax;
-
-    AJCNEW0(wk,AJCODSTART);
-
-
-    for(i=0;i<AJCODSTART;++i)
-    {
-	thisaa = thys->aa[i];
-	aamax = (double)INT_MIN;
-
-	for(j=0;j<AJCODSTART;++j)
-	    if(thys->aa[j]==thisaa)
-		aamax = aamax > thys->tcount[j] ? aamax : thys->tcount[j];
-	if(aamax)
-	    wk[i] = thys->tcount[i] / aamax;
-    }
-
-    return wk;
-}
-
-
-
-
-/* @func ajCodCai *************************************************************
-**
-** Calculate codon adaptive index using equation 7
-** NAR 15:1281-1295
+** See equation 7 in NAR 15:1281-1295
 **
 ** @param [r] thys [const AjPCod] codon usage
 ** @param [r] str [const AjPStr] sequence
@@ -3420,7 +3191,7 @@ double* ajCodCaiW(const AjPCod thys)
 ** @@
 ******************************************************************************/
 
-double ajCodCai(const AjPCod thys, const AjPStr str)
+double ajCodCalcCaiSeq(const AjPCod thys, const AjPStr str)
 {
     double *wk;
     ajint  i;
@@ -3430,7 +3201,7 @@ double ajCodCai(const AjPCod thys, const AjPStr str)
     ajint  idx;
     double total;
 
-    wk = ajCodCaiW(thys);
+    wk = codGetWstat(thys);
 
     len = ajStrGetLen(str);
     p   = ajStrGetPtr(str);
@@ -3454,6 +3225,302 @@ double ajCodCai(const AjPCod thys, const AjPStr str)
 }
 
 
+
+
+/* @obsolete ajCodCalcCai
+** @rename ajCodCalcCaiSeq
+*/
+
+__deprecated double ajCodCalcCai(const AjPCod thys, const AjPStr str)
+{
+    return ajCodCalcCaiSeq(thys, str);
+}
+
+
+/* @func ajCodCalcGribskov ****************************************************
+**
+** Calculate Gribskov statistic (count per thousand) in AjPCod internals
+**
+** @param [u] thys [AjPCod] codon usage for sequence
+** @param [r] s [const AjPStr] sequence
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajCodCalcGribskov(AjPCod thys, const AjPStr s)
+{
+    ajint i;
+    ajint j;
+
+    ajint NA;
+    ajint NC;
+    ajint NG;
+    ajint NT;
+
+    const char *p;
+    ajint len;
+    ajint aa;
+    double fam[64];
+    double frct[64];
+
+    double x;
+    double z;
+
+    len = ajStrGetLen(s);
+
+    for(i=0;i<AJCODSTART;++i)
+	frct[i] = thys->fraction[i];
+
+    NA = NC = NG = NT = 0;
+    ajCodComp(&NA,&NC,&NG,&NT,ajStrGetPtr(s));
+
+    /* Get expected frequencies */
+    for(i=0;i<AJCODSTART;++i)
+    {
+	p = ajCodTriplet(i);
+	thys->tcount[i] = codRandom(NA,NC,NG,NT,len,p);
+    }
+
+
+    /* Calculate expected family */
+    for(i=0;i<AJCODSTART;++i)
+    {
+	x=0.0;
+	aa = thys->aa[i];
+
+	for(j=0;j<AJCODSTART;++j)
+	    if(thys->aa[j]==aa) x += thys->tcount[j];
+
+	fam[i] = x;
+    }
+
+
+    /* Calculate expected ratio etc */
+
+    for(i=0;i<AJCODSTART;++i)
+    {
+	z = thys->tcount[i] / fam[i];
+
+	/* Work out ln(real/expected) */
+	thys->tcount[i]= log(frct[i] / z);
+    }
+
+    return;
+}
+
+
+
+
+/* @func ajCodCalcNc **********************************************************
+**
+** Calculate effective number of codons
+** Wright, F. (1990) Gene 87:23-29
+**
+** @param [r] thys [const AjPCod] codon usage
+**
+** @return [double] Nc
+** @@
+******************************************************************************/
+
+double ajCodCalcNc(const AjPCod thys)
+{
+    ajint *df = NULL;
+    ajint *n  = NULL;
+    ajint i;
+    ajint j;
+    ajint v;
+
+    ajint max;
+    ajint ndx;
+
+    ajint    *nt = NULL;
+    double *Fbar = NULL;
+    double *F    = NULL;
+    double sum;
+    double num = 0.0;
+
+    AJCNEW0(df, AJCODAMINOS);
+    AJCNEW0(n, AJCODAMINOS);
+
+    for(i=0;i<AJCODSTART;++i)
+    {
+	v = thys->aa[i];
+
+	if(v==27)
+	    continue;
+
+	++df[v];
+	n[thys->aa[i]] += thys->num[i];
+    }
+
+
+    for(i=0,max=INT_MIN;i<AJCODAMINOS;++i)
+	max = (max > df[i]) ? max : df[i];
+
+    AJCNEW0(Fbar, max);
+    AJCNEW0(nt, max);
+    AJCNEW0(F, AJCODAMINOS);
+
+    for(i=0;i<AJCODAMINOS-2;++i)
+	if(df[i])
+	    ++nt[df[i]-1];
+
+    for(i=0;i<AJCODAMINOS-2;++i)
+      for(j=0;j<AJCODSTART;++j)
+	{
+	    if(thys->aa[j]==27)
+		continue;
+
+	    if(thys->aa[j]==i)
+		F[i] += pow(thys->fraction[j],2.0);
+	}
+
+
+    for(i=0;i<AJCODAMINOS-2;++i)
+    {
+	if(n[i]-1 <1  || (num=((double)n[i]*F[i]-1.0))<0.05)
+	{
+	    F[i] = 0.0;
+
+	    if(df[i])
+		--nt[df[i]-1];
+
+	    continue;
+	}
+
+	F[i]= num / ((double)n[i]-1.0);
+    }
+
+
+    for(i=0;i<AJCODAMINOS-2;++i)
+    {
+	ndx=df[i];
+
+	if(!ndx)
+	    continue;
+
+	--ndx;
+	Fbar[ndx] += F[i];
+    }
+
+    for(i=0;i<max;++i)
+	if(nt[i])
+	    Fbar[i] /= (double)nt[i];
+
+    if(!Fbar[2])				/* Ile fix */
+	Fbar[2] = (Fbar[1]+Fbar[3]) / 2.0;
+
+
+    for(i=1,sum=2.0;i<max;++i)
+    {
+	if(!Fbar[i])
+	    continue;
+
+	if(i==1)
+	    sum += 9.0/Fbar[i];
+	else if(i==2)
+	    sum += 1.0/Fbar[i];
+	else if(i==3)
+	    sum += 5.0/Fbar[i];
+	else if(i==5)
+	    sum += 3.0/Fbar[i];
+    }
+
+
+    AJFREE(F);
+    AJFREE(nt);
+    AJFREE(Fbar);
+    AJFREE(n);
+    AJFREE(df);
+
+    if(sum>61.0)
+	return 61.0;
+
+    return sum;
+}
+
+
+
+
+/* @func ajCodCalcUsage ********************************************************
+**
+** Calculate fractional and thousand elements of a codon object
+** Used for creating a codon usage table
+**
+** If no counts are stored, warns of need to first run ajCodSetTriplets
+**
+** @param [u] thys [AjPCod] Codon object
+** @param [r] c [ajint] triplet count
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajCodCalcUsage(AjPCod thys, ajint c)
+{
+    ajint i;
+    ajint *aasum;
+    ajuint totcnt = 0;
+
+    for(i=0;i<AJCODSIZE;i++)
+        totcnt += thys->num[i];
+    if(!totcnt)
+        ajWarn("empty codon usage table, first call ajCodSetTripletsS");
+
+    /* Calculate thousands */
+    for(i=0;i<AJCODSTART;++i)
+	if(!c)
+	    thys->tcount[i] = 0.0;
+	else
+	    thys->tcount[i] = ((double)thys->num[i] / (double)c) * 1000.0;
+
+    /* Get number of codons per amino acid */
+    AJCNEW0(aasum, AJCODAMINOS);
+    for(i=0;i<AJCODSTART;++i)
+	if(thys->aa[i]==27)
+	    aasum[27] += thys->num[i];
+	else
+	    aasum[thys->aa[i]] += thys->num[i];
+
+
+    /* Calculate fraction */
+    for(i=0;i<AJCODSTART;++i)
+	if(thys->aa[i]==27)
+	{
+	    if(!aasum[27])
+		thys->fraction[i] = 0.0;
+	    else
+		thys->fraction[i] = (double)thys->num[i] /
+		    (double)aasum[27];
+	}
+	else
+	{
+	    if(!aasum[thys->aa[i]])
+		thys->fraction[i] = 0.0;
+	    else
+		thys->fraction[i] = (double)thys->num[i] /
+		    (double)aasum[thys->aa[i]];
+	}
+
+    AJFREE(aasum);
+
+    return;
+}
+
+
+
+
+
+/* @obsolete ajCodCalculateUsage
+** @rename ajCodCalcUsage
+*/
+
+__deprecated void ajCodCalculateUsage(AjPCod thys, ajint c)
+{
+    ajCodCalcUsage(thys, c);
+    return;
+}
 
 
 /* @func ajCodGetName *********************************************************
@@ -3664,223 +3731,7 @@ ajint ajCodGetCode(const AjPCod thys)
 
 
 
-/* @func ajCodAssName *********************************************************
-**
-** Assigns the name of a codon table
-**
-** @param [u] thys [AjPCod] Codon usage object
-** @param [r] name [const AjPStr] Name
-** @return [void]
-******************************************************************************/
-
-void ajCodAssName(AjPCod thys, const AjPStr name)
-{
-    ajStrAssignS(&thys->Name, name);
-    return;
-}
-
-
-
-
-/* @func ajCodAssNameC ********************************************************
-**
-** Assigns the name of a codon table
-**
-** @param [u] thys [AjPCod] Codon usage object
-** @param [r] name [const char*] Name
-** @return [void]
-******************************************************************************/
-
-void ajCodAssNameC(AjPCod thys, const char* name)
-{
-    ajStrAssignC(&thys->Name, name);
-    return;
-}
-
-
-
-
-/* @func ajCodAssDesc *********************************************************
-**
-** Assigns the description of a codon table
-**
-** @param [u] thys [AjPCod] Codon usage object
-** @param [r] desc [const AjPStr] Description
-** @return [void]
-******************************************************************************/
-
-void ajCodAssDesc(AjPCod thys, const AjPStr desc)
-{
-    ajStrAssignS(&thys->Desc,desc );
-    return;
-}
-
-
-
-
-/* @func ajCodAssDescC ********************************************************
-**
-** Assigns the description of a codon table
-**
-** @param [u] thys [AjPCod] Codon usage object
-** @param [r] desc [const char*] Description
-** @return [void]
-******************************************************************************/
-
-void ajCodAssDescC(AjPCod thys, const char* desc)
-{
-    ajStrAssignC(&thys->Desc, desc);
-    return;
-}
-
-
-
-
-/* @func ajCodAssSpecies ******************************************************
-**
-** Assigns the species of a codon table
-**
-** @param [u] thys [AjPCod] Codon usage object
-** @param [r] species [const AjPStr] Species
-** @return [void]
-******************************************************************************/
-
-void ajCodAssSpecies(AjPCod thys, const AjPStr species)
-{
-    ajStrAssignS(&thys->Species, species);
-    return;
-}
-
-
-
-
-/* @func ajCodAssSpeciesC *****************************************************
-**
-** Assigns the species of a codon table
-**
-** @param [u] thys [AjPCod] Codon usage object
-** @param [r] species [const char*] Species
-** @return [void]
-******************************************************************************/
-
-void ajCodAssSpeciesC(AjPCod thys, const char* species)
-{
-    ajStrAssignC(&thys->Species, species);
-    return;
-}
-
-
-
-
-/* @func ajCodAssRelease ******************************************************
-**
-** Assigns the release of a codon table
-**
-** @param [u] thys [AjPCod] Codon usage object
-** @param [r] release [const AjPStr] Release
-** @return [void]
-******************************************************************************/
-
-void ajCodAssRelease(AjPCod thys, const AjPStr release)
-{
-    ajStrAssignS(&thys->Release, release);
-    return;
-}
-
-
-
-
-/* @func ajCodAssReleaseC *****************************************************
-**
-** Assigns the  of a codon table
-**
-** @param [u] thys [AjPCod] Codon usage object
-** @param [r] release [const char*] Release
-** @return [void]
-******************************************************************************/
-
-void ajCodAssReleaseC(AjPCod thys, const char* release)
-{
-    ajStrAssignC(&thys->Release, release);
-    return;
-}
-
-
-
-
-/* @func ajCodAssDivision *****************************************************
-**
-** Assigns the division of a codon table
-**
-** @param [u] thys [AjPCod] Codon usage object
-** @param [r] division [const AjPStr] Division
-** @return [void]
-******************************************************************************/
-
-void ajCodAssDivision(AjPCod thys, const AjPStr division)
-{
-    ajStrAssignS(&thys->Division, division);
-    return;
-}
-
-
-
-
-/* @func ajCodAssDivisionC ****************************************************
-**
-** Assigns the division of a codon table
-**
-** @param [u] thys [AjPCod] Codon usage object
-** @param [r] division [const char*] Division
-** @return [void]
-******************************************************************************/
-
-void ajCodAssDivisionC(AjPCod thys, const char* division)
-{
-    ajStrAssignC(&thys->Division, division);
-    return;
-}
-
-
-
-
-/* @func ajCodAssNumcodon *****************************************************
-**
-** Assigns the number of codons in a codon table
-**
-** @param [u] thys [AjPCod] Codon usage object
-** @param [r] numcodon [ajint] Number of codons
-** @return [void]
-******************************************************************************/
-
-void ajCodAssNumcodon(AjPCod thys, ajint numcodon)
-{
-    thys->CodonCount = numcodon;
-    return;
-}
-
-
-
-
-/* @func ajCodAssNumcds *******************************************************
-**
-** Assigns the number of CDSs in a codon table
-**
-** @param [u] thys [AjPCod] Codon usage object
-** @param [r] numcds [ajint] Number of codons
-** @return [void]
-******************************************************************************/
-
-void ajCodAssNumcds(AjPCod thys, ajint numcds)
-{
-    thys->CdsCount = numcds;
-    return;
-}
-
-
-
-
-/* @func ajCodAssCode *******************************************************
+/* @func ajCodSetCodenum *****************************************************
 **
 ** Assigns the genetic code in a codon table
 **
@@ -3889,9 +3740,390 @@ void ajCodAssNumcds(AjPCod thys, ajint numcds)
 ** @return [void]
 ******************************************************************************/
 
-void ajCodAssCode(AjPCod thys, ajint geneticcode)
+void ajCodSetCodenum(AjPCod thys, ajint geneticcode)
 {
     thys->GeneticCode = geneticcode;
+    return;
+}
+
+
+
+
+/* @obsolete ajCodAssCode
+** @rename ajCodSetCodenum
+*/
+
+__deprecated void ajCodAssCode(AjPCod thys, ajint geneticcode)
+{
+    thys->GeneticCode = geneticcode;
+    return;
+}
+
+/* @func ajCodSetDescC ********************************************************
+**
+** Assigns the description of a codon table
+**
+** @param [u] thys [AjPCod] Codon usage object
+** @param [r] desc [const char*] Description
+** @return [void]
+******************************************************************************/
+
+void ajCodSetDescC(AjPCod thys, const char* desc)
+{
+    ajStrAssignC(&thys->Desc, desc);
+    return;
+}
+
+
+
+
+
+/* @obsolete ajCodAssDescC
+** @rename ajCodSetDescC
+*/
+
+__deprecated void ajCodAssDescC(AjPCod thys, const char* desc)
+{
+    ajCodSetDescC(thys, desc);
+    return;
+}
+
+
+/* @func ajCodSetDescS *********************************************************
+**
+** Assigns the description of a codon table
+**
+** @param [u] thys [AjPCod] Codon usage object
+** @param [r] desc [const AjPStr] Description
+** @return [void]
+******************************************************************************/
+
+void ajCodSetDescS(AjPCod thys, const AjPStr desc)
+{
+    ajStrAssignS(&thys->Desc,desc );
+    return;
+}
+
+
+
+
+
+
+/* @obsolete ajCodAssDesc
+** @rename ajCodSetDescS
+*/
+
+__deprecated void ajCodAssDesc(AjPCod thys, const AjPStr desc)
+{
+    ajCodSetDescS(thys, desc);
+    return;
+}
+
+
+
+
+/* @func ajCodSetDivisionC ****************************************************
+**
+** Assigns the division of a codon table
+**
+** @param [u] thys [AjPCod] Codon usage object
+** @param [r] division [const char*] Division
+** @return [void]
+******************************************************************************/
+
+void ajCodSetDivisionC(AjPCod thys, const char* division)
+{
+    ajStrAssignC(&thys->Division, division);
+    return;
+}
+
+
+
+
+
+/* @obsolete ajCodAssDivisionC
+** @rename ajCodSetDivisionC
+*/
+
+__deprecated void ajCodAssDivisionC(AjPCod thys, const char* division)
+{
+    ajCodSetDivisionC(thys, division);
+    return;
+}
+
+
+
+
+/* @func ajCodSetDivisionS *****************************************************
+**
+** Assigns the division of a codon table
+**
+** @param [u] thys [AjPCod] Codon usage object
+** @param [r] division [const AjPStr] Division
+** @return [void]
+******************************************************************************/
+
+void ajCodSetDivisionS(AjPCod thys, const AjPStr division)
+{
+    ajStrAssignS(&thys->Division, division);
+    return;
+}
+
+
+
+
+
+/* @obsolete ajCodAssDivision
+** @rename ajCodSetDivisionS
+*/
+
+__deprecated void ajCodAssDivision(AjPCod thys, const AjPStr division)
+{
+    ajCodSetDivisionS(thys, division);
+    return;
+}
+
+
+
+
+/* @func ajCodSetNameC ********************************************************
+**
+** Assigns the name of a codon table
+**
+** @param [u] thys [AjPCod] Codon usage object
+** @param [r] name [const char*] Name
+** @return [void]
+******************************************************************************/
+
+void ajCodSetNameC(AjPCod thys, const char* name)
+{
+    ajStrAssignC(&thys->Name, name);
+    return;
+}
+
+
+
+/* @obsolete ajCodAssNameC
+** @rename ajCodSetNameC
+*/
+
+__deprecated void ajCodAssNameC(AjPCod thys, const char* name)
+{
+    ajCodSetNameC(thys, name);
+    return;
+}
+
+
+
+/* @func ajCodSetNameS *********************************************************
+**
+** Assigns the name of a codon table
+**
+** @param [u] thys [AjPCod] Codon usage object
+** @param [r] name [const AjPStr] Name
+** @return [void]
+******************************************************************************/
+
+void ajCodSetNameS(AjPCod thys, const AjPStr name)
+{
+    ajStrAssignS(&thys->Name, name);
+    return;
+}
+
+
+
+/* @obsolete ajCodAssName
+** @rename ajCodSetNameS
+*/
+
+__deprecated void ajCodAssName(AjPCod thys, const AjPStr name)
+{
+    ajCodSetNameS(thys, name);
+    return;
+}
+
+
+/* @func ajCodSetNumcds ********************************************************
+**
+** Assigns the number of CDSs in a codon table
+**
+** @param [u] thys [AjPCod] Codon usage object
+** @param [r] numcds [ajint] Number of codons
+** @return [void]
+******************************************************************************/
+
+void ajCodSetNumcds(AjPCod thys, ajint numcds)
+{
+    thys->CdsCount = numcds;
+    return;
+}
+
+
+
+
+
+
+/* @obsolete ajCodAssNumcds
+** @rename ajCodSetNumcds
+*/
+
+__deprecated void ajCodAssNumcds(AjPCod thys, ajint numcds)
+{
+    ajCodSetNumcds(thys, numcds);
+    return;
+}
+
+
+
+
+/* @func ajCodSetNumcodons ****************************************************
+**
+** Assigns the number of codons in a codon table
+**
+** @param [u] thys [AjPCod] Codon usage object
+** @param [r] numcodon [ajint] Number of codons
+** @return [void]
+******************************************************************************/
+
+void ajCodSetNumcodons(AjPCod thys, ajint numcodon)
+{
+    thys->CodonCount = numcodon;
+    return;
+}
+
+
+
+
+/* @obsolete ajCodAssNumcodon
+** @rename ajCodSetNumcodons
+*/
+
+__deprecated void ajCodAssNumcodon(AjPCod thys, ajint numcodon)
+{
+    ajCodSetNumcodons(thys, numcodon);
+    return;
+}
+
+
+
+/* @func ajCodSetReleaseC *****************************************************
+**
+** Assigns the  of a codon table
+**
+** @param [u] thys [AjPCod] Codon usage object
+** @param [r] release [const char*] Release
+** @return [void]
+******************************************************************************/
+
+void ajCodSetReleaseC(AjPCod thys, const char* release)
+{
+    ajStrAssignC(&thys->Release, release);
+    return;
+}
+
+
+
+
+/* @obsolete ajCodAssReleaseC
+** @rename ajCodSetReleaseC
+*/
+
+__deprecated void ajCodAssReleaseC(AjPCod thys, const char* release)
+{
+    ajStrAssignC(&thys->Release, release);
+    return;
+}
+
+
+
+
+/* @func ajCodSetReleaseS ******************************************************
+**
+** Assigns the release of a codon table
+**
+** @param [u] thys [AjPCod] Codon usage object
+** @param [r] release [const AjPStr] Release
+** @return [void]
+******************************************************************************/
+
+void ajCodSetReleaseS(AjPCod thys, const AjPStr release)
+{
+    ajStrAssignS(&thys->Release, release);
+    return;
+}
+
+
+
+
+
+/* @obsolete ajCodAssRelease
+** @rename ajCodSetReleaseS
+*/
+
+__deprecated void ajCodAssRelease(AjPCod thys, const AjPStr release)
+{
+    ajCodSetReleaseS(thys, release);
+    return;
+}
+
+
+
+/* @func ajCodSetSpeciesC *****************************************************
+**
+** Assigns the species of a codon table
+**
+** @param [u] thys [AjPCod] Codon usage object
+** @param [r] species [const char*] Species
+** @return [void]
+******************************************************************************/
+
+void ajCodSetSpeciesC(AjPCod thys, const char* species)
+{
+    ajStrAssignC(&thys->Species, species);
+    return;
+}
+
+
+
+
+/* @obsolete ajCodAssSpeciesC
+** @rename ajCodSetSpeciesC
+*/
+
+__deprecated void ajCodAssSpeciesC(AjPCod thys, const char* species)
+{
+    ajCodSetSpeciesC(thys, species);
+    return;
+}
+
+
+
+
+/* @func ajCodSetSpeciesS *****************************************************
+**
+** Assigns the species of a codon table
+**
+** @param [u] thys [AjPCod] Codon usage object
+** @param [r] species [const AjPStr] Species
+** @return [void]
+******************************************************************************/
+
+void ajCodSetSpeciesS(AjPCod thys, const AjPStr species)
+{
+    ajStrAssignS(&thys->Species, species);
+    return;
+}
+
+
+
+
+/* @obsolete ajCodAssSpecies
+** @rename ajCodSetSpeciesS
+*/
+
+__deprecated void ajCodAssSpecies(AjPCod thys, const AjPStr species)
+{
+    ajCodSetSpeciesS(thys, species);
     return;
 }
 
