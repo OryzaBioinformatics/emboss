@@ -27,8 +27,9 @@
 ******************************************************************************/
 
 #include "ajax.h"
+#include "ajseqdb.h"
 
-#include "limits.h"
+#include <limits.h>
 #include <stdarg.h>
 #include <sys/types.h>
 #ifndef WIN32
@@ -536,7 +537,6 @@ static void       seqSocketTimeout(int sig);
 
 
 
-
 /* @funclist seqAccess ********************************************************
 **
 ** Functions to access each database or sequence access method
@@ -622,28 +622,28 @@ static char aa_btoa2[27]= {"-ABCDEFGHIKLMNPQRSTVWXYZ*"};
 
 
 
-/* @func ajSeqMethodTest ******************************************************
+/* @func ajSeqdbInit **********************************************************
 **
-** Tests for a named method for sequence reading.
+** Initialise sequence database interbals
 **
-** @param [r] method [const AjPStr] Method required.
-** @return [AjBool] ajTrue on success.
-** @@
+** @return [void]
 ******************************************************************************/
 
-AjBool ajSeqMethodTest(const AjPStr method)
+void ajSeqdbInit(void)
 {
-    ajint i;
+    AjPTable table;
+    ajuint i = 0;
 
-    for(i=0; seqAccess[i].Name; i++)
-	if(ajStrMatchCaseC(method, seqAccess[i].Name))
-	    return ajTrue;
+    table = ajSeqtableGetDb();
 
-    return ajFalse;
+    while(seqAccess[i].Name)
+    {
+        ajCallTableRegister(table, seqAccess[i].Name, (void*) &seqAccess[i]);
+	i++;
+    }
+
+    return;
 }
-
-
-
 
 /* @func ajSeqMethod **********************************************************
 **
@@ -658,20 +658,7 @@ AjBool ajSeqMethodTest(const AjPStr method)
 
 SeqPAccess ajSeqMethod(const AjPStr method)
 {
-    ajint i = 0;
-
-    while(seqAccess[i].Name)
-    {
-	if(ajStrMatchCaseC(method, seqAccess[i].Name))
-	{
-	    ajDebug("Matched seqAccess[%d] '%s'\n", i, seqAccess[i].Name);
-	    return &seqAccess[i];
-	}
-
-	i++;
-    }
-
-    return NULL;
+    return ajCallTableGetS(ajSeqtableGetDb(),method);
 }
 
 
@@ -6637,7 +6624,7 @@ static AjBool seqAccessDbfetch(AjPSeqin seqin)
     }
 
     ajDebug("Ready to read errno %d msg '%s'\n",
-	    errno, ajMessSysErrorText());
+	    errno, ajMessGetSysmessageC());
 
 #ifndef WIN32
     signal(SIGALRM, seqSocketTimeout);
@@ -6765,7 +6752,7 @@ static AjBool seqAccessMrs(AjPSeqin seqin)
     }
 
     ajDebug("Ready to read errno %d msg '%s'\n",
-	    errno, ajMessSysErrorText());
+	    errno, ajMessGetSysmessageC());
 
 #ifndef WIN32
     signal(SIGALRM, seqSocketTimeout);
@@ -6889,7 +6876,7 @@ static AjBool seqAccessMrs3(AjPSeqin seqin)
     }
 
     ajDebug("Ready to read errno %d msg '%s'\n",
-	    errno, ajMessSysErrorText());
+	    errno, ajMessGetSysmessageC());
 
 #ifndef WIN32
     signal(SIGALRM, seqSocketTimeout);
@@ -6989,7 +6976,7 @@ static AjBool seqAccessUrl(AjPSeqin seqin)
     }
 
     ajDebug("Ready to read errno %d msg '%s'\n",
-	    errno, ajMessSysErrorText());
+	    errno, ajMessGetSysmessageC());
 
 #ifndef WIN32
     signal(SIGALRM, seqSocketTimeout);
@@ -7392,7 +7379,7 @@ static FILE* seqHttpSocket(const AjPSeqQuery qry,
     }
 
     ajDebug("connect status %d errno %d msg '%s'\n",
-	    istatus, errno, ajMessSysErrorText());
+	    istatus, errno, ajMessGetSysmessageC());
     ajDebug("inet_ntoa '%s'\n", inet_ntoa(sin.sin_addr));
     
 
@@ -7400,10 +7387,10 @@ static FILE* seqHttpSocket(const AjPSeqQuery qry,
 
     if(isendlen != ajStrGetLen(get))
 	ajErr("send failure, expected %d bytes returned %d : %s\n",
-	      ajStrGetLen(get), istatus, ajMessSysErrorText());
+	      ajStrGetLen(get), istatus, ajMessGetSysmessageC());
     ajDebug("sending: '%S' status: %d\n", get, istatus);
     ajDebug("send for GET errno %d msg '%s'\n",
-	    errno, ajMessSysErrorText());
+	    errno, ajMessGetSysmessageC());
 
     /*
        ajFmtPrintS(&gethead, "Accept: \n");
@@ -7412,12 +7399,13 @@ static FILE* seqHttpSocket(const AjPSeqQuery qry,
        
     */
 
-    ajFmtPrintS(&gethead, "User-Agent: EMBOSS/%S\n", ajNamValueVersion());
+    ajFmtPrintS(&gethead, "User-Agent: EMBOSS/%S (%S)\n",
+                ajNamValueVersion(), ajNamValueSystem());
     isendlen = send(sock, ajStrGetPtr(gethead), ajStrGetLen(gethead), 0);
 
     if(isendlen != ajStrGetLen(gethead))
 	ajErr("send failure, expected %d bytes returned %d : %s\n",
-	      ajStrGetLen(gethead), istatus, ajMessSysErrorText());
+	      ajStrGetLen(gethead), istatus, ajMessGetSysmessageC());
     ajDebug("sending: '%S' status: %d\n", gethead, istatus);
 
     ajFmtPrintS(&gethead, "Host: %S:%d\n", host, iport);
@@ -7425,20 +7413,20 @@ static FILE* seqHttpSocket(const AjPSeqQuery qry,
 
     if(isendlen != ajStrGetLen(gethead))
 	ajErr("send failure, expected %d bytes returned %d : %s\n",
-	      ajStrGetLen(gethead), istatus, ajMessSysErrorText());
+	      ajStrGetLen(gethead), istatus, ajMessGetSysmessageC());
     ajDebug("sending: '%S' status: %d\n", gethead, istatus);
     ajDebug("send for host errno %d msg '%s'\n",
-	    errno, ajMessSysErrorText());
+	    errno, ajMessGetSysmessageC());
 
     ajFmtPrintS(&gethead, "\n");
     isendlen =  send(sock, ajStrGetPtr(gethead), ajStrGetLen(gethead), 0);
 
     if(isendlen != ajStrGetLen(gethead))
 	ajErr("send failure, expected %d bytes returned %d : %s\n",
-	      ajStrGetLen(gethead), istatus, ajMessSysErrorText());
+	      ajStrGetLen(gethead), istatus, ajMessGetSysmessageC());
     ajDebug("sending: '%S' status: %d\n", gethead, istatus);
     ajDebug("send for blankline errno %d msg '%s'\n",
-	    errno, ajMessSysErrorText());
+	    errno, ajMessGetSysmessageC());
 
     ajStrDel(&gethead);
 
@@ -7452,7 +7440,7 @@ static FILE* seqHttpSocket(const AjPSeqQuery qry,
 #endif
 
     ajDebug("fdopen errno %d msg '%s'\n",
-            errno, ajMessSysErrorText());
+            errno, ajMessGetSysmessageC());
 
     if(!fp)
     {
@@ -7557,156 +7545,6 @@ static AjBool seqAccessApp(AjPSeqin seqin)
 }
 
 
-
-
-/* @section ASIS Sequence Access **********************************************
-**
-** These functions manage the ASIS sequence access methods.
-**
-******************************************************************************/
-
-
-
-
-/* @func ajSeqAccessAsis ******************************************************
-**
-** Reads a sequence using the 'filename' as the sequence data.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-AjBool ajSeqAccessAsis(AjPSeqin seqin)
-{
-    AjPSeqQuery qry;
-
-    qry = seqin->Query;
-
-    if(!ajStrGetLen(qry->Filename))
-    {
-	ajErr("ASIS access: no sequence");
-
-	return ajFalse;
-    }
-
-    ajDebug("ajSeqAccessAsis %S\n", qry->Filename);
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewLine(qry->Filename);
-
-    if(!seqin->Filebuff)
-    {
-	ajDebug("Asis access: unable to use sequence '%S'\n", qry->Filename);
-
-	return ajFalse;
-    }
-
-    ajStrAssignC(&seqin->Filename, "asis");
-    /*ajFilebuffTrace(seqin->Filebuff);*/
-
-    return ajTrue;
-}
-
-
-
-
-/* @section File Access *******************************************************
-**
-** These functions manage the sequence file access methods.
-**
-******************************************************************************/
-
-/* @func ajSeqAccessFile ******************************************************
-**
-** Reads a sequence from a named file.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-AjBool ajSeqAccessFile(AjPSeqin seqin)
-{
-    AjPSeqQuery qry;
-
-    qry = seqin->Query;
-
-    if(!ajStrGetLen(qry->Filename))
-    {
-	ajErr("FILE access: no filename");
-
-	return ajFalse;
-    }
-
-    ajDebug("ajSeqAccessFile %S\n", qry->Filename);
-
-    /* ajStrTraceT(qry->Filename, "qry->Filename (before):"); */
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewNameS(qry->Filename);
-
-    if(!seqin->Filebuff)
-    {
-	ajDebug("FILE access: unable to open file '%S'\n", qry->Filename);
-
-	return ajFalse;
-    }
-
-    /* ajStrTraceT(seqin->Filename, "seqin->Filename:"); */
-    /* ajStrTraceT(qry->Filename, "qry->Filename (after):"); */
-
-    ajStrAssignS(&seqin->Filename, qry->Filename);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ajSeqAccessOffset ****************************************************
-**
-** Reads a sequence from a named file, at a given offset within the file.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-AjBool ajSeqAccessOffset(AjPSeqin seqin)
-{
-    AjPSeqQuery qry;
-
-    qry = seqin->Query;
-
-    if(!ajStrGetLen(qry->Filename))
-    {
-	ajErr("FILE access: no filename");
-
-	return ajFalse;
-    }
-
-    ajDebug("ajSeqAccessOffset %S %Ld\n", qry->Filename, qry->Fpos);
-
-    /* ajStrTraceT(qry->Filename, "qry->Filename (before):"); */
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewNameS(qry->Filename);
-
-    if(!seqin->Filebuff)
-    {
-	ajDebug("OFFSET access: unable to open file '%S'\n", qry->Filename);
-
-	return ajFalse;
-    }
-
-    ajFileSeek(ajFilebuffGetFile(seqin->Filebuff), qry->Fpos, 0);
-    /* ajStrTraceT(seqin->Filename, "seqin->Filename:"); */
-    /* ajStrTraceT(qry->Filename, "qry->Filename (after):"); */
-    ajStrAssignS(&seqin->Filename, qry->Filename);
-
-    return ajTrue;
-}
 
 
 
@@ -8659,6 +8497,8 @@ static void seqCdTrgDel(SeqPCdTrg* pthys)
 
 void ajSeqDbExit(void)
 {
+    AjPTable table = NULL;
+
     ajRegFree(&seqCdDivExp);
     ajRegFree(&seqBlastDivExp);
     ajRegFree(&seqRegHttpProxy);
@@ -8673,6 +8513,9 @@ void ajSeqDbExit(void)
     ajRegFree(&seqRegGcgRefId);
 
     ajRegFree(&seqRegGi);
+
+    table = ajSeqtableGetDb();
+    ajCallTableDel(&table);
 
     return;
 }
