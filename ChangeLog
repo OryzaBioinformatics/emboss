@@ -1,3 +1,118 @@
+Fixes since Version 6.1.0
+
+The following fixes were already included in the distribution used for this
+rebuild of the code.
+
+The files in this directory are bugfix replacements for files in
+the EMBOSS-6.1.0 distribution. Just drop the replacement files in
+the location shown and redo the 'make install.'
+
+Fix 1. EMBOSS-6.1.0/ajax/ajfeat.c
+       EMBOSS-6.1.0/ajax/ajseqread.c
+       EMBOSS-6.1.0/ajax/ajseqwrite.c
+       EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/Browser.java
+       EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/BuildProgramMenu.java
+       EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java
+       EMBOSS-6.1.0/jemboss/org/emboss/jemboss/gui/sequenceChooser/InputSequenceAttributes.java
+       EMBOSS-6.1.0/jemboss/org/emboss/jemboss/soap/GetVersion.java
+       EMBOSS-6.1.0/jemboss/org/emboss/jemboss/soap/ShowDB.java
+       EMBOSS-6.1.0/jemboss/utils/install-jemboss-server.sh
+       EMBOSS-6.1.0/jemboss/lib/client.jar
+
+29 Jul 2009: Fix feature specification problems in Jemboss.
+             Use version number to point to documentation URLs
+             Remove standalone option from server script.
+             Correct FASTQ input searching for '@' to start next sequence
+             Standardize FASTQ sequence formats with other OpenBio projects
+             Correct issues in igstrict, genpept and refseqp formats
+
+Fix 2. EMBOSS-6.1.0/ajax/ajmem.h
+       EMBOSS-6.1.0/ajax/ajstr.c
+       EMBOSS-6.1.0/ajax/ajstr.h
+       EMBOSS-6.1.0/nucleus/embaln.c
+
+24-Aug-2009: Fix string extension so that pointers in lists remain valid.
+             This fixes a bug in processing SwissProt complex descriptions.
+             Fix definition of AJRESIZE0 macro.
+	     Fix processing of first match in a profile alignment (prophet).
+
+Fix 3. EMBOSS-6.1.0/ajax/ajfeat.c
+       EMBOSS-6.1.0/ajax/ajfeat.h
+       EMBOSS-6.1.0/ajax/ajgraph.c
+       EMBOSS-6.1.0/ajax/ajmath.c
+       EMBOSS-6.1.0/ajax/ajseq.c
+       EMBOSS-6.1.0/ajax/ajseqread.c
+       EMBOSS-6.1.0/ajax/ajseqwrite.c
+       EMBOSS-6.1.0/nucleus/embmisc.c
+       EMBOSS-6.1.0/nucleus/embmisc.h
+       EMBOSS-6.1.0/nucleus/embpat.c
+       EMBOSS-6.1.0/emboss/coderet.c
+       EMBOSS-6.1.0/emboss/extractfeat.c
+       EMBOSS-6.1.0/emboss/notseq.c
+       EMBOSS-6.1.0/emboss/prettyplot.c
+       EMBOSS-6.1.0/emboss/seqmatchall.c
+       EMBOSS-6.1.0/emboss/showfeat.c
+       EMBOSS-6.1.0/emboss/showpep.c
+       EMBOSS-6.1.0/emboss/showseq.c
+       EMBOSS-6.1.0/emboss/twofeat.c
+       EMBOSS-6.1.0/jemboss/utils/install-jemboss-server.sh
+       EMBOSS-6.1.0/jemboss/org/emboss/jemboss/server/AppendToLogFileThread.java
+       EMBOSS-6.1.0/jemboss/org/emboss/jemboss/server/JembossAuthServer.java
+
+02-Dec-2009: Fixes problems with extractfeat. The fix includes cleaner
+             definitions of functions used to match feature tags and
+             feature types which result in minor updates to 6 other
+             applications.
+
+             Extractfeat in previous versions used its own text parser
+             to extract feature data from only a limited set of
+             formats. In release 6.1.0 it was replaced by the standard
+             EMBOSS feature table. With no options set, extractfeat
+             rejected all features (type '*' was needed to extract
+             features). Extractfeat default settings now extract all
+             features from an entry.
+
+             Features on the reverse strand were incorrectly processed
+             (an effect caused by some of the old extractfeat code
+             remaining). Reverse strand features are now correctly
+             parsed, including both "join(complement())" and
+             "complement(join())" syntax in EMBL/GenBank/DDBJ feature
+             tables.
+
+             Fixes an issue in GenBank parsing where the ORIGIN line is absent.
+
+             Fixes scaling errors in prettyplot, especially in mEMBOSS
+             when plotting to a window on screen (the default
+             output). The plplot library does not report the true
+             width and height for several devices. The assumptions in
+             prettyplot depend on reasonable size estimates. Release
+             6.2.0 will have further corrections to plplot device
+             scaling.
+
+	     Fixes the counting of non-coding features in coderet.
+
+	     Fixes a seqmatchall error for short sequences with perfect matches
+
+	     When reverse-complementing sequences, also reverses
+	     the quality scores.
+
+	     Allows '-' in format names in the USA syntax, to allow
+	     fastq-sanger fastq-illumina and fastq-solexa format names
+	     to be used.
+
+	     When reading protein sequences, a sequence with only a
+	     stop is now recognized as empty (zero length) after
+	     processing ambiguity codes and stops.
+
+	     Fixes a problem writing features in PIR format when the
+	     feature table is empty, for example a report file with no hits.
+
+	     Fixes a dependency on 'ant' to install a Jemboss server.
+
+	     Fixes a problem in logging Jemboss info/error messages.
+
+
+
 Version 6.1.0
 	A new data structure AjPSeqXref holds details of cross-references
 	between a sequence object and any other data resource. The
