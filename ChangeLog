@@ -1,3 +1,178 @@
+Fixed after release of version 6.2.0
+
+The following fixes were already applied to the distribution used to
+reconstruct this stage of development.
+
+The files in this directory are bugfix replacements for files in
+the EMBOSS-6.2.0 distribution. Just drop the replacement files in
+the location shown and redo the 'make install.'
+
+Fix 1. EMBOSS-6.2.0/emboss/jembossctl.c
+       EMBOSS-6.2.0/jemboss/lib/jemboss.jar
+       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/gui/filetree/DragTree.java
+       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/gui/filetree/RemoteDragTree.java
+       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/gui/form/BuildJembossForm.java
+       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/gui/ShowResultSet.java
+       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/JembossParams.java
+       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/programs/RunEmbossApplication2.java
+       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/server/JembossAuthServer.java
+       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/server/JembossServer.java
+       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/server/JembossThread.java
+       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/soap/AuthPopup.java
+       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/soap/JembossRun.java
+       EMBOSS-6.2.0/jemboss/org/emboss/jemboss/soap/PrivateRequest.java
+       EMBOSS-6.2.0/jemboss/utils/install-jemboss-server.sh
+
+26 Feb 2010: Various Jemboss fixes including allowing multiple
+             parameters to "wossname" and reporting of stderr
+             output
+
+
+Fix 2. EMBOSS-6.2.0/emboss/acd/jaspextract.acd
+       EMBOSS-6.2.0/emboss/acd/jaspscan.acd
+       EMBOSS-6.2.0/emboss/jaspextract.c
+       EMBOSS-6.2.0/emboss/jaspscan.c
+
+26 Feb 2010: jaspextract and jaspscan can use the latest-format data at
+             http://jaspar.genereg.net/html/DOWNLOAD/Archive.zip
+             jaspextract uses the data in the "all_data/FlatFileDir"
+             directory. It is advisable to clear delete any old data files
+             from your EMBOSS data file area e.g. from the
+             /usr/local/emboss/share/EMBOSS/data/JASPAR_* directories
+
+
+Fix 3. EMBOSS-6.2.0/emboss/emma.c
+
+26 Feb 2010: Takes note once again of any EMBOSS_CLUSTALW environment variable
+             setting.
+
+
+Fix 4. EMBOSS-6.2.0/emboss/acd/trimseq.acd
+
+26 Feb 2010: Place limit on the maximum window size
+
+
+Fix 5. EMBOSS-6.2.0/ajax/core/ajpat.c
+       EMBOSS-6.2.0/nucleus/embpat.c
+
+26 Feb 2010: Fix crash when excessive mismatches requested in one of the
+             fuzzpro search algorithms.
+
+
+Fix 6. EMBOSS-6.2.0/emboss/coderet.c
+       EMBOSS-6.2.0/emboss/splitter.c
+
+26 Feb 2010: Fix crash if no features in the source sequence
+
+
+Fix 7. EMBOSS-6.2.0/emboss/matcher.c
+
+26 Feb 2010: Fix memory allocation problem
+
+
+Fix 8. EMBOSS-6.2.0/ajax/core/ajseqread.c
+       EMBOSS-6.2.0/ajax/core/ajseqwrite.c
+
+01-Mar-2010: Fix sequence format 'refseqp' to be a valid protein
+             output format and to preserve more fields from refseqp input.
+
+
+Fix 9. EMBOSS-6.2.0/ajax/core/ajlist.c
+       EMBOSS-6.2.0/ajax/core/ajlist.h
+       EMBOSS-6.2.0/emboss/showfeat.c
+
+01-Mar-2010: Fix showfeat sorted feature output to correctly sort exons
+             for 'join' feature locations.
+
+
+Fix 10.EMBOSS-6.2.0/ajax/graphics/ajgraph.c
+       EMBOSS-6.2.0/emboss/prettyplot.c
+
+01-Mar-2010: Fix PNG graphics output format to remove large blank
+             margins added by the plplot driver. Improve prettyplot
+             output to better centre sequence characters within boxes.
+
+
+Fix 11.EMBOSS-6.2.0/emboss/recoder.c
+       EMBOSS-6.2.0/emboss/remap.c
+       EMBOSS-6.2.0/emboss/restrict.c
+       EMBOSS-6.2.0/emboss/showseq.c
+       EMBOSS-6.2.0/emboss/silent.c
+
+01-Mar-2010: Skip bad enzyme file records
+
+
+Fix 12.EMBOSS-6.2.0/emboss/showpep.c
+       EMBOSS-6.2.0/emboss/showseq.c
+
+01-Mar-2010: Correct HTML output closing tag.
+
+
+Fix 13.EMBOSS-6.2.0/ajax/core/ajfeat.c       
+
+01-Mar-2010: Remove warnings for accessions and repeat features in
+             ensembl format EMBL files.
+
+
+Fix 14.EMBOSS-6.2.0/emboss/acd/cirdna.acd
+       EMBOSS-6.2.0/emboss/acd/knowntypes.standard
+
+01-Mar-2010: Fix description of cirdna input
+
+
+Fix 15.EMBOSS-6.2.0/emboss/acd/extractfeat.acd
+       EMBOSS-6.2.0/emboss/acd/maskfeat.acd
+       EMBOSS-6.2.0/emboss/acd/showfeat.acd
+       EMBOSS-6.2.0/emboss/acd/showpep.acd
+       EMBOSS-6.2.0/emboss/acd/showseq.acd
+       EMBOSS-6.2.0/emboss/acd/twofeat.acd
+       EMBOSS-6.2.0/doc/programs/html/extractfeat.html
+       EMBOSS-6.2.0/doc/programs/html/maskfeat.html
+       EMBOSS-6.2.0/doc/programs/html/showfeat.html
+       EMBOSS-6.2.0/doc/programs/html/showpep.html
+       EMBOSS-6.2.0/doc/programs/html/showseq.html
+       EMBOSS-6.2.0/doc/programs/html/twofeat.html
+       EMBOSS-6.2.0/doc/programs/text/extractfeat.txt
+       EMBOSS-6.2.0/doc/programs/text/maskfeat.txt
+       EMBOSS-6.2.0/doc/programs/text/showfeat.txt
+       EMBOSS-6.2.0/doc/programs/text/showpep.txt
+       EMBOSS-6.2.0/doc/programs/text/showseq.txt
+       EMBOSS-6.2.0/doc/programs/text/twofeat.txt
+
+01-Mar-2010: Fix URLs for EMBL/GenBank and SwissProt feature table
+             descriptions in help and documentation.
+
+
+Fix 16.EMBOSS-6.2.0/emboss/acd/remap.acd
+       EMBOSS-6.2.0/emboss/acd/restover.acd
+       EMBOSS-6.2.0/emboss/acd/restrict.acd
+       EMBOSS-6.2.0/emboss/acd/showseq.acd
+
+01-Mar-2010: Remove artificial upper limit on number of restriction cuts
+
+
+Fix 17.EMBOSS-6.2.0/doc/programs/html/density.2.density.gif
+       EMBOSS-6.2.0/doc/programs/html/density.3.density.gif
+       EMBOSS-6.2.0/doc/programs/html/Makefile.am
+       EMBOSS-6.2.0/doc/programs/html/Makefile.in
+       EMBOSS-6.2.0/doc/programs/html/Makefile
+
+01-Mar-2010: Missing images for density usage examples
+
+
+Fix 18. EMBOSS-6.2.0/ajax/core/ajsys.c
+
+02-Mar-2010: Add .exe extension when searching for CYGWIN executables
+
+
+Fix 19.EMBOSS-6.2.0/nucleus/embaln.h
+       EMBOSS-6.2.0/nucleus/embaln.c
+       EMBOSS-6.2.0/emboss/needle.c
+       EMBOSS-6.2.0/emboss/needleall.c
+
+15-June-2010: Fix needle traceback problem
+
+
 Version 6.2.0 15-Jan-2010
 	Fixed GFF2 and GFF3 feature formats to always have the start
 	position less than the end position for features on the '-'
