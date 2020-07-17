@@ -69,13 +69,3 @@ configure
 **/CVS/Root
 
 
-emboss/index/chebi.*
-emboss/index/drcat.*
-emboss/index/eco.*
-emboss/index/edam.*
-emboss/index/go.*
-emboss/index/pw.*
-emboss/index/ro.*
-emboss/index/so.*
-emboss/index/swo.*
-emboss/index/taxon.*
