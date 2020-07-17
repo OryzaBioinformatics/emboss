@@ -62,9 +62,18 @@ bundlewin
 autom4te.cache
 
 configure
-*.dmp
 
 **/CVS/
 **/CVS/Entries
 **/CVS/Repository
 **/CVS/Root
+
+
+emboss/index/drcat.*
+emboss/index/eco.*
+emboss/index/edam.*
+emboss/index/go.*
+emboss/index/pw.*
+emboss/index/ro.*
+emboss/index/so.*
+emboss/index/taxon.*
