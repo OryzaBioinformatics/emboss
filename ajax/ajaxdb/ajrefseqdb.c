@@ -1,11 +1,12 @@
-/* @source ajvardb ************************************************************
+/* @source ajrefseqdb *********************************************************
 **
-** AJAX variation database functions
+** AJAX reference sequence database functions
 **
-** These functions control all aspects of AJAX variation database access
+** These functions control all aspects of AJAX reference sequence
+** database access
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.8 $
+** @version $Revision: 1.5 $
 ** @modified Oct 2010 pmr first version
 ** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
 ** @@
@@ -27,20 +28,14 @@
 **
 ******************************************************************************/
 
-
-#include "ajlib.h"
-
-#include "ajvardb.h"
-#include "ajvarread.h"
+#include "ajrefseqdb.h"
+#include "ajrefseqread.h"
 #include "ajcall.h"
+#include "ajlib.h"
 
 #include <limits.h>
 #include <stdarg.h>
 #include <sys/types.h>
-
-#include <errno.h>
-#include <signal.h>
-
 #ifndef WIN32
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -54,21 +49,23 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #endif
+#include <errno.h>
+#include <signal.h>
 
 
 
 
-/* @funclist varAccess ********************************************************
+/* @funclist refseqAccess ******************************************************
 **
-** Functions to access each database or variation access method
+** Functions to access each database or reference sequence access method
 **
 ******************************************************************************/
 
-static AjOVarAccess varAccess[] =
+static AjORefseqAccess refseqAccess[] =
 {
   /*  Name      AccessFunction   FreeFunction
       Qlink    Description
-      Alias    Entry    Query    All      Chunk   Padding */
+      Alias    Entry    Query    All      Chunk    Padding */
     {
       NULL, NULL, NULL,
       NULL, NULL,
@@ -78,32 +75,30 @@ static AjOVarAccess varAccess[] =
       NULL, NULL, NULL,
       NULL, NULL,
       AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE
-    }
+    },
 };
 
 
 
 
-/* @func ajVardbInit **********************************************************
+/* @func ajRefseqdbInit ********************************************************
 **
-** Initialise variation database internals
+** Initialise reference sequence database internals
 **
 ** @return [void]
-**
-** @release 6.4.0
 ******************************************************************************/
 
-void ajVardbInit(void)
+void ajRefseqdbInit(void)
 {
     AjPTable table;
     ajuint i = 0;
 
-    table = ajVaraccessGetDb();
+    table = ajRefseqaccessGetDb();
 
-    while(varAccess[i].Name)
+    while(refseqAccess[i].Name)
     {
-        ajCallTableRegister(table, varAccess[i].Name,
-                            (void*) &varAccess[i]);
+        ajCallTableRegister(table, refseqAccess[i].Name,
+                            (void*) &refseqAccess[i]);
 	i++;
     }
 
@@ -113,34 +108,32 @@ void ajVardbInit(void)
 
 
 
-/* @func ajVardbPrintAccess ***************************************************
+/* @func ajRefseqdbPrintAccess *************************************************
 **
 ** Reports the internal data structures
 **
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
-**
-** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-void ajVardbPrintAccess(AjPFile outf, AjBool full)
+void ajRefseqdbPrintAccess(AjPFile outf, AjBool full)
 {
     ajint i = 0;
 
     ajFmtPrintF(outf, "\n");
-    ajFmtPrintF(outf, "# Variation access methods\n");
+    ajFmtPrintF(outf, "# Reference sequence access methods\n");
     ajFmtPrintF(outf, "# Name       Alias Entry Query   All Description\n");
     ajFmtPrintF(outf, "\n");
     ajFmtPrintF(outf, "method {\n");
 
-    for(i=0; varAccess[i].Name; i++)
-	if(full || !varAccess[i].Alias)
+    for(i=0; refseqAccess[i].Name; i++)
+	if(full || !refseqAccess[i].Alias)
 	    ajFmtPrintF(outf, "  %-10s %5B %5B %5B %5B \"%s\"\n",
-			varAccess[i].Name,  varAccess[i].Alias,
-			varAccess[i].Entry, varAccess[i].Query,
-			varAccess[i].All,   varAccess[i].Desc);
+			refseqAccess[i].Name,  refseqAccess[i].Alias,
+			refseqAccess[i].Entry, refseqAccess[i].Query,
+			refseqAccess[i].All,   refseqAccess[i].Desc);
 
     ajFmtPrintF(outf, "}\n\n");
 
@@ -150,17 +143,15 @@ void ajVardbPrintAccess(AjPFile outf, AjBool full)
 
 
 
-/* @func ajVardbExit **********************************************************
+/* @func ajRefseqdbExit ********************************************************
 **
-** Cleans up variation database processing internal memory
+** Cleans up reference sequence database processing internal memory
 **
 ** @return [void]
-**
-** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-void ajVardbExit(void)
+void ajRefseqdbExit(void)
 {
     return;
 }

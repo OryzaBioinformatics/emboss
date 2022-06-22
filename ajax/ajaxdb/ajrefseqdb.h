@@ -1,8 +1,9 @@
-/* @include ajurldb ***********************************************************
+/* @include ajrefseqdb ********************************************************
 **
-** AJAX url database functions
+** AJAX reference sequence database functions
 **
-** These functions control all aspects of AJAX url database access
+** These functions control all aspects of AJAX reference sequence
+** database a#ccess
 **
 ** @author Copyright (C) 2010 Peter Rice
 ** @version $Revision: 1.3 $
@@ -27,8 +28,8 @@
 **
 ******************************************************************************/
 
-#ifndef AJURLDB_H
-#define AJURLDB_H
+#ifndef AJREFSEQDB_H
+#define AJREFSEQDB_H
 
 
 
@@ -68,9 +69,9 @@ AJ_BEGIN_DECLS
 ** Prototype definitions
 */
 
-void           ajUrldbExit(void);
-void           ajUrldbInit(void);
-void           ajUrldbPrintAccess (AjPFile outf, AjBool full);
+void           ajRefseqdbExit(void);
+void           ajRefseqdbInit(void);
+void           ajRefseqdbPrintAccess (AjPFile outf, AjBool full);
 
 /*
 ** End of prototype definitions
@@ -78,4 +79,4 @@ void           ajUrldbPrintAccess (AjPFile outf, AjBool full);
 
 AJ_END_DECLS
 
-#endif  /* !AJTEXTDB_H */
+#endif  /* !AJREFSEQDB_H */
