@@ -220,6 +220,7 @@ DIRECTORY: /homes/user/local/share/EMBOSS/data/
   EnsemblIdentifiers.dat
   Epepcoil.dat
   Epk.dat
+  Epkexpasy.dat
   Epprofile
   Eprior1.plib
   Eprior30.plib
@@ -245,6 +246,7 @@ DIRECTORY: /homes/user/local/share/EMBOSS/data/
   Matrices.proteinstructure
   SSSUB
   edialignmat
+  software.obo
   tffungi
   tfinsect
   tfother
@@ -261,8 +263,58 @@ DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_SPLICE
   matrix_list.txt
 
 
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PBM_HOMEO
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_FAM
 
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/OBO
+
+  chebi.obo
+  eco.obo
+  evidence_code.obo
+  gene_ontology.1_2.obo
+  go.obo
+  pathway.obo
+  ro.obo
+  so.obo
+  software.obo
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/REBASE
+
+  embossre.enz
+  embossre.equ
+  embossre.ref
+  embossre.sup
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PBM_HLH
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PHYLOFACTS
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_CORE
+
+  MA0070.1.pfm
+  MA0071.1.pfm
+  MA0072.1.pfm
+  MA0073.1.pfm
+  MA0074.1.pfm
+  MA0075.1.pfm
+  MA0076.1.pfm
+  MA0077.1.pfm
+  MA0078.1.pfm
+  MA0079.1.pfm
+  MA0079.2.pfm
   dummyfile
   matrix_list.txt
 
@@ -531,48 +583,6 @@ DIRECTORY: /homes/user/local/share/EMBOSS/data/CODONS
   Ezma.cut
 
 
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PHYLOFACTS
-
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_CNE
-
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PBM
-
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/OBO
-
-  chebi.obo
-  eco.obo
-  evidence_code.obo
-  gene_ontology.1_2.obo
-  pathway.obo
-  ro.obo
-  so.obo
-  software.obo
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_POLII
-
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_FAM
-
-  dummyfile
-  matrix_list.txt
-
-
 DIRECTORY: /homes/user/local/share/EMBOSS/data/TAXONOMY
 
   division.dmp
@@ -582,24 +592,7 @@ DIRECTORY: /homes/user/local/share/EMBOSS/data/TAXONOMY
   nodes.dmp
 
 
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_CORE
-
-  MA0070.1.pfm
-  MA0071.1.pfm
-  MA0072.1.pfm
-  MA0073.1.pfm
-  MA0074.1.pfm
-  MA0075.1.pfm
-  MA0076.1.pfm
-  MA0077.1.pfm
-  MA0078.1.pfm
-  MA0079.1.pfm
-  MA0079.2.pfm
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PBM_HLH
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PBM
 
   dummyfile
   matrix_list.txt
@@ -628,12 +621,22 @@ DIRECTORY: /homes/user/local/share/EMBOSS/data/AAINDEX
   kytj820101
 
 
-DIRECTORY: /homes/user/local/share/EMBOSS/data/REBASE
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_POLII
 
-  embossre.enz
-  embossre.equ
-  embossre.ref
-  embossre.sup
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_PBM_HOMEO
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/user/local/share/EMBOSS/data/JASPAR_CNE
+
+  dummyfile
+  matrix_list.txt
 
 </pre></td></tr></table><p>
 <p>
@@ -689,7 +692,7 @@ File /homes/user/local/share/EMBOSS/data/EPAM60                     Exists
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Find and retrieve EMBOSS data files
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.6.0.0
 
    Standard (Mandatory) qualifiers:
   [-filename]          string     This specifies the name of the file that
@@ -1054,7 +1057,7 @@ None noted.
 <th>Description</th></tr>
 <tr>
 <td><a href="embossupdate.html">embossupdate</a></td>
-<td>Checks for more recent updates to EMBOSS</td>
+<td>Check for more recent updates to EMBOSS</td>
 </tr>
 
 <tr>
